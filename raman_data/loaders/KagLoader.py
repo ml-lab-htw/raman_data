@@ -5,7 +5,7 @@ from kagglehub import KaggleDatasetAdapter
 from numpy import ndarray
 
 from ILoader import ILoader
-from LoaderTools import CACHE_DIRS, LoaderTools
+from LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
 
 class KagLoader(ILoader):
     DATASETS = [
@@ -15,17 +15,18 @@ class KagLoader(ILoader):
     ]
 
 
+    @staticmethod
     def download_dataset(
         dataset_name: str,
         file_name: Optional[str] = None,
-        cache_dir: Optional[str] = None
+        cache_path: Optional[str] = None
     ) -> str:
         if (not LoaderTools.is_dataset_available(dataset_name, KagLoader.DATASETS)):
             print(f"[!] Cannot download {dataset_name} dataset with Kaggle loader")
             return 
 
-        if cache_dir != None:
-            LoaderTools.set_cache_root(cache_dir, CACHE_DIRS.Kaggle)
+        if not (cache_path is None):
+            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
 
         print("Loading Kaggle dataset...")
         path = dataset_download(
@@ -37,15 +38,16 @@ class KagLoader(ILoader):
         return path
 
 
+    @staticmethod
     def load_dataset(
         dataset_name: str,
         file_name: str,
-        cache_dir: Optional[str] = None
+        cache_path: Optional[str] = None
     ) -> ndarray:
-        if cache_dir != None:
-            LoaderTools.set_cache_root(cache_dir, CACHE_DIRS.Kaggle)
+        if not (cache_path is None):
+            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
 
-        print(f"Loading Kaggle dataset into {LoaderTools.get_cache_root(CACHE_DIRS.Kaggle)}")
+        print(f"Loading Kaggle dataset into {LoaderTools.get_cache_root(CACHE_DIR.Kaggle)}")
 
         df = load_dataset(
             adapter=KaggleDatasetAdapter.PANDAS,
@@ -57,6 +59,7 @@ class KagLoader(ILoader):
         return nd
 
 
+    @staticmethod
     def list_datasets() -> None:
-        LoaderTools.list_datasets(CACHE_DIRS.Kaggle, KagLoader.DATASETS)
+        LoaderTools.list_datasets(CACHE_DIR.Kaggle, KagLoader.DATASETS)
 

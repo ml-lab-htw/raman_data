@@ -11,7 +11,8 @@ class ILoader(metaclass=ABCMeta):
                 hasattr(subclass, 'load_dataset') and 
                 callable(subclass.load_dataset) or
                 NotImplementedError)
-    
+
+
     @abstractmethod
     def download_dataset(
         dataset_name: str,
@@ -19,7 +20,8 @@ class ILoader(metaclass=ABCMeta):
         cache_dir: Optional[str] = None
     ) -> str:
         raise NotImplementedError
-    
+
+
     @abstractmethod
     def load_dataset(
         dataset_name: str,
@@ -27,4 +29,4 @@ class ILoader(metaclass=ABCMeta):
         cache_dir: Optional[str] = None
     ) -> ndarray:
         raise NotImplementedError
-    
+
