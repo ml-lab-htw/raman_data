@@ -8,11 +8,11 @@ from ILoader import ILoader
 from LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
 
 class KagLoader(ILoader):
-    DATASETS = [
-        "codina/raman-spectroscopy-of-diabetes",
-        "sergioalejandrod/raman-spectroscopy",
-        "andriitrelin/cells-raman-spectra"
-    ]
+    DATASETS = {
+        "codina/raman-spectroscopy-of-diabetes": TASK_TYPE.Classification,
+        "sergioalejandrod/raman-spectroscopy": TASK_TYPE.Classification,
+        "andriitrelin/cells-raman-spectra": TASK_TYPE.Classification
+    }
 
 
     @staticmethod

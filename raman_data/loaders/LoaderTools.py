@@ -5,7 +5,12 @@ class CACHE_DIR(Enum):
     HuggingFace = "HF_HOME"
 
 
-from typing import Optional, List
+class TASK_TYPE(Enum):
+    Classification = 0,
+    Regression = 1
+
+
+from typing import Dict, Optional, List
 import os
 
 class LoaderTools:
@@ -50,8 +55,8 @@ class LoaderTools:
     @staticmethod
     def list_datasets(
         loader_key: CACHE_DIR,
-        datasets: List[str]
+        datasets: Dict[str, TASK_TYPE]
     ) -> None:
         print(f"[*] Datasets available with {loader_key.name}'s loader:")
-        for dataset_name in datasets:
-            print(f" |-> Name: {dataset_name}")
+        for dataset_name, task_type in datasets.items():
+            print(f" |-> Name: {dataset_name} | Task type: {task_type.name}")
