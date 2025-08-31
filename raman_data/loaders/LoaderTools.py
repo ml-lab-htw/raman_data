@@ -6,7 +6,7 @@ class CACHE_DIR(Enum):
 
 
 class TASK_TYPE(Enum):
-    Classification = 0,
+    Classification = 0
     Regression = 1
 
 

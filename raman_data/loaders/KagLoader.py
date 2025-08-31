@@ -4,8 +4,8 @@ from kagglehub import load_dataset, dataset_download
 from kagglehub import KaggleDatasetAdapter
 from numpy import ndarray
 
-from ILoader import ILoader
-from LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
+from loaders.ILoader import ILoader
+from loaders.LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
 
 class KagLoader(ILoader):
     DATASETS = {
@@ -21,7 +21,7 @@ class KagLoader(ILoader):
         file_name: Optional[str] = None,
         cache_path: Optional[str] = None
     ) -> str:
-        if (not LoaderTools.is_dataset_available(dataset_name, KagLoader.DATASETS)):
+        if not LoaderTools.is_dataset_available(dataset_name, KagLoader.DATASETS):
             print(f"[!] Cannot download {dataset_name} dataset with Kaggle loader")
             return 
 
