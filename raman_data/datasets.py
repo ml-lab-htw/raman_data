@@ -3,11 +3,12 @@ Internal functions for loading and listing datasets.
 """
 
 from typing import List, Optional
-import numpy as np
 from .types import RamanDataset
 
 from raman_data.loaders.KagLoader import KagLoader
 from raman_data.loaders.LoaderTools import TASK_TYPE
+
+__LOADERS = [KagLoader]
 
 def list_datasets(
     task_type: Optional[TASK_TYPE] = None
@@ -36,10 +37,9 @@ def list_datasets(
         "nature_s41467_019_12898_9": "classification",
     }
 
-    loaders = [KagLoader]
     datasets = {}
-    
-    for loader in loaders:
+
+    for loader in __LOADERS:
         for name, task in loader.DATASETS.items():
             datasets.update({name: task})
 
@@ -49,17 +49,20 @@ def list_datasets(
 
 
 def load_dataset(
-    name: str,
+    dataset_name: str,
+    file_name: Optional[str] = None,
     cache_dir: Optional[str] = None
 ) -> RamanDataset:
     """
-    Loads a specific Raman spectroscopy dataset.
+    (Down-)Loads a specific Raman spectroscopy dataset.
 
     When called for the first time, it will download the data from its original source
     and store it in the cache directory. Subsequent calls will load the data from the cache.
 
     Args:
-        name: The name of the dataset to load.
+        dataset_name: The name of the dataset to load.
+        file_name: The name of a dataset's file to load. If None, the whole dataset
+                   will be saved to the cache_dir.
         cache_dir: The directory to use for caching the data. If None, a default
                    directory will be used.
 
@@ -69,32 +72,32 @@ def load_dataset(
     Raises:
         ValueError: If the dataset name is not found.
     """
-    if name not in list_datasets():
-        raise ValueError(f"Dataset '{name}' not found. "
+    if dataset_name not in list_datasets():
+        raise ValueError(f"Dataset '{dataset_name}' not found. "
                          f"Available datasets: {list_datasets()}")
 
-    # This is a placeholder for the actual data loading logic.
-    # The implementation will involve downloading from different sources (Kaggle, HF, etc.)
-    # and processing the data into a unified format.
-    print(f"Loading dataset: {name}")
-    print(f"Cache directory: {cache_dir or 'default_cache_dir'}")
+    get_dataset = None
 
-    # Dummy data for now
-    dummy_data = np.array([
-        [0.1, 0.4],
-        [0.2, 0.5],
-        [0.3, 0.6]
-    ])
-    dummy_target = np.array([[0, 1], [1, 0], [0, 1]])
-    dummy_metadata = {
-        "name": name,
+    raman_data = None
+    raman_target = None
+    raman_meta = {
+        "name": f"{dataset_name}{'/{file_name}' if file_name else ''}",
         "source": "dummy",
         "description": "This is a dummy dataset for demonstration purposes."
     }
+    
+    for loader in __LOADERS:
+        if not (dataset_name in loader.DATASETS):
+            continue
+        
+        get_dataset = loader.load_dataset if file_name else loader.download_dataset
+        break
+
+    raman_data = get_dataset(dataset_name, file_name, cache_dir)
 
     return RamanDataset(
-        data=dummy_data,
-        target=dummy_target,
-        metadata=dummy_metadata
+        data=raman_data,
+        target=raman_target,
+        metadata=raman_meta
     )
 
