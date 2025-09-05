@@ -4,8 +4,8 @@ from kagglehub import load_dataset, dataset_download
 from kagglehub import KaggleDatasetAdapter
 from numpy import ndarray
 
-from loaders.ILoader import ILoader
-from loaders.LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
+from raman_data.loaders.ILoader import ILoader
+from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
 
 class KagLoader(ILoader):
     DATASETS = {

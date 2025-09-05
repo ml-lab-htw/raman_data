@@ -2,26 +2,28 @@
 Internal functions for loading and listing datasets.
 """
 
-from typing import List, Optional, Literal
+from typing import List, Optional
 import numpy as np
 from .types import RamanDataset
 
+from raman_data.loaders.KagLoader import KagLoader
+from raman_data.loaders.LoaderTools import TASK_TYPE
+
 def list_datasets(
-    task_type: Optional[Literal['classification', 'regression']] = None
+    task_type: Optional[TASK_TYPE] = None
 ) -> List[str]:
     """
     Lists the available Raman spectroscopy datasets.
 
     Args:
         task_type: If specified, filters the datasets by task type.
-                   Can be 'classification' or 'regression'.
+                   Can be 'TASK_TYPE.Classification' or 'TASK_TYPE.Regression'.
 
     Returns:
         A list of available dataset names.
     """
-    # In the future, this will be dynamically generated.
-    # For now, it's a placeholder.
-    datasets = {
+    # Placeholder for all planned datasets (will be removed later)
+    datasets_placeholder = {
         "diabetes_kaggle": "classification",
         "covid19_kaggle": "classification",
         "spectroscopy_kaggle": "classification",
@@ -33,6 +35,13 @@ def list_datasets(
         "mendeley_y4md8znppn": "classification",
         "nature_s41467_019_12898_9": "classification",
     }
+
+    loaders = [KagLoader]
+    datasets = {}
+    
+    for loader in loaders:
+        for name, task in loader.DATASETS.items():
+            datasets.update({name: task})
 
     if task_type:
         return [name for name, task in datasets.items() if task == task_type]
