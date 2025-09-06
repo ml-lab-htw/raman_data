@@ -79,7 +79,7 @@ def load_dataset(
     get_dataset = None
 
     raman_data = None
-    raman_target = None
+    raman_target = []
     raman_meta = {
         "name": f"{dataset_name}{'/{file_name}' if file_name else ''}",
         "source": "dummy",

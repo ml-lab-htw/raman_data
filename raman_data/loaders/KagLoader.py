@@ -30,7 +30,7 @@ class KagLoader(ILoader):
 
         print("Loading Kaggle dataset...")
         path = dataset_download(
-            handle="codina/raman-spectroscopy-of-diabetes",
+            handle=dataset_name,
             path=file_name
         )
         print(f"Dataset downloaded into {path}")
