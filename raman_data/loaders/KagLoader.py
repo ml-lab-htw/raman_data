@@ -61,5 +61,5 @@ class KagLoader(ILoader):
 
     @staticmethod
     def list_datasets() -> None:
-        LoaderTools.list_datasets(CACHE_DIR.Kaggle, KagLoader.DATASETS)
+        LoaderTools.list_datasets(KagLoader)
 
