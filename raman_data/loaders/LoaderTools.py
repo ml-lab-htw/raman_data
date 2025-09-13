@@ -61,7 +61,7 @@ class LoaderTools:
 
         Args:
             path (str): The path to save datasets to.
-            loader_key (Optional[CACHE_DIR], optional): The name of loader's
+            loader_key (CACHE_DIR, optional): The name of loader's
             environment variable that stores the cache path. If None,
             sets the given path for all loaders.
         """
