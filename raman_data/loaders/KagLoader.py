@@ -4,10 +4,13 @@ from kagglehub import load_dataset, dataset_download
 from kagglehub import KaggleDatasetAdapter
 from numpy import ndarray
 
-from loaders.ILoader import ILoader
-from loaders.LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
+from raman_data.loaders.ILoader import ILoader
+from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
 
 class KagLoader(ILoader):
+    """
+    A static class specified in providing datasets hosted on Kaggle.
+    """
     DATASETS = {
         "codina/raman-spectroscopy-of-diabetes": TASK_TYPE.Classification,
         "sergioalejandrod/raman-spectroscopy": TASK_TYPE.Classification,
@@ -20,17 +23,17 @@ class KagLoader(ILoader):
         dataset_name: str,
         file_name: Optional[str] = None,
         cache_path: Optional[str] = None
-    ) -> str:
+    ) -> str | None:
         if not LoaderTools.is_dataset_available(dataset_name, KagLoader.DATASETS):
             print(f"[!] Cannot download {dataset_name} dataset with Kaggle loader")
-            return 
+            return
 
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
 
-        print("Loading Kaggle dataset...")
+        print(f"Loading Kaggle dataset: {dataset_name}")
         path = dataset_download(
-            handle="codina/raman-spectroscopy-of-diabetes",
+            handle=dataset_name,
             path=file_name
         )
         print(f"Dataset downloaded into {path}")
@@ -43,7 +46,11 @@ class KagLoader(ILoader):
         dataset_name: str,
         file_name: str,
         cache_path: Optional[str] = None
-    ) -> ndarray:
+    ) -> ndarray | None:
+        if not LoaderTools.is_dataset_available(dataset_name, KagLoader.DATASETS):
+            print(f"[!] Cannot load {dataset_name} dataset with Kaggle loader")
+            return
+
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
 
@@ -61,5 +68,8 @@ class KagLoader(ILoader):
 
     @staticmethod
     def list_datasets() -> None:
-        LoaderTools.list_datasets(CACHE_DIR.Kaggle, KagLoader.DATASETS)
+        """
+        Prints formatted list of datasets provided by this loader.
+        """
+        LoaderTools.list_datasets(KagLoader)
 

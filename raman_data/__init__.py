@@ -2,15 +2,17 @@
 A unified API for loading and accessing Raman spectroscopy datasets.
 """
 
-from typing import List, Optional, Literal, Union
+from typing import List, Optional, Union
 
 from .types import RamanDataset
 from . import datasets
+from .loaders.LoaderTools import TASK_TYPE
 
 def raman_data(
-    name: Optional[str] = None,
+    dataset_name: Optional[str] = None,
+    file_name: Optional[str] = None,
     cache_dir: Optional[str] = None,
-    task_type: Optional[Literal['classification', 'regression']] = None
+    task_type: Optional[TASK_TYPE] = None
 ) -> Union[RamanDataset, List[str]]:
     """
     Main function to interact with Raman datasets.
@@ -19,7 +21,9 @@ def raman_data(
     - If 'name' is None, it lists available datasets, optionally filtered by 'task_type'.
 
     Args:
-        name: The name of the dataset to load. If None, lists datasets.
+        dataset_name: The name of the dataset to load. If None, lists datasets.
+        file_name: The name of a dataset's file to load. If None for given `dataset_name`,
+                   downloads the whole dataset into `cache_dir`.
         cache_dir: The directory to use for caching the data.
         task_type: Filters the dataset list by task type ('classification' or 'regression').
 
@@ -27,7 +31,9 @@ def raman_data(
         - A RamanDataset object if 'name' is specified.
         - A list of dataset names if 'name' is None.
     """
-    if name is None:
+    if dataset_name is None:
         return datasets.list_datasets(task_type=task_type)
     else:
-        return datasets.load_dataset(name=name, cache_dir=cache_dir)
+        return datasets.load_dataset(dataset_name=dataset_name,
+                                     file_name=file_name,
+                                     cache_dir=cache_dir)
