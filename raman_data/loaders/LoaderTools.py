@@ -22,7 +22,7 @@ class TASK_TYPE(Enum):
     Regression = 1
 
 
-from ILoader import ILoader
+from raman_data.loaders.ILoader import ILoader
 from typing import Optional, List
 import os
 
