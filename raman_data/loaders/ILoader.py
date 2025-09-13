@@ -9,11 +9,29 @@ class ILoader(metaclass=ABCMeta):
     """
     @classmethod
     def __subclasshook__(cls, subclass):
-        return (hasattr(subclass, 'download_dataset') and 
-                callable(subclass.download_dataset) and
-                hasattr(subclass, 'load_dataset') and 
-                callable(subclass.load_dataset) or
-                NotImplementedError)
+        """
+        Checks whether a subclass has needed properties.
+
+        Args:
+            subclass (class): A class to check inheritance of.
+
+        Returns:
+            bool: True, if the subclass has required properties.
+                  False otherwise.
+        """
+        if not (hasattr(subclass, 'download_dataset') and
+            callable(subclass.download_dataset) and
+            hasattr(subclass, 'load_dataset') and
+            callable(subclass.load_dataset)):
+            return False
+        
+        try:
+            subclass.download_dataset('')
+            subclass.load_dataset('', '')
+        except NotImplementedError:
+            return False
+        
+        return True
 
 
     @abstractmethod
