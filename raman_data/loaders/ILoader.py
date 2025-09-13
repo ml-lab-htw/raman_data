@@ -55,7 +55,7 @@ class ILoader(metaclass=ABCMeta):
 
         Returns:
             str: The path the dataset is downloaded to.
-            None: In case the dataset isn't on the list of a loader.
+            If the dataset isn't on the list of a loader, returns None.
         """
         raise NotImplementedError
 
@@ -65,7 +65,7 @@ class ILoader(metaclass=ABCMeta):
         dataset_name: str,
         file_name: str,
         cache_dir: Optional[str] = None
-    ) -> ndarray:
+    ) -> ndarray | None:
         """
         Loads certain dataset's file from cache folder as a numpy array.
         If requested file isn't in the cache folder, downloads it into that folder.
@@ -81,6 +81,7 @@ class ILoader(metaclass=ABCMeta):
 
         Returns:
             ndarray: A numpy array representing the loaded file.
+            If the dataset isn't on the list of a loader, returns None.
         """
         raise NotImplementedError
 
