@@ -1,3 +1,7 @@
+"""
+Some general tests of package's functionality.
+"""
+
 from raman_data import raman_data
 from raman_data.loaders.LoaderTools import TASK_TYPE
 
