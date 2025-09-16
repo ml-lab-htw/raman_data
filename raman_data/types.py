@@ -20,3 +20,23 @@ class RamanDataset:
     target: np.ndarray
     metadata: dict
 
+
+@dataclass
+class ZenodoFileInfo:
+    """
+    A class holding information about a downloadeble file from Zenodo.
+    
+    Attributes:
+        id (str): A 39 alphanumerical unique identifier.
+        key (str): The name of the file. 
+        size (int): The size of the file in bytes.
+        checksum (str): The md5 hexadecimal hash. 
+        download_link (str): The link for downloading this file.
+        links (dict[str, str]): A dictonary of all associated links.
+    """
+    id: str
+    key: str
+    size: int
+    checksum: str
+    download_link: str
+    links: dict[str, str]
