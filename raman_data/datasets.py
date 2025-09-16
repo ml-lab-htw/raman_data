@@ -6,9 +6,13 @@ from typing import List, Optional
 from .types import RamanDataset
 
 from raman_data.loaders.KagLoader import KagLoader
+from raman_data.loaders.HugLoader import HugLoader
 from raman_data.loaders.LoaderTools import TASK_TYPE
 
-__LOADERS = [KagLoader]
+__LOADERS = [
+    KagLoader,
+    HugLoader
+]
 
 def list_datasets(
     task_type: Optional[TASK_TYPE] = None

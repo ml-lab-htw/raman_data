@@ -75,6 +75,7 @@ class ILoader(metaclass=ABCMeta):
             file_name (str): The name of a specific dataset's file to load.
             cache_dir (str, optional): The path to look for the file at.
                                        If None, uses the lastly saved path.
+                                       If "default", sets the default path ('~/.cache').
 
         Raises:
             NotImplementedError: If not implemented raises the error by default.
