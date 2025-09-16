@@ -35,8 +35,9 @@ class HugLoader(ILoader):
             data_files=file_name,
             cache_dir=cache_path
         )
-        print(f"Dataset downloaded into " \
-              f"{cache_path if cache_path else 'default folder (~/.cache)'}")
+
+        cache_path = cache_path if cache_path else "~/.cache"
+        print(f"Dataset downloaded into {cache_path}")
 
         return cache_path
 

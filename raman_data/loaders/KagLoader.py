@@ -31,7 +31,7 @@ class KagLoader(ILoader):
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
 
-        print(f"Loading Kaggle dataset: {dataset_name}")
+        print(f"Downloading Kaggle dataset: {dataset_name}")
         path = dataset_download(
             handle=dataset_name,
             path=file_name
@@ -54,7 +54,8 @@ class KagLoader(ILoader):
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
 
-        print(f"Loading Kaggle dataset into {LoaderTools.get_cache_root(CACHE_DIR.Kaggle)}")
+        print(f"Loading Kaggle dataset from " \
+              f"{cache_path if cache_path else 'default folder (~/.cache)'}")
 
         df = load_dataset(
             adapter=KaggleDatasetAdapter.PANDAS,

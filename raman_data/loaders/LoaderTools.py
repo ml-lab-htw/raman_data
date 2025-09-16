@@ -34,7 +34,7 @@ class LoaderTools:
     @staticmethod
     def get_cache_root(
         env_var: CACHE_DIR
-    ) -> str:
+    ) -> str | None:
         """
         Retrieves the cache path of a certain loader.
 
@@ -42,12 +42,13 @@ class LoaderTools:
             env_var (CACHE_DIR): The name of loader's environment variable.
 
         Returns:
-            str: The saved cache path.
+            str|None: The saved cache path or
+                      None, if the path wasn't specified earlier.
         """
         try:
             return os.environ[env_var.value]
         except (KeyError):
-            return "Default path at \'~/.cache/kagglehub/\'"
+            return None
 
     
     @staticmethod
@@ -60,11 +61,14 @@ class LoaderTools:
         or for all loaders.
 
         Args:
-            path (str): The path to save datasets to.
+            path (str): The path to save datasets to or
+                        "default" to reset previously saved path.
             loader_key (CACHE_DIR, optional): The name of loader's
             environment variable that stores the cache path. If None,
             sets the given path for all loaders.
         """
+        path = None if path == "default" else path
+        
         if not (loader_key is None):
             os.environ[loader_key.value] = path
             print(f"[!] Cache root folder for {loader_key.name}'s loader is set to: {path}")
