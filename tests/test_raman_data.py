@@ -8,7 +8,8 @@ from raman_data.loaders.LoaderTools import TASK_TYPE
 __DATASETS = {
     "codina/raman-spectroscopy-of-diabetes": TASK_TYPE.Classification,
     "sergioalejandrod/raman-spectroscopy": TASK_TYPE.Classification,
-    "andriitrelin/cells-raman-spectra": TASK_TYPE.Classification
+    "andriitrelin/cells-raman-spectra": TASK_TYPE.Classification,
+    "chlange/SubstrateMixRaman": TASK_TYPE.Regression
 }
 
 def test_list_all_datasets():
@@ -37,7 +38,12 @@ def test_load_dataset():
     """
     Tests loading a dataset.
     """
-    dataset = raman_data(dataset_name="codina/raman-spectroscopy-of-diabetes")
-    assert dataset.data is not None
-    assert dataset.target is not None
-    assert dataset.metadata["name"] == "codina/raman-spectroscopy-of-diabetes"
+    test_datasets = [
+        "codina/raman-spectroscopy-of-diabetes",    # hosted on Kaggle
+        "chlange/SubstrateMixRaman"                 # hosted on HuggingFace
+    ]
+    for dataset_name in test_datasets:
+        dataset = raman_data(dataset_name=dataset_name)
+        assert dataset.data is not None
+        assert dataset.target is not None
+        assert dataset.metadata["name"] == dataset_name
