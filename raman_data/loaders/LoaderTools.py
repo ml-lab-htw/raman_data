@@ -23,6 +23,8 @@ class TASK_TYPE(Enum):
 
 
 from raman_data.loaders.ILoader import ILoader
+from raman_data.exceptions import ChecksumError
+
 from typing import Optional, List
 from tqdm import tqdm
 import os, requests, zipfile, hashlib, os
@@ -193,4 +195,33 @@ class LoaderTools:
         return out_file_path
     
     
-    
+    @staticmethod
+    def extract_zip_file_comtent(zip_file_path: str, zip_file_name: str) -> str | None:
+        """
+        Extracts all files and subfiles from a zip file into a directory with the same name as the zip file.
+        The extracted files are saved in the same directory as the zip file.
+
+        Args:
+            zip_file_path (str): Path to the zip file.
+            zip_file_name (str): The name of the zip file.
+
+        Returns:
+            str|None: If successfull the path of the output directory else None.
+        """
+        if zipfile.is_zipfile(zip_file_path):
+            #create dir with the same name as the zip file for uncompressed file data
+            out_dir = f"{os.path.dirname(zip_file_path)}/{zip_file_name.split('.')[0]}"
+            os.makedirs(out_dir, exist_ok=True)
+
+            #extract files 
+            with zipfile.ZipFile(zip_file_path, "r") as zf:
+                file_list = zf.namelist()
+                with tqdm(total=len(file_list), unit="files", unit_scale=True, desc=zip_file_name) as pbar:
+                    for file in file_list:
+                        if not os.path.isfile(f"{out_dir}/{file}"):
+                            zf.extract(file, out_dir)
+                            
+                        pbar.update(1)
+            os.remove(zip_file_path)
+            
+            return out_dir
