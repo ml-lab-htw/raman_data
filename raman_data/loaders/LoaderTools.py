@@ -24,7 +24,9 @@ class TASK_TYPE(Enum):
 
 from raman_data.loaders.ILoader import ILoader
 from typing import Optional, List
-import os
+from tqdm import tqdm
+import os, requests, zipfile, hashlib, os
+
 
 class LoaderTools:
     """
@@ -116,3 +118,79 @@ class LoaderTools:
         print(f"[*] Datasets available with {loader.__qualname__}:")
         for dataset_name, task_type in loader.DATASETS.items():
             print(f" |-> Name: {dataset_name} | Task type: {task_type.name}")
+            
+    
+    @staticmethod
+    def download(
+        url: str,
+        out_dir_path: str,
+        out_file_name: str,           
+        md5_hash: Optional[str] = None
+    ) -> str | None:
+        """
+        Download a file from a URL with optional MD5 verification.
+        
+        Args:
+            url (str): The URL to download the file from.
+            out_dir_path (str): The full path of the directory where the downloaded file will be saved.
+            out_file_name (str): The name of the file being downloaded.
+            md5_hash (Optional[str], optional): Expected MD5 hash of the file for integrity 
+                verification. If provided, the download is considered failed if the hash 
+                doesn't match. Defaults to None.
+        Returns:
+                    str | None: The output file path if download is successful and MD5 verification 
+                            (if provided) passes, None if the download fails or MD5 verification fails.
+        Note:
+            - Downloads in chunks of 1MB (1048576 bytes) for memory efficiency
+        """
+        
+        # size of a download package is set to 1MB 
+        # so that not the entire date gets loaded in to ram an once
+        CHUNK_SIZE = 1048576
+        
+        checksum = hashlib.md5()
+        
+        # http get request 
+        with requests.get(url=url, stream=True) as response: 
+            
+            print(response.status_code)
+            
+            #if its failed raise error 
+            if not response.ok:
+                raise requests.HTTPError(response=response)
+            
+            #total size of the to download data 
+            total_size = int(response.headers["Content-Length"]) if "Content-Length" in response.headers else None
+            
+            
+            
+            #TODO check if file already exits
+            out_file_path = os.path.join(out_dir_path, out_file_name)
+            
+            
+            
+            #open/create file to write the data to
+            with open(out_file_path, "xb") as file:
+                
+                #displays a loadingbar in the cli 
+                with tqdm(total=total_size, unit="B", unit_scale=True, desc=out_file_name) as pbar:
+                    
+                    #writes chunks with predefined size into the file 
+                    for chunk in response.iter_content(CHUNK_SIZE):
+                        if chunk:
+                            file.write(chunk)
+                            
+                            #calculate checksum
+                            checksum.update(chunk)
+                            
+                            pbar.update(len(chunk))
+        
+        #check the calculated checksum with the given one, 
+        # if its a mismatch rasie an Error
+        if md5_hash and (checksum.hexdigest() is not md5_hash):
+            raise ChecksumError(expected_checksum=md5_hash, actual_checksum=checksum.hexdigest())
+        
+        return out_file_path
+    
+    
+    
