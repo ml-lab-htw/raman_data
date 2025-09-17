@@ -1,7 +1,6 @@
 from typing import Optional
 from numpy import ndarray
-from tqdm import tqdm
-import requests, zipfile, os, hashlib
+import requests, os
 
 from raman_data.loaders.ILoader import ILoader
 from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
@@ -10,7 +9,6 @@ from raman_data import types
 class ZenLoader(ILoader):
     """
     A static class providing download functionality for datasets hosted on Zenodo.
-
     """
     BASE_URL = "https://zenodo.org/api/records/"
     
@@ -25,12 +23,13 @@ class ZenLoader(ILoader):
     
     @staticmethod
     def download_dataset(
-        dataset_id: Optional[str] = None,
         dataset_name: Optional[str] = None,
         file_name: Optional[str] = None,
-        cache_path: Optional[str] = None
+        cache_path: Optional[str] = None,
+        dataset_id: Optional[str] = None
     ) -> str | None:
-        """_summary_
+        """
+        _summary_
 
         Args:
             dataset_name (Optional[str], optional): _description_. Defaults to None.
@@ -40,6 +39,9 @@ class ZenLoader(ILoader):
         Returns:
             str|None: _description_
         """
+        
+        if cache_path is not None:
+            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
         
         if dataset_id and dataset_id.isdigit():
             response = requests.get(ZenLoader.BASE_URL + dataset_id.strip())
@@ -51,14 +53,14 @@ class ZenLoader(ILoader):
                                     headers={"response": "application/json"})
             file_list = ZenLoader.__get_downloadeble_files(search_response=response)
         else:
-            return None
+            return
 
         if not file_list:
-            return None
+            return
         
         for file in file_list: 
             file_path = LoaderTools.download(url=file.download_link,
-                                 out_dir_path="",
+                                 out_dir_path=LoaderTools.get_cache_root(CACHE_DIR.Zenodo),
                                  out_file_name=file.key,
                                  md5_hash=file.checksum)
             if file_path:
