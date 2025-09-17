@@ -3,6 +3,8 @@ General functions and enums meant to be used while loading certain dataset.
 """
 
 from enum import Enum
+from pathlib import Path
+import os
 
 class CACHE_DIR(Enum):
     """
@@ -11,6 +13,7 @@ class CACHE_DIR(Enum):
     """
     Kaggle = "KAGGLEHUB_CACHE"
     HuggingFace = "HF_HOME"
+    Zenodo = os.path.join(os.path.expanduser('~'), ".cache", "raman_data")
 
 
 class TASK_TYPE(Enum):
@@ -73,7 +76,7 @@ class LoaderTools:
         """
         path = None if path == "default" else path
         
-        if not (loader_key is None):
+        if loader_key is not None:
             os.environ[loader_key.value] = path
             print(f"[!] Cache root folder for {loader_key.name}'s loader is set to: {path}")
             
