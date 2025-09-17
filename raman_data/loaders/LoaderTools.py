@@ -5,8 +5,6 @@ General functions and enums meant to be used while loading certain dataset.
 from enum import Enum
 from pathlib import Path
 import os
-from pathlib import Path
-import os
 
 class CACHE_DIR(Enum):
     """
@@ -15,7 +13,6 @@ class CACHE_DIR(Enum):
     """
     Kaggle = "KAGGLEHUB_CACHE"
     HuggingFace = "HF_HOME"
-    Zenodo = os.path.join(os.path.expanduser('~'), ".cache", "raman_data")
     Zenodo = os.path.join(os.path.expanduser('~'), ".cache", "raman_data")
 
 
@@ -31,14 +28,9 @@ class TASK_TYPE(Enum):
 from raman_data.loaders.ILoader import ILoader
 from raman_data.exceptions import ChecksumError
 
-from raman_data.exceptions import ChecksumError
-
 from typing import Optional, List
 from tqdm import tqdm
-import os, requests, zipfile, hashlib, os
-
-from tqdm import tqdm
-import os, requests, zipfile, hashlib, os
+import requests, zipfile, hashlib
 
 
 class LoaderTools:
