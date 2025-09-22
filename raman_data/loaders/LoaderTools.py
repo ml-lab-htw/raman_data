@@ -3,7 +3,6 @@ General functions and enums meant to be used while loading certain dataset.
 """
 
 from enum import Enum
-from pathlib import Path
 import os
 
 class CACHE_DIR(Enum):
@@ -30,6 +29,7 @@ from raman_data.exceptions import ChecksumError
 
 from typing import Optional, List
 from tqdm import tqdm
+from pathlib import Path
 import requests, zipfile, hashlib
 
 
@@ -53,7 +53,7 @@ class LoaderTools:
                       None, if the path wasn't specified earlier.
         """
         try:
-            return os.environ[env_var.value]
+            return env_var.value if env_var == CACHE_DIR.Zenodo else os.environ[env_var.value]
         except (KeyError):
             return None
 
@@ -157,42 +157,37 @@ class LoaderTools:
         
         # http get request 
         with requests.get(url=url, stream=True) as response: 
-            
             print(response.status_code)
-            
             #if its failed raise error 
             if not response.ok:
                 raise requests.HTTPError(response=response)
-            
             #total size of the to download data 
             total_size = int(response.headers["Content-Length"]) if "Content-Length" in response.headers else None
             
+            os.makedirs(out_dir_path, exist_ok=True)
             
-            
-            #TODO check if file already exits
             out_file_path = os.path.join(out_dir_path, out_file_name)
-            
-            
+            if os.path.exists(out_file_path):
+                return out_file_path
             
             #open/create file to write the data to
-            with open(out_file_path, "xb") as file:
-                
+            with open(out_file_path, 'xb+') as file:
                 #displays a loadingbar in the cli 
-                with tqdm(total=total_size, unit="B", unit_scale=True, desc=out_file_name) as pbar:
-                    
+                with tqdm(total=total_size, unit="B", unit_scale=True, desc=f"Downloading file: {out_file_name}") as pbar:
                     #writes chunks with predefined size into the file 
                     for chunk in response.iter_content(CHUNK_SIZE):
                         if chunk:
                             file.write(chunk)
-                            
                             #calculate checksum
                             checksum.update(chunk)
-                            
                             pbar.update(len(chunk))
+                                
         
         #check the calculated checksum with the given one, 
         # if its a mismatch rasie an Error
-        if md5_hash and (checksum.hexdigest() is not md5_hash):
+        
+        if md5_hash is not None and checksum.hexdigest().strip() != md5_hash.strip():
+            os.remove(out_file_path)
             raise ChecksumError(expected_checksum=md5_hash, actual_checksum=checksum.hexdigest())
         
         return out_file_path
@@ -219,7 +214,7 @@ class LoaderTools:
             #extract files 
             with zipfile.ZipFile(zip_file_path, "r") as zf:
                 file_list = zf.namelist()
-                with tqdm(total=len(file_list), unit="files", unit_scale=True, desc=zip_file_name) as pbar:
+                with tqdm(total=len(file_list), unit="files", unit_scale=True, desc=f"Extracting from zip file: {zip_file_name}") as pbar:
                     for file in file_list:
                         if not os.path.isfile(f"{out_dir}/{file}"):
                             zf.extract(file, out_dir)
