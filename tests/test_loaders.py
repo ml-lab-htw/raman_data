@@ -5,10 +5,12 @@ A general checkup of loader's implementation.
 from raman_data.loaders.ILoader import ILoader
 from raman_data.loaders.KagLoader import KagLoader
 from raman_data.loaders.HugLoader import HugLoader
+from raman_data.loaders.ZenodoLoader import ZenLoader
 
 __LOADERS = [
     KagLoader,
-    HugLoader
+    HugLoader,
+    ZenLoader
 ]
 
 def test_interfacing():
