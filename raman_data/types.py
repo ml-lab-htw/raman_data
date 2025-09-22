@@ -21,7 +21,7 @@ class RamanDataset:
     metadata: dict
 
 
-@dataclass
+@dataclass(init=False)
 class ZenodoFileInfo:
     """
     A class holding information about a downloadeble file from Zenodo.
@@ -40,3 +40,21 @@ class ZenodoFileInfo:
     checksum: str
     download_link: str
     links: dict[str, str]
+    
+    def __init__(
+        self, 
+        id: str, 
+        key: str, 
+        size: int,
+        checksum: str, 
+        download_link: str, 
+        links: dict[str, str]
+    ) -> None:
+        
+        self.id = id
+        self.key = key.replace(" ", "_")
+        self.size = size
+        self.checksum = checksum.removeprefix("md5:").strip()
+        self.download_link = download_link
+        self.links = links
+        
