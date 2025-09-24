@@ -50,7 +50,7 @@ class LoaderTools:
     @staticmethod
     def get_cache_root(
         env_var: CACHE_DIR
-    ) -> str:
+    ) -> str | None:
         """
         Retrieves the cache path of a certain loader.
 
@@ -58,13 +58,13 @@ class LoaderTools:
             env_var (CACHE_DIR): The name of loader's environment variable.
 
         Returns:
-            str: The saved cache path or cache home directory (~/.cache),
-                 if the path wasn't specified earlier.
+            str: The saved cache path or
+                 None, if the path wasn't specified earlier.
         """
         try:
             return os.environ[env_var.value]
         except (KeyError):
-            return os.path.join(os.path.expanduser("~"), ".cache")
+            return None
 
     
     @staticmethod
