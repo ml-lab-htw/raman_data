@@ -3,6 +3,7 @@ General functions and enums meant to be used while loading certain dataset.
 """
 
 from enum import Enum
+import hashlib
 
 class CACHE_DIR(Enum):
     """
@@ -11,6 +12,7 @@ class CACHE_DIR(Enum):
     """
     Kaggle = "KAGGLEHUB_CACHE"
     HuggingFace = "HF_HOME"
+    Zip = "ZIP_CACHE"
 
 
 class TASK_TYPE(Enum):
@@ -22,12 +24,23 @@ class TASK_TYPE(Enum):
     Regression = 1
 
 
+class HASH_TYPE(Enum):
+    """    
+    An enum contains possible hash types of a
+    certain dataset's checksum. Each enums' value
+    is a respective `hashlib`'s generating function
+    which outputs the related hash upon execution.  
+    """
+    md5 = hashlib.md5
+    sha256 = hashlib.sha256
+
+
 from raman_data.loaders.ILoader import ILoader
 from raman_data.exceptions import ChecksumError
 
 from tqdm import tqdm
 from typing import Optional, List
-import hashlib, os, requests, zipfile
+import os, requests, zipfile
 
 class LoaderTools:
     """
@@ -126,24 +139,31 @@ class LoaderTools:
         url: str,
         out_dir_path: str,
         out_file_name: str,
-        md5_hash: Optional[str] = None
+        hash_target: Optional[str] = None,
+        hash_type: Optional[HASH_TYPE] = HASH_TYPE.md5
     ) -> str | None:
         """
-        Download a file from a URL with optional MD5 verification.
+        Download files from a URL with optional hash verification
+        and stores them as a `.zip` file.
         
         Args:
-            url (str): The URL to download the file from.
+            url (str): The URL to download the files from.
             out_dir_path (str): The full path of the directory where
-                                the downloaded file will be saved.
-            out_file_name (str): The name of the file being downloaded.
-            md5_hash (str, optional): Expected MD5 hash of the file for integrity
-                                      verification. If provided, the download is
-                                      considered failed if the hash doesn't match.
+                                the downloaded files will be saved.
+            out_file_name (str): The name of the file to create.
+            hash_target (str, optional): Expected hash value of the file for
+                                         integrity verification.
+            hash_type (HASH_TYPE, optional): The type of provided hash.
+
+        Raises:
+            requests.HTTPError: If connection / HTTP request fails.
+            ChecksumError: If provided hash value doesn't match with
+                           the one of downloaded files.
 
         Returns:
             str|None: The output file path if download is successful and
-                      MD5 verification (if provided) passes,
-                      None if the download fails or MD5 verification fails.
+                      hash verification (if hash's provided) passes.
+                      None if either download or hash verification fails.
         Note:
             - Downloads in chunks of 1MB (1048576 bytes) for memory efficiency
         """
@@ -151,12 +171,10 @@ class LoaderTools:
         # so that not the entire date gets loaded in to ram an once
         CHUNK_SIZE = 1048576
         
-        checksum = hashlib.md5()
+        checksum = hash_type.value()
         
         # http get request
         with requests.get(url=url, stream=True) as response:
-            print(response.status_code)
-            
             # if it's failed raise error
             if not response.ok:
                 raise requests.HTTPError(response=response)
@@ -168,9 +186,17 @@ class LoaderTools:
                 else None
             )
             
-            # TODO check if file already exits
+            # check if file or directory already exists
+            out_file_name += ".zip"
             out_file_path = os.path.join(out_dir_path, out_file_name)
-            
+            if not os.path.exists(out_dir_path):
+                print(f"Creating dataset's path: {out_dir_path}")
+                os.makedirs(out_dir_path)
+            elif os.path.exists(out_file_path):
+                print(f"File {out_file_name} already exists " \
+                      f"in the output folder: {out_dir_path}")
+                return out_file_path
+
             # open/create file to write the data to
             with open(out_file_path, "xb") as file:
                 # displays a loading bar in the cli
@@ -182,18 +208,23 @@ class LoaderTools:
                 ) as pbar:
                     # writes chunks with predefined size into the file
                     for chunk in response.iter_content(CHUNK_SIZE):
-                        if chunk:
-                            file.write(chunk)
-                            
-                            # calculate checksum
-                            checksum.update(chunk)
-                            
-                            pbar.update(len(chunk))
+                        if not chunk:
+                            continue
+                        
+                        file.write(chunk)
+                        
+                        # calculate checksum
+                        checksum.update(chunk)
+                        
+                        pbar.update(len(chunk))
                             
         # check the calculated checksum with the given one,
         # if it's a mismatch raise an error
-        if md5_hash and (checksum.hexdigest() is not md5_hash):
-            raise ChecksumError(expected_checksum=md5_hash, actual_checksum=checksum.hexdigest())
+        if hash_target and (checksum.hexdigest() != hash_target):
+            raise ChecksumError(
+                expected_checksum=hash_target,
+                actual_checksum=checksum.hexdigest()
+            )
         
         return out_file_path
 
