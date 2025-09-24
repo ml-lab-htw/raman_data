@@ -50,7 +50,7 @@ class LoaderTools:
     @staticmethod
     def get_cache_root(
         env_var: CACHE_DIR
-    ) -> str | None:
+    ) -> str:
         """
         Retrieves the cache path of a certain loader.
 
@@ -58,13 +58,13 @@ class LoaderTools:
             env_var (CACHE_DIR): The name of loader's environment variable.
 
         Returns:
-            str|None: The saved cache path or
-                      None, if the path wasn't specified earlier.
+            str: The saved cache path or cache home directory (~/.cache),
+                 if the path wasn't specified earlier.
         """
         try:
             return os.environ[env_var.value]
         except (KeyError):
-            return None
+            return os.path.join(os.path.expanduser("~"), ".cache")
 
     
     @staticmethod
@@ -140,7 +140,7 @@ class LoaderTools:
         out_dir_path: str,
         out_file_name: str,
         hash_target: Optional[str] = None,
-        hash_type: Optional[HASH_TYPE] = HASH_TYPE.md5
+        hash_type: Optional[HASH_TYPE] = None
     ) -> str | None:
         """
         Download files from a URL with optional hash verification
@@ -171,7 +171,7 @@ class LoaderTools:
         # so that not the entire date gets loaded in to ram an once
         CHUNK_SIZE = 1048576
         
-        checksum = hash_type.value()
+        checksum = hash_type.value() if hash_type else HASH_TYPE.md5.value()
         
         # http get request
         with requests.get(url=url, stream=True) as response:
