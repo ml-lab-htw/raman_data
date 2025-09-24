@@ -232,40 +232,45 @@ class LoaderTools:
     @staticmethod
     def extract_zip_file_content(
         zip_file_path: str,
-        zip_file_name: str
+        unzip_target_dir: Optional[str] = ''
     ) -> str | None:
         """
-        Extracts all files and subfiles from a zip file into a directory
-        with the same name as the zip file.
-        The extracted files are saved in the same directory as the zip file.
+        Extracts all files and subfiles from a `.zip` file into a directory
+        with the same name as the `.zip` file.
+        The extracted files are saved in the same directory
+        as the zip file by default.
         
         Args:
-            zip_file_path (str): Path to the zip file.
-            zip_file_name (str): The name of the zip file.
+            zip_file_path (str): Path to the `.zip` file to extract content of.
+            unzip_target_dir (str, optional): The name of the subdirectory
+                                              unzipped files should be stored in.
         
         Returns:
             str|None: If successful the path of the output directory else None.
         """
-        if zipfile.is_zipfile(zip_file_path):
-            # create dir with the same name as the zip file for uncompressed file data
-            out_dir = f"{os.path.dirname(zip_file_path)}/{zip_file_name.split('.')[0]}"
-            os.makedirs(out_dir, exist_ok=True)
-            
-            # extract files
-            with zipfile.ZipFile(zip_file_path, "r") as zf:
-                file_list = zf.namelist()
-                with tqdm(
-                    total=len(file_list),
-                    unit="files",
-                    unit_scale=True,
-                    desc=zip_file_name,
-                ) as pbar:
-                    for file in file_list:
-                        if not os.path.isfile(f"{out_dir}/{file}"):
-                            zf.extract(file, out_dir)
-                            
-                        pbar.update(1)
-            os.remove(zip_file_path)
-            
-            return out_dir
+        if not zipfile.is_zipfile(zip_file_path):
+            print(f"There's no .zip file stored at {zip_file_path}")
+            return None
+        
+        # create dir with the same name as the zip file for uncompressed file data
+        out_dir = os.path.join(os.path.dirname(zip_file_path), unzip_target_dir)
+        os.makedirs(out_dir, exist_ok=True)
+        
+        # extract files
+        with zipfile.ZipFile(zip_file_path, "r") as zf:
+            file_list = zf.namelist()
+            with tqdm(
+                total=len(file_list),
+                unit="files",
+                unit_scale=True,
+                desc=unzip_target_dir
+            ) as pbar:
+                for file in file_list:
+                    if not os.path.isfile(f"{out_dir}/{file}"):
+                        zf.extract(file, out_dir)
+                        
+                    pbar.update(1)
+        os.remove(zip_file_path)
+        
+        return out_dir
 
