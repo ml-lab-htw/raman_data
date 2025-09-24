@@ -3,6 +3,7 @@ Data structures for the raman_data package.
 """
 
 from dataclasses import dataclass
+from enum import Enum
 import numpy as np
 
 @dataclass
@@ -19,4 +20,12 @@ class RamanDataset:
     data: np.ndarray
     target: np.ndarray
     metadata: dict
+
+
+@dataclass
+class ExternalLink:
+    name: str
+    url: str
+    checksum: str | None = None
+    checksum_type: Enum | None = None
 
