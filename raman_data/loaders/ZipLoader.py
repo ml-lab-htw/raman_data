@@ -1,6 +1,7 @@
 from typing import Optional
 
-from numpy import ndarray
+from numpy import genfromtxt, load, ndarray
+from pandas import read_excel
 
 from raman_data.loaders.ILoader import ILoader
 from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, HASH_TYPE, LoaderTools
@@ -71,9 +72,7 @@ class ZipLoader(ILoader):
                                        this feature.*
             cache_path (str, optional): The path to save the dataset to.
                                         If None, uses the lastly saved path.
-
-        Raises:
-            NotImplementedError: If not implemented raises the error by default.
+                                        If "default", sets the default path ('~/.cache').
 
         Returns:
             str: The path the dataset is downloaded to.
@@ -98,6 +97,9 @@ class ZipLoader(ILoader):
             hash_target=dataset_link.checksum,
             hash_type=dataset_link.checksum_type
         )
+        
+        print("Unzipping files...")
+        
         download_path = LoaderTools.extract_zip_file_content(
             zip_file_path=download_zip_path,
             unzip_target_subdir=dataset_name
@@ -114,6 +116,22 @@ class ZipLoader(ILoader):
         file_name: str,
         cache_path: Optional[str] = None
     ) -> ndarray | None:
+        """
+        Loads certain dataset's file from cache folder as a numpy array.
+        If requested file isn't in the cache folder, downloads **the whole
+        dataset** into that folder.
+
+        Args:
+            dataset_name (str): The name of a dataset.
+            file_name (str): The name of a specific dataset's file to load.
+            cache_path (str, optional): The path to look for the file at.
+                                        If None, uses the lastly saved path.
+                                        If "default", sets the default path ('~/.cache').
+
+        Returns:
+            ndarray: A numpy array representing the loaded file.
+            If the dataset isn't on the list of a loader, returns None.
+        """
         if not LoaderTools.is_dataset_available(dataset_name, ZipLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with ZipLoader")
             return
@@ -121,14 +139,29 @@ class ZipLoader(ILoader):
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zip)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zip)
-        
-        print(f"Loading dataset from " \
-              f"{cache_path if cache_path else 'default folder (~/.cache)'}")
+        cache_path = cache_path if cache_path else os.path.join(os.path.expanduser("~"), ".cache", "ziploader")
 
-        # * Downloading magic
-        # * Converting magic
+        if not os.path.exists(os.path.join(cache_path, dataset_name, file_name)):
+            print(f"[!] Dataset's file {file_name} not found at: {cache_path}")
+            ZipLoader.download_dataset(
+                dataset_name=dataset_name,
+                cache_path=cache_path
+            )
 
-        return None
+        print(f"Loading dataset from {cache_path}")
+
+        file_path = os.path.join(cache_path, dataset_name, file_name)
+
+        # Converting Excel files with pandas
+        if file_name[-4:] in ["xlsx", ".xls"]:
+            return read_excel(io=file_path).to_numpy()
+
+        # Converting / reading numpy's native files
+        if file_name[-4:] == ".npy":
+            return load(file=file_path)
+
+        # Converting CSV files with numpy
+        return genfromtxt(fname=file_path, delimiter=",")
 
 
     @staticmethod
