@@ -33,7 +33,7 @@ class ZipLoader(ILoader):
         ),
         ExternalLink(
             name="csho33_bacteria_id",
-            url="https://uc62fbf42928de66f8f4eefa3695.dl.dropboxusercontent.com/zip_download_get/CVVyB-vq9ZONS4160D_U7daE999pFmJvXvKkXrDZbv540AGQFT_KjRfiUPWCNuIdLZml5W6vheLM_trgEgCkvkZLq7ooFLEZdlVM3CwTVOfjCw?_download_id=9898965341343273779645420073714159256370985042715217280190759748&_log_download_success=1&_notify_domain=www.dropbox.com&dl=1"
+            url="https://www.dropbox.com/scl/fo/fb29ihfnvishuxlnpgvhg/AJToUtts-vjYdwZGeqK4k-Y?rlkey=r4p070nsuei6qj3pjp13nwf6l&e=1&st=dmn0jupt&dl=1"
         ),
         ExternalLink(
             name="mendeley_surface-enhanced-raman",
