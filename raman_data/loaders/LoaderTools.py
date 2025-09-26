@@ -176,7 +176,7 @@ class LoaderTools:
         # check if the file already exists
         out_file_name += ".zip"
         out_file_path = os.path.join(out_dir_path, out_file_name)
-        if os.path.exists(out_file_path):
+        if zipfile.is_zipfile(out_file_path):
             print(f"File '{out_file_name}' already exists " \
                     f"in the output folder: {out_dir_path}")
             return out_file_path
