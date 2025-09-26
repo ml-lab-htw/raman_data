@@ -173,6 +173,17 @@ class LoaderTools:
         
         checksum = hash_type.value() if hash_type else HASH_TYPE.md5.value()
         
+        # check if the file already exists
+        out_file_name += ".zip"
+        out_file_path = os.path.join(out_dir_path, out_file_name)
+        if os.path.exists(out_file_path):
+            print(f"File '{out_file_name}' already exists " \
+                    f"in the output folder: {out_dir_path}")
+            return out_file_path
+
+        # create the output folder if not present
+        os.makedirs(name=out_dir_path, exist_ok=True)
+        
         # http get request
         with requests.get(url=url, stream=True) as response:
             # if it's failed raise error
@@ -185,17 +196,6 @@ class LoaderTools:
                 if "Content-Length" in response.headers
                 else None
             )
-            
-            # check if file or directory already exists
-            out_file_name += ".zip"
-            out_file_path = os.path.join(out_dir_path, out_file_name)
-            if not os.path.exists(out_dir_path):
-                print(f"Creating dataset's path: {out_dir_path}")
-                os.makedirs(out_dir_path)
-            elif os.path.exists(out_file_path):
-                print(f"File {out_file_name} already exists " \
-                      f"in the output folder: {out_dir_path}")
-                return out_file_path
 
             # open/create file to write the data to
             with open(out_file_path, "xb") as file:
@@ -232,18 +232,23 @@ class LoaderTools:
     @staticmethod
     def extract_zip_file_content(
         zip_file_path: str,
-        unzip_target_dir: Optional[str] = ''
+        unzip_target_subdir: Optional[str] = '',
+        force_overwrite: Optional[bool] = False
     ) -> str | None:
         """
-        Extracts all files and subfiles from a `.zip` file into a directory
-        with the same name as the `.zip` file.
+        Extracts all files and subfiles from a `.zip` file.
         The extracted files are saved in the same directory
-        as the zip file by default.
+        as the `.zip` file by default or in a subdirectory of files' location
+        if specified.
         
         Args:
             zip_file_path (str): Path to the `.zip` file to extract content of.
-            unzip_target_dir (str, optional): The name of the subdirectory
-                                              unzipped files should be stored in.
+            unzip_target_subdir (str, optional): The name of the subdirectory
+                                                 unzipped files should be stored in.
+            force_overwrite (bool, optional): A flag to determine whether
+                                              to overwrite previously unzipped files
+                                              or not. This doesn't affect any files
+                                              other than of specified `.zip` file.
         
         Returns:
             str|None: If successful the path of the output directory else None.
@@ -253,7 +258,7 @@ class LoaderTools:
             return None
         
         # create dir with the same name as the zip file for uncompressed file data
-        out_dir = os.path.join(os.path.dirname(zip_file_path), unzip_target_dir)
+        out_dir = os.path.join(os.path.dirname(zip_file_path), unzip_target_subdir)
         os.makedirs(out_dir, exist_ok=True)
         
         # extract files
@@ -263,10 +268,10 @@ class LoaderTools:
                 total=len(file_list),
                 unit="files",
                 unit_scale=True,
-                desc=unzip_target_dir
+                desc=unzip_target_subdir
             ) as pbar:
                 for file in file_list:
-                    if not os.path.isfile(f"{out_dir}/{file}"):
+                    if (force_overwrite or not os.path.isfile(f"{out_dir}/{file}")):
                         zf.extract(file, out_dir)
                         
                     pbar.update(1)

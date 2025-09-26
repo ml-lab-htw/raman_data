@@ -100,10 +100,10 @@ class ZipLoader(ILoader):
         )
         download_path = LoaderTools.extract_zip_file_content(
             zip_file_path=download_zip_path,
-            unzip_target_dir=f"{dataset_name}"
+            unzip_target_subdir=dataset_name
         )
 
-        print(f"Dataset downloaded into '{download_path}'")
+        print(f"Dataset downloaded into {download_path}")
 
         return download_path
 
