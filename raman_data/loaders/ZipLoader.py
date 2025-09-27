@@ -16,22 +16,12 @@ class ZipLoader(ILoader):
     which don't provide any API.
     """
     DATASETS = {
-        "mind-lab_covid19": TASK_TYPE.Classification,
-        "mind-lab_pd_ad": TASK_TYPE.Classification,
         "csho33_bacteria_id": TASK_TYPE.Classification,
         "mendeley_surface-enhanced-raman": TASK_TYPE.Classification,
         "dtu_raman-spectrum-matching": TASK_TYPE.Classification
     }
     
     __LINKS = [
-        ExternalLink(
-            name="mind-lab_covid19",
-            url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip"
-        ),
-        ExternalLink(
-            name="mind-lab_pd_ad",
-            url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip"
-        ),
         ExternalLink(
             name="csho33_bacteria_id",
             url="https://www.dropbox.com/scl/fo/fb29ihfnvishuxlnpgvhg/AJToUtts-vjYdwZGeqK4k-Y?rlkey=r4p070nsuei6qj3pjp13nwf6l&e=1&st=dmn0jupt&dl=1"
