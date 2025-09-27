@@ -12,7 +12,7 @@ class CACHE_DIR(Enum):
     """
     Kaggle = "KAGGLEHUB_CACHE"
     HuggingFace = "HF_HOME"
-    Zenodo = os.path.join(os.path.expanduser('~'), ".cache", "raman_data")
+    Zenodo = "ZEN_CACHE"
 
 
 class TASK_TYPE(Enum):
@@ -53,7 +53,7 @@ class LoaderTools:
                       None, if the path wasn't specified earlier.
         """
         try:
-            return env_var.value if env_var == CACHE_DIR.Zenodo else os.environ[env_var.value]
+            return os.environ[env_var.value]
         except (KeyError):
             return None
 
