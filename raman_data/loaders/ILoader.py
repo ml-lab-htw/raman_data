@@ -54,8 +54,9 @@ class ILoader(metaclass=ABCMeta):
             NotImplementedError: If not implemented raises the error by default.
 
         Returns:
-            str: The path the dataset is downloaded to.
-            If the dataset isn't on the list of a loader, returns None.
+            str|None: The path the dataset is downloaded to.
+                      If the dataset isn't on the list of a loader,
+                      returns None.
         """
         raise NotImplementedError
 
@@ -81,8 +82,9 @@ class ILoader(metaclass=ABCMeta):
             NotImplementedError: If not implemented raises the error by default.
 
         Returns:
-            ndarray: A numpy array representing the loaded file.
-            If the dataset isn't on the list of a loader, returns None.
+            ndarray|None: A numpy array representing the loaded file.
+                          If the dataset isn't on the list of a loader,
+                          returns None.
         """
         raise NotImplementedError
 

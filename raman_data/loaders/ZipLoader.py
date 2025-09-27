@@ -65,8 +65,8 @@ class ZipLoader(ILoader):
                                         If "default", sets the default path ('~/.cache').
 
         Returns:
-            str: The path the dataset is downloaded to.
-            If the dataset isn't on the list of a loader, returns None.
+            str|None: The path the dataset is downloaded to.
+                      If the dataset isn't on the list of a loader, returns None.
         """
         if not LoaderTools.is_dataset_available(dataset_name, ZipLoader.DATASETS):
             print(f"[!] Cannot download {dataset_name} dataset with ZipLoader")
@@ -119,8 +119,8 @@ class ZipLoader(ILoader):
                                         If "default", sets the default path ('~/.cache').
 
         Returns:
-            ndarray: A numpy array representing the loaded file.
-            If the dataset isn't on the list of a loader, returns None.
+            ndarray|None: A numpy array representing the loaded file.
+                          If the dataset isn't on the list of a loader, returns None.
         """
         if not LoaderTools.is_dataset_available(dataset_name, ZipLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with ZipLoader")

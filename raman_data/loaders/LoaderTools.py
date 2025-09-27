@@ -58,8 +58,8 @@ class LoaderTools:
             env_var (CACHE_DIR): The name of loader's environment variable.
 
         Returns:
-            str: The saved cache path or
-                 None, if the path wasn't specified earlier.
+            str|None: The saved cache path or
+                      None, if the path wasn't specified earlier.
         """
         try:
             return os.environ[env_var.value]
@@ -80,8 +80,9 @@ class LoaderTools:
             path (str): The path to save datasets to or
                         "default" to reset previously saved path.
             loader_key (CACHE_DIR, optional): The name of loader's
-            environment variable that stores the cache path. If None,
-            sets the given path for all loaders.
+                                              environment variable that stores
+                                              the cache path. If None, sets
+                                              the given path for all loaders.
         """
         path = None if path == "default" else path
         
