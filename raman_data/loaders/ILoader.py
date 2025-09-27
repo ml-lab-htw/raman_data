@@ -38,7 +38,7 @@ class ILoader(metaclass=ABCMeta):
     def download_dataset(
         dataset_name: str,
         file_name: Optional[str] = None,
-        cache_dir: Optional[str] = None
+        cache_path: Optional[str] = None
     ) -> str | None:
         """
         Downloads certain dataset into a predefined cache folder.
@@ -47,15 +47,16 @@ class ILoader(metaclass=ABCMeta):
             dataset_name (str): The name of a dataset to download.
             file_name (str, optional): The name of a specific dataset's file to download.
                                        If None, downloads whole dataset.
-            cache_dir (str, optional): The path to save the dataset to.
-                                       If None, uses the lastly saved path.
+            cache_path (str, optional): The path to save the dataset to.
+                                        If None, uses the lastly saved path.
 
         Raises:
             NotImplementedError: If not implemented raises the error by default.
 
         Returns:
-            str: The path the dataset is downloaded to.
-            If the dataset isn't on the list of a loader, returns None.
+            str|None: The path the dataset is downloaded to.
+                      If the dataset isn't on the list of a loader,
+                      returns None.
         """
         raise NotImplementedError
 
@@ -64,7 +65,7 @@ class ILoader(metaclass=ABCMeta):
     def load_dataset(
         dataset_name: str,
         file_name: str,
-        cache_dir: Optional[str] = None
+        cache_path: Optional[str] = None
     ) -> ndarray | None:
         """
         Loads certain dataset's file from cache folder as a numpy array.
@@ -73,16 +74,17 @@ class ILoader(metaclass=ABCMeta):
         Args:
             dataset_name (str): The name of a dataset.
             file_name (str): The name of a specific dataset's file to load.
-            cache_dir (str, optional): The path to look for the file at.
-                                       If None, uses the lastly saved path.
-                                       If "default", sets the default path ('~/.cache').
+            cache_path (str, optional): The path to look for the file at.
+                                        If None, uses the lastly saved path.
+                                        If "default", sets the default path ('~/.cache').
 
         Raises:
             NotImplementedError: If not implemented raises the error by default.
 
         Returns:
-            ndarray: A numpy array representing the loaded file.
-            If the dataset isn't on the list of a loader, returns None.
+            ndarray|None: A numpy array representing the loaded file.
+                          If the dataset isn't on the list of a loader,
+                          returns None.
         """
         raise NotImplementedError
 

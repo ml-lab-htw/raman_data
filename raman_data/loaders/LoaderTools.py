@@ -3,6 +3,7 @@ General functions and enums meant to be used while loading certain dataset.
 """
 
 from enum import Enum
+import hashlib
 
 class CACHE_DIR(Enum):
     """
@@ -11,6 +12,7 @@ class CACHE_DIR(Enum):
     """
     Kaggle = "KAGGLEHUB_CACHE"
     HuggingFace = "HF_HOME"
+    Zip = "ZIP_CACHE"
 
 
 class TASK_TYPE(Enum):
@@ -22,9 +24,23 @@ class TASK_TYPE(Enum):
     Regression = 1
 
 
+class HASH_TYPE(Enum):
+    """    
+    An enum contains possible hash types of a
+    certain dataset's checksum. Each enums' value
+    is a respective `hashlib`'s generating function
+    which outputs the related hash upon execution.  
+    """
+    md5 = hashlib.md5
+    sha256 = hashlib.sha256
+
+
 from raman_data.loaders.ILoader import ILoader
+from raman_data.exceptions import ChecksumError
+
+from tqdm import tqdm
 from typing import Optional, List
-import os
+import os, requests, zipfile
 
 class LoaderTools:
     """
@@ -64,8 +80,9 @@ class LoaderTools:
             path (str): The path to save datasets to or
                         "default" to reset previously saved path.
             loader_key (CACHE_DIR, optional): The name of loader's
-            environment variable that stores the cache path. If None,
-            sets the given path for all loaders.
+                                              environment variable that stores
+                                              the cache path. If None, sets
+                                              the given path for all loaders.
         """
         path = None if path == "default" else path
         
@@ -116,3 +133,150 @@ class LoaderTools:
         print(f"[*] Datasets available with {loader.__qualname__}:")
         for dataset_name, task_type in loader.DATASETS.items():
             print(f" |-> Name: {dataset_name} | Task type: {task_type.name}")
+            
+    
+    @staticmethod
+    def download(
+        url: str,
+        out_dir_path: str,
+        out_file_name: str,
+        hash_target: Optional[str] = None,
+        hash_type: Optional[HASH_TYPE] = None
+    ) -> str | None:
+        """
+        Download files from a URL with optional hash verification
+        and stores them as a `.zip` file.
+        
+        Args:
+            url (str): The URL to download the files from.
+            out_dir_path (str): The full path of the directory where
+                                the downloaded files will be saved.
+            out_file_name (str): The name of the file to create.
+            hash_target (str, optional): Expected hash value of the file for
+                                         integrity verification.
+            hash_type (HASH_TYPE, optional): The type of provided hash.
+
+        Raises:
+            requests.HTTPError: If connection / HTTP request fails.
+            ChecksumError: If provided hash value doesn't match with
+                           the one of downloaded files.
+
+        Returns:
+            str|None: The output file path if download is successful and
+                      hash verification (if hash's provided) passes.
+                      None if either download or hash verification fails.
+        Note:
+            - Downloads in chunks of 1MB (1048576 bytes) for memory efficiency
+        """
+        # size of a download package is set to 1MB
+        # so that not the entire date gets loaded in to ram an once
+        CHUNK_SIZE = 1048576
+        
+        checksum = hash_type.value() if hash_type else HASH_TYPE.md5.value()
+        
+        # check if the file already exists
+        out_file_name += ".zip"
+        out_file_path = os.path.join(out_dir_path, out_file_name)
+        if zipfile.is_zipfile(out_file_path):
+            print(f"File '{out_file_name}' already exists " \
+                    f"in the output folder: {out_dir_path}")
+            return out_file_path
+
+        # create the output folder if not present
+        os.makedirs(name=out_dir_path, exist_ok=True)
+        
+        # http get request
+        with requests.get(url=url, stream=True) as response:
+            # if it's failed raise error
+            if not response.ok:
+                raise requests.HTTPError(response=response)
+            
+            # total size of the downloaded data
+            total_size = (
+                int(response.headers["Content-Length"])
+                if "Content-Length" in response.headers
+                else None
+            )
+
+            # open/create file to write the data to
+            with open(out_file_path, "xb") as file:
+                # displays a loading bar in the cli
+                with tqdm(
+                    total=total_size,
+                    unit="B",
+                    unit_scale=True,
+                    desc=out_file_name
+                ) as pbar:
+                    # writes chunks with predefined size into the file
+                    for chunk in response.iter_content(CHUNK_SIZE):
+                        if not chunk:
+                            continue
+                        
+                        file.write(chunk)
+                        
+                        # calculate checksum
+                        checksum.update(chunk)
+                        
+                        pbar.update(len(chunk))
+                            
+        # check the calculated checksum with the given one,
+        # if it's a mismatch raise an error
+        if hash_target and (checksum.hexdigest() != hash_target):
+            raise ChecksumError(
+                expected_checksum=hash_target,
+                actual_checksum=checksum.hexdigest()
+            )
+        
+        return out_file_path
+
+
+    @staticmethod
+    def extract_zip_file_content(
+        zip_file_path: str,
+        unzip_target_subdir: Optional[str] = '',
+        force_overwrite: Optional[bool] = False
+    ) -> str | None:
+        """
+        Extracts all files and subfiles from a `.zip` file.
+        The extracted files are saved in the same directory
+        as the `.zip` file by default or in a subdirectory of files' location
+        if specified.
+        
+        Args:
+            zip_file_path (str): Path to the `.zip` file to extract content of.
+            unzip_target_subdir (str, optional): The name of the subdirectory
+                                                 unzipped files should be stored in.
+            force_overwrite (bool, optional): A flag to determine whether
+                                              to overwrite previously unzipped files
+                                              or not. This doesn't affect any files
+                                              other than of specified `.zip` file.
+        
+        Returns:
+            str|None: If successful the path of the output directory else None.
+        """
+        if not zipfile.is_zipfile(zip_file_path):
+            print(f"There's no .zip file stored at {zip_file_path}")
+            return None
+        
+        # create dir with the same name as the zip file for uncompressed file data
+        out_dir = os.path.join(os.path.dirname(zip_file_path), unzip_target_subdir)
+        os.makedirs(out_dir, exist_ok=True)
+        
+        # extract files
+        with zipfile.ZipFile(zip_file_path, "r") as zf:
+            file_list = zf.namelist()
+            with tqdm(
+                total=len(file_list),
+                unit="files",
+                unit_scale=True,
+                desc=unzip_target_subdir
+            ) as pbar:
+                for file in file_list:
+                    if (force_overwrite or not os.path.isfile(f"{out_dir}/{file}")):
+                        zf.extract(file, out_dir)
+                        
+                    pbar.update(1)
+        os.remove(zip_file_path)
+        
+        return out_dir
+

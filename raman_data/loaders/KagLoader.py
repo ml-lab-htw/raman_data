@@ -55,7 +55,7 @@ class KagLoader(ILoader):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
 
         print(f"Loading Kaggle dataset from " \
-              f"{cache_path if cache_path else 'default folder (~/.cache)'}")
+              f"{cache_path if cache_path else 'default folder (~/.cache/kagglehub)'}")
 
         df = load_dataset(
             adapter=KaggleDatasetAdapter.PANDAS,
