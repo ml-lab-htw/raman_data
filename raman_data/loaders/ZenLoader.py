@@ -1,12 +1,15 @@
-from typing import Optional
-from numpy import ndarray, genfromtxt, load
 from pathlib import Path
-from pandas import read_excel
-import requests, os
+from typing import Optional
 
+import os
+import pandas as pd
+import requests
+from numpy import ndarray
+
+from raman_data import types
 from raman_data.loaders.ILoader import ILoader
 from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
-from raman_data import types
+
 
 class ZenLoader(ILoader):
     """
@@ -17,7 +20,7 @@ class ZenLoader(ILoader):
     
     #TODO Needs to be checked if Classification or Regression
     DATASETS = {
-        "10779223": TASK_TYPE.Classification,
+        "10779223": TASK_TYPE.Regression,
         "256329": TASK_TYPE.Classification,
         "3572359": TASK_TYPE.Classification,
         "7644521": TASK_TYPE.Classification
@@ -28,7 +31,6 @@ class ZenLoader(ILoader):
     def download_dataset(
         dataset_name: Optional[str|None] = None,
         dataset_id: Optional[str|None] = None,
-        file_name: Optional[str|None] = None,
         cache_path: Optional[str|None] = None
     ) -> str | None:
         """
@@ -37,8 +39,6 @@ class ZenLoader(ILoader):
         Args:
             dataset_name (str, optional): The name of a dataset to download.
             dataset_id (str, optional): The Zenodo id of the dataset.
-            file_name (str, optional): This loader dosen't support this feature, 
-                                       it will always download the entire dataset.
              cache_path (str, optional): The path to look for the file at.
                                        If None, uses the lastly saved path.
                                        If "default", sets the default path ('~/.cache').
@@ -50,7 +50,7 @@ class ZenLoader(ILoader):
             str: The path the dataset is downloaded to.
             If the dataset isn't on the list of the loader, returns None.
         """
-        if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS):
+        if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS):  # TODO here seems to be a confusion between dataset_name and dataset_id
             print(f"[!] Cannot download {dataset_name} dataset with Zenodo loader")
             return None
         
@@ -117,7 +117,7 @@ class ZenLoader(ILoader):
                 else: 
                     file_dir = None
         except requests.HTTPError as e:
-            print(f"Could not download requested dataset: {dataset_name} ID: {dataset_id if dataset_id else "None"}")
+            print(f"Could not download requested dataset: {dataset_name} ID: {dataset_id}")
             return None
         except OSError as e:
             return None
@@ -128,7 +128,6 @@ class ZenLoader(ILoader):
     @staticmethod
     def load_dataset(
         dataset_name: str,
-        file_name: str, 
         dataset_id: Optional[str|None] = None,
         cache_path: str | None = None
     ) -> ndarray | None:
@@ -138,7 +137,6 @@ class ZenLoader(ILoader):
 
         Args:
             dataset_name (str): The name of a dataset.
-            file_name (str): The name of a specific dataset's file to load.
             dataset_id (str, optional): The Zenodo id of the dataset.
             cache_path (str, optional): The path to look for the file at.
                                        If None, uses the lastly saved path.
@@ -158,27 +156,46 @@ class ZenLoader(ILoader):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
         cache_path = cache_path if cache_path else os.path.join(os.path.expanduser('~'), ".cache", "zenodo")
-        
-        file_path = os.path.join(cache_path, dataset_name, file_name)
-        
-        if not os.path.exists(file_path):
-            print(f"[!] Dataset's file {file_name} not found at: {cache_path}")
-            ZenLoader.download_dataset(
-                dataset_name=dataset_name,
-                cache_path=cache_path,
-                dataset_id= dataset_id if dataset_id else None
-            )
-            
-         # Converting Excel files with pandas
-        if file_name[-4:] in ["xlsx", ".xls"]:
-            return read_excel(io=file_path).to_numpy()
 
-        # Converting / reading numpy's native files
-        if file_name[-4:] == ".npy":
-            return load(file=file_path)
+        data_folder_parent = os.path.join(cache_path, "Raw data", "Raw data", "Experimental data from sugar mixtures", "Raw datasets for analyses")
 
-        # Converting CSV files with numpy
-        return genfromtxt(fname=file_path, delimiter=",")
+        snr = "Low SNR"
+        data_folder = os.path.join(data_folder_parent, snr)
+        data_path = os.path.join(data_folder, "data.pkl")
+
+        if not os.path.isfile(data_path):
+            zip_filename = "Raw data.zip"
+
+            # check if the zip file exists
+            if not os.path.isfile(os.path.join(cache_path, zip_filename)):
+                # download the dataset if the zip file doesn't exist
+                download_path = ZenLoader.download_dataset(dataset_name, dataset_id, None, cache_path)
+
+            # extract the zip file
+            LoaderTools.extract_zip_file_comtent(cache_path, zip_filename)
+
+        # load the data file
+        if not os.path.isfile(data_path):
+            raise FileNotFoundError(f"Could not find {zip_filename} in {data_path}")
+
+        # read spectra with pandas
+        spectra = pd.read_pickle(data_path)
+
+        # read shifts with pandas
+        shifts_path = os.path.join(data_folder, "spectral_axis.pkl")
+        if not os.path.isfile(shifts_path):
+            raise FileNotFoundError(f"Could not find spectral_axis.pkl in {shifts_path}")
+
+        raman_shifts = pd.read_pickle(shifts_path)
+
+        # read gt with pandas
+        gt_path = os.path.join(data_folder, "gt_endmembers.pkl")
+        if not os.path.isfile(gt_path):
+            raise FileNotFoundError(f"Could not find gt_endmembers.pkl in {gt_path}")
+
+        concentrations = pd.read_pickle(gt_path)
+
+        return raman_shifts, spectra, concentrations
         
         
     @staticmethod
