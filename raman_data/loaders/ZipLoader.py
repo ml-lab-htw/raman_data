@@ -16,12 +16,17 @@ class ZipLoader(ILoader):
     which don't provide any API.
     """
     DATASETS = {
+        "MIND-Lab_covid+pd_ad_bundle": TASK_TYPE.Classification,
         "csho33_bacteria_id": TASK_TYPE.Classification,
         "mendeley_surface-enhanced-raman": TASK_TYPE.Classification,
         "dtu_raman-spectrum-matching": TASK_TYPE.Classification
     }
     
     __LINKS = [
+        ExternalLink(
+            name="MIND-Lab_covid+pd_ad_bundle",
+            url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip"
+        ),
         ExternalLink(
             name="csho33_bacteria_id",
             url="https://www.dropbox.com/scl/fo/fb29ihfnvishuxlnpgvhg/AJToUtts-vjYdwZGeqK4k-Y?rlkey=r4p070nsuei6qj3pjp13nwf6l&e=1&st=dmn0jupt&dl=1"
@@ -114,6 +119,8 @@ class ZipLoader(ILoader):
         Args:
             dataset_name (str): The name of a dataset.
             file_name (str): The name of a specific dataset's file to load.
+                             Depending on dataset this can be a path relative
+                             to dataset's root.
             cache_path (str, optional): The path to look for the file at.
                                         If None, uses the lastly saved path.
                                         If "default", sets the default path ('~/.cache').
