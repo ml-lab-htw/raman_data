@@ -220,6 +220,8 @@ class LoaderTools:
                             zf.extract(file, out_dir)
                             
                         pbar.update(1)
-            os.remove(zip_file_path)
+
+            # TODO check if we really want to delete the zip file after extraction
+            # os.remove(zip_file_path)
             
             return out_dir
