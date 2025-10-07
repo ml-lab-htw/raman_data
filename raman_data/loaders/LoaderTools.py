@@ -214,7 +214,7 @@ class LoaderTools:
             #extract files 
             with zipfile.ZipFile(zip_file_path, "r") as zf:
                 file_list = zf.namelist()
-                with tqdm(total=len(file_list), unit="files", unit_scale=True, desc=f"Extracting from zip file: {zip_file_name}") as pbar:
+                with tqdm(total=len(file_list), unit="files", unit_scale=True, desc=f"Extracting file:  {zip_file_name}") as pbar:
                     for file in file_list:
                         if not os.path.isfile(f"{out_dir}/{file}"):
                             zf.extract(file, out_dir)
