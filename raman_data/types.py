@@ -3,7 +3,10 @@ Data structures for the raman_data package.
 """
 
 from dataclasses import dataclass
+from typing import Callable, Any
 import numpy as np
+
+from raman_data.loaders.LoaderTools import TASK_TYPE 
 
 @dataclass
 class RamanDataset:
@@ -52,9 +55,17 @@ class ZenodoFileInfo:
     ) -> None:
         
         self.id = id
-        self.key = key.replace(" ", "_")
+        self.key = key
         self.size = size
         self.checksum = checksum.removeprefix("md5:").strip()
         self.download_link = download_link
         self.links = links
-        
+ 
+ 
+@dataclass
+class datasetInfo:
+    task_type: TASK_TYPE
+    id: str
+    loader: Callable[[str], np.ndarray]
+    
+    
