@@ -163,7 +163,6 @@ class LoaderTools:
                 raise requests.HTTPError(response=response)
             #total size of the to download data 
             total_size = int(response.headers["Content-Length"]) if "Content-Length" in response.headers else None
-            
             os.makedirs(out_dir_path, exist_ok=True)
             
             out_file_path = os.path.join(out_dir_path, out_file_name)
@@ -173,7 +172,7 @@ class LoaderTools:
             #open/create file to write the data to
             with open(out_file_path, 'xb+') as file:
                 #displays a loadingbar in the cli 
-                with tqdm(total=total_size, unit="B", unit_scale=True, desc=f"Downloading file: {out_file_name}") as pbar:
+                with tqdm(total=total_size, unit="B", unit_scale=True, desc=f"Downloading file {out_file_name}") as pbar:
                     #writes chunks with predefined size into the file 
                     for chunk in response.iter_content(CHUNK_SIZE):
                         if chunk:
@@ -214,14 +213,11 @@ class LoaderTools:
             #extract files 
             with zipfile.ZipFile(zip_file_path, "r") as zf:
                 file_list = zf.namelist()
-                with tqdm(total=len(file_list), unit="files", unit_scale=True, desc=f"Extracting file:  {zip_file_name}") as pbar:
+                with tqdm(total=len(file_list), unit="files", unit_scale=True, desc=f"Extracting file {zip_file_name}") as pbar:
                     for file in file_list:
                         if not os.path.isfile(f"{out_dir}/{file}"):
                             zf.extract(file, out_dir)
                             
                         pbar.update(1)
-
-            # TODO check if we really want to delete the zip file after extraction
-            # os.remove(zip_file_path)
             
             return out_dir
