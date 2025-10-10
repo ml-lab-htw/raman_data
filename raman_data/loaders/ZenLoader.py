@@ -1,10 +1,9 @@
 from pathlib import Path
 from typing import Optional
 
-import os
+import os, requests, csv
 import pandas as pd
-import requests
-from numpy import ndarray
+import numpy as np
 
 from raman_data import types
 from raman_data.loaders.ILoader import ILoader
@@ -17,12 +16,15 @@ class ZenLoader(ILoader):
     """
     
     @staticmethod
-    def __load_10779223(cache_path: str) -> ndarray:
+    def __load_10779223(cache_path: str) -> np.ndarray|None:
         zip_filename = "Raw data.zip"
         
-        data_dir = LoaderTools.extract_zip_file_comtent(os.path.join(cache_path, "Raw data" "10779223", zip_filename), zip_filename)
+        data_dir = LoaderTools.extract_zip_file_comtent(os.path.join(cache_path, "10779223", zip_filename), zip_filename)
         
-        data_folder_parent = os.path.join(data_dir, "Experimental data from sugar mixtures", "Raw datasets for analyses")
+        if data_dir is None:
+            return None
+        
+        data_folder_parent = os.path.join(data_dir, "Raw data", "Raw data", "Experimental data from sugar mixtures", "Raw datasets for analyses")
 
         snr = "Low SNR"
         data_folder = os.path.join(data_folder_parent, snr)
@@ -54,23 +56,42 @@ class ZenLoader(ILoader):
     
     
     @staticmethod
-    def __load_256329(cache_path: str) -> ndarray:
+    def __load_256329(cache_path: str) -> np.ndarray|None:
         raise NotImplementedError
     
     
     @staticmethod
-    def __load_7644521(cache_path: str) -> ndarray:
+    def __load_7644521(cache_path: str) -> np.ndarray|None:
         raise NotImplementedError
     
     
     
     @staticmethod
-    def __load_3572359(cache_path: str) -> ndarray:
+    def __load_3572359(cache_path: str) -> np.ndarray|None:
         zip_filename = "Dataset.zip"
         
         data_dir = LoaderTools.extract_zip_file_comtent(os.path.join(cache_path, "3572359", zip_filename), zip_filename)
         
-        raise NotImplementedError
+        if data_dir is None:
+            return None
+        
+        
+        data_path = os.path.join(data_dir, "ILSdata.csv")
+
+        if not os.path.isfile(data_path):
+            raise FileNotFoundError(f"Could not find ILSdata.csv in {data_path}")
+        
+        with open(data_path, newline='') as csv_file:
+            reader = csv.DictReader(csv_file)
+
+            for row in reader: 
+                raman_shift = row.keys()
+                
+                for shift in range(400, 2002, 3):
+                    
+                
+        
+        
     
     
     
@@ -140,7 +161,7 @@ class ZenLoader(ILoader):
     def load_dataset(
         *dataset_names: str,
         cache_path: str | None = None
-    ) -> ndarray | None:
+    ) -> np.ndarray | None:
         
         if cache_path is not None:
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
@@ -174,3 +195,6 @@ class ZenLoader(ILoader):
                 LoaderTools.extract_zip_file_comtent(zip_file_path, zip_file_name)
                 
             loaded_data[dataset_name] = ZenLoader.DATASETS[dataset_name].loader(cache_path)
+            
+        
+        #TODO: convert data to RamanDatasets type
