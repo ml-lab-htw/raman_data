@@ -19,7 +19,7 @@ class ZenLoader(ILoader):
     def __load_10779223(cache_path: str) -> np.ndarray|None:
         zip_filename = "Raw data.zip"
         
-        data_dir = LoaderTools.extract_zip_file_comtent(os.path.join(cache_path, "10779223", zip_filename), zip_filename)
+        data_dir = LoaderTools.extract_zip_file_content(os.path.join(cache_path, "10779223", zip_filename), zip_filename)
         
         if data_dir is None:
             return None
@@ -67,33 +67,49 @@ class ZenLoader(ILoader):
     
     
     @staticmethod
-    def __load_3572359(cache_path: str) -> np.ndarray|None:
-        zip_filename = "Dataset.zip"
+    def load_3572359(cache_path: str) -> np.ndarray|None:
         
-        data_dir = LoaderTools.extract_zip_file_comtent(os.path.join(cache_path, "3572359", zip_filename), zip_filename)
-        
-        if data_dir is None:
-            return None
-        
-        
-        data_path = os.path.join(data_dir, "ILSdata.csv")
+        data_path = os.path.join(cache_path, "3572359", "ILSdata.csv")
 
         if not os.path.isfile(data_path):
             raise FileNotFoundError(f"Could not find ILSdata.csv in {data_path}")
         
         with open(data_path, newline='') as csv_file:
-            reader = csv.DictReader(csv_file)
+            #reader = csv.DictReader(csv_file)
+            reader = csv.reader(csv_file)
+
+            raman_shifts = np.zeros((3518, 534))
+            concentrations = []
+
+            i = 0
 
             for row in reader: 
-                raman_shift = row.keys()
-                
-                for shift in range(400, 2002, 3):
+                data_row = row[9:]
+
+                if i == 0:
+                    spectra = np.array(data_row, dtype=float)
+                else:
+                    #TODO:What the hell should I do with NA values
+                    raman_shifts[i] = np.array(data_row, dtype=float)
+
+                    concentrations.append(row[6])
+
+                i += 1
+
+            return raman_shifts, spectra, np.array(concentrations, dtype=float)
+
+
                     
                 
-        
-        
-    
-    
+
+
+                
+
+
+
+
+
+
     
     BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
     BASE_CACHE_DIR = os.path.join(os.path.expanduser('~'), ".cache", "zenodo")
@@ -114,7 +130,7 @@ class ZenLoader(ILoader):
         "Surface Enhanced Raman Spectroscopy" : types.datasetInfo(
                                         task_type=TASK_TYPE.Classification, 
                                         id="3572359", 
-                                        loader=__load_3572359)
+                                        loader=load_3572359)
 
     }
     
@@ -192,7 +208,7 @@ class ZenLoader(ILoader):
                 ZenLoader.download_dataset(dataset_name, cache_path)
             
             if not os.path.isdir(os.path.join(cache_path, dataset_id)):
-                LoaderTools.extract_zip_file_comtent(zip_file_path, zip_file_name)
+                LoaderTools.extract_zip_file_content(zip_file_path, zip_file_name)
                 
             loaded_data[dataset_name] = ZenLoader.DATASETS[dataset_name].loader(cache_path)
             
