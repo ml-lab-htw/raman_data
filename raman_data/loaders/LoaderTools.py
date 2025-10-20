@@ -193,7 +193,7 @@ class LoaderTools:
     
     
     @staticmethod
-    def extract_zip_file_comtent(zip_file_path: str, zip_file_name: str) -> str | None:
+    def extract_zip_file_content(zip_file_path: str, zip_file_name: str) -> str | None:
         """
         Extracts all files and subfiles from a zip file into a directory with the same name as the zip file.
         The extracted files are saved in the same directory as the zip file.
@@ -205,6 +205,7 @@ class LoaderTools:
         Returns:
             str|None: If successfull the path of the output directory else None.
         """
+        
         if zipfile.is_zipfile(zip_file_path):
             #create dir with the same name as the zip file for uncompressed file data
             out_dir = f"{os.path.dirname(zip_file_path)}/{zip_file_name.split('.')[0]}"
