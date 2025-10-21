@@ -3,7 +3,11 @@ General functions and enums meant to be used while loading certain dataset.
 """
 
 from enum import Enum
-import os
+from scipy import io
+
+import os, h5py
+import numpy as np
+
 
 class CACHE_DIR(Enum):
     """
@@ -222,3 +226,41 @@ class LoaderTools:
                         pbar.update(1)
             
             return out_dir
+        
+    
+    @staticmethod
+
+
+    def read_mat_file(mat_file_path: str) -> dict[str, np.ndarray]|None:
+        """
+        Extracts the content of a MATLAB .mat file as a python dictonary.
+
+        Args:
+            mat_file_path (str): Complet path to the MAT file
+
+            Returns:
+                dict|None: A dictonary whre the keys are the variabel names definded in the file  
+                and data/header information as values. The data is converted to numpy arrays 
+                with a uniform type. If possible the type of the data is used, if not python strings 
+                used as default the data type.
+
+                If the file couldn't be loaded None is returned.
+        """
+
+        try:
+            #check the file format, matlab version 7.3 or above use hdf5
+            #everything below can be opend using scipys loadmat
+            if h5py.is_hdf5(mat_file_path):
+                print("hdf5")
+                with h5py.File(mat_file_path, "r") as file:
+                    for key in file.keys():
+                        try:
+                            data_dict[key] = np.array(file[key])
+                        except TypeError:
+                            data_dict[key] = np.array(file[key], dtype=str)
+            else:
+                data_dict = io.loadmat(mat_file_path)
+        except OSError as e:
+            return None
+
+        return data_dict
