@@ -1,9 +1,11 @@
 from pathlib import Path
 from typing import Optional
+from scipy import io
 
-import os, requests, csv
+import os, requests, csv, h5py
 import pandas as pd
 import numpy as np
+
 
 from raman_data import types
 from raman_data.loaders.ILoader import ILoader
@@ -61,9 +63,35 @@ class ZenLoader(ILoader):
     
     
     @staticmethod
-    def __load_7644521(cache_path: str) -> np.ndarray|None:
+    def load_7644521(cache_path: str) -> np.ndarray|None:
         raise NotImplementedError
-    
+
+        #data feild names in the mat file
+        data_keys = ["COM", "COM_125mM", "ML1_125mM", "ML2_125mM"]
+
+        data_path = os.path.join(cache_path, "7644521", "Data.mat")
+
+        #load data file
+        if not os.path.isfile(data_path):
+            raise FileNotFoundError(f"Could not find Data.mat in {data_path}")
+
+        #read content
+        file_content = LoaderTools.read_mat_file(data_path)
+
+        if file_content == None:
+            return None
+        
+        #spectra scale
+        spectra = file_content["Calx"]
+        raman_shifts = []
+
+        #raman shift data
+        for key in data_keys:
+            data_row = file_content[key]
+            raman_shifts.append(data_row)
+        
+        #TODO: Inhomogeneous data array
+        return np.array(raman_shifts), spectra
     
     
     @staticmethod
@@ -73,11 +101,12 @@ class ZenLoader(ILoader):
         
         data_path = os.path.join(cache_path, "3572359", "ILSdata.csv")
 
+        #load data file
         if not os.path.isfile(data_path):
             raise FileNotFoundError(f"Could not find ILSdata.csv in {data_path}")
         
+        #read data 
         with open(data_path, newline='') as csv_file:
-            #reader = csv.DictReader(csv_file)
             reader = csv.reader(csv_file)
 
             raman_shifts = np.zeros((3518, 534))
@@ -85,15 +114,19 @@ class ZenLoader(ILoader):
 
             i = 0
 
-            for row in reader: 
+            for row in reader:
+                #only get the data and ignore the meta information
                 data_row = row[9:]
-
+                
+                #first entry is the spectra scale
                 if i == 0:
                     spectra = np.array(data_row, dtype=float)
+                #raman shift
                 else:
                     #TODO:What the hell should I do with NA values
                     raman_shifts[i] = np.array(data_row, dtype=float)
-
+                    
+                    #get the coresponding test concetration
                     concentrations.append(row[6])
 
                 i += 1
@@ -128,7 +161,7 @@ class ZenLoader(ILoader):
         "Wheat lines" : types.datasetInfo(
                                         task_type=TASK_TYPE.Classification, 
                                         id="7644521", 
-                                        loader=__load_7644521),
+                                        loader=load_7644521),
         "Adenine" : types.datasetInfo(
                                         task_type=TASK_TYPE.Classification, 
                                         id="3572359", 
