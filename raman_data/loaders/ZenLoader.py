@@ -1,8 +1,6 @@
-from pathlib import Path
 from typing import Optional
-from scipy import io
 
-import os, requests, csv, h5py
+import os, requests
 import pandas as pd
 import numpy as np
 
@@ -96,8 +94,6 @@ class ZenLoader(ILoader):
     
     @staticmethod
     def load_3572359(cache_path: str) -> np.ndarray|None:
-
-        raise NotImplementedError
         
         data_path = os.path.join(cache_path, "3572359", "ILSdata.csv")
 
@@ -105,45 +101,13 @@ class ZenLoader(ILoader):
         if not os.path.isfile(data_path):
             raise FileNotFoundError(f"Could not find ILSdata.csv in {data_path}")
         
-        #read data 
-        with open(data_path, newline='') as csv_file:
-            reader = csv.reader(csv_file)
 
-            raman_shifts = np.zeros((3518, 534))
-            concentrations = []
-
-            i = 0
-
-            for row in reader:
-                #only get the data and ignore the meta information
-                data_row = row[9:]
-                
-                #first entry is the spectra scale
-                if i == 0:
-                    spectra = np.array(data_row, dtype=float)
-                #raman shift
-                else:
-                    #TODO:What the hell should I do with NA values
-                    raman_shifts[i] = np.array(data_row, dtype=float)
-                    
-                    #get the coresponding test concetration
-                    concentrations.append(row[6])
-
-                i += 1
-
-            return raman_shifts, spectra, np.array(concentrations, dtype=float)
-
-
-                    
-                
-
-
-                
-
-
-
-
-
+        df = pd.read_csv(data_path)
+        concentrations = df.pop("conc").to_numpy()
+        spectra = np.array(df.columns.values[9:], dtype=int)
+        raman_shifts = df.loc[:, "400":].to_numpy()
+        
+        return raman_shifts, spectra, concentrations
 
     
     BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
