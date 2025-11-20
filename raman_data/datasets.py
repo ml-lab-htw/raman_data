@@ -9,11 +9,13 @@ from raman_data.loaders.KagLoader import KagLoader
 from raman_data.loaders.HugLoader import HugLoader
 from raman_data.loaders.ZenLoader import ZenLoader
 from raman_data.loaders.LoaderTools import TASK_TYPE
+from raman_data.loaders.ZipLoader import ZipLoader
 
 __LOADERS = [
     KagLoader,
     HugLoader,
-    ZenLoader
+    ZenLoader,
+    ZipLoader
 ]
 
 def list_datasets(
