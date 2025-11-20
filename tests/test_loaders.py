@@ -6,6 +6,8 @@ from raman_data.loaders.ILoader import ILoader
 from raman_data.loaders.KagLoader import KagLoader
 from raman_data.loaders.HugLoader import HugLoader
 from raman_data.loaders.ZenLoader import ZenLoader
+import pytest
+import os
 
 __LOADERS = [
     KagLoader,
