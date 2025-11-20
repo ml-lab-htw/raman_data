@@ -48,7 +48,7 @@ def test_load_dataset():
     test_datasets = [
         "codina/raman-spectroscopy-of-diabetes",    # hosted on Kaggle
         "chlange/SubstrateMixRaman",                # hosted on HuggingFace
-        #"mendeley_surface-enhanced-raman",          # hosted on external website
+        "mendeley_surface-enhanced-raman",          # hosted on external website
         "Adenine"                                   # hosted on Zenodo
     ]
     for dataset_name in test_datasets:
