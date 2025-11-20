@@ -1,6 +1,7 @@
 __all__ = [
     "KagLoader",
     "HugLoader",
+    "ZenLoader",
     "ZipLoader",
     "ILoader",
     "LoaderTools",

@@ -7,12 +7,14 @@ from .types import RamanDataset
 
 from raman_data.loaders.KagLoader import KagLoader
 from raman_data.loaders.HugLoader import HugLoader
-from raman_data.loaders.ZipLoader import ZipLoader
+from raman_data.loaders.ZenLoader import ZenLoader
 from raman_data.loaders.LoaderTools import TASK_TYPE
+from raman_data.loaders.ZipLoader import ZipLoader
 
 __LOADERS = [
     KagLoader,
     HugLoader,
+    ZenLoader,
     ZipLoader
 ]
 
@@ -47,10 +49,12 @@ def list_datasets(
 
     for loader in __LOADERS:
         for name, task in loader.DATASETS.items():
+            #print(f"{loader} : {name} : {task}")
             datasets.update({name: task})
 
     if task_type:
-        return [name for name, task in datasets.items() if task == task_type]
+        return [name for name, task in datasets.items() if task.name == task_type.name]
+    
     return list(datasets.keys())
 
 

@@ -3,8 +3,10 @@ Data structures for the raman_data package.
 """
 
 from dataclasses import dataclass
+from typing import Callable, Any
 import numpy as np
 
+from raman_data.loaders.LoaderTools import TASK_TYPE 
 from raman_data.loaders.LoaderTools import HASH_TYPE
 
 @dataclass
@@ -23,6 +25,51 @@ class RamanDataset:
     metadata: dict
 
 
+@dataclass(init=False)
+class ZenodoFileInfo:
+    """
+    A class holding information about a downloadeble file from Zenodo.
+    
+    Attributes:
+        id (str): A 39 alphanumerical unique identifier.
+        key (str): The name of the file. 
+        size (int): The size of the file in bytes.
+        checksum (str): The md5 hexadecimal hash. 
+        download_link (str): The link for downloading this file.
+        links (dict[str, str]): A dictonary of all associated links.
+    """
+    id: str
+    key: str
+    size: int
+    checksum: str
+    download_link: str
+    links: dict[str, str]
+    
+    def __init__(
+        self, 
+        id: str, 
+        key: str, 
+        size: int,
+        checksum: str, 
+        download_link: str, 
+        links: dict[str, str]
+    ) -> None:
+        
+        self.id = id
+        self.key = key
+        self.size = size
+        self.checksum = checksum.removeprefix("md5:").strip()
+        self.download_link = download_link
+        self.links = links
+ 
+ 
+@dataclass
+class datasetInfo:
+    task_type: TASK_TYPE
+    id: str
+    loader: Callable[[str], np.ndarray]
+    
+    
 @dataclass
 class ExternalLink:
     """

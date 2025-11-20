@@ -13,7 +13,10 @@ __DATASETS = {
     "MIND-Lab_covid+pd_ad_bundle": TASK_TYPE.Classification,
     "csho33_bacteria_id": TASK_TYPE.Classification,
     "mendeley_surface-enhanced-raman": TASK_TYPE.Classification,
-    "dtu_raman-spectrum-matching": TASK_TYPE.Classification
+    "dtu_raman-spectrum-matching": TASK_TYPE.Classification,
+    "sugar mixtures": TASK_TYPE.Regression,
+    "Wheat lines" : TASK_TYPE.Classification,
+    "Adenine" : TASK_TYPE.Classification
 }
 
 def test_list_all_datasets():
@@ -45,7 +48,8 @@ def test_load_dataset():
     test_datasets = [
         "codina/raman-spectroscopy-of-diabetes",    # hosted on Kaggle
         "chlange/SubstrateMixRaman",                # hosted on HuggingFace
-        "mendeley_surface-enhanced-raman"           # hosted on external website
+        #"mendeley_surface-enhanced-raman",          # hosted on external website
+        "Adenine"                                   # hosted on Zenodo
     ]
     for dataset_name in test_datasets:
         dataset = raman_data(dataset_name=dataset_name)
