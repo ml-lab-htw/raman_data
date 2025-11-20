@@ -56,8 +56,28 @@ class ZenLoader(ILoader):
     
     
     @staticmethod
-    def __load_256329(cache_path: str) -> np.ndarray|None:
+    def load_256329(cache_path: str) -> np.ndarray|None:
+
         raise NotImplementedError
+
+        zip_filename = "Kallepitis-et-al-Raw-data.zip"
+
+        print(os.path.join(cache_path, "256329", zip_filename))
+
+        data_dir = LoaderTools.extract_zip_file_content(os.path.join(cache_path, "256329", zip_filename), zip_filename)
+
+        print(data_dir)
+        
+        if data_dir is None:
+            return None
+        
+        data_folder_parent = os.path.join(data_dir, "Kallepitis-et-al-Raw-data", "Figure 3", "THP-1")
+
+        file_1 = os.path.join(data_folder_parent, "3D THP1 001_15 06 24.wip")
+
+        # this what ramanspy does, it doenst work for me, why? I dont know
+        #data = loadmat(file_name=file_1, squeeze_me=True)
+
     
     
     @staticmethod
