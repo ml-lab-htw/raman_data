@@ -161,7 +161,7 @@ class LoaderTools:
         
         # http get request 
         with requests.get(url=url, stream=True) as response: 
-            print(response.status_code)
+
             #if its failed raise error 
             if not response.ok:
                 raise requests.HTTPError(response=response)
