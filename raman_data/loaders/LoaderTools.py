@@ -5,7 +5,7 @@ General functions and enums meant to be used while loading certain dataset.
 from enum import Enum
 from scipy import io
 
-import os, h5py
+import os, h5py, hashlib
 import numpy as np
 
 
@@ -45,7 +45,7 @@ from raman_data.exceptions import ChecksumError
 from typing import Optional, List
 from tqdm import tqdm
 from pathlib import Path
-import requests, zipfile, hashlib
+import requests, zipfile
 
 
 class LoaderTools:
