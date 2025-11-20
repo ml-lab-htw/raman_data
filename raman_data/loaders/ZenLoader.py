@@ -236,8 +236,8 @@ class ZenLoader(ILoader):
         
         dataset_id = ZenLoader.DATASETS_INFO[dataset_name].id
         
-        zip_file_name = dataset_id + ".zip"
-        zip_file_path = os.path.join(cache_path, zip_file_name)
+        zip_file_name = dataset_id
+        zip_file_path = os.path.join(cache_path, zip_file_name+ ".zip")
         
         if not os.path.isfile(zip_file_path):
             ZenLoader.download_dataset(dataset_name, cache_path)
