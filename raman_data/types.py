@@ -7,6 +7,7 @@ from typing import Callable, Any
 import numpy as np
 
 from raman_data.loaders.LoaderTools import TASK_TYPE 
+from raman_data.loaders.LoaderTools import HASH_TYPE
 
 @dataclass
 class RamanDataset:
@@ -69,3 +70,21 @@ class datasetInfo:
     loader: Callable[[str], np.ndarray]
     
     
+@dataclass
+class ExternalLink:
+    """
+    A class to represent a URL of a dataset hosted on a website which
+    doesn't provide any API.
+    
+    Attributes:
+        name (str): The name of a dataset to show in the list.
+        url (str): The URL of a dataset used to download it.
+        checksum (str, optional): The hash value of the downloaded file to ensure
+                                  download's security.
+        checksum_type (HASH_TYPE, optional): The type of the specified checksum.
+    """
+    name: str
+    url: str
+    checksum: str | None = None
+    checksum_type: HASH_TYPE | None = None
+

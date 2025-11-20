@@ -87,7 +87,7 @@ def load_dataset(
     raman_data = None
     raman_target = []
     raman_meta = {
-        "name": f"{dataset_name}{'/{file_name}' if file_name else ''}",
+        "name": f"{dataset_name}{f'/{file_name}' if file_name else ''}",
         "source": "dummy",
         "description": "This is a dummy dataset for demonstration purposes."
     }

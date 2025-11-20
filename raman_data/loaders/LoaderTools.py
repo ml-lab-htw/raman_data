@@ -28,6 +28,17 @@ class TASK_TYPE(Enum):
     Regression = 1
 
 
+class HASH_TYPE(Enum):
+    """    
+    An enum contains possible hash types of a
+    certain dataset's checksum. Each enums' value
+    is a respective `hashlib`'s generating function
+    which outputs the related hash upon execution.  
+    """
+    md5 = hashlib.md5
+    sha256 = hashlib.sha256
+
+
 from raman_data.loaders.ILoader import ILoader
 from raman_data.exceptions import ChecksumError
 
@@ -75,8 +86,9 @@ class LoaderTools:
             path (str): The path to save datasets to or
                         "default" to reset previously saved path.
             loader_key (CACHE_DIR, optional): The name of loader's
-            environment variable that stores the cache path. If None,
-            sets the given path for all loaders.
+                                              environment variable that stores
+                                              the cache path. If None, sets
+                                              the given path for all loaders.
         """
         path = None if path == "default" else path
         

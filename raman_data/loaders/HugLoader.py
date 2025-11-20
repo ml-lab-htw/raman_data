@@ -36,7 +36,7 @@ class HugLoader(ILoader):
             cache_dir=cache_path
         )
 
-        cache_path = cache_path if cache_path else "~/.cache"
+        cache_path = cache_path if cache_path else "~/.cache/huggingface"
         print(f"Dataset downloaded into {cache_path}")
 
         return cache_path
@@ -57,7 +57,7 @@ class HugLoader(ILoader):
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.HuggingFace)
         
         print(f"Loading HuggingFace dataset from " \
-              f"{cache_path if cache_path else 'default folder (~/.cache)'}")
+              f"{cache_path if cache_path else 'default folder (~/.cache/huggingface)'}")
 
         df = load_dataset(
             path=dataset_name,
