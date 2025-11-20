@@ -11,6 +11,7 @@ filelock==3.19.1
 frozenlist==1.7.0
 fsspec==2025.3.0
 hf-xet==1.1.10
+h5py==3.14.0
 huggingface-hub==0.34.4
 idna==3.10
 kagglehub==0.3.13
