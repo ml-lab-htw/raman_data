@@ -17,6 +17,7 @@ class CACHE_DIR(Enum):
     Kaggle = "KAGGLEHUB_CACHE"
     HuggingFace = "HF_HOME"
     Zenodo = "ZEN_CACHE"
+    Zip = "ZIP_CACHE"
 
 
 class TASK_TYPE(Enum):
