@@ -146,22 +146,32 @@ class LoaderTools:
     def download(
         url: str,
         out_dir_path: str,
-        out_file_name: str,           
-        md5_hash: Optional[str] = None
+        out_file_name: str,
+        hash_target: Optional[str] = None,           
+        hash_type: Optional[HASH_TYPE] = None
     ) -> str | None:
         """
-        Download a file from a URL with optional MD5 verification.
+        Download files from a URL with optional hash verification
+        and stores them as a `.zip` file.
         
         Args:
-            url (str): The URL to download the file from.
-            out_dir_path (str): The full path of the directory where the downloaded file will be saved.
-            out_file_name (str): The name of the file being downloaded.
-            md5_hash (Optional[str], optional): Expected MD5 hash of the file for integrity 
-                verification. If provided, the download is considered failed if the hash 
-                doesn't match. Defaults to None.
+            url (str): The URL to download the files from.
+            out_dir_path (str): The full path of the directory where
+                                the downloaded files will be saved.
+            out_file_name (str): The name of the file to create.
+            hash_target (str, optional): Expected hash value of the file for
+                                         integrity verification.
+            hash_type (HASH_TYPE, optional): The type of provided hash.
+
+        Raises:
+            requests.HTTPError: If connection / HTTP request fails.
+            ChecksumError: If provided hash value doesn't match with
+                           the one of downloaded files.
+
         Returns:
-                    str | None: The output file path if download is successful and MD5 verification 
-                            (if provided) passes, None if the download fails or MD5 verification fails.
+            str|None: The output file path if download is successful and
+                      hash verification (if hash's provided) passes.
+                      None if either download or hash verification fails.
         Note:
             - Downloads in chunks of 1MB (1048576 bytes) for memory efficiency
         """
@@ -170,7 +180,8 @@ class LoaderTools:
         # so that not the entire date gets loaded in to ram an once
         CHUNK_SIZE = 1048576
         
-        checksum = hashlib.md5()
+        checksum = hash_type.value() if hash_type else HASH_TYPE.md5.value()
+
         
         # http get request 
         with requests.get(url=url, stream=True) as response: 
@@ -201,49 +212,70 @@ class LoaderTools:
         
         #check the calculated checksum with the given one, 
         # if its a mismatch rasie an Error
-        
-        if md5_hash is not None and checksum.hexdigest().strip() != md5_hash.strip():
+
+
+        if hash_target and (checksum.hexdigest() != hash_target):
+
             os.remove(out_file_path)
-            raise ChecksumError(expected_checksum=md5_hash, actual_checksum=checksum.hexdigest())
-        
+            raise ChecksumError(
+                expected_checksum=hash_target,
+                actual_checksum=checksum.hexdigest()
+            )
+    
         return out_file_path
     
     
     @staticmethod
-    def extract_zip_file_content(zip_file_path: str, zip_file_name: str) -> str | None:
+    def extract_zip_file_content(
+        zip_file_path: str,
+        unzip_target_subdir: Optional[str] = '',
+        force_overwrite: Optional[bool] = False
+    ) -> str | None:
         """
-        Extracts all files and subfiles from a zip file into a directory with the same name as the zip file.
-        The extracted files are saved in the same directory as the zip file.
-
-        Args:
-            zip_file_path (str): Path to the zip file.
-            zip_file_name (str): The name of the zip file.
-
-        Returns:
-            str|None: If successfull the path of the output directory else None.
-        """
+        Extracts all files and subfiles from a `.zip` file.
+        The extracted files are saved in the same directory
+        as the `.zip` file by default or in a subdirectory of files' location
+        if specified.
         
-        if zipfile.is_zipfile(zip_file_path):
-            #create dir with the same name as the zip file for uncompressed file data
-            out_dir = f"{os.path.dirname(zip_file_path)}/{zip_file_name.split('.')[0]}"
-            os.makedirs(out_dir, exist_ok=True)
-
-            #extract files 
-            with zipfile.ZipFile(zip_file_path, "r") as zf:
-                file_list = zf.namelist()
-                with tqdm(total=len(file_list), unit="files", unit_scale=True, desc=f"Extracting file {zip_file_name}") as pbar:
-                    for file in file_list:
-                        if not os.path.isfile(f"{out_dir}/{file}"):
-                            zf.extract(file, out_dir)
-                            
-                        pbar.update(1)
-            
-            return out_dir
+        Args:
+            zip_file_path (str): Path to the `.zip` file to extract content of.
+            unzip_target_subdir (str, optional): The name of the subdirectory
+                                                 unzipped files should be stored in.
+            force_overwrite (bool, optional): A flag to determine whether
+                                              to overwrite previously unzipped files
+                                              or not. This doesn't affect any files
+                                              other than of specified `.zip` file.
+        
+        Returns:
+            str|None: If successful the path of the output directory else None.
+        """
+        if not zipfile.is_zipfile(zip_file_path):
+            print(f"There's no .zip file stored at {zip_file_path}")
+            return None
+        
+        # create dir with the same name as the zip file for uncompressed file data
+        out_dir = os.path.join(os.path.dirname(zip_file_path), unzip_target_subdir)
+        os.makedirs(out_dir, exist_ok=True)
+        
+        # extract files
+        with zipfile.ZipFile(zip_file_path, "r") as zf:
+            file_list = zf.namelist()
+            with tqdm(
+                total=len(file_list),
+                unit="files",
+                unit_scale=True,
+                desc=unzip_target_subdir
+            ) as pbar:
+                for file in file_list:
+                    if (force_overwrite or not os.path.isfile(f"{out_dir}/{file}")):
+                        zf.extract(file, out_dir)
+                        
+                    pbar.update(1)
+        
+        return out_dir
         
     
     @staticmethod
-
-
     def read_mat_file(mat_file_path: str) -> dict[str, np.ndarray]|None:
         """
         Extracts the content of a MATLAB .mat file as a python dictonary.
