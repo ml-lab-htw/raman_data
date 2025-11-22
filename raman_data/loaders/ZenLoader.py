@@ -175,20 +175,6 @@ class ZenLoader(ILoader):
         cache_path: Optional[str|None] = None
     ) -> str | None:
         
-        if cache_path is not None:
-            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
-        cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
-        cache_path = cache_path if cache_path else ZenLoader.BASE_CACHE_DIR
-        
-        #dataset_to_download = []
-        
-        #if dataset_names:
-        #    dataset_to_download = dataset_names
-        #else:
-        #    dataset_to_download = ZenLoader.DATASETS.keys()
-        
-        
-        #for dataset_name in dataset_to_download:
         if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS_INFO):
            return None
 
@@ -214,25 +200,13 @@ class ZenLoader(ILoader):
         cache_path: str | None = None
     ) -> np.ndarray | None:
         
-        if cache_path is not None:
-            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
-        cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
-        cache_path = cache_path if cache_path else ZenLoader.BASE_CACHE_DIR
-        
-        
-        #datasets_to_load = []
-        
-        loaded_datasets = []
-        
-        #if dataset_name:
-        #    datasets_to_load.append(dataset_name)
-        #else: 
-        #    datasets_to_load = ZenLoader.DATASETS.keys()
-            
-            
-        #for dataset_name in datasets_to_load:
         if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS_INFO):
             return None
+
+        if cache_path is None:
+            cache_path = ZenLoader.BASE_CACHE_DIR
+        
+        LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
         
         dataset_id = ZenLoader.DATASETS_INFO[dataset_name].id
         
@@ -245,12 +219,14 @@ class ZenLoader(ILoader):
         if not os.path.isdir(os.path.join(cache_path, dataset_id)):
             LoaderTools.extract_zip_file_content(zip_file_path, zip_file_name)
         
-        raman_shifts, spectra, concentrations = ZenLoader.DATASETS_INFO[dataset_name].loader(cache_path)
+        return ZenLoader.DATASETS_INFO[dataset_name].loader(cache_path)
 
-        dataset = types.RamanDataset(data=raman_shifts, 
-                                     target=concentrations, 
-                                     metadata={"spectra":spectra})
-        
-        return dataset
+        #raman_shifts, spectra, concentrations = ZenLoader.DATASETS_INFO[dataset_name].loader(cache_path)
+
+        #dataset = types.RamanDataset(data=raman_shifts, 
+        #                             target=concentrations, 
+        #                             metadata={"spectra":spectra})
+        #
+        #return dataset
         
         
