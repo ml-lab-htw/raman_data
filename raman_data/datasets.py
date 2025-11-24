@@ -100,10 +100,10 @@ def load_dataset(
         if not (dataset_name in loader.DATASETS):
             continue
         
-        get_dataset = loader.load_dataset if file_name else loader.download_dataset
+        get_dataset = loader.load_dataset #if file_name else loader.download_dataset
         break
 
-    raman_data = get_dataset(dataset_name, file_name, cache_dir)
+    raman_data, temp, raman_target = get_dataset(dataset_name, file_name, cache_dir)
 
     return RamanDataset(
         data=raman_data,
