@@ -25,7 +25,7 @@ def test_interfacing():
 def test_zen_loader_download():
     # Using a known dataset ID from ZenLoader.DATASETS
     dataset_id = list(ZenLoader.DATASETS_INFO.keys())[0]
-    download_dir = ZenLoader.download_dataset(dataset_id=dataset_id, dataset_name=dataset_id) # TODO check if dataset_name should be dataset_id
+    download_dir = ZenLoader.download_dataset(dataset_name=dataset_id)
     assert download_dir is not None
     assert os.path.isdir(download_dir)
     assert len(os.listdir(download_dir)) > 0
@@ -34,7 +34,7 @@ def test_zen_loader_download():
 def test_zen_loader_load():
     # Using a known dataset ID from ZenLoader.DATASETS
     dataset_id = list(ZenLoader.DATASETS_INFO.keys())[0]
-    download_dir = ZenLoader.load_dataset(dataset_id=dataset_id, dataset_name=dataset_id) # TODO check if dataset_name should be dataset_id
+    download_dir = ZenLoader.load_dataset(dataset_name=dataset_id)
     assert download_dir is not None
     assert os.path.isdir(download_dir)
     assert len(os.listdir(download_dir)) > 0

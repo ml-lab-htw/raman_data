@@ -141,6 +141,7 @@ class ZenLoader(ILoader):
     
     BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
     BASE_CACHE_DIR = os.path.join(os.path.expanduser('~'), ".cache", "zenodo")
+    LoaderTools.set_cache_root(BASE_CACHE_DIR, CACHE_DIR.Zenodo)
     
     DATASETS = {
         "sugar mixtures" : TASK_TYPE.Regression,
@@ -178,6 +179,10 @@ class ZenLoader(ILoader):
         if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS_INFO):
            return None
 
+        if not (cache_path is None):
+            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
+        cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
+
         try:
             dataset_id = ZenLoader.DATASETS_INFO[dataset_name].id
             file_name = dataset_id + ".zip"
@@ -203,10 +208,9 @@ class ZenLoader(ILoader):
         if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS_INFO):
             return None
 
-        if cache_path is None:
-            cache_path = ZenLoader.BASE_CACHE_DIR
-        
-        LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
+        if not (cache_path is None):
+            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
+        cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
         
         dataset_id = ZenLoader.DATASETS_INFO[dataset_name].id
         

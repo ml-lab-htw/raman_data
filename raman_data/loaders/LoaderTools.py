@@ -255,7 +255,8 @@ class LoaderTools:
         
         # create dir with the same name as the zip file for uncompressed file data
         out_dir = os.path.join(os.path.dirname(zip_file_path), unzip_target_subdir)
-        os.makedirs(out_dir, exist_ok=True)
+        if (not os.path.exists(out_dir)):
+            os.makedirs(out_dir, exist_ok=True)
         
         # extract files
         with zipfile.ZipFile(zip_file_path, "r") as zf:
