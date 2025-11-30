@@ -48,12 +48,11 @@ def list_datasets(
     datasets = {}
 
     for loader in __LOADERS:
-        for name, task in loader.DATASETS.items():
-            #print(f"{loader} : {name} : {task}")
-            datasets.update({name: task})
+        for name, dataset_info in loader.DATASETS.items():
+            datasets.update({name: dataset_info})
 
     if task_type:
-        return [name for name, task in datasets.items() if task.name == task_type.name]
+        return [name for name, dataset_info in datasets.items() if dataset_info.task_type == task_type]
     
     return list(datasets.keys())
 

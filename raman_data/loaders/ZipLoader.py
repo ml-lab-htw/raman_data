@@ -6,7 +6,7 @@ from pandas import read_excel
 from raman_data.loaders.ILoader import ILoader
 from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, HASH_TYPE, LoaderTools
 
-from raman_data.types import ExternalLink
+from raman_data.types import DatasetInfo, ExternalLink
 
 import os.path
 
@@ -16,12 +16,24 @@ class ZipLoader(ILoader):
     which don't provide any API.
     """
     DATASETS = {
-        "MIND-Lab_covid+pd_ad_bundle": TASK_TYPE.Classification,
-        "csho33_bacteria_id": TASK_TYPE.Classification,
-        "mendeley_surface-enhanced-raman": TASK_TYPE.Classification,
-        "dtu_raman-spectrum-matching": TASK_TYPE.Classification
+        "MIND-Lab_covid+pd_ad_bundle": DatasetInfo(
+            task_type=TASK_TYPE.Classification, 
+            id="1", 
+            load=...),
+        "csho33_bacteria_id": DatasetInfo(
+            task_type=TASK_TYPE.Classification, 
+            id="2", 
+            load=...),
+        "mendeley_surface-enhanced-raman": DatasetInfo(
+            task_type=TASK_TYPE.Classification, 
+            id="3", 
+            load=...),
+        "dtu_raman-spectrum-matching": DatasetInfo(
+            task_type=TASK_TYPE.Classification, 
+            id="4", 
+            load=...)
     }
-    
+
     __LINKS = [
         ExternalLink(
             name="MIND-Lab_covid+pd_ad_bundle",

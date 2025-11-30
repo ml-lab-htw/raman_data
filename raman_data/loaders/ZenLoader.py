@@ -4,7 +4,7 @@ import os, requests
 import pandas as pd
 import numpy as np
 
-from raman_data import types
+from raman_data.types import DatasetInfo
 from raman_data.loaders.ILoader import ILoader
 from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
 
@@ -144,29 +144,22 @@ class ZenLoader(ILoader):
     LoaderTools.set_cache_root(BASE_CACHE_DIR, CACHE_DIR.Zenodo)
     
     DATASETS = {
-        "sugar mixtures" : TASK_TYPE.Regression,
-        "Wheat lines" : TASK_TYPE.Classification,
-        "Adenine" : TASK_TYPE.Classification
-    }
-    
-    
-    DATASETS_INFO = {
-        "sugar mixtures" : types.datasetInfo(
-                                        task_type=TASK_TYPE.Regression, 
-                                        id="10779223", 
-                                        loader=load_10779223),
-        #"Volumetric cells" : types.datasetInfo(
-        #                                task_type=TASK_TYPE.Classification, 
-        #                                id="256329", 
-        #                                loader=load_256329),
-        "Wheat lines" : types.datasetInfo(
-                                        task_type=TASK_TYPE.Classification, 
-                                        id="7644521", 
-                                        loader=load_7644521),
-        "Adenine" : types.datasetInfo(
-                                        task_type=TASK_TYPE.Classification, 
-                                        id="3572359", 
-                                        loader=load_3572359)
+        "sugar mixtures": DatasetInfo(
+            task_type=TASK_TYPE.Regression, 
+            id="10779223", 
+            load=load_10779223),
+        #"Volumetric cells": DatasetInfo(
+        #   task_type=TASK_TYPE.Classification, 
+        #   id="256329", 
+        #   load=load_256329),
+        "Wheat lines": DatasetInfo(
+            task_type=TASK_TYPE.Classification, 
+            id="7644521", 
+            load=load_7644521),
+        "Adenine": DatasetInfo(
+            task_type=TASK_TYPE.Classification, 
+            id="3572359", 
+            load=load_3572359)
     }
     
     @staticmethod
@@ -176,7 +169,7 @@ class ZenLoader(ILoader):
         cache_path: Optional[str|None] = None
     ) -> str | None:
         
-        if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS_INFO):
+        if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS):
            return None
 
         if not (cache_path is None):
@@ -184,7 +177,7 @@ class ZenLoader(ILoader):
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
 
         try:
-            dataset_id = ZenLoader.DATASETS_INFO[dataset_name].id
+            dataset_id = ZenLoader.DATASETS[dataset_name].id
             file_name = dataset_id + ".zip"
             url = ZenLoader.BASE_URL.replace("ID", dataset_id)
             
@@ -205,14 +198,14 @@ class ZenLoader(ILoader):
         cache_path: str | None = None
     ) -> np.ndarray | None:
         
-        if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS_INFO):
+        if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS):
             return None
 
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
         
-        dataset_id = ZenLoader.DATASETS_INFO[dataset_name].id
+        dataset_id = ZenLoader.DATASETS[dataset_name].id
         
         zip_file_name = dataset_id
         zip_file_path = os.path.join(cache_path, zip_file_name+ ".zip")
@@ -223,9 +216,9 @@ class ZenLoader(ILoader):
         if not os.path.isdir(os.path.join(cache_path, dataset_id)):
             LoaderTools.extract_zip_file_content(zip_file_path, zip_file_name)
         
-        return ZenLoader.DATASETS_INFO[dataset_name].loader(cache_path)
+        return ZenLoader.DATASETS[dataset_name].load(cache_path)
 
-        #raman_shifts, spectra, concentrations = ZenLoader.DATASETS_INFO[dataset_name].loader(cache_path)
+        #raman_shifts, spectra, concentrations = ZenLoader.DATASETS[dataset_name].loader(cache_path)
 
         #dataset = types.RamanDataset(data=raman_shifts, 
         #                             target=concentrations, 

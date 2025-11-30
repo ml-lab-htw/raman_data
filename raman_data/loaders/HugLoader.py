@@ -1,12 +1,11 @@
 from typing import Optional
 
 import datasets
-#from datasets import load_dataset
 from numpy import ndarray
 import pandas as pd
 import numpy as np
 
-from raman_data import types
+from raman_data.types import DatasetInfo
 from raman_data.loaders.ILoader import ILoader
 from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
 
@@ -14,10 +13,6 @@ class HugLoader(ILoader):
     """
     A static class specified in providing datasets hosted on HuggingFace.
     """
-    DATASETS = {
-        "chlange/SubstrateMixRaman": TASK_TYPE.Regression
-    }
-
 
     def load_substarteMix(data: pd.DataFrame) -> np.ndarray|None:
 
@@ -32,11 +27,11 @@ class HugLoader(ILoader):
         return raman_shifts, spectra, concentrations
 
 
-    DATASETS_INFO = {
-        "chlange/SubstrateMixRaman" : types.datasetInfo(
-                                                    task_type=TASK_TYPE.Regression,
-                                                    id=None,
-                                                    loader=load_substarteMix)
+    DATASETS = {
+        "chlange/SubstrateMixRaman": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id=None,
+            load=load_substarteMix)
     }
 
 
@@ -89,7 +84,7 @@ class HugLoader(ILoader):
             cache_dir=cache_path
         )
 
-        return HugLoader.DATASETS_INFO[dataset_name].loader(dataDict)
+        return HugLoader.DATASETS[dataset_name].load(dataDict)
 
 
     @staticmethod

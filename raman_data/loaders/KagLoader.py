@@ -4,6 +4,7 @@ from kagglehub import load_dataset, dataset_download
 from kagglehub import KaggleDatasetAdapter
 from numpy import ndarray
 
+from raman_data.types import DatasetInfo
 from raman_data.loaders.ILoader import ILoader
 from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
 
@@ -12,11 +13,19 @@ class KagLoader(ILoader):
     A static class specified in providing datasets hosted on Kaggle.
     """
     DATASETS = {
-        "codina/raman-spectroscopy-of-diabetes": TASK_TYPE.Classification,
-        "sergioalejandrod/raman-spectroscopy": TASK_TYPE.Classification,
-        "andriitrelin/cells-raman-spectra": TASK_TYPE.Classification
+        "codina/raman-spectroscopy-of-diabetes": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="1",
+            load=...),
+        "sergioalejandrod/raman-spectroscopy": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="2",
+            load=...),
+        "andriitrelin/cells-raman-spectra": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="3",
+            load=...)
     }
-
 
     @staticmethod
     def download_dataset(
