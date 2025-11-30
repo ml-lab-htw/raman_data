@@ -5,17 +5,17 @@ Internal functions for loading and listing datasets.
 from typing import List, Optional
 from .types import RamanDataset
 
-from raman_data.loaders.KagLoader import KagLoader
+# from raman_data.loaders.KagLoader import KagLoader
 from raman_data.loaders.HugLoader import HugLoader
 from raman_data.loaders.ZenLoader import ZenLoader
+# from raman_data.loaders.ZipLoader import ZipLoader
 from raman_data.loaders.LoaderTools import TASK_TYPE
-from raman_data.loaders.ZipLoader import ZipLoader
 
 __LOADERS = [
-    KagLoader,
+    # KagLoader,
     HugLoader,
     ZenLoader,
-    ZipLoader
+    # ZipLoader
 ]
 
 def list_datasets(
@@ -99,7 +99,7 @@ def load_dataset(
         if not (dataset_name in loader.DATASETS):
             continue
         
-        get_dataset = loader.load_dataset #if file_name else loader.download_dataset
+        get_dataset = loader.load_dataset
         break
 
     raman_data, temp, raman_target = get_dataset(dataset_name, file_name, cache_dir)

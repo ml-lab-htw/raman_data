@@ -34,7 +34,7 @@ def test_zen_loader_download():
 def test_zen_loader_load():
     # Using a known dataset ID from ZenLoader.DATASETS
     test_dataset_name = list(ZenLoader.DATASETS.keys())[0]
-    download_dir = ZenLoader.load_dataset(dataset_name=dataset_id)
-    assert download_dir is not None
-    assert os.path.isdir(download_dir)
-    assert len(os.listdir(download_dir)) > 0
+    raman_shifts, spectra, concentrations = ZenLoader.load_dataset(dataset_name=test_dataset_name)
+    assert raman_shifts is not None
+    assert spectra is not None
+    assert concentrations is not None
