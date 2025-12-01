@@ -8,14 +8,14 @@ from .types import RamanDataset
 from raman_data.loaders.KagLoader import KagLoader
 from raman_data.loaders.HugLoader import HugLoader
 from raman_data.loaders.ZenLoader import ZenLoader
-from raman_data.loaders.LoaderTools import TASK_TYPE
 from raman_data.loaders.ZipLoader import ZipLoader
+from raman_data.loaders.LoaderTools import TASK_TYPE
 
 __LOADERS = [
     KagLoader,
     HugLoader,
     ZenLoader,
-    ZipLoader
+    #ZipLoader
 ]
 
 def list_datasets(
@@ -31,36 +31,21 @@ def list_datasets(
     Returns:
         A list of available dataset names.
     """
-    # Placeholder for all planned datasets (will be removed later)
-    datasets_placeholder = {
-        "diabetes_kaggle": "classification",
-        "covid19_kaggle": "classification",
-        "spectroscopy_kaggle": "classification",
-        "cells_raman_spectra_kaggle": "classification",
-        "SubstrateMixRaman_hf": "regression",
-        "Raman_Spectra_Data_github": "classification",
-        "zenodo_10779223": "classification",
-        "dtu_contrastive": "classification",
-        "mendeley_y4md8znppn": "classification",
-        "nature_s41467_019_12898_9": "classification",
-    }
 
     datasets = {}
 
     for loader in __LOADERS:
-        for name, task in loader.DATASETS.items():
-            #print(f"{loader} : {name} : {task}")
-            datasets.update({name: task})
+        for name, dataset_info in loader.DATASETS.items():
+            datasets.update({name: dataset_info})
 
     if task_type:
-        return [name for name, task in datasets.items() if task.name == task_type.name]
+        return [name for name, dataset_info in datasets.items() if dataset_info.task_type == task_type]
     
     return list(datasets.keys())
 
 
 def load_dataset(
     dataset_name: str,
-    file_name: Optional[str] = None,
     cache_dir: Optional[str] = None
 ) -> RamanDataset:
     """
@@ -71,8 +56,6 @@ def load_dataset(
 
     Args:
         dataset_name: The name of the dataset to load.
-        file_name: The name of a dataset's file to load. If None, the whole dataset
-                   will be saved to the cache_dir.
         cache_dir: The directory to use for caching the data. If None, a default
                    directory will be used.
 
@@ -91,7 +74,7 @@ def load_dataset(
     raman_data = None
     raman_target = []
     raman_meta = {
-        "name": f"{dataset_name}{f'/{file_name}' if file_name else ''}",
+        "name": f"{dataset_name}",
         "source": "dummy",
         "description": "This is a dummy dataset for demonstration purposes."
     }
@@ -100,10 +83,10 @@ def load_dataset(
         if not (dataset_name in loader.DATASETS):
             continue
         
-        get_dataset = loader.load_dataset #if file_name else loader.download_dataset
+        get_dataset = loader.load_dataset
         break
 
-    raman_data, temp, raman_target = get_dataset(dataset_name, file_name, cache_dir)
+    raman_data, temp, raman_target = get_dataset(dataset_name, cache_dir)
 
     return RamanDataset(
         data=raman_data,

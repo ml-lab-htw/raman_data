@@ -1,27 +1,48 @@
-from typing import Optional
+from typing import Optional, Tuple
 
-from numpy import genfromtxt, load, ndarray
-from pandas import read_excel
+import os.path
+from numpy import ndarray
 
+#* These functions could be useful for specific load() functions
+# from numpy import genfromtxt, load,
+# from pandas import read_excel
+
+from raman_data.types import DatasetInfo, ExternalLink
 from raman_data.loaders.ILoader import ILoader
 from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, HASH_TYPE, LoaderTools
 
-from raman_data.types import ExternalLink
-
-import os.path
 
 class ZipLoader(ILoader):
     """
     A static class specified in providing datasets hosted on websites
     which don't provide any API.
     """
+    __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "ziploader")
+    LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zip)
+
     DATASETS = {
-        "MIND-Lab_covid+pd_ad_bundle": TASK_TYPE.Classification,
-        "csho33_bacteria_id": TASK_TYPE.Classification,
-        "mendeley_surface-enhanced-raman": TASK_TYPE.Classification,
-        "dtu_raman-spectrum-matching": TASK_TYPE.Classification
+        "MIND-Lab_covid+pd_ad_bundle": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="1",
+            loader=...
+        ),
+        "csho33_bacteria_id": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="2",
+            loader=...
+        ),
+        "mendeley_surface-enhanced-raman": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="3",
+            loader=...
+        ),
+        "dtu_raman-spectrum-matching": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="4",
+            loader=...
+        )
     }
-    
+
     __LINKS = [
         ExternalLink(
             name="MIND-Lab_covid+pd_ad_bundle",
@@ -53,26 +74,8 @@ class ZipLoader(ILoader):
     @staticmethod
     def download_dataset(
         dataset_name: str,
-        file_name: Optional[str] = None,
         cache_path: Optional[str] = None
     ) -> str | None:
-        """
-        Downloads certain dataset into a predefined cache folder.
-
-        Args:
-            dataset_name (str): The name of a dataset to download.
-            file_name (str, optional): The name of a specific dataset's file to download.
-                                       If None, downloads whole dataset.
-                                       *This loader doesn't support
-                                       this feature.*
-            cache_path (str, optional): The path to save the dataset to.
-                                        If None, uses the lastly saved path.
-                                        If "default", sets the default path ('~/.cache').
-
-        Returns:
-            str|None: The path the dataset is downloaded to.
-                      If the dataset isn't on the list of a loader, returns None.
-        """
         if not LoaderTools.is_dataset_available(dataset_name, ZipLoader.DATASETS):
             print(f"[!] Cannot download {dataset_name} dataset with ZipLoader")
             return
@@ -80,21 +83,22 @@ class ZipLoader(ILoader):
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zip)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zip)
-        cache_path = cache_path if cache_path else os.path.join(os.path.expanduser("~"), ".cache", "ziploader")
-        
+
         print(f"Downloading dataset: {dataset_name}")
 
-        dataset_link = [link for link in ZipLoader.__LINKS if link.name == dataset_name][0]
+        dataset_link = [
+            link for link in ZipLoader.__LINKS if link.name == dataset_name
+        ][0]
         download_zip_path = LoaderTools.download(
             url=dataset_link.url,
             out_dir_path=cache_path,
             out_file_name=dataset_name,
             hash_target=dataset_link.checksum,
-            hash_type=dataset_link.checksum_type
+            hash_type=dataset_link.checksum_type,
         )
-        
+
         print("Unzipping files...")
-        
+
         download_path = LoaderTools.extract_zip_file_content(
             zip_file_path=download_zip_path,
             unzip_target_subdir=dataset_name
@@ -108,27 +112,8 @@ class ZipLoader(ILoader):
     @staticmethod
     def load_dataset(
         dataset_name: str,
-        file_name: str,
         cache_path: Optional[str] = None
-    ) -> ndarray | None:
-        """
-        Loads certain dataset's file from cache folder as a numpy array.
-        If requested file isn't in the cache folder, downloads **the whole
-        dataset** into that folder.
-
-        Args:
-            dataset_name (str): The name of a dataset.
-            file_name (str): The name of a specific dataset's file to load.
-                             Depending on dataset this can be a path relative
-                             to dataset's root.
-            cache_path (str, optional): The path to look for the file at.
-                                        If None, uses the lastly saved path.
-                                        If "default", sets the default path ('~/.cache').
-
-        Returns:
-            ndarray|None: A numpy array representing the loaded file.
-                          If the dataset isn't on the list of a loader, returns None.
-        """
+    ) -> Tuple[ndarray, ndarray, ndarray] | None:
         if not LoaderTools.is_dataset_available(dataset_name, ZipLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with ZipLoader")
             return
@@ -136,10 +121,9 @@ class ZipLoader(ILoader):
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zip)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zip)
-        cache_path = cache_path if cache_path else os.path.join(os.path.expanduser("~"), ".cache", "ziploader")
 
-        if not os.path.exists(os.path.join(cache_path, dataset_name, file_name)):
-            print(f"[!] Dataset's file {file_name} not found at: {cache_path}")
+        if not os.path.exists(os.path.join(cache_path, dataset_name)):
+            print(f"[!] Dataset isn't found at: {cache_path}")
             ZipLoader.download_dataset(
                 dataset_name=dataset_name,
                 cache_path=cache_path
@@ -147,18 +131,23 @@ class ZipLoader(ILoader):
 
         print(f"Loading dataset from {cache_path}")
 
-        file_path = os.path.join(cache_path, dataset_name, file_name)
-
+        #* These methods could be useful for specific load() functions
         # Converting Excel files with pandas
-        if file_name[-4:] in ["xlsx", ".xls"]:
-            return read_excel(io=file_path).to_numpy()
+        # if file_name[-4:] in ["xlsx", ".xls"]:
+        #     return read_excel(io=file_path).to_numpy()
 
         # Converting / reading numpy's native files
-        if file_name[-4:] == ".npy":
-            return load(file=file_path)
+        # if file_name[-4:] == ".npy":
+        #     return load(file=file_path)
 
         # Converting CSV files with numpy
-        return genfromtxt(fname=file_path, delimiter=",")
+        # return genfromtxt(fname=file_path, delimiter=",")
+        
+        data = ZipLoader.DATASETS[dataset_name].loader(cache_path)
+        if data is None:
+            return None, None, None
+
+        return data
 
 
     @staticmethod
@@ -167,4 +156,3 @@ class ZipLoader(ILoader):
         Prints formatted list of datasets provided by this loader.
         """
         LoaderTools.list_datasets(ZipLoader)
-

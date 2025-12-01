@@ -5,19 +5,37 @@ Some general tests of package's functionality.
 from raman_data import raman_data
 from raman_data.loaders.LoaderTools import TASK_TYPE
 
-__DATASETS = {
-    "codina/raman-spectroscopy-of-diabetes": TASK_TYPE.Classification,
-    "sergioalejandrod/raman-spectroscopy": TASK_TYPE.Classification,
-    "andriitrelin/cells-raman-spectra": TASK_TYPE.Classification,
+_2_DATASETS = {
+    # "codina/raman-spectroscopy-of-diabetes": TASK_TYPE.Classification,
+    # "sergioalejandrod/raman-spectroscopy": TASK_TYPE.Classification,
+    # "andriitrelin/cells-raman-spectra": TASK_TYPE.Classification,
     "chlange/SubstrateMixRaman": TASK_TYPE.Regression,
-    "MIND-Lab_covid+pd_ad_bundle": TASK_TYPE.Classification,
-    "csho33_bacteria_id": TASK_TYPE.Classification,
-    "mendeley_surface-enhanced-raman": TASK_TYPE.Classification,
-    "dtu_raman-spectrum-matching": TASK_TYPE.Classification,
+    #"MIND-Lab_covid+pd_ad_bundle": TASK_TYPE.Classification,
+    #"csho33_bacteria_id": TASK_TYPE.Classification,
+    # "mendeley_surface-enhanced-raman": TASK_TYPE.Classification,
+    #"dtu_raman-spectrum-matching": TASK_TYPE.Classification,
     "sugar mixtures": TASK_TYPE.Regression,
     "Wheat lines" : TASK_TYPE.Classification,
     "Adenine" : TASK_TYPE.Classification
 }
+
+__DATASETS = {
+    'codina/diabetes/AGEs' : TASK_TYPE.Classification,
+    'codina/diabetes/earLobe' : TASK_TYPE.Classification,
+    'codina/diabetes/innerArm' : TASK_TYPE.Classification,
+    'codina/diabetes/thumbNail' : TASK_TYPE.Classification,
+    'codina/diabetes/vein' : TASK_TYPE.Classification,
+    'sergioalejandrod/AminoAcids/glycine' : TASK_TYPE.Classification,
+    'sergioalejandrod/AminoAcids/leucine' : TASK_TYPE.Classification,
+    'sergioalejandrod/AminoAcids/phenylalanine' : TASK_TYPE.Classification,
+    'sergioalejandrod/AminoAcids/tryptophan' : TASK_TYPE.Classification,
+    'chlange/SubstrateMixRaman' : TASK_TYPE.Regression,
+    'chlange/RamanSpectraEcoliFermentation' : TASK_TYPE.Classification,
+    'sugar mixtures' : TASK_TYPE.Regression,
+    'Wheat lines' : TASK_TYPE.Classification,
+    'Adenine' : TASK_TYPE.Classification
+}
+
 
 def test_list_all_datasets():
     """
@@ -46,9 +64,9 @@ def test_load_dataset():
     Tests loading a dataset.
     """
     test_datasets = [
-        "codina/raman-spectroscopy-of-diabetes",    # hosted on Kaggle
+        "codina/diabetes/earLobe",                  # hosted on Kaggle
         "chlange/SubstrateMixRaman",                # hosted on HuggingFace
-        #"mendeley_surface-enhanced-raman",          # hosted on external website
+        # "mendeley_surface-enhanced-raman",          # hosted on external website
         "Adenine"                                   # hosted on Zenodo
     ]
     for dataset_name in test_datasets:

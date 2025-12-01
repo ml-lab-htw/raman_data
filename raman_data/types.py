@@ -6,8 +6,7 @@ from dataclasses import dataclass
 from typing import Callable, Any
 import numpy as np
 
-from raman_data.loaders.LoaderTools import TASK_TYPE 
-from raman_data.loaders.LoaderTools import HASH_TYPE
+from raman_data.loaders.LoaderTools import HASH_TYPE, TASK_TYPE
 
 @dataclass
 class RamanDataset:
@@ -64,7 +63,7 @@ class ZenodoFileInfo:
  
  
 @dataclass
-class datasetInfo:
+class DatasetInfo:
     task_type: TASK_TYPE
     id: str
     loader: Callable[[str], np.ndarray]

@@ -24,8 +24,8 @@ def test_interfacing():
 @pytest.mark.skipif(os.environ.get('CI') is not None, reason="Zenodo dataset is huge for CI")
 def test_zen_loader_download():
     # Using a known dataset ID from ZenLoader.DATASETS
-    dataset_id = list(ZenLoader.DATASETS_INFO.keys())[0]
-    download_dir = ZenLoader.download_dataset(dataset_id=dataset_id, dataset_name=dataset_id) # TODO check if dataset_name should be dataset_id
+    test_dataset_name = list(ZenLoader.DATASETS.keys())[0]
+    download_dir = ZenLoader.download_dataset(dataset_name=test_dataset_name)
     assert download_dir is not None
     assert os.path.isdir(download_dir)
     assert len(os.listdir(download_dir)) > 0
@@ -33,8 +33,8 @@ def test_zen_loader_download():
 @pytest.mark.skipif(os.environ.get('CI') is not None, reason="Zenodo dataset is huge for CI")
 def test_zen_loader_load():
     # Using a known dataset ID from ZenLoader.DATASETS
-    dataset_id = list(ZenLoader.DATASETS_INFO.keys())[0]
-    download_dir = ZenLoader.load_dataset(dataset_id=dataset_id, dataset_name=dataset_id) # TODO check if dataset_name should be dataset_id
-    assert download_dir is not None
-    assert os.path.isdir(download_dir)
-    assert len(os.listdir(download_dir)) > 0
+    test_dataset_name = list(ZenLoader.DATASETS.keys())[0]
+    raman_shifts, spectra, concentrations = ZenLoader.load_dataset(dataset_name=test_dataset_name)
+    assert raman_shifts is not None
+    assert spectra is not None
+    assert concentrations is not None

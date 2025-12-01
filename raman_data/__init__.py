@@ -10,7 +10,6 @@ from .loaders.LoaderTools import TASK_TYPE
 
 def raman_data(
     dataset_name: Optional[str] = None,
-    file_name: Optional[str] = None,
     cache_dir: Optional[str] = None,
     task_type: Optional[TASK_TYPE] = None
 ) -> Union[RamanDataset, List[str]]:
@@ -22,8 +21,6 @@ def raman_data(
 
     Args:
         dataset_name: The name of the dataset to load. If None, lists datasets.
-        file_name: The name of a dataset's file to load. If None for given `dataset_name`,
-                   downloads the whole dataset into `cache_dir`.
         cache_dir: The directory to use for caching the data.
         task_type: Filters the dataset list by task type ('classification' or 'regression').
 
@@ -35,5 +32,4 @@ def raman_data(
         return datasets.list_datasets(task_type=task_type)
     else:
         return datasets.load_dataset(dataset_name=dataset_name,
-                                     file_name=file_name,
                                      cache_dir=cache_dir)

@@ -2,11 +2,9 @@
 General functions and enums meant to be used while loading certain dataset.
 """
 
+# Enums' related imports
 from enum import Enum
-from scipy import io
-
-import os, h5py, hashlib
-import numpy as np
+import hashlib
 
 
 class CACHE_DIR(Enum):
@@ -30,23 +28,28 @@ class TASK_TYPE(Enum):
 
 
 class HASH_TYPE(Enum):
-    """    
+    """
     An enum contains possible hash types of a
     certain dataset's checksum. Each enums' value
     is a respective `hashlib`'s generating function
-    which outputs the related hash upon execution.  
+    which outputs the related hash upon execution.
     """
     md5 = hashlib.md5
     sha256 = hashlib.sha256
 
 
-from raman_data.loaders.ILoader import ILoader
-from raman_data.exceptions import ChecksumError
-
+# LoaderTools' related imports
 from typing import Optional, List
+
 from tqdm import tqdm
-from pathlib import Path
 import requests, zipfile
+
+from scipy import io
+import os, h5py
+import numpy as np
+
+from raman_data.loaders.ILoader import ILoader
+from raman_data.exceptions import ChecksumError, CorruptedZipFileError
 
 
 class LoaderTools:
@@ -70,10 +73,10 @@ class LoaderTools:
         """
         try:
             return os.environ[env_var.value]
-        except (KeyError):
+        except KeyError:
             return None
 
-    
+
     @staticmethod
     def set_cache_root(
         path: str,
@@ -92,13 +95,15 @@ class LoaderTools:
                                               the given path for all loaders.
         """
         path = None if path == "default" else path
-        
+
         if loader_key is not None:
             os.environ[loader_key.value] = path
-            print(f"[!] Cache root folder for {loader_key.name}'s loader is set to: {path}")
-            
+            print(
+                f"[!] Cache root folder for {loader_key.name}'s loader " \
+                f"is set to: {path}"
+            )
             return
-        
+
         for env_var in CACHE_DIR:
             os.environ[env_var.value] = path
         print(f"[!] Cache root folder is set to: {path}")
@@ -123,13 +128,13 @@ class LoaderTools:
         check = dataset_name in datasets
         if not check:
             print(f"[!] Dataset {dataset_name} is not on the loader's list.")
-        
+
         return check
 
 
     @staticmethod
     def list_datasets(
-        loader: ILoader,
+        loader: ILoader
     ) -> None:
         """
         Prints a formatted list of datasets of a certain loader.
@@ -140,20 +145,20 @@ class LoaderTools:
         print(f"[*] Datasets available with {loader.__qualname__}:")
         for dataset_name, task_type in loader.DATASETS.items():
             print(f" |-> Name: {dataset_name} | Task type: {task_type.name}")
-            
-    
+
+
     @staticmethod
     def download(
         url: str,
         out_dir_path: str,
         out_file_name: str,
-        hash_target: Optional[str] = None,           
+        hash_target: Optional[str] = None,
         hash_type: Optional[HASH_TYPE] = None
     ) -> str | None:
         """
         Download files from a URL with optional hash verification
         and stores them as a `.zip` file.
-        
+
         Args:
             url (str): The URL to download the files from.
             out_dir_path (str): The full path of the directory where
@@ -175,56 +180,59 @@ class LoaderTools:
         Note:
             - Downloads in chunks of 1MB (1048576 bytes) for memory efficiency
         """
-        
-        # size of a download package is set to 1MB 
+
+        # size of a download package is set to 1MB
         # so that not the entire date gets loaded in to ram an once
         CHUNK_SIZE = 1048576
-        
+
         checksum = hash_type.value() if hash_type else HASH_TYPE.md5.value()
 
-        
-        # http get request 
-        with requests.get(url=url, stream=True) as response: 
-
-            #if its failed raise error 
+        # http get request
+        with requests.get(url=url, stream=True) as response:
+            # if its failed raise error
             if not response.ok:
                 raise requests.HTTPError(response=response)
-            #total size of the to download data 
-            total_size = int(response.headers["Content-Length"]) if "Content-Length" in response.headers else None
+            # total size of the to download data
+            total_size = (
+                int(response.headers["Content-Length"])
+                if "Content-Length" in response.headers
+                else None
+            )
+
             os.makedirs(out_dir_path, exist_ok=True)
-            
             out_file_path = os.path.join(out_dir_path, out_file_name)
             if os.path.exists(out_file_path):
                 return out_file_path
-            
-            #open/create file to write the data to
-            with open(out_file_path, 'xb+') as file:
-                #displays a loadingbar in the cli 
-                with tqdm(total=total_size, unit="B", unit_scale=True, desc=f"Downloading file {out_file_name}") as pbar:
-                    #writes chunks with predefined size into the file 
+
+            # open/create file to write the data to
+            with open(out_file_path, "xb+") as file:
+                # displays a loading bar in the cli
+                with tqdm(
+                    total=total_size,
+                    unit="B",
+                    unit_scale=True,
+                    desc=f"Downloading file {out_file_name}",
+                ) as pbar:
+                    # writes chunks with predefined size into the file
                     for chunk in response.iter_content(CHUNK_SIZE):
                         if chunk:
                             file.write(chunk)
-                            #calculate checksum
+                            # calculate checksum
                             checksum.update(chunk)
                             pbar.update(len(chunk))
-                                
-        
-        #check the calculated checksum with the given one, 
-        # if its a mismatch rasie an Error
 
-
+        # check the calculated checksum with the given one,
+        # if its a mismatch raise an Error
         if hash_target and (checksum.hexdigest() != hash_target):
-
             os.remove(out_file_path)
             raise ChecksumError(
                 expected_checksum=hash_target,
                 actual_checksum=checksum.hexdigest()
             )
-    
+
         return out_file_path
-    
-    
+
+
     @staticmethod
     def extract_zip_file_content(
         zip_file_path: str,
@@ -236,7 +244,7 @@ class LoaderTools:
         The extracted files are saved in the same directory
         as the `.zip` file by default or in a subdirectory of files' location
         if specified.
-        
+
         Args:
             zip_file_path (str): Path to the `.zip` file to extract content of.
             unzip_target_subdir (str, optional): The name of the subdirectory
@@ -245,18 +253,22 @@ class LoaderTools:
                                               to overwrite previously unzipped files
                                               or not. This doesn't affect any files
                                               other than of specified `.zip` file.
-        
+
         Returns:
             str|None: If successful the path of the output directory else None.
         """
-        if not zipfile.is_zipfile(zip_file_path):
+        if os.path.isfile(zip_file_path):
+            if not zipfile.is_zipfile(zip_file_path):
+                raise CorruptedZipFileError(zip_file_path)
+        else:
             print(f"There's no .zip file stored at {zip_file_path}")
             return None
-        
+
         # create dir with the same name as the zip file for uncompressed file data
         out_dir = os.path.join(os.path.dirname(zip_file_path), unzip_target_subdir)
-        os.makedirs(out_dir, exist_ok=True)
-        
+        if not os.path.exists(out_dir):
+            os.makedirs(out_dir, exist_ok=True)
+
         # extract files
         with zipfile.ZipFile(zip_file_path, "r") as zf:
             file_list = zf.namelist()
@@ -264,17 +276,17 @@ class LoaderTools:
                 total=len(file_list),
                 unit="files",
                 unit_scale=True,
-                desc=unzip_target_subdir
+                desc=unzip_target_subdir,
             ) as pbar:
                 for file in file_list:
-                    if (force_overwrite or not os.path.isfile(f"{out_dir}/{file}")):
+                    if force_overwrite or not os.path.isfile(f"{out_dir}/{file}"):
                         zf.extract(file, out_dir)
-                        
+
                     pbar.update(1)
-        
+
         return out_dir
-        
-    
+
+
     @staticmethod
     def read_mat_file(mat_file_path: str) -> dict[str, np.ndarray]|None:
         """
