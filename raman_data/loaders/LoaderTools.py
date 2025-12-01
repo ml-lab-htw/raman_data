@@ -41,7 +41,7 @@ class HASH_TYPE(Enum):
 
 
 from raman_data.loaders.ILoader import ILoader
-from raman_data.exceptions import ChecksumError
+from raman_data.exceptions import ChecksumError, CorruptedZipFileError
 
 from typing import Optional, List
 from tqdm import tqdm
@@ -249,9 +249,16 @@ class LoaderTools:
         Returns:
             str|None: If successful the path of the output directory else None.
         """
-        if not zipfile.is_zipfile(zip_file_path):
+        if os.path.isfile(zip_file_path):
+            if not zipfile.is_zipfile(zip_file_path):
+                raise CorruptedZipFileError(
+                    zip_file_path
+                )
+        else:
             print(f"There's no .zip file stored at {zip_file_path}")
-            return None
+            return None        
+
+       
         
         # create dir with the same name as the zip file for uncompressed file data
         out_dir = os.path.join(os.path.dirname(zip_file_path), unzip_target_subdir)
