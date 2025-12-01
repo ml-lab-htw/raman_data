@@ -222,6 +222,7 @@ class ZenLoader(ILoader):
         dataset_name: str,
         cache_path: Optional[str] | None = None
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        
         if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with ZenLoader")
             return None
@@ -234,15 +235,6 @@ class ZenLoader(ILoader):
 
         zip_file_path = os.path.join(cache_path, dataset_id + ".zip")
         if not os.path.isfile(zip_file_path):
-            ZenLoader.download_dataset(dataset_name, cache_path)
-
-        try:
-            if not os.path.isdir(os.path.join(cache_path, dataset_id)):
-                LoaderTools.extract_zip_file_content(zip_file_path, dataset_id)
-        except CorruptedZipFileError as e:
-            print(f"{e.zip_file_path} got removed, because it was damaged.")
-            os.remove(e.zip_file_path)
-
             ZenLoader.download_dataset(dataset_name, cache_path)
 
         max_retries = 3

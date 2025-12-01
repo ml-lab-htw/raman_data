@@ -54,7 +54,6 @@ class HugLoader(ILoader):
     @staticmethod
     def download_dataset(
         dataset_name: str,
-        file_name: Optional[str] = None,
         cache_path: Optional[str] = None
     ) -> str | None:
         if not LoaderTools.is_dataset_available(dataset_name, HugLoader.DATASETS):
@@ -68,7 +67,6 @@ class HugLoader(ILoader):
         print(f"Downloading HuggingFace dataset: {dataset_name}")
         datasets.load_dataset(
             path=dataset_name,
-            data_files=file_name,
             cache_dir=cache_path
         )
 

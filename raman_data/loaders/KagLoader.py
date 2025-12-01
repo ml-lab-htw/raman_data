@@ -135,7 +135,6 @@ class KagLoader(ILoader):
     @staticmethod
     def load_dataset(
         dataset_name: str,
-        file_name: str,
         cache_path: Optional[str] = None
     ) -> np.ndarray | None:
         if not LoaderTools.is_dataset_available(dataset_name, KagLoader.DATASETS):
