@@ -25,13 +25,29 @@ class HugLoader(ILoader):
         raman_shifts = df.loc[:, :"3384.7"].to_numpy().T
 
         return raman_shifts, spectra, concentrations
+    
+
+    def load_EcoliFermentation(data: pd.DataFrame) -> np.ndarray|None:
+        df = pd.concat([pd.DataFrame(data["train"]),pd.DataFrame(data["test"]) ,pd.DataFrame(data["validation"])], ignore_index=True)
+
+        end_data_index = len(df.columns.values)-2
+
+        concentrations = df.loc[:, :"Glucose"].to_numpy()
+        spectra = np.array(df.columns.values[:end_data_index])
+        raman_shifts = df.loc[:, :"3384.7"].to_numpy().T
+
+        return raman_shifts, spectra, concentrations
 
 
     DATASETS = {
         "chlange/SubstrateMixRaman": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id=None,
-            load=load_substarteMix)
+            loader=load_substarteMix),
+        "chlange/RamanSpectraEcoliFermentation" : DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id=None,
+            loader=load_EcoliFermentation)
     }
 
 
