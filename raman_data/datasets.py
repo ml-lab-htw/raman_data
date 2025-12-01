@@ -5,17 +5,17 @@ Internal functions for loading and listing datasets.
 from typing import List, Optional
 from .types import RamanDataset
 
-# from raman_data.loaders.KagLoader import KagLoader
+from raman_data.loaders.KagLoader import KagLoader
 from raman_data.loaders.HugLoader import HugLoader
 from raman_data.loaders.ZenLoader import ZenLoader
-# from raman_data.loaders.ZipLoader import ZipLoader
+from raman_data.loaders.ZipLoader import ZipLoader
 from raman_data.loaders.LoaderTools import TASK_TYPE
 
 __LOADERS = [
-    # KagLoader,
+    KagLoader,
     HugLoader,
     ZenLoader,
-    # ZipLoader
+    #ZipLoader
 ]
 
 def list_datasets(
@@ -31,19 +31,6 @@ def list_datasets(
     Returns:
         A list of available dataset names.
     """
-    # Placeholder for all planned datasets (will be removed later)
-    datasets_placeholder = {
-        "diabetes_kaggle": "classification",
-        "covid19_kaggle": "classification",
-        "spectroscopy_kaggle": "classification",
-        "cells_raman_spectra_kaggle": "classification",
-        "SubstrateMixRaman_hf": "regression",
-        "Raman_Spectra_Data_github": "classification",
-        "zenodo_10779223": "classification",
-        "dtu_contrastive": "classification",
-        "mendeley_y4md8znppn": "classification",
-        "nature_s41467_019_12898_9": "classification",
-    }
 
     datasets = {}
 
