@@ -84,12 +84,16 @@ class HugLoader(ILoader):
 
         print(f"Downloading HuggingFace dataset: {dataset_name}")
         
-        datasets.load_dataset(path=dataset_name, cache_dir=cache_path)
+        datasets.load_dataset(
+            path=dataset_name,
+            cache_dir=cache_path
+        )
 
         cache_path = cache_path if cache_path else "~/.cache/huggingface"
         print(f"Dataset downloaded into {cache_path}")
 
         return cache_path
+
 
     @staticmethod
     def load_dataset(
