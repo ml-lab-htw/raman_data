@@ -19,19 +19,19 @@ class ZipLoader(ILoader):
         "MIND-Lab_covid+pd_ad_bundle": DatasetInfo(
             task_type=TASK_TYPE.Classification, 
             id="1", 
-            load=...),
+            loader=...),
         "csho33_bacteria_id": DatasetInfo(
             task_type=TASK_TYPE.Classification, 
             id="2", 
-            load=...),
+            loader=...),
         "mendeley_surface-enhanced-raman": DatasetInfo(
             task_type=TASK_TYPE.Classification, 
             id="3", 
-            load=...),
+            loader=...),
         "dtu_raman-spectrum-matching": DatasetInfo(
             task_type=TASK_TYPE.Classification, 
             id="4", 
-            load=...)
+            loader=...)
     }
 
     __LINKS = [

@@ -66,7 +66,7 @@ class ZenodoFileInfo:
 class DatasetInfo:
     task_type: TASK_TYPE
     id: str
-    load: Callable[[str], np.ndarray]
+    loader: Callable[[str], np.ndarray]
     
     
 @dataclass

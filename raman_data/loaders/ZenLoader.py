@@ -147,7 +147,7 @@ class ZenLoader(ILoader):
         "sugar mixtures": DatasetInfo(
             task_type=TASK_TYPE.Regression, 
             id="10779223", 
-            load=load_10779223),
+            loader=load_10779223),
         #"Volumetric cells": DatasetInfo(
         #   task_type=TASK_TYPE.Classification, 
         #   id="256329", 
@@ -155,11 +155,11 @@ class ZenLoader(ILoader):
         "Wheat lines": DatasetInfo(
             task_type=TASK_TYPE.Classification, 
             id="7644521", 
-            load=load_7644521),
+            loader=load_7644521),
         "Adenine": DatasetInfo(
             task_type=TASK_TYPE.Classification, 
             id="3572359", 
-            load=load_3572359)
+            loader=load_3572359)
     }
     
     @staticmethod

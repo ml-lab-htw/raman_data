@@ -84,7 +84,7 @@ class HugLoader(ILoader):
             cache_dir=cache_path
         )
 
-        return HugLoader.DATASETS[dataset_name].load(dataDict)
+        return HugLoader.DATASETS[dataset_name].loader(dataDict)
 
 
     @staticmethod
