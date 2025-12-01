@@ -6,6 +6,7 @@ import numpy as np
 
 from raman_data.types import DatasetInfo
 from raman_data.loaders.ILoader import ILoader
+from raman_data.exceptions import CorruptedZipFileError
 from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
 
 
@@ -212,17 +213,34 @@ class ZenLoader(ILoader):
         if not os.path.isfile(zip_file_path):
             ZenLoader.download_dataset(dataset_name, cache_path)
         
-        if not os.path.isdir(os.path.join(cache_path, dataset_id)):
-            LoaderTools.extract_zip_file_content(zip_file_path, dataset_id)
-        
+        try:
+
+            if not os.path.isdir(os.path.join(cache_path, dataset_id)):
+                LoaderTools.extract_zip_file_content(zip_file_path, dataset_id)
+        except CorruptedZipFileError as e:
+            print(f"{e.zip_file_path} got removed, because it was damaged.")
+            os.remove(e.zip_file_path)
+
+            ZenLoader.download_dataset(dataset_name, cache_path)
+
+        max_retries = 3
+        retry_count = 0
+
+        while retry_count < max_retries:
+            try:
+                if not os.path.isdir(os.path.join(cache_path, dataset_id)):
+                    LoaderTools.extract_zip_file_content(zip_file_path, dataset_id)
+                break 
+
+            except CorruptedZipFileError as e:
+                print(f"{e.zip_file_path} is corrupted. Attempt {retry_count + 1}/{max_retries}")
+                os.remove(e.zip_file_path)
+                retry_count += 1
+
+                if retry_count < max_retries:
+                    ZenLoader.download_dataset(dataset_name, cache_path)
+                else:
+                    raise Exception(f"Failed to download valid file after {max_retries} attempts")
+
+
         return ZenLoader.DATASETS[dataset_name].loader(cache_path)
-
-        #raman_shifts, spectra, concentrations = ZenLoader.DATASETS[dataset_name].loader(cache_path)
-
-        #dataset = types.RamanDataset(data=raman_shifts, 
-        #                             target=concentrations, 
-        #                             metadata={"spectra":spectra})
-        #
-        #return dataset
-        
-        
