@@ -150,7 +150,12 @@ class KagLoader(ILoader):
 
         dataset_id = KagLoader.DATASETS[dataset_name].id
 
-        return KagLoader.DATASETS[dataset_name].loader(dataset_id)
+        data = KagLoader.DATASETS[dataset_name].loader(dataset_id)
+    
+        if data is None:
+                return None, None, None
+
+        return data
 
 
     @staticmethod

@@ -19,7 +19,11 @@ class ZenLoader(ILoader):
     def load_10779223(cache_path: str) -> np.ndarray|None:
         zip_filename = "Raw data.zip"
         
-        data_dir = LoaderTools.extract_zip_file_content(os.path.join(cache_path, "10779223", zip_filename), zip_filename.split(".")[0])
+        try:
+            data_dir = LoaderTools.extract_zip_file_content(os.path.join(cache_path, "10779223", zip_filename), zip_filename.split(".")[0])
+        except CorruptedZipFileError as e:
+            print(f"There seems to be an issue with dataset 10779223/sugar mixtures. \n The following file could not be extracted: {zip_filename}")
+            return None
         
         if data_dir is None:
             return None
@@ -242,5 +246,10 @@ class ZenLoader(ILoader):
                 else:
                     raise Exception(f"Failed to download valid file after {max_retries} attempts")
 
-
-        return ZenLoader.DATASETS[dataset_name].loader(cache_path)
+        data = ZenLoader.DATASETS[dataset_name].loader(cache_path)
+        if data is None:
+            return None, None, None
+        
+        return data
+        
+        

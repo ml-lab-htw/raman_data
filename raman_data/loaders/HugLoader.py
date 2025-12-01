@@ -100,7 +100,12 @@ class HugLoader(ILoader):
             cache_dir=cache_path
         )
 
-        return HugLoader.DATASETS[dataset_name].loader(dataDict)
+        data = HugLoader.DATASETS[dataset_name].loader(dataDict)
+
+        if data is None:
+            return None, None, None
+        
+        return data
 
 
     @staticmethod
