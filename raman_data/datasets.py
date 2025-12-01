@@ -46,7 +46,6 @@ def list_datasets(
 
 def load_dataset(
     dataset_name: str,
-    file_name: Optional[str] = None,
     cache_dir: Optional[str] = None
 ) -> RamanDataset:
     """
@@ -57,8 +56,6 @@ def load_dataset(
 
     Args:
         dataset_name: The name of the dataset to load.
-        file_name: The name of a dataset's file to load. If None, the whole dataset
-                   will be saved to the cache_dir.
         cache_dir: The directory to use for caching the data. If None, a default
                    directory will be used.
 
@@ -77,7 +74,7 @@ def load_dataset(
     raman_data = None
     raman_target = []
     raman_meta = {
-        "name": f"{dataset_name}{f'/{file_name}' if file_name else ''}",
+        "name": f"{dataset_name}",
         "source": "dummy",
         "description": "This is a dummy dataset for demonstration purposes."
     }
@@ -89,7 +86,7 @@ def load_dataset(
         get_dataset = loader.load_dataset
         break
 
-    raman_data, temp, raman_target = get_dataset(dataset_name, file_name, cache_dir)
+    raman_data, temp, raman_target = get_dataset(dataset_name, cache_dir)
 
     return RamanDataset(
         data=raman_data,
