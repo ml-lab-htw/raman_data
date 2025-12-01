@@ -18,7 +18,7 @@ class ZenLoader(ILoader):
     def load_10779223(cache_path: str) -> np.ndarray|None:
         zip_filename = "Raw data.zip"
         
-        data_dir = LoaderTools.extract_zip_file_content(os.path.join(cache_path, "10779223", zip_filename), zip_filename.split('.')[0])
+        data_dir = LoaderTools.extract_zip_file_content(os.path.join(cache_path, "10779223", zip_filename), zip_filename)
         
         if data_dir is None:
             return None
@@ -64,7 +64,7 @@ class ZenLoader(ILoader):
 
         print(os.path.join(cache_path, "256329", zip_filename))
 
-        data_dir = LoaderTools.extract_zip_file_content(os.path.join(cache_path, "256329", zip_filename), zip_filename.split('.')[0])
+        data_dir = LoaderTools.extract_zip_file_content(os.path.join(cache_path, "256329", zip_filename), zip_filename)
 
         print(data_dir)
         
@@ -207,16 +207,15 @@ class ZenLoader(ILoader):
         
         dataset_id = ZenLoader.DATASETS[dataset_name].id
         
-        zip_file_name = dataset_id
-        zip_file_path = os.path.join(cache_path, zip_file_name+ ".zip")
+        zip_file_path = os.path.join(cache_path, dataset_id + ".zip")
         
         if not os.path.isfile(zip_file_path):
             ZenLoader.download_dataset(dataset_name, cache_path)
         
         if not os.path.isdir(os.path.join(cache_path, dataset_id)):
-            LoaderTools.extract_zip_file_content(zip_file_path, zip_file_name)
+            LoaderTools.extract_zip_file_content(zip_file_path, dataset_id)
         
-        return ZenLoader.DATASETS[dataset_name].load(cache_path)
+        return ZenLoader.DATASETS[dataset_name].loader(cache_path)
 
         #raman_shifts, spectra, concentrations = ZenLoader.DATASETS[dataset_name].loader(cache_path)
 
