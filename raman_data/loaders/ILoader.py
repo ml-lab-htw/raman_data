@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Optional
+from typing import Optional, Tuple
 
 from numpy import ndarray
 
@@ -37,7 +37,6 @@ class ILoader(metaclass=ABCMeta):
     @abstractmethod
     def download_dataset(
         dataset_name: str,
-        file_name: Optional[str] = None,
         cache_path: Optional[str] = None
     ) -> str | None:
         """
@@ -45,8 +44,6 @@ class ILoader(metaclass=ABCMeta):
 
         Args:
             dataset_name (str): The name of a dataset to download.
-            file_name (str, optional): The name of a specific dataset's file to download.
-                                       If None, downloads whole dataset.
             cache_path (str, optional): The path to save the dataset to.
                                         If None, uses the lastly saved path.
 
@@ -64,16 +61,14 @@ class ILoader(metaclass=ABCMeta):
     @abstractmethod
     def load_dataset(
         dataset_name: str,
-        file_name: str,
         cache_path: Optional[str] = None
-    ) -> ndarray | None:
+    ) -> Tuple[ndarray, ndarray, ndarray] | None:
         """
-        Loads certain dataset's file from cache folder as a numpy array.
-        If requested file isn't in the cache folder, downloads it into that folder.
+        Loads certain dataset from cache folder.
+        If the dataset isn't in the cache folder, downloads it into that folder.
 
         Args:
             dataset_name (str): The name of a dataset.
-            file_name (str): The name of a specific dataset's file to load.
             cache_path (str, optional): The path to look for the file at.
                                         If None, uses the lastly saved path.
                                         If "default", sets the default path ('~/.cache').
@@ -82,9 +77,13 @@ class ILoader(metaclass=ABCMeta):
             NotImplementedError: If not implemented raises the error by default.
 
         Returns:
-            ndarray|None: A numpy array representing the loaded file.
-                          If the dataset isn't on the list of a loader,
-                          returns None.
+            Tuple[ndarray,ndarray,ndarray]|None:
+                A tuple of the following structure:
+                    1. `wave lengths` and `raman_shifts` data,
+                    2. `target concentrations`
+                    3. `dataset's metadata`
+                If the dataset isn't on the list of a loader or load fails,
+                all three values will be None.
         """
         raise NotImplementedError
 
