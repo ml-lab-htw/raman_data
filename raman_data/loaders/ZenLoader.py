@@ -18,7 +18,7 @@ class ZenLoader(ILoader):
     def load_10779223(cache_path: str) -> np.ndarray|None:
         zip_filename = "Raw data.zip"
         
-        data_dir = LoaderTools.extract_zip_file_content(os.path.join(cache_path, "10779223", zip_filename), zip_filename)
+        data_dir = LoaderTools.extract_zip_file_content(os.path.join(cache_path, "10779223", zip_filename), zip_filename.split(".")[0])
         
         if data_dir is None:
             return None
