@@ -69,7 +69,7 @@ class ILoader(metaclass=ABCMeta):
 
         Args:
             dataset_name (str): The name of a dataset.
-            cache_path (str, optional): The path to look for the file at.
+            cache_path (str, optional): The path to the dataset's folder.
                                         If None, uses the lastly saved path.
                                         If "default", sets the default path ('~/.cache').
 
