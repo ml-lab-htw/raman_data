@@ -62,7 +62,7 @@ class ILoader(metaclass=ABCMeta):
     def load_dataset(
         dataset_name: str,
         cache_path: Optional[str] = None
-    ) -> Tuple[ndarray, ndarray, ndarray] | None:
+    ) -> RamanDataset | None:
         """
         Loads certain dataset from cache folder.
         If the dataset isn't in the cache folder, downloads it into that folder.

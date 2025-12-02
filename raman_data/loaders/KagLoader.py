@@ -67,47 +67,101 @@ class KagLoader(ILoader):
         "codina/diabetes/AGEs": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="AGEs",
-            loader=__load_diabetes
+            loader=__load_diabetes,
+            metadata={
+                "full_name" : "codina/raman-spectroscopy-of-diabetes",
+                "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
+                "paper" : "https://doi.org/10.1364/BOE.9.004998",
+                "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
+            }
         ),
         "codina/diabetes/earLobe": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="earLobe",
-            loader=__load_diabetes
+            loader=__load_diabetes,
+            metadata={
+                "full_name" : "codina/raman-spectroscopy-of-diabetes",
+                "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
+                "paper" : "https://doi.org/10.1364/BOE.9.004998",
+                "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
+            }
         ),
         "codina/diabetes/innerArm": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="innerArm",
-            loader=__load_diabetes
+            loader=__load_diabetes,
+            metadata={
+                "full_name" : "codina/raman-spectroscopy-of-diabetes",
+                "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
+                "paper" : "https://doi.org/10.1364/BOE.9.004998",
+                "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
+            }
         ),
         "codina/diabetes/thumbNail": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="thumbNail",
-            loader=__load_diabetes
+            loader=__load_diabetes,
+            metadata={
+                "full_name" : "codina/raman-spectroscopy-of-diabetes",
+                "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
+                "paper" : "https://doi.org/10.1364/BOE.9.004998",
+                "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
+            }
         ),
         "codina/diabetes/vein": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="vein",
-            loader=__load_diabetes
+            loader=__load_diabetes,
+            metadata={
+                "full_name" : "codina/raman-spectroscopy-of-diabetes",
+                "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
+                "paper" : "https://doi.org/10.1364/BOE.9.004998",
+                "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
+            }
         ),
         "sergioalejandrod/AminoAcids/glycine": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="1",
-            loader=__load_sergioalejandrod
+            loader=__load_sergioalejandrod,
+            metadata={
+                "full_name" : "sergioalejandrod/raman-spectroscopy",
+                "source" : "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
+                "paper" : "https://doi.org/10.1021/acs.analchem.0c03015",
+                "description" : "This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method."
+            }
         ),
         "sergioalejandrod/AminoAcids/leucine": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="2",
-            loader=__load_sergioalejandrod
+            loader=__load_sergioalejandrod,
+            metadata={
+                "full_name" : "sergioalejandrod/raman-spectroscopy",
+                "source" : "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
+                "paper" : "https://doi.org/10.1021/acs.analchem.0c03015",
+                "description" : "This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method."
+            }
         ),
         "sergioalejandrod/AminoAcids/phenylalanine": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="3",
-            loader=__load_sergioalejandrod
+            loader=__load_sergioalejandrod,
+            metadata={
+                "full_name" : "sergioalejandrod/raman-spectroscopy",
+                "source" : "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
+                "paper" : "https://doi.org/10.1021/acs.analchem.0c03015",
+                "description" : "This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method."
+            }
         ),
         "sergioalejandrod/AminoAcids/tryptophan": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="4",
-            loader=__load_sergioalejandrod
+            loader=__load_sergioalejandrod,
+            metadata={
+                "full_name" : "sergioalejandrod/raman-spectroscopy",
+                "source" : "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
+                "paper" : "https://doi.org/10.1021/acs.analchem.0c03015",
+                "description" : "This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method."
+            }
         ),
         # "andriitrelin/cells-raman-spectra": DatasetInfo(
         #     task_type=TASK_TYPE.Classification,
@@ -142,7 +196,7 @@ class KagLoader(ILoader):
     def load_dataset(
         dataset_name: str,
         cache_path: Optional[str] = None
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+    ) -> RamanDataset | None:
         if not LoaderTools.is_dataset_available(dataset_name, KagLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with Kaggle loader")
             return
@@ -157,11 +211,18 @@ class KagLoader(ILoader):
         )
 
         dataset_id = KagLoader.DATASETS[dataset_name].id
+
         data = KagLoader.DATASETS[dataset_name].loader(dataset_id)
 
-        if data is None:
-            return None, None, None
-
+        if data is not None:
+            raman_shifts, spectra, concentrations = data
+            return RamanDataset(
+                data=raman_shifts,
+                target=concentrations,
+                spectra=spectra,
+                metadata=KagLoader.DATASETS[dataset_name].metadata
+            )
+        
         return data
 
     @staticmethod

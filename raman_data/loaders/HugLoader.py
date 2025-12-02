@@ -59,12 +59,24 @@ class HugLoader(ILoader):
         "chlange/SubstrateMixRaman": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id=None,
-            loader=__load_substarteMix
+            loader=__load_substarteMix,
+            metadata={
+                "full_name" : "chlange/SubstrateMixRaman",
+                "source" : "https://huggingface.co/datasets/chlange/SubstrateMixRaman",
+                "paper" : "https://dx.doi.org/10.2139/ssrn.5239248",
+                "description" : "This dataset, designed for biotechnological applications, provides a valuable resource for calibrating models used in high-throughput bioprocess development, particularly for bacterial fermentations. It features Raman spectra of samples containing varying, statistically independent concentrations of eight key metabolites, along with mineral salt medium and antifoam."
+            }
         ),
         "chlange/RamanSpectraEcoliFermentation": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id=None,
-            loader=__load_EcoliFermentation
+            loader=__load_EcoliFermentation,
+            metadata={
+                "full_name" : "chlange/RamanSpectraEcoliFermentation",
+                "source" : "https://huggingface.co/datasets/chlange/RamanSpectraEcoliFermentation",
+                "paper" : "https://doi.org/10.1002/bit.70006",
+                "description" : "Dataset Card for Raman Spectra from High-Throughput Bioprocess Fermentations of E. Coli. Raman spectra were obtained during an E. coli fermentation process consisting of a batch and a glucose-limited feeding phase, each lasting about four hours. Samples were automatically collected hourly, centrifuged to separate cells from the supernatant, and the latter was used for both metabolite analysis and Raman measurements. Two Raman spectra of ten seconds each were recorded per sample, with cell removal improving metabolite signal quality. More details can be found in the paper https://doi.org/10.1002/bit.70006"
+            }
         )
     }
 
@@ -99,7 +111,7 @@ class HugLoader(ILoader):
     def load_dataset(
         dataset_name: str,
         cache_path: Optional[str] = None
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+    ) -> RamanDataset | None:
         if not LoaderTools.is_dataset_available(dataset_name, HugLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with HuggingFace loader")
             return
@@ -114,11 +126,18 @@ class HugLoader(ILoader):
         )
 
         dataDict = datasets.load_dataset(path=dataset_name, cache_dir=cache_path)
+    
         data = HugLoader.DATASETS[dataset_name].loader(dataDict)
 
-        if data is None:
-            return None, None, None
-
+        if data is not None:
+            raman_shifts, spectra, concentrations = data
+            return RamanDataset(
+                data=raman_shifts,
+                target=concentrations,
+                spectra=spectra,
+                metadata=HugLoader.DATASETS[dataset_name].metadata
+            )
+        
         return data
 
 

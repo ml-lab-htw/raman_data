@@ -24,22 +24,26 @@ class ZipLoader(ILoader):
         "MIND-Lab_covid+pd_ad_bundle": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="1",
-            loader=...
+            loader=...,
+            metadata={}
         ),
         "csho33_bacteria_id": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="2",
-            loader=...
+            loader=...,
+            metadata={}
         ),
         "mendeley_surface-enhanced-raman": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="3",
-            loader=...
+            loader=...,
+            metadata={}
         ),
         "dtu_raman-spectrum-matching": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="4",
-            loader=...
+            loader=...,
+            metadata={}
         )
     }
 

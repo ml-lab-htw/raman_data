@@ -70,14 +70,6 @@ def load_dataset(
                          f"Available datasets: {list_datasets()}")
 
     get_dataset = None
-
-    raman_data = None
-    raman_target = []
-    raman_meta = {
-        "name": f"{dataset_name}",
-        "source": "dummy",
-        "description": "This is a dummy dataset for demonstration purposes."
-    }
     
     for loader in __LOADERS:
         if not (dataset_name in loader.DATASETS):
@@ -86,11 +78,4 @@ def load_dataset(
         get_dataset = loader.load_dataset
         break
 
-    raman_data, temp, raman_target = get_dataset(dataset_name, cache_dir)
-
-    return RamanDataset(
-        data=raman_data,
-        target=raman_target,
-        metadata=raman_meta
-    )
-
+    return get_dataset(dataset_name, cache_dir)
