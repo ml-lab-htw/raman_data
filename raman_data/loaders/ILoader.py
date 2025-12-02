@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
-from typing import Optional, Tuple
+from typing import Optional
 
-from numpy import ndarray
+from raman_data.types import RamanDataset
 
 class ILoader(metaclass=ABCMeta):
     """

@@ -9,7 +9,7 @@ from raman_data.loaders.KagLoader import KagLoader
 from raman_data.loaders.HugLoader import HugLoader
 from raman_data.loaders.ZenLoader import ZenLoader
 from raman_data.loaders.ZipLoader import ZipLoader
-from raman_data.loaders.LoaderTools import TASK_TYPE
+from raman_data.types import TASK_TYPE
 
 __LOADERS = [
     KagLoader,

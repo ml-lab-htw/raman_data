@@ -1,12 +1,44 @@
 """
-Data structures for the raman_data package.
+Data structures and enums for the raman_data package.
 """
+from enum import Enum
+import hashlib
 
 from dataclasses import dataclass
 from typing import Callable, Any
 import numpy as np
 
-from raman_data.loaders.LoaderTools import HASH_TYPE, TASK_TYPE
+
+class CACHE_DIR(Enum):
+    """
+    An enum contains names of environment variables used
+    by certain loaders for saving their cache directories.
+    """
+    Kaggle = "KAGGLEHUB_CACHE"
+    HuggingFace = "HF_HOME"
+    Zenodo = "ZEN_CACHE"
+    Zip = "ZIP_CACHE"
+
+
+class TASK_TYPE(Enum):
+    """
+    An enum contains possible task types of a
+    certain dataset.
+    """
+    Classification = 0
+    Regression = 1
+
+
+class HASH_TYPE(Enum):
+    """
+    An enum contains possible hash types of a
+    certain dataset's checksum. Each enums' value
+    is a respective `hashlib`'s generating function
+    which outputs the related hash upon execution.
+    """
+    md5 = hashlib.md5
+    sha256 = hashlib.sha256
+
 
 @dataclass
 class RamanDataset:
@@ -21,6 +53,7 @@ class RamanDataset:
     """
     data: np.ndarray
     target: np.ndarray
+    spectra: np.ndarray
     metadata: dict
 
 
@@ -67,6 +100,7 @@ class DatasetInfo:
     task_type: TASK_TYPE
     id: str
     loader: Callable[[str], np.ndarray]
+    metadata : dict
     
     
 @dataclass
@@ -86,4 +120,5 @@ class ExternalLink:
     url: str
     checksum: str | None = None
     checksum_type: HASH_TYPE | None = None
+
 

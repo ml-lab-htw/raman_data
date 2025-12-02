@@ -4,9 +4,9 @@ from kagglehub import dataset_load, dataset_download
 from kagglehub import KaggleDatasetAdapter
 import numpy as np
 
-from raman_data.types import DatasetInfo
+from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
 from raman_data.loaders.ILoader import ILoader
-from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
+from raman_data.loaders.LoaderTools import LoaderTools
 
 
 class KagLoader(ILoader):

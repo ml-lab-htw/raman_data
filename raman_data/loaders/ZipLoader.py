@@ -7,9 +7,9 @@ from numpy import ndarray
 # from numpy import genfromtxt, load,
 # from pandas import read_excel
 
-from raman_data.types import DatasetInfo, ExternalLink
+from raman_data.types import DatasetInfo, ExternalLink, CACHE_DIR, TASK_TYPE, HASH_TYPE
 from raman_data.loaders.ILoader import ILoader
-from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, HASH_TYPE, LoaderTools
+from raman_data.loaders.LoaderTools import LoaderTools
 
 
 class ZipLoader(ILoader):

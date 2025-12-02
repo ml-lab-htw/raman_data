@@ -6,7 +6,7 @@ from typing import List, Optional, Union
 
 from .types import RamanDataset
 from . import datasets
-from .loaders.LoaderTools import TASK_TYPE
+from .types import TASK_TYPE
 
 def raman_data(
     dataset_name: Optional[str] = None,
