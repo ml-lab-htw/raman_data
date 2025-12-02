@@ -96,7 +96,7 @@ class ZipLoader(ILoader):
         download_zip_path = LoaderTools.download(
             url=dataset_link.url,
             out_dir_path=cache_path,
-            out_file_name=dataset_name,
+            out_file_name=f"{dataset_name}.zip",
             hash_target=dataset_link.checksum,
             hash_type=dataset_link.checksum_type,
         )
