@@ -1,44 +1,6 @@
 """
 General functions and enums meant to be used while loading certain dataset.
 """
-
-# Enums' related imports
-from enum import Enum
-import hashlib
-
-
-class CACHE_DIR(Enum):
-    """
-    An enum contains names of environment variables used
-    by certain loaders for saving their cache directories.
-    """
-    Kaggle = "KAGGLEHUB_CACHE"
-    HuggingFace = "HF_HOME"
-    Zenodo = "ZEN_CACHE"
-    Zip = "ZIP_CACHE"
-
-
-class TASK_TYPE(Enum):
-    """
-    An enum contains possible task types of a
-    certain dataset.
-    """
-    Classification = 0
-    Regression = 1
-
-
-class HASH_TYPE(Enum):
-    """
-    An enum contains possible hash types of a
-    certain dataset's checksum. Each enums' value
-    is a respective `hashlib`'s generating function
-    which outputs the related hash upon execution.
-    """
-    md5 = hashlib.md5
-    sha256 = hashlib.sha256
-
-
-# LoaderTools' related imports
 from typing import Optional, List
 
 from tqdm import tqdm
@@ -50,6 +12,7 @@ import numpy as np
 
 from raman_data.loaders.ILoader import ILoader
 from raman_data.exceptions import ChecksumError, CorruptedZipFileError
+from raman_data.types import CACHE_DIR, HASH_TYPE
 
 
 class LoaderTools:

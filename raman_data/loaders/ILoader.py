@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
-from typing import Optional, Tuple
+from typing import Optional
 
-from numpy import ndarray
+from raman_data.types import RamanDataset
 
 class ILoader(metaclass=ABCMeta):
     """
@@ -62,7 +62,7 @@ class ILoader(metaclass=ABCMeta):
     def load_dataset(
         dataset_name: str,
         cache_path: Optional[str] = None
-    ) -> Tuple[ndarray, ndarray, ndarray] | None:
+    ) -> RamanDataset | None:
         """
         Loads certain dataset from cache folder.
         If the dataset isn't in the cache folder, downloads it into that folder.
@@ -77,13 +77,10 @@ class ILoader(metaclass=ABCMeta):
             NotImplementedError: If not implemented raises the error by default.
 
         Returns:
-            Tuple[ndarray,ndarray,ndarray]|None:
-                A tuple of the following structure:
-                    1. `wave lengths` and `raman_shifts` data,
-                    2. `target concentrations`
-                    3. `dataset's metadata`
-                If the dataset isn't on the list of a loader or load fails,
-                all three values will be None.
+            RamanDataset|None: A RamanDataset object containing
+                                the data, target, spectra and metadata.
+                                If the dataset isn't on the list of a loader
+                                or load fails, returns None.
         """
         raise NotImplementedError
 

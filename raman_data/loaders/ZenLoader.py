@@ -4,10 +4,10 @@ import os, requests
 import pandas as pd
 import numpy as np
 
-from raman_data.types import DatasetInfo
+from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
 from raman_data.exceptions import CorruptedZipFileError
 from raman_data.loaders.ILoader import ILoader
-from raman_data.loaders.LoaderTools import CACHE_DIR, TASK_TYPE, LoaderTools
+from raman_data.loaders.LoaderTools import  LoaderTools
 
 
 class ZenLoader(ILoader):
@@ -177,7 +177,13 @@ class ZenLoader(ILoader):
         "sugar mixtures": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="10779223",
-            loader=__load_10779223
+            loader=__load_10779223,
+            metadata={
+                "full_name" : "Research data supporting \"Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders\"",
+                "source" : "https://doi.org/10.5281/zenodo.10779223",
+                "paper" : "https://doi.org/10.1073/pnas.2407439121",
+                "description" : "Experimental and synthetic Raman data used in Georgiev et al., PNAS (2024) DOI:10.1073/pnas.2407439121."
+            }
         ),
         # "Volumetric cells": DatasetInfo(
         #     task_type=TASK_TYPE.Classification,
@@ -187,12 +193,24 @@ class ZenLoader(ILoader):
         "Wheat lines": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="7644521",
-            loader=__load_7644521
+            loader=__load_7644521,
+             metadata={
+                "full_name" : "DIFFERENTIATION OF ADVANCED GENERATION MUTANT WHEAT LINES: CONVENTIONAL TECHNIQUES VERSUS RAMAN SPECTROSCOPY",
+                "source" : "https://doi.org/10.5281/zenodo.7644521",
+                "paper" : "https://doi.org/10.3389/fpls.2023.1116876",
+                "description" : "Data and codes used in the manuscript titled \"DIFFERENTIATION OF ADVANCED GENERATION MUTANT WHEAT LINES: CONVENTIONAL TECHNIQUES VERSUS RAMAN SPECTROSCOPY\". The decision tree model is trained and tested using the Classification Learner app of MATLAB (R2021b, The MathWorks, Inc.)."
+            }
         ),
         "Adenine": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="3572359",
-            loader=__load_3572359
+            loader=__load_3572359,
+            metadata={
+                "full_name" : "Dataset for Surface Enhanced Raman Spectroscopy for quantitative analysis: results of a large-scale European multi-instrument interlaboratory study",
+                "source" : "https://doi.org/10.5281/zenodo.3572359",
+                "paper" : "https://doi.org/10.1021/acs.analchem.9b05658",
+                "description" : "This dataset contains all the spectra used in \"Surface Enhanced Raman Spectroscopy for quantitative analysis: results of a large-scale European multi-instrument interlaboratory study\". Data are available in 2 different formats: - a compressed archive with 1 folder (\"Dataset\") cointaining all the 3516 TXT files (1 file = 1 spectrum) uploaded by all participants (all spectra of the Interlaboratory study); - 1 single CSV file (“ILSspectra.csv”) with all the 3516 spectra uploaded by all participants in the form of a table. The data are structured as follow, with each row being 1 spectrum, preceded by metadata: \"labcode\", \"substrate\", \"laser\", \"method\", \"sample\", \"type\", \"conc\", \"batch\", \"replica\". Note that for those spectra starting after 400 cm-1 and/or ending before 2000 cm-1 missing values were expressed as NAs."
+            }
         )
     }
 
@@ -230,7 +248,7 @@ class ZenLoader(ILoader):
     def load_dataset(
         dataset_name: str,
         cache_path: Optional[str] = None
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+    ) -> RamanDataset | None:
         
         if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with ZenLoader")
@@ -272,7 +290,14 @@ class ZenLoader(ILoader):
                     )
 
         data = ZenLoader.DATASETS[dataset_name].loader(cache_path)
-        if data is None:
-            return None, None, None
 
+        if data is not None:
+            raman_shifts, spectra, concentrations = data
+            return RamanDataset(
+                data=raman_shifts,
+                target=concentrations,
+                spectra=spectra,
+                metadata=ZenLoader.DATASETS[dataset_name].metadata
+            )
+        
         return data

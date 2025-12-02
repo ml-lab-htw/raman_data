@@ -9,7 +9,7 @@ from raman_data.loaders.KagLoader import KagLoader
 from raman_data.loaders.HugLoader import HugLoader
 from raman_data.loaders.ZenLoader import ZenLoader
 from raman_data.loaders.ZipLoader import ZipLoader
-from raman_data.loaders.LoaderTools import TASK_TYPE
+from raman_data.types import TASK_TYPE
 
 __LOADERS = [
     KagLoader,
@@ -47,7 +47,7 @@ def list_datasets(
 def load_dataset(
     dataset_name: str,
     cache_dir: Optional[str] = None
-) -> RamanDataset:
+) -> RamanDataset | None:
     """
     (Down-)Loads a specific Raman spectroscopy dataset.
 
@@ -60,7 +60,9 @@ def load_dataset(
                    directory will be used.
 
     Returns:
-        A RamanDataset object containing the data, target, and metadata.
+        RamanDataset|None: A RamanDataset object containing
+                           the data, target, spectra and metadata or
+                           None if load process fails.
 
     Raises:
         ValueError: If the dataset name is not found.
@@ -70,14 +72,6 @@ def load_dataset(
                          f"Available datasets: {list_datasets()}")
 
     get_dataset = None
-
-    raman_data = None
-    raman_target = []
-    raman_meta = {
-        "name": f"{dataset_name}",
-        "source": "dummy",
-        "description": "This is a dummy dataset for demonstration purposes."
-    }
     
     for loader in __LOADERS:
         if not (dataset_name in loader.DATASETS):
@@ -86,11 +80,4 @@ def load_dataset(
         get_dataset = loader.load_dataset
         break
 
-    raman_data, temp, raman_target = get_dataset(dataset_name, cache_dir)
-
-    return RamanDataset(
-        data=raman_data,
-        target=raman_target,
-        metadata=raman_meta
-    )
-
+    return get_dataset(dataset_name, cache_dir)

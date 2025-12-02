@@ -3,20 +3,14 @@ Some general tests of package's functionality.
 """
 
 from raman_data import raman_data
-from raman_data.loaders.LoaderTools import TASK_TYPE
+from raman_data.types import TASK_TYPE
 
-_2_DATASETS = {
-    # "codina/raman-spectroscopy-of-diabetes": TASK_TYPE.Classification,
-    # "sergioalejandrod/raman-spectroscopy": TASK_TYPE.Classification,
+__TODO_DATASETS = {
     # "andriitrelin/cells-raman-spectra": TASK_TYPE.Classification,
-    "chlange/SubstrateMixRaman": TASK_TYPE.Regression,
     #"MIND-Lab_covid+pd_ad_bundle": TASK_TYPE.Classification,
     #"csho33_bacteria_id": TASK_TYPE.Classification,
     # "mendeley_surface-enhanced-raman": TASK_TYPE.Classification,
     #"dtu_raman-spectrum-matching": TASK_TYPE.Classification,
-    "sugar mixtures": TASK_TYPE.Regression,
-    "Wheat lines" : TASK_TYPE.Classification,
-    "Adenine" : TASK_TYPE.Classification
 }
 
 __DATASETS = {
@@ -73,4 +67,6 @@ def test_load_dataset():
         dataset = raman_data(dataset_name=dataset_name)
         assert dataset.data is not None
         assert dataset.target is not None
-        assert dataset.metadata["name"] == dataset_name
+        assert dataset.spectra is not None
+        assert dataset.metadata["full_name"] is not None
+        assert dataset.metadata["source"] is not None
