@@ -1,11 +1,12 @@
 """
 Data structures and enums for the raman_data package.
 """
+
 from enum import Enum
 import hashlib
 
 from dataclasses import dataclass
-from typing import Callable, Any
+from typing import Callable, Tuple
 import numpy as np
 
 
@@ -49,12 +50,12 @@ class RamanDataset:
         data (np.ndarray): The Raman spectra. Each row is a spectrum, and each column is a Raman shift.
         target (np.ndarray): The target variable(s) for each spectrum. Can be a 1D array for single-target tasks
                          (e.g., class label or concentration) or a 2D array for multi-target tasks.
-        metadata (dict): A dictionary containing metadata about the dataset (e.g., source, description).
+        metadata (dict[str, str]): A dictionary containing metadata about the dataset (e.g., source, description).
     """
     data: np.ndarray
     target: np.ndarray
     spectra: np.ndarray
-    metadata: dict
+    metadata: dict[str, str]
 
 
 @dataclass(init=False)
@@ -97,10 +98,20 @@ class ZenodoFileInfo:
  
 @dataclass
 class DatasetInfo:
+    """
+    A class to represent dataset's information for its preparation.
+    
+    Attributes:
+        task_type (TASK_TYPE): The task type of the dataset
+                               e.g. Classification or Regression.
+        id (str): An internal id to distinguish between sub-datasets.
+        loader (Callable): The function to format the dataset.
+        metadata (dict[str, str]): Some non-functional information about the dataset.
+    """
     task_type: TASK_TYPE
     id: str
-    loader: Callable[[str], np.ndarray]
-    metadata : dict
+    loader: Callable[[str], Tuple[np.ndarray, np.ndarray, np.ndarray] | None]
+    metadata : dict[str, str]
     
     
 @dataclass
@@ -120,5 +131,4 @@ class ExternalLink:
     url: str
     checksum: str | None = None
     checksum_type: HASH_TYPE | None = None
-
 

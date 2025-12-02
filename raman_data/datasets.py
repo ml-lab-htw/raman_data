@@ -47,7 +47,7 @@ def list_datasets(
 def load_dataset(
     dataset_name: str,
     cache_dir: Optional[str] = None
-) -> RamanDataset:
+) -> RamanDataset | None:
     """
     (Down-)Loads a specific Raman spectroscopy dataset.
 
@@ -60,7 +60,9 @@ def load_dataset(
                    directory will be used.
 
     Returns:
-        A RamanDataset object containing the data, target, and metadata.
+        RamanDataset|None: A RamanDataset object containing
+                           the data, target, spectra and metadata or
+                           None if load process fails.
 
     Raises:
         ValueError: If the dataset name is not found.
