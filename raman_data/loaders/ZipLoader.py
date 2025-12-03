@@ -1,13 +1,12 @@
 from typing import Optional, Tuple
 
-import os.path
-from numpy import ndarray
-
+import os
+import numpy as np
+from numpy import genfromtxt, load
 #* These functions could be useful for specific load() functions
-# from numpy import genfromtxt, load,
 # from pandas import read_excel
 
-from raman_data.types import DatasetInfo, ExternalLink, CACHE_DIR, TASK_TYPE, HASH_TYPE
+from raman_data.types import DatasetInfo, ExternalLink, RamanDataset, CACHE_DIR, TASK_TYPE, HASH_TYPE
 from raman_data.loaders.ILoader import ILoader
 from raman_data.loaders.LoaderTools import LoaderTools
 
@@ -17,15 +16,69 @@ class ZipLoader(ILoader):
     A static class specified in providing datasets hosted on websites
     which don't provide any API.
     """
+    @staticmethod
+    def __load_mind_lab_bundle(
+        id: str,
+        dataset_path: str
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        dataset_root = os.path.join(dataset_path, "Raman-Spectra-Data-main")
+
+        if id == "COV":
+            dataset_root = os.path.join(dataset_root, "covid_dataset")
+        else:
+            dataset_root = os.path.join(dataset_root, "pd_ad_dataset")
+        data_dirs = os.listdir(dataset_root)
+        # Removing an extra user_information.csv from the list
+        data_dirs.pop()
+        
+        raman_shifts = []
+        spectra = []
+        target = []
+        
+        for data_dir in data_dirs:
+            raman_shifts_path = os.path.join(dataset_root, data_dir, "raman_shift.csv")
+            raman_shifts_data = genfromtxt(raman_shifts_path)
+            raman_shifts.append(raman_shifts_data)
+            
+            spectra_path = os.path.join(dataset_root, data_dir, "spectra.csv")
+            spectra_data = genfromtxt(spectra_path, delimiter=',')
+            spectra.append(spectra_data)
+            
+            target_path = os.path.join(dataset_root, data_dir, "user_information.csv")
+            target_data = genfromtxt(target_path,
+                                     dtype=int,
+                                     delimiter=',',
+                                     skip_header=1)[-1]
+            target.append(target_data)
+
+        return raman_shifts, spectra, target
+    
+    
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "ziploader")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zip)
 
     DATASETS = {
-        "MIND-Lab_covid+pd_ad_bundle": DatasetInfo(
+        "MIND-Lab_covid+pd_ad_bundle-covid_dataset": DatasetInfo(
             task_type=TASK_TYPE.Classification,
-            id="1",
-            loader=...,
-            metadata={}
+            id="COV",
+            loader=__load_mind_lab_bundle,
+            metadata={
+                "full_name" : "MIND-Lab_covid_dataset",
+                "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
+                "paper": "https://pubmed.ncbi.nlm.nih.gov/38335817/",
+                "description": "Datasets used for the experimental computations of paper \"An Integrated Computational Pipeline for Machine Learning-Driven Diagnosis based on Raman Spectra of saliva samples\"."
+            }
+        ),
+        "MIND-Lab_covid+pd_ad_bundle-pd_ad_dataset": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="PD",
+            loader=__load_mind_lab_bundle,
+            metadata={
+                "full_name" : "MIND-Lab_pd_ad_dataset",
+                "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
+                "paper": "https://pubmed.ncbi.nlm.nih.gov/38335817/",
+                "description": "Datasets used for the experimental computations of paper \"An Integrated Computational Pipeline for Machine Learning-Driven Diagnosis based on Raman Spectra of saliva samples\"."
+            }
         ),
         "csho33_bacteria_id": DatasetInfo(
             task_type=TASK_TYPE.Classification,
@@ -49,7 +102,11 @@ class ZipLoader(ILoader):
 
     __LINKS = [
         ExternalLink(
-            name="MIND-Lab_covid+pd_ad_bundle",
+            name="MIND-Lab_covid+pd_ad_bundle-covid_dataset",
+            url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip"
+        ),
+        ExternalLink(
+            name="MIND-Lab_covid+pd_ad_bundle-pd_ad_dataset",
             url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip"
         ),
         ExternalLink(
@@ -117,7 +174,7 @@ class ZipLoader(ILoader):
     def load_dataset(
         dataset_name: str,
         cache_path: Optional[str] = None
-    ) -> Tuple[ndarray, ndarray, ndarray] | None:
+    ) -> RamanDataset | None:
         if not LoaderTools.is_dataset_available(dataset_name, ZipLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with ZipLoader")
             return
@@ -144,14 +201,20 @@ class ZipLoader(ILoader):
         # if file_name[-4:] == ".npy":
         #     return load(file=file_path)
 
-        # Converting CSV files with numpy
-        # return genfromtxt(fname=file_path, delimiter=",")
-        
-        data = ZipLoader.DATASETS[dataset_name].loader(cache_path)
+        dataset_id = ZipLoader.DATASETS[dataset_name].id
+        data = ZipLoader.DATASETS[dataset_name].loader(
+            id=dataset_id,
+            dataset_path=os.path.join(cache_path, dataset_name))
         if data is None:
             return None, None, None
 
-        return data
+        raman_shifts, spectra, concentrations = data
+        return RamanDataset(
+            data=raman_shifts,
+            target=concentrations,
+            spectra=spectra,
+            metadata=ZipLoader.DATASETS[dataset_name].metadata
+        )
 
 
     @staticmethod
