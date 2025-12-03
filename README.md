@@ -15,12 +15,14 @@ The basic interface for the package is defined in `raman_data/__init__.py`. Here
 
 ```python
 from raman_data import raman_data
+# To specify a task type import this enum as well
+from raman_data import TASK_TYPE
 
 # List all available datasets
 print(raman_data())
 
 # List only classification datasets
-print(raman_data(task_type='classification'))
+print(raman_data(task_type=TASK_TYPE.Classification))
 
 # Load a dataset
 dataset = raman_data(name="diabetes_kaggle")
@@ -34,6 +36,8 @@ print(X.shape)
 print(y.shape)
 print(metadata)
 ```
+
+For more detailed examples see [Demo Notebook](./demo.ipynb).
 
 ## 📚 Available Datasets
 
@@ -63,12 +67,12 @@ Here is the list of datasets that will be included in the package:
 ## 🎯 Milestones
 
 - [x] View Datasets
-- [ ] Software architecture with dummy data
-- [ ] Software tests
-- [ ] Integration of Kaggle
-- [ ] Integration of Huggingface
-- [ ] Integration of Github
-- [ ] Integration of Zenodo
+- [x] Software architecture with dummy data
+- [x] Software tests
+- [x] Integration of Kaggle
+- [x] Integration of Huggingface
+- [x] Integration of Github
+- [x] Integration of Zenodo
 - [ ] Integration of other datasets
 - [ ] Finalize Package
     - [ ] Documentation
