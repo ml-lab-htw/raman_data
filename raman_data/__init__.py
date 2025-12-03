@@ -2,6 +2,11 @@
 A unified API for loading and accessing Raman spectroscopy datasets.
 """
 
+__all__ = [
+    "TASK_TYPE",
+    "raman_data"
+]
+
 from typing import List, Optional, Union
 
 from .types import RamanDataset
