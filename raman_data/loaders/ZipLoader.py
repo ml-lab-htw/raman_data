@@ -28,14 +28,16 @@ class ZipLoader(ILoader):
         else:
             dataset_root = os.path.join(dataset_root, "pd_ad_dataset")
         data_dirs = os.listdir(dataset_root)
-        # Removing an extra user_information.csv from the list
-        data_dirs.pop()
         
         raman_shifts = []
         spectra = []
         target = []
         
         for data_dir in data_dirs:
+            # Skipping an extra user_information.csv
+            if data_dir == "user_information.csv":
+                continue
+            
             raman_shifts_path = os.path.join(dataset_root, data_dir, "raman_shift.csv")
             raman_shifts_data = genfromtxt(raman_shifts_path)
             raman_shifts.append(raman_shifts_data)
@@ -58,7 +60,7 @@ class ZipLoader(ILoader):
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zip)
 
     DATASETS = {
-        "MIND-Lab_covid+pd_ad_bundle-covid_dataset": DatasetInfo(
+        "MIND-Lab_Raman-Spectra-Data_covid-dataset": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="COV",
             loader=__load_mind_lab_bundle,
@@ -67,9 +69,10 @@ class ZipLoader(ILoader):
                 "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
                 "paper": "https://pubmed.ncbi.nlm.nih.gov/38335817/",
                 "description": "Datasets used for the experimental computations of paper \"An Integrated Computational Pipeline for Machine Learning-Driven Diagnosis based on Raman Spectra of saliva samples\"."
-            }
+            },
+            base_name="MIND-Lab_Raman-Spectra-Data"
         ),
-        "MIND-Lab_covid+pd_ad_bundle-pd_ad_dataset": DatasetInfo(
+        "MIND-Lab_Raman-Spectra-Data_pd-ad-dataset": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="PD",
             loader=__load_mind_lab_bundle,
@@ -78,7 +81,8 @@ class ZipLoader(ILoader):
                 "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
                 "paper": "https://pubmed.ncbi.nlm.nih.gov/38335817/",
                 "description": "Datasets used for the experimental computations of paper \"An Integrated Computational Pipeline for Machine Learning-Driven Diagnosis based on Raman Spectra of saliva samples\"."
-            }
+            },
+            base_name="MIND-Lab_Raman-Spectra-Data"
         ),
         "csho33_bacteria_id": DatasetInfo(
             task_type=TASK_TYPE.Classification,
@@ -102,11 +106,7 @@ class ZipLoader(ILoader):
 
     __LINKS = [
         ExternalLink(
-            name="MIND-Lab_covid+pd_ad_bundle-covid_dataset",
-            url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip"
-        ),
-        ExternalLink(
-            name="MIND-Lab_covid+pd_ad_bundle-pd_ad_dataset",
+            name="MIND-Lab_Raman-Spectra-Data",
             url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip"
         ),
         ExternalLink(
@@ -147,22 +147,25 @@ class ZipLoader(ILoader):
 
         print(f"Downloading dataset: {dataset_name}")
 
+        dataset_base_name = [
+            info.base_name for name, info in ZipLoader.DATASETS.items() if name == dataset_name
+        ][0]
         dataset_link = [
-            link for link in ZipLoader.__LINKS if link.name == dataset_name
+            link for link in ZipLoader.__LINKS if link.name == dataset_base_name
         ][0]
         download_zip_path = LoaderTools.download(
             url=dataset_link.url,
             out_dir_path=cache_path,
-            out_file_name=f"{dataset_name}.zip",
+            out_file_name=f"{dataset_base_name}.zip",
             hash_target=dataset_link.checksum,
-            hash_type=dataset_link.checksum_type,
+            hash_type=dataset_link.checksum_type
         )
 
         print("Unzipping files...")
 
         download_path = LoaderTools.extract_zip_file_content(
             zip_file_path=download_zip_path,
-            unzip_target_subdir=dataset_name
+            unzip_target_subdir=dataset_base_name
         )
 
         print(f"Dataset downloaded into {download_path}")
@@ -183,7 +186,11 @@ class ZipLoader(ILoader):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zip)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zip)
 
-        if not os.path.exists(os.path.join(cache_path, dataset_name)):
+        dataset_base_name = [
+            info.base_name for name, info in ZipLoader.DATASETS.items() if name == dataset_name
+        ][0]
+
+        if not os.path.exists(os.path.join(cache_path, dataset_base_name)):
             print(f"[!] Dataset isn't found at: {cache_path}")
             ZipLoader.download_dataset(
                 dataset_name=dataset_name,
@@ -204,7 +211,7 @@ class ZipLoader(ILoader):
         dataset_id = ZipLoader.DATASETS[dataset_name].id
         data = ZipLoader.DATASETS[dataset_name].loader(
             id=dataset_id,
-            dataset_path=os.path.join(cache_path, dataset_name))
+            dataset_path=os.path.join(cache_path, dataset_base_name))
         if data is None:
             return None, None, None
 

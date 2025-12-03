@@ -107,11 +107,13 @@ class DatasetInfo:
         id (str): An internal id to distinguish between sub-datasets.
         loader (Callable): The function to format the dataset.
         metadata (dict[str, str]): Some non-functional information about the dataset.
+        base_name (str | None) = None: The common name for all sub-datasets.
     """
     task_type: TASK_TYPE
     id: str
     loader: Callable[[str], Tuple[np.ndarray, np.ndarray, np.ndarray] | None]
-    metadata : dict[str, str]
+    metadata: dict[str, str]
+    base_name: str | None = None
     
     
 @dataclass
