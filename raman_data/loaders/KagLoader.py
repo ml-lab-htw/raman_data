@@ -51,8 +51,8 @@ class KagLoader(ILoader):
             pandas_kwargs={"sheet_name": f"Sheet{id}"}
         )
 
-        raman_shifts = df.loc[1:, 4.5:].to_numpy().T
-        spectra = df.loc[:, header[(int(id) - 1)]].to_numpy()
+        raman_shifts = df.loc[1:, 4.5:].to_numpy()
+        spectra = df.loc[1:, header[(int(id) - 1)]].to_numpy()
         concentration = np.array(df.columns.values[2:], dtype=float)
 
         return raman_shifts, spectra, concentration
