@@ -13,6 +13,8 @@ class HugLoader(ILoader):
     """
     A static class specified in providing datasets hosted on HuggingFace.
     """
+
+    @staticmethod
     def __load_substarteMix(
         df: pd.DataFrame
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
@@ -26,6 +28,7 @@ class HugLoader(ILoader):
         return raman_shifts, spectra, concentrations
 
 
+    @staticmethod
     def __load_EcoliFermentation(
         df: pd.DataFrame
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
@@ -39,6 +42,7 @@ class HugLoader(ILoader):
         return raman_shifts, spectra, concentrations
 
 
+    @staticmethod
     def __load_FuleSpectra(
         df: pd.DataFrame
     )-> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
