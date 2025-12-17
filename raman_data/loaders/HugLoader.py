@@ -14,16 +14,8 @@ class HugLoader(ILoader):
     A static class specified in providing datasets hosted on HuggingFace.
     """
     def __load_substarteMix(
-        data: pd.DataFrame
+        df: pd.DataFrame
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
-        df = pd.concat(
-            [
-                pd.DataFrame(data["train"]),
-                pd.DataFrame(data["test"]),
-                pd.DataFrame(data["validation"]),
-            ],
-            ignore_index=True,
-        )
 
         end_data_index = len(df.columns.values) - 8
 
@@ -35,16 +27,8 @@ class HugLoader(ILoader):
 
 
     def __load_EcoliFermentation(
-        data: pd.DataFrame
+        df: pd.DataFrame
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
-        df = pd.concat(
-            [
-                pd.DataFrame(data["train"]),
-                pd.DataFrame(data["test"]),
-                pd.DataFrame(data["validation"]),
-            ],
-            ignore_index=True,
-        )
 
         end_data_index = len(df.columns.values) - 2
 
@@ -126,8 +110,17 @@ class HugLoader(ILoader):
         )
 
         dataDict = datasets.load_dataset(path=dataset_name, cache_dir=cache_path)
+
+        df = pd.concat(
+            [
+                pd.DataFrame(dataDict["train"]),
+                pd.DataFrame(dataDict["test"]),
+                pd.DataFrame(dataDict["validation"]),
+            ],
+            ignore_index=True,
+        )
     
-        data = HugLoader.DATASETS[dataset_name].loader(dataDict)
+        data = HugLoader.DATASETS[dataset_name].loader(df)
 
         if data is not None:
             raman_shifts, spectra, concentrations = data
