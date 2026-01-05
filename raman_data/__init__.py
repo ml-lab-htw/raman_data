@@ -2,11 +2,22 @@
 A unified API for loading and accessing Raman spectroscopy datasets.
 """
 
+__version__ = "0.1.0"
+
+from pkg_resources import get_distribution, DistributionNotFound
+try:
+    __version__ = get_distribution(__name__).version
+except DistributionNotFound:
+    pass
+
 from typing import List, Optional, Union
 
 from .types import RamanDataset
 from . import datasets
 from .types import TASK_TYPE
+
+
+
 
 def raman_data(
     dataset_name: Optional[str] = None,

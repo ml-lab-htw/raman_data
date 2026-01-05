@@ -1,10 +1,9 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "raman-data"
-version = "0.0.1"
 authors = [
   { name="Mario Koddenbrock", email="mario.koddenbrock@htw-berlin.de" },
   { name="Oskar Fulde", email="oskar.fulde@example.com" },
@@ -20,13 +19,8 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering",
 ]
-dependencies = [
-    "numpy",
-    "requests",
-    "tqdm",
-    "huggingface_hub",
-    "kagglehub",
-]
+
+dynamic = ["version", "dependencies"]
 
 [project.urls]
 "Homepage" = "https://github.com/ml-lab-htw/raman_data"
@@ -36,3 +30,6 @@ dependencies = [
 test = [
     "pytest"
 ]
+[tool.setuptools.dynamic]
+version = {attr = "raman_data.__version__"}
+dependencies = {file = "requirements.txt"}
