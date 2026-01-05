@@ -31,5 +31,8 @@ test = [
     "pytest"
 ]
 [tool.setuptools.dynamic]
-version = {attr = "raman_data.__version__"}
 dependencies = {file = "requirements.txt"}
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "no-local-version"
