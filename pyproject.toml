@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 name = "raman-data"
 authors = [
   { name="Mario Koddenbrock", email="mario.koddenbrock@htw-berlin.de" },
-  { name="Oskar Fulde", email="oskar.fulde@example.com" },
-  { name="Robert Koch", email="TODO@example.com" },
+  { name="Oskar Fulde", email="Oskar.Fulde@Student.HTW-Berlin.de" },
+  { name="Robert Koch", email="Robert.Koch@Student.HTW-Berlin.de" },
 ]
 description = "A unified Python package for accessing various Raman spectroscopy datasets."
 readme = "README.md"
