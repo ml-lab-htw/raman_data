@@ -55,7 +55,31 @@ class ZipLoader(ILoader):
 
         return raman_shifts, spectra, target
     
-    
+    @staticmethod
+    def __load_csho33_bacteria_bundle(
+        id: str,
+        dataset_path: str
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        file_prefixes = ['X', 'y']
+
+        raman_shifts = []
+        spectra = []
+        target = []
+        
+        raman_shifts_path = os.path.join(dataset_path, "wavenumbers.npy")
+        raman_shifts_data = load(raman_shifts_path)
+        raman_shifts.append(raman_shifts_data)
+        
+        spectra_path = os.path.join(dataset_path, f"{file_prefixes[0]}_{id}.npy")
+        spectra_data = load(spectra_path)
+        spectra.append(spectra_data)
+        
+        target_path = os.path.join(dataset_path, f"{file_prefixes[1]}_{id}.npy")
+        target_data = load(target_path)
+        target.append(target_data)
+
+        return raman_shifts, spectra, target
+
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "ziploader")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zip)
 
@@ -84,11 +108,65 @@ class ZipLoader(ILoader):
             },
             base_name="MIND-Lab_Raman-Spectra-Data"
         ),
-        "csho33_bacteria_id": DatasetInfo(
+        "csho33_bacteria_2018clinical": DatasetInfo(
             task_type=TASK_TYPE.Classification,
-            id="2",
-            loader=...,
-            metadata={}
+            id="2018clinical",
+            loader=__load_csho33_bacteria_bundle,
+            metadata={
+                "full_name" : "csho33_bacteria_2018clinical",
+                "source": "https://github.com/csho33/bacteria-ID",
+                "paper": "https://www.nature.com/articles/s41467-019-12898-9",
+                "description": "This dataset contains the Raman spectra of pathogenic bacteria used to produce the results in the paper \"Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning\"."
+            },
+            base_name="csho33_bacteria"
+        ),
+        "csho33_bacteria_2019clinical": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="2019clinical",
+            loader=__load_csho33_bacteria_bundle,
+            metadata={
+                "full_name" : "csho33_bacteria_2019clinical",
+                "source": "https://github.com/csho33/bacteria-ID",
+                "paper": "https://www.nature.com/articles/s41467-019-12898-9",
+                "description": "This dataset contains the Raman spectra of pathogenic bacteria used to produce the results in the paper \"Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning\"."
+            },
+            base_name="csho33_bacteria"
+        ),
+        "csho33_bacteria_finetune": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="finetune",
+            loader=__load_csho33_bacteria_bundle,
+            metadata={
+                "full_name" : "csho33_bacteria_finetune",
+                "source": "https://github.com/csho33/bacteria-ID",
+                "paper": "https://www.nature.com/articles/s41467-019-12898-9",
+                "description": "This dataset contains the Raman spectra of pathogenic bacteria used to produce the results in the paper \"Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning\"."
+            },
+            base_name="csho33_bacteria"
+        ),
+        "csho33_bacteria_reference": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="reference",
+            loader=__load_csho33_bacteria_bundle,
+            metadata={
+                "full_name" : "csho33_bacteria_reference",
+                "source": "https://github.com/csho33/bacteria-ID",
+                "paper": "https://www.nature.com/articles/s41467-019-12898-9",
+                "description": "This dataset contains the Raman spectra of pathogenic bacteria used to produce the results in the paper \"Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning\"."
+            },
+            base_name="csho33_bacteria"
+        ),
+        "csho33_bacteria_test": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="test",
+            loader=__load_csho33_bacteria_bundle,
+            metadata={
+                "full_name" : "csho33_bacteria_test",
+                "source": "https://github.com/csho33/bacteria-ID",
+                "paper": "https://www.nature.com/articles/s41467-019-12898-9",
+                "description": "This dataset contains the Raman spectra of pathogenic bacteria used to produce the results in the paper \"Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning\"."
+            },
+            base_name="csho33_bacteria"
         ),
         "mendeley_surface-enhanced-raman": DatasetInfo(
             task_type=TASK_TYPE.Classification,
@@ -110,7 +188,7 @@ class ZipLoader(ILoader):
             url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip"
         ),
         ExternalLink(
-            name="csho33_bacteria_id",
+            name="csho33_bacteria",
             url="https://www.dropbox.com/scl/fo/fb29ihfnvishuxlnpgvhg/AJToUtts-vjYdwZGeqK4k-Y?rlkey=r4p070nsuei6qj3pjp13nwf6l&e=1&st=dmn0jupt&dl=1"
         ),
         ExternalLink(
