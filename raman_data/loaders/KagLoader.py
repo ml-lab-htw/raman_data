@@ -3,6 +3,7 @@ from typing import Optional, Tuple
 from kagglehub import dataset_load, dataset_download
 from kagglehub import KaggleDatasetAdapter
 import numpy as np
+import pandas as pd
 
 from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
 from raman_data.loaders.ILoader import ILoader
@@ -61,6 +62,35 @@ class KagLoader(ILoader):
     @staticmethod
     def __load_andriitrelin():
         raise NotImplementedError
+
+
+    @staticmethod
+    def __load_cancer_cells(
+        id: str
+    )-> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        raise NotImplementedError
+
+        file_handle = "mathiascharconnet/cancer-cells-sers-spectra"
+        lable_list = ["A", "A-S", "G", "G-S", "HPM", "HPM-S", "HF", "HF-S", "ZAM", "ZAM-S", "DMEM", "DMEM-S"]
+        file_list = {"(COOH)2.csv":None, 
+                     "COOH.csv":None, 
+                     "NH2.csv":None}
+
+        for lable in lable_list:
+            for file in file_list.keys():
+
+                df = dataset_load(
+                    adapter=KaggleDatasetAdapter.PANDAS,
+                    handle=file_handle,
+                    path=f"{lable}/{file}"
+                )
+
+                if file_list[file] is None:
+                    file_list[file] = df
+                else:
+                    file_list[file] = pd.concat([file_list[file], df])
+ 
+        spectra = np.linspace(100, 4278, 2090)
 
 
     DATASETS = {
@@ -167,7 +197,18 @@ class KagLoader(ILoader):
         #     task_type=TASK_TYPE.Classification,
         #     id=None,
         #     loader=__load_andriitrelin
-        # )
+        # ),
+        #"mathiascharconnet/cancer-cells-sers-spectra" : DatasetInfo(
+        #    task_type=TASK_TYPE.Classification,
+        #    id=None,
+        #    loader=__load_cancer_cells,
+        #    metadata={
+        #        "full_name" : "mathiascharconnet/cancer-cells-sers-spectra",
+        #        "source" : "https://www.kaggle.com/code/mathiascharconnet/cancer-cells-sers-spectra/input",
+        #        "paper" : "https://doi.org/10.1016/j.snb.2020.127660",
+        #        "description" : "This dataset was collected in the University of Chemistry and Technology, Prague during work on cancer detection. It contains Raman spectra of the culture medium, corresponding to several kinds of cancer and normal cells. Dataset consists of 12 folders with 3 CSV files in each. Folders are named after specific samples (tabulated below). Each CSV in folder contains spectra of medium, collected on the gold nanourchins functionalized with corresponding moiety. Please refer to the original publication for details."
+        #    }
+        #)
     }
 
 

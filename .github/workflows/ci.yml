@@ -3,6 +3,7 @@ name: Python Package CI
 on:
   push:
     branches: [ "main" ]
+    #tags: ["v*"]
   pull_request:
     branches: [ "main" ]
 
@@ -30,3 +31,16 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+    
+  #  - name: build pypi Package
+  #    run: |
+  #      pip install --upgrade build twine
+  #      pip -m build
+  #      twine check --strict dist/*
+#
+  #  - name: publish pypi Package
+  #    uses: pypa/gh-action-pypi-publish@master
+  #    with:
+  #      user: __token__
+  #      password: ${{secrets.PYPI_API}}
+

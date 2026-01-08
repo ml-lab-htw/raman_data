@@ -13,17 +13,11 @@ class HugLoader(ILoader):
     """
     A static class specified in providing datasets hosted on HuggingFace.
     """
+
+    @staticmethod
     def __load_substarteMix(
-        data: pd.DataFrame
+        df: pd.DataFrame
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
-        df = pd.concat(
-            [
-                pd.DataFrame(data["train"]),
-                pd.DataFrame(data["test"]),
-                pd.DataFrame(data["validation"]),
-            ],
-            ignore_index=True,
-        )
 
         end_data_index = len(df.columns.values) - 8
 
@@ -34,23 +28,30 @@ class HugLoader(ILoader):
         return raman_shifts, spectra, concentrations
 
 
+    @staticmethod
     def __load_EcoliFermentation(
-        data: pd.DataFrame
+        df: pd.DataFrame
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
-        df = pd.concat(
-            [
-                pd.DataFrame(data["train"]),
-                pd.DataFrame(data["test"]),
-                pd.DataFrame(data["validation"]),
-            ],
-            ignore_index=True,
-        )
 
         end_data_index = len(df.columns.values) - 2
 
         raman_shifts = df.loc[:, :"3384.7"].to_numpy().T
         spectra = np.array(df.columns.values[:end_data_index])
         concentrations = df.loc[:, :"Glucose"].to_numpy()
+
+        return raman_shifts, spectra, concentrations
+
+
+    @staticmethod
+    def __load_FuleSpectra(
+        df: pd.DataFrame
+    )-> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+
+        end_data_index = len(df.columns.values) - 12
+
+        raman_shifts = df.loc[:, :"3801.0"].to_numpy().T
+        spectra = np.array(df.columns.values[:end_data_index])
+        concentrations = df.loc[:, "Research Octane Number":].to_numpy()
 
         return raman_shifts, spectra, concentrations
 
@@ -76,6 +77,17 @@ class HugLoader(ILoader):
                 "source" : "https://huggingface.co/datasets/chlange/RamanSpectraEcoliFermentation",
                 "paper" : "https://doi.org/10.1002/bit.70006",
                 "description" : "Dataset Card for Raman Spectra from High-Throughput Bioprocess Fermentations of E. Coli. Raman spectra were obtained during an E. coli fermentation process consisting of a batch and a glucose-limited feeding phase, each lasting about four hours. Samples were automatically collected hourly, centrifuged to separate cells from the supernatant, and the latter was used for both metabolite analysis and Raman measurements. Two Raman spectra of ten seconds each were recorded per sample, with cell removal improving metabolite signal quality. More details can be found in the paper https://doi.org/10.1002/bit.70006"
+            }
+        ),
+        "chlange/FuelRamanSpectraBenchtop": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id=None,
+            loader=__load_FuleSpectra,
+            metadata={
+                "full_name" : "chlange/FuelRamanSpectraBenchtop",
+                "source" : "https://huggingface.co/datasets/chlange/FuelRamanSpectraBenchtop",
+                "paper" : "http://dx.doi.org/10.1021/acs.energyfuels.9b02944",
+                "description" : "This dataset contains Raman spectra for the analysis and prediction of key parameters in commercial fuel samples (gasoline). It includes spectra of 179 fuel samples from various refineries."
             }
         )
     }
@@ -126,8 +138,17 @@ class HugLoader(ILoader):
         )
 
         dataDict = datasets.load_dataset(path=dataset_name, cache_dir=cache_path)
+
+        df = pd.concat(
+            [
+                pd.DataFrame(dataDict["train"]),
+                pd.DataFrame(dataDict["test"]),
+                pd.DataFrame(dataDict["validation"]),
+            ],
+            ignore_index=True,
+        )
     
-        data = HugLoader.DATASETS[dataset_name].loader(dataDict)
+        data = HugLoader.DATASETS[dataset_name].loader(df)
 
         if data is not None:
             raman_shifts, spectra, concentrations = data

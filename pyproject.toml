@@ -1,14 +1,13 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "raman-data"
-version = "0.0.1"
 authors = [
   { name="Mario Koddenbrock", email="mario.koddenbrock@htw-berlin.de" },
-  { name="Oskar Fulde", email="oskar.fulde@example.com" },
-  { name="Robert Koch", email="TODO@example.com" },
+  { name="Oskar Fulde", email="Oskar.Fulde@Student.HTW-Berlin.de" },
+  { name="Robert Koch", email="Robert.Koch@Student.HTW-Berlin.de" },
 ]
 description = "A unified Python package for accessing various Raman spectroscopy datasets."
 readme = "README.md"
@@ -20,13 +19,8 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering",
 ]
-dependencies = [
-    "numpy",
-    "requests",
-    "tqdm",
-    "huggingface_hub",
-    "kagglehub",
-]
+
+dynamic = ["version", "dependencies"]
 
 [project.urls]
 "Homepage" = "https://github.com/ml-lab-htw/raman_data"
@@ -36,3 +30,9 @@ dependencies = [
 test = [
     "pytest"
 ]
+[tool.setuptools.dynamic]
+dependencies = {file = "requirements.txt"}
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "no-local-version"
