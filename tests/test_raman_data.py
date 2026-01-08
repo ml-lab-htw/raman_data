@@ -25,6 +25,7 @@ __DATASETS = {
     'sergioalejandrod/AminoAcids/tryptophan' : TASK_TYPE.Classification,
     'chlange/SubstrateMixRaman' : TASK_TYPE.Regression,
     'chlange/RamanSpectraEcoliFermentation' : TASK_TYPE.Classification,
+    "chlange/FuelRamanSpectraBenchtop" : TASK_TYPE.Regression,
     'sugar mixtures' : TASK_TYPE.Regression,
     'Wheat lines' : TASK_TYPE.Classification,
     'Adenine' : TASK_TYPE.Classification
