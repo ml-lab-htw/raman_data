@@ -7,8 +7,6 @@ from raman_data.types import TASK_TYPE
 
 __TODO_DATASETS = {
     # "andriitrelin/cells-raman-spectra": TASK_TYPE.Classification,
-    #"MIND-Lab_covid+pd_ad_bundle": TASK_TYPE.Classification,
-    #"csho33_bacteria_id": TASK_TYPE.Classification,
     # "mendeley_surface-enhanced-raman": TASK_TYPE.Classification,
     #"dtu_raman-spectrum-matching": TASK_TYPE.Classification,
 }
@@ -28,7 +26,14 @@ __DATASETS = {
     "chlange/FuelRamanSpectraBenchtop" : TASK_TYPE.Regression,
     'sugar mixtures' : TASK_TYPE.Regression,
     'Wheat lines' : TASK_TYPE.Classification,
-    'Adenine' : TASK_TYPE.Classification
+    'Adenine' : TASK_TYPE.Classification,
+    'MIND-Lab_Raman-Spectra-Data_covid-dataset': TASK_TYPE.Classification,
+    'MIND-Lab_Raman-Spectra-Data_pd-ad-dataset': TASK_TYPE.Classification,
+    'csho33_bacteria_2018clinical': TASK_TYPE.Classification,
+    'csho33_bacteria_2019clinical': TASK_TYPE.Classification,
+    'csho33_bacteria_finetune': TASK_TYPE.Classification,
+    'csho33_bacteria_reference': TASK_TYPE.Classification,
+    'csho33_bacteria_test': TASK_TYPE.Classification
 }
 
 
@@ -62,7 +67,8 @@ def test_load_dataset():
         "codina/diabetes/earLobe",                  # hosted on Kaggle
         "chlange/SubstrateMixRaman",                # hosted on HuggingFace
         # "mendeley_surface-enhanced-raman",          # hosted on external website
-        "Adenine"                                   # hosted on Zenodo
+        "Adenine",                                  # hosted on Zenodo
+        "csho33_bacteria_test"                      # hosted on GitHub
     ]
     for dataset_name in test_datasets:
         dataset = raman_data(dataset_name=dataset_name)

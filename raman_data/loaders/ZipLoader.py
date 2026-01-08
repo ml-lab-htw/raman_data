@@ -1,13 +1,12 @@
 from typing import Optional, Tuple
 
-import os.path
-from numpy import ndarray
-
+import os
+import numpy as np
+from numpy import genfromtxt, load
 #* These functions could be useful for specific load() functions
-# from numpy import genfromtxt, load,
 # from pandas import read_excel
 
-from raman_data.types import DatasetInfo, ExternalLink, CACHE_DIR, TASK_TYPE, HASH_TYPE
+from raman_data.types import DatasetInfo, ExternalLink, RamanDataset, CACHE_DIR, TASK_TYPE, HASH_TYPE
 from raman_data.loaders.ILoader import ILoader
 from raman_data.loaders.LoaderTools import LoaderTools
 
@@ -17,43 +16,179 @@ class ZipLoader(ILoader):
     A static class specified in providing datasets hosted on websites
     which don't provide any API.
     """
+    @staticmethod
+    def __load_mind_lab_bundle(
+        id: str,
+        dataset_path: str
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        dataset_root = os.path.join(dataset_path, "Raman-Spectra-Data-main")
+
+        if id == "COV":
+            dataset_root = os.path.join(dataset_root, "covid_dataset")
+        else:
+            dataset_root = os.path.join(dataset_root, "pd_ad_dataset")
+        data_dirs = os.listdir(dataset_root)
+        
+        raman_shifts = []
+        spectra = []
+        target = []
+        
+        for data_dir in data_dirs:
+            # Skipping an extra user_information.csv
+            if data_dir == "user_information.csv":
+                continue
+            
+            raman_shifts_path = os.path.join(dataset_root, data_dir, "raman_shift.csv")
+            raman_shifts_data = genfromtxt(raman_shifts_path)
+            raman_shifts.append(raman_shifts_data)
+            
+            spectra_path = os.path.join(dataset_root, data_dir, "spectra.csv")
+            spectra_data = genfromtxt(spectra_path, delimiter=',')
+            spectra.append(spectra_data)
+            
+            target_path = os.path.join(dataset_root, data_dir, "user_information.csv")
+            target_data = genfromtxt(target_path,
+                                     dtype=int,
+                                     delimiter=',',
+                                     skip_header=1)[-1]
+            target.append(target_data)
+
+        return raman_shifts, spectra, target
+    
+    @staticmethod
+    def __load_csho33_bacteria_bundle(
+        id: str,
+        dataset_path: str
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        file_prefixes = ['X', 'y']
+
+        raman_shifts = []
+        spectra = []
+        target = []
+        
+        raman_shifts_path = os.path.join(dataset_path, "wavenumbers.npy")
+        raman_shifts_data = load(raman_shifts_path)
+        raman_shifts.append(raman_shifts_data)
+        
+        spectra_path = os.path.join(dataset_path, f"{file_prefixes[0]}_{id}.npy")
+        spectra_data = load(spectra_path)
+        spectra.append(spectra_data)
+        
+        target_path = os.path.join(dataset_path, f"{file_prefixes[1]}_{id}.npy")
+        target_data = load(target_path)
+        target.append(target_data)
+
+        return raman_shifts, spectra, target
+
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "ziploader")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zip)
 
     DATASETS = {
-        "MIND-Lab_covid+pd_ad_bundle": DatasetInfo(
+        "MIND-Lab_Raman-Spectra-Data_covid-dataset": DatasetInfo(
             task_type=TASK_TYPE.Classification,
-            id="1",
-            loader=...,
-            metadata={}
+            id="COV",
+            loader=__load_mind_lab_bundle,
+            metadata={
+                "full_name" : "MIND-Lab_covid_dataset",
+                "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
+                "paper": "https://pubmed.ncbi.nlm.nih.gov/38335817/",
+                "description": "Datasets used for the experimental computations of paper \"An Integrated Computational Pipeline for Machine Learning-Driven Diagnosis based on Raman Spectra of saliva samples\"."
+            },
+            base_name="MIND-Lab_Raman-Spectra-Data"
         ),
-        "csho33_bacteria_id": DatasetInfo(
+        "MIND-Lab_Raman-Spectra-Data_pd-ad-dataset": DatasetInfo(
             task_type=TASK_TYPE.Classification,
-            id="2",
-            loader=...,
-            metadata={}
+            id="PD",
+            loader=__load_mind_lab_bundle,
+            metadata={
+                "full_name" : "MIND-Lab_pd_ad_dataset",
+                "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
+                "paper": "https://pubmed.ncbi.nlm.nih.gov/38335817/",
+                "description": "Datasets used for the experimental computations of paper \"An Integrated Computational Pipeline for Machine Learning-Driven Diagnosis based on Raman Spectra of saliva samples\"."
+            },
+            base_name="MIND-Lab_Raman-Spectra-Data"
         ),
-        "mendeley_surface-enhanced-raman": DatasetInfo(
+        "csho33_bacteria_2018clinical": DatasetInfo(
             task_type=TASK_TYPE.Classification,
-            id="3",
-            loader=...,
-            metadata={}
+            id="2018clinical",
+            loader=__load_csho33_bacteria_bundle,
+            metadata={
+                "full_name" : "csho33_bacteria_2018clinical",
+                "source": "https://github.com/csho33/bacteria-ID",
+                "paper": "https://www.nature.com/articles/s41467-019-12898-9",
+                "description": "This dataset contains the Raman spectra of pathogenic bacteria used to produce the results in the paper \"Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning\"."
+            },
+            base_name="csho33_bacteria"
         ),
-        "dtu_raman-spectrum-matching": DatasetInfo(
+        "csho33_bacteria_2019clinical": DatasetInfo(
             task_type=TASK_TYPE.Classification,
-            id="4",
-            loader=...,
-            metadata={}
-        )
+            id="2019clinical",
+            loader=__load_csho33_bacteria_bundle,
+            metadata={
+                "full_name" : "csho33_bacteria_2019clinical",
+                "source": "https://github.com/csho33/bacteria-ID",
+                "paper": "https://www.nature.com/articles/s41467-019-12898-9",
+                "description": "This dataset contains the Raman spectra of pathogenic bacteria used to produce the results in the paper \"Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning\"."
+            },
+            base_name="csho33_bacteria"
+        ),
+        "csho33_bacteria_finetune": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="finetune",
+            loader=__load_csho33_bacteria_bundle,
+            metadata={
+                "full_name" : "csho33_bacteria_finetune",
+                "source": "https://github.com/csho33/bacteria-ID",
+                "paper": "https://www.nature.com/articles/s41467-019-12898-9",
+                "description": "This dataset contains the Raman spectra of pathogenic bacteria used to produce the results in the paper \"Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning\"."
+            },
+            base_name="csho33_bacteria"
+        ),
+        "csho33_bacteria_reference": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="reference",
+            loader=__load_csho33_bacteria_bundle,
+            metadata={
+                "full_name" : "csho33_bacteria_reference",
+                "source": "https://github.com/csho33/bacteria-ID",
+                "paper": "https://www.nature.com/articles/s41467-019-12898-9",
+                "description": "This dataset contains the Raman spectra of pathogenic bacteria used to produce the results in the paper \"Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning\"."
+            },
+            base_name="csho33_bacteria"
+        ),
+        "csho33_bacteria_test": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="test",
+            loader=__load_csho33_bacteria_bundle,
+            metadata={
+                "full_name" : "csho33_bacteria_test",
+                "source": "https://github.com/csho33/bacteria-ID",
+                "paper": "https://www.nature.com/articles/s41467-019-12898-9",
+                "description": "This dataset contains the Raman spectra of pathogenic bacteria used to produce the results in the paper \"Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning\"."
+            },
+            base_name="csho33_bacteria"
+        ),
+        # "mendeley_surface-enhanced-raman": DatasetInfo(
+        #     task_type=TASK_TYPE.Classification,
+        #     id="3",
+        #     loader=...,
+        #     metadata={}
+        # ),
+        # "dtu_raman-spectrum-matching": DatasetInfo(
+        #     task_type=TASK_TYPE.Classification,
+        #     id="4",
+        #     loader=...,
+        #     metadata={}
+        # )
     }
 
     __LINKS = [
         ExternalLink(
-            name="MIND-Lab_covid+pd_ad_bundle",
+            name="MIND-Lab_Raman-Spectra-Data",
             url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip"
         ),
         ExternalLink(
-            name="csho33_bacteria_id",
+            name="csho33_bacteria",
             url="https://www.dropbox.com/scl/fo/fb29ihfnvishuxlnpgvhg/AJToUtts-vjYdwZGeqK4k-Y?rlkey=r4p070nsuei6qj3pjp13nwf6l&e=1&st=dmn0jupt&dl=1"
         ),
         ExternalLink(
@@ -90,22 +225,25 @@ class ZipLoader(ILoader):
 
         print(f"Downloading dataset: {dataset_name}")
 
+        dataset_base_name = [
+            info.base_name for name, info in ZipLoader.DATASETS.items() if name == dataset_name
+        ][0]
         dataset_link = [
-            link for link in ZipLoader.__LINKS if link.name == dataset_name
+            link for link in ZipLoader.__LINKS if link.name == dataset_base_name
         ][0]
         download_zip_path = LoaderTools.download(
             url=dataset_link.url,
             out_dir_path=cache_path,
-            out_file_name=dataset_name,
+            out_file_name=f"{dataset_base_name}.zip",
             hash_target=dataset_link.checksum,
-            hash_type=dataset_link.checksum_type,
+            hash_type=dataset_link.checksum_type
         )
 
         print("Unzipping files...")
 
         download_path = LoaderTools.extract_zip_file_content(
             zip_file_path=download_zip_path,
-            unzip_target_subdir=dataset_name
+            unzip_target_subdir=dataset_base_name
         )
 
         print(f"Dataset downloaded into {download_path}")
@@ -117,7 +255,7 @@ class ZipLoader(ILoader):
     def load_dataset(
         dataset_name: str,
         cache_path: Optional[str] = None
-    ) -> Tuple[ndarray, ndarray, ndarray] | None:
+    ) -> RamanDataset | None:
         if not LoaderTools.is_dataset_available(dataset_name, ZipLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with ZipLoader")
             return
@@ -126,7 +264,11 @@ class ZipLoader(ILoader):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zip)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zip)
 
-        if not os.path.exists(os.path.join(cache_path, dataset_name)):
+        dataset_base_name = [
+            info.base_name for name, info in ZipLoader.DATASETS.items() if name == dataset_name
+        ][0]
+
+        if not os.path.exists(os.path.join(cache_path, dataset_base_name)):
             print(f"[!] Dataset isn't found at: {cache_path}")
             ZipLoader.download_dataset(
                 dataset_name=dataset_name,
@@ -144,14 +286,20 @@ class ZipLoader(ILoader):
         # if file_name[-4:] == ".npy":
         #     return load(file=file_path)
 
-        # Converting CSV files with numpy
-        # return genfromtxt(fname=file_path, delimiter=",")
-        
-        data = ZipLoader.DATASETS[dataset_name].loader(cache_path)
+        dataset_id = ZipLoader.DATASETS[dataset_name].id
+        data = ZipLoader.DATASETS[dataset_name].loader(
+            id=dataset_id,
+            dataset_path=os.path.join(cache_path, dataset_base_name))
         if data is None:
             return None, None, None
 
-        return data
+        raman_shifts, spectra, concentrations = data
+        return RamanDataset(
+            data=raman_shifts,
+            target=concentrations,
+            spectra=spectra,
+            metadata=ZipLoader.DATASETS[dataset_name].metadata
+        )
 
 
     @staticmethod
