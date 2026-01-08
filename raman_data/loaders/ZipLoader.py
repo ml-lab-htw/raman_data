@@ -168,18 +168,18 @@ class ZipLoader(ILoader):
             },
             base_name="csho33_bacteria"
         ),
-        "mendeley_surface-enhanced-raman": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            id="3",
-            loader=...,
-            metadata={}
-        ),
-        "dtu_raman-spectrum-matching": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            id="4",
-            loader=...,
-            metadata={}
-        )
+        # "mendeley_surface-enhanced-raman": DatasetInfo(
+        #     task_type=TASK_TYPE.Classification,
+        #     id="3",
+        #     loader=...,
+        #     metadata={}
+        # ),
+        # "dtu_raman-spectrum-matching": DatasetInfo(
+        #     task_type=TASK_TYPE.Classification,
+        #     id="4",
+        #     loader=...,
+        #     metadata={}
+        # )
     }
 
     __LINKS = [

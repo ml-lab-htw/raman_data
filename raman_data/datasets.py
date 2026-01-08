@@ -15,7 +15,7 @@ __LOADERS = [
     KagLoader,
     HugLoader,
     ZenLoader,
-    #ZipLoader
+    ZipLoader
 ]
 
 def list_datasets(
