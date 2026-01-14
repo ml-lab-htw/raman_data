@@ -26,8 +26,9 @@ class TASK_TYPE(Enum):
     An enum contains possible task types of a
     certain dataset.
     """
-    Classification = 0
-    Regression = 1
+    Unknown = 0
+    Classification = 1
+    Regression = 2
 
 
 class HASH_TYPE(Enum):
@@ -55,12 +56,12 @@ class RamanDataset:
                          (e.g., class label or concentration) or a 2D array for multi-target tasks.
         metadata (dict[str, str]): A dictionary containing metadata about the dataset (e.g., source, description).
     """
-    name: str
-    task_type: TASK_TYPE
     data: np.ndarray
     target: np.ndarray
     spectra: np.ndarray
     metadata: dict[str, str]
+    name: str = ""
+    task_type: TASK_TYPE = TASK_TYPE.Unknown
 
 
 @dataclass(init=False)
