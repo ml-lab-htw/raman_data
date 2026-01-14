@@ -6,8 +6,9 @@ from enum import Enum
 import hashlib
 
 from dataclasses import dataclass
-from typing import Callable, Tuple
+from typing import Callable, Tuple, Optional, List
 import numpy as np
+import pandas as pd
 
 
 class CACHE_DIR(Enum):
@@ -62,6 +63,55 @@ class RamanDataset:
     metadata: dict[str, str]
     name: str = ""
     task_type: TASK_TYPE = TASK_TYPE.Unknown
+
+    @property
+    def n_spectra(self) -> int:
+        return self.data.shape[0]
+
+    @property
+    def n_frequencies(self) -> int:
+        return self.data.shape[1] if len(self.data.shape) > 1 else 0
+
+    @property
+    def n_raman_shifts(self) -> int:
+        return self.spectra.shape[0] if len(self.spectra.shape) > 0 else 0
+
+    @property
+    def n_classes(self) -> Optional[int]:
+        if self.task_type == TASK_TYPE.Classification:
+            return len(np.unique(self.target))
+        return None
+
+    @property
+    def class_names(self) -> Optional[List[str]]:
+        if self.task_type == TASK_TYPE.Classification:
+            return list(np.unique(self.target))
+        return None
+
+    @property
+    def target_range(self):
+        if self.task_type == TASK_TYPE.Regression:
+            return (np.min(self.target), np.max(self.target))
+        return None
+
+    @property
+    def min_shift(self):
+        return self.spectra.min()
+
+    @property
+    def max_shift(self):
+        return self.spectra.max()
+
+    def to_dataframe(self) -> pd.DataFrame:
+        """
+        Convert the dataset to a pandas DataFrame.
+
+        Returns:
+            DataFrame with spectral data, wavenumbers as columns, and target as last column.
+        """
+        df = pd.DataFrame(self.data.T, columns=self.spectra)
+        df["target"] = self.target
+        return df
 
 
 @dataclass(init=False)
