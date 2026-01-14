@@ -1,21 +1,23 @@
-name: Python Package CI
+name: Python Package CI and Publish
 
 on:
   push:
     branches: [ "main" ]
-    #tags: ["v*"]
+    tags: ["v*.*.*"]
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.11"]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # needed for setuptools-scm
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
@@ -31,16 +33,33 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
-    
-  #  - name: build pypi Package
-  #    run: |
-  #      pip install --upgrade build twine
-  #      pip -m build
-  #      twine check --strict dist/*
-#
-  #  - name: publish pypi Package
-  #    uses: pypa/gh-action-pypi-publish@master
-  #    with:
-  #      user: __token__
-  #      password: ${{secrets.PYPI_API}}
 
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      id-token: write # required for trusted publishing
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # needed for setuptools-scm
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+
+      - name: Build package
+        run: python -m build
+
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
