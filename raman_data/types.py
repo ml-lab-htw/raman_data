@@ -66,40 +66,92 @@ class RamanDataset:
 
     @property
     def n_spectra(self) -> int:
+        """
+        Get the number of spectra in the dataset.
+
+        Returns:
+            int: The number of individual spectra (rows in the data array).
+        """
         return self.data.shape[0]
 
     @property
     def n_frequencies(self) -> int:
+        """
+        Get the number of frequency points per spectrum.
+
+        Returns:
+            int: The number of frequency/wavenumber points (columns in data array),
+                 or 0 if data is 1-dimensional.
+        """
         return self.data.shape[1] if len(self.data.shape) > 1 else 0
 
     @property
     def n_raman_shifts(self) -> int:
+        """
+        Get the number of Raman shift values in the spectra axis.
+
+        Returns:
+            int: The number of Raman shift values, or 0 if spectra is empty.
+        """
         return self.spectra.shape[0] if len(self.spectra.shape) > 0 else 0
 
     @property
     def n_classes(self) -> Optional[int]:
+        """
+        Get the number of unique classes for classification tasks.
+
+        Returns:
+            int | None: The number of unique class labels if the task type
+                        is Classification, None otherwise.
+        """
         if self.task_type == TASK_TYPE.Classification:
             return len(np.unique(self.target))
         return None
 
     @property
     def class_names(self) -> Optional[List[str]]:
+        """
+        Get the unique class names for classification tasks.
+
+        Returns:
+            list[str] | None: A list of unique class names if the task type
+                              is Classification, None otherwise.
+        """
         if self.task_type == TASK_TYPE.Classification:
             return list(np.unique(self.target))
         return None
 
     @property
     def target_range(self):
+        """
+        Get the range of target values for regression tasks.
+
+        Returns:
+            tuple[float, float] | None: A tuple containing (min, max) target values
+                                        if the task type is Regression, None otherwise.
+        """
         if self.task_type == TASK_TYPE.Regression:
             return (np.min(self.target), np.max(self.target))
         return None
 
     @property
     def min_shift(self):
+        """
+        Get the minimum Raman shift value in the spectra.
+
+        Returns:
+            float: The minimum wavenumber/Raman shift value.
+        """
         return self.spectra.min()
 
     @property
     def max_shift(self):
+        """
+        Get the maximum Raman shift value in the spectra.
+
+        Returns:
+            float: The maximum wavenumber/Raman shift value.
+        """
         return self.spectra.max()
 
     def to_dataframe(self) -> pd.DataFrame:
@@ -143,7 +195,17 @@ class ZenodoFileInfo:
         download_link: str, 
         links: dict[str, str]
     ) -> None:
-        
+        """
+        Initialize a ZenodoFileInfo instance.
+
+        Args:
+            id: A 39-character alphanumerical unique identifier.
+            key: The name of the file.
+            size: The size of the file in bytes.
+            checksum: The md5 hexadecimal hash (with or without 'md5:' prefix).
+            download_link: The direct URL for downloading this file.
+            links: A dictionary of all associated links.
+        """
         self.id = id
         self.key = key
         self.size = size

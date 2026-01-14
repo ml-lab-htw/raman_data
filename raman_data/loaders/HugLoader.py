@@ -11,14 +11,34 @@ from raman_data.loaders.LoaderTools import LoaderTools
 
 class HugLoader(ILoader):
     """
-    A static class specified in providing datasets hosted on HuggingFace.
+    A static class for loading Raman spectroscopy datasets hosted on HuggingFace.
+
+    This loader provides access to datasets stored on HuggingFace's dataset hub,
+    handling download, caching, and formatting of the data into RamanDataset objects.
+
+    Attributes:
+        DATASETS (dict): A dictionary mapping dataset names to their DatasetInfo objects.
+
+    Example:
+        >>> from raman_data.loaders import HugLoader
+        >>> dataset = HugLoader.load_dataset("chlange/SubstrateMixRaman")
+        >>> HugLoader.list_datasets()
     """
 
     @staticmethod
     def __load_substarteMix(
         df: pd.DataFrame
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        """
+        Parse and extract data from the SubstrateMixRaman dataset.
 
+        Args:
+            df: DataFrame containing the raw dataset with Raman shifts and concentrations.
+
+        Returns:
+            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            or None if parsing fails.
+        """
         end_data_index = len(df.columns.values) - 8
 
         raman_shifts = df.loc[:, :"3384.7"].to_numpy().T
@@ -32,7 +52,16 @@ class HugLoader(ILoader):
     def __load_EcoliFermentation(
         df: pd.DataFrame
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        """
+        Parse and extract data from the RamanSpectraEcoliFermentation dataset.
 
+        Args:
+            df: DataFrame containing the raw dataset with Raman shifts and glucose data.
+
+        Returns:
+            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            or None if parsing fails.
+        """
         end_data_index = len(df.columns.values) - 2
 
         raman_shifts = df.loc[:, :"3384.7"].to_numpy().T
@@ -46,7 +75,16 @@ class HugLoader(ILoader):
     def __load_FuleSpectra(
         df: pd.DataFrame
     )-> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        """
+        Parse and extract data from the FuelRamanSpectraBenchtop dataset.
 
+        Args:
+            df: DataFrame containing the raw dataset with fuel Raman spectra.
+
+        Returns:
+            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            or None if parsing fails.
+        """
         end_data_index = len(df.columns.values) - 12
 
         raman_shifts = df.loc[:, :"3801.0"].to_numpy().T
@@ -98,6 +136,18 @@ class HugLoader(ILoader):
         dataset_name: str,
         cache_path: Optional[str] = None
     ) -> str | None:
+        """
+        Download a HuggingFace dataset to the local cache.
+
+        Args:
+            dataset_name: The full name of the HuggingFace dataset (e.g., "chlange/SubstrateMixRaman").
+            cache_path: Custom directory to save the dataset. If None, uses the default
+                        HuggingFace cache directory (~/.cache/huggingface).
+
+        Returns:
+            str | None: The path where the dataset was downloaded, or None if the
+                        dataset is not available through this loader.
+        """
         if not LoaderTools.is_dataset_available(dataset_name, HugLoader.DATASETS):
             print(f"[!] Cannot download {dataset_name} dataset with HuggingFace loader")
             return
@@ -124,6 +174,21 @@ class HugLoader(ILoader):
         dataset_name: str,
         cache_path: Optional[str] = None
     ) -> RamanDataset | None:
+        """
+        Load a HuggingFace dataset as a RamanDataset object.
+
+        Downloads the dataset if not already cached, then parses it into
+        a standardized RamanDataset format.
+
+        Args:
+            dataset_name: The full name of the HuggingFace dataset (e.g., "chlange/SubstrateMixRaman").
+            cache_path: Custom directory to load/save the dataset. If None, uses the default
+                        HuggingFace cache directory (~/.cache/huggingface).
+
+        Returns:
+            RamanDataset | None: A RamanDataset object containing the spectral data,
+                                 target values, and metadata, or None if loading fails.
+        """
         if not LoaderTools.is_dataset_available(dataset_name, HugLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with HuggingFace loader")
             return

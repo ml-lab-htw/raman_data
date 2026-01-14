@@ -14,8 +14,22 @@ from raman_data.loaders.LoaderTools import LoaderTools
 
 class ZipLoader(ILoader):
     """
-    A static class specified in providing datasets hosted on websites
-    which don't provide any API.
+    A static class for loading Raman spectroscopy datasets from external URLs.
+
+    This loader handles datasets hosted on websites that don't provide a formal API.
+    It downloads files directly via URL, handles ZIP extraction, and supports
+    optional checksum verification for data integrity.
+
+    Attributes:
+        DATASETS (dict): A dictionary mapping dataset names to their DatasetInfo objects.
+
+    Example:
+        >>> from raman_data.loaders import ZipLoader
+        >>> dataset = ZipLoader.load_dataset("MIND-Lab_covid+pd_ad_bundle")
+        >>> ZipLoader.list_datasets()
+
+    Note:
+        This loader is currently disabled in the main datasets module.
     """
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "ziploader")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zip)
@@ -70,8 +84,10 @@ class ZipLoader(ILoader):
         )
     ]
     """
-    The `__LINKS` property is meant to store URLs of external sources which don't
-    provide any API and therefore any datasets' structures.
+    List of external dataset links with optional checksum verification.
+    
+    Each ExternalLink contains the dataset name, download URL, and optionally
+    a checksum value and type for integrity verification during download.
     """
 
 
@@ -80,6 +96,21 @@ class ZipLoader(ILoader):
         dataset_name: str,
         cache_path: Optional[str] = None
     ) -> str | None:
+        """
+        Download a dataset from an external URL to the local cache.
+
+        Downloads the dataset as a ZIP file, verifies checksum if provided,
+        and extracts the contents to the cache directory.
+
+        Args:
+            dataset_name: The name of the dataset to download (e.g., "MIND-Lab_covid+pd_ad_bundle").
+            cache_path: Custom directory to save the dataset. If None, uses the default
+                        cache directory (~/.cache/ziploader).
+
+        Returns:
+            str | None: The path where the dataset was extracted, or None if the
+                        dataset is not available through this loader.
+        """
         if not LoaderTools.is_dataset_available(dataset_name, ZipLoader.DATASETS):
             print(f"[!] Cannot download {dataset_name} dataset with ZipLoader")
             return
@@ -118,6 +149,20 @@ class ZipLoader(ILoader):
         dataset_name: str,
         cache_path: Optional[str] = None
     ) -> Tuple[ndarray, ndarray, ndarray] | None:
+        """
+        Load a dataset from an external source as raw numpy arrays.
+
+        Downloads the dataset if not already cached, then returns the parsed data.
+
+        Args:
+            dataset_name: The name of the dataset to load (e.g., "MIND-Lab_covid+pd_ad_bundle").
+            cache_path: Custom directory to load/save the dataset. If None, uses the default
+                        cache directory (~/.cache/ziploader).
+
+        Returns:
+            tuple | None: A tuple of (raman_shifts, spectra, concentrations) numpy arrays,
+                          or (None, None, None) if loading fails.
+        """
         if not LoaderTools.is_dataset_available(dataset_name, ZipLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with ZipLoader")
             return

@@ -12,12 +12,39 @@ from raman_data.loaders.LoaderTools import LoaderTools
 
 class KagLoader(ILoader):
     """
-    A static class specified in providing datasets hosted on Kaggle.
+    A static class for loading Raman spectroscopy datasets hosted on Kaggle.
+
+    This loader provides access to datasets stored on Kaggle, handling
+    download, caching, and formatting of the data into RamanDataset objects.
+    Requires Kaggle API credentials to be configured.
+
+    Attributes:
+        DATASETS (dict): A dictionary mapping dataset names to their DatasetInfo objects.
+
+    Example:
+        >>> from raman_data.loaders import KagLoader
+        >>> dataset = KagLoader.load_dataset("codina/diabetes/AGEs")
+        >>> KagLoader.list_datasets()
+
+    Note:
+        Kaggle API credentials must be set up before using this loader.
+        See: https://www.kaggle.com/docs/api
     """
+
     @staticmethod
     def __load_diabetes(
         id: str
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        """
+        Parse and extract data from the diabetes Raman spectroscopy dataset.
+
+        Args:
+            id: The specific sub-dataset identifier (e.g., "AGEs", "earLobe", "innerArm").
+
+        Returns:
+            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            or None if parsing fails.
+        """
         file_handle = "codina/raman-spectroscopy-of-diabetes"
 
         df = dataset_load(
@@ -42,6 +69,16 @@ class KagLoader(ILoader):
     def __load_sergioalejandrod(
         id: str
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        """
+        Parse and extract data from the amino acids Raman spectroscopy dataset.
+
+        Args:
+            id: The sheet number identifier (1-4) corresponding to different amino acids.
+
+        Returns:
+            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            or None if parsing fails.
+        """
         file_handle = "sergioalejandrod/raman-spectroscopy"
         header = ["Gly, 40 mM", "Leu, 40 mM", "Phe, 40 mM", "Trp, 40 mM"]
 
@@ -61,6 +98,7 @@ class KagLoader(ILoader):
 
     @staticmethod
     def __load_andriitrelin():
+        """Load the andriitrelin cells Raman spectra dataset (not implemented)."""
         raise NotImplementedError
 
 
@@ -68,6 +106,19 @@ class KagLoader(ILoader):
     def __load_cancer_cells(
         id: str
     )-> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        """
+        Parse and extract data from the cancer cells SERS spectra dataset.
+
+        Args:
+            id: The dataset identifier.
+
+        Returns:
+            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            or None if parsing fails.
+
+        Note:
+            This method is not yet implemented.
+        """
         raise NotImplementedError
 
         file_handle = "mathiascharconnet/cancer-cells-sers-spectra"
@@ -217,6 +268,18 @@ class KagLoader(ILoader):
         dataset_name: str,
         cache_path: Optional[str] = None,
     ) -> str | None:
+        """
+        Download a Kaggle dataset to the local cache.
+
+        Args:
+            dataset_name: The name of the dataset to download (e.g., "codina/diabetes/AGEs").
+            cache_path: Custom directory to save the dataset. If None, uses the default
+                        Kaggle cache directory (~/.cache/kagglehub).
+
+        Returns:
+            str | None: The path where the dataset was downloaded, or None if the
+                        dataset is not available through this loader.
+        """
         if not LoaderTools.is_dataset_available(dataset_name, KagLoader.DATASETS):
             print(f"[!] Cannot download {dataset_name} dataset with Kaggle loader")
             return
@@ -238,6 +301,21 @@ class KagLoader(ILoader):
         dataset_name: str,
         cache_path: Optional[str] = None
     ) -> RamanDataset | None:
+        """
+        Load a Kaggle dataset as a RamanDataset object.
+
+        Downloads the dataset if not already cached, then parses it into
+        a standardized RamanDataset format.
+
+        Args:
+            dataset_name: The name of the dataset to load (e.g., "codina/diabetes/AGEs").
+            cache_path: Custom directory to load/save the dataset. If None, uses the default
+                        Kaggle cache directory (~/.cache/kagglehub).
+
+        Returns:
+            RamanDataset | None: A RamanDataset object containing the spectral data,
+                                 target values, and metadata, or None if loading fails.
+        """
         if not LoaderTools.is_dataset_available(dataset_name, KagLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with Kaggle loader")
             return

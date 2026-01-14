@@ -12,12 +12,35 @@ from raman_data.loaders.LoaderTools import  LoaderTools
 
 class ZenLoader(ILoader):
     """
-    A static class providing download functionality for datasets hosted on Zenodo.
+    A static class for loading Raman spectroscopy datasets hosted on Zenodo.
+
+    This loader provides access to datasets stored on the Zenodo research
+    data repository, handling download, caching, and formatting of the data
+    into RamanDataset objects.
+
+    Attributes:
+        DATASETS (dict): A dictionary mapping dataset names to their DatasetInfo objects.
+
+    Example:
+        >>> from raman_data.loaders import ZenLoader
+        >>> dataset = ZenLoader.load_dataset("sugar mixtures")
+        >>> ZenLoader.list_datasets()
     """
+
     @staticmethod
     def __load_10779223(
         cache_path: str
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        """
+        Parse and extract data from the sugar mixtures Raman dataset (Zenodo ID: 10779223).
+
+        Args:
+            cache_path: The base path where the dataset files are cached.
+
+        Returns:
+            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            or None if parsing fails.
+        """
         zip_filename = "Raw data.zip"
 
         try:
@@ -78,7 +101,19 @@ class ZenLoader(ILoader):
 
     @staticmethod
     def __load_256329(cache_path: str) -> np.ndarray | None:
+        """
+        Parse and extract data from the volumetric cells Raman dataset (Zenodo ID: 256329).
 
+        Args:
+            cache_path: The base path where the dataset files are cached.
+
+        Returns:
+            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            or None if parsing fails.
+
+        Note:
+            This method is not yet implemented.
+        """
         raise NotImplementedError
 
         zip_filename = "Kallepitis-et-al-Raw-data.zip"
@@ -112,6 +147,16 @@ class ZenLoader(ILoader):
     def __load_7644521(
         cache_path: str
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        """
+        Parse and extract data from the wheat lines Raman dataset (Zenodo ID: 7644521).
+
+        Args:
+            cache_path: The base path where the dataset files are cached.
+
+        Returns:
+            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            or None if parsing fails.
+        """
         # data field names in the mat file
         data_keys = ["COM", "COM_125mM", "ML1_125mM", "ML2_125mM"]
 
@@ -156,6 +201,16 @@ class ZenLoader(ILoader):
     def __load_3572359(
         cache_path: str
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        """
+        Parse and extract data from the adenine SERS dataset (Zenodo ID: 3572359).
+
+        Args:
+            cache_path: The base path where the dataset files are cached.
+
+        Returns:
+            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            or None if parsing fails.
+        """
         # load data file
         data_path = os.path.join(cache_path, "3572359", "ILSdata.csv")
         if not os.path.isfile(data_path):
@@ -220,6 +275,21 @@ class ZenLoader(ILoader):
         dataset_name: str,
         cache_path: Optional[str] = None
     ) -> str | None:
+        """
+        Download a Zenodo dataset to the local cache.
+
+        Args:
+            dataset_name: The name of the dataset to download (e.g., "sugar mixtures").
+            cache_path: Custom directory to save the dataset. If None, uses the default
+                        Zenodo cache directory (~/.cache/zenodo).
+
+        Returns:
+            str | None: The path where the dataset was downloaded, or None if the
+                        dataset is not available or download fails.
+
+        Raises:
+            requests.HTTPError: If the HTTP request to Zenodo fails.
+        """
         if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS):
             print(f"[!] Cannot download {dataset_name} dataset with ZenLoader")
             return None
@@ -249,7 +319,25 @@ class ZenLoader(ILoader):
         dataset_name: str,
         cache_path: Optional[str] = None
     ) -> RamanDataset | None:
-        
+        """
+        Load a Zenodo dataset as a RamanDataset object.
+
+        Downloads the dataset if not already cached, then parses it into
+        a standardized RamanDataset format. Automatically retries download
+        up to 3 times if the file appears corrupted.
+
+        Args:
+            dataset_name: The name of the dataset to load (e.g., "sugar mixtures").
+            cache_path: Custom directory to load/save the dataset. If None, uses the default
+                        Zenodo cache directory (~/.cache/zenodo).
+
+        Returns:
+            RamanDataset | None: A RamanDataset object containing the spectral data,
+                                 target values, and metadata, or None if loading fails.
+
+        Raises:
+            Exception: If the file download fails after maximum retry attempts.
+        """
         if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with ZenLoader")
             return None
