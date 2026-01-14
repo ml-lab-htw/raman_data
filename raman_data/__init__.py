@@ -39,5 +39,13 @@ def raman_data(
     if dataset_name is None:
         return datasets.list_datasets(task_type=task_type)
     else:
-        return datasets.load_dataset(dataset_name=dataset_name,
-                                     cache_dir=cache_dir)
+        dataset = datasets.load_dataset(
+            dataset_name=dataset_name,
+            cache_dir=cache_dir,
+        )
+
+        if not dataset is None:
+            dataset.task_type = task_type
+            dataset.name = dataset_name
+
+        return dataset
