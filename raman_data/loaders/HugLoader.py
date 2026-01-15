@@ -113,8 +113,6 @@ class HugLoader(ILoader):
             str | None: The path where the dataset was downloaded, or None if the
                         dataset is not available through this loader.
         """
-        if dataset_name == "HTW-KI-Werkstatt/FuelRamanSpectraHandheld":
-            raise RuntimeError("The dataset 'HTW-KI-Werkstatt/FuelRamanSpectraHandheld' is private. Please ensure you have access via HuggingFace CLI or token.")
 
         if not LoaderTools.is_dataset_available(dataset_name, HugLoader.DATASETS):
             print(f"[!] Cannot download {dataset_name} dataset with HuggingFace loader")
@@ -157,8 +155,6 @@ class HugLoader(ILoader):
             RamanDataset | None: A RamanDataset object containing the spectral data,
                                  target values, and metadata, or None if loading fails.
         """
-        if dataset_name == "HTW-KI-Werkstatt/FuelRamanSpectraHandheld":
-            raise RuntimeError("The dataset 'HTW-KI-Werkstatt/FuelRamanSpectraHandheld' is private. Please ensure you have access via HuggingFace CLI or token.")
 
         if not LoaderTools.is_dataset_available(dataset_name, HugLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with HuggingFace loader")
