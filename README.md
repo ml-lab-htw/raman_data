@@ -54,7 +54,7 @@ dataset = raman_data(dataset_name="codina/diabetes/AGEs")
 # Access the spectra (intensity data), raman_shifts (wavenumbers), targets, and metadata
 spectra = dataset.spectra           # 2D array: (n_samples, n_wavenumbers)
 raman_shifts = dataset.raman_shifts # 1D array: wavenumber values in cm⁻¹
-targets = dataset.target            # Target labels or values
+targets = dataset.targets            # Target labels or values
 metadata = dataset.metadata         # Dataset metadata (source, paper, description)
 
 print(f"Number of spectra: {dataset.n_spectra}")
@@ -72,7 +72,7 @@ Each loaded dataset returns a `RamanDataset` object with the following attribute
 |-------------------|------|-------------|
 | `spectra` | `np.ndarray` | Raman spectra intensity data (2D: samples × wavenumbers) |
 | `raman_shifts` | `np.ndarray` | Wavenumber/Raman shift values in cm⁻¹ (1D array) |
-| `target` | `np.ndarray` | Target labels (classification) or values (regression) |
+| `targets` | `np.ndarray` | Target labels (classification) or values (regression) |
 | `metadata` | `dict` | Dataset metadata including source, paper, and description |
 | `name` | `str` | Name of the dataset |
 | `task_type` | `TASK_TYPE` | Classification or Regression |
@@ -81,7 +81,7 @@ Each loaded dataset returns a `RamanDataset` object with the following attribute
 | `n_raman_shifts` | `int` | Number of Raman shift values |
 | `n_classes` | `int \| None` | Number of classes (classification only) |
 | `class_names` | `list \| None` | Unique class names (classification only) |
-| `target_range` | `tuple \| None` | (min, max) target values (regression only) |
+| `target_range` | `tuple \| None` | (min, max) targets values (regression only) |
 | `min_shift` | `float` | Minimum Raman shift value |
 | `max_shift` | `float` | Maximum Raman shift value |
 
@@ -159,9 +159,9 @@ Here is the list of datasets that are currently included in the package:
 Contributions are welcome! To add a new dataset:
 
 1. Choose the appropriate loader based on the data source:
-   - `KagLoader` for Kaggle datasets
-   - `HugLoader` for Hugging Face datasets
-   - `ZenLoader` for Zenodo datasets
+   - `KaggleLoader` for Kaggle datasets
+   - `HuggingFaceLoader` for Hugging Face datasets
+   - `ZenodoLoader` for Zenodo datasets
    - `ZipLoader` for other URL-based sources
 
 2. Implement a loader function that returns a tuple of `(spectra, raman_shifts, targets)`:

@@ -6,11 +6,11 @@ import numpy as np
 
 from raman_data.loaders.utils import is_wavenumber
 from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
-from raman_data.loaders.ILoader import ILoader
+from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 
 
-class HugLoader(ILoader):
+class HuggingFaceLoader(BaseLoader):
     """
     A static class for loading Raman spectroscopy datasets hosted on HuggingFace.
 
@@ -21,16 +21,16 @@ class HugLoader(ILoader):
         DATASETS (dict): A dictionary mapping dataset names to their DatasetInfo objects.
 
     Example:
-        >>> from raman_data.loaders import HugLoader
-        >>> dataset = HugLoader.load_dataset("chlange/SubstrateMixRaman")
-        >>> HugLoader.list_datasets()
+        >>> from raman_data.loaders import HuggingFaceLoader
+        >>> dataset = HuggingFaceLoader.load_dataset("chlange/SubstrateMixRaman")
+        >>> HuggingFaceLoader.list_datasets()
     """
 
     DATASETS = {
         "chlange/SubstrateMixRaman": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="chlange_SubstrateMixRaman",
-            loader=lambda df: HugLoader._load_chlange(df),
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "chlange/SubstrateMixRaman",
                 "source": "https://huggingface.co/datasets/chlange/SubstrateMixRaman",
@@ -41,7 +41,7 @@ class HugLoader(ILoader):
         "chlange/RamanSpectraEcoliFermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="chlange_RamanSpectraEcoliFermentation",
-            loader=lambda df: HugLoader._load_chlange(df),
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "chlange/RamanSpectraEcoliFermentation",
                 "source": "https://huggingface.co/datasets/chlange/RamanSpectraEcoliFermentation",
@@ -52,7 +52,7 @@ class HugLoader(ILoader):
         "chlange/FuelRamanSpectraBenchtop": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="chlange_FuelRamanSpectraBenchtop",
-            loader=lambda df: HugLoader._load_chlange(df),
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "chlange/FuelRamanSpectraBenchtop",
                 "source": "https://huggingface.co/datasets/chlange/FuelRamanSpectraBenchtop",
@@ -63,7 +63,7 @@ class HugLoader(ILoader):
         "HTW-KI-Werkstatt/FuelRamanSpectraHandheld": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="HTW-KI-Werkstatt_FuelRamanSpectraHandheld",
-            loader=lambda df: HugLoader._load_chlange(df),
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "HTW-KI-Werkstatt/FuelRamanSpectraHandheld",
                 "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/FuelRamanSpectraHandheld",
@@ -115,7 +115,7 @@ class HugLoader(ILoader):
                         dataset is not available through this loader.
         """
 
-        if not LoaderTools.is_dataset_available(dataset_name, HugLoader.DATASETS):
+        if not LoaderTools.is_dataset_available(dataset_name, HuggingFaceLoader.DATASETS):
             print(f"[!] Cannot download {dataset_name} dataset with HuggingFace loader")
             return
 
@@ -154,10 +154,10 @@ class HugLoader(ILoader):
 
         Returns:
             RamanDataset | None: A RamanDataset object containing the spectral data,
-                                 target values, and metadata, or None if loading fails.
+                                 targets values, and metadata, or None if loading fails.
         """
 
-        if not LoaderTools.is_dataset_available(dataset_name, HugLoader.DATASETS):
+        if not LoaderTools.is_dataset_available(dataset_name, HuggingFaceLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with HuggingFace loader")
             return
 
@@ -182,17 +182,17 @@ class HugLoader(ILoader):
 
         full_dataset_df = pd.concat(splits, ignore_index=True)
 
-        data = HugLoader.DATASETS[dataset_name].loader(full_dataset_df)
+        data = HuggingFaceLoader.DATASETS[dataset_name].loader(full_dataset_df)
 
         if data is not None:
             spectra, raman_shifts, concentrations = data
             return RamanDataset(
-                metadata=HugLoader.DATASETS[dataset_name].metadata,
+                metadata=HuggingFaceLoader.DATASETS[dataset_name].metadata,
                 name=dataset_name,
                 raman_shifts=raman_shifts,
                 spectra=spectra,
-                target=concentrations,
-                task_type=HugLoader.DATASETS[dataset_name].task_type,
+                targets=concentrations,
+                task_type=HuggingFaceLoader.DATASETS[dataset_name].task_type,
             )
         
         return data

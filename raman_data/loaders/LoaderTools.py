@@ -10,7 +10,6 @@ from scipy import io
 import os, h5py
 import numpy as np
 
-from raman_data.loaders.ILoader import ILoader
 from raman_data.exceptions import ChecksumError, CorruptedZipFileError
 from raman_data.types import CACHE_DIR, HASH_TYPE, DatasetInfo
 

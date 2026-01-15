@@ -4,20 +4,20 @@ Loaders module for the raman_data package.
 This module provides various loader classes for downloading and loading
 Raman spectroscopy datasets from different sources:
 
-- KagLoader: Datasets hosted on Kaggle
-- HugLoader: Datasets hosted on HuggingFace
-- ZenLoader: Datasets hosted on Zenodo
+- KaggleLoader: Datasets hosted on Kaggle
+- HuggingFaceLoader: Datasets hosted on HuggingFace
+- ZenodoLoader: Datasets hosted on Zenodo
 - ZipLoader: Datasets from external URLs (no API)
-- ILoader: Abstract base class defining the loader interface
+- BaseLoader: Abstract base class defining the loader interface
 - LoaderTools: Utility functions for all loaders
 """
 
 __all__ = [
-    "KagLoader",
-    "HugLoader",
-    "ZenLoader",
+    "KaggleLoader",
+    "HuggingFaceLoader",
+    "ZenodoLoader",
     "ZipLoader",
-    "ILoader",
+    "BaseLoader",
     "LoaderTools",
     "CACHE_DIR",
     "TASK_TYPE"

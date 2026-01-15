@@ -5,7 +5,7 @@ from datasets import DatasetInfo
 
 from raman_data.types import RamanDataset
 
-class ILoader(metaclass=ABCMeta):
+class BaseLoader(metaclass=ABCMeta):
     """
     The general interface of all loaders.
     """
@@ -58,7 +58,7 @@ class ILoader(metaclass=ABCMeta):
 
         Returns:
             RamanDataset|None: A RamanDataset object containing
-                                the data, target, spectra and metadata.
+                                the data, targets, spectra and metadata.
                                 If the dataset isn't on the list of a loader
                                 or load fails, returns None.
         """

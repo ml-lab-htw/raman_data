@@ -69,7 +69,7 @@ def test_load_dataset():
     for dataset_name in test_datasets:
         dataset = raman_data(dataset_name=dataset_name)
         assert dataset.spectra is not None
-        assert dataset.target is not None
+        assert dataset.targets is not None
         assert dataset.raman_shifts is not None
         assert dataset.metadata["full_name"] is not None
         assert dataset.metadata["source"] is not None

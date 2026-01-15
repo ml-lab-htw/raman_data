@@ -8,11 +8,11 @@ from numpy import ndarray
 # from pandas import read_excel
 
 from raman_data.types import DatasetInfo, ExternalLink, CACHE_DIR, TASK_TYPE, HASH_TYPE
-from raman_data.loaders.ILoader import ILoader
+from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 
 
-class ZipLoader(ILoader):
+class ZipLoader(BaseLoader):
     """
     A static class for loading Raman spectroscopy datasets from external URLs.
 

@@ -6,11 +6,11 @@ import numpy as np
 import pandas as pd
 
 from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
-from raman_data.loaders.ILoader import ILoader
+from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 
 
-class KagLoader(ILoader):
+class KaggleLoader(BaseLoader):
     """
     A static class for loading Raman spectroscopy datasets hosted on Kaggle.
 
@@ -22,9 +22,9 @@ class KagLoader(ILoader):
         DATASETS (dict): A dictionary mapping dataset names to their DatasetInfo objects.
 
     Example:
-        >>> from raman_data.loaders import KagLoader
-        >>> dataset = KagLoader.load_dataset("codina/diabetes/AGEs")
-        >>> KagLoader.list_datasets()
+        >>> from raman_data.loaders import KaggleLoader
+        >>> dataset = KaggleLoader.load_dataset("codina/diabetes/AGEs")
+        >>> KaggleLoader.list_datasets()
 
     Note:
         Kaggle API credentials must be set up before using this loader.
@@ -321,7 +321,7 @@ class KagLoader(ILoader):
             str | None: The path where the dataset was downloaded, or None if the
                         dataset is not available through this loader.
         """
-        if not LoaderTools.is_dataset_available(dataset_name, KagLoader.DATASETS):
+        if not LoaderTools.is_dataset_available(dataset_name, KaggleLoader.DATASETS):
             print(f"[!] Cannot download {dataset_name} dataset with Kaggle loader")
             return
 
@@ -357,7 +357,7 @@ class KagLoader(ILoader):
             RamanDataset | None: A RamanDataset object containing the spectral data,
                                  target values, and metadata, or None if loading fails.
         """
-        if not LoaderTools.is_dataset_available(dataset_name, KagLoader.DATASETS):
+        if not LoaderTools.is_dataset_available(dataset_name, KaggleLoader.DATASETS):
             print(f"[!] Cannot load {dataset_name} dataset with Kaggle loader")
             return
 
@@ -370,19 +370,19 @@ class KagLoader(ILoader):
             f"{cache_path if cache_path else 'default folder (~/.cache/kagglehub)'}"
         )
 
-        dataset_id = KagLoader.DATASETS[dataset_name].id
+        dataset_id = KaggleLoader.DATASETS[dataset_name].id
 
-        data = KagLoader.DATASETS[dataset_name].loader(dataset_id)
+        data = KaggleLoader.DATASETS[dataset_name].loader(dataset_id)
 
         if data is not None:
             spectra, raman_shifts, concentrations = data
             return RamanDataset(
-                metadata=KagLoader.DATASETS[dataset_name].metadata,
+                metadata=KaggleLoader.DATASETS[dataset_name].metadata,
                 name=dataset_name,
                 raman_shifts=raman_shifts,
                 spectra=spectra,
-                target=concentrations,
-                task_type=KagLoader.DATASETS[dataset_name].task_type,
+                targets=concentrations,
+                task_type=KaggleLoader.DATASETS[dataset_name].task_type,
             )
 
         return data
@@ -392,4 +392,4 @@ class KagLoader(ILoader):
         """
         Prints formatted list of datasets provided by this loader.
         """
-        LoaderTools.list_datasets(KagLoader)
+        LoaderTools.list_datasets(KaggleLoader)

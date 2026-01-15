@@ -6,11 +6,11 @@ import numpy as np
 
 from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
 from raman_data.exceptions import CorruptedZipFileError
-from raman_data.loaders.ILoader import ILoader
+from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import  LoaderTools
 
 
-class ZenLoader(ILoader):
+class ZenodoLoader(BaseLoader):
     """
     A static class for loading Raman spectroscopy datasets hosted on Zenodo.
 
@@ -22,9 +22,9 @@ class ZenLoader(ILoader):
         DATASETS (dict): A dictionary mapping dataset names to their DatasetInfo objects.
 
     Example:
-        >>> from raman_data.loaders import ZenLoader
-        >>> dataset = ZenLoader.load_dataset("sugar mixtures")
-        >>> ZenLoader.list_datasets()
+        >>> from raman_data.loaders import ZenodoLoader
+        >>> dataset = ZenodoLoader.load_dataset("sugar mixtures")
+        >>> ZenodoLoader.list_datasets()
     """
 
     @staticmethod
@@ -290,8 +290,8 @@ class ZenLoader(ILoader):
         Raises:
             requests.HTTPError: If the HTTP request to Zenodo fails.
         """
-        if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS):
-            print(f"[!] Cannot download {dataset_name} dataset with ZenLoader")
+        if not LoaderTools.is_dataset_available(dataset_name, ZenodoLoader.DATASETS):
+            print(f"[!] Cannot download {dataset_name} dataset with ZenodoLoader")
             return None
 
         if not (cache_path is None):
@@ -299,9 +299,9 @@ class ZenLoader(ILoader):
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
 
         try:
-            dataset_id = ZenLoader.DATASETS[dataset_name].id
+            dataset_id = ZenodoLoader.DATASETS[dataset_name].id
             file_name = dataset_id + ".zip"
-            url = ZenLoader.__BASE_URL.replace("ID", dataset_id)
+            url = ZenodoLoader.__BASE_URL.replace("ID", dataset_id)
 
             LoaderTools.download(url, cache_path, file_name)
         except requests.HTTPError as e:
@@ -338,20 +338,20 @@ class ZenLoader(ILoader):
         Raises:
             Exception: If the file download fails after maximum retry attempts.
         """
-        if not LoaderTools.is_dataset_available(dataset_name, ZenLoader.DATASETS):
-            print(f"[!] Cannot load {dataset_name} dataset with ZenLoader")
+        if not LoaderTools.is_dataset_available(dataset_name, ZenodoLoader.DATASETS):
+            print(f"[!] Cannot load {dataset_name} dataset with ZenodoLoader")
             return None
 
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
 
-        dataset_id = ZenLoader.DATASETS[dataset_name].id
+        dataset_id = ZenodoLoader.DATASETS[dataset_name].id
 
         zip_file_path = os.path.join(cache_path, dataset_id + ".zip")
 
         if not os.path.isfile(zip_file_path):
-            ZenLoader.download_dataset(dataset_name, cache_path)
+            ZenodoLoader.download_dataset(dataset_name, cache_path)
 
         max_retries = 3
         retry_count = 0
@@ -371,23 +371,23 @@ class ZenLoader(ILoader):
                 retry_count += 1
 
                 if retry_count < max_retries:
-                    ZenLoader.download_dataset(dataset_name, cache_path)
+                    ZenodoLoader.download_dataset(dataset_name, cache_path)
                 else:
                     raise Exception(
                         f"Failed to download valid file after {max_retries} attempts"
                     )
 
-        data = ZenLoader.DATASETS[dataset_name].loader(cache_path)
+        data = ZenodoLoader.DATASETS[dataset_name].loader(cache_path)
 
         if data is not None:
             spectra, raman_shifts, concentrations = data
             return RamanDataset(
-                metadata=ZenLoader.DATASETS[dataset_name].metadata,
+                metadata=ZenodoLoader.DATASETS[dataset_name].metadata,
                 name=dataset_name,
                 raman_shifts=raman_shifts,
                 spectra=spectra,
-                target=concentrations,
-                task_type=ZenLoader.DATASETS[dataset_name].task_type,
+                targets=concentrations,
+                task_type=ZenodoLoader.DATASETS[dataset_name].task_type,
             )
         
         return data

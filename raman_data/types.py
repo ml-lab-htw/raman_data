@@ -54,13 +54,13 @@ class RamanDataset:
                                e.g. Classification or Regression.
         spectra (np.ndarray): The Raman spectra intensity data. Each row is a spectrum,
                               and each column corresponds to a Raman shift value.
-        target (np.ndarray): The target variable(s) for each spectrum. Can be a 1D array for single-target tasks
+        targets (np.ndarray): The target variable(s) for each spectrum. Can be a 1D array for single-target tasks
                          (e.g., class label or concentration) or a 2D array for multi-target tasks.
         raman_shifts (np.ndarray): The wavenumber/Raman shift values (x-axis) in cm⁻¹.
         metadata (dict[str, str]): A dictionary containing metadata about the dataset (e.g., source, description).
     """
     spectra: np.ndarray
-    target: np.ndarray
+    targets: np.ndarray
     raman_shifts: np.ndarray
     metadata: dict[str, str]
     name: str = ""
@@ -107,7 +107,7 @@ class RamanDataset:
                         is Classification, None otherwise.
         """
         if self.task_type == TASK_TYPE.Classification:
-            return len(np.unique(self.target))
+            return len(np.unique(self.targets))
         return None
 
     @property
@@ -120,7 +120,7 @@ class RamanDataset:
                               is Classification, None otherwise.
         """
         if self.task_type == TASK_TYPE.Classification:
-            return list(np.unique(self.target))
+            return list(np.unique(self.targets))
         return None
 
     @property
@@ -133,7 +133,7 @@ class RamanDataset:
                                         if the task type is Regression, None otherwise.
         """
         if self.task_type == TASK_TYPE.Regression:
-            return (np.min(self.target), np.max(self.target))
+            return (np.min(self.targets), np.max(self.targets))
         return None
 
     @property
@@ -161,10 +161,10 @@ class RamanDataset:
         Convert the dataset to a pandas DataFrame.
 
         Returns:
-            DataFrame with spectral data, wavenumbers as columns, and target as last column.
+            DataFrame with spectral data, wavenumbers as columns, and targets as last column.
         """
         df = pd.DataFrame(self.spectra.T, columns=self.raman_shifts)
-        df["target"] = self.target
+        df["targets"] = self.targets
         return df
 
 

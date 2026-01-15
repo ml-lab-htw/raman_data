@@ -5,16 +5,16 @@ Internal functions for loading and listing datasets.
 from typing import List, Optional
 from .types import RamanDataset
 
-from raman_data.loaders.KagLoader import KagLoader
-from raman_data.loaders.HugLoader import HugLoader
-from raman_data.loaders.ZenLoader import ZenLoader
+from raman_data.loaders.KaggleLoader import KaggleLoader
+from raman_data.loaders.HuggingFaceLoader import HuggingFaceLoader
+from raman_data.loaders.ZenodoLoader import ZenodoLoader
 from raman_data.loaders.ZipLoader import ZipLoader
 from raman_data.types import TASK_TYPE
 
 __LOADERS = [
-    KagLoader,
-    HugLoader,
-    ZenLoader,
+    KaggleLoader,
+    HuggingFaceLoader,
+    ZenodoLoader,
     #ZipLoader
 ]
 
@@ -61,7 +61,7 @@ def load_dataset(
 
     Returns:
         RamanDataset|None: A RamanDataset object containing
-                           the data, target, spectra and metadata or
+                           the data, targets, spectra and metadata or
                            None if load process fails.
 
     Raises:
