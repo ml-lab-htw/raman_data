@@ -67,7 +67,8 @@ class HugLoader(ILoader):
             metadata={
                 "full_name": "HTW-KI-Werkstatt/FuelRamanSpectraHandheld",
                 "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/FuelRamanSpectraHandheld",
-                "description": "Handheld Raman spectra for fuel analysis. Structure assumed similar to SubstrateMixRaman."
+                "paper": "",
+                "description": "Handheld Raman spectra for fuel analysis. Structure similar to FuelRamanSpectraBenchtop."
             }
         )
     }
@@ -196,11 +197,4 @@ class HugLoader(ILoader):
         
         return data
 
-
-    @staticmethod
-    def list_datasets() -> None:
-        """
-        Prints formatted list of datasets provided by this loader.
-        """
-        LoaderTools.list_datasets(HugLoader)
 

@@ -96,21 +96,6 @@ class LoaderTools:
 
 
     @staticmethod
-    def list_datasets(
-        loader: ILoader
-    ) -> None:
-        """
-        Prints a formatted list of datasets of a certain loader.
-
-        Args:
-            loader (ILoader): The loader to list datasets of.
-        """
-        print(f"[*] Datasets available with {loader.__qualname__}:")
-        for dataset_name, task_type in loader.DATASETS.items():
-            print(f" |-> Name: {dataset_name} | Task type: {task_type.name}")
-
-
-    @staticmethod
     def download(
         url: str,
         out_dir_path: str,

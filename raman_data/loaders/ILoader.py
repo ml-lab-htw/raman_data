@@ -1,5 +1,7 @@
 from abc import ABCMeta, abstractmethod
-from typing import Optional
+from typing import Optional, Dict
+
+from datasets import DatasetInfo
 
 from raman_data.types import RamanDataset
 
@@ -7,32 +9,8 @@ class ILoader(metaclass=ABCMeta):
     """
     The general interface of all loaders.
     """
-    @classmethod
-    def __subclasshook__(cls, subclass):
-        """
-        Checks whether a subclass has needed properties.
 
-        Args:
-            subclass (class): A class to check inheritance of.
-
-        Returns:
-            bool: True, if the subclass has required properties.
-                  False otherwise.
-        """
-        if not (hasattr(subclass, 'download_dataset') and
-            callable(subclass.download_dataset) and
-            hasattr(subclass, 'load_dataset') and
-            callable(subclass.load_dataset)):
-            return False
-        
-        try:
-            subclass.download_dataset('')
-            subclass.load_dataset('', '')
-        except NotImplementedError:
-            return False
-        
-        return True
-
+    DATASETS: Dict[str, DatasetInfo] = {}
 
     @staticmethod
     @abstractmethod
@@ -85,4 +63,69 @@ class ILoader(metaclass=ABCMeta):
                                 or load fails, returns None.
         """
         raise NotImplementedError
+
+    @classmethod
+    def is_dataset_available(cls, dataset_name: str) -> bool:
+        """
+        Check if a dataset is available through this loader.
+
+        Args:
+            dataset_name: The name of the dataset to check.
+
+        Returns:
+            bool: True if the dataset is available, False otherwise.
+        """
+        # Default implementation subclasses can use
+        return dataset_name in cls.DATASETS
+
+    @classmethod
+    def get_dataset_info(cls, dataset_name: str) -> Optional[DatasetInfo]:
+        """
+        Get metadata information for a specific dataset.
+
+        Args:
+            dataset_name: The name of the dataset.
+
+        Returns:
+            DatasetInfo object or None if dataset not found.
+        """
+        return cls.DATASETS.get(dataset_name)
+
+    @classmethod
+    def get_dataset_names(cls) -> list[str]:
+        """
+        Get list of all available dataset names.
+
+        Returns:
+            List of dataset name strings.
+        """
+        return list(cls.DATASETS.keys())
+
+    @classmethod
+    def get_loader_name(cls) -> str:
+        """
+        Get the name of this loader.
+        Returns the class name by default. Override for custom names.
+        """
+        return cls.__name__
+
+    @classmethod
+    def list_datasets(cls) -> None:
+        """
+        Print formatted list of available datasets.
+        Subclasses can override this for custom formatting.
+        """
+        loader_name = cls.get_loader_name()
+        print(f"\n{loader_name} Datasets:")
+        print("=" * 50)
+
+        if not cls.DATASETS:
+            print("No datasets available.")
+            return
+
+        for dataset_name, info in cls.DATASETS.items():
+            print(f"\n• {dataset_name}")
+            print(f"  Task Type: {info.task_type}")
+
+        print("\n" + "=" * 50)
 
