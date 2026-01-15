@@ -1,7 +1,7 @@
 """
 General functions and enums meant to be used while loading certain dataset.
 """
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 from tqdm import tqdm
 import requests, zipfile
@@ -12,7 +12,7 @@ import numpy as np
 
 from raman_data.loaders.ILoader import ILoader
 from raman_data.exceptions import ChecksumError, CorruptedZipFileError
-from raman_data.types import CACHE_DIR, HASH_TYPE
+from raman_data.types import CACHE_DIR, HASH_TYPE, DatasetInfo
 
 
 class LoaderTools:
@@ -75,7 +75,7 @@ class LoaderTools:
     @staticmethod
     def is_dataset_available(
         dataset_name: str,
-        datasets: List[str]
+        datasets: Dict[str, DatasetInfo]
     ) -> bool:
         """
         Checks whether given dataset's name is in the given list.
