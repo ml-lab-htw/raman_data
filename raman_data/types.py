@@ -230,7 +230,7 @@ class DatasetInfo:
     """
     task_type: TASK_TYPE
     id: str
-    loader: Callable[[str], Tuple[np.ndarray, np.ndarray, np.ndarray] | None]
+    loader: Callable[[str], Tuple[np.ndarray, np.ndarray, np.ndarray] | pd.DataFrame | None]
     metadata : dict[str, str]
     
     
