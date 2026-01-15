@@ -59,11 +59,11 @@ class RamanDataset:
         raman_shifts (np.ndarray): The wavenumber/Raman shift values (x-axis) in cm⁻¹.
         metadata (dict[str, str]): A dictionary containing metadata about the dataset (e.g., source, description).
     """
-    metadata: dict[str, str] = None
+    spectra: np.ndarray
+    target: np.ndarray
+    raman_shifts: np.ndarray
+    metadata: dict[str, str]
     name: str = ""
-    raman_shifts: np.ndarray = np.array([])
-    spectra: np.ndarray = np.array([[]])
-    target: np.ndarray = np.array([])
     task_type: TASK_TYPE = TASK_TYPE.Unknown
 
     @property
