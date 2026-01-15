@@ -6,7 +6,6 @@ from raman_data import raman_data
 from raman_data.types import TASK_TYPE
 
 __TODO_DATASETS = {
-    # "andriitrelin/cells-raman-spectra": TASK_TYPE.Classification,
     #"MIND-Lab_covid+pd_ad_bundle": TASK_TYPE.Classification,
     #"csho33_bacteria_id": TASK_TYPE.Classification,
     # "mendeley_surface-enhanced-raman": TASK_TYPE.Classification,
@@ -23,6 +22,9 @@ __DATASETS = {
     'sergioalejandrod/AminoAcids/leucine' : TASK_TYPE.Classification,
     'sergioalejandrod/AminoAcids/phenylalanine' : TASK_TYPE.Classification,
     'sergioalejandrod/AminoAcids/tryptophan' : TASK_TYPE.Classification,
+    'andriitrelin/cells-raman-spectra/COOH' : TASK_TYPE.Classification,
+    'andriitrelin/cells-raman-spectra/NH2' : TASK_TYPE.Classification,
+    'andriitrelin/cells-raman-spectra/(COOH)2' : TASK_TYPE.Classification,
     'chlange/SubstrateMixRaman' : TASK_TYPE.Regression,
     'chlange/RamanSpectraEcoliFermentation' : TASK_TYPE.Classification,
     "chlange/FuelRamanSpectraBenchtop" : TASK_TYPE.Regression,
