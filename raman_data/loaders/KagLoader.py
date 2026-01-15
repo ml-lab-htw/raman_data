@@ -124,9 +124,6 @@ class KagLoader(ILoader):
             "ZAM", "ZAM-S", "MEL", "MEL-S", "DMEM", "DMEM-S"
         ]
 
-        # Raman shift scale as specified in the dataset README
-        raman_shifts = np.linspace(100, 4278, 2090)
-
         # Download the dataset first
         cache_path = dataset_download(file_handle)
 
@@ -143,9 +140,13 @@ class KagLoader(ILoader):
 
             try:
                 df = pd.read_csv(file_path, header=None)
-                spectra_data = df.to_numpy()
-                all_spectra.append(spectra_data)
-                all_labels.extend([cell_type] * spectra_data.shape[0])
+                data_np = df.to_numpy()
+
+                raman_shifts = data_np[0, :]
+                spectra = data_np[1:, :]
+
+                all_spectra.append(spectra)
+                all_labels.extend([cell_type] * spectra.shape[0])
 
             except Exception as e:
                 print(f"Warning: Could not load {file_path}: {e}")
@@ -160,46 +161,9 @@ class KagLoader(ILoader):
         return spectra, raman_shifts, labels
 
 
-    @staticmethod
-    def __load_cancer_cells(
-        id: str
-    )-> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
-        """
-        Parse and extract data from the cancer cells SERS spectra dataset.
-
-        Args:
-            id: The dataset identifier.
-
-        Returns:
-            A tuple of (raman_shifts, spectra, concentrations) arrays,
-            or None if parsing fails.
-
-        Note:
-            This method is not yet implemented.
-        """
-        raise NotImplementedError
-
-        file_handle = "mathiascharconnet/cancer-cells-sers-spectra"
-        lable_list = ["A", "A-S", "G", "G-S", "HPM", "HPM-S", "HF", "HF-S", "ZAM", "ZAM-S", "DMEM", "DMEM-S"]
-        file_list = {"(COOH)2.csv":None, 
-                     "COOH.csv":None, 
-                     "NH2.csv":None}
-
-        for lable in lable_list:
-            for file in file_list.keys():
-
-                df = dataset_load(
-                    adapter=KaggleDatasetAdapter.PANDAS,
-                    handle=file_handle,
-                    path=f"{lable}/{file}"
-                )
-
-                if file_list[file] is None:
-                    file_list[file] = df
-                else:
-                    file_list[file] = pd.concat([file_list[file], df])
- 
-        spectra = np.linspace(100, 4278, 2090)
+    # Note: __load_cancer_cells was removed as mathiascharconnet/cancer-cells-sers-spectra
+    # requires special Kaggle consent. The same data is available via
+    # andriitrelin/cells-raman-spectra which is loaded by __load_andriitrelin above.
 
 
     DATASETS = {
@@ -335,17 +299,8 @@ class KagLoader(ILoader):
                 "description" : "SERS spectra of melanoma cells, melanocytes, fibroblasts, and culture medium collected on gold nanourchins functionalized with (COOH)2 moiety. Contains 12 cell type classes for classification."
             }
         ),
-        #"mathiascharconnet/cancer-cells-sers-spectra" : DatasetInfo(
-        #    task_type=TASK_TYPE.Classification,
-        #    id=None,
-        #    loader=__load_cancer_cells,
-        #    metadata={
-        #        "full_name" : "mathiascharconnet/cancer-cells-sers-spectra",
-        #        "source" : "https://www.kaggle.com/code/mathiascharconnet/cancer-cells-sers-spectra/input",
-        #        "paper" : "https://doi.org/10.1016/j.snb.2020.127660",
-        #        "description" : "This dataset was collected in the University of Chemistry and Technology, Prague during work on cancer detection. It contains Raman spectra of the culture medium, corresponding to several kinds of cancer and normal cells. Dataset consists of 12 folders with 3 CSV files in each. Folders are named after specific samples (tabulated below). Each CSV in folder contains spectra of medium, collected on the gold nanourchins functionalized with corresponding moiety. Please refer to the original publication for details."
-        #    }
-        #)
+        # Note: mathiascharconnet/cancer-cells-sers-spectra requires Kaggle consent.
+        # The same data is available via andriitrelin/cells-raman-spectra above.
     }
 
 
