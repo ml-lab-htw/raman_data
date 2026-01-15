@@ -34,6 +34,7 @@ class ILoader(metaclass=ABCMeta):
         return True
 
 
+    @staticmethod
     @abstractmethod
     def download_dataset(
         dataset_name: str,
@@ -58,6 +59,7 @@ class ILoader(metaclass=ABCMeta):
         raise NotImplementedError
 
 
+    @staticmethod
     @abstractmethod
     def load_dataset(
         dataset_name: str,
