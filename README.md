@@ -107,10 +107,14 @@ Here is the list of datasets that are currently included in the package:
 | `sergioalejandrod/AminoAcids/leucine` | Classification | Amino acid (leucine) spectroscopy |
 | `sergioalejandrod/AminoAcids/phenylalanine` | Classification | Amino acid (phenylalanine) spectroscopy |
 | `sergioalejandrod/AminoAcids/tryptophan` | Classification | Amino acid (tryptophan) spectroscopy |
+| `andriitrelin/cells-raman-spectra/COOH` | Classification | Cell type classification (COOH functionalized) |
+| `andriitrelin/cells-raman-spectra/NH2` | Classification | Cell type classification (NH2 functionalized) |
+| `andriitrelin/cells-raman-spectra/(COOH)2` | Classification | Cell type classification ((COOH)2 functionalized) |
 
 **Sources:**
 - [Diabetes Spectroscopy](https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes)
 - [Amino Acids Spectroscopy](https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy)
+- [Cells Raman Spectra](https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra)
 
 ### Hugging Face Datasets
 | Dataset Name | Task Type | Description |
