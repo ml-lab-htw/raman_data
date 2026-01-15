@@ -42,7 +42,7 @@ class KagLoader(ILoader):
             id: The specific sub-dataset identifier (e.g., "AGEs", "earLobe", "innerArm").
 
         Returns:
-            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            A tuple of (spectra, raman_shifts, concentrations) arrays,
             or None if parsing fails.
         """
         file_handle = "codina/raman-spectroscopy-of-diabetes"
@@ -54,15 +54,15 @@ class KagLoader(ILoader):
         )
 
         if id == "AGEs":
-            raman_shifts = df.loc[1:, "Var802":].to_numpy().T
-            spectra = df.loc[0, "Var802":].to_numpy()
+            spectra = df.loc[1:, "Var802":].to_numpy().T
+            raman_shifts = df.loc[0, "Var802":].to_numpy()
             concentration = df.loc[1:, "AGEsID"].to_numpy()
         else:
-            raman_shifts = df.loc[1:, "Var2":].to_numpy().T
-            spectra = df.loc[0, "Var2":].to_numpy()
+            spectra = df.loc[1:, "Var2":].to_numpy().T
+            raman_shifts = df.loc[0, "Var2":].to_numpy()
             concentration = df.loc[1:, "has_DM2"].to_numpy()
 
-        return raman_shifts, spectra, concentration
+        return spectra, raman_shifts, concentration
 
 
     @staticmethod
@@ -76,7 +76,7 @@ class KagLoader(ILoader):
             id: The sheet number identifier (1-4) corresponding to different amino acids.
 
         Returns:
-            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            A tuple of (spectra, raman_shifts, concentrations) arrays,
             or None if parsing fails.
         """
         file_handle = "sergioalejandrod/raman-spectroscopy"
@@ -89,11 +89,11 @@ class KagLoader(ILoader):
             pandas_kwargs={"sheet_name": f"Sheet{id}"}
         )
 
-        raman_shifts = df.loc[1:, 4.5:].to_numpy()
-        spectra = df.loc[1:, header[(int(id) - 1)]].to_numpy()
+        spectra = df.loc[1:, 4.5:].to_numpy()
+        raman_shifts = df.loc[1:, header[(int(id) - 1)]].to_numpy()
         concentration = np.array(df.columns.values[2:], dtype=float)
 
-        return raman_shifts, spectra, concentration
+        return spectra, raman_shifts, concentration
 
 
     @staticmethod
@@ -334,11 +334,11 @@ class KagLoader(ILoader):
         data = KagLoader.DATASETS[dataset_name].loader(dataset_id)
 
         if data is not None:
-            raman_shifts, spectra, concentrations = data
+            spectra, raman_shifts, concentrations = data
             return RamanDataset(
-                data=raman_shifts,
-                target=concentrations,
                 spectra=spectra,
+                target=concentrations,
+                raman_shifts=raman_shifts,
                 metadata=KagLoader.DATASETS[dataset_name].metadata
             )
         

@@ -52,14 +52,16 @@ class RamanDataset:
         name (str): The name of the dataset.
         task_type (TASK_TYPE): The task type of the dataset
                                e.g. Classification or Regression.
-        data (np.ndarray): The Raman spectra. Each row is a spectrum, and each column is a Raman shift.
+        spectra (np.ndarray): The Raman spectra intensity data. Each row is a spectrum,
+                              and each column corresponds to a Raman shift value.
         target (np.ndarray): The target variable(s) for each spectrum. Can be a 1D array for single-target tasks
                          (e.g., class label or concentration) or a 2D array for multi-target tasks.
+        raman_shifts (np.ndarray): The wavenumber/Raman shift values (x-axis) in cm⁻¹.
         metadata (dict[str, str]): A dictionary containing metadata about the dataset (e.g., source, description).
     """
-    data: np.ndarray
-    target: np.ndarray
     spectra: np.ndarray
+    target: np.ndarray
+    raman_shifts: np.ndarray
     metadata: dict[str, str]
     name: str = ""
     task_type: TASK_TYPE = TASK_TYPE.Unknown
@@ -70,9 +72,9 @@ class RamanDataset:
         Get the number of spectra in the dataset.
 
         Returns:
-            int: The number of individual spectra (rows in the data array).
+            int: The number of individual spectra (rows in the spectra array).
         """
-        return self.data.shape[0]
+        return self.spectra.shape[0]
 
     @property
     def n_frequencies(self) -> int:
@@ -80,20 +82,20 @@ class RamanDataset:
         Get the number of frequency points per spectrum.
 
         Returns:
-            int: The number of frequency/wavenumber points (columns in data array),
-                 or 0 if data is 1-dimensional.
+            int: The number of frequency/wavenumber points (columns in spectra array),
+                 or 0 if spectra is 1-dimensional.
         """
-        return self.data.shape[1] if len(self.data.shape) > 1 else 0
+        return self.spectra.shape[1] if len(self.spectra.shape) > 1 else 0
 
     @property
     def n_raman_shifts(self) -> int:
         """
-        Get the number of Raman shift values in the spectra axis.
+        Get the number of Raman shift values.
 
         Returns:
-            int: The number of Raman shift values, or 0 if spectra is empty.
+            int: The number of Raman shift/wavenumber values, or 0 if empty.
         """
-        return self.spectra.shape[0] if len(self.spectra.shape) > 0 else 0
+        return self.raman_shifts.shape[0] if len(self.raman_shifts.shape) > 0 else 0
 
     @property
     def n_classes(self) -> Optional[int]:
@@ -137,22 +139,22 @@ class RamanDataset:
     @property
     def min_shift(self):
         """
-        Get the minimum Raman shift value in the spectra.
+        Get the minimum Raman shift value.
 
         Returns:
-            float: The minimum wavenumber/Raman shift value.
+            float: The minimum wavenumber/Raman shift value in cm⁻¹.
         """
-        return self.spectra.min()
+        return self.raman_shifts.min()
 
     @property
     def max_shift(self):
         """
-        Get the maximum Raman shift value in the spectra.
+        Get the maximum Raman shift value.
 
         Returns:
-            float: The maximum wavenumber/Raman shift value.
+            float: The maximum wavenumber/Raman shift value in cm⁻¹.
         """
-        return self.spectra.max()
+        return self.raman_shifts.max()
 
     def to_dataframe(self) -> pd.DataFrame:
         """
@@ -161,7 +163,7 @@ class RamanDataset:
         Returns:
             DataFrame with spectral data, wavenumbers as columns, and target as last column.
         """
-        df = pd.DataFrame(self.data.T, columns=self.spectra)
+        df = pd.DataFrame(self.spectra.T, columns=self.raman_shifts)
         df["target"] = self.target
         return df
 

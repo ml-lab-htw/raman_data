@@ -73,21 +73,21 @@ class ZenLoader(ILoader):
         snr = "Low SNR"
         data_folder = os.path.join(data_folder_parent, snr)
         
-        # read raman_shifts with pandas
+        # read spectra intensity data with pandas
         data_path = os.path.join(data_folder, "data.pkl")
         if not os.path.isfile(data_path):
             raise FileNotFoundError(f"Could not find data.pkl in {data_path}")
 
-        raman_shifts = pd.read_pickle(data_path).T
+        spectra = pd.read_pickle(data_path).T
 
-        # read shifts with pandas
-        spectra_path = os.path.join(data_folder, "spectral_axis.pkl")
-        if not os.path.isfile(spectra_path):
+        # read raman shifts (wavenumbers) with pandas
+        raman_shifts_path = os.path.join(data_folder, "spectral_axis.pkl")
+        if not os.path.isfile(raman_shifts_path):
             raise FileNotFoundError(
-                f"Could not find spectral_axis.pkl in {spectra_path}"
+                f"Could not find spectral_axis.pkl in {raman_shifts_path}"
             )
 
-        spectra = pd.read_pickle(spectra_path)
+        raman_shifts = pd.read_pickle(raman_shifts_path)
 
         # read gt with pandas
         gt_path = os.path.join(data_folder, "gt_endmembers.pkl")
@@ -96,7 +96,7 @@ class ZenLoader(ILoader):
 
         concentrations = pd.read_pickle(gt_path).T
 
-        return raman_shifts, spectra, concentrations
+        return spectra, raman_shifts, concentrations
 
 
     @staticmethod
@@ -108,7 +108,7 @@ class ZenLoader(ILoader):
             cache_path: The base path where the dataset files are cached.
 
         Returns:
-            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            A tuple of (spectra, raman_shifts, concentrations) arrays,
             or None if parsing fails.
 
         Note:
@@ -154,7 +154,7 @@ class ZenLoader(ILoader):
             cache_path: The base path where the dataset files are cached.
 
         Returns:
-            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            A tuple of (spectra, raman_shifts, concentrations) arrays,
             or None if parsing fails.
         """
         # data field names in the mat file
@@ -174,15 +174,15 @@ class ZenLoader(ILoader):
             )
             return None
 
-        # spectra scale
-        spectra = file_content["Calx"].squeeze()
-        raman_shifts = []
+        # raman shifts (wavenumbers/x-axis)
+        raman_shifts = file_content["Calx"].squeeze()
+        spectra_list = []
         concentrations = np.array(np.empty)
 
-        # raman shift data
+        # spectra intensity data
         for key in data_keys:
             data_row = file_content[key]
-            raman_shifts.append(data_row)
+            spectra_list.append(data_row)
 
         #TODO Get the concentrations: 
         #tihs is waht ramanspy dose:
@@ -192,9 +192,9 @@ class ZenLoader(ILoader):
                 #COM would 0, COM_125mM would be 1, and so on 
         #       y.append(np.repeat(i, data[dataset].shape[0]))
 
-        raman_shifts = np.concatenate(raman_shifts).T
+        spectra = np.concatenate(spectra_list).T
 
-        return raman_shifts, spectra, concentrations
+        return spectra, raman_shifts, concentrations
 
 
     @staticmethod
@@ -208,7 +208,7 @@ class ZenLoader(ILoader):
             cache_path: The base path where the dataset files are cached.
 
         Returns:
-            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            A tuple of (spectra, raman_shifts, concentrations) arrays,
             or None if parsing fails.
         """
         # load data file
@@ -218,10 +218,10 @@ class ZenLoader(ILoader):
 
         df = pd.read_csv(data_path)
         concentrations = df.pop("conc").to_numpy()
-        spectra = np.array(df.columns.values[8:], dtype=int)
-        raman_shifts = df.loc[:, "400":].to_numpy().T
+        raman_shifts = np.array(df.columns.values[8:], dtype=int)
+        spectra = df.loc[:, "400":].to_numpy().T
 
-        return raman_shifts, spectra, concentrations
+        return spectra, raman_shifts, concentrations
 
 
     __BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
@@ -380,11 +380,11 @@ class ZenLoader(ILoader):
         data = ZenLoader.DATASETS[dataset_name].loader(cache_path)
 
         if data is not None:
-            raman_shifts, spectra, concentrations = data
+            spectra, raman_shifts, concentrations = data
             return RamanDataset(
-                data=raman_shifts,
-                target=concentrations,
                 spectra=spectra,
+                target=concentrations,
+                raman_shifts=raman_shifts,
                 metadata=ZenLoader.DATASETS[dataset_name].metadata
             )
         

@@ -33,19 +33,19 @@ class HugLoader(ILoader):
         Parse and extract data from the SubstrateMixRaman dataset.
 
         Args:
-            df: DataFrame containing the raw dataset with Raman shifts and concentrations.
+            df: DataFrame containing the raw dataset with Raman spectra and concentrations.
 
         Returns:
-            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            A tuple of (spectra, raman_shifts, concentrations) arrays,
             or None if parsing fails.
         """
         end_data_index = len(df.columns.values) - 8
 
-        raman_shifts = df.loc[:, :"3384.7"].to_numpy().T
-        spectra = np.array(df.columns.values[:end_data_index])
+        spectra = df.loc[:, :"3384.7"].to_numpy().T
+        raman_shifts = np.array(df.columns.values[:end_data_index])
         concentrations = df.loc[:, "Glucose":].to_numpy()
 
-        return raman_shifts, spectra, concentrations
+        return spectra, raman_shifts, concentrations
 
 
     @staticmethod
@@ -56,19 +56,19 @@ class HugLoader(ILoader):
         Parse and extract data from the RamanSpectraEcoliFermentation dataset.
 
         Args:
-            df: DataFrame containing the raw dataset with Raman shifts and glucose data.
+            df: DataFrame containing the raw dataset with Raman spectra and glucose data.
 
         Returns:
-            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            A tuple of (spectra, raman_shifts, concentrations) arrays,
             or None if parsing fails.
         """
         end_data_index = len(df.columns.values) - 2
 
-        raman_shifts = df.loc[:, :"3384.7"].to_numpy().T
-        spectra = np.array(df.columns.values[:end_data_index])
+        spectra = df.loc[:, :"3384.7"].to_numpy().T
+        raman_shifts = np.array(df.columns.values[:end_data_index])
         concentrations = df.loc[:, :"Glucose"].to_numpy()
 
-        return raman_shifts, spectra, concentrations
+        return spectra, raman_shifts, concentrations
 
 
     @staticmethod
@@ -82,16 +82,16 @@ class HugLoader(ILoader):
             df: DataFrame containing the raw dataset with fuel Raman spectra.
 
         Returns:
-            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            A tuple of (spectra, raman_shifts, concentrations) arrays,
             or None if parsing fails.
         """
         end_data_index = len(df.columns.values) - 12
 
-        raman_shifts = df.loc[:, :"3801.0"].to_numpy().T
-        spectra = np.array(df.columns.values[:end_data_index])
+        spectra = df.loc[:, :"3801.0"].to_numpy().T
+        raman_shifts = np.array(df.columns.values[:end_data_index])
         concentrations = df.loc[:, "Research Octane Number":].to_numpy()
 
-        return raman_shifts, spectra, concentrations
+        return spectra, raman_shifts, concentrations
 
 
     DATASETS = {
@@ -216,11 +216,11 @@ class HugLoader(ILoader):
         data = HugLoader.DATASETS[dataset_name].loader(df)
 
         if data is not None:
-            raman_shifts, spectra, concentrations = data
+            spectra, raman_shifts, concentrations = data
             return RamanDataset(
-                data=raman_shifts,
-                target=concentrations,
                 spectra=spectra,
+                target=concentrations,
+                raman_shifts=raman_shifts,
                 metadata=HugLoader.DATASETS[dataset_name].metadata
             )
         
