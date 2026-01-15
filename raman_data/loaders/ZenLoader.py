@@ -382,10 +382,12 @@ class ZenLoader(ILoader):
         if data is not None:
             spectra, raman_shifts, concentrations = data
             return RamanDataset(
+                metadata=ZenLoader.DATASETS[dataset_name].metadata,
+                name=dataset_name,
+                raman_shifts=raman_shifts,
                 spectra=spectra,
                 target=concentrations,
-                raman_shifts=raman_shifts,
-                metadata=ZenLoader.DATASETS[dataset_name].metadata
+                task_type=ZenLoader.DATASETS[dataset_name].task_type,
             )
         
         return data

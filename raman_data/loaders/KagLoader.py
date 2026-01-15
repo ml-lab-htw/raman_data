@@ -97,9 +97,67 @@ class KagLoader(ILoader):
 
 
     @staticmethod
-    def __load_andriitrelin():
-        """Load the andriitrelin cells Raman spectra dataset (not implemented)."""
-        raise NotImplementedError
+    def __load_andriitrelin(
+        id: str
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        """
+        Parse and extract data from the cells Raman spectra dataset.
+
+        This dataset contains SERS spectra of various cell types (melanoma cells,
+        melanocytes, fibroblasts) collected on gold nanourchins with different
+        surface functionalizations.
+
+        Args:
+            id: The surface functionalization type ("COOH", "NH2", or "(COOH)2").
+
+        Returns:
+            A tuple of (spectra, raman_shifts, labels) arrays,
+            or None if parsing fails.
+        """
+        import os
+
+        file_handle = "andriitrelin/cells-raman-spectra"
+
+        # Cell type labels (folder names)
+        cell_types = [
+            "A", "A-S", "G", "G-S", "HF", "HF-S",
+            "ZAM", "ZAM-S", "MEL", "MEL-S", "DMEM", "DMEM-S"
+        ]
+
+        # Raman shift scale as specified in the dataset README
+        raman_shifts = np.linspace(100, 4278, 2090)
+
+        # Download the dataset first
+        cache_path = dataset_download(file_handle)
+
+        all_spectra = []
+        all_labels = []
+
+        for cell_type in cell_types:
+            # Data is in the dataset_i subfolder
+            file_path = os.path.join(cache_path, "dataset_i", cell_type, f"{id}.csv")
+
+            if not os.path.exists(file_path):
+                print(f"Warning: File not found: {file_path}")
+                continue
+
+            try:
+                df = pd.read_csv(file_path, header=None)
+                spectra_data = df.to_numpy()
+                all_spectra.append(spectra_data)
+                all_labels.extend([cell_type] * spectra_data.shape[0])
+
+            except Exception as e:
+                print(f"Warning: Could not load {file_path}: {e}")
+                continue
+
+        if not all_spectra:
+            return None
+
+        spectra = np.vstack(all_spectra)
+        labels = np.array(all_labels)
+
+        return spectra, raman_shifts, labels
 
 
     @staticmethod
@@ -244,11 +302,39 @@ class KagLoader(ILoader):
                 "description" : "This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method."
             }
         ),
-        # "andriitrelin/cells-raman-spectra": DatasetInfo(
-        #     task_type=TASK_TYPE.Classification,
-        #     id=None,
-        #     loader=__load_andriitrelin
-        # ),
+        "andriitrelin/cells-raman-spectra/COOH": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="COOH",
+            loader=__load_andriitrelin,
+            metadata={
+                "full_name" : "andriitrelin/cells-raman-spectra",
+                "source" : "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
+                "paper" : "https://doi.org/10.1016/j.snb.2020.127660",
+                "description" : "SERS spectra of melanoma cells, melanocytes, fibroblasts, and culture medium collected on gold nanourchins functionalized with COOH moiety. Contains 12 cell type classes for classification."
+            }
+        ),
+        "andriitrelin/cells-raman-spectra/NH2": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="NH2",
+            loader=__load_andriitrelin,
+            metadata={
+                "full_name" : "andriitrelin/cells-raman-spectra",
+                "source" : "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
+                "paper" : "https://doi.org/10.1016/j.snb.2020.127660",
+                "description" : "SERS spectra of melanoma cells, melanocytes, fibroblasts, and culture medium collected on gold nanourchins functionalized with NH2 moiety. Contains 12 cell type classes for classification."
+            }
+        ),
+        "andriitrelin/cells-raman-spectra/(COOH)2": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="(COOH)2",
+            loader=__load_andriitrelin,
+            metadata={
+                "full_name" : "andriitrelin/cells-raman-spectra",
+                "source" : "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
+                "paper" : "https://doi.org/10.1016/j.snb.2020.127660",
+                "description" : "SERS spectra of melanoma cells, melanocytes, fibroblasts, and culture medium collected on gold nanourchins functionalized with (COOH)2 moiety. Contains 12 cell type classes for classification."
+            }
+        ),
         #"mathiascharconnet/cancer-cells-sers-spectra" : DatasetInfo(
         #    task_type=TASK_TYPE.Classification,
         #    id=None,
@@ -336,12 +422,14 @@ class KagLoader(ILoader):
         if data is not None:
             spectra, raman_shifts, concentrations = data
             return RamanDataset(
+                metadata=KagLoader.DATASETS[dataset_name].metadata,
+                name=dataset_name,
+                raman_shifts=raman_shifts,
                 spectra=spectra,
                 target=concentrations,
-                raman_shifts=raman_shifts,
-                metadata=KagLoader.DATASETS[dataset_name].metadata
+                task_type=KagLoader.DATASETS[dataset_name].task_type,
             )
-        
+
         return data
 
     @staticmethod
