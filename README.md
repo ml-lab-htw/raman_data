@@ -176,7 +176,7 @@ Contributions are welcome! To add a new dataset:
 ## 🔮 For Later (Future Datasets)
 
 ### Kaggle
-- [Cancer Cells SERS Spectra](https://www.kaggle.com/code/mathiascharconnet/cancer-cells-sers-spectra) (requires authentification)
+- ~~[Cancer Cells SERS Spectra](https://www.kaggle.com/code/mathiascharconnet/cancer-cells-sers-spectra)~~ - Now available as `andriitrelin/cells-raman-spectra/*`
 
 ### GitHub
 - [Raman Spectra Data](https://github.com/MIND-Lab/Raman-Spectra-Data)
