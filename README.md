@@ -120,7 +120,7 @@ Here is the list of datasets that are currently included in the package:
 | Dataset Name | Task Type | Description |
 |-------------|-----------|-------------|
 | `chlange/SubstrateMixRaman` | Regression | Substrate mixture concentration prediction |
-| `chlange/RamanSpectraEcoliFermentation` | Classification | E. coli fermentation monitoring |
+| `chlange/RamanSpectraEcoliFermentation` | Regression | E. coli fermentation monitoring |
 | `chlange/FuelRamanSpectraBenchtop` | Regression | Fuel property prediction |
 
 **Sources:**
