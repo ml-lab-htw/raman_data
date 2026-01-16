@@ -140,6 +140,17 @@ Here is the list of datasets that are currently included in the package:
 - [Mutant Wheat Lines](https://zenodo.org/records/7644521)
 - [Surface Enhanced Spectroscopy](https://zenodo.org/records/3572359)
 
+### Miscellaneous Datasets
+| Dataset Name                | Task Type        | Description                                                      |
+|----------------------------|------------------|------------------------------------------------------------------|
+| `deepr_denoising`           | Denoising        | Raman spectral denoising dataset from DeepeR paper               |
+| `deepr_super_resolution`    | SuperResolution  | Hyperspectral super-resolution dataset from DeepeR paper         |
+
+**Sources:**
+- [DeepeR: High-throughput molecular imaging via deep learning enabled Raman spectroscopy](https://github.com/conor-horgan/DeepeR?tab=readme-ov-file#dataset)
+- [Denoising Dataset (OneDrive)](https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9)
+- [Super-Resolution Dataset (OneDrive)](https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9)
+
 ## 🎯 Milestones
 
 - [x] View Datasets
@@ -163,6 +174,7 @@ Contributions are welcome! To add a new dataset:
    - `HuggingFaceLoader` for Hugging Face datasets
    - `ZenodoLoader` for Zenodo datasets
    - `ZipLoader` for other URL-based sources
+   - `MiscLoader` for datasets that do not fit into the above categories (e.g., DeepeR)
 
 2. Implement a loader function that returns a tuple of `(spectra, raman_shifts, targets)`:
    - `spectra`: 2D numpy array of intensity values (samples × wavenumbers)

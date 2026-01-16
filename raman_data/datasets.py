@@ -3,6 +3,8 @@ Internal functions for loading and listing datasets.
 """
 
 from typing import List, Optional
+
+from .loaders.MiscLoader import MiscLoader
 from .types import RamanDataset
 
 from raman_data.loaders.KaggleLoader import KaggleLoader
@@ -15,6 +17,7 @@ __LOADERS = [
     KaggleLoader,
     HuggingFaceLoader,
     ZenodoLoader,
+    MiscLoader,
     #ZipLoader
 ]
 

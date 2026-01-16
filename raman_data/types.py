@@ -5,7 +5,7 @@ Data structures and enums for the raman_data package.
 from enum import Enum
 import hashlib
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Callable, Tuple, Optional, List
 import numpy as np
 import pandas as pd
@@ -18,8 +18,9 @@ class CACHE_DIR(Enum):
     """
     Kaggle = "KAGGLEHUB_CACHE"
     HuggingFace = "HF_HOME"
-    Zenodo = "ZEN_CACHE"
+    Zenodo = "ZENODO_CACHE"
     Zip = "ZIP_CACHE"
+    Misc = "MISC_CACHE"
 
 
 class TASK_TYPE(Enum):
@@ -30,6 +31,8 @@ class TASK_TYPE(Enum):
     Unknown = 0
     Classification = 1
     Regression = 2
+    Denoising = 3
+    SuperResolution = 4
 
 
 class HASH_TYPE(Enum):
@@ -61,9 +64,9 @@ class RamanDataset:
     """
     spectra: np.ndarray
     targets: np.ndarray
-    target_names: List[str]
     raman_shifts: np.ndarray
-    metadata: dict[str, str]
+    metadata: dict[str, str] = field(default_factory=dict)
+    target_names: List[str] = field(default_factory=list)
     name: str = ""
     task_type: TASK_TYPE = TASK_TYPE.Unknown
 

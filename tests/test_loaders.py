@@ -6,13 +6,15 @@ from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.KaggleLoader import KaggleLoader
 from raman_data.loaders.HuggingFaceLoader import HuggingFaceLoader
 from raman_data.loaders.ZenodoLoader import ZenodoLoader
+from raman_data.loaders.MiscLoader import MiscLoader
 import pytest
 import os
 
 __LOADERS = [
     KaggleLoader,
     HuggingFaceLoader,
-    ZenodoLoader
+    ZenodoLoader,
+    MiscLoader
 ]
 
 def test_interfacing():
@@ -40,3 +42,15 @@ def test_zen_loader_load():
     assert dataset.raman_shifts is not None
     assert dataset.metadata["full_name"] is not None
     assert dataset.metadata["source"] is not None
+
+def test_misc_loader_download():
+    # Only checks that the download_dataset returns a path and creates the info file
+    for name in MiscLoader.get_dataset_names():
+        path = MiscLoader.download_dataset(name)
+        assert path is not None
+        assert os.path.exists(os.path.join(path, "onedrive_url.txt"))
+
+def test_misc_loader_load_missing():
+    # Should print missing file warning and return None if files are missing
+    dataset = MiscLoader.load_dataset("deepr_denoising", cache_path="/tmp/nonexistent_misc")
+    assert dataset is None
