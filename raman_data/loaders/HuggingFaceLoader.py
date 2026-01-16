@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
 import datasets
 import pandas as pd
@@ -76,7 +76,7 @@ class HuggingFaceLoader(BaseLoader):
     @staticmethod
     def _load_chlange(
         df: pd.DataFrame
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List] | None:
         """
         Parse and extract data from the RamanSpectraEcoliFermentation dataset.
 
@@ -94,8 +94,9 @@ class HuggingFaceLoader(BaseLoader):
         raman_shifts = np.array([float(wn) for wn in wavenumber_cols])
         spectra = df[wavenumber_cols]
         concentrations = df[substance_cols]
+        concentration_names = list(concentrations.columns)
 
-        return spectra.to_numpy(), raman_shifts, concentrations.to_numpy()
+        return spectra.to_numpy(), raman_shifts, concentrations.to_numpy(), concentration_names
 
     @staticmethod
     def download_dataset(
@@ -185,13 +186,14 @@ class HuggingFaceLoader(BaseLoader):
         data = HuggingFaceLoader.DATASETS[dataset_name].loader(full_dataset_df)
 
         if data is not None:
-            spectra, raman_shifts, concentrations = data
+            spectra, raman_shifts, concentrations, concentration_names = data
             return RamanDataset(
                 metadata=HuggingFaceLoader.DATASETS[dataset_name].metadata,
                 name=dataset_name,
                 raman_shifts=raman_shifts,
                 spectra=spectra,
                 targets=concentrations,
+                target_names=concentration_names,
                 task_type=HuggingFaceLoader.DATASETS[dataset_name].task_type,
             )
         

@@ -61,6 +61,7 @@ class RamanDataset:
     """
     spectra: np.ndarray
     targets: np.ndarray
+    target_names: List[str]
     raman_shifts: np.ndarray
     metadata: dict[str, str]
     name: str = ""
@@ -119,9 +120,7 @@ class RamanDataset:
             list[str] | None: A list of unique class names if the task type
                               is Classification, None otherwise.
         """
-        if self.task_type == TASK_TYPE.Classification:
-            return list(np.unique(self.targets))
-        return None
+        return self.target_names
 
     @property
     def target_range(self):
