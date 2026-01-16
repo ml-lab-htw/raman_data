@@ -31,7 +31,7 @@ class ZipLoader(BaseLoader):
     Note:
         This loader is currently disabled in the main datasets module.
     """
-    __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "ziploader")
+    __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "raman-data", "zip")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zip)
 
     DATASETS = {

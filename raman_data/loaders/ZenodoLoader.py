@@ -225,7 +225,7 @@ class ZenodoLoader(BaseLoader):
 
 
     __BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
-    __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "zenodo")
+    __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "raman-data", "zenodo")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
 
     DATASETS = {
