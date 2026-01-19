@@ -1,4 +1,5 @@
 from typing import Optional, Tuple
+import logging
 
 from kagglehub import dataset_load, dataset_download
 from kagglehub import KaggleDatasetAdapter
@@ -8,6 +9,9 @@ import pandas as pd
 from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class KaggleLoader(BaseLoader):
@@ -135,7 +139,7 @@ class KaggleLoader(BaseLoader):
             file_path = os.path.join(cache_path, "dataset_i", cell_type, f"{id}.csv")
 
             if not os.path.exists(file_path):
-                print(f"Warning: File not found: {file_path}")
+                logger.warning(f"Warning: File not found: {file_path}")
                 continue
 
             try:
@@ -149,7 +153,7 @@ class KaggleLoader(BaseLoader):
                 all_labels.extend([cell_type] * spectra.shape[0])
 
             except Exception as e:
-                print(f"Warning: Could not load {file_path}: {e}")
+                logger.warning(f"Warning: Could not load {file_path}: {e}")
                 continue
 
         if not all_spectra:
@@ -322,17 +326,17 @@ class KaggleLoader(BaseLoader):
                         dataset is not available through this loader.
         """
         if not LoaderTools.is_dataset_available(dataset_name, KaggleLoader.DATASETS):
-            print(f"[!] Cannot download {dataset_name} dataset with Kaggle loader")
+            logger.error(f"[!] Cannot download {dataset_name} dataset with Kaggle loader")
             return
 
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.HuggingFace)
 
-        print(f"Downloading Kaggle dataset: {dataset_name}")
-        
+        logger.info(f"Downloading Kaggle dataset: {dataset_name}")
+
         path = dataset_download(handle=dataset_name, path=cache_path)
-        print(f"Dataset downloaded into {path}")
+        logger.info(f"Dataset downloaded into {path}")
 
         return path
 
@@ -358,14 +362,14 @@ class KaggleLoader(BaseLoader):
                                  target values, and metadata, or None if loading fails.
         """
         if not LoaderTools.is_dataset_available(dataset_name, KaggleLoader.DATASETS):
-            print(f"[!] Cannot load {dataset_name} dataset with Kaggle loader")
+            logger.error(f"[!] Cannot load {dataset_name} dataset with Kaggle loader")
             return
 
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.HuggingFace)
 
-        print(
+        logger.info(
             f"Loading Kaggle dataset from "
             f"{cache_path if cache_path else 'default folder (~/.cache/kagglehub)'}"
         )

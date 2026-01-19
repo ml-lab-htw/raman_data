@@ -1,4 +1,5 @@
 from typing import Optional, Tuple, List
+import logging
 
 import datasets
 import pandas as pd
@@ -8,6 +9,9 @@ from raman_data.loaders.utils import is_wavenumber
 from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class HuggingFaceLoader(BaseLoader):
@@ -117,22 +121,22 @@ class HuggingFaceLoader(BaseLoader):
         """
 
         if not LoaderTools.is_dataset_available(dataset_name, HuggingFaceLoader.DATASETS):
-            print(f"[!] Cannot download {dataset_name} dataset with HuggingFace loader")
+            logger.error(f"[!] Cannot download {dataset_name} dataset with HuggingFace loader")
             return
 
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.HuggingFace)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.HuggingFace)
 
-        print(f"Downloading HuggingFace dataset: {dataset_name}")
-        
+        logger.info(f"Downloading HuggingFace dataset: {dataset_name}")
+
         datasets.load_dataset(
             path=dataset_name,
             cache_dir=cache_path
         )
 
         cache_path = cache_path if cache_path else "~/.cache/huggingface"
-        print(f"Dataset downloaded into {cache_path}")
+        logger.info(f"Dataset downloaded into {cache_path}")
 
         return cache_path
 
@@ -159,14 +163,14 @@ class HuggingFaceLoader(BaseLoader):
         """
 
         if not LoaderTools.is_dataset_available(dataset_name, HuggingFaceLoader.DATASETS):
-            print(f"[!] Cannot load {dataset_name} dataset with HuggingFace loader")
+            logger.error(f"[!] Cannot load {dataset_name} dataset with HuggingFace loader")
             return
 
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.HuggingFace)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.HuggingFace)
 
-        print(
+        logger.info(
             f"Loading HuggingFace dataset from "
             f"{cache_path if cache_path else 'default folder (~/.cache/huggingface)'}"
         )
@@ -198,5 +202,4 @@ class HuggingFaceLoader(BaseLoader):
             )
         
         return data
-
 

@@ -1,4 +1,5 @@
 from typing import Optional, Tuple
+import logging
 
 import os, requests
 import pandas as pd
@@ -8,6 +9,9 @@ from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
 from raman_data.exceptions import CorruptedZipFileError
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import  LoaderTools
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class ZenodoLoader(BaseLoader):
@@ -49,16 +53,15 @@ class ZenodoLoader(BaseLoader):
                 zip_filename.split(".")[0]
             )
         except CorruptedZipFileError as e:
-            print(
+            logger.error(
                 f"There seems to be an issue with dataset '10779223/sugar mixtures'. \n" \
                 f"The following file could not be extracted: {zip_filename}"
             )
             return None
 
         if data_dir is None:
-            print(
+            logger.error(
                 f"There seems to be no file of dataset '10779223/sugar mixtures'.\n " \
-                f"The following file could not be extracted: {zip_filename}"
             )
             return None
 
@@ -118,14 +121,14 @@ class ZenodoLoader(BaseLoader):
 
         zip_filename = "Kallepitis-et-al-Raw-data.zip"
 
-        print(os.path.join(cache_path, "256329", zip_filename))
+        logger.info(os.path.join(cache_path, "256329", zip_filename))
 
         data_dir = LoaderTools.extract_zip_file_content(
             os.path.join(cache_path, "256329", zip_filename),
             zip_filename
         )
 
-        print(data_dir)
+        logger.info(data_dir)
 
         if data_dir is None:
             return None
@@ -168,7 +171,7 @@ class ZenodoLoader(BaseLoader):
         # read content
         file_content = LoaderTools.read_mat_file(data_path)
         if file_content == None:
-            print(
+            logger.error(
                 f"There was an error while reading the dataset '7644521/Wheat lines'.\n " \
                 f"The following file could not be read: {data_path}"
             )
@@ -189,7 +192,7 @@ class ZenodoLoader(BaseLoader):
         #   y = []
         #   for i, dataset in enumerate(labels):
         #       #apperently they just add the index of the labe to each label as concentration
-                #COM would 0, COM_125mM would be 1, and so on 
+                #COM would 0, COM_125mM would 1, and so on
         #       y.append(np.repeat(i, data[dataset].shape[0]))
 
         spectra = np.concatenate(spectra_list).T
@@ -291,7 +294,7 @@ class ZenodoLoader(BaseLoader):
             requests.HTTPError: If the HTTP request to Zenodo fails.
         """
         if not LoaderTools.is_dataset_available(dataset_name, ZenodoLoader.DATASETS):
-            print(f"[!] Cannot download {dataset_name} dataset with ZenodoLoader")
+            logger.error(f"[!] Cannot download {dataset_name} dataset with ZenodoLoader")
             return None
 
         if not (cache_path is None):
@@ -305,10 +308,10 @@ class ZenodoLoader(BaseLoader):
 
             LoaderTools.download(url, cache_path, file_name)
         except requests.HTTPError as e:
-            print(f"Could not download requested dataset")
+            logger.error(f"Could not download requested dataset")
             return None
         except OSError as e:
-            print(f"A very bad error occurred :(")
+            logger.error(f"A very bad error occurred :(")
             return None
 
         return cache_path
@@ -339,7 +342,7 @@ class ZenodoLoader(BaseLoader):
             Exception: If the file download fails after maximum retry attempts.
         """
         if not LoaderTools.is_dataset_available(dataset_name, ZenodoLoader.DATASETS):
-            print(f"[!] Cannot load {dataset_name} dataset with ZenodoLoader")
+            logger.error(f"[!] Cannot load {dataset_name} dataset with ZenodoLoader")
             return None
 
         if not (cache_path is None):
@@ -363,7 +366,7 @@ class ZenodoLoader(BaseLoader):
                 break
 
             except CorruptedZipFileError as e:
-                print(
+                logger.warning(
                     f"{e.zip_file_path} is corrupted. " \
                     f"Attempt {retry_count + 1}/{max_retries}"
                 )

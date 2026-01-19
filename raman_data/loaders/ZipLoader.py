@@ -2,6 +2,7 @@ from typing import Optional, Tuple
 
 import os.path
 from numpy import ndarray
+import logging
 
 #* These functions could be useful for specific load() functions
 # from numpy import genfromtxt, load,
@@ -10,6 +11,9 @@ from numpy import ndarray
 from raman_data.types import DatasetInfo, ExternalLink, CACHE_DIR, TASK_TYPE, HASH_TYPE
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class ZipLoader(BaseLoader):
@@ -112,14 +116,14 @@ class ZipLoader(BaseLoader):
                         dataset is not available through this loader.
         """
         if not LoaderTools.is_dataset_available(dataset_name, ZipLoader.DATASETS):
-            print(f"[!] Cannot download {dataset_name} dataset with ZipLoader")
+            logger.error(f"[!] Cannot download {dataset_name} dataset with ZipLoader")
             return
 
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zip)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zip)
 
-        print(f"Downloading dataset: {dataset_name}")
+        logger.info(f"Downloading dataset: {dataset_name}")
 
         dataset_link = [
             link for link in ZipLoader.__LINKS if link.name == dataset_name
@@ -132,14 +136,14 @@ class ZipLoader(BaseLoader):
             hash_type=dataset_link.checksum_type,
         )
 
-        print("Unzipping files...")
+        logger.info("Unzipping files...")
 
         download_path = LoaderTools.extract_zip_file_content(
             zip_file_path=download_zip_path,
             unzip_target_subdir=dataset_name
         )
 
-        print(f"Dataset downloaded into {download_path}")
+        logger.info(f"Dataset downloaded into {download_path}")
 
         return download_path
 
@@ -164,7 +168,7 @@ class ZipLoader(BaseLoader):
                           or (None, None, None) if loading fails.
         """
         if not LoaderTools.is_dataset_available(dataset_name, ZipLoader.DATASETS):
-            print(f"[!] Cannot load {dataset_name} dataset with ZipLoader")
+            logger.error(f"[!] Cannot load {dataset_name} dataset with ZipLoader")
             return
 
         if not (cache_path is None):
@@ -172,13 +176,13 @@ class ZipLoader(BaseLoader):
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zip)
 
         if not os.path.exists(os.path.join(cache_path, dataset_name)):
-            print(f"[!] Dataset isn't found at: {cache_path}")
+            logger.warning(f"[!] Dataset isn't found at: {cache_path}")
             ZipLoader.download_dataset(
                 dataset_name=dataset_name,
                 cache_path=cache_path
             )
 
-        print(f"Loading dataset from {cache_path}")
+        logger.info(f"Loading dataset from {cache_path}")
 
         #* These methods could be useful for specific load() functions
         # Converting Excel files with pandas
