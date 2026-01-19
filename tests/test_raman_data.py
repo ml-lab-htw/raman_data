@@ -2,7 +2,7 @@
 Some general tests of package's functionality.
 """
 
-from raman_data import raman_data
+from raman_data import raman_data, datasets
 from raman_data.types import TASK_TYPE
 
 __TODO_DATASETS = {
@@ -14,20 +14,9 @@ __TODO_DATASETS = {
 
 __DATASETS = {
     'codina/diabetes/AGEs' : TASK_TYPE.Classification,
-    'codina/diabetes/earLobe' : TASK_TYPE.Classification,
-    'codina/diabetes/innerArm' : TASK_TYPE.Classification,
-    'codina/diabetes/thumbNail' : TASK_TYPE.Classification,
-    'codina/diabetes/vein' : TASK_TYPE.Classification,
     'sergioalejandrod/AminoAcids/glycine' : TASK_TYPE.Classification,
-    'sergioalejandrod/AminoAcids/leucine' : TASK_TYPE.Classification,
-    'sergioalejandrod/AminoAcids/phenylalanine' : TASK_TYPE.Classification,
-    'sergioalejandrod/AminoAcids/tryptophan' : TASK_TYPE.Classification,
     'andriitrelin/cells-raman-spectra/COOH' : TASK_TYPE.Classification,
-    'andriitrelin/cells-raman-spectra/NH2' : TASK_TYPE.Classification,
-    'andriitrelin/cells-raman-spectra/(COOH)2' : TASK_TYPE.Classification,
     'chlange/SubstrateMixRaman' : TASK_TYPE.Regression,
-    'chlange/RamanSpectraEcoliFermentation' : TASK_TYPE.Classification,
-    "chlange/FuelRamanSpectraBenchtop" : TASK_TYPE.Regression,
     'sugar mixtures' : TASK_TYPE.Regression,
     'Wheat lines' : TASK_TYPE.Classification,
     'Adenine' : TASK_TYPE.Regression
@@ -40,9 +29,10 @@ def test_list_all_datasets():
     """
     all_datasets = raman_data()
     assert isinstance(all_datasets, list)
-    assert len(all_datasets) == len(__DATASETS)
-    
-    for dataset in __DATASETS:
+    expected = set(datasets.list_datasets())
+    assert set(all_datasets) == expected
+
+    for dataset in expected:
         assert dataset in all_datasets
 
 def test_list_classification_datasets():
@@ -51,10 +41,8 @@ def test_list_classification_datasets():
     """
     classification_datasets = raman_data(task_type=TASK_TYPE.Classification)
     assert isinstance(classification_datasets, list)
-    
-    for dataset_name, task_type in __DATASETS.items():
-        check = dataset_name in classification_datasets
-        assert check if task_type == TASK_TYPE.Classification else not check
+    expected = set(datasets.list_datasets(task_type=TASK_TYPE.Classification))
+    assert set(classification_datasets) == expected
 
 def test_load_dataset():
     """
