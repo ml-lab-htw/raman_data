@@ -136,7 +136,7 @@ class LoaderTools:
         # so that not the entire date gets loaded in to ram an once
         CHUNK_SIZE = 1048576
 
-        checksum = (hash_type or HASH_TYPE.md5).value()()
+        checksum = hash_type.value() if hash_type else HASH_TYPE.md5.value()
 
         # http get request
         with requests.get(url=url, stream=True) as response:
