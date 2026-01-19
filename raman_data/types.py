@@ -169,6 +169,69 @@ class RamanDataset:
         df["targets"] = self.targets
         return df
 
+    def __len__(self) -> int:
+        """
+        Return the number of spectra in the dataset.
+        Equivalent to n_spectra.
+        """
+        return self.n_spectra
+
+    def __repr__(self) -> str:
+        return (f"<RamanDataset name='{self.name}' n_spectra={self.n_spectra} n_frequencies={self.n_frequencies} "
+                f"task_type={self.task_type.name}>")
+
+    def __str__(self) -> str:
+        return (f"RamanDataset: {self.name}\n"
+                f"  Spectra: {self.n_spectra} x {self.n_frequencies}\n"
+                f"  Task type: {self.task_type.name}\n"
+                f"  Metadata: {self.metadata}")
+
+    def __getitem__(self, idx):
+        """
+        Allow indexing and slicing. Returns a new RamanDataset for slices, or a tuple for single index.
+        """
+        if isinstance(idx, slice):
+            return RamanDataset(
+                spectra=self.spectra[idx],
+                targets=self.targets[idx],
+                raman_shifts=self.raman_shifts,
+                metadata=self.metadata,
+                target_names=self.target_names,
+                name=self.name,
+                task_type=self.task_type
+            )
+        else:
+            return (self.spectra[idx], self.targets[idx])
+
+    def __iter__(self):
+        """
+        Iterate over spectra and targets as tuples.
+        """
+        for i in range(self.n_spectra):
+            yield (self.spectra[i], self.targets[i])
+
+    def __contains__(self, item):
+        """
+        Check if a (spectrum, target) tuple is in the dataset.
+        """
+        for i in range(self.n_spectra):
+            if np.array_equal(self.spectra[i], item[0]) and np.array_equal(self.targets[i], item[1]):
+                return True
+        return False
+
+    def __eq__(self, other):
+        if not isinstance(other, RamanDataset):
+            return False
+        return (np.array_equal(self.spectra, other.spectra) and
+                np.array_equal(self.targets, other.targets) and
+                np.array_equal(self.raman_shifts, other.raman_shifts) and
+                self.target_names == other.target_names and
+                self.name == other.name and
+                self.task_type == other.task_type)
+
+    def __bool__(self):
+        return self.n_spectra > 0
+
 
 @dataclass(init=False)
 class ZenodoFileInfo:
