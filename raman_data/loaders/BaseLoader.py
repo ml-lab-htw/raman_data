@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from typing import Optional, Dict
+import logging
 
 from datasets import DatasetInfo
 
@@ -11,6 +12,7 @@ class BaseLoader(metaclass=ABCMeta):
     """
 
     DATASETS: Dict[str, DatasetInfo] = {}
+    logger = logging.getLogger(__name__)
 
     @staticmethod
     @abstractmethod
@@ -116,16 +118,18 @@ class BaseLoader(metaclass=ABCMeta):
         Subclasses can override this for custom formatting.
         """
         loader_name = cls.get_loader_name()
-        print(f"\n{loader_name} Datasets:")
-        print("=" * 50)
+        cls.logger.info(f"\n{loader_name} Datasets:")
+        cls.logger.info("=" * 50)
 
         if not cls.DATASETS:
-            print("No datasets available.")
+            cls.logger.info("No datasets available.")
             return
 
         for dataset_name, info in cls.DATASETS.items():
-            print(f"\n• {dataset_name}")
-            print(f"  Task Type: {info.task_type}")
+            if hasattr(info, 'task_type'):
+                cls.logger.info(f"\n• {dataset_name}")
+                cls.logger.info(f"  Task Type: {info.task_type}")
+            else:
+                cls.logger.info(f"\n• {dataset_name}")
 
-        print("\n" + "=" * 50)
-
+        cls.logger.info("\n" + "=" * 50)

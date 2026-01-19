@@ -9,6 +9,7 @@ import requests, zipfile
 from scipy import io
 import os, h5py
 import numpy as np
+import logging
 
 from raman_data.exceptions import ChecksumError, CorruptedZipFileError
 from raman_data.types import CACHE_DIR, HASH_TYPE, DatasetInfo
@@ -19,6 +20,8 @@ class LoaderTools:
     A static class contains general methods that
     can be used while loading datasets.
     """
+    logger = logging.getLogger(__name__)
+
     @staticmethod
     def get_cache_root(
         env_var: CACHE_DIR
@@ -60,15 +63,14 @@ class LoaderTools:
 
         if loader_key is not None:
             os.environ[loader_key.value] = path
-            print(
-                f"[!] Cache root folder for {loader_key.name}'s loader " \
-                f"is set to: {path}"
+            LoaderTools.logger.debug(
+                f"Cache root folder for {loader_key.name}'s loader is set to: {path}"
             )
             return
 
         for env_var in CACHE_DIR:
             os.environ[env_var.value] = path
-        print(f"[!] Cache root folder is set to: {path}")
+        LoaderTools.logger.debug(f"Cache root folder is set to: {path}")
 
 
     @staticmethod
@@ -89,7 +91,9 @@ class LoaderTools:
         """
         check = dataset_name in datasets
         if not check:
-            print(f"[!] Dataset {dataset_name} is not on the loader's list.")
+            LoaderTools.logger.warning(
+                f"Dataset {dataset_name} is not on the loader's list."
+            )
 
         return check
 
@@ -132,7 +136,7 @@ class LoaderTools:
         # so that not the entire date gets loaded in to ram an once
         CHUNK_SIZE = 1048576
 
-        checksum = hash_type.value() if hash_type else HASH_TYPE.md5.value()
+        checksum = (hash_type or HASH_TYPE.md5).value()()
 
         # http get request
         with requests.get(url=url, stream=True) as response:
@@ -208,7 +212,7 @@ class LoaderTools:
             if not zipfile.is_zipfile(zip_file_path):
                 raise CorruptedZipFileError(zip_file_path)
         else:
-            print(f"There's no .zip file stored at {zip_file_path}")
+            LoaderTools.logger.error(f"There's no .zip file stored at {zip_file_path}")
             return None
 
         # create dir with the same name as the zip file for uncompressed file data
@@ -243,9 +247,9 @@ class LoaderTools:
             mat_file_path (str): Complet path to the MAT file
 
             Returns:
-                dict|None: A dictonary whre the keys are the variabel names definded in the file  
-                and data/header information as values. The data is converted to numpy arrays 
-                with a uniform type. If possible the type of the data is used, if not python strings 
+                dict|None: A dictonary whre the keys are the variabel names definded in the file
+                and data/header information as values. The data is converted to numpy arrays
+                with a uniform type. If possible the type of the data is used, if not python strings
                 used as default the data type.
 
                 If the file couldn't be loaded None is returned.
@@ -255,7 +259,8 @@ class LoaderTools:
             #check the file format, matlab version 7.3 or above use hdf5
             #everything below can be opend using scipys loadmat
             if h5py.is_hdf5(mat_file_path):
-                print("hdf5")
+                LoaderTools.logger.debug("Reading HDF5 .mat file")
+                data_dict = {}
                 with h5py.File(mat_file_path, "r") as file:
                     for key in file.keys():
                         try:
@@ -265,6 +270,7 @@ class LoaderTools:
             else:
                 data_dict = io.loadmat(mat_file_path)
         except OSError as e:
+            LoaderTools.logger.error(f"Failed to read .mat file: {e}")
             return None
 
         return data_dict

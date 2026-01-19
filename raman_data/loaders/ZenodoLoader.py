@@ -121,14 +121,14 @@ class ZenodoLoader(BaseLoader):
 
         zip_filename = "Kallepitis-et-al-Raw-data.zip"
 
-        logger.info(os.path.join(cache_path, "256329", zip_filename))
+        logger.debug(os.path.join(cache_path, "256329", zip_filename))
 
         data_dir = LoaderTools.extract_zip_file_content(
             os.path.join(cache_path, "256329", zip_filename),
             zip_filename
         )
 
-        logger.info(data_dir)
+        logger.debug(data_dir)
 
         if data_dir is None:
             return None

@@ -1,11 +1,7 @@
-import glob
 from typing import Optional, Tuple
 import os
-import requests
 import numpy as np
-import scipy.io
-import zipfile
-import shutil
+import logging
 
 from scipy.io import loadmat
 
@@ -55,6 +51,8 @@ class MiscLoader(BaseLoader):
         )
     }
 
+    logger = logging.getLogger(__name__)
+
     @staticmethod
     def _load_deepr_denoising(cache_path: str) -> Optional[Tuple[np.ndarray, np.ndarray, np.ndarray]]:
         """
@@ -78,8 +76,8 @@ class MiscLoader(BaseLoader):
         for key, fname in required_files.items():
             file_path = os.path.join(cache_path, fname)
             if not os.path.exists(file_path):
-                print(f"[!] Missing file: {fname}")
-                print(f"[!] Please download manually from OneDrive and extract to: {cache_path}")
+                MiscLoader.logger.warning(f"[!] Missing file: {fname}")
+                MiscLoader.logger.warning(f"[!] Please download manually from OneDrive and extract to: {cache_path}")
                 return None
 
         try:
@@ -98,7 +96,7 @@ class MiscLoader(BaseLoader):
             return inputs, axis, outputs
 
         except Exception as e:
-            print(f"[!] Error loading dataset: {e}")
+            MiscLoader.logger.error(f"[!] Error loading dataset: {e}")
             return None
 
 
@@ -150,7 +148,7 @@ class MiscLoader(BaseLoader):
             RamanDataset object or None if loading fails.
         """
         if not LoaderTools.is_dataset_available(dataset_name, MiscLoader.DATASETS):
-            print(f"[!] Cannot load {dataset_name} dataset with Miscellaneous loader")
+            MiscLoader.logger.warning(f"[!] Cannot load {dataset_name} dataset with Miscellaneous loader")
             return None
 
         # Get or set cache path
@@ -163,13 +161,13 @@ class MiscLoader(BaseLoader):
         # Try to open if not present
         if not os.path.exists(dataset_cache_path) or not os.listdir(dataset_cache_path):
             os.makedirs(dataset_cache_path, exist_ok=True)
-            print(f"[!] Dataset not found in cache. Automatic donload is currently not supported for OneDrive datasets.")
-            print(f"[!] Please download the dataset manually from the provided link.")
-            print(f"[!] {dataset_name} dataset is available at {MiscLoader.DATASETS[dataset_name].metadata.get('source', 'No link provided')}")
-            print(f"[!] Please download the dataset folder manually from the provided link and extract it to: {dataset_cache_path}")
+            MiscLoader.logger.warning(f"[!] Dataset not found in cache. Automatic donload is currently not supported for OneDrive datasets.")
+            MiscLoader.logger.warning(f"[!] Please download the dataset manually from the provided link.")
+            MiscLoader.logger.warning(f"[!] {dataset_name} dataset is available at {MiscLoader.DATASETS[dataset_name].metadata.get('source', 'No link provided')}")
+            MiscLoader.logger.warning(f"[!] Please download the dataset folder manually from the provided link and extract it to: {dataset_cache_path}")
             return None
 
-        print(f"Loading dataset from: {dataset_cache_path}")
+        MiscLoader.logger.debug(f"Loading dataset from: {dataset_cache_path}")
 
         # Get dataset info and load data
         dataset_info = MiscLoader.DATASETS[dataset_name]
@@ -188,5 +186,3 @@ class MiscLoader(BaseLoader):
             targets=targets,
             task_type=dataset_info.task_type
         )
-
-

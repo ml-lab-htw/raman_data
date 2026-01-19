@@ -8,10 +8,13 @@ __all__ = [
 ]
 
 from typing import List, Optional, Union
+import logging
 
 from .types import RamanDataset
 from . import datasets
 from .types import TASK_TYPE
+
+logger = logging.getLogger(__name__)
 
 
 
@@ -37,8 +40,10 @@ def raman_data(
         - A list of dataset names if 'name' is None.
     """
     if dataset_name is None:
+        logger.info("Listing available datasets%s", f" filtered by {task_type.name}" if task_type else "")
         return datasets.list_datasets(task_type=task_type)
     else:
+        logger.info(f"Loading dataset: {dataset_name} (cache_dir={cache_dir})")
         return datasets.load_dataset(
             dataset_name=dataset_name,
             cache_dir=cache_dir,

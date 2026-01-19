@@ -128,7 +128,7 @@ class HuggingFaceLoader(BaseLoader):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.HuggingFace)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.HuggingFace)
 
-        logger.info(f"Downloading HuggingFace dataset: {dataset_name}")
+        logger.debug(f"Downloading HuggingFace dataset: {dataset_name}")
 
         datasets.load_dataset(
             path=dataset_name,
@@ -136,7 +136,7 @@ class HuggingFaceLoader(BaseLoader):
         )
 
         cache_path = cache_path if cache_path else "~/.cache/huggingface"
-        logger.info(f"Dataset downloaded into {cache_path}")
+        logger.debug(f"Dataset downloaded into {cache_path}")
 
         return cache_path
 
@@ -170,7 +170,7 @@ class HuggingFaceLoader(BaseLoader):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.HuggingFace)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.HuggingFace)
 
-        logger.info(
+        logger.debug(
             f"Loading HuggingFace dataset from "
             f"{cache_path if cache_path else 'default folder (~/.cache/huggingface)'}"
         )

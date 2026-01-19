@@ -333,10 +333,10 @@ class KaggleLoader(BaseLoader):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.HuggingFace)
 
-        logger.info(f"Downloading Kaggle dataset: {dataset_name}")
+        logger.debug(f"Downloading Kaggle dataset: {dataset_name}")
 
         path = dataset_download(handle=dataset_name, path=cache_path)
-        logger.info(f"Dataset downloaded into {path}")
+        logger.debug(f"Dataset downloaded into {path}")
 
         return path
 
@@ -369,7 +369,7 @@ class KaggleLoader(BaseLoader):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.HuggingFace)
 
-        logger.info(
+        logger.debug(
             f"Loading Kaggle dataset from "
             f"{cache_path if cache_path else 'default folder (~/.cache/kagglehub)'}"
         )

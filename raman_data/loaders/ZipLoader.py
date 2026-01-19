@@ -123,7 +123,7 @@ class ZipLoader(BaseLoader):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zip)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zip)
 
-        logger.info(f"Downloading dataset: {dataset_name}")
+        logger.debug(f"Downloading dataset: {dataset_name}")
 
         dataset_link = [
             link for link in ZipLoader.__LINKS if link.name == dataset_name
@@ -136,14 +136,14 @@ class ZipLoader(BaseLoader):
             hash_type=dataset_link.checksum_type,
         )
 
-        logger.info("Unzipping files...")
+        logger.debug("Unzipping files...")
 
         download_path = LoaderTools.extract_zip_file_content(
             zip_file_path=download_zip_path,
             unzip_target_subdir=dataset_name
         )
 
-        logger.info(f"Dataset downloaded into {download_path}")
+        logger.debug(f"Dataset downloaded into {download_path}")
 
         return download_path
 
@@ -182,7 +182,7 @@ class ZipLoader(BaseLoader):
                 cache_path=cache_path
             )
 
-        logger.info(f"Loading dataset from {cache_path}")
+        logger.debug(f"Loading dataset from {cache_path}")
 
         #* These methods could be useful for specific load() functions
         # Converting Excel files with pandas
