@@ -30,7 +30,7 @@ __DATASETS = {
     "chlange/FuelRamanSpectraBenchtop" : TASK_TYPE.Regression,
     'sugar mixtures' : TASK_TYPE.Regression,
     'Wheat lines' : TASK_TYPE.Classification,
-    'Adenine' : TASK_TYPE.Classification
+    'Adenine' : TASK_TYPE.Regression
 }
 
 

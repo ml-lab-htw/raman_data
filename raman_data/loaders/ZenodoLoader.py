@@ -260,7 +260,7 @@ class ZenodoLoader(BaseLoader):
             }
         ),
         "Adenine": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
+            task_type=TASK_TYPE.Regression,
             id="3572359",
             loader=__load_3572359,
             metadata={
