@@ -5,6 +5,7 @@ import logging
 
 from scipy.io import loadmat
 
+from raman_data.exceptions import CorruptedZipFileError
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR
 from raman_data.loaders.LoaderTools import LoaderTools
@@ -47,6 +48,96 @@ class MiscLoader(BaseLoader):
                 "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
                 "description": "Hyperspectral super-resolution dataset from DeepeR paper. Contains low-resolution input spectra and high-resolution target spectra for training super-resolution models.",
                 "license": "MIT License"
+            }
+        ),
+        "rruff_mineral_raw": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="rruff_mineral_raw",
+            loader=lambda df: MiscLoader._load_dtu_split(df, split="mineral_r"),
+            metadata={
+                "full_name": "RRUFF - Mineral (raw)",
+                "source": "https://data.dtu.dk/api/files/36144495",
+                "paper": [
+                    "https://www.rruff.net/wp-content/uploads/2023/04/HMC1-30.pdf",
+                    "https://doi.org/10.1039/D2AN00403H"
+                ],
+                "citation": [
+                    "Lafuente, B., Downs, R. T., Yang, H., & Stone, N. (2015). The power of databases: the RRUFF project. Highlights in Mineralogical Crystallography, T Armbruster and R M Danisi, Eds., Berlin, Germany, W. De Gruyter, 1–30."
+                ],
+                "description": "Mineral (raw) raman spectra subset from RRUFF database",
+                "license": "See paper"
+            }
+        ),
+        "rruff_mineral_preprocessed": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="rruff_mineral_preprocessed",
+            loader=lambda df: MiscLoader._load_dtu_split(df, split="mineral_p"),
+            metadata={
+                "full_name": "RRUFF - Mineral (preprocessed)",
+                "source": "https://data.dtu.dk/api/files/36144495",
+                "paper": [
+                    "https://www.rruff.net/wp-content/uploads/2023/04/HMC1-30.pdf",
+                    "https://doi.org/10.1039/D2AN00403H"
+                ],
+                "citation": [
+                    "Lafuente, B., Downs, R. T., Yang, H., & Stone, N. (2015). The power of databases: the RRUFF project. Highlights in Mineralogical Crystallography, T Armbruster and R M Danisi, Eds., Berlin, Germany, W. De Gruyter, 1–30."
+                ],
+                "description": "Mineral (preprocessed) raman spectra subset from RRUFF database",
+                "license": "See paper"
+            }
+        ),
+        "tlb_organic_raw": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="tlb_organic_raw",
+            loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_r"),
+            metadata={
+                "full_name": "Transfer-learning-based Raman spectra identification - Organic (raw)",
+                "source": "https://data.dtu.dk/api/files/36144495",
+                "paper": [
+                    "https://doi.org/10.1002/jrs.5750",
+                    "https://doi.org/10.1039/D2AN00403H"
+                ],
+                "citation": [
+                    "Zhang, Rui et al., Transfer-learning-based Raman spectra identification, Journal of Raman Spectroscopy, 2020, 51, 1, 176-186. https://doi.org/10.1002/jrs.5992"
+                ],
+                "description": "Organic (raw) dataset from Transfer-learningbased Raman spectra identification. Organic compounds measured with several excitation sources.",
+                "license": "See paper"
+            }
+        ),
+        "tlb_organic_preprocessed": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="tlb_organic_preprocessed",
+            loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_p"),
+            metadata={
+                "full_name": "Transfer-learning-based Raman spectra identification - Organic (preprocessed)",
+                "source": "https://data.dtu.dk/api/files/36144495",
+                "paper": [
+                    "https://doi.org/10.1002/jrs.5750",
+                    "https://doi.org/10.1039/D2AN00403H"
+                ],
+                "citation": [
+                    "Zhang, Rui et al., Transfer-learning-based Raman spectra identification, Journal of Raman Spectroscopy, 2020, 51, 1, 176-186. https://doi.org/10.1002/jrs.5992"
+                ],
+                "description": "Organic (preprocessed) dataset from Transfer-learningbased Raman spectra identification. Organic compounds measured with several excitation sources.",
+                "license": "See paper"
+            }
+        ),
+        "bacteria": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="bacteria",
+            loader=lambda df: MiscLoader._load_dtu_split(df, split="bacteria"),
+            metadata={
+                "full_name": "Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning",
+                "source": "https://data.dtu.dk/api/files/36144495",
+                "paper": [
+                    "https://doi.org/10.1038/s41467-019-12898-9",
+                    "http://dx.doi.org/10.1039/D2AN00403H"
+                ],
+                "citation": [
+                    "Ho, CS., Jean, N., Hogan, C.A. et al. Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Nat Commun 10, 4927 (2019)."
+                ],
+                "description": "Bacteria dataset from Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Bacterial Raman spectra described by Ho et al.",
+                "license": "See paper"
             }
         )
     }
@@ -158,15 +249,6 @@ class MiscLoader(BaseLoader):
         cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
         dataset_cache_path = os.path.join(cache_root, dataset_name)
 
-        # Try to open if not present
-        if not os.path.exists(dataset_cache_path) or not os.listdir(dataset_cache_path):
-            os.makedirs(dataset_cache_path, exist_ok=True)
-            MiscLoader.logger.warning(f"[!] Dataset not found in cache. Automatic donload is currently not supported for OneDrive datasets.")
-            MiscLoader.logger.warning(f"[!] Please download the dataset manually from the provided link.")
-            MiscLoader.logger.warning(f"[!] {dataset_name} dataset is available at {MiscLoader.DATASETS[dataset_name].metadata.get('source', 'No link provided')}")
-            MiscLoader.logger.warning(f"[!] Please download the dataset folder manually from the provided link and extract it to: {dataset_cache_path}")
-            return None
-
         MiscLoader.logger.debug(f"Loading dataset from: {dataset_cache_path}")
 
         # Get dataset info and load data
@@ -186,3 +268,59 @@ class MiscLoader(BaseLoader):
             targets=targets,
             task_type=dataset_info.task_type
         )
+
+    @staticmethod
+    def _load_dtu_split(cache_path: str, split: str) -> Optional[Tuple[np.ndarray, np.ndarray, np.ndarray]]:
+        """
+        Load a split from the DTU Raman Spectrum Matching dataset.
+        Args:
+            cache_path: Path to the cached dataset directory for this dataset split.
+            split: One of 'mineral_r', 'mineral_p', 'organic_r', 'organic_p', 'bacteria'.
+        Returns:
+            Tuple of (spectra, raman_shifts, targets) or None if files are missing.
+        """
+        # Shared download/extract root for all DTU splits
+        shared_root = os.path.join(os.path.dirname(cache_path), "dtu_raman_shared")
+        zip_path = os.path.join(shared_root, "dtu_raman.zip")
+        extracted_dir = os.path.join(shared_root, "dtu_raman")
+        os.makedirs(shared_root, exist_ok=True)
+
+        if (not os.path.exists(extracted_dir)) or (not os.path.exists(zip_path)) or (not LoaderTools.is_valid_zip(zip_path)):
+            if os.path.exists(zip_path):
+                try:
+                    os.remove(zip_path)
+                except Exception as e:
+                    MiscLoader.logger.error(f"[!] Failed to remove corrupted zip: {e}")
+
+            LoaderTools.download(
+                url="https://data.dtu.dk/api/files/36144495",
+                out_dir_path=shared_root,
+                out_file_name="dtu_raman.zip"
+            )
+            LoaderTools.extract_zip_file_content(zip_path, unzip_target_subdir="dtu_raman")
+
+            # Check again after re-download
+            if not LoaderTools.is_valid_zip(zip_path):
+                raise CorruptedZipFileError(zip_path)
+
+
+        # Map split to file names
+        split_files = {
+            "mineral_r": "mineral_raw.npz",
+            "mineral_p": "mineral_preprocessed.npz",
+            "organic_r": "organic_raw.npz",
+            "organic_p": "organic_preprocessed.npz",
+            "bacteria": "bacteria.npz"
+        }
+        if split not in split_files:
+            MiscLoader.logger.error(f"[!] Unknown DTU split: {split}")
+            return None
+        npz_file = os.path.join(extracted_dir, split_files[split])
+        if not os.path.exists(npz_file):
+            MiscLoader.logger.error(f"[!] Expected file not found: {npz_file}")
+            return None
+        data = np.load(npz_file, allow_pickle=True)
+        spectra = data["spectra"]
+        raman_shifts = data["raman_shifts"]
+        targets = data["labels"] if "labels" in data else data["targets"]
+        return spectra, raman_shifts, targets
