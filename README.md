@@ -62,7 +62,7 @@ print(f"Raman shift range: {dataset.min_shift} - {dataset.max_shift} cm⁻¹")
 print(metadata)
 ```
 
-For more detailed examples see [Demo Notebook](./demo.ipynb) or [Demo Script](./demo.py).
+For more detailed examples see [Demo Notebook](examples/demo.ipynb) or [Demo Script](examples/example_all.py).
 
 ## 📊 RamanDataset Class
 
