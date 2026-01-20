@@ -1,3 +1,4 @@
+import os
 from typing import Optional, Tuple
 import logging
 
@@ -58,11 +59,11 @@ class KaggleLoader(BaseLoader):
         )
 
         if id == "AGEs":
-            spectra = df.loc[1:, "Var802":].to_numpy().T
+            spectra = df.loc[1:, "Var802":].to_numpy()
             raman_shifts = df.loc[0, "Var802":].to_numpy()
             concentration = df.loc[1:, "AGEsID"].to_numpy()
         else:
-            spectra = df.loc[1:, "Var2":].to_numpy().T
+            spectra = df.loc[1:, "Var2":].to_numpy()
             raman_shifts = df.loc[0, "Var2":].to_numpy()
             concentration = df.loc[1:, "has_DM2"].to_numpy()
 
@@ -93,7 +94,7 @@ class KaggleLoader(BaseLoader):
             pandas_kwargs={"sheet_name": f"Sheet{id}"}
         )
 
-        spectra = df.loc[1:, 4.5:].to_numpy()
+        spectra = df.loc[1:, 4.5:].to_numpy().T
         raman_shifts = df.loc[1:, header[(int(id) - 1)]].to_numpy()
         concentration = np.array(df.columns.values[2:], dtype=float)
 
@@ -118,8 +119,6 @@ class KaggleLoader(BaseLoader):
             A tuple of (spectra, raman_shifts, labels) arrays,
             or None if parsing fails.
         """
-        import os
-
         file_handle = "andriitrelin/cells-raman-spectra"
 
         # Cell type labels (folder names)
@@ -133,6 +132,7 @@ class KaggleLoader(BaseLoader):
 
         all_spectra = []
         all_labels = []
+        raman_shifts = np.array([])
 
         for cell_type in cell_types:
             # Data is in the dataset_i subfolder
@@ -159,7 +159,12 @@ class KaggleLoader(BaseLoader):
         if not all_spectra:
             return None
 
+
         spectra = np.vstack(all_spectra)
+        
+        if spectra.shape[1] < spectra.shape[0]:
+            spectra = spectra.T
+
         labels = np.array(all_labels)
 
         return spectra, raman_shifts, labels

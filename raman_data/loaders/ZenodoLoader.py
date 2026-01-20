@@ -81,7 +81,7 @@ class ZenodoLoader(BaseLoader):
         if not os.path.isfile(data_path):
             raise FileNotFoundError(f"Could not find data.pkl in {data_path}")
 
-        spectra = pd.read_pickle(data_path).T
+        spectra = pd.read_pickle(data_path)
 
         # read raman shifts (wavenumbers) with pandas
         raman_shifts_path = os.path.join(data_folder, "spectral_axis.pkl")
@@ -195,7 +195,7 @@ class ZenodoLoader(BaseLoader):
                 #COM would 0, COM_125mM would 1, and so on
         #       y.append(np.repeat(i, data[dataset].shape[0]))
 
-        spectra = np.concatenate(spectra_list).T
+        spectra = np.concatenate(spectra_list)
 
         return spectra, raman_shifts, concentrations
 
@@ -222,7 +222,7 @@ class ZenodoLoader(BaseLoader):
         df = pd.read_csv(data_path)
         concentrations = df.pop("conc").to_numpy()
         raman_shifts = np.array(df.columns.values[8:], dtype=int)
-        spectra = df.loc[:, "400":].to_numpy().T
+        spectra = df.loc[:, "400":].to_numpy()
 
         return spectra, raman_shifts, concentrations
 
