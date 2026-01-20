@@ -281,7 +281,7 @@ class MiscLoader(BaseLoader):
         """
         # Shared download/extract root for all DTU splits
         shared_root = os.path.join(os.path.dirname(cache_path), "dtu_raman_shared")
-        zip_path = os.path.join(shared_root, "dtu_raman.zip")
+        zip_path = os.path.join(shared_root, "public_dataset.zip")
         extracted_dir = os.path.join(shared_root, "dtu_raman")
         os.makedirs(shared_root, exist_ok=True)
 
@@ -293,9 +293,9 @@ class MiscLoader(BaseLoader):
                     MiscLoader.logger.error(f"[!] Failed to remove corrupted zip: {e}")
 
             LoaderTools.download(
-                url="https://data.dtu.dk/api/files/36144495",
+                url="https://data.dtu.dk/api/files/36144495/content",
                 out_dir_path=shared_root,
-                out_file_name="dtu_raman.zip"
+                out_file_name="public_dataset.zip"
             )
             LoaderTools.extract_zip_file_content(zip_path, unzip_target_subdir="dtu_raman")
 
