@@ -274,3 +274,11 @@ class LoaderTools:
             return None
 
         return data_dict
+
+    @staticmethod
+    def is_valid_zip(path):
+        try:
+            with zipfile.ZipFile(path, "r"):
+                return True
+        except zipfile.BadZipFile:
+            return False
