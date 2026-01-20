@@ -122,24 +122,24 @@ class MiscLoader(BaseLoader):
                 "license": "See paper"
             }
         ),
-        "bacteria": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            id="bacteria",
-            loader=lambda df: MiscLoader._load_dtu_split(df, split="bacteria"),
-            metadata={
-                "full_name": "Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning",
-                "source": "https://data.dtu.dk/api/files/36144495",
-                "paper": [
-                    "https://doi.org/10.1038/s41467-019-12898-9",
-                    "http://dx.doi.org/10.1039/D2AN00403H"
-                ],
-                "citation": [
-                    "Ho, CS., Jean, N., Hogan, C.A. et al. Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Nat Commun 10, 4927 (2019)."
-                ],
-                "description": "Bacteria dataset from Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Bacterial Raman spectra described by Ho et al.",
-                "license": "See paper"
-            }
-        )
+        # "bacteria": DatasetInfo(
+        #     task_type=TASK_TYPE.Classification,
+        #     id="bacteria",
+        #     loader=lambda df: MiscLoader._load_dtu_split(df, split="bacteria"),
+        #     metadata={
+        #         "full_name": "Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning",
+        #         "source": "https://data.dtu.dk/api/files/36144495",
+        #         "paper": [
+        #             "https://doi.org/10.1038/s41467-019-12898-9",
+        #             "http://dx.doi.org/10.1039/D2AN00403H"
+        #         ],
+        #         "citation": [
+        #             "Ho, CS., Jean, N., Hogan, C.A. et al. Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Nat Commun 10, 4927 (2019)."
+        #         ],
+        #         "description": "Bacteria dataset from Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Bacterial Raman spectra described by Ho et al.",
+        #         "license": "See paper"
+        #     }
+        # )
     }
 
     logger = logging.getLogger(__name__)
@@ -270,22 +270,28 @@ class MiscLoader(BaseLoader):
         )
 
     @staticmethod
-    def _load_dtu_split(cache_path: str, split: str) -> Optional[Tuple[np.ndarray, np.ndarray, np.ndarray]]:
+    def _load_dtu_split(
+            cache_path: str,
+            split: str
+    ) -> Optional[Tuple[np.ndarray, np.ndarray, np.ndarray]]:
         """
-        Load a split from the DTU Raman Spectrum Matching dataset.
-        Args:
-            cache_path: Path to the cached dataset directory for this dataset split.
-            split: One of 'mineral_r', 'mineral_p', 'organic_r', 'organic_p', 'bacteria'.
-        Returns:
-            Tuple of (spectra, raman_shifts, targets) or None if files are missing.
+        Load a split from the DTU Raman Spectrum Matching dataset
+        using the *folder-based* raw layout.
         """
+
         # Shared download/extract root for all DTU splits
         shared_root = os.path.join(os.path.dirname(cache_path), "dtu_raman_shared")
         zip_path = os.path.join(shared_root, "public_dataset.zip")
-        extracted_dir = os.path.join(shared_root, "dtu_raman")
+        extracted_dir = os.path.join(shared_root, "public_dataset")
+
         os.makedirs(shared_root, exist_ok=True)
 
-        if (not os.path.exists(extracted_dir)) or (not os.path.exists(zip_path)) or (not LoaderTools.is_valid_zip(zip_path)):
+        # Download & extract if needed
+        if (
+                not os.path.exists(extracted_dir)
+                or not os.path.exists(zip_path)
+                or not LoaderTools.is_valid_zip(zip_path)
+        ):
             if os.path.exists(zip_path):
                 try:
                     os.remove(zip_path)
@@ -297,30 +303,88 @@ class MiscLoader(BaseLoader):
                 out_dir_path=shared_root,
                 out_file_name="public_dataset.zip"
             )
-            LoaderTools.extract_zip_file_content(zip_path, unzip_target_subdir="dtu_raman")
+            LoaderTools.extract_zip_file_content(
+                zip_path,
+                unzip_target_subdir="public_dataset"
+            )
 
-            # Check again after re-download
             if not LoaderTools.is_valid_zip(zip_path):
                 raise CorruptedZipFileError(zip_path)
 
-
-        # Map split to file names
-        split_files = {
-            "mineral_r": "mineral_raw.npz",
-            "mineral_p": "mineral_preprocessed.npz",
-            "organic_r": "organic_raw.npz",
-            "organic_p": "organic_preprocessed.npz",
-            "bacteria": "bacteria.npz"
+        # Map logical split → folder name in ZIP
+        split_dirs = {
+            "mineral_r": "mineral_raw",
+            "mineral_p": "mineral_preprocess",
+            "organic_r": "organic_raw",
+            "organic_p": "organic_preprocess",
+            # bacteria not present in your ZIP
         }
-        if split not in split_files:
+
+        if split not in split_dirs:
             MiscLoader.logger.error(f"[!] Unknown DTU split: {split}")
             return None
-        npz_file = os.path.join(extracted_dir, split_files[split])
-        if not os.path.exists(npz_file):
-            MiscLoader.logger.error(f"[!] Expected file not found: {npz_file}")
+
+        split_root = os.path.join(extracted_dir, split_dirs[split])
+
+        if not os.path.isdir(split_root):
+            MiscLoader.logger.error(f"[!] Expected directory not found: {split_root}")
             return None
-        data = np.load(npz_file, allow_pickle=True)
-        spectra = data["spectra"]
-        raman_shifts = data["raman_shifts"]
-        targets = data["labels"] if "labels" in data else data["targets"]
+
+        spectra = []
+        targets = []
+        raman_shifts = None
+
+        class_names = sorted(
+            d for d in os.listdir(split_root)
+            if os.path.isdir(os.path.join(split_root, d))
+        )
+
+        class_to_idx = {cls: i for i, cls in enumerate(class_names)}
+
+        for cls in class_names:
+            cls_dir = os.path.join(split_root, cls)
+
+            for fname in os.listdir(cls_dir):
+                if not fname.lower().endswith((".txt", ".csv", ".dat")):
+                    continue
+
+                fpath = os.path.join(cls_dir, fname)
+
+                try:
+                    data = np.loadtxt(fpath)
+
+                    # Case 1: intensity only
+                    if data.ndim == 1:
+                        intensity = data
+                        if raman_shifts is None:
+                            raman_shifts = np.arange(len(intensity))
+
+                    # Case 2: (shift, intensity)
+                    elif data.ndim == 2 and data.shape[1] >= 2:
+                        if raman_shifts is None:
+                            raman_shifts = data[:, 0]
+                        intensity = data[:, 1]
+
+                    else:
+                        MiscLoader.logger.warning(
+                            f"[!] Skipping unsupported file format: {fpath}"
+                        )
+                        continue
+
+                    spectra.append(intensity)
+                    targets.append(class_to_idx[cls])
+
+                except Exception as e:
+                    MiscLoader.logger.warning(
+                        f"[!] Failed to load spectrum {fpath}: {e}"
+                    )
+
+        if len(spectra) == 0:
+            MiscLoader.logger.error("[!] No spectra loaded")
+            return None
+
+        spectra = np.asarray(spectra, dtype=np.float32)
+        targets = np.asarray(targets, dtype=np.int64)
+        raman_shifts = np.asarray(raman_shifts, dtype=np.float32)
+
         return spectra, raman_shifts, targets
