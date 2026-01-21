@@ -156,11 +156,16 @@ Here is the list of datasets that are currently included in the package:
 |----------------------------|------------------|------------------------------------------------------------------|
 | `deepr_denoising`           | Denoising        | Raman spectral denoising dataset from DeepeR paper               |
 | `deepr_super_resolution`    | SuperResolution  | Hyperspectral super-resolution dataset from DeepeR paper         |
+| `rruff_mineral_raw`         | Classification   | Mineral (raw) Raman spectra subset from the DTU public dataset (RRUFF subset) |
+| `rruff_mineral_preprocessed`| Classification   | Mineral (preprocessed) Raman spectra subset from the DTU public dataset (RRUFF subset) |
+| `knowitall_organics_raw`    | Classification   | Organic compounds (raw) dataset from the DTU public dataset (Transfer-learning / KnowItAll benchmark) |
+| `knowitall_organics_preprocessed` | Classification | Organic compounds (preprocessed) dataset from the DTU public dataset |
 
 **Sources:**
 - [DeepeR: High-throughput molecular imaging via deep learning enabled Raman spectroscopy](https://github.com/conor-horgan/DeepeR?tab=readme-ov-file#dataset)
 - [Denoising Dataset (OneDrive)](https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9)
 - [Super-Resolution Dataset (OneDrive)](https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9)
+- [DTU public dataset for Raman Spectrum Matching (contains RRUFF / organics splits)](https://data.dtu.dk/api/files/36144495)
 
 ## 🎯 Milestones
 
