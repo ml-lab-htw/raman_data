@@ -78,7 +78,10 @@ class RamanDataset:
         Returns:
             int: The number of individual spectra (rows in the spectra array).
         """
-        return self.spectra.shape[0]
+        if isinstance(self.spectra, list):
+            return len(self.spectra)
+        else:
+            return self.spectra.shape[0]
 
     @property
     def n_frequencies(self) -> int:
@@ -89,6 +92,8 @@ class RamanDataset:
             int: The number of frequency/wavenumber points (columns in spectra array),
                  or 0 if spectra is 1-dimensional.
         """
+        if isinstance(self.spectra, list):
+            raise ValueError("spectra with multiple frequencies")
         return self.spectra.shape[1] if len(self.spectra.shape) > 1 else 0
 
     @property
@@ -99,6 +104,8 @@ class RamanDataset:
         Returns:
             int: The number of Raman shift/wavenumber values, or 0 if empty.
         """
+        if isinstance(self.spectra, list):
+            raise ValueError("spectra with multiple raman shifts")
         return self.raman_shifts.shape[0] if len(self.raman_shifts.shape) > 0 else 0
 
     @property
@@ -135,7 +142,7 @@ class RamanDataset:
                                         if the task type is Regression, None otherwise.
         """
         if self.task_type == TASK_TYPE.Regression:
-            return (np.min(self.targets), np.max(self.targets))
+            return np.min(self.targets), np.max(self.targets)
         return None
 
     @property
@@ -146,7 +153,10 @@ class RamanDataset:
         Returns:
             float: The minimum wavenumber/Raman shift value in cm⁻¹.
         """
-        return self.raman_shifts.min()
+        if isinstance(self.raman_shifts, list):
+            return min([rs.min() for rs in self.raman_shifts])
+        else:
+            return self.raman_shifts.min()
 
     @property
     def max_shift(self):
@@ -156,7 +166,10 @@ class RamanDataset:
         Returns:
             float: The maximum wavenumber/Raman shift value in cm⁻¹.
         """
-        return self.raman_shifts.max()
+        if isinstance(self.raman_shifts, list):
+            return max([rs.max() for rs in self.raman_shifts])
+        else:
+            return self.raman_shifts.max()
 
     def to_dataframe(self) -> pd.DataFrame:
         """
