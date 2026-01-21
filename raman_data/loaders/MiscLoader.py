@@ -1,7 +1,9 @@
+import pickle
 from typing import Optional, Tuple
 import os
 import numpy as np
 import logging
+import pandas as pd
 
 from scipy.io import loadmat
 
@@ -325,66 +327,132 @@ class MiscLoader(BaseLoader):
             return None
 
         split_root = os.path.join(extracted_dir, split_dirs[split])
-
         if not os.path.isdir(split_root):
             MiscLoader.logger.error(f"[!] Expected directory not found: {split_root}")
             return None
 
+        # Attempt to load spectra from spectra.obj first
+        obj_file = os.path.join(split_root, "spectra.obj")
+        if os.path.exists(obj_file):
+            with open(obj_file, "rb") as f:
+                data = pickle.load(f)
+
+                # Handle list of arrays (n_points, 2)
+                if len(data) > 0 and hasattr(data[0], 'shape') and data[0].ndim == 2 and data[0].shape[1] == 2:
+                    raman_shifts_list = [arr[:, 0] for arr in data]
+                    spectra_list = [arr[:, 1] for arr in data]
+                    lengths = [len(rs) for rs in raman_shifts_list]
+                    unique_lengths = set(lengths)
+                    # Load targets from CSVs as before
+                    csvs = [f for f in os.listdir(split_root) if f.endswith('.csv')]
+
+                    dfs = [pd.read_csv(os.path.join(split_root, f)) for f in csvs]
+                    df = pd.concat(dfs, ignore_index=True)
+                    minerals_txt = os.path.join(split_root, 'minerals.txt')
+                    with open(minerals_txt, 'r') as f2:
+                        class_names = [line.strip() for line in f2 if line.strip()]
+                    name_to_idx = {name.lower(): i for i, name in enumerate(class_names)}
+                    targets = df['name'].str.lower().map(name_to_idx).to_numpy()
+                    if len(unique_lengths) == 1:
+                        # All have the same length, check if values are the same
+                        all_equal = all(np.allclose(raman_shifts_list[0], rs) for rs in raman_shifts_list)
+                        if all_equal:
+                            # All raman_shifts are identical: return (n_samples, n_points) and (n_points,)
+                            raman_shifts = raman_shifts_list[0]
+                            spectra = np.stack(spectra_list)
+                        else:
+                            # All have the same length, but values differ: return (n_samples, n_points) for both
+                            MiscLoader.logger.warning("All spectra have the same length but raman_shifts values differ. Returning raman_shifts as 2D array.")
+                            raman_shifts = np.stack(raman_shifts_list).astype(np.float32)
+                            spectra = np.stack(spectra_list).astype(np.float32)
+                    else:
+                        # Inconsistent lengths, return as object arrays
+                        MiscLoader.logger.warning(f"Inconsistent raman_shifts lengths found: {dict((l, lengths.count(l)) for l in unique_lengths)}. Returning as object arrays.")
+                        raman_shifts = np.empty(len(raman_shifts_list), dtype=object)
+                        spectra = np.empty(len(spectra_list), dtype=object)
+                        for i, (rs, sp) in enumerate(zip(raman_shifts_list, spectra_list)):
+                            raman_shifts[i] = rs
+                            spectra[i] = sp
+                    return spectra, raman_shifts, targets
+
+                else:
+                    MiscLoader.logger.error(f"[!] Unknown spectra.obj format: {type(data)}")
+                    return None
+
+        # Otherwise, fall back to loading all CSV files
         spectra = []
         targets = []
         raman_shifts = None
 
-        class_names = sorted(
-            d for d in os.listdir(split_root)
-            if os.path.isdir(os.path.join(split_root, d))
-        )
+        # Simple label mapping based on filename prefixes
+        class_map = {}
+        class_idx = 0
 
-        class_to_idx = {cls: i for i, cls in enumerate(class_names)}
+        for fname in os.listdir(split_root):
+            if not fname.lower().endswith(".csv"):
+                continue
+            label_name = fname.split("_")[0]  # e.g., "excellent", "fair", "poor", etc.
+            if label_name not in class_map:
+                class_map[label_name] = class_idx
+                class_idx += 1
 
-        for cls in class_names:
-            cls_dir = os.path.join(split_root, cls)
-
-            for fname in os.listdir(cls_dir):
-                if not fname.lower().endswith((".txt", ".csv", ".dat")):
-                    continue
-
-                fpath = os.path.join(cls_dir, fname)
-
-                try:
-                    data = np.loadtxt(fpath)
-
-                    # Case 1: intensity only
-                    if data.ndim == 1:
-                        intensity = data
-                        if raman_shifts is None:
-                            raman_shifts = np.arange(len(intensity))
-
-                    # Case 2: (shift, intensity)
-                    elif data.ndim == 2 and data.shape[1] >= 2:
-                        if raman_shifts is None:
-                            raman_shifts = data[:, 0]
-                        intensity = data[:, 1]
-
-                    else:
-                        MiscLoader.logger.warning(
-                            f"[!] Skipping unsupported file format: {fpath}"
-                        )
-                        continue
-
-                    spectra.append(intensity)
-                    targets.append(class_to_idx[cls])
-
-                except Exception as e:
-                    MiscLoader.logger.warning(
-                        f"[!] Failed to load spectrum {fpath}: {e}"
-                    )
+            fpath = os.path.join(split_root, fname)
+            try:
+                data = np.loadtxt(fpath, delimiter=",")
+                if data.ndim == 1:
+                    intensity = data
+                    if raman_shifts is None:
+                        raman_shifts = np.arange(len(intensity))
+                else:
+                    intensity = data[:, 1]  # assume column 0 is shift, column 1 is intensity
+                    if raman_shifts is None:
+                        raman_shifts = data[:, 0]
+                spectra.append(intensity)
+                targets.append(class_map[label_name])
+            except Exception as e:
+                MiscLoader.logger.warning(f"[!] Failed to load {fpath}: {e}")
 
         if len(spectra) == 0:
             MiscLoader.logger.error("[!] No spectra loaded")
             return None
 
-        spectra = np.asarray(spectra, dtype=np.float32)
-        targets = np.asarray(targets, dtype=np.int64)
-        raman_shifts = np.asarray(raman_shifts, dtype=np.float32)
+        spectra = np.array(spectra, dtype=np.float32)
+        targets = np.array(targets, dtype=np.int64)
+        raman_shifts = np.array(raman_shifts, dtype=np.float32)
 
         return spectra, raman_shifts, targets
+
+    @staticmethod
+    def _load_public_dataset_mineral_raw(folder_path: str):
+        """
+        Load spectra, targets, and class names from public_dataset/mineral_raw.
+
+        Args:
+            folder_path: Path to the mineral_raw directory.
+
+        Returns:
+            spectra (np.ndarray), raman_shifts (None), targets (np.ndarray), class_names (list)
+        """
+        # 1. Load all CSVs
+        csvs = [f for f in os.listdir(folder_path) if f.endswith('.csv')]
+        dfs = [pd.read_csv(os.path.join(folder_path, f)) for f in csvs]
+        df = pd.concat(dfs, ignore_index=True)
+        # 2. Load class names
+        minerals_txt = os.path.join(folder_path, 'minerals.txt')
+        with open(minerals_txt, 'r') as f:
+            class_names = [line.strip() for line in f if line.strip()]
+        # 3. Load spectra.obj
+        spectra_path = os.path.join(folder_path, 'spectra.obj')
+        try:
+            with open(spectra_path, 'rb') as f:
+                spectra = pickle.load(f)
+        except Exception:
+            import numpy as np
+            spectra = np.load(spectra_path, allow_pickle=True)
+        # 4. Map mineral name to class index
+        name_to_idx = {name.lower(): i for i, name in enumerate(class_names)}
+        targets = df['name'].str.lower().map(name_to_idx).to_numpy()
+        # 5. raman_shifts is not available in this structure
+        raman_shifts = None
+        return spectra, raman_shifts, targets, class_names
+
