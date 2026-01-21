@@ -10,13 +10,11 @@ The submodules available are:
 - rruff
 - organic
 - bacteria
-- prepare_data
 """
 
 # Re-export submodules for convenient access
 from . import rruff
 from . import organic
 from . import bacteria
-from . import prepare_data
 
-__all__ = ["rruff", "organic", "bacteria", "prepare_data"]
+__all__ = ["rruff", "organic", "bacteria"]
