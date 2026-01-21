@@ -70,8 +70,8 @@ Each loaded dataset returns a `RamanDataset` object with the following attribute
 
 | Attribute/Property | Type | Description |
 |-------------------|------|-------------|
-| `spectra` | `np.ndarray` | Raman spectra intensity data (2D: samples × wavenumbers) |
-| `raman_shifts` | `np.ndarray` | Wavenumber/Raman shift values in cm⁻¹ (1D array) |
+| `spectra` | `np.ndarray` | Raman spectra intensity data (2D: samples × wavenumbers, or 2D/object array if variable) |
+| `raman_shifts` | `np.ndarray` | Wavenumber/Raman shift values in cm⁻¹ (1D array, or 2D/object array if variable) |
 | `targets` | `np.ndarray` | Target labels (classification) or values (regression) |
 | `metadata` | `dict` | Dataset metadata including source, paper, and description |
 | `name` | `str` | Name of the dataset |
@@ -84,6 +84,17 @@ Each loaded dataset returns a `RamanDataset` object with the following attribute
 | `target_range` | `tuple \| None` | (min, max) targets values (regression only) |
 | `min_shift` | `float` | Minimum Raman shift value |
 | `max_shift` | `float` | Maximum Raman shift value |
+
+**Support for Datasets with Multiple Raman Shifts:**
+
+- If all spectra share identical raman_shifts, `raman_shifts` is a 1D array and `spectra` is a 2D array (n_samples × n_points).
+- If all spectra have the same number of points but different raman_shift values, both `raman_shifts` and `spectra` are 2D arrays (n_samples × n_points).
+- If spectra have different numbers of points, both `raman_shifts` and `spectra` are returned as 1D object arrays, where each entry is a 1D array for that sample.
+- This allows the library to support real-world datasets with variable or non-uniform spectral grids.
+
+**Note:**
+- Downstream code should check the shape and dtype of `raman_shifts` and `spectra` to handle all cases robustly.
+- For machine learning, it is recommended to interpolate or pad spectra to a common grid if uniformity is required.
 
 The dataset can also be converted to a pandas DataFrame:
 
