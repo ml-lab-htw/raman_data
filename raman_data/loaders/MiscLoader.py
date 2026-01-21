@@ -1,16 +1,16 @@
+import logging
+import os
 import pickle
 from typing import Optional, Tuple
-import os
-import numpy as np
-import logging
-import pandas as pd
 
+import numpy as np
 from scipy.io import loadmat
 
+import raman_data.loaders.helper.rruff as rruff
 from raman_data.exceptions import CorruptedZipFileError
 from raman_data.loaders.BaseLoader import BaseLoader
-from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR
 from raman_data.loaders.LoaderTools import LoaderTools
+from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR
 
 
 class MiscLoader(BaseLoader):
@@ -26,32 +26,32 @@ class MiscLoader(BaseLoader):
 
     # Define DATASETS after class definition to avoid NameError
     DATASETS = {
-        "deepr_denoising": DatasetInfo(
-            task_type=TASK_TYPE.Denoising,
-            id="deepr_denoising",
-            loader=lambda df: MiscLoader._load_deepr_denoising(df),
-            metadata={
-                "full_name": "DeepeR Denoising Dataset",
-                "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9",
-                "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
-                "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
-                "description": "Raman spectral denoising dataset from DeepeR paper. Contains noisy input spectra and corresponding denoised target spectra for training deep learning denoising models.",
-                "license": "MIT License"
-            }
-        ),
-        "deepr_super_resolution": DatasetInfo(
-            task_type=TASK_TYPE.SuperResolution,
-            id="deepr_super_resolution",
-            loader=lambda df: MiscLoader._load_deepr_super_resolution(df),
-            metadata={
-                "full_name": "DeepeR Super-Resolution Dataset",
-                "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9",
-                "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
-                "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
-                "description": "Hyperspectral super-resolution dataset from DeepeR paper. Contains low-resolution input spectra and high-resolution target spectra for training super-resolution models.",
-                "license": "MIT License"
-            }
-        ),
+        # "deepr_denoising": DatasetInfo(
+        #     task_type=TASK_TYPE.Denoising,
+        #     id="deepr_denoising",
+        #     loader=lambda df: MiscLoader._load_deepr_denoising(df),
+        #     metadata={
+        #         "full_name": "DeepeR Denoising Dataset",
+        #         "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9",
+        #         "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
+        #         "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
+        #         "description": "Raman spectral denoising dataset from DeepeR paper. Contains noisy input spectra and corresponding denoised target spectra for training deep learning denoising models.",
+        #         "license": "MIT License"
+        #     }
+        # ),
+        # "deepr_super_resolution": DatasetInfo(
+        #     task_type=TASK_TYPE.SuperResolution,
+        #     id="deepr_super_resolution",
+        #     loader=lambda df: MiscLoader._load_deepr_super_resolution(df),
+        #     metadata={
+        #         "full_name": "DeepeR Super-Resolution Dataset",
+        #         "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9",
+        #         "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
+        #         "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
+        #         "description": "Hyperspectral super-resolution dataset from DeepeR paper. Contains low-resolution input spectra and high-resolution target spectra for training super-resolution models.",
+        #         "license": "MIT License"
+        #     }
+        # ),
         "rruff_mineral_raw": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="rruff_mineral_raw",
@@ -147,7 +147,7 @@ class MiscLoader(BaseLoader):
     logger = logging.getLogger(__name__)
 
     @staticmethod
-    def _load_deepr_denoising(cache_path: str) -> Optional[Tuple[np.ndarray, np.ndarray, np.ndarray]]:
+    def _load_deepr_denoising(cache_path: str) -> Optional[Tuple[np.ndarray, np.ndarray, np.ndarray, None]]:
         """
         Load the DeepeR denoising dataset from cache.
 
@@ -186,7 +186,7 @@ class MiscLoader(BaseLoader):
             inputs = np.vstack((train_inputs, test_inputs))
             outputs = np.vstack((train_outputs, test_outputs))
 
-            return inputs, axis, outputs
+            return inputs, axis, outputs, None
 
         except Exception as e:
             MiscLoader.logger.error(f"[!] Error loading dataset: {e}")
@@ -260,7 +260,7 @@ class MiscLoader(BaseLoader):
         if result is None:
             return None
 
-        spectra, raman_shifts, targets = result
+        spectra, raman_shifts, targets, class_names = result
 
         return RamanDataset(
             metadata=dataset_info.metadata,
@@ -268,24 +268,15 @@ class MiscLoader(BaseLoader):
             raman_shifts=raman_shifts,
             spectra=spectra,
             targets=targets,
-            task_type=dataset_info.task_type
+            task_type=dataset_info.task_type,
+            target_names=class_names,
         )
 
     @staticmethod
-    def _load_dtu_split(
-            cache_path: str,
-            split: str
-    ) -> Optional[Tuple[np.ndarray, np.ndarray, np.ndarray]]:
-        """
-        Load a split from the DTU Raman Spectrum Matching dataset
-        using the *folder-based* raw layout.
-        """
-
-        # Shared download/extract root for all DTU splits
+    def _load_dtu_split(cache_path: str, split: str):
         shared_root = os.path.join(os.path.dirname(cache_path), "dtu_raman_shared")
         zip_path = os.path.join(shared_root, "public_dataset.zip")
         extracted_dir = os.path.join(shared_root, "public_dataset")
-
         os.makedirs(shared_root, exist_ok=True)
 
         # Download & extract if needed
@@ -299,7 +290,6 @@ class MiscLoader(BaseLoader):
                     os.remove(zip_path)
                 except Exception as e:
                     MiscLoader.logger.error(f"[!] Failed to remove corrupted zip: {e}")
-
             LoaderTools.download(
                 url="https://data.dtu.dk/api/files/36144495/content",
                 out_dir_path=shared_root,
@@ -309,7 +299,6 @@ class MiscLoader(BaseLoader):
                 zip_path,
                 unzip_target_subdir="public_dataset"
             )
-
             if not LoaderTools.is_valid_zip(zip_path):
                 raise CorruptedZipFileError(zip_path)
 
@@ -319,140 +308,80 @@ class MiscLoader(BaseLoader):
             "mineral_p": "mineral_preprocess",
             "organic_r": "organic_raw",
             "organic_p": "organic_preprocess",
-            # bacteria not present in your ZIP
         }
-
         if split not in split_dirs:
             MiscLoader.logger.error(f"[!] Unknown DTU split: {split}")
             return None
-
         split_root = os.path.join(extracted_dir, split_dirs[split])
         if not os.path.isdir(split_root):
             MiscLoader.logger.error(f"[!] Expected directory not found: {split_root}")
             return None
 
-        # Attempt to load spectra from spectra.obj first
-        obj_file = os.path.join(split_root, "spectra.obj")
-        if os.path.exists(obj_file):
-            with open(obj_file, "rb") as f:
-                data = pickle.load(f)
-
-                # Handle list of arrays (n_points, 2)
-                if len(data) > 0 and hasattr(data[0], 'shape') and data[0].ndim == 2 and data[0].shape[1] == 2:
-                    raman_shifts_list = [arr[:, 0] for arr in data]
-                    spectra_list = [arr[:, 1] for arr in data]
-                    lengths = [len(rs) for rs in raman_shifts_list]
-                    unique_lengths = set(lengths)
-                    # Load targets from CSVs as before
-                    csvs = [f for f in os.listdir(split_root) if f.endswith('.csv')]
-
-                    dfs = [pd.read_csv(os.path.join(split_root, f)) for f in csvs]
-                    df = pd.concat(dfs, ignore_index=True)
-                    minerals_txt = os.path.join(split_root, 'minerals.txt')
-                    with open(minerals_txt, 'r') as f2:
-                        class_names = [line.strip() for line in f2 if line.strip()]
-                    name_to_idx = {name.lower(): i for i, name in enumerate(class_names)}
-                    targets = df['name'].str.lower().map(name_to_idx).to_numpy()
-                    if len(unique_lengths) == 1:
-                        # All have the same length, check if values are the same
-                        all_equal = all(np.allclose(raman_shifts_list[0], rs) for rs in raman_shifts_list)
-                        if all_equal:
-                            # All raman_shifts are identical: return (n_samples, n_points) and (n_points,)
-                            raman_shifts = raman_shifts_list[0]
-                            spectra = np.stack(spectra_list)
-                        else:
-                            # All have the same length, but values differ: return (n_samples, n_points) for both
-                            MiscLoader.logger.warning("All spectra have the same length but raman_shifts values differ. Returning raman_shifts as 2D array.")
-                            raman_shifts = np.stack(raman_shifts_list).astype(np.float32)
-                            spectra = np.stack(spectra_list).astype(np.float32)
-                    else:
-                        # Inconsistent lengths, return as object arrays
-                        MiscLoader.logger.warning(f"Inconsistent raman_shifts lengths found: {dict((l, lengths.count(l)) for l in unique_lengths)}. Returning as object arrays.")
-                        raman_shifts = np.empty(len(raman_shifts_list), dtype=object)
-                        spectra = np.empty(len(spectra_list), dtype=object)
-                        for i, (rs, sp) in enumerate(zip(raman_shifts_list, spectra_list)):
-                            raman_shifts[i] = rs
-                            spectra[i] = sp
-                    return spectra, raman_shifts, targets
-
+        # Use original repo IO for mineral and organic splits
+        if split in ("mineral_r", "mineral_p"):
+            if split == "mineral_r":
+                data = rruff.give_all_raw(split_root, print_info=True)
+            else:
+                csv_path = os.path.join(split_root, "excellent_unoriented_unoriented.csv")
+                data = rruff.give_subset_of_spectrums(csv_path, None, "preprocess", print_info=False)
+            minerals_txt = os.path.join(split_root, 'minerals.txt')
+            class_names = []
+            if os.path.exists(minerals_txt):
+                with open(minerals_txt, 'r') as f:
+                    class_names = [line.strip() for line in f if line.strip()]
+            name_to_idx = {name.lower(): i for i, name in enumerate(class_names)} if class_names else {}
+            targets = data['name'].str.lower().map(name_to_idx).to_numpy() if name_to_idx else np.zeros(len(data), dtype=int)
+            spectra_path = os.path.join(split_root, 'spectra.obj')
+            with open(spectra_path, "rb") as f:
+                spectra_data = pickle.load(f)
+            raman_shifts_list = [arr[:, 0] for arr in spectra_data]
+            spectra_list = [arr[:, 1] for arr in spectra_data]
+            lengths = [len(rs) for rs in raman_shifts_list]
+            unique_lengths = set(lengths)
+            if len(unique_lengths) == 1:
+                all_equal = all(np.allclose(raman_shifts_list[0], rs) for rs in raman_shifts_list)
+                if all_equal:
+                    raman_shifts = raman_shifts_list[0]
+                    spectra = np.stack(spectra_list)
                 else:
-                    MiscLoader.logger.error(f"[!] Unknown spectra.obj format: {type(data)}")
-                    return None
+                    raman_shifts = np.stack(raman_shifts_list).astype(np.float32)
+                    spectra = np.stack(spectra_list).astype(np.float32)
+            else:
+                raman_shifts = raman_shifts_list
+                spectra = spectra_list
 
-        # Otherwise, fall back to loading all CSV files
-        spectra = []
-        targets = []
-        raman_shifts = None
+            return spectra, raman_shifts, targets, class_names
 
-        # Simple label mapping based on filename prefixes
-        class_map = {}
-        class_idx = 0
-
-        for fname in os.listdir(split_root):
-            if not fname.lower().endswith(".csv"):
-                continue
-            label_name = fname.split("_")[0]  # e.g., "excellent", "fair", "poor", etc.
-            if label_name not in class_map:
-                class_map[label_name] = class_idx
-                class_idx += 1
-
-            fpath = os.path.join(split_root, fname)
-            try:
-                data = np.loadtxt(fpath, delimiter=",")
-                if data.ndim == 1:
-                    intensity = data
-                    if raman_shifts is None:
-                        raman_shifts = np.arange(len(intensity))
+        elif split in ("organic_r", "organic_p"):
+            import raman_data.loaders.helper.organic as organic
+            preprocess = (split == "organic_p")
+            [tr_spectra, tr_label], _ = organic.get_target_data_with_randomleaveone(split_root, preprocess, random_leave_one_out=False)
+            org_txt = os.path.join(split_root, 'organic.txt')
+            class_names = []
+            if os.path.exists(org_txt):
+                with open(org_txt, 'r') as f:
+                    class_names = [line.strip() for line in f if line.strip()]
+            else:
+                class_names = sorted(list(set(tr_label)))
+            name_to_idx = {str(name).lower(): i for i, name in enumerate(class_names)} if class_names else {}
+            targets = np.array([name_to_idx.get(str(lbl).lower(), 0) for lbl in tr_label])
+            raman_shifts_list = [arr[:, 0] for arr in tr_spectra]
+            spectra_list = [arr[:, 1] for arr in tr_spectra]
+            lengths = [len(rs) for rs in raman_shifts_list]
+            unique_lengths = set(lengths)
+            if len(unique_lengths) == 1:
+                all_equal = all(np.allclose(raman_shifts_list[0], rs) for rs in raman_shifts_list)
+                if all_equal:
+                    raman_shifts = raman_shifts_list[0]
+                    spectra = np.stack(spectra_list)
                 else:
-                    intensity = data[:, 1]  # assume column 0 is shift, column 1 is intensity
-                    if raman_shifts is None:
-                        raman_shifts = data[:, 0]
-                spectra.append(intensity)
-                targets.append(class_map[label_name])
-            except Exception as e:
-                MiscLoader.logger.warning(f"[!] Failed to load {fpath}: {e}")
-
-        if len(spectra) == 0:
-            MiscLoader.logger.error("[!] No spectra loaded")
-            return None
-
-        spectra = np.array(spectra, dtype=np.float32)
-        targets = np.array(targets, dtype=np.int64)
-        raman_shifts = np.array(raman_shifts, dtype=np.float32)
-
-        return spectra, raman_shifts, targets
-
-    @staticmethod
-    def _load_public_dataset_mineral_raw(folder_path: str):
-        """
-        Load spectra, targets, and class names from public_dataset/mineral_raw.
-
-        Args:
-            folder_path: Path to the mineral_raw directory.
-
-        Returns:
-            spectra (np.ndarray), raman_shifts (None), targets (np.ndarray), class_names (list)
-        """
-        # 1. Load all CSVs
-        csvs = [f for f in os.listdir(folder_path) if f.endswith('.csv')]
-        dfs = [pd.read_csv(os.path.join(folder_path, f)) for f in csvs]
-        df = pd.concat(dfs, ignore_index=True)
-        # 2. Load class names
-        minerals_txt = os.path.join(folder_path, 'minerals.txt')
-        with open(minerals_txt, 'r') as f:
-            class_names = [line.strip() for line in f if line.strip()]
-        # 3. Load spectra.obj
-        spectra_path = os.path.join(folder_path, 'spectra.obj')
-        try:
-            with open(spectra_path, 'rb') as f:
-                spectra = pickle.load(f)
-        except Exception:
-            import numpy as np
-            spectra = np.load(spectra_path, allow_pickle=True)
-        # 4. Map mineral name to class index
-        name_to_idx = {name.lower(): i for i, name in enumerate(class_names)}
-        targets = df['name'].str.lower().map(name_to_idx).to_numpy()
-        # 5. raman_shifts is not available in this structure
-        raman_shifts = None
-        return spectra, raman_shifts, targets, class_names
+                    raman_shifts = np.stack(raman_shifts_list).astype(np.float32)
+                    spectra = np.stack(spectra_list).astype(np.float32)
+            else:
+                raman_shifts = np.empty(len(raman_shifts_list), dtype=object)
+                spectra = np.empty(len(spectra_list), dtype=object)
+                for i, (rs, sp) in enumerate(zip(raman_shifts_list, spectra_list)):
+                    raman_shifts[i] = rs
+                    spectra[i] = sp
+            return spectra, raman_shifts, targets, class_names
 
