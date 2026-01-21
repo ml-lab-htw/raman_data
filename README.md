@@ -102,70 +102,63 @@ The dataset can also be converted to a pandas DataFrame:
 df = dataset.to_dataframe()
 ```
 
-## 📚 Available Datasets
-
-Here is the list of datasets that are currently included in the package:
-
-### Kaggle Datasets
-| Dataset Name | Task Type | Description |
-|-------------|-----------|-------------|
-| `codina/diabetes/AGEs` | Classification | Diabetes detection using AGEs spectroscopy |
-| `codina/diabetes/earLobe` | Classification | Diabetes detection from ear lobe |
-| `codina/diabetes/innerArm` | Classification | Diabetes detection from inner arm |
-| `codina/diabetes/thumbNail` | Classification | Diabetes detection from thumbnail |
-| `codina/diabetes/vein` | Classification | Diabetes detection from vein |
-| `sergioalejandrod/AminoAcids/glycine` | Classification | Amino acid (glycine) spectroscopy |
-| `sergioalejandrod/AminoAcids/leucine` | Classification | Amino acid (leucine) spectroscopy |
-| `sergioalejandrod/AminoAcids/phenylalanine` | Classification | Amino acid (phenylalanine) spectroscopy |
-| `sergioalejandrod/AminoAcids/tryptophan` | Classification | Amino acid (tryptophan) spectroscopy |
-| `andriitrelin/cells-raman-spectra/COOH` | Classification | Cell type classification (COOH functionalized) |
-| `andriitrelin/cells-raman-spectra/NH2` | Classification | Cell type classification (NH2 functionalized) |
-| `andriitrelin/cells-raman-spectra/(COOH)2` | Classification | Cell type classification ((COOH)2 functionalized) |
-
-**Sources:**
-- [Diabetes Spectroscopy](https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes)
-- [Amino Acids Spectroscopy](https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy)
-- [Cells Raman Spectra](https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra)
+<!-- DATASETS_TABLE_START -->
+<!-- AUTO-GENERATED: START - datasets table. Do not edit manually. -->
 
 ### Hugging Face Datasets
+
 | Dataset Name | Task Type | Description |
 |-------------|-----------|-------------|
-| `chlange/SubstrateMixRaman` | Regression | Substrate mixture concentration prediction |
-| `chlange/RamanSpectraEcoliFermentation` | Regression | E. coli fermentation monitoring |
-| `chlange/FuelRamanSpectraBenchtop` | Regression | Fuel property prediction |
+| `chlange/FuelRamanSpectraBenchtop` | Regression | This dataset contains Raman spectra for the analysis and prediction of key parameters in commercial fuel samples (gasoline). It includes spectra of 179 fuel samples from various refineries. |
+| `chlange/RamanSpectraEcoliFermentation` | Regression | Dataset Card for Raman Spectra from High-Throughput Bioprocess Fermentations of E. Coli. Raman spectra were obtained during an E. coli fermentation process consisting of a batch and a glucose-limited feeding phase, each lasting about four hours. Samples were automatically collected hourly, centrifug |
+| `chlange/SubstrateMixRaman` | Regression | This dataset, designed for biotechnological applications, provides a valuable resource for calibrating models used in high-throughput bioprocess development, particularly for bacterial fermentations. It features Raman spectra of samples containing varying, statistically independent concentrations of |
+| `HTW-KI-Werkstatt/FuelRamanSpectraHandheld` | Regression | Handheld Raman spectra for fuel analysis. Structure similar to FuelRamanSpectraBenchtop. |
 
-**Sources:**
-- [Substrate Mix Raman](https://huggingface.co/datasets/chlange/SubstrateMixRaman)
-- [Ecoli Fermentation](https://huggingface.co/datasets/chlange/RamanSpectraEcoliFermentation)
-- [Fuel Spectra Benchtop](https://huggingface.co/datasets/chlange/FuelRamanSpectraBenchtop)
+### Kaggle Datasets
 
-### Zenodo Datasets
 | Dataset Name | Task Type | Description |
 |-------------|-----------|-------------|
-| `sugar mixtures` | Regression | Hyperspectral unmixing of sugar mixtures |
-| `Wheat lines` | Classification | Wheat line differentiation |
-| `Adenine` | Classification | SERS quantitative analysis interlaboratory study |
-
-**Sources:**
-- [Hyperspectral Unmixing](https://zenodo.org/records/10779223)
-- [Mutant Wheat Lines](https://zenodo.org/records/7644521)
-- [Surface Enhanced Spectroscopy](https://zenodo.org/records/3572359)
+| `andriitrelin/cells-raman-spectra/(COOH)2` | Classification | SERS spectra of melanoma cells, melanocytes, fibroblasts, and culture medium collected on gold nanourchins functionalized with (COOH)2 moiety. Contains 12 cell type classes for classification. |
+| `andriitrelin/cells-raman-spectra/COOH` | Classification | SERS spectra of melanoma cells, melanocytes, fibroblasts, and culture medium collected on gold nanourchins functionalized with COOH moiety. Contains 12 cell type classes for classification. |
+| `andriitrelin/cells-raman-spectra/NH2` | Classification | SERS spectra of melanoma cells, melanocytes, fibroblasts, and culture medium collected on gold nanourchins functionalized with NH2 moiety. Contains 12 cell type classes for classification. |
+| `codina/diabetes/AGEs` | Classification | This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy. |
+| `codina/diabetes/earLobe` | Classification | This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy. |
+| `codina/diabetes/innerArm` | Classification | This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy. |
+| `codina/diabetes/thumbNail` | Classification | This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy. |
+| `codina/diabetes/vein` | Classification | This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy. |
+| `sergioalejandrod/AminoAcids/glycine` | Classification | This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method. |
+| `sergioalejandrod/AminoAcids/leucine` | Classification | This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method. |
+| `sergioalejandrod/AminoAcids/phenylalanine` | Classification | This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method. |
+| `sergioalejandrod/AminoAcids/tryptophan` | Classification | This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method. |
 
 ### Miscellaneous Datasets
-| Dataset Name                | Task Type        | Description                                                      |
-|----------------------------|------------------|------------------------------------------------------------------|
-| `deepr_denoising`           | Denoising        | Raman spectral denoising dataset from DeepeR paper               |
-| `deepr_super_resolution`    | SuperResolution  | Hyperspectral super-resolution dataset from DeepeR paper         |
-| `rruff_mineral_raw`         | Classification   | Mineral (raw) Raman spectra subset from the DTU public dataset (RRUFF subset) |
-| `rruff_mineral_preprocessed`| Classification   | Mineral (preprocessed) Raman spectra subset from the DTU public dataset (RRUFF subset) |
-| `knowitall_organics_raw`    | Classification   | Organic compounds (raw) dataset from the DTU public dataset (Transfer-learning / KnowItAll benchmark) |
-| `knowitall_organics_preprocessed` | Classification | Organic compounds (preprocessed) dataset from the DTU public dataset |
 
-**Sources:**
-- [DeepeR: High-throughput molecular imaging via deep learning enabled Raman spectroscopy](https://github.com/conor-horgan/DeepeR?tab=readme-ov-file#dataset)
-- [Denoising Dataset (OneDrive)](https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9)
-- [Super-Resolution Dataset (OneDrive)](https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9)
-- [DTU public dataset for Raman Spectrum Matching (contains RRUFF / organics splits)](https://data.dtu.dk/api/files/36144495)
+| Dataset Name | Task Type | Description |
+|-------------|-----------|-------------|
+| `knowitall_organics_preprocessed` | Classification | Organic (preprocessed) dataset from Transfer-learningbased Raman spectra identification. Organic compounds measured with several excitation sources. |
+| `knowitall_organics_raw` | Classification | Organic (raw) dataset from Transfer-learningbased Raman spectra identification. Organic compounds measured with several excitation sources. |
+| `rruff_mineral_preprocessed` | Classification | Mineral (preprocessed) raman spectra subset from RRUFF database |
+| `rruff_mineral_raw` | Classification | Mineral (raw) raman spectra subset from RRUFF database |
+
+### Zenodo Datasets
+
+| Dataset Name | Task Type | Description |
+|-------------|-----------|-------------|
+| `Adenine` | Regression | This dataset contains all the spectra used in "Surface Enhanced Raman Spectroscopy for quantitative analysis: results of a large-scale European multi-instrument interlaboratory study". Data are available in 2 different formats: - a compressed archive with 1 folder ("Dataset") cointaining all the 351 |
+| `sugar mixtures` | Regression | Experimental and synthetic Raman data used in Georgiev et al., PNAS (2024) DOI:10.1073/pnas.2407439121. |
+| `Wheat lines` | Classification | Data and codes used in the manuscript titled "DIFFERENTIATION OF ADVANCED GENERATION MUTANT WHEAT LINES: CONVENTIONAL TECHNIQUES VERSUS RAMAN SPECTROSCOPY". The decision tree model is trained and tested using the Classification Learner app of MATLAB (R2021b, The MathWorks, Inc.). |
+
+### Zip/URL Datasets
+
+| Dataset Name | Task Type | Description |
+|-------------|-----------|-------------|
+| `csho33_bacteria_id` | Classification |  |
+| `dtu_raman-spectrum-matching` | Classification |  |
+| `mendeley_surface-enhanced-raman` | Classification |  |
+| `MIND-Lab_covid+pd_ad_bundle` | Classification |  |
+
+<!-- AUTO-GENERATED: END - datasets table. -->
+<!-- DATASETS_TABLE_END -->
 
 ## 🎯 Milestones
 
