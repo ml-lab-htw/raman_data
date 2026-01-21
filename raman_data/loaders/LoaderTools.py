@@ -97,14 +97,13 @@ class LoaderTools:
 
         return check
 
-
     @staticmethod
     def download(
-        url: str,
-        out_dir_path: str,
-        out_file_name: str,
-        hash_target: Optional[str] = None,
-        hash_type: Optional[HASH_TYPE] = None
+            url: str,
+            out_dir_path: str,
+            out_file_name: str,
+            hash_target: Optional[str] = None,
+            hash_type: Optional[HASH_TYPE] = None
     ) -> str | None:
         """
         Download files from a URL with optional hash verification
@@ -135,46 +134,57 @@ class LoaderTools:
         # size of a download package is set to 1MB
         # so that not the entire date gets loaded in to ram an once
         CHUNK_SIZE = 1048576
-
         checksum = hash_type.value() if hash_type else HASH_TYPE.md5.value()
 
-        # http get request
-        with requests.get(url=url, stream=True) as response:
-            # if its failed raise error
-            if not response.ok:
-                raise requests.HTTPError(response=response)
-            # total size of the to download data
+        headers = {
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "*/*",
+        }
+
+        os.makedirs(out_dir_path, exist_ok=True)
+        out_file_path = os.path.join(out_dir_path, out_file_name)
+
+        # DO NOT trust existing files blindly
+        if os.path.exists(out_file_path):
+            os.remove(out_file_path)
+
+        with requests.get(
+                url=url,
+                headers=headers,
+                stream=True,
+                allow_redirects=True,
+                timeout=60,
+        ) as response:
+
+            response.raise_for_status()
+
             total_size = (
-                int(response.headers["Content-Length"])
-                if "Content-Length" in response.headers
-                else None
+                    int(response.headers.get("Content-Length", 0)) or None
             )
 
-            os.makedirs(out_dir_path, exist_ok=True)
-            out_file_path = os.path.join(out_dir_path, out_file_name)
-            if os.path.exists(out_file_path):
-                return out_file_path
-
-            # open/create file to write the data to
-            with open(out_file_path, "xb+") as file:
-                # displays a loading bar in the cli
+            with open(out_file_path, "wb") as file:
                 with tqdm(
-                    total=total_size,
-                    unit="B",
-                    unit_scale=True,
-                    desc=f"Downloading file {out_file_name}",
+                        total=total_size,
+                        unit="B",
+                        unit_scale=True,
+                        desc=f"Downloading file {out_file_name}",
                 ) as pbar:
-                    # writes chunks with predefined size into the file
+
                     for chunk in response.iter_content(CHUNK_SIZE):
                         if chunk:
                             file.write(chunk)
-                            # calculate checksum
                             checksum.update(chunk)
                             pbar.update(len(chunk))
 
-        # check the calculated checksum with the given one,
-        # if its a mismatch raise an Error
-        if hash_target and (checksum.hexdigest() != hash_target):
+        # ZIP magic-byte validation
+        with open(out_file_path, "rb") as f:
+            if f.read(4) != b"PK\x03\x04":
+                os.remove(out_file_path)
+                raise CorruptedZipFileError(
+                    f"{out_file_path} is not a ZIP (likely HTML/JSON response)"
+                )
+
+        if hash_target and checksum.hexdigest() != hash_target:
             os.remove(out_file_path)
             raise ChecksumError(
                 expected_checksum=hash_target,
@@ -182,7 +192,6 @@ class LoaderTools:
             )
 
         return out_file_path
-
 
     @staticmethod
     def extract_zip_file_content(
