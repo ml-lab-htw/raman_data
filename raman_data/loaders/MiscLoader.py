@@ -10,6 +10,7 @@ import raman_data.loaders.helper.rruff as rruff
 from raman_data.exceptions import CorruptedZipFileError
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
+from raman_data.loaders.helper import organic
 from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR
 
 
@@ -88,9 +89,9 @@ class MiscLoader(BaseLoader):
                 "license": "See paper"
             }
         ),
-        "tlb_organic_raw": DatasetInfo(
+        "knowitall_organics_raw": DatasetInfo(
             task_type=TASK_TYPE.Classification,
-            id="tlb_organic_raw",
+            id="knowitall_organics_raw",
             loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_r"),
             metadata={
                 "full_name": "Transfer-learning-based Raman spectra identification - Organic (raw)",
@@ -106,9 +107,9 @@ class MiscLoader(BaseLoader):
                 "license": "See paper"
             }
         ),
-        "tlb_organic_preprocessed": DatasetInfo(
+        "knowitall_organics_preprocessed": DatasetInfo(
             task_type=TASK_TYPE.Classification,
-            id="tlb_organic_preprocessed",
+            id="knowitall_organics_preprocessed",
             loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_p"),
             metadata={
                 "full_name": "Transfer-learning-based Raman spectra identification - Organic (preprocessed)",
@@ -309,33 +310,41 @@ class MiscLoader(BaseLoader):
             "organic_r": "organic_raw",
             "organic_p": "organic_preprocess",
         }
+
         if split not in split_dirs:
             MiscLoader.logger.error(f"[!] Unknown DTU split: {split}")
             return None
+
         split_root = os.path.join(extracted_dir, split_dirs[split])
         if not os.path.isdir(split_root):
             MiscLoader.logger.error(f"[!] Expected directory not found: {split_root}")
             return None
 
+        split_root_raw = split_root.replace("preprocess", "raw")
+        if not os.path.isdir(split_root_raw):
+            MiscLoader.logger.error(f"[!] Expected directory not found: {split_root_raw}")
+            return None
+
         # Use original repo IO for mineral and organic splits
         if split in ("mineral_r", "mineral_p"):
+
             if split == "mineral_r":
                 data = rruff.give_all_raw(split_root, print_info=True)
             else:
                 csv_path = os.path.join(split_root, "excellent_unoriented_unoriented.csv")
-                data = rruff.give_subset_of_spectrums(csv_path, None, "preprocess", print_info=False)
-            minerals_txt = os.path.join(split_root, 'minerals.txt')
-            class_names = []
-            if os.path.exists(minerals_txt):
-                with open(minerals_txt, 'r') as f:
-                    class_names = [line.strip() for line in f if line.strip()]
-            name_to_idx = {name.lower(): i for i, name in enumerate(class_names)} if class_names else {}
-            targets = data['name'].str.lower().map(name_to_idx).to_numpy() if name_to_idx else np.zeros(len(data), dtype=int)
+                data = rruff.give_subset_of_spectrums(csv_path, None, "preprocess", print_info=True)
+
+            class_names = list(data['name'].unique())
+            name_to_idx = {name: i for i, name in enumerate(class_names)} if class_names else {}
+            targets = data['name'].map(name_to_idx).to_numpy() if name_to_idx else np.zeros(len(data), dtype=int)
+
             spectra_path = os.path.join(split_root, 'spectra.obj')
             with open(spectra_path, "rb") as f:
                 spectra_data = pickle.load(f)
+
             raman_shifts_list = [arr[:, 0] for arr in spectra_data]
             spectra_list = [arr[:, 1] for arr in spectra_data]
+
             lengths = [len(rs) for rs in raman_shifts_list]
             unique_lengths = set(lengths)
             if len(unique_lengths) == 1:
@@ -352,36 +361,17 @@ class MiscLoader(BaseLoader):
 
             return spectra, raman_shifts, targets, class_names
 
-        elif split in ("organic_r", "organic_p"):
-            import raman_data.loaders.helper.organic as organic
-            preprocess = (split == "organic_p")
-            [tr_spectra, tr_label], _ = organic.get_target_data_with_randomleaveone(split_root, preprocess, random_leave_one_out=False)
-            org_txt = os.path.join(split_root, 'organic.txt')
-            class_names = []
-            if os.path.exists(org_txt):
-                with open(org_txt, 'r') as f:
-                    class_names = [line.strip() for line in f if line.strip()]
-            else:
-                class_names = sorted(list(set(tr_label)))
-            name_to_idx = {str(name).lower(): i for i, name in enumerate(class_names)} if class_names else {}
-            targets = np.array([name_to_idx.get(str(lbl).lower(), 0) for lbl in tr_label])
-            raman_shifts_list = [arr[:, 0] for arr in tr_spectra]
-            spectra_list = [arr[:, 1] for arr in tr_spectra]
-            lengths = [len(rs) for rs in raman_shifts_list]
-            unique_lengths = set(lengths)
-            if len(unique_lengths) == 1:
-                all_equal = all(np.allclose(raman_shifts_list[0], rs) for rs in raman_shifts_list)
-                if all_equal:
-                    raman_shifts = raman_shifts_list[0]
-                    spectra = np.stack(spectra_list)
-                else:
-                    raman_shifts = np.stack(raman_shifts_list).astype(np.float32)
-                    spectra = np.stack(spectra_list).astype(np.float32)
-            else:
-                raman_shifts = np.empty(len(raman_shifts_list), dtype=object)
-                spectra = np.empty(len(spectra_list), dtype=object)
-                for i, (rs, sp) in enumerate(zip(raman_shifts_list, spectra_list)):
-                    raman_shifts[i] = rs
-                    spectra[i] = sp
+        elif split == "organic_r":
+
+            spectra, raman_shifts, targets = organic.get_raw_data(split_root)
+            class_names = [str(i) for i in range(len(np.unique(targets)))]
             return spectra, raman_shifts, targets, class_names
 
+        elif split == "organic_p":
+
+            spectra, raman_shifts, targets = organic.get_preprocessed_data(split_root)
+            class_names = [str(i) for i in range(len(np.unique(targets)))]
+            return spectra, raman_shifts, targets, class_names
+
+        else:
+            raise ValueError(f"Unknown DTU split: {split}")
