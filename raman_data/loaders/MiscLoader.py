@@ -592,6 +592,8 @@ class MiscLoader(BaseLoader):
         targets = np.array(targets, dtype=int)
 
 
+        # Guard: ensure first_rs is defined for later use in all_equal branch
+        first_rs = None
         if len(raman_shifts_list) > 0:
             try:
                 first_rs = raman_shifts_list[0]
@@ -640,17 +642,7 @@ class MiscLoader(BaseLoader):
         # Use Dropbox direct-download URL (dl=1)
         dl_url = "https://www.dropbox.com/scl/fo/fb29ihfnvishuxlnpgvhg/AJToUtts-vjYdwZGeqK4k-Y?rlkey=r4p070nsuei6qj3pjp13nwf6l&dl=1"
 
-        try:
-            LoaderTools.download(url=dl_url, out_dir_path=shared_root, out_file_name=zip_name)
-        except Exception as e:
-            MiscLoader.logger.error(f"[!] Failed to download csho33 dataset: {e}")
-            return None
-
-        extracted_dir = LoaderTools.extract_zip_file_content(zip_path, unzip_target_subdir="csho33_bacteria")
-        if extracted_dir is None:
-            MiscLoader.logger.error("[!] Failed to extract csho33 zip")
-            return None
-
+        # Files we expect to find somewhere under the extracted tree
         required = [
             "X_finetune.npy", "y_finetune.npy",
             "X_test.npy", "y_test.npy",
@@ -658,30 +650,107 @@ class MiscLoader(BaseLoader):
             "X_2019clinical.npy", "y_2019clinical.npy",
         ]
 
-        for fname in required:
-            if not os.path.exists(os.path.join(extracted_dir, fname)):
-                MiscLoader.logger.error(f"[!] Missing expected file in data/: {fname}")
+        def find_dir_with_files(root_dir: str, filenames: list[str]) -> str | None:
+            for root, dirs, files in os.walk(root_dir):
+                if all(fname in files for fname in filenames):
+                    return root
+            return None
+
+        # If the extracted folder already exists and contains our files, reuse it.
+        extracted_dir = os.path.join(shared_root, "csho33_bacteria")
+        data_root = find_dir_with_files(extracted_dir, required) if os.path.isdir(extracted_dir) else None
+
+        # If not found under the extracted dir, try scanning the shared_root and the wider cache_root
+        if data_root is None:
+            data_root = find_dir_with_files(shared_root, required)
+        if data_root is None:
+            data_root = find_dir_with_files(cache_root, required)
+
+        # If no data files found yet, look for any existing zip file anywhere under the misc cache root and reuse it.
+        existing_zip = None
+        if data_root is None:
+            for root, dirs, files in os.walk(cache_root):
+                for f in files:
+                    if f.lower().endswith('.zip'):
+                        candidate = os.path.join(root, f)
+                        if LoaderTools.is_valid_zip(candidate):
+                            existing_zip = candidate
+                            MiscLoader.logger.debug(f"Found existing zip at {existing_zip}; will attempt to extract")
+                            break
+                if existing_zip:
+                    break
+
+        # If we have an existing zip, extract it into the canonical extraction folder and search for the data
+        if data_root is None and existing_zip is not None:
+            try:
+                LoaderTools.extract_zip_file_content(existing_zip, unzip_target_subdir="csho33_bacteria")
+            except Exception as e:
+                MiscLoader.logger.warning(f"[!] Failed to extract existing zip {existing_zip}: {e}")
+            data_root = find_dir_with_files(extracted_dir, required) or find_dir_with_files(shared_root, required) or find_dir_with_files(cache_root, required)
+
+        # If still not found, do a fresh download using the expected filename into shared_root
+        if data_root is None:
+            try:
+                LoaderTools.download(url=dl_url, out_dir_path=shared_root, out_file_name=zip_name)
+            except Exception as e:
+                MiscLoader.logger.error(f"[!] Failed to download csho33 dataset: {e}")
                 return None
 
+            extracted_dir = LoaderTools.extract_zip_file_content(zip_path, unzip_target_subdir="csho33_bacteria")
+            if extracted_dir is None:
+                MiscLoader.logger.error("[!] Failed to extract csho33 zip")
+                return None
+
+            data_root = find_dir_with_files(extracted_dir, required) or find_dir_with_files(shared_root, required) or find_dir_with_files(cache_root, required)
+
+        if data_root is None:
+            MiscLoader.logger.error(f"[!] Could not find the expected files after extraction under: {shared_root} or {cache_root}")
+            return None
+
         try:
-            X_2018 = np.load(os.path.join(extracted_dir, "X_2018clinical.npy"))
-            X_2019 = np.load(os.path.join(extracted_dir, "X_2019clinical.npy"))
-            X_f = np.load(os.path.join(extracted_dir, "X_finetune.npy"))
-            X_r = np.load(os.path.join(extracted_dir, "X_reference.npy"))
-            X_t = np.load(os.path.join(extracted_dir, "X_test.npy"))
-            raman_shifts = np.load(os.path.join(extracted_dir, "wavenumbers.npy"))
-            y_2018 = np.load(os.path.join(extracted_dir, "y_2018clinical.npy"))
-            y_2019 = np.load(os.path.join(extracted_dir, "y_2019clinical.npy"))
-            y_f = np.load(os.path.join(extracted_dir, "y_finetune.npy"))
-            y_r = np.load(os.path.join(extracted_dir, "y_reference.npy"))
-            y_t = np.load(os.path.join(extracted_dir, "y_test.npy"))
+            # Load arrays; some archives include extra files like reference or wavenumbers
+            # Try to load an optional wavenumbers.npy if present
+            X_f = np.load(os.path.join(data_root, "X_finetune.npy"))
+            y_f = np.load(os.path.join(data_root, "y_finetune.npy"))
+            X_t = np.load(os.path.join(data_root, "X_test.npy"))
+            y_t = np.load(os.path.join(data_root, "y_test.npy"))
+            X_2018 = np.load(os.path.join(data_root, "X_2018clinical.npy"))
+            y_2018 = np.load(os.path.join(data_root, "y_2018clinical.npy"))
+            X_2019 = np.load(os.path.join(data_root, "X_2019clinical.npy"))
+            y_2019 = np.load(os.path.join(data_root, "y_2019clinical.npy"))
+
+            # optional files
+            X_r = None
+            y_r = None
+            raman_shifts = None
+            if os.path.exists(os.path.join(data_root, "X_reference.npy")):
+                X_r = np.load(os.path.join(data_root, "X_reference.npy"))
+            if os.path.exists(os.path.join(data_root, "y_reference.npy")):
+                y_r = np.load(os.path.join(data_root, "y_reference.npy"))
+            if os.path.exists(os.path.join(data_root, "wavenumbers.npy")):
+                raman_shifts = np.load(os.path.join(data_root, "wavenumbers.npy"))
         except Exception as e:
             MiscLoader.logger.error(f"[!] Failed to load numpy arrays: {e}")
             return None
 
-        # Concatenate datasets in order finetune, reference, test, 2018, 2019
-        X = np.vstack([X_f, X_r, X_t, X_2018, X_2019])
-        y = np.concatenate([y_f, y_r, y_t, y_2018, y_2019])
+        # Concatenate datasets in order finetune, (reference if present), test, 2018, 2019
+        parts_X = [X_f]
+        parts_y = [y_f]
+        if X_r is not None and y_r is not None:
+            parts_X.append(X_r)
+            parts_y.append(y_r)
+        parts_X.extend([X_t, X_2018, X_2019])
+        parts_y.extend([y_t, y_2018, y_2019])
+
+        X = np.vstack(parts_X)
+        y = np.concatenate(parts_y)
+
+        # If raman_shifts missing, create default
+        if raman_shifts is None:
+            if X.ndim == 2:
+                raman_shifts = np.arange(X.shape[1], dtype=float)
+            else:
+                raman_shifts = [np.arange(x.shape[0], dtype=float) for x in X]
 
         # Determine class names from unique labels
         unique = sorted(list(map(str, np.unique(y))))
