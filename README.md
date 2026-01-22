@@ -178,27 +178,50 @@ Contributions are welcome! To add a new dataset:
 
 ## 🔮 For Later (Future Datasets)
 
-### Kaggle
-- ~~[Cancer Cells SERS Spectra](https://www.kaggle.com/code/mathiascharconnet/cancer-cells-sers-spectra)~~ - Now available as `andriitrelin/cells-raman-spectra/*`
+### Remaining / For Later (still not integrated)
+The following items remain to be added (suggested action: add a `DATASETS` entry under the appropriate loader, or add a loader placeholder with the source link):
 
-### GitHub
-- [Raman Spectra Data](https://github.com/MIND-Lab/Raman-Spectra-Data)
-- [Raman spectra of pathogenic bacteria](https://www.dropbox.com/scl/fo/fb29ihfnvishuxlnpgvhg/AJToUtts-vjYdwZGeqK4k-Y?rlkey=r4p070nsuei6qj3pjp13nwf6l&e=2&dl=0) 
-(_more info on [this GitHub page](https://github.com/csho33/bacteria-ID)_) 
-- [High-throughput molecular imaging](https://github.com/conor-horgan/DeepeR?tab=readme-ov-file#dataset)
-- [spectrai raman spectra](https://github.com/conor-horgan/spectrai)
+- High-throughput molecular imaging (DeepeR)
+  - URL: https://github.com/conor-horgan/DeepeR?tab=readme-ov-file#dataset
+  - Suggested loader: `MiscLoader` or `ZipLoader` depending on availability of packaged data
+  - Notes: README points to datasets; may require dataset-specific processing
 
-### Zenodo
-- [Quantitative volumetric Raman imaging](https://zenodo.org/records/256329)
+- spectrai raman spectra
+  - URL: https://github.com/conor-horgan/spectrai
+  - Suggested loader: `MiscLoader` / `ZipLoader`
 
-### Other Sources
-- [Spectra of illicit adulterants](https://data.mendeley.com/datasets/y4md8znppn/1)
-- [Raman Spectrum Matching with Contrastive Representation Learning](https://data.dtu.dk/articles/dataset/Datasets_for_replicating_the_paper_Raman_Spectrum_Matching_with_Contrastive_Representation_Learning_/20222331?file=36144495)
-- [Raman spectra of chemical compounds](https://springernature.figshare.com/articles/dataset/Open-source_Raman_spectra_of_chemical_compounds_for_active_pharmaceutical_ingredient_development/27931131)
-- [Inline Raman Spectroscopy and Indirect Hard Modeling](https://publications.rwth-aachen.de/record/978266/files/)
-- [The Effect of Sulfate Electrolytes on the Liquid-Liquid Equilibrium](https://publications.rwth-aachen.de/record/978265/files/)
-- [In-line Monitoring of Microgel Synthesis](https://publications.rwth-aachen.de/record/834113/files/) (_weird format_)
-- [N-isopropylacrylamide Microgel Synthesis](https://publications.rwth-aachen.de/record/959050/files/)
-- [Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy](https://publications.rwth-aachen.de/record/959137)
-- [NASA AHEAD](https://ahed.nasa.gov/datasets/f5b6051bfeb18c5a7eaef6504582)
-- [RRUFF](https://rruff.info/)
+- Quantitative volumetric Raman imaging (Zenodo record)
+  - URL: https://zenodo.org/records/256329
+  - Suggested loader: `ZenodoLoader`
+
+- Spectra of illicit adulterants (Mendeley)
+  - URL: https://data.mendeley.com/datasets/y4md8znppn/1
+  - Suggested loader: `ZipLoader` / `MiscLoader`
+
+- Raman spectra of chemical compounds (Springer / figshare)
+  - URL: https://springernature.figshare.com/articles/dataset/Open-source_Raman_spectra_of_chemical_compounds_for_active_pharmaceutical_ingredient_development/27931131
+  - Suggested loader: `ZipLoader`
+
+- Inline Raman Spectroscopy and Indirect Hard Modeling
+  - URL: https://publications.rwth-aachen.de/record/978266/files/
+  - Suggested loader: `ZipLoader` (file formats may be non-standard)
+
+- The Effect of Sulfate Electrolytes on the Liquid-Liquid Equilibrium
+  - URL: https://publications.rwth-aachen.de/record/978265/files/
+  - Suggested loader: `ZipLoader`
+
+- In-line Monitoring of Microgel Synthesis (weird format)
+  - URL: https://publications.rwth-aachen.de/record/834113/files/
+  - Suggested loader: `ZipLoader` (may require manual preprocessing)
+
+- N-isopropylacrylamide Microgel Synthesis
+  - URL: https://publications.rwth-aachen.de/record/959050/files/
+  - Suggested loader: `ZipLoader`
+
+- Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy
+  - URL: https://publications.rwth-aachen.de/record/959137
+  - Suggested loader: `ZipLoader`
+
+- NASA AHEAD dataset
+  - URL: https://ahed.nasa.gov/datasets/f5b6051bfeb18c5a7eaef6504582
+  - Suggested loader: `ZipLoader` / `MiscLoader`
