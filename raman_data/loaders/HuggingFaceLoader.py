@@ -74,6 +74,17 @@ class HuggingFaceLoader(BaseLoader):
                 "paper": "",
                 "description": "Handheld Raman spectra for fuel analysis. Structure similar to FuelRamanSpectraBenchtop."
             }
+        ),
+        "HTW-KI-Werkstatt/RamanSpectraRalstoniaFermentations": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id="HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "HTW-KI-Werkstatt/RamanSpectraRalstoniaFermentations",
+                "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanSpectraRalstoniaFermentations",
+                "paper": "",
+                "description": "Raman spectra collected during Ralstonia fermentations. Dataset structure matches HTW-KI-Werkstatt/FuelRamanSpectraHandheld (wavenumber columns + metadata columns)."
+            }
         )
     }
 

@@ -113,6 +113,7 @@ df = dataset.to_dataframe()
 | `chlange/RamanSpectraEcoliFermentation` | Regression | Dataset Card for Raman Spectra from High-Throughput Bioprocess Fermentations of E. Coli. Raman spectra were obtained during an E. coli fermentation process consisting of a batch and a glucose-limited feeding phase, each lasting about four hours. Samples were automatically collected hourly, centrifug |
 | `chlange/SubstrateMixRaman` | Regression | This dataset, designed for biotechnological applications, provides a valuable resource for calibrating models used in high-throughput bioprocess development, particularly for bacterial fermentations. It features Raman spectra of samples containing varying, statistically independent concentrations of |
 | `HTW-KI-Werkstatt/FuelRamanSpectraHandheld` | Regression | Handheld Raman spectra for fuel analysis. Structure similar to FuelRamanSpectraBenchtop. |
+| `HTW-KI-Werkstatt/RamanSpectraRalstoniaFermentations` | Regression | Raman spectra collected during Ralstonia fermentations. Dataset structure matches HTW-KI-Werkstatt/FuelRamanSpectraHandheld (wavenumber columns + metadata columns). |
 
 ### Kaggle Datasets
 
@@ -135,6 +136,7 @@ df = dataset.to_dataframe()
 
 | Dataset Name | Task Type | Description |
 |-------------|-----------|-------------|
+| `csho33_bacteria` | Classification | Bacterial Raman spectra dataset used in Ho et al. (2019). Add data source or download link to enable loading in the library. |
 | `knowitall_organics_preprocessed` | Classification | Organic (preprocessed) dataset from Transfer-learningbased Raman spectra identification. Organic compounds measured with several excitation sources. |
 | `knowitall_organics_raw` | Classification | Organic (raw) dataset from Transfer-learningbased Raman spectra identification. Organic compounds measured with several excitation sources. |
 | `mind_covid` | Classification | Per-patient saliva Raman spectra and clinical metadata used for COVID diagnosis study (IRCCS Fondazione Don Carlo Gnocchi, Milano and Centro Spalenza, Rovato). Each patient folder contains spectra.csv, raman_shift.csv and user_information.csv. |
