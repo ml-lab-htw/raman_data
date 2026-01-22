@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 from raman_data import raman_data
 random.seed(0)
 
-dataset_name = "knowitall_organics_preprocessed"
+dataset_name = "HTW-KI-Werkstatt/RamanSpectraRalstoniaFermentations"
 dataset = raman_data(dataset_name)
 
 if len(dataset) == 0:
@@ -18,7 +18,10 @@ indices = random.sample(range(len(dataset)), k=num_to_plot)
 
 for idx, i in enumerate(indices):
     if not isinstance(dataset.raman_shifts, list):
-        plt.plot(dataset.raman_shifts, dataset.spectra[i], label=f"{i+1}: {dataset.target_names[dataset.targets[i]]}")
+        if isinstance(dataset.targets[i], int):
+            plt.plot(dataset.raman_shifts, dataset.spectra[i], label=f"{i+1}: {dataset.target_names[dataset.targets[i]]}")
+        else:
+            plt.plot(dataset.raman_shifts, dataset.spectra[i], label=f"{i+1}: {dataset.target_names[0]}: {dataset.targets[i][0]}")
     else:
         plt.plot(dataset.raman_shifts[i], dataset.spectra[i], label=f"{i+1}: {dataset.target_names[dataset.targets[i]]}")
 
