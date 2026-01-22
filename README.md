@@ -137,6 +137,8 @@ df = dataset.to_dataframe()
 |-------------|-----------|-------------|
 | `knowitall_organics_preprocessed` | Classification | Organic (preprocessed) dataset from Transfer-learningbased Raman spectra identification. Organic compounds measured with several excitation sources. |
 | `knowitall_organics_raw` | Classification | Organic (raw) dataset from Transfer-learningbased Raman spectra identification. Organic compounds measured with several excitation sources. |
+| `mind_covid` | Classification | Per-patient saliva Raman spectra and clinical metadata used for COVID diagnosis study (IRCCS Fondazione Don Carlo Gnocchi, Milano and Centro Spalenza, Rovato). Each patient folder contains spectra.csv, raman_shift.csv and user_information.csv. |
+| `mind_pd_ad` | Classification | Per-patient saliva Raman spectra and clinical metadata used for Parkinson's Disease and Alzheimer studies (IRCCS Fondazione Don Carlo Gnocchi and Istituto Auxologico Italiano). Each patient folder contains spectra.csv, raman_shift.csv and user_information.csv. |
 | `rruff_mineral_preprocessed` | Classification | Mineral (preprocessed) raman spectra subset from RRUFF database |
 | `rruff_mineral_raw` | Classification | Mineral (raw) raman spectra subset from RRUFF database |
 

@@ -11,6 +11,7 @@ from raman_data.exceptions import CorruptedZipFileError
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.helper import organic
+import pandas as pd
 from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR
 
 
@@ -125,6 +126,36 @@ class MiscLoader(BaseLoader):
                 "license": "See paper"
             }
         ),
+        "mind_covid": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="mind_covid",
+            loader=lambda df: MiscLoader._load_mind_dataset(df, "covid_dataset"),
+            metadata={
+                "full_name": "MIND-Lab Raman COVID Dataset",
+                "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
+                "description": "Per-patient saliva Raman spectra and clinical metadata used for COVID diagnosis study (IRCCS Fondazione Don Carlo Gnocchi, Milano and Centro Spalenza, Rovato). Each patient folder contains spectra.csv, raman_shift.csv and user_information.csv.",
+                "paper": "https://doi.org/10.1016/j.compbiomed.2024.108028",
+                "citation": [
+                    "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028. https://doi.org/10.1016/j.compbiomed.2024.108028"
+                ],
+                "license": "See source"
+            }
+        ),
+        "mind_pd_ad": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="mind_pd_ad",
+            loader=lambda df: MiscLoader._load_mind_dataset(df, "pd_ad_dataset"),
+            metadata={
+                "full_name": "MIND-Lab Parkinson/Alzheimer Dataset",
+                "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
+                "description": "Per-patient saliva Raman spectra and clinical metadata used for Parkinson's Disease and Alzheimer studies (IRCCS Fondazione Don Carlo Gnocchi and Istituto Auxologico Italiano). Each patient folder contains spectra.csv, raman_shift.csv and user_information.csv.",
+                "paper": "https://doi.org/10.1016/j.compbiomed.2024.108028",
+                "citation": [
+                    "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028. https://doi.org/10.1016/j.compbiomed.2024.108028"
+                ],
+                "license": "See source"
+            }
+        ),
         # "bacteria": DatasetInfo(
         #     task_type=TASK_TYPE.Classification,
         #     id="bacteria",
@@ -222,7 +253,70 @@ class MiscLoader(BaseLoader):
             dataset_name: str,
             cache_path: Optional[str] = None
     ) -> Optional[str]:
-        raise NotImplementedError
+        """
+        Download helper for miscellaneous datasets. Implements download for MIND-Lab datasets
+        by fetching the GitHub repository zip and extracting it. Returns the dataset folder path
+        inside the cache.
+        """
+        # Only implement downloading for the two MIND datasets here
+        mind_map = {
+            "mind_covid": "covid_dataset",
+            "mind_pd_ad": "pd_ad_dataset",
+        }
+
+        if dataset_name not in mind_map:
+            MiscLoader.logger.warning(f"[!] download_dataset not implemented for: {dataset_name}")
+            return None
+
+        if cache_path is not None:
+            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Misc)
+
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            MiscLoader.logger.error("[!] Cache root for MiscLoader is not set")
+            return None
+
+        shared_root = os.path.join(cache_root, "mind_shared")
+        os.makedirs(shared_root, exist_ok=True)
+
+        zip_name = "Raman-Spectra-Data.zip"
+        zip_path = os.path.join(shared_root, zip_name)
+        extracted_dir = os.path.join(shared_root, "Raman-Spectra-Data-main")
+
+        # Download repo zip from GitHub (main branch)
+        try:
+            LoaderTools.download(
+                url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip",
+                out_dir_path=shared_root,
+                out_file_name=zip_name
+            )
+        except Exception as e:
+            MiscLoader.logger.error(f"[!] Failed to download MIND repo: {e}")
+            return None
+
+        LoaderTools.extract_zip_file_content(zip_path, unzip_target_subdir="Raman-Spectra-Data-main")
+
+        # After extraction, the exact nesting may vary (extraction can create
+        # an extra top-level folder). Search recursively under shared_root for
+        # a directory matching the dataset_sub name and return its path.
+        dataset_sub = mind_map[dataset_name]
+        found = None
+        for root, dirs, files in os.walk(shared_root):
+            if dataset_sub in dirs:
+                found = os.path.join(root, dataset_sub)
+                break
+
+        if found is None:
+            # As a fallback, check the previously assumed path
+            dataset_folder = os.path.join(extracted_dir, dataset_sub)
+            if os.path.isdir(dataset_folder):
+                found = dataset_folder
+
+        if found is None:
+            MiscLoader.logger.error(f"[!] Expected dataset folder not found after extraction under: {shared_root}")
+            return None
+
+        return found
 
     @staticmethod
     def load_dataset(
@@ -375,3 +469,149 @@ class MiscLoader(BaseLoader):
 
         else:
             raise ValueError(f"Unknown DTU split: {split}")
+
+    @staticmethod
+    def _load_mind_dataset(cache_path: str, dataset_subfolder: str):
+        """
+        Load MIND-Lab datasets (covid_dataset or pd_ad_dataset).
+
+        The expected layout (inside dataset folder):
+          <patient_id>/spectra.csv
+                          /raman_shift.csv
+                          /user_information.csv
+
+        Returns: spectra, raman_shifts, targets, class_names
+        """
+        # If user passed in a cache path that is not the actual dataset folder, try common locations
+        # 1) cache_path itself
+        # 2) parent/mind_shared/Raman-Spectra-Data-main/<dataset_subfolder>
+
+        # Check direct path
+        if os.path.isdir(cache_path) and os.listdir(cache_path):
+            base_dir = cache_path
+        else:
+            shared_root = os.path.join(os.path.dirname(cache_path), "mind_shared")
+            extracted_dir = os.path.join(shared_root, "Raman-Spectra-Data-main")
+            candidate = os.path.join(extracted_dir, dataset_subfolder)
+            if os.path.isdir(candidate):
+                base_dir = candidate
+            else:
+                MiscLoader.logger.debug(f"Attempting to download dataset {dataset_subfolder} to {shared_root}")
+                # Construct dataset key matching DATASETS mapping, e.g. 'pd_ad_dataset' -> 'mind_pd_ad'
+                dataset_key = f"mind_{dataset_subfolder.replace('_dataset','')}"
+                downloaded = MiscLoader.download_dataset(dataset_key, cache_path=os.path.dirname(cache_path))
+                if downloaded and os.path.isdir(downloaded):
+                    base_dir = downloaded
+                else:
+                    MiscLoader.logger.error(f"[!] Could not locate or download dataset folder for {dataset_subfolder}")
+                    return None
+
+        # Iterate patient folders
+        spectra_list = []
+        raman_shifts_list = []
+        targets_list = []
+        categories = []
+
+        for entry in sorted(os.listdir(base_dir)):
+            patient_dir = os.path.join(base_dir, entry)
+            if not os.path.isdir(patient_dir):
+                continue
+
+            user_info_path = os.path.join(patient_dir, "user_information.csv")
+            spectra_path = os.path.join(patient_dir, "spectra.csv")
+            shifts_path = os.path.join(patient_dir, "raman_shift.csv")
+
+            if not (os.path.exists(user_info_path) and os.path.exists(spectra_path) and os.path.exists(shifts_path)):
+                MiscLoader.logger.warning(f"[!] Skipping patient folder (missing files): {patient_dir}")
+                continue
+
+            try:
+                ui = pd.read_csv(user_info_path)
+            except Exception as e:
+                MiscLoader.logger.warning(f"[!] Failed to read user_information.csv for {patient_dir}: {e}")
+                continue
+
+            # Prefer the 'category' column for class names (case-insensitive).
+            # Fallbacks: positional second column, then 'label' column, then first column.
+            cat_col = next((c for c in ui.columns if c.lower() == "category"), None)
+            if cat_col is None and len(ui.columns) >= 2:
+                cat_col = ui.columns[1]
+            if cat_col is None:
+                # fallback to label-like column
+                cat_col = next((c for c in ui.columns if c.lower() == "label"), None)
+            if cat_col is None:
+                MiscLoader.logger.warning(f"[!] No category/label column found in {user_info_path}; skipping")
+                continue
+
+            category = str(ui[cat_col].iloc[0])
+            categories.append(category)
+
+            # Read spectra and shifts
+            try:
+                spectra_df = pd.read_csv(spectra_path, header=None)
+                shifts = pd.read_csv(shifts_path, header=None).to_numpy().squeeze()
+            except Exception as e:
+                MiscLoader.logger.warning(f"[!] Failed to read spectra/shift for {patient_dir}: {e}")
+                continue
+
+            # For each spectrum (row) add to list and set target to label
+            for _, row in spectra_df.iterrows():
+                row_arr = row.to_numpy(dtype=float)
+                spectra_list.append(row_arr)
+                raman_shifts_list.append(shifts)
+                # targets per spectrum will be assigned later after mapping labels to indices
+
+        if len(spectra_list) == 0:
+            MiscLoader.logger.error(f"[!] No spectra found in {base_dir}")
+            return None
+
+        # Map categories to class indices
+        unique_categories = sorted(list(set(categories)))
+        cat_to_idx = {lab: i for i, lab in enumerate(unique_categories)}
+
+        # Re-read user info per patient to create targets aligned with spectra_list –
+        # simpler: we built labels list per patient order, but need per-spectrum targets.
+        # The earlier loop appended spectra in patient order and appended the patient's label once to labels list;
+        # to construct targets we will walk base_dir again and collect counts per patient.
+        targets = []
+        for entry in sorted(os.listdir(base_dir)):
+            patient_dir = os.path.join(base_dir, entry)
+            if not os.path.isdir(patient_dir):
+                continue
+            user_info_path = os.path.join(patient_dir, "user_information.csv")
+            spectra_path = os.path.join(patient_dir, "spectra.csv")
+            if not (os.path.exists(user_info_path) and os.path.exists(spectra_path)):
+                continue
+            try:
+                ui = pd.read_csv(user_info_path)
+                cat_col = next((c for c in ui.columns if c.lower() == "category"), ui.columns[2] if len(ui.columns) >= 3 else ui.columns[0])
+                lab = str(ui[cat_col].iloc[0])
+                sf = pd.read_csv(spectra_path, header=None)
+                count = len(sf)
+                targets.extend([cat_to_idx[lab]] * count)
+            except Exception:
+                continue
+
+        targets = np.array(targets, dtype=int)
+
+
+        if len(raman_shifts_list) > 0:
+            try:
+                first_rs = raman_shifts_list[0]
+                all_equal = all(np.allclose(first_rs, rs) for rs in raman_shifts_list)
+            except Exception:
+                all_equal = False
+        else:
+            all_equal = False
+
+        if all_equal:
+            raman_shifts = np.array(first_rs, dtype=float)
+            spectra = np.stack([np.array(s, dtype=float) for s in spectra_list])
+        else:
+            raman_shifts = [np.array(rs, dtype=float) for rs in raman_shifts_list]
+            spectra = [np.array(s, dtype=float) for s in spectra_list]
+
+        class_names = unique_categories
+
+        return spectra, raman_shifts, targets, class_names
+
