@@ -29,7 +29,7 @@ class ZipLoader(BaseLoader):
 
     Example:
         >>> from raman_data.loaders import ZipLoader
-        >>> dataset = ZipLoader.load_dataset("MIND-Lab_covid+pd_ad_bundle")
+        >>> dataset = ZipLoader.load_dataset("MIND_Lab_covid_and_pd_ad_bundle")
         >>> ZipLoader.list_datasets()
 
     Note:
@@ -39,7 +39,7 @@ class ZipLoader(BaseLoader):
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zip)
 
     DATASETS = {
-        "MIND-Lab_covid+pd_ad_bundle": DatasetInfo(
+        "MIND_Lab_covid_and_pd_ad_bundle": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="1",
             loader=...,
@@ -67,7 +67,7 @@ class ZipLoader(BaseLoader):
 
     __LINKS = [
         ExternalLink(
-            name="MIND-Lab_covid+pd_ad_bundle",
+            name="MIND_Lab_covid_and_pd_ad_bundle",
             url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip"
         ),
         ExternalLink(
@@ -107,7 +107,7 @@ class ZipLoader(BaseLoader):
         and extracts the contents to the cache directory.
 
         Args:
-            dataset_name: The name of the dataset to download (e.g., "MIND-Lab_covid+pd_ad_bundle").
+            dataset_name: The name of the dataset to download (e.g., "MIND_Lab_covid_and_pd_ad_bundle").
             cache_path: Custom directory to save the dataset. If None, uses the default
                         cache directory (~/.cache/ziploader).
 
@@ -159,7 +159,7 @@ class ZipLoader(BaseLoader):
         Downloads the dataset if not already cached, then returns the parsed data.
 
         Args:
-            dataset_name: The name of the dataset to load (e.g., "MIND-Lab_covid+pd_ad_bundle").
+            dataset_name: The name of the dataset to load (e.g., "MIND_Lab_covid_and_pd_ad_bundle").
             cache_path: Custom directory to load/save the dataset. If None, uses the default
                         cache directory (~/.cache/ziploader).
 

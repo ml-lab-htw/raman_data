@@ -28,7 +28,7 @@ class KaggleLoader(BaseLoader):
 
     Example:
         >>> from raman_data.loaders import KaggleLoader
-        >>> dataset = KaggleLoader.load_dataset("codina/diabetes/AGEs")
+        >>> dataset = KaggleLoader.load_dataset("codina_diabetes_AGEs")
         >>> KaggleLoader.list_datasets()
 
     Note:
@@ -84,7 +84,7 @@ class KaggleLoader(BaseLoader):
             A tuple of (spectra, raman_shifts, concentrations) arrays,
             or None if parsing fails.
         """
-        file_handle = "sergioalejandrod/raman-spectroscopy"
+        file_handle = "sergioalejandrod_raman-spectroscopy"
         header = ["Gly, 40 mM", "Leu, 40 mM", "Phe, 40 mM", "Trp, 40 mM"]
 
         df = dataset_load(
@@ -172,144 +172,144 @@ class KaggleLoader(BaseLoader):
 
     # Note: __load_cancer_cells was removed as mathiascharconnet/cancer-cells-sers-spectra
     # requires special Kaggle consent. The same data is available via
-    # andriitrelin/cells-raman-spectra which is loaded by __load_andriitrelin above.
+    # andriitrelin_cells-raman-spectra which is loaded by __load_andriitrelin above.
 
 
     DATASETS = {
-        "codina/diabetes/AGEs": DatasetInfo(
+        "codina_diabetes_AGEs": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="AGEs",
             loader=__load_diabetes,
             metadata={
-                "full_name" : "codina/raman-spectroscopy-of-diabetes",
+                "full_name" : "codina_raman-spectroscopy-of-diabetes",
                 "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
                 "paper" : "https://doi.org/10.1364/BOE.9.004998",
                 "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
             }
         ),
-        "codina/diabetes/earLobe": DatasetInfo(
+        "codina_diabetes_earLobe": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="earLobe",
             loader=__load_diabetes,
             metadata={
-                "full_name" : "codina/raman-spectroscopy-of-diabetes",
+                "full_name" : "codina_raman-spectroscopy-of-diabetes",
                 "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
                 "paper" : "https://doi.org/10.1364/BOE.9.004998",
                 "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
             }
         ),
-        "codina/diabetes/innerArm": DatasetInfo(
+        "codina_diabetes_innerArm": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="innerArm",
             loader=__load_diabetes,
             metadata={
-                "full_name" : "codina/raman-spectroscopy-of-diabetes",
+                "full_name" : "codina_raman-spectroscopy-of-diabetes",
                 "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
                 "paper" : "https://doi.org/10.1364/BOE.9.004998",
                 "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
             }
         ),
-        "codina/diabetes/thumbNail": DatasetInfo(
+        "codina_diabetes_thumbNail": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="thumbNail",
             loader=__load_diabetes,
             metadata={
-                "full_name" : "codina/raman-spectroscopy-of-diabetes",
+                "full_name" : "codina_raman-spectroscopy-of-diabetes",
                 "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
                 "paper" : "https://doi.org/10.1364/BOE.9.004998",
                 "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
             }
         ),
-        "codina/diabetes/vein": DatasetInfo(
+        "codina_diabetes_vein": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="vein",
             loader=__load_diabetes,
             metadata={
-                "full_name" : "codina/raman-spectroscopy-of-diabetes",
+                "full_name" : "codina_raman-spectroscopy-of-diabetes",
                 "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
                 "paper" : "https://doi.org/10.1364/BOE.9.004998",
                 "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
             }
         ),
-        "sergioalejandrod/AminoAcids/glycine": DatasetInfo(
+        "sergioalejandrod_AminoAcids_glycine": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="1",
             loader=__load_sergioalejandrod,
             metadata={
-                "full_name" : "sergioalejandrod/raman-spectroscopy",
+                "full_name" : "sergioalejandrod_raman-spectroscopy",
                 "source" : "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
                 "paper" : "https://doi.org/10.1021/acs.analchem.0c03015",
                 "description" : "This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method."
             }
         ),
-        "sergioalejandrod/AminoAcids/leucine": DatasetInfo(
+        "sergioalejandrod_AminoAcids_leucine": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="2",
             loader=__load_sergioalejandrod,
             metadata={
-                "full_name" : "sergioalejandrod/raman-spectroscopy",
+                "full_name" : "sergioalejandrod_raman-spectroscopy",
                 "source" : "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
                 "paper" : "https://doi.org/10.1021/acs.analchem.0c03015",
                 "description" : "This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method."
             }
         ),
-        "sergioalejandrod/AminoAcids/phenylalanine": DatasetInfo(
+        "sergioalejandrod_AminoAcids_phenylalanine": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="3",
             loader=__load_sergioalejandrod,
             metadata={
-                "full_name" : "sergioalejandrod/raman-spectroscopy",
+                "full_name" : "sergioalejandrod_raman-spectroscopy",
                 "source" : "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
                 "paper" : "https://doi.org/10.1021/acs.analchem.0c03015",
                 "description" : "This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method."
             }
         ),
-        "sergioalejandrod/AminoAcids/tryptophan": DatasetInfo(
+        "sergioalejandrod_AminoAcids_tryptophan": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="4",
             loader=__load_sergioalejandrod,
             metadata={
-                "full_name" : "sergioalejandrod/raman-spectroscopy",
+                "full_name" : "sergioalejandrod_raman-spectroscopy",
                 "source" : "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
                 "paper" : "https://doi.org/10.1021/acs.analchem.0c03015",
                 "description" : "This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method."
             }
         ),
-        "andriitrelin/cells-raman-spectra/COOH": DatasetInfo(
+        "andriitrelin_cells-raman-spectra_COOH": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="COOH",
             loader=__load_andriitrelin,
             metadata={
-                "full_name" : "andriitrelin/cells-raman-spectra",
+                "full_name" : "andriitrelin_cells-raman-spectra",
                 "source" : "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
                 "paper" : "https://doi.org/10.1016/j.snb.2020.127660",
                 "description" : "SERS spectra of melanoma cells, melanocytes, fibroblasts, and culture medium collected on gold nanourchins functionalized with COOH moiety. Contains 12 cell type classes for classification."
             }
         ),
-        "andriitrelin/cells-raman-spectra/NH2": DatasetInfo(
+        "andriitrelin_cells-raman-spectra_NH2": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="NH2",
             loader=__load_andriitrelin,
             metadata={
-                "full_name" : "andriitrelin/cells-raman-spectra",
+                "full_name" : "andriitrelin_cells-raman-spectra",
                 "source" : "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
                 "paper" : "https://doi.org/10.1016/j.snb.2020.127660",
                 "description" : "SERS spectra of melanoma cells, melanocytes, fibroblasts, and culture medium collected on gold nanourchins functionalized with NH2 moiety. Contains 12 cell type classes for classification."
             }
         ),
-        "andriitrelin/cells-raman-spectra/(COOH)2": DatasetInfo(
+        "andriitrelin_cells-raman-spectra_(COOH)2": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="(COOH)2",
             loader=__load_andriitrelin,
             metadata={
-                "full_name" : "andriitrelin/cells-raman-spectra",
+                "full_name" : "andriitrelin_cells-raman-spectra",
                 "source" : "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
                 "paper" : "https://doi.org/10.1016/j.snb.2020.127660",
                 "description" : "SERS spectra of melanoma cells, melanocytes, fibroblasts, and culture medium collected on gold nanourchins functionalized with (COOH)2 moiety. Contains 12 cell type classes for classification."
             }
         ),
         # Note: mathiascharconnet/cancer-cells-sers-spectra requires Kaggle consent.
-        # The same data is available via andriitrelin/cells-raman-spectra above.
+        # The same data is available via andriitrelin_cells-raman-spectra above.
     }
 
 
@@ -322,7 +322,7 @@ class KaggleLoader(BaseLoader):
         Download a Kaggle dataset to the local cache.
 
         Args:
-            dataset_name: The name of the dataset to download (e.g., "codina/diabetes/AGEs").
+            dataset_name: The name of the dataset to download (e.g., "codina_diabetes_AGEs").
             cache_path: Custom directory to save the dataset. If None, uses the default
                         Kaggle cache directory (~/.cache/kagglehub).
 
@@ -358,7 +358,7 @@ class KaggleLoader(BaseLoader):
         a standardized RamanDataset format.
 
         Args:
-            dataset_name: The name of the dataset to load (e.g., "codina/diabetes/AGEs").
+            dataset_name: The name of the dataset to load (e.g., "codina_diabetes_AGEs").
             cache_path: Custom directory to load/save the dataset. If None, uses the default
                         Kaggle cache directory (~/.cache/kagglehub).
 

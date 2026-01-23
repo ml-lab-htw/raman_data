@@ -26,64 +26,69 @@ class HuggingFaceLoader(BaseLoader):
 
     Example:
         >>> from raman_data.loaders import HuggingFaceLoader
-        >>> dataset = HuggingFaceLoader.load_dataset("chlange/SubstrateMixRaman")
+        >>> dataset = HuggingFaceLoader.load_dataset("chlange_SubstrateMixRaman")
         >>> HuggingFaceLoader.list_datasets()
     """
 
     DATASETS = {
-        "chlange/SubstrateMixRaman": DatasetInfo(
+        "chlange_SubstrateMixRaman": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="chlange_SubstrateMixRaman",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "chlange/SubstrateMixRaman",
+                "full_name": "chlange_SubstrateMixRaman",
+                "hf_key": "chlange/SubstrateMixRaman",
                 "source": "https://huggingface.co/datasets/chlange/SubstrateMixRaman",
                 "paper": "https://dx.doi.org/10.2139/ssrn.5239248",
                 "description": "This dataset, designed for biotechnological applications, provides a valuable resource for calibrating models used in high-throughput bioprocess development, particularly for bacterial fermentations. It features Raman spectra of samples containing varying, statistically independent concentrations of eight key metabolites, along with mineral salt medium and antifoam."
             }
         ),
-        "chlange/RamanSpectraEcoliFermentation": DatasetInfo(
+        "chlange_RamanSpectraEcoliFermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="chlange_RamanSpectraEcoliFermentation",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "chlange/RamanSpectraEcoliFermentation",
+                "full_name": "chlange_RamanSpectraEcoliFermentation",
+                "hf_key": "chlange/RamanSpectraEcoliFermentation",
                 "source": "https://huggingface.co/datasets/chlange/RamanSpectraEcoliFermentation",
                 "paper": "https://doi.org/10.1002/bit.70006",
                 "description": "Dataset Card for Raman Spectra from High-Throughput Bioprocess Fermentations of E. Coli. Raman spectra were obtained during an E. coli fermentation process consisting of a batch and a glucose-limited feeding phase, each lasting about four hours. Samples were automatically collected hourly, centrifuged to separate cells from the supernatant, and the latter was used for both metabolite analysis and Raman measurements. Two Raman spectra of ten seconds each were recorded per sample, with cell removal improving metabolite signal quality. More details can be found in the paper https://doi.org/10.1002/bit.70006"
             }
         ),
-        "chlange/FuelRamanSpectraBenchtop": DatasetInfo(
+        "chlange_FuelRamanSpectraBenchtop": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="chlange_FuelRamanSpectraBenchtop",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "chlange/FuelRamanSpectraBenchtop",
+                "full_name": "chlange_FuelRamanSpectraBenchtop",
+                "hf_key": "chlange/FuelRamanSpectraBenchtop",
                 "source": "https://huggingface.co/datasets/chlange/FuelRamanSpectraBenchtop",
                 "paper": "http://dx.doi.org/10.1021/acs.energyfuels.9b02944",
                 "description": "This dataset contains Raman spectra for the analysis and prediction of key parameters in commercial fuel samples (gasoline). It includes spectra of 179 fuel samples from various refineries."
             }
         ),
-        "HTW-KI-Werkstatt/FuelRamanSpectraHandheld": DatasetInfo(
+        "HTW-KI-Werkstatt_FuelRamanSpectraHandheld": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="HTW-KI-Werkstatt_FuelRamanSpectraHandheld",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "HTW-KI-Werkstatt/FuelRamanSpectraHandheld",
+                "full_name": "HTW-KI-Werkstatt_FuelRamanSpectraHandheld",
+                "hf_key": "HTW-KI-Werkstatt/FuelRamanSpectraHandheld",
                 "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/FuelRamanSpectraHandheld",
                 "paper": "",
                 "description": "Handheld Raman spectra for fuel analysis. Structure similar to FuelRamanSpectraBenchtop."
             }
         ),
-        "HTW-KI-Werkstatt/RamanSpectraRalstoniaFermentations": DatasetInfo(
+        "HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "HTW-KI-Werkstatt/RamanSpectraRalstoniaFermentations",
+                "full_name": "HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations",
+                "hf_key": "HTW-KI-Werkstatt/RamanSpectraRalstoniaFermentations",
                 "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanSpectraRalstoniaFermentations",
                 "paper": "",
-                "description": "Raman spectra collected during Ralstonia fermentations. Dataset structure matches HTW-KI-Werkstatt/FuelRamanSpectraHandheld (wavenumber columns + metadata columns)."
+                "description": "Raman spectra collected during Ralstonia fermentations. Dataset structure matches HTW-KI-Werkstatt_FuelRamanSpectraHandheld (wavenumber columns + metadata columns)."
             }
         )
     }
@@ -122,7 +127,7 @@ class HuggingFaceLoader(BaseLoader):
         Download a HuggingFace dataset to the local cache.
 
         Args:
-            dataset_name: The full name of the HuggingFace dataset (e.g., "chlange/SubstrateMixRaman").
+            dataset_name: The full name of the HuggingFace dataset (e.g., "chlange_SubstrateMixRaman").
             cache_path: Custom directory to save the dataset. If None, uses the default
                         HuggingFace cache directory (~/.cache/huggingface).
 
@@ -164,7 +169,7 @@ class HuggingFaceLoader(BaseLoader):
         a standardized RamanDataset format.
 
         Args:
-            dataset_name: The full name of the HuggingFace dataset (e.g., "chlange/SubstrateMixRaman").
+            dataset_name: The full name of the HuggingFace dataset (e.g., "chlange_SubstrateMixRaman").
             cache_path: Custom directory to load/save the dataset. If None, uses the default
                         HuggingFace cache directory (~/.cache/huggingface).
 
@@ -186,7 +191,8 @@ class HuggingFaceLoader(BaseLoader):
             f"{cache_path if cache_path else 'default folder (~/.cache/huggingface)'}"
         )
 
-        data_dict = datasets.load_dataset(path=dataset_name, cache_dir=cache_path)
+        dataset_key = HuggingFaceLoader.DATASETS[dataset_name].metadata["hf_key"]
+        data_dict = datasets.load_dataset(path=dataset_key, cache_dir=cache_path)
 
         splits = []
         if "train" in data_dict:

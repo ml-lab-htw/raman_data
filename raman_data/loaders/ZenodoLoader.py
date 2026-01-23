@@ -27,7 +27,7 @@ class ZenodoLoader(BaseLoader):
 
     Example:
         >>> from raman_data.loaders import ZenodoLoader
-        >>> dataset = ZenodoLoader.load_dataset("sugar mixtures")
+        >>> dataset = ZenodoLoader.load_dataset("sugar_mixtures")
         >>> ZenodoLoader.list_datasets()
     """
 
@@ -36,7 +36,7 @@ class ZenodoLoader(BaseLoader):
         cache_path: str
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
         """
-        Parse and extract data from the sugar mixtures Raman dataset (Zenodo ID: 10779223).
+        Parse and extract data from the sugar_mixtures Raman dataset (Zenodo ID: 10779223).
 
         Args:
             cache_path: The base path where the dataset files are cached.
@@ -54,21 +54,21 @@ class ZenodoLoader(BaseLoader):
             )
         except CorruptedZipFileError as e:
             logger.error(
-                f"There seems to be an issue with dataset '10779223/sugar mixtures'. \n" \
+                f"There seems to be an issue with dataset '10779223/sugar_mixtures'. \n" \
                 f"The following file could not be extracted: {zip_filename}"
             )
             return None
 
         if data_dir is None:
             logger.error(
-                f"There seems to be no file of dataset '10779223/sugar mixtures'.\n " \
+                f"There seems to be no file of dataset '10779223/sugar_mixtures'.\n " \
             )
             return None
 
         data_folder_parent = os.path.join(
             data_dir,
             "Raw data",
-            "Experimental data from sugar mixtures",
+            "Experimental data from sugar_mixtures",
             "Raw datasets for analyses"
         )
 
@@ -151,7 +151,7 @@ class ZenodoLoader(BaseLoader):
         cache_path: str
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
         """
-        Parse and extract data from the wheat lines Raman dataset (Zenodo ID: 7644521).
+        Parse and extract data from the wheat_lines Raman dataset (Zenodo ID: 7644521).
 
         Args:
             cache_path: The base path where the dataset files are cached.
@@ -172,7 +172,7 @@ class ZenodoLoader(BaseLoader):
         file_content = LoaderTools.read_mat_file(data_path)
         if file_content == None:
             logger.error(
-                f"There was an error while reading the dataset '7644521/Wheat lines'.\n " \
+                f"There was an error while reading the dataset '7644521/wheat_lines'.\n " \
                 f"The following file could not be read: {data_path}"
             )
             return None
@@ -232,7 +232,7 @@ class ZenodoLoader(BaseLoader):
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
 
     DATASETS = {
-        "sugar mixtures": DatasetInfo(
+        "sugar_mixtures": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="10779223",
             loader=__load_10779223,
@@ -248,18 +248,18 @@ class ZenodoLoader(BaseLoader):
         #     id="256329",
         #     load=__load_256329
         # ),
-        "Wheat lines": DatasetInfo(
+        "wheat_lines": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="7644521",
             loader=__load_7644521,
              metadata={
-                "full_name" : "DIFFERENTIATION OF ADVANCED GENERATION MUTANT WHEAT LINES: CONVENTIONAL TECHNIQUES VERSUS RAMAN SPECTROSCOPY",
+                "full_name" : "DIFFERENTIATION OF ADVANCED GENERATION MUTANT wheat_lines: CONVENTIONAL TECHNIQUES VERSUS RAMAN SPECTROSCOPY",
                 "source" : "https://doi.org/10.5281/zenodo.7644521",
                 "paper" : "https://doi.org/10.3389/fpls.2023.1116876",
                 "description" : "Data and codes used in the manuscript titled \"DIFFERENTIATION OF ADVANCED GENERATION MUTANT WHEAT LINES: CONVENTIONAL TECHNIQUES VERSUS RAMAN SPECTROSCOPY\". The decision tree model is trained and tested using the Classification Learner app of MATLAB (R2021b, The MathWorks, Inc.)."
             }
         ),
-        "Adenine": DatasetInfo(
+        "adenine": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="3572359",
             loader=__load_3572359,
@@ -282,7 +282,7 @@ class ZenodoLoader(BaseLoader):
         Download a Zenodo dataset to the local cache.
 
         Args:
-            dataset_name: The name of the dataset to download (e.g., "sugar mixtures").
+            dataset_name: The name of the dataset to download (e.g., "sugar_mixtures").
             cache_path: Custom directory to save the dataset. If None, uses the default
                         Zenodo cache directory (~/.cache/zenodo).
 
@@ -330,7 +330,7 @@ class ZenodoLoader(BaseLoader):
         up to 3 times if the file appears corrupted.
 
         Args:
-            dataset_name: The name of the dataset to load (e.g., "sugar mixtures").
+            dataset_name: The name of the dataset to load (e.g., "sugar_mixtures").
             cache_path: Custom directory to load/save the dataset. If None, uses the default
                         Zenodo cache directory (~/.cache/zenodo).
 

@@ -6,20 +6,20 @@ from raman_data import raman_data, datasets
 from raman_data.types import TASK_TYPE
 
 __TODO_DATASETS = {
-    #"MIND-Lab_covid+pd_ad_bundle": TASK_TYPE.Classification,
+    #"MIND_Lab_covid_and_pd_ad_bundle": TASK_TYPE.Classification,
     #"csho33_bacteria_id": TASK_TYPE.Classification,
     # "mendeley_surface-enhanced-raman": TASK_TYPE.Classification,
     #"dtu_raman-spectrum-matching": TASK_TYPE.Classification,
 }
 
 __DATASETS = {
-    'codina/diabetes/AGEs' : TASK_TYPE.Classification,
-    'sergioalejandrod/AminoAcids/glycine' : TASK_TYPE.Classification,
-    'andriitrelin/cells-raman-spectra/COOH' : TASK_TYPE.Classification,
-    'chlange/SubstrateMixRaman' : TASK_TYPE.Regression,
-    'sugar mixtures' : TASK_TYPE.Regression,
-    'Wheat lines' : TASK_TYPE.Classification,
-    'Adenine' : TASK_TYPE.Regression
+    'codina_diabetes_AGEs' : TASK_TYPE.Classification,
+    'sergioalejandrod_AminoAcids_glycine' : TASK_TYPE.Classification,
+    'andriitrelin_cells-raman-spectra_COOH' : TASK_TYPE.Classification,
+    'chlange_SubstrateMixRaman' : TASK_TYPE.Regression,
+    'sugar_mixtures' : TASK_TYPE.Regression,
+    'wheat_lines' : TASK_TYPE.Classification,
+    'adenine' : TASK_TYPE.Regression
 }
 
 
@@ -49,10 +49,10 @@ def test_load_dataset():
     Tests loading a dataset.
     """
     test_datasets = [
-        "codina/diabetes/earLobe",                  # hosted on Kaggle
-        "chlange/SubstrateMixRaman",                # hosted on HuggingFace
+        "codina_diabetes_earLobe",                  # hosted on Kaggle
+        "chlange_SubstrateMixRaman",                # hosted on HuggingFace
         # "mendeley_surface-enhanced-raman",          # hosted on external website
-        "Adenine"                                   # hosted on Zenodo
+        "adenine"                                   # hosted on Zenodo
     ]
     for dataset_name in test_datasets:
         dataset = raman_data(dataset_name=dataset_name)
