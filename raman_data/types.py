@@ -34,6 +34,9 @@ class TASK_TYPE(Enum):
     Denoising = 3
     SuperResolution = 4
 
+    def __str__(self):
+        return self.name
+
 
 class HASH_TYPE(Enum):
     """
@@ -171,15 +174,16 @@ class RamanDataset:
         else:
             return self.raman_shifts.max()
 
-    def to_dataframe(self) -> pd.DataFrame:
+    def to_dataframe(self, target_idx) -> pd.DataFrame:
         """
         Convert the dataset to a pandas DataFrame.
 
         Returns:
             DataFrame with spectral data, wavenumbers as columns, and targets as last column.
         """
-        df = pd.DataFrame(self.spectra.T, columns=self.raman_shifts)
-        df["targets"] = self.targets
+        df = pd.DataFrame(self.spectra, columns=self.raman_shifts)
+        df["target"] = self.targets[:, target_idx]
+        df.index.name = "spectrum_id"
         return df
 
     def __len__(self) -> int:
