@@ -182,7 +182,10 @@ class RamanDataset:
             DataFrame with spectral data, wavenumbers as columns, and targets as last column.
         """
         df = pd.DataFrame(self.spectra, columns=self.raman_shifts)
-        df["target"] = self.targets[:, target_idx]
+        if self.targets.ndim == 1:
+            df["target"] = self.targets
+        else:
+            df["target"] = self.targets[:, target_idx]
         df.index.name = "spectrum_id"
         return df
 
