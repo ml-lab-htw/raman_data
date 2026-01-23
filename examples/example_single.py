@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 from raman_data import raman_data
 random.seed(0)
 
-dataset_name = "HTW-KI-Werkstatt/RamanSpectraRalstoniaFermentations"
+dataset_name = "HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations"
 dataset = raman_data(dataset_name)
 
 if len(dataset) == 0:
