@@ -84,7 +84,7 @@ class KaggleLoader(BaseLoader):
             A tuple of (spectra, raman_shifts, concentrations) arrays,
             or None if parsing fails.
         """
-        file_handle = "sergioalejandrod_raman-spectroscopy"
+        file_handle = "sergioalejandrod/raman-spectroscopy"
         header = ["Gly, 40 mM", "Leu, 40 mM", "Phe, 40 mM", "Trp, 40 mM"]
 
         df = dataset_load(
@@ -179,6 +179,7 @@ class KaggleLoader(BaseLoader):
         "codina_diabetes_AGEs": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="AGEs",
+            name="Diabetes AGE",
             loader=__load_diabetes,
             metadata={
                 "full_name" : "codina_raman-spectroscopy-of-diabetes",
@@ -190,6 +191,7 @@ class KaggleLoader(BaseLoader):
         "codina_diabetes_earLobe": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="earLobe",
+            name="Diabetes Ear Lobe",
             loader=__load_diabetes,
             metadata={
                 "full_name" : "codina_raman-spectroscopy-of-diabetes",
@@ -201,6 +203,7 @@ class KaggleLoader(BaseLoader):
         "codina_diabetes_innerArm": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="innerArm",
+            name="Diabetes Inner Arm",
             loader=__load_diabetes,
             metadata={
                 "full_name" : "codina_raman-spectroscopy-of-diabetes",
@@ -212,6 +215,7 @@ class KaggleLoader(BaseLoader):
         "codina_diabetes_thumbNail": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="thumbNail",
+            name="Diabetes Thumbnail",
             loader=__load_diabetes,
             metadata={
                 "full_name" : "codina_raman-spectroscopy-of-diabetes",
@@ -223,6 +227,7 @@ class KaggleLoader(BaseLoader):
         "codina_diabetes_vein": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="vein",
+            name="Diabetes Vein",
             loader=__load_diabetes,
             metadata={
                 "full_name" : "codina_raman-spectroscopy-of-diabetes",
@@ -234,6 +239,7 @@ class KaggleLoader(BaseLoader):
         "sergioalejandrod_AminoAcids_glycine": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="1",
+            name="Amino Acids Glycine",
             loader=__load_sergioalejandrod,
             metadata={
                 "full_name" : "sergioalejandrod_raman-spectroscopy",
@@ -245,6 +251,7 @@ class KaggleLoader(BaseLoader):
         "sergioalejandrod_AminoAcids_leucine": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="2",
+            name="Amino Acids Leucine",
             loader=__load_sergioalejandrod,
             metadata={
                 "full_name" : "sergioalejandrod_raman-spectroscopy",
@@ -256,6 +263,7 @@ class KaggleLoader(BaseLoader):
         "sergioalejandrod_AminoAcids_phenylalanine": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="3",
+            name="Amino Acids Phenylalanine",
             loader=__load_sergioalejandrod,
             metadata={
                 "full_name" : "sergioalejandrod_raman-spectroscopy",
@@ -267,6 +275,7 @@ class KaggleLoader(BaseLoader):
         "sergioalejandrod_AminoAcids_tryptophan": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="4",
+            name="Amino Acids Tryptophan",
             loader=__load_sergioalejandrod,
             metadata={
                 "full_name" : "sergioalejandrod_raman-spectroscopy",
@@ -278,6 +287,7 @@ class KaggleLoader(BaseLoader):
         "andriitrelin_cells-raman-spectra_COOH": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="COOH",
+            name="Cancer Cells COOH",
             loader=__load_andriitrelin,
             metadata={
                 "full_name" : "andriitrelin_cells-raman-spectra",
@@ -289,6 +299,7 @@ class KaggleLoader(BaseLoader):
         "andriitrelin_cells-raman-spectra_NH2": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="NH2",
+            name="Cancer Cells NH2",
             loader=__load_andriitrelin,
             metadata={
                 "full_name" : "andriitrelin_cells-raman-spectra",
@@ -300,6 +311,7 @@ class KaggleLoader(BaseLoader):
         "andriitrelin_cells-raman-spectra_(COOH)2": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="(COOH)2",
+            name="Cancer Cells (COOH)2",
             loader=__load_andriitrelin,
             metadata={
                 "full_name" : "andriitrelin_cells-raman-spectra",

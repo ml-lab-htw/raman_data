@@ -54,26 +54,25 @@ class ZenodoLoader(BaseLoader):
             )
         except CorruptedZipFileError as e:
             logger.error(
-                f"There seems to be an issue with dataset '10779223/sugar_mixtures'. \n" \
-                f"The following file could not be extracted: {zip_filename}"
+                f"There seems to be an issue with dataset '10779223/sugar_mixtures'. \n"
             )
             return None
 
         if data_dir is None:
             logger.error(
-                f"There seems to be no file of dataset '10779223/sugar_mixtures'.\n " \
+                f"There seems to be no file of dataset '10779223/sugar_mixtures'.\n"
             )
             return None
 
         data_folder_parent = os.path.join(
             data_dir,
             "Raw data",
-            "Experimental data from sugar_mixtures",
+            "Experimental data from sugar mixtures",
             "Raw datasets for analyses"
         )
 
         # load the data file
-        snr = "Low SNR"
+        snr = "Low SNR"  # TODO implement snr selection
         data_folder = os.path.join(data_folder_parent, snr)
         
         # read spectra intensity data with pandas
@@ -119,33 +118,6 @@ class ZenodoLoader(BaseLoader):
         """
         raise NotImplementedError
 
-        zip_filename = "Kallepitis-et-al-Raw-data.zip"
-
-        logger.debug(os.path.join(cache_path, "256329", zip_filename))
-
-        data_dir = LoaderTools.extract_zip_file_content(
-            os.path.join(cache_path, "256329", zip_filename),
-            zip_filename
-        )
-
-        logger.debug(data_dir)
-
-        if data_dir is None:
-            return None
-
-        data_folder_parent = os.path.join(
-            data_dir,
-            "Kallepitis-et-al-Raw-data",
-            "Figure 3",
-            "THP-1"
-        )
-
-        file_1 = os.path.join(data_folder_parent, "3D THP1 001_15 06 24.wip")
-
-        # this what ramanspy does, it doenst work for me, why? I dont know
-        #data = loadmat(file_name=file_1, squeeze_me=True)
-
-
     @staticmethod
     def __load_7644521(
         cache_path: str
@@ -172,30 +144,23 @@ class ZenodoLoader(BaseLoader):
         file_content = LoaderTools.read_mat_file(data_path)
         if file_content == None:
             logger.error(
-                f"There was an error while reading the dataset '7644521/wheat_lines'.\n " \
-                f"The following file could not be read: {data_path}"
+                f"There was an error while reading the dataset '7644521/wheat_lines'.\n"
             )
             return None
 
         # raman shifts (wavenumbers/x-axis)
         raman_shifts = file_content["Calx"].squeeze()
         spectra_list = []
-        concentrations = np.array(np.empty)
+        concentrations = []
 
         # spectra intensity data
-        for key in data_keys:
+        for idx, key in enumerate(data_keys):
             data_row = file_content[key]
             spectra_list.append(data_row)
-
-        #TODO Get the concentrations: 
-        #tihs is waht ramanspy dose:
-        #   y = []
-        #   for i, dataset in enumerate(labels):
-        #       #apperently they just add the index of the labe to each label as concentration
-                #COM would 0, COM_125mM would 1, and so on
-        #       y.append(np.repeat(i, data[dataset].shape[0]))
+            concentrations.append(np.repeat(idx, data_row.shape[0]))
 
         spectra = np.concatenate(spectra_list)
+        concentrations = np.concatenate(concentrations)
 
         return spectra, raman_shifts, concentrations
 
@@ -232,165 +197,40 @@ class ZenodoLoader(BaseLoader):
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
 
     DATASETS = {
-        "sugar_mixtures": DatasetInfo(
+        "sugar": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="10779223",
+            name="Sugar Mixtures",
             loader=__load_10779223,
             metadata={
-                "full_name" : "Research data supporting \"Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders\"",
-                "source" : "https://doi.org/10.5281/zenodo.10779223",
-                "paper" : "https://doi.org/10.1073/pnas.2407439121",
-                "description" : "Experimental and synthetic Raman data used in Georgiev et al., PNAS (2024) DOI:10.1073/pnas.2407439121."
+                "full_name": "Research data supporting \"Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders\"",
+                "source": "https://doi.org/10.5281/zenodo.10779223",
+                "paper": "https://doi.org/10.1073/pnas.2407439121",
+                "description": "Experimental and synthetic Raman data used in Georgiev et al., PNAS (2024) DOI:10.1073/pnas.2407439121."
             }
         ),
-        # "Volumetric cells": DatasetInfo(
-        #     task_type=TASK_TYPE.Classification,
-        #     id="256329",
-        #     load=__load_256329
-        # ),
-        "wheat_lines": DatasetInfo(
+        "wheat": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="7644521",
+            name="Wheat Lines",
             loader=__load_7644521,
-             metadata={
-                "full_name" : "DIFFERENTIATION OF ADVANCED GENERATION MUTANT wheat_lines: CONVENTIONAL TECHNIQUES VERSUS RAMAN SPECTROSCOPY",
-                "source" : "https://doi.org/10.5281/zenodo.7644521",
-                "paper" : "https://doi.org/10.3389/fpls.2023.1116876",
-                "description" : "Data and codes used in the manuscript titled \"DIFFERENTIATION OF ADVANCED GENERATION MUTANT WHEAT LINES: CONVENTIONAL TECHNIQUES VERSUS RAMAN SPECTROSCOPY\". The decision tree model is trained and tested using the Classification Learner app of MATLAB (R2021b, The MathWorks, Inc.)."
+            metadata={
+                "full_name": "DIFFERENTIATION OF ADVANCED GENERATION MUTANT wheat_lines: CONVENTIONAL TECHNIQUES VERSUS RAMAN SPECTROSCOPY",
+                "source": "https://doi.org/10.5281/zenodo.7644521",
+                "paper": "https://doi.org/10.1016/j.foodchem.2023.134703",
+                "description": "Raman spectroscopy data used to differentiate between advanced generation mutant wheat lines and their parental cultivars."
             }
         ),
         "adenine": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
+            task_type=TASK_TYPE.Classification,
             id="3572359",
+            name="Adenine",
             loader=__load_3572359,
             metadata={
-                "full_name" : "Dataset for Surface Enhanced Raman Spectroscopy for quantitative analysis: results of a large-scale European multi-instrument interlaboratory study",
-                "source" : "https://doi.org/10.5281/zenodo.3572359",
-                "paper" : "https://doi.org/10.1021/acs.analchem.9b05658",
-                "description" : "This dataset contains all the spectra used in \"Surface Enhanced Raman Spectroscopy for quantitative analysis: results of a large-scale European multi-instrument interlaboratory study\". Data are available in 2 different formats: - a compressed archive with 1 folder (\"Dataset\") cointaining all the 3516 TXT files (1 file = 1 spectrum) uploaded by all participants (all spectra of the Interlaboratory study); - 1 single CSV file (“ILSspectra.csv”) with all the 3516 spectra uploaded by all participants in the form of a table. The data are structured as follow, with each row being 1 spectrum, preceded by metadata: \"labcode\", \"substrate\", \"laser\", \"method\", \"sample\", \"type\", \"conc\", \"batch\", \"replica\". Note that for those spectra starting after 400 cm-1 and/or ending before 2000 cm-1 missing values were expressed as NAs."
+                "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
+                "source": "https://doi.org/10.5281/zenodo.3572359",
+                "paper": "https://doi.org/10.1021/acsami.9b17424",
+                "description": "SERS spectra of adenine molecules on silver nanoparticles, with varying concentrations."
             }
         )
     }
-
-
-    @staticmethod
-    def download_dataset(
-        dataset_name: str,
-        cache_path: Optional[str] = None
-    ) -> str | None:
-        """
-        Download a Zenodo dataset to the local cache.
-
-        Args:
-            dataset_name: The name of the dataset to download (e.g., "sugar_mixtures").
-            cache_path: Custom directory to save the dataset. If None, uses the default
-                        Zenodo cache directory (~/.cache/zenodo).
-
-        Returns:
-            str | None: The path where the dataset was downloaded, or None if the
-                        dataset is not available or download fails.
-
-        Raises:
-            requests.HTTPError: If the HTTP request to Zenodo fails.
-        """
-        if not LoaderTools.is_dataset_available(dataset_name, ZenodoLoader.DATASETS):
-            logger.error(f"[!] Cannot download {dataset_name} dataset with ZenodoLoader")
-            return None
-
-        if not (cache_path is None):
-            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
-        cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
-
-        try:
-            dataset_id = ZenodoLoader.DATASETS[dataset_name].id
-            file_name = dataset_id + ".zip"
-            url = ZenodoLoader.__BASE_URL.replace("ID", dataset_id)
-
-            LoaderTools.download(url, cache_path, file_name)
-        except requests.HTTPError as e:
-            logger.error(f"Could not download requested dataset")
-            return None
-        except OSError as e:
-            logger.error(f"A very bad error occurred :(")
-            return None
-
-        return cache_path
-
-
-    @staticmethod
-    def load_dataset(
-        dataset_name: str,
-        cache_path: Optional[str] = None
-    ) -> RamanDataset | None:
-        """
-        Load a Zenodo dataset as a RamanDataset object.
-
-        Downloads the dataset if not already cached, then parses it into
-        a standardized RamanDataset format. Automatically retries download
-        up to 3 times if the file appears corrupted.
-
-        Args:
-            dataset_name: The name of the dataset to load (e.g., "sugar_mixtures").
-            cache_path: Custom directory to load/save the dataset. If None, uses the default
-                        Zenodo cache directory (~/.cache/zenodo).
-
-        Returns:
-            RamanDataset | None: A RamanDataset object containing the spectral data,
-                                 target values, and metadata, or None if loading fails.
-
-        Raises:
-            Exception: If the file download fails after maximum retry attempts.
-        """
-        if not LoaderTools.is_dataset_available(dataset_name, ZenodoLoader.DATASETS):
-            logger.error(f"[!] Cannot load {dataset_name} dataset with ZenodoLoader")
-            return None
-
-        if not (cache_path is None):
-            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
-        cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
-
-        dataset_id = ZenodoLoader.DATASETS[dataset_name].id
-
-        zip_file_path = os.path.join(cache_path, dataset_id + ".zip")
-
-        if not os.path.isfile(zip_file_path):
-            ZenodoLoader.download_dataset(dataset_name, cache_path)
-
-        max_retries = 3
-        retry_count = 0
-
-        while retry_count < max_retries:
-            try:
-                if not os.path.isdir(os.path.join(cache_path, dataset_id)):
-                    LoaderTools.extract_zip_file_content(zip_file_path, dataset_id)
-                break
-
-            except CorruptedZipFileError as e:
-                logger.warning(
-                    f"{e.zip_file_path} is corrupted. " \
-                    f"Attempt {retry_count + 1}/{max_retries}"
-                )
-                os.remove(e.zip_file_path)
-                retry_count += 1
-
-                if retry_count < max_retries:
-                    ZenodoLoader.download_dataset(dataset_name, cache_path)
-                else:
-                    raise Exception(
-                        f"Failed to download valid file after {max_retries} attempts"
-                    )
-
-        data = ZenodoLoader.DATASETS[dataset_name].loader(cache_path)
-
-        if data is not None:
-            spectra, raman_shifts, concentrations = data
-            return RamanDataset(
-                metadata=ZenodoLoader.DATASETS[dataset_name].metadata,
-                name=dataset_name,
-                raman_shifts=raman_shifts,
-                spectra=spectra,
-                targets=concentrations,
-                task_type=ZenodoLoader.DATASETS[dataset_name].task_type,
-            )
-        
-        return data

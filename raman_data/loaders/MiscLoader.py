@@ -31,6 +31,7 @@ class MiscLoader(BaseLoader):
         # "deepr_denoising": DatasetInfo(
         #     task_type=TASK_TYPE.Denoising,
         #     id="deepr_denoising",
+        #     name="DeepeR Denoising",
         #     loader=lambda df: MiscLoader._load_deepr_denoising(df),
         #     metadata={
         #         "full_name": "DeepeR Denoising Dataset",
@@ -44,6 +45,7 @@ class MiscLoader(BaseLoader):
         # "deepr_super_resolution": DatasetInfo(
         #     task_type=TASK_TYPE.SuperResolution,
         #     id="deepr_super_resolution",
+        #     name="DeepeR Super-Resolution Dataset",
         #     loader=lambda df: MiscLoader._load_deepr_super_resolution(df),
         #     metadata={
         #         "full_name": "DeepeR Super-Resolution Dataset",
@@ -57,6 +59,7 @@ class MiscLoader(BaseLoader):
         "rruff_mineral_raw": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="rruff_mineral_raw",
+            name="RRUFF - Mineral (raw)",
             loader=lambda df: MiscLoader._load_dtu_split(df, split="mineral_r"),
             metadata={
                 "full_name": "RRUFF - Mineral (raw)",
@@ -75,6 +78,7 @@ class MiscLoader(BaseLoader):
         "rruff_mineral_preprocessed": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="rruff_mineral_preprocessed",
+            name="RRUFF - Mineral (preprocessed)",
             loader=lambda df: MiscLoader._load_dtu_split(df, split="mineral_p"),
             metadata={
                 "full_name": "RRUFF - Mineral (preprocessed)",
@@ -93,6 +97,7 @@ class MiscLoader(BaseLoader):
         "knowitall_organics_raw": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="knowitall_organics_raw",
+            name="Knowitall Organics (raw)",
             loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_r"),
             metadata={
                 "full_name": "Transfer-learning-based Raman spectra identification - Organic (raw)",
@@ -111,6 +116,7 @@ class MiscLoader(BaseLoader):
         "knowitall_organics_preprocessed": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="knowitall_organics_preprocessed",
+            name="Knowitall Organics (preprocessed)",
             loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_p"),
             metadata={
                 "full_name": "Transfer-learning-based Raman spectra identification - Organic (preprocessed)",
@@ -129,6 +135,7 @@ class MiscLoader(BaseLoader):
         "mind_covid": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="mind_covid",
+            name="COVID-19",
             loader=lambda df: MiscLoader._load_mind_dataset(df, "covid_dataset"),
             metadata={
                 "full_name": "MIND-Lab Raman COVID Dataset",
@@ -144,6 +151,7 @@ class MiscLoader(BaseLoader):
         "mind_pd_ad": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="mind_pd_ad",
+            name="Parkinson/Alzheimer",
             loader=lambda df: MiscLoader._load_mind_dataset(df, "pd_ad_dataset"),
             metadata={
                 "full_name": "MIND-Lab Parkinson/Alzheimer Dataset",

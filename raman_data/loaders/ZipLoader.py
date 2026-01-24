@@ -39,27 +39,31 @@ class ZipLoader(BaseLoader):
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zip)
 
     DATASETS = {
-        "MIND_Lab_covid_and_pd_ad_bundle": DatasetInfo(
+        "mind_lab": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="1",
+            name="Covid-19 and Pd-AD-Bundle",
             loader=...,
             metadata={}
         ),
-        "csho33_bacteria_id": DatasetInfo(
+        "bacteria_id": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="2",
+            name="Bacteria Identification",
             loader=...,
             metadata={}
         ),
-        "mendeley_surface-enhanced-raman": DatasetInfo(
+        "surface_raman": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="3",
+            name="Surface Enhanced Raman Spectra",
             loader=...,
             metadata={}
         ),
-        "dtu_raman-spectrum-matching": DatasetInfo(
+        "dtu_raman": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="4",
+            name="Raman Spectra Matching",
             loader=...,
             metadata={}
         )

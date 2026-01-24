@@ -315,6 +315,7 @@ class DatasetInfo:
     """
     task_type: TASK_TYPE
     id: str
+    name: str
     loader: Callable[[str], Tuple[np.ndarray, np.ndarray, np.ndarray] | pd.DataFrame | None]
     metadata : dict[str, str]
     
