@@ -167,6 +167,7 @@ class MiscLoader(BaseLoader):
         "csho33_bacteria": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="csho33_bacteria",
+            name="Bacteria Identification",
             loader=lambda df: MiscLoader._load_csho33_bacteria(df),
             metadata={
                 "full_name": "Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning",
