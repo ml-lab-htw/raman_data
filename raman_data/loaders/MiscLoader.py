@@ -60,7 +60,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="rruff_mineral_raw",
             name="RRUFF - Mineral (raw)",
-            loader=lambda df: MiscLoader._load_dtu_split(df, split="mineral_r"),
+            loader=lambda df: MiscLoader._load_dtu_split(df, split="mineral_r", align_output=True),
             metadata={
                 "full_name": "RRUFF - Mineral (raw)",
                 "source": "https://data.dtu.dk/api/files/36144495",
@@ -79,7 +79,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="rruff_mineral_preprocessed",
             name="RRUFF - Mineral (preprocessed)",
-            loader=lambda df: MiscLoader._load_dtu_split(df, split="mineral_p"),
+            loader=lambda df: MiscLoader._load_dtu_split(df, split="mineral_p", align_output=True),
             metadata={
                 "full_name": "RRUFF - Mineral (preprocessed)",
                 "source": "https://data.dtu.dk/api/files/36144495",
@@ -98,7 +98,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="knowitall_organics_raw",
             name="Knowitall Organics (raw)",
-            loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_r"),
+            loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_r", align_output=True),
             metadata={
                 "full_name": "Transfer-learning-based Raman spectra identification - Organic (raw)",
                 "source": "https://data.dtu.dk/api/files/36144495",
@@ -117,7 +117,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="knowitall_organics_preprocessed",
             name="Knowitall Organics (preprocessed)",
-            loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_p"),
+            loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_p", align_output=False),
             metadata={
                 "full_name": "Transfer-learning-based Raman spectra identification - Organic (preprocessed)",
                 "source": "https://data.dtu.dk/api/files/36144495",
@@ -445,45 +445,38 @@ class MiscLoader(BaseLoader):
             raman_shifts_list = [arr[:, 0] for arr in spectra_data]
             spectra_list = [arr[:, 1] for arr in spectra_data]
 
-            lengths = [len(rs) for rs in raman_shifts_list]
-            unique_lengths = set(lengths)
-            if len(unique_lengths) == 1:
-                all_equal = all(np.allclose(raman_shifts_list[0], rs) for rs in raman_shifts_list)
-                if all_equal:
-                    raman_shifts = raman_shifts_list[0]
-                    spectra = np.stack(spectra_list)
-                else:
-                    raman_shifts = np.stack(raman_shifts_list).astype(np.float32)
-                    spectra = np.stack(spectra_list).astype(np.float32)
-            else:
-                raman_shifts = raman_shifts_list
-                spectra = spectra_list
-
-            if align_output:
-                min_shift = np.max([rs[0] for rs in raman_shifts_list])
-                max_shift = np.min([rs[-1] for rs in raman_shifts_list])
-                frequency_steps = [rs[1] - rs[0] for rs in raman_shifts_list]
-                min_step = min(frequency_steps)
-                raman_shifts = np.arange(min_shift, max_shift, min_step)
-                new_spectra_list = [np.interp(raman_shifts, rs, spec) for rs, spec in zip(raman_shifts_list, spectra_list)]
-                spectra = np.stack(new_spectra_list)
-
-            return spectra, raman_shifts, targets, class_names
-
         elif split == "organic_r":
 
-            spectra, raman_shifts, targets = organic.get_raw_data(split_root)
-            class_names = [str(i) for i in range(len(np.unique(targets)))]
-            return spectra, raman_shifts, targets, class_names
+            spectra_list, raman_shifts_list, targets = organic.get_raw_data(split_root)
+            class_names = [str(i) for i in range(len(np.unique(targets)))]  # TODO
 
         elif split == "organic_p":
 
-            spectra, raman_shifts, targets = organic.get_preprocessed_data(split_root)
-            class_names = [str(i) for i in range(len(np.unique(targets)))]
-            return spectra, raman_shifts, targets, class_names
+            spectra_list, raman_shifts_list, targets = organic.get_preprocessed_data(split_root)
+            class_names = [str(i) for i in range(len(np.unique(targets)))] # TODO
 
         else:
             raise ValueError(f"Unknown DTU split: {split}")
+
+        if align_output:
+            raman_shifts, spectra = MiscLoader.align_raman_shifts(raman_shifts_list, spectra_list)
+        else:
+            raman_shifts = raman_shifts_list
+            spectra = spectra_list
+
+        return spectra, raman_shifts, targets, class_names
+
+
+    @staticmethod
+    def align_raman_shifts(raman_shifts_list: list[np.ndarray], spectra_list: list[np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
+        min_shift = np.max([rs[0] for rs in raman_shifts_list])
+        max_shift = np.min([rs[-1] for rs in raman_shifts_list])
+        frequency_steps = [rs[1] - rs[0] for rs in raman_shifts_list]
+        min_step = min(frequency_steps)
+        raman_shifts = np.arange(min_shift, max_shift, min_step)
+        new_spectra_list = [np.interp(raman_shifts, rs, spec) for rs, spec in zip(raman_shifts_list, spectra_list)]
+        spectra = np.stack(new_spectra_list)
+        return raman_shifts, spectra
 
     @staticmethod
     def _load_mind_dataset(cache_path: str, dataset_subfolder: str):
@@ -501,25 +494,29 @@ class MiscLoader(BaseLoader):
         # 1) cache_path itself
         # 2) parent/mind_shared/Raman-Spectra-Data-main/<dataset_subfolder>
 
-        # Check direct path
-        if os.path.isdir(cache_path) and os.listdir(cache_path):
-            base_dir = cache_path
+        shared_root = os.path.join(os.path.dirname(cache_path), "mind_shared")
+        shared_main = os.path.join(shared_root, "Raman-Spectra-Data-main", "Raman-Spectra-Data-main")
+        if os.path.isdir(shared_main) and os.listdir(shared_main):
+            MiscLoader.logger.debug(f"Using existing dataset folder at {shared_main}")
         else:
-            shared_root = os.path.join(os.path.dirname(cache_path), "mind_shared")
-            extracted_dir = os.path.join(shared_root, "Raman-Spectra-Data-main")
-            candidate = os.path.join(extracted_dir, dataset_subfolder)
-            if os.path.isdir(candidate):
-                base_dir = candidate
-            else:
+            zip_file = os.path.join(shared_root, "Raman-Spectra-Data.zip")
+
+            if not os.path.exists(shared_root):
                 MiscLoader.logger.debug(f"Attempting to download dataset {dataset_subfolder} to {shared_root}")
                 # Construct dataset key matching DATASETS mapping, e.g. 'pd_ad_dataset' -> 'mind_pd_ad'
-                dataset_key = f"mind_{dataset_subfolder.replace('_dataset','')}"
+                dataset_key = f"mind_{dataset_subfolder.replace('_dataset', '')}"
                 downloaded = MiscLoader.download_dataset(dataset_key, cache_path=os.path.dirname(cache_path))
-                if downloaded and os.path.isdir(downloaded):
-                    base_dir = downloaded
-                else:
+
+                if not downloaded or not os.path.isdir(downloaded):
                     MiscLoader.logger.error(f"[!] Could not locate or download dataset folder for {dataset_subfolder}")
                     return None
+
+            if os.path.exists(zip_file) and LoaderTools.is_valid_zip(zip_file):
+                # Extract dataset folder from zip
+                LoaderTools.extract_zip_file_content(zip_file, unzip_target_subdir="Raman-Spectra-Data-main")
+            else:
+                MiscLoader.logger.error(f"[!] Failed to extract dataset folder from zip: {zip_file}")
+                return None
 
         # Iterate patient folders
         spectra_list = []
@@ -527,8 +524,9 @@ class MiscLoader(BaseLoader):
         targets_list = []
         categories = []
 
-        for entry in sorted(os.listdir(base_dir)):
-            patient_dir = os.path.join(base_dir, entry)
+        dataset_dir = os.path.join(shared_main, dataset_subfolder)
+        for entry in sorted(os.listdir(dataset_dir)):
+            patient_dir = os.path.join(dataset_dir, entry)
             if not os.path.isdir(patient_dir):
                 continue
 
@@ -577,7 +575,7 @@ class MiscLoader(BaseLoader):
                 # targets per spectrum will be assigned later after mapping labels to indices
 
         if len(spectra_list) == 0:
-            MiscLoader.logger.error(f"[!] No spectra found in {base_dir}")
+            MiscLoader.logger.error(f"[!] No spectra found in {dataset_dir}")
             return None
 
         # Map categories to class indices
@@ -589,8 +587,8 @@ class MiscLoader(BaseLoader):
         # The earlier loop appended spectra in patient order and appended the patient's label once to labels list;
         # to construct targets we will walk base_dir again and collect counts per patient.
         targets = []
-        for entry in sorted(os.listdir(base_dir)):
-            patient_dir = os.path.join(base_dir, entry)
+        for entry in sorted(os.listdir(dataset_dir)):
+            patient_dir = os.path.join(dataset_dir, entry)
             if not os.path.isdir(patient_dir):
                 continue
             user_info_path = os.path.join(patient_dir, "user_information.csv")
