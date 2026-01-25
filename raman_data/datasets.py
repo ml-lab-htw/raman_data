@@ -84,3 +84,20 @@ def load_dataset(
         break
 
     return get_dataset(dataset_name, cache_dir)
+
+
+def pretty_name(dataset_name: str) -> str:
+
+    if dataset_name not in list_datasets():
+        raise ValueError(f"Dataset '{dataset_name}' not found. "
+                         f"Available datasets: {list_datasets()}")
+
+    name = ""
+    for loader in __LOADERS:
+        if not (dataset_name in loader.DATASETS):
+            continue
+
+        name = loader.DATASETS[dataset_name].name
+        break
+
+    return name
