@@ -64,7 +64,7 @@ class BaseLoader(metaclass=ABCMeta):
                                 If the dataset isn't on the list of a loader
                                 or load fails, returns None.
         """
-        raise NotImplementedError
+        raise NotImplementedError(f"load_dataset not implemented in {__class__.__name__} for {dataset_name}")
 
     @classmethod
     def is_dataset_available(cls, dataset_name: str) -> bool:
