@@ -34,6 +34,7 @@ class HuggingFaceLoader(BaseLoader):
         "chlange_SubstrateMixRaman": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="chlange_SubstrateMixRaman",
+            name="Substrate Mix",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "chlange_SubstrateMixRaman",
@@ -46,6 +47,7 @@ class HuggingFaceLoader(BaseLoader):
         "chlange_RamanSpectraEcoliFermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="chlange_RamanSpectraEcoliFermentation",
+            name="E. Coli Fermentation",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "chlange_RamanSpectraEcoliFermentation",
@@ -58,6 +60,7 @@ class HuggingFaceLoader(BaseLoader):
         "chlange_FuelRamanSpectraBenchtop": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="chlange_FuelRamanSpectraBenchtop",
+            name="Fuel Benchtop",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "chlange_FuelRamanSpectraBenchtop",
@@ -70,6 +73,7 @@ class HuggingFaceLoader(BaseLoader):
         "HTW-KI-Werkstatt_FuelRamanSpectraHandheld": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="HTW-KI-Werkstatt_FuelRamanSpectraHandheld",
+            name="Fuel Handheld",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "HTW-KI-Werkstatt_FuelRamanSpectraHandheld",
@@ -82,6 +86,7 @@ class HuggingFaceLoader(BaseLoader):
         "HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations",
+            name="Ralstonia Fermentation",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations",
