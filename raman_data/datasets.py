@@ -4,13 +4,14 @@ Internal functions for loading and listing datasets.
 
 from typing import List, Optional
 
+from cachetools import LRUCache, cached
+
 from .loaders.MiscLoader import MiscLoader
 from .types import RamanDataset
 
 from raman_data.loaders.KaggleLoader import KaggleLoader
 from raman_data.loaders.HuggingFaceLoader import HuggingFaceLoader
 from raman_data.loaders.ZenodoLoader import ZenodoLoader
-from raman_data.loaders.ZipLoader import ZipLoader
 from raman_data.types import TASK_TYPE
 
 __LOADERS = [
@@ -20,6 +21,9 @@ __LOADERS = [
     MiscLoader,
     #ZipLoader
 ]
+
+# Create a global LRU cache instance with a capacity of 1
+lru_cache = LRUCache(maxsize=1)
 
 def list_datasets(
     task_type: Optional[TASK_TYPE] = None
@@ -47,6 +51,7 @@ def list_datasets(
     return list(datasets.keys())
 
 
+@cached(cache=lru_cache)
 def load_dataset(
     dataset_name: str,
     cache_dir: Optional[str] = None
@@ -70,16 +75,17 @@ def load_dataset(
     Raises:
         ValueError: If the dataset name is not found.
     """
+
     if dataset_name not in list_datasets():
         raise ValueError(f"Dataset '{dataset_name}' not found. "
                          f"Available datasets: {list_datasets()}")
 
     get_dataset = None
-    
+
     for loader in __LOADERS:
         if not (dataset_name in loader.DATASETS):
             continue
-        
+
         get_dataset = loader.load_dataset
         break
 
