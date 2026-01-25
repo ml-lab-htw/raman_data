@@ -374,7 +374,7 @@ class MiscLoader(BaseLoader):
         )
 
     @staticmethod
-    def _load_dtu_split(cache_path: str, split: str):
+    def _load_dtu_split(cache_path: str, split: str, align_output: bool = True):
         shared_root = os.path.join(os.path.dirname(cache_path), "dtu_raman_shared")
         zip_path = os.path.join(shared_root, "public_dataset.zip")
         extracted_dir = os.path.join(shared_root, "public_dataset")
@@ -458,6 +458,15 @@ class MiscLoader(BaseLoader):
             else:
                 raman_shifts = raman_shifts_list
                 spectra = spectra_list
+
+            if align_output:
+                min_shift = np.max([rs[0] for rs in raman_shifts_list])
+                max_shift = np.min([rs[-1] for rs in raman_shifts_list])
+                frequency_steps = [rs[1] - rs[0] for rs in raman_shifts_list]
+                min_step = min(frequency_steps)
+                raman_shifts = np.arange(min_shift, max_shift, min_step)
+                new_spectra_list = [np.interp(raman_shifts, rs, spec) for rs, spec in zip(raman_shifts_list, spectra_list)]
+                spectra = np.stack(new_spectra_list)
 
             return spectra, raman_shifts, targets, class_names
 
