@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 import logging
 
 import os, requests
@@ -34,7 +34,7 @@ class ZenodoLoader(BaseLoader):
     @staticmethod
     def __load_10779223(
         cache_path: str
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str]] | None:
         """
         Parse and extract data from the sugar_mixtures Raman dataset (Zenodo ID: 10779223).
 
@@ -42,7 +42,7 @@ class ZenodoLoader(BaseLoader):
             cache_path: The base path where the dataset files are cached.
 
         Returns:
-            A tuple of (raman_shifts, spectra, concentrations) arrays,
+            A tuple of (spectra, raman_shifts, concentrations) arrays,
             or None if parsing fails.
         """
         zip_filename = "Raw data.zip"
@@ -96,9 +96,19 @@ class ZenodoLoader(BaseLoader):
         if not os.path.isfile(gt_path):
             raise FileNotFoundError(f"Could not find gt_endmembers.pkl in {gt_path}")
 
-        concentrations = pd.read_pickle(gt_path).T
+        meta_data_csv_path = os.path.join(data_folder, "metadata.csv")
+        if not os.path.isfile(meta_data_csv_path):
+            raise FileNotFoundError(f"Could not find meta_data.csv in {meta_data_csv_path}")
 
-        return spectra, raman_shifts, concentrations
+        meta_data = pd.read_csv(meta_data_csv_path)
+
+        # take the last 6 columns of the meta_data dataframe
+        concentrations = meta_data.iloc[:, -6:]
+
+        # take their column names as target names
+        target_names = concentrations.keys().to_list()
+
+        return np.array(spectra), np.array(raman_shifts), np.array(concentrations), target_names
 
 
     @staticmethod
@@ -121,7 +131,7 @@ class ZenodoLoader(BaseLoader):
     @staticmethod
     def __load_7644521(
         cache_path: str
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str]] | None:
         """
         Parse and extract data from the wheat_lines Raman dataset (Zenodo ID: 7644521).
 
@@ -142,7 +152,7 @@ class ZenodoLoader(BaseLoader):
 
         # read content
         file_content = LoaderTools.read_mat_file(data_path)
-        if file_content == None:
+        if file_content is None:
             logger.error(
                 f"There was an error while reading the dataset '7644521/wheat_lines'.\n"
             )
@@ -162,13 +172,13 @@ class ZenodoLoader(BaseLoader):
         spectra = np.concatenate(spectra_list)
         concentrations = np.concatenate(concentrations)
 
-        return spectra, raman_shifts, concentrations
+        return spectra, raman_shifts, concentrations, data_keys
 
 
     @staticmethod
     def __load_3572359(
         cache_path: str
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str]] | None:
         """
         Parse and extract data from the adenine SERS dataset (Zenodo ID: 3572359).
 
@@ -189,7 +199,7 @@ class ZenodoLoader(BaseLoader):
         raman_shifts = np.array(df.columns.values[8:], dtype=int)
         spectra = df.loc[:, "400":].to_numpy()
 
-        return spectra, raman_shifts, concentrations
+        return spectra, raman_shifts, concentrations, target_names
 
 
     __BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
@@ -197,11 +207,11 @@ class ZenodoLoader(BaseLoader):
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
 
     DATASETS = {
-        "sugar": DatasetInfo(
+        "sugar_mixtures": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="10779223",
             name="Sugar Mixtures",
-            loader=__load_10779223,
+            loader=lambda cache_path: ZenodoLoader.__load_10779223(cache_path),
             metadata={
                 "full_name": "Research data supporting \"Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders\"",
                 "source": "https://doi.org/10.5281/zenodo.10779223",
@@ -209,11 +219,11 @@ class ZenodoLoader(BaseLoader):
                 "description": "Experimental and synthetic Raman data used in Georgiev et al., PNAS (2024) DOI:10.1073/pnas.2407439121."
             }
         ),
-        "wheat": DatasetInfo(
+        "wheat_lines": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="7644521",
             name="Wheat Lines",
-            loader=__load_7644521,
+            loader=lambda cache_path: ZenodoLoader.__load_7644521(cache_path),
             metadata={
                 "full_name": "DIFFERENTIATION OF ADVANCED GENERATION MUTANT wheat_lines: CONVENTIONAL TECHNIQUES VERSUS RAMAN SPECTROSCOPY",
                 "source": "https://doi.org/10.5281/zenodo.7644521",
@@ -222,10 +232,10 @@ class ZenodoLoader(BaseLoader):
             }
         ),
         "adenine": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
+            task_type=TASK_TYPE.Regression,
             id="3572359",
             name="Adenine",
-            loader=__load_3572359,
+            loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path),
             metadata={
                 "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
                 "source": "https://doi.org/10.5281/zenodo.3572359",
@@ -234,3 +244,125 @@ class ZenodoLoader(BaseLoader):
             }
         )
     }
+
+    @staticmethod
+    def download_dataset(
+            dataset_name: str,
+            cache_path: Optional[str] = None
+    ) -> str | None:
+        """
+        Download a Zenodo dataset to the local cache.
+
+        Args:
+            dataset_name: The name of the dataset to download (e.g., "sugar_mixtures").
+            cache_path: Custom directory to save the dataset. If None, uses the default
+                        Zenodo cache directory (~/.cache/zenodo).
+
+        Returns:
+            str | None: The path where the dataset was downloaded, or None if the
+                        dataset is not available or download fails.
+
+        Raises:
+            requests.HTTPError: If the HTTP request to Zenodo fails.
+        """
+        if not LoaderTools.is_dataset_available(dataset_name, ZenodoLoader.DATASETS):
+            logger.error(f"[!] Cannot download {dataset_name} dataset with ZenodoLoader")
+            return None
+
+        if not (cache_path is None):
+            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
+        cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
+
+        try:
+            dataset_id = ZenodoLoader.DATASETS[dataset_name].id
+            file_name = dataset_id + ".zip"
+            url = ZenodoLoader.__BASE_URL.replace("ID", dataset_id)
+
+            LoaderTools.download(url, cache_path, file_name)
+        except requests.HTTPError as e:
+            logger.error(f"Could not download requested dataset")
+            return None
+        except OSError as e:
+            logger.error(f"Failed to save dataset due to filesystem error: {e}")
+            return None
+
+        return cache_path
+
+    @staticmethod
+    def load_dataset(
+            dataset_name: str,
+            cache_path: Optional[str] = None
+    ) -> RamanDataset | None:
+        """
+        Load a Zenodo dataset as a RamanDataset object.
+
+        Downloads the dataset if not already cached, then parses it into
+        a standardized RamanDataset format. Automatically retries download
+        up to 3 times if the file appears corrupted.
+
+        Args:
+            dataset_name: The name of the dataset to load (e.g., "sugar_mixtures").
+            cache_path: Custom directory to load/save the dataset. If None, uses the default
+                        Zenodo cache directory (~/.cache/zenodo).
+
+        Returns:
+            RamanDataset | None: A RamanDataset object containing the spectral data,
+                                 target values, and metadata, or None if loading fails.
+
+        Raises:
+            Exception: If the file download fails after maximum retry attempts.
+        """
+        if not LoaderTools.is_dataset_available(dataset_name, ZenodoLoader.DATASETS):
+            logger.error(f"[!] Cannot load {dataset_name} dataset with ZenodoLoader")
+            return None
+
+        if not (cache_path is None):
+            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
+        cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
+
+        dataset_id = ZenodoLoader.DATASETS[dataset_name].id
+
+        zip_file_path = os.path.join(cache_path, dataset_id + ".zip")
+
+        if not os.path.isfile(zip_file_path):
+            ZenodoLoader.download_dataset(dataset_name, cache_path)
+
+        max_retries = 3
+        retry_count = 0
+
+        while retry_count < max_retries:
+            try:
+                if not os.path.isdir(os.path.join(cache_path, dataset_id)):
+                    LoaderTools.extract_zip_file_content(zip_file_path, dataset_id)
+                break
+
+            except CorruptedZipFileError as e:
+                logger.warning(
+                    f"{e.zip_file_path} is corrupted. " \
+                    f"Attempt {retry_count + 1}/{max_retries}"
+                )
+                os.remove(e.zip_file_path)
+                retry_count += 1
+
+                if retry_count < max_retries:
+                    ZenodoLoader.download_dataset(dataset_name, cache_path)
+                else:
+                    raise Exception(
+                        f"Failed to download valid file after {max_retries} attempts"
+                    )
+
+        data = ZenodoLoader.DATASETS[dataset_name].loader(cache_path)
+
+        if data is not None:
+            spectra, raman_shifts, concentrations, target_names = data
+            return RamanDataset(
+                metadata=ZenodoLoader.DATASETS[dataset_name].metadata,
+                name=dataset_name,
+                raman_shifts=raman_shifts,
+                spectra=spectra,
+                targets=concentrations,
+                task_type=ZenodoLoader.DATASETS[dataset_name].task_type,
+                target_names=target_names,
+            )
+
+        return data
