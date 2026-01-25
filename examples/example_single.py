@@ -1,9 +1,13 @@
 import random
+
+import numpy as np
 from matplotlib import pyplot as plt
 from raman_data import raman_data
+from raman_data.datasets import pretty_name
+
 random.seed(0)
 
-dataset_name = "HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations"
+dataset_name = "mind_pd_ad"
 dataset = raman_data(dataset_name)
 
 if len(dataset) == 0:
@@ -18,7 +22,7 @@ indices = random.sample(range(len(dataset)), k=num_to_plot)
 
 for idx, i in enumerate(indices):
     if not isinstance(dataset.raman_shifts, list):
-        if isinstance(dataset.targets[i], int):
+        if isinstance(dataset.targets[i], (int, np.integer)):
             plt.plot(dataset.raman_shifts, dataset.spectra[i], label=f"{i+1}: {dataset.target_names[dataset.targets[i]]}")
         else:
             plt.plot(dataset.raman_shifts, dataset.spectra[i], label=f"{i+1}: {dataset.target_names[0]}: {dataset.targets[i][0]}")
@@ -28,6 +32,6 @@ for idx, i in enumerate(indices):
 plt.grid()
 plt.xlabel('Raman Shift')
 plt.ylabel('Intensity')
-plt.title(f"{dataset_name} - Random {num_to_plot}/{len(dataset)} Spectra")
+plt.title(f"{pretty_name(dataset_name)} - Random {num_to_plot}/{len(dataset)} Spectra")
 plt.legend()
 plt.show()
