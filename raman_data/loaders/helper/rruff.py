@@ -2,13 +2,11 @@
 Originally from https://github.com/lyn1874/raman_spectra_matching_with_contrastive_learning
 @author: bo
 """
-import numpy as np
 import os
-import pandas as pd
-import matplotlib.pyplot as plt
-import math
-import time
 import pickle
+
+import numpy as np
+import pandas as pd
 import seaborn as sns
 from scipy.interpolate import interp1d
 
@@ -125,6 +123,8 @@ def create_label(name):
 
 
 def show_mineral(tr_filename, tt_filename, path_mom, show_specific="Actinolite", save=False):
+    import matplotlib.pyplot as plt
+
     tr_shortname = np.array([v.split("__")[0] for v in tr_filename])
     tt_shortname = np.array([v.split("__")[0] for v in tt_filename])
     if "rs_dataset" in tr_shortname[0]:
@@ -509,21 +509,21 @@ def sample(spectrum, label, tot_num, show=False, norm_first=False, norm_method="
         spectrum_update = np.array([v for j in spectrum_update for v in j])
     label_update = np.array([v for j in label_update for v in j])
     real_or_sample = np.array([v for j in real_or_sample for v in j])
-    if show:
-        fig = plt.figure(figsize=(10, 5))
-        _label_select = np.random.choice(tr_class, 1)[0]
-        _subset_index = np.where(label_update == _label_select)[0]
-        for i in range(2):
-            if i == 0:
-                _value = spectrum_update[_subset_index]
-            else:
-                _value = [norm(v, "max_1_min_0") for v in spectrum_update[_subset_index]]
-            ax = fig.add_subplot(2, 1, i + 1)
-            _avg = np.mean(_value, axis=0)
-            _std = 1.95 * np.std(_value) / np.sqrt(len(_value))
-            ax.plot(np.arange(len(_avg)), _avg, 'r')
-            ax.fill_between(np.arange(len(_avg)), _avg - _std, _avg + _std, color='r', alpha=0.4)
-            ax.set_title(_label_select)
+    # if show:
+    #     fig = plt.figure(figsize=(10, 5))
+    #     _label_select = np.random.choice(tr_class, 1)[0]
+    #     _subset_index = np.where(label_update == _label_select)[0]
+    #     for i in range(2):
+    #         if i == 0:
+    #             _value = spectrum_update[_subset_index]
+    #         else:
+    #             _value = [norm(v, "max_1_min_0") for v in spectrum_update[_subset_index]]
+    #         ax = fig.add_subplot(2, 1, i + 1)
+    #         _avg = np.mean(_value, axis=0)
+    #         _std = 1.95 * np.std(_value) / np.sqrt(len(_value))
+    #         ax.plot(np.arange(len(_avg)), _avg, 'r')
+    #         ax.fill_between(np.arange(len(_avg)), _avg - _std, _avg + _std, color='r', alpha=0.4)
+    #         ax.set_title(_label_select)
     return spectrum_update, label_update.astype('int32'), real_or_sample.astype('int32')
 
 
