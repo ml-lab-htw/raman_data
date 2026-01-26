@@ -1,9 +1,11 @@
+import glob
 from typing import Optional, Tuple, List
 import logging
 
 import os, requests
 import pandas as pd
 import numpy as np
+from zenodo_get import download
 
 from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
 from raman_data.exceptions import CorruptedZipFileError
@@ -45,36 +47,33 @@ class ZenodoLoader(BaseLoader):
             A tuple of (spectra, raman_shifts, concentrations) arrays,
             or None if parsing fails.
         """
-        zip_filename = "Raw data.zip"
-
-        try:
-            data_dir = LoaderTools.extract_zip_file_content(
-                os.path.join(cache_path, "10779223", zip_filename),
-                zip_filename.split(".")[0]
-            )
-        except CorruptedZipFileError as e:
-            logger.error(
-                f"There seems to be an issue with dataset '10779223/sugar_mixtures'. \n"
-            )
-            return None
-
-        if data_dir is None:
-            logger.error(
-                f"There seems to be no file of dataset '10779223/sugar_mixtures'.\n"
-            )
-            return None
 
         data_folder_parent = os.path.join(
-            data_dir,
+            cache_path,
             "Raw data",
             "Experimental data from sugar mixtures",
             "Raw datasets for analyses"
         )
 
+        if not os.path.isdir(data_folder_parent) or not os.listdir(data_folder_parent):
+            zip_filename = "Raw data.zip"
+            try:
+                extracted_dir = LoaderTools.extract_zip_file_content(
+                    os.path.join(cache_path, "10779223", zip_filename),
+                    zip_filename.split(".")[0]
+                )
+            except CorruptedZipFileError as e:
+                logger.error(
+                    f"There seems to be an issue with dataset '10779223/sugar_mixtures'. \n"
+                )
+                return None
+
+
+
         # load the data file
         snr = "Low SNR"  # TODO implement snr selection
         data_folder = os.path.join(data_folder_parent, snr)
-        
+
         # read spectra intensity data with pandas
         data_path = os.path.join(data_folder, "data.pkl")
         if not os.path.isfile(data_path):
@@ -190,7 +189,7 @@ class ZenodoLoader(BaseLoader):
             or None if parsing fails.
         """
         # load data file
-        data_path = os.path.join(cache_path, "3572359", "ILSdata.csv")
+        data_path = os.path.join(cache_path, "adenine", "ILSdata.csv")
         if not os.path.isfile(data_path):
             raise FileNotFoundError(f"Could not find ILSdata.csv in {data_path}")
 
@@ -218,6 +217,7 @@ class ZenodoLoader(BaseLoader):
             task_type=TASK_TYPE.Regression,
             id="10779223",
             name="Sugar Mixtures",
+            file_typ="*", # zip file containing multiple files ".zip" somehow not working
             loader=lambda cache_path: ZenodoLoader.__load_10779223(cache_path),
             metadata={
                 "full_name": "Research data supporting \"Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders\"",
@@ -230,6 +230,7 @@ class ZenodoLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="7644521",
             name="Wheat Lines",
+            file_typ=".mat",
             loader=lambda cache_path: ZenodoLoader.__load_7644521(cache_path),
             metadata={
                 "full_name": "DIFFERENTIATION OF ADVANCED GENERATION MUTANT wheat_lines: CONVENTIONAL TECHNIQUES VERSUS RAMAN SPECTROSCOPY",
@@ -242,6 +243,7 @@ class ZenodoLoader(BaseLoader):
             task_type=TASK_TYPE.Regression,
             id="3572359",
             name="Adenine cAg",
+            file_typ=".csv",
             loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'cAg'),
             metadata={
                 "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
@@ -254,6 +256,7 @@ class ZenodoLoader(BaseLoader):
             task_type=TASK_TYPE.Regression,
             id="3572359",
             name="Adenine sAg",
+            file_typ=".csv",
             loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'sAg'),
             metadata={
                 "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
@@ -266,6 +269,7 @@ class ZenodoLoader(BaseLoader):
             task_type=TASK_TYPE.Regression,
             id="3572359",
             name="Adenine cAu",
+            file_typ=".csv",
             loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'cAu'),
             metadata={
                 "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
@@ -278,6 +282,7 @@ class ZenodoLoader(BaseLoader):
             task_type=TASK_TYPE.Regression,
             id="3572359",
             name="Adenine sAu",
+            file_typ=".csv",
             loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'sAu'),
             metadata={
                 "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
@@ -316,12 +321,15 @@ class ZenodoLoader(BaseLoader):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
 
+        dataset_id = ZenodoLoader.DATASETS[dataset_name].id
+        file_typ = ZenodoLoader.DATASETS[dataset_name].file_typ
+        dataset_cache_path = os.path.join(cache_path, dataset_id)
+        os.makedirs(dataset_cache_path, exist_ok=True)
+
         try:
             dataset_id = ZenodoLoader.DATASETS[dataset_name].id
-            file_name = dataset_id + ".zip"
-            url = ZenodoLoader.__BASE_URL.replace("ID", dataset_id)
+            download(dataset_id, output_dir=dataset_cache_path, file_glob=file_typ)
 
-            LoaderTools.download(url, cache_path, file_name)
         except requests.HTTPError as e:
             logger.error(f"Could not download requested dataset")
             return None
@@ -364,35 +372,10 @@ class ZenodoLoader(BaseLoader):
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
 
         dataset_id = ZenodoLoader.DATASETS[dataset_name].id
+        dataset_cache_path = os.path.join(cache_path, dataset_id)
 
-        zip_file_path = os.path.join(cache_path, dataset_id + ".zip")
-
-        if not os.path.isfile(zip_file_path):
+        if not os.path.isdir(dataset_cache_path) or glob.glob(dataset_cache_path):
             ZenodoLoader.download_dataset(dataset_name, cache_path)
-
-        max_retries = 3
-        retry_count = 0
-
-        while retry_count < max_retries:
-            try:
-                if not os.path.isdir(os.path.join(cache_path, dataset_id)):
-                    LoaderTools.extract_zip_file_content(zip_file_path, dataset_id)
-                break
-
-            except CorruptedZipFileError as e:
-                logger.warning(
-                    f"{e.zip_file_path} is corrupted. " \
-                    f"Attempt {retry_count + 1}/{max_retries}"
-                )
-                os.remove(e.zip_file_path)
-                retry_count += 1
-
-                if retry_count < max_retries:
-                    ZenodoLoader.download_dataset(dataset_name, cache_path)
-                else:
-                    raise Exception(
-                        f"Failed to download valid file after {max_retries} attempts"
-                    )
 
         data = ZenodoLoader.DATASETS[dataset_name].loader(cache_path)
 
