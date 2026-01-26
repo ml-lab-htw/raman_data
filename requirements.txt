@@ -14,7 +14,7 @@ hf-xet==1.1.10
 h5py==3.14.0
 huggingface-hub==0.34.4
 idna==3.10
-kagglehub==0.3.13
+kagglehub==0.4.1
 multidict==6.6.4
 multiprocess==0.70.16
 numpy==2.3.2
