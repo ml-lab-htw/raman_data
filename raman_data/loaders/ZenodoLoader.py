@@ -177,7 +177,7 @@ class ZenodoLoader(BaseLoader):
 
     @staticmethod
     def __load_3572359(
-        cache_path: str
+        cache_path: str, substrate:str = "cAg"
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str]] | None:
         """
         Parse and extract data from the adenine SERS dataset (Zenodo ID: 3572359).
@@ -194,12 +194,19 @@ class ZenodoLoader(BaseLoader):
         if not os.path.isfile(data_path):
             raise FileNotFoundError(f"Could not find ILSdata.csv in {data_path}")
 
-        df = pd.read_csv(data_path)
-        concentrations = df.pop("conc").to_numpy()
-        raman_shifts = np.array(df.columns.values[8:], dtype=int)
-        spectra = df.loc[:, "400":].to_numpy()
+        if substrate not in ['cAg', 'sAg', 'cAu', 'sAu']:
+            raise ValueError(f"Substrate {substrate} not available in dataset adenine")
 
-        return spectra, raman_shifts, concentrations, target_names
+        df = pd.read_csv(data_path)
+        raman_shifts = np.array(df.columns.values[9:], dtype=int)
+
+        # substrates = df["substrate"].unique().tolist()
+        substrates = [substrate]
+        df_substrate = df[df["substrate"] == substrate]
+        spectra = df_substrate.iloc[:, 9:].to_numpy()
+        concentrations = df_substrate["conc"].to_numpy()
+
+        return spectra, raman_shifts, concentrations, substrates
 
 
     __BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
@@ -231,18 +238,54 @@ class ZenodoLoader(BaseLoader):
                 "description": "Raman spectroscopy data used to differentiate between advanced generation mutant wheat lines and their parental cultivars."
             }
         ),
-        "adenine": DatasetInfo(
+        "adenine_cAg": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="3572359",
-            name="Adenine",
-            loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path),
+            name="Adenine cAg",
+            loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'cAg'),
             metadata={
                 "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
                 "source": "https://doi.org/10.5281/zenodo.3572359",
-                "paper": "https://doi.org/10.1021/acsami.9b17424",
+                "paper": "https://pubs.acs.org/doi/10.1021/acs.analchem.9b05658",
                 "description": "SERS spectra of adenine molecules on silver nanoparticles, with varying concentrations."
             }
-        )
+        ),
+        "adenine_sAg": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id="3572359",
+            name="Adenine sAg",
+            loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'sAg'),
+            metadata={
+                "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
+                "source": "https://doi.org/10.5281/zenodo.3572359",
+                "paper": "https://pubs.acs.org/doi/10.1021/acs.analchem.9b05658",
+                "description": "SERS spectra of adenine molecules on silver nanoparticles, with varying concentrations."
+            }
+        ),
+        "adenine_cAu": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id="3572359",
+            name="Adenine cAu",
+            loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'cAu'),
+            metadata={
+                "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
+                "source": "https://doi.org/10.5281/zenodo.3572359",
+                "paper": "https://pubs.acs.org/doi/10.1021/acs.analchem.9b05658",
+                "description": "SERS spectra of adenine molecules on silver nanoparticles, with varying concentrations."
+            }
+        ),
+        "adenine_sAu": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id="3572359",
+            name="Adenine sAu",
+            loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'sAu'),
+            metadata={
+                "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
+                "source": "https://doi.org/10.5281/zenodo.3572359",
+                "paper": "https://pubs.acs.org/doi/10.1021/acs.analchem.9b05658",
+                "description": "SERS spectra of adenine molecules on silver nanoparticles, with varying concentrations."
+            }
+        ),
     }
 
     @staticmethod
