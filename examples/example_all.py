@@ -1,5 +1,4 @@
-from matplotlib import pyplot as plt
-
+from examples.utils import plot_samples
 from raman_data import TASK_TYPE
 from raman_data import raman_data
 
@@ -23,36 +22,17 @@ for idx in range(len(dataset_names)):
     name = dataset_names[idx]
     print(f"- {name}: {num_samples} samples")
 
-
-
 # Iterate and plot first 5 spectra for all classification datasets
 for dataset_name in classification_datasets:
     print(f"\n[Classification] Plotting first 5 spectra for: {dataset_name}")
     dataset = raman_data(dataset_name)
-    if dataset is None:
-        print(f"[!] Failed to load dataset: {dataset_name}")
-        continue
-    for i in range(min(5, len(dataset))):
-        plt.plot(dataset.raman_shifts, dataset.spectra[i], label=f"Spec {i+1}")
-    plt.xlabel('Raman Shift')
-    plt.ylabel('Intensity')
-    plt.title(f"{dataset_name} - First 5/{len(dataset)}  Spectra")
-    plt.legend()
-    plt.show()
+    plot_samples(dataset)
+
 
 # Iterate and plot first 5 spectra for all regression datasets
 for dataset_name in regression_datasets:
     print(f"\n[Regression] Plotting first 5 spectra for: {dataset_name}")
     dataset = raman_data(dataset_name)
-    if dataset is None:
-        print(f"[!] Failed to load dataset: {dataset_name}")
-        continue
-    for i in range(min(5, len(dataset))):
-        plt.plot(dataset.raman_shifts, dataset.spectra[i], label=f"Spec {i+1}")
-    plt.xlabel('Raman Shift')
-    plt.ylabel('Intensity')
-    plt.title(f"{dataset_name} - First 5/{len(dataset)}  Spectra")
-    plt.legend()
-    plt.show()
+    plot_samples(dataset)
 
 
