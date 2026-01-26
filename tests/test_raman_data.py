@@ -51,8 +51,8 @@ def test_load_dataset():
     test_datasets = [
         "codina_diabetes_earLobe",                  # hosted on Kaggle
         "chlange_SubstrateMixRaman",                # hosted on HuggingFace
-        # "mendeley_surface-enhanced-raman",          # hosted on external website
-        "adenine"                                   # hosted on Zenodo
+        # "mendeley_surface-enhanced-raman",        # hosted on external website
+        "adenine_cAu"                               # hosted on Zenodo
     ]
     for dataset_name in test_datasets:
         print(f"Loading {dataset_name} dataset...")
