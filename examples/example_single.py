@@ -7,7 +7,7 @@ from raman_data.datasets import pretty_name
 
 random.seed(0)
 
-dataset_name = "mind_pd_ad"
+dataset_name = "adenine_cAu"
 dataset = raman_data(dataset_name)
 
 if len(dataset) == 0:
@@ -25,7 +25,10 @@ for idx, i in enumerate(indices):
         if isinstance(dataset.targets[i], (int, np.integer)):
             plt.plot(dataset.raman_shifts, dataset.spectra[i], label=f"{i+1}: {dataset.target_names[dataset.targets[i]]}")
         else:
-            plt.plot(dataset.raman_shifts, dataset.spectra[i], label=f"{i+1}: {dataset.target_names[0]}: {dataset.targets[i][0]}")
+            if isinstance(dataset.targets[i], (float, np.floating)):
+                plt.plot(dataset.raman_shifts, dataset.spectra[i], label=f"{i+1}: {dataset.target_names[0]}: {dataset.targets[i]:.2f}")
+            else:
+                plt.plot(dataset.raman_shifts, dataset.spectra[i], label=f"{i+1}: {dataset.target_names[0]}: {dataset.targets[i][0]:.2f}")
     else:
         plt.plot(dataset.raman_shifts[i], dataset.spectra[i], label=f"{i+1}: {dataset.target_names[dataset.targets[i]]}")
 
