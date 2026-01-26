@@ -3,8 +3,6 @@ Originally from https://github.com/lyn1874/raman_spectra_matching_with_contrasti
 @author: bo
 """
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 
 def get_reference_data(path="../bacteria/", show=False, tds_dir=None, save=False):
@@ -16,6 +14,8 @@ def get_reference_data(path="../bacteria/", show=False, tds_dir=None, save=False
         label_group[single_string] = np.load(path + "y_%s.npy" % single_string).astype(np.int32)
     label_name = get_label_string()
     if show:
+        import matplotlib.pyplot as plt
+        import seaborn as sns
         wavenum = np.load(path + "/wavenumbers.npy")
         label_unique = np.unique(label_group["reference"])
         select = np.random.choice(label_unique, 10, replace=False).astype(np.int32)
