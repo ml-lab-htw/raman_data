@@ -7,7 +7,6 @@ import pickle
 
 import numpy as np
 import pandas as pd
-import seaborn as sns
 from scipy.interpolate import interp1d
 
 
@@ -124,7 +123,7 @@ def create_label(name):
 
 def show_mineral(tr_filename, tt_filename, path_mom, show_specific="Actinolite", save=False):
     import matplotlib.pyplot as plt
-
+    import seaborn as sns
     tr_shortname = np.array([v.split("__")[0] for v in tr_filename])
     tt_shortname = np.array([v.split("__")[0] for v in tt_filename])
     if "rs_dataset" in tr_shortname[0]:
