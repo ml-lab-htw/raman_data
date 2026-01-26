@@ -313,12 +313,13 @@ class DatasetInfo:
         loader (Callable): The function to format the dataset.
         metadata (dict[str, str]): Some non-functional information about the dataset.
     """
-    task_type: TASK_TYPE
     id: str
     name: str
     loader: Callable[[str], Tuple[np.ndarray, np.ndarray, np.ndarray] | pd.DataFrame | None]
     metadata : dict[str, str]
-    
+    task_type: TASK_TYPE
+    file_typ: Optional[str | List[str] | None] = None
+
     
 @dataclass
 class ExternalLink:
