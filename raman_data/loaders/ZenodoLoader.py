@@ -189,7 +189,7 @@ class ZenodoLoader(BaseLoader):
             or None if parsing fails.
         """
         # load data file
-        data_path = os.path.join(cache_path, "adenine", "ILSdata.csv")
+        data_path = os.path.join(cache_path, "3572359", "ILSdata.csv")
         if not os.path.isfile(data_path):
             raise FileNotFoundError(f"Could not find ILSdata.csv in {data_path}")
 
@@ -217,7 +217,7 @@ class ZenodoLoader(BaseLoader):
             task_type=TASK_TYPE.Regression,
             id="10779223",
             name="Sugar Mixtures",
-            file_typ="*", # zip file containing multiple files ".zip" somehow not working
+            file_typ="*.zip",
             loader=lambda cache_path: ZenodoLoader.__load_10779223(cache_path),
             metadata={
                 "full_name": "Research data supporting \"Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders\"",
@@ -230,7 +230,7 @@ class ZenodoLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="7644521",
             name="Wheat Lines",
-            file_typ=".mat",
+            file_typ="*.mat",
             loader=lambda cache_path: ZenodoLoader.__load_7644521(cache_path),
             metadata={
                 "full_name": "DIFFERENTIATION OF ADVANCED GENERATION MUTANT wheat_lines: CONVENTIONAL TECHNIQUES VERSUS RAMAN SPECTROSCOPY",
@@ -243,7 +243,7 @@ class ZenodoLoader(BaseLoader):
             task_type=TASK_TYPE.Regression,
             id="3572359",
             name="Adenine cAg",
-            file_typ=".csv",
+            file_typ="*.csv",
             loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'cAg'),
             metadata={
                 "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
@@ -256,7 +256,7 @@ class ZenodoLoader(BaseLoader):
             task_type=TASK_TYPE.Regression,
             id="3572359",
             name="Adenine sAg",
-            file_typ=".csv",
+            file_typ="*.csv",
             loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'sAg'),
             metadata={
                 "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
@@ -269,7 +269,7 @@ class ZenodoLoader(BaseLoader):
             task_type=TASK_TYPE.Regression,
             id="3572359",
             name="Adenine cAu",
-            file_typ=".csv",
+            file_typ="*.csv",
             loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'cAu'),
             metadata={
                 "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
@@ -282,7 +282,7 @@ class ZenodoLoader(BaseLoader):
             task_type=TASK_TYPE.Regression,
             id="3572359",
             name="Adenine sAu",
-            file_typ=".csv",
+            file_typ="*.csv",
             loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'sAu'),
             metadata={
                 "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
@@ -328,7 +328,12 @@ class ZenodoLoader(BaseLoader):
 
         try:
             dataset_id = ZenodoLoader.DATASETS[dataset_name].id
-            download(dataset_id, output_dir=dataset_cache_path, file_glob=file_typ)
+            download(
+                record_or_doi=dataset_id, 
+                output_dir=dataset_cache_path, 
+                file_glob=file_typ,
+                # file_glob="*.csv",
+            )
 
         except requests.HTTPError as e:
             logger.error(f"Could not download requested dataset")
