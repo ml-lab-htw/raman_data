@@ -39,6 +39,6 @@ def plot_samples(dataset:RamanDataset, num_samples:int=5):
     plt.grid()
     plt.xlabel('Raman Shift')
     plt.ylabel('Intensity')
-    plt.title(f"{pretty_name(dataset.name)} - Random {num_to_plot}/{len(dataset)} Spectra")
+    plt.title(f"{dataset.name} - Random {num_to_plot}/{len(dataset)} Spectra")
     plt.legend()
     plt.show()
