@@ -35,7 +35,8 @@ class ZenodoLoader(BaseLoader):
 
     @staticmethod
     def __load_10779223(
-        cache_path: str
+        cache_path: str,
+        snr: str = "Low SNR"
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str]] | None:
         """
         Parse and extract data from the sugar_mixtures Raman dataset (Zenodo ID: 10779223).
@@ -48,8 +49,13 @@ class ZenodoLoader(BaseLoader):
             or None if parsing fails.
         """
 
+        if snr not in ['Low SNR', 'High SNR']:
+            raise ValueError(f"SNR {snr} not available in dataset sugar_mixtures")
+
         data_folder_parent = os.path.join(
             cache_path,
+            "10779223",
+            "Raw data",
             "Raw data",
             "Experimental data from sugar mixtures",
             "Raw datasets for analyses"
@@ -68,10 +74,7 @@ class ZenodoLoader(BaseLoader):
                 )
                 return None
 
-
-
         # load the data file
-        snr = "Low SNR"  # TODO implement snr selection
         data_folder = os.path.join(data_folder_parent, snr)
 
         # read spectra intensity data with pandas
@@ -213,12 +216,25 @@ class ZenodoLoader(BaseLoader):
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
 
     DATASETS = {
-        "sugar_mixtures": DatasetInfo(
+        "sugar_mixtures_low_snr": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="10779223",
-            name="Sugar Mixtures",
+            name="Sugar Mixtures (Low SNR)",
             file_typ="*.zip",
-            loader=lambda cache_path: ZenodoLoader.__load_10779223(cache_path),
+            loader=lambda cache_path: ZenodoLoader.__load_10779223(cache_path, "Low SNR"),
+            metadata={
+                "full_name": "Research data supporting \"Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders\"",
+                "source": "https://doi.org/10.5281/zenodo.10779223",
+                "paper": "https://doi.org/10.1073/pnas.2407439121",
+                "description": "Experimental and synthetic Raman data used in Georgiev et al., PNAS (2024) DOI:10.1073/pnas.2407439121."
+            }
+        ),
+        "sugar_mixtures_high_snr": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id="10779223",
+            name="Sugar Mixtures (High SNR)",
+            file_typ="*.zip",
+            loader=lambda cache_path: ZenodoLoader.__load_10779223(cache_path, "High SNR"),
             metadata={
                 "full_name": "Research data supporting \"Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders\"",
                 "source": "https://doi.org/10.5281/zenodo.10779223",
@@ -296,7 +312,7 @@ class ZenodoLoader(BaseLoader):
     @staticmethod
     def download_dataset(
             dataset_name: str,
-            cache_path: Optional[str] = None
+            cache_path: Optional[str] = None,
     ) -> str | None:
         """
         Download a Zenodo dataset to the local cache.
@@ -347,7 +363,8 @@ class ZenodoLoader(BaseLoader):
     @staticmethod
     def load_dataset(
             dataset_name: str,
-            cache_path: Optional[str] = None
+            cache_path: Optional[str] = None,
+            load_data: bool = True,
     ) -> RamanDataset | None:
         """
         Load a Zenodo dataset as a RamanDataset object.
@@ -377,18 +394,23 @@ class ZenodoLoader(BaseLoader):
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
 
         dataset_id = ZenodoLoader.DATASETS[dataset_name].id
-        dataset_cache_path = os.path.join(cache_path, dataset_id)
+        pretty_name = ZenodoLoader.DATASETS[dataset_name].name
 
-        if not os.path.isdir(dataset_cache_path) or glob.glob(dataset_cache_path):
-            ZenodoLoader.download_dataset(dataset_name, cache_path)
+        if load_data:
+            dataset_cache_path = os.path.join(cache_path, dataset_id)
 
-        data = ZenodoLoader.DATASETS[dataset_name].loader(cache_path)
+            if not os.path.isdir(dataset_cache_path) or not glob.glob(dataset_cache_path):
+                ZenodoLoader.download_dataset(dataset_name, cache_path)
+
+            data = ZenodoLoader.DATASETS[dataset_name].loader(cache_path)
+        else:
+            data = None, None, None, None
 
         if data is not None:
             spectra, raman_shifts, concentrations, target_names = data
             return RamanDataset(
                 metadata=ZenodoLoader.DATASETS[dataset_name].metadata,
-                name=dataset_name,
+                name=pretty_name,
                 raman_shifts=raman_shifts,
                 spectra=spectra,
                 targets=concentrations,

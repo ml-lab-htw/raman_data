@@ -361,7 +361,8 @@ class KaggleLoader(BaseLoader):
     @staticmethod
     def load_dataset(
         dataset_name: str,
-        cache_path: Optional[str] = None
+        cache_path: Optional[str] = None,
+        load_data: bool = True,
     ) -> RamanDataset | None:
         """
         Load a Kaggle dataset as a RamanDataset object.
@@ -380,7 +381,7 @@ class KaggleLoader(BaseLoader):
         """
         if not LoaderTools.is_dataset_available(dataset_name, KaggleLoader.DATASETS):
             logger.error(f"[!] Cannot load {dataset_name} dataset with Kaggle loader")
-            return
+            return None
 
         if not (cache_path is None):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
@@ -392,14 +393,18 @@ class KaggleLoader(BaseLoader):
         )
 
         dataset_id = KaggleLoader.DATASETS[dataset_name].id
+        pretty_name = KaggleLoader.DATASETS[dataset_name].name
 
-        data = KaggleLoader.DATASETS[dataset_name].loader(dataset_id)
+        if load_data:
+            data = KaggleLoader.DATASETS[dataset_name].loader(dataset_id)
+        else:
+            data = None, None, None
 
         if data is not None:
             spectra, raman_shifts, concentrations = data
             return RamanDataset(
                 metadata=KaggleLoader.DATASETS[dataset_name].metadata,
-                name=dataset_name,
+                name=pretty_name,
                 raman_shifts=raman_shifts,
                 spectra=spectra,
                 targets=concentrations,

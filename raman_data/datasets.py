@@ -54,7 +54,8 @@ def list_datasets(
 @cached(cache=lru_cache)
 def load_dataset(
     dataset_name: str,
-    cache_dir: Optional[str] = None
+    cache_dir: Optional[str] = None,
+    load_data: bool = True
 ) -> RamanDataset | None:
     """
     (Down-)Loads a specific Raman spectroscopy dataset.
@@ -89,7 +90,7 @@ def load_dataset(
         get_dataset = loader.load_dataset
         break
 
-    return get_dataset(dataset_name, cache_dir)
+    return get_dataset(dataset_name, cache_dir, load_data)
 
 
 def pretty_name(dataset_name: str) -> str:

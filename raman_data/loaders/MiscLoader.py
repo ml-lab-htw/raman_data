@@ -1,7 +1,7 @@
 import logging
 import os
 import pickle
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
 import numpy as np
 from scipy.io import loadmat
@@ -136,7 +136,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="mind_covid",
             name="COVID-19",
-            loader=lambda df: MiscLoader._load_mind_dataset(df, "covid_dataset"),
+            loader=lambda df: MiscLoader._load_mind_dataset(df, "covid_dataset", ["CTRL", "COV+", "COV-"]),
             metadata={
                 "full_name": "MIND-Lab Raman COVID Dataset",
                 "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
@@ -148,11 +148,27 @@ class MiscLoader(BaseLoader):
                 "license": "See source"
             }
         ),
-        "mind_pd_ad": DatasetInfo(
+        "mind_pd": DatasetInfo(
             task_type=TASK_TYPE.Classification,
-            id="mind_pd_ad",
-            name="Parkinson/Alzheimer",
-            loader=lambda df: MiscLoader._load_mind_dataset(df, "pd_ad_dataset"),
+            id="mind_pd",
+            name="Parkinson",
+            loader=lambda df: MiscLoader._load_mind_dataset(df, "pd_ad_dataset", ["PD", "CTRL"]),
+            metadata={
+                "full_name": "MIND-Lab Parkinson/Alzheimer Dataset",
+                "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
+                "description": "Per-patient saliva Raman spectra and clinical metadata used for Parkinson's Disease and Alzheimer studies (IRCCS Fondazione Don Carlo Gnocchi and Istituto Auxologico Italiano). Each patient folder contains spectra.csv, raman_shift.csv and user_information.csv.",
+                "paper": "https://doi.org/10.1016/j.compbiomed.2024.108028",
+                "citation": [
+                    "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028. https://doi.org/10.1016/j.compbiomed.2024.108028"
+                ],
+                "license": "See source"
+            }
+        ),
+        "mind_ad": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="mind_ad",
+            name="Alzheimer",
+            loader=lambda df: MiscLoader._load_mind_dataset(df, "pd_ad_dataset", ["AD", "CTRL"]),
             metadata={
                 "full_name": "MIND-Lab Parkinson/Alzheimer Dataset",
                 "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
@@ -327,7 +343,8 @@ class MiscLoader(BaseLoader):
     @staticmethod
     def load_dataset(
             dataset_name: str,
-            cache_path: Optional[str] = None
+            cache_path: Optional[str] = None,
+            load_data: bool = True,
     ) -> Optional[RamanDataset]:
         """
         Load a miscellaneous dataset from cache.
@@ -356,16 +373,19 @@ class MiscLoader(BaseLoader):
 
         # Get dataset info and load data
         dataset_info = MiscLoader.DATASETS[dataset_name]
-        result = dataset_info.loader(dataset_cache_path)
+        pretty_name = MiscLoader.DATASETS[dataset_name].name
 
-        if result is None:
-            return None
-
-        spectra, raman_shifts, targets, class_names = result
+        if load_data:
+            result = dataset_info.loader(dataset_cache_path)
+            if result is None:
+                return None
+            spectra, raman_shifts, targets, class_names = result
+        else:
+            spectra = raman_shifts = targets = class_names = None
 
         return RamanDataset(
             metadata=dataset_info.metadata,
-            name=dataset_name,
+            name=pretty_name,
             raman_shifts=raman_shifts,
             spectra=spectra,
             targets=targets,
@@ -479,7 +499,7 @@ class MiscLoader(BaseLoader):
         return raman_shifts, spectra
 
     @staticmethod
-    def _load_mind_dataset(cache_path: str, dataset_subfolder: str):
+    def _load_mind_dataset(cache_path: str, dataset_subfolder: str, category_filter: List[str]):
         """
         Load MIND-Lab datasets (covid_dataset or pd_ad_dataset).
 
@@ -557,6 +577,10 @@ class MiscLoader(BaseLoader):
                 continue
 
             category = str(ui[cat_col].iloc[0])
+
+            if category not in category_filter:
+                continue
+
             categories.append(category)
 
             # Read spectra and shifts

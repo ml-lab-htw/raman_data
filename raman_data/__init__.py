@@ -20,7 +20,8 @@ logger = logging.getLogger(__name__)
 def raman_data(
     dataset_name: Optional[str] = None,
     cache_dir: Optional[str] = None,
-    task_type: Optional[TASK_TYPE] = None
+    task_type: Optional[TASK_TYPE] = None,
+    load_data: bool = True,
 ) -> Union[RamanDataset, List[str]]:
     """
     Main function to interact with Raman datasets.
@@ -42,4 +43,4 @@ def raman_data(
         return datasets.list_datasets(task_type=task_type)
     else:
         logger.info(f"Loading dataset: {dataset_name} (cache_dir={cache_dir})")
-        return datasets.load_dataset(dataset_name=dataset_name, cache_dir=cache_dir)
+        return datasets.load_dataset(dataset_name=dataset_name, cache_dir=cache_dir, load_data=load_data)

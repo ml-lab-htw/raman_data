@@ -1,14 +1,14 @@
-from typing import Optional, Tuple, List
 import logging
+from typing import Optional, Tuple, List
 
 import datasets
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from raman_data.loaders.utils import is_wavenumber
-from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
+from raman_data.loaders.utils import is_wavenumber
+from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -126,7 +126,7 @@ class HuggingFaceLoader(BaseLoader):
     @staticmethod
     def download_dataset(
         dataset_name: str,
-        cache_path: Optional[str] = None
+        cache_path: Optional[str] = None,
     ) -> str | None:
         """
         Download a HuggingFace dataset to the local cache.
@@ -165,7 +165,8 @@ class HuggingFaceLoader(BaseLoader):
     @staticmethod
     def load_dataset(
         dataset_name: str,
-        cache_path: Optional[str] = None
+        cache_path: Optional[str] = None,
+        load_data: bool = True,
     ) -> RamanDataset | None:
         """
         Load a HuggingFace dataset as a RamanDataset object.
@@ -199,23 +200,28 @@ class HuggingFaceLoader(BaseLoader):
         dataset_key = HuggingFaceLoader.DATASETS[dataset_name].metadata["hf_key"]
         data_dict = datasets.load_dataset(path=dataset_key, cache_dir=cache_path)
 
-        splits = []
-        if "train" in data_dict:
-            splits.append(pd.DataFrame(data_dict["train"]))
-        if "test" in data_dict:
-            splits.append(pd.DataFrame(data_dict["test"]))
-        if "validation" in data_dict:
-            splits.append(pd.DataFrame(data_dict["validation"]))
+        if load_data:
+            splits = []
+            if "train" in data_dict:
+                splits.append(pd.DataFrame(data_dict["train"]))
+            if "test" in data_dict:
+                splits.append(pd.DataFrame(data_dict["test"]))
+            if "validation" in data_dict:
+                splits.append(pd.DataFrame(data_dict["validation"]))
 
-        full_dataset_df = pd.concat(splits, ignore_index=True)
+            full_dataset_df = pd.concat(splits, ignore_index=True)
 
-        data = HuggingFaceLoader.DATASETS[dataset_name].loader(full_dataset_df)
+            data = HuggingFaceLoader.DATASETS[dataset_name].loader(full_dataset_df)
+        else:
+            data = None, None, None
+
+        pretty_name = HuggingFaceLoader.DATASETS[dataset_name].name
 
         if data is not None:
             spectra, raman_shifts, concentrations, concentration_names = data
             return RamanDataset(
                 metadata=HuggingFaceLoader.DATASETS[dataset_name].metadata,
-                name=dataset_name,
+                name=pretty_name,
                 raman_shifts=raman_shifts,
                 spectra=spectra,
                 targets=concentrations,
