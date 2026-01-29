@@ -26,3 +26,5 @@ __all__ = [
     "CACHE_DIR",
     "TASK_TYPE",
 ]
+
+from raman_data.types import CACHE_DIR, TASK_TYPE
