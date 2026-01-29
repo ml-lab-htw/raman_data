@@ -394,7 +394,6 @@ class ZenodoLoader(BaseLoader):
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
 
         dataset_id = ZenodoLoader.DATASETS[dataset_name].id
-        pretty_name = ZenodoLoader.DATASETS[dataset_name].name
 
         if load_data:
             dataset_cache_path = os.path.join(cache_path, dataset_id)
@@ -409,12 +408,10 @@ class ZenodoLoader(BaseLoader):
         if data is not None:
             spectra, raman_shifts, concentrations, target_names = data
             return RamanDataset(
-                metadata=ZenodoLoader.DATASETS[dataset_name].metadata,
-                name=pretty_name,
+                info=ZenodoLoader.DATASETS[dataset_name],
                 raman_shifts=raman_shifts,
                 spectra=spectra,
                 targets=concentrations,
-                task_type=ZenodoLoader.DATASETS[dataset_name].task_type,
                 target_names=target_names,
             )
 

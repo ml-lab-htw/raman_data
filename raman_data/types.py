@@ -37,7 +37,6 @@ class TASK_TYPE(Enum):
     def __str__(self):
         return self.name
 
-
 class HASH_TYPE(Enum):
     """
     An enum contains possible hash types of a
@@ -50,28 +49,55 @@ class HASH_TYPE(Enum):
 
 
 @dataclass
+class DatasetInfo:
+    """
+    A class to represent dataset's information for its preparation.
+
+    Attributes:
+        task_type (TASK_TYPE): The task type of the dataset
+                               e.g. Classification or Regression.
+        id (str): An internal id to distinguish between sub-datasets.
+        loader (Callable): The function to format the dataset.
+        metadata (dict[str, str]): Some non-functional information about the dataset.
+    """
+    id: str
+    name: str
+    loader: Callable[[str], Tuple[np.ndarray, np.ndarray, np.ndarray] | pd.DataFrame | None]
+    metadata: dict[str, str]
+    task_type: TASK_TYPE
+    file_typ: Optional[str | List[str] | None] = None
+
+
+
+@dataclass
 class RamanDataset:
     """
     A class to represent a Raman spectroscopy dataset.
 
     Attributes:
         name (str): The name of the dataset.
-        task_type (TASK_TYPE): The task type of the dataset
-                               e.g. Classification or Regression.
         spectra (np.ndarray): The Raman spectra intensity data. Each row is a spectrum,
                               and each column corresponds to a Raman shift value.
         targets (np.ndarray): The target variable(s) for each spectrum. Can be a 1D array for single-target tasks
                          (e.g., class label or concentration) or a 2D array for multi-target tasks.
         raman_shifts (np.ndarray): The wavenumber/Raman shift values (x-axis) in cm⁻¹.
-        metadata (dict[str, str]): A dictionary containing metadata about the dataset (e.g., source, description).
+        info (DatasetInfo | None): DatasetInfo object containing dataset's information.
+        target_names (list[str]): A list of class names for classification tasks.
+        name (str): The name of the dataset.
     """
     spectra: np.ndarray
     targets: np.ndarray
     raman_shifts: np.ndarray
-    metadata: dict[str, str] = field(default_factory=dict)
+    info: DatasetInfo | None = None
     target_names: List[str] = field(default_factory=list)
-    name: str = ""
-    task_type: TASK_TYPE = TASK_TYPE.Unknown
+
+    @property
+    def name(self) -> str:
+        return self.info.name if self.info is not None else "Unknown Dataset"
+
+    @property
+    def task_type(self) -> TASK_TYPE:
+        return self.info.task_type if self.info is not None else TASK_TYPE.Unknown
 
     @property
     def n_spectra(self) -> int:
@@ -203,8 +229,7 @@ class RamanDataset:
     def __str__(self) -> str:
         return (f"RamanDataset: {self.name}\n"
                 f"  Spectra: {self.n_spectra} x {self.n_frequencies}\n"
-                f"  Task type: {self.task_type.name}\n"
-                f"  Metadata: {self.metadata}")
+                f"  Task type: {self.task_type.name}")
 
     def __getitem__(self, idx):
         """
@@ -215,10 +240,8 @@ class RamanDataset:
                 spectra=self.spectra[idx],
                 targets=self.targets[idx],
                 raman_shifts=self.raman_shifts,
-                metadata=self.metadata,
+                info=self.info,
                 target_names=self.target_names,
-                name=self.name,
-                task_type=self.task_type
             )
         else:
             return (self.spectra[idx], self.targets[idx])
@@ -300,25 +323,6 @@ class ZenodoFileInfo:
         self.download_link = download_link
         self.links = links
  
- 
-@dataclass
-class DatasetInfo:
-    """
-    A class to represent dataset's information for its preparation.
-    
-    Attributes:
-        task_type (TASK_TYPE): The task type of the dataset
-                               e.g. Classification or Regression.
-        id (str): An internal id to distinguish between sub-datasets.
-        loader (Callable): The function to format the dataset.
-        metadata (dict[str, str]): Some non-functional information about the dataset.
-    """
-    id: str
-    name: str
-    loader: Callable[[str], Tuple[np.ndarray, np.ndarray, np.ndarray] | pd.DataFrame | None]
-    metadata : dict[str, str]
-    task_type: TASK_TYPE
-    file_typ: Optional[str | List[str] | None] = None
 
     
 @dataclass

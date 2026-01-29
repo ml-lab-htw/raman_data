@@ -215,18 +215,14 @@ class HuggingFaceLoader(BaseLoader):
         else:
             data = None, None, None
 
-        pretty_name = HuggingFaceLoader.DATASETS[dataset_name].name
-
         if data is not None:
             spectra, raman_shifts, concentrations, concentration_names = data
             return RamanDataset(
-                metadata=HuggingFaceLoader.DATASETS[dataset_name].metadata,
-                name=pretty_name,
+                info=HuggingFaceLoader.DATASETS[dataset_name],
                 raman_shifts=raman_shifts,
                 spectra=spectra,
                 targets=concentrations,
                 target_names=concentration_names,
-                task_type=HuggingFaceLoader.DATASETS[dataset_name].task_type,
             )
         
         return data

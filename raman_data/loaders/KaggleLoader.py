@@ -390,7 +390,6 @@ class KaggleLoader(BaseLoader):
         )
 
         dataset_id = KaggleLoader.DATASETS[dataset_name].id
-        pretty_name = KaggleLoader.DATASETS[dataset_name].name
 
         if load_data:
             data = KaggleLoader.DATASETS[dataset_name].loader(dataset_id)
@@ -400,12 +399,10 @@ class KaggleLoader(BaseLoader):
         if data is not None:
             spectra, raman_shifts, concentrations = data
             return RamanDataset(
-                metadata=KaggleLoader.DATASETS[dataset_name].metadata,
-                name=pretty_name,
+                info=KaggleLoader.DATASETS[dataset_name],
                 raman_shifts=raman_shifts,
                 spectra=spectra,
                 targets=concentrations,
-                task_type=KaggleLoader.DATASETS[dataset_name].task_type,
             )
 
         return data

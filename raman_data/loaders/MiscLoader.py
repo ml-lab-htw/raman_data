@@ -380,7 +380,6 @@ class MiscLoader(BaseLoader):
 
         # Get dataset info and load data
         dataset_info = MiscLoader.DATASETS[dataset_name]
-        pretty_name = MiscLoader.DATASETS[dataset_name].name
 
         if load_data:
             result = dataset_info.loader(dataset_cache_path)
@@ -391,12 +390,10 @@ class MiscLoader(BaseLoader):
             spectra = raman_shifts = targets = class_names = None
 
         return RamanDataset(
-            metadata=dataset_info.metadata,
-            name=pretty_name,
+            info=dataset_info,
             raman_shifts=raman_shifts,
             spectra=spectra,
             targets=targets,
-            task_type=dataset_info.task_type,
             target_names=class_names,
         )
 
