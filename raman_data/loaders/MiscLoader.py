@@ -5,8 +5,10 @@ import pickle
 from typing import Optional, Tuple, List
 
 import numpy as np
+import requests
 from scipy.io import loadmat
 import spectrochempy as scp
+from sklearn.preprocessing import LabelEncoder
 
 import raman_data.loaders.helper.rruff as rruff
 from raman_data.exceptions import CorruptedZipFileError
@@ -14,7 +16,7 @@ from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.helper import organic
 import pandas as pd
-from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR
+from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, HASH_TYPE
 
 
 class MiscLoader(BaseLoader):
@@ -89,6 +91,22 @@ class MiscLoader(BaseLoader):
                 "license": "See paper"
             }
         ),
+        "active_pharmaceutical_ingredients": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="active_pharmaceutical_ingredients",
+            name="Active Pharmaceutical Ingredients",
+            loader=lambda cache_path: MiscLoader._load_api(cache_path),
+            metadata={
+                "full_name": "Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development",
+                "source": "https://springernature.figshare.com/ndownloader/articles/27931131/versions/1",
+                "paper": "https://doi.org/10.1038/s41597-025-04848-6",
+                "citation": [
+                    "Flanagan, A.R., Glavin, F.G. Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development. Sci Data 12, 498 (2025)."
+                ],
+                "description": "A Raman spectral dataset comprising 3,510 spectra from 32 chemical substances. This dataset includes organic solvents and reagents commonly used in API development, along with information regarding the products in the XLSX, and code to visualise and perform technical validation on the data.",
+                "license": "See paper"
+            }
+        ),
         "knowitall_organics_raw": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="knowitall_organics_raw",
@@ -119,6 +137,22 @@ class MiscLoader(BaseLoader):
                 ],
                 "description": "Preprocessed Raman spectra of organic compounds across multiple excitation sources, evaluating the generalization capabilities of deep neural networks on instrument-specific chemical sets.",
                 "license": "See paper"
+            }
+        ),
+        "covid19_serum": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="covid19_serum",
+            name="COVID-19 Human Serum",
+            loader=lambda cache_path: MiscLoader._load_covid(cache_path),
+            metadata={
+                "full_name": "COVID-19 in human serum using Raman spectroscopy",
+                "source": "Only via E-Mail",
+                "description": "This study proposed the diagnosis of COVID-19 by means of Raman spectroscopy. Samples of blood serum from 10 patients positive and 10 patients negative for COVID-19 by RT-PCR RNA and ELISA tests were analyzed.",
+                "paper": "https://doi.org/10.1007/s10103-021-03488-7",
+                "citation": [
+                    "Goulart, Ana Cristina Castro, et al. 'Diagnosing COVID-19 in human serum using Raman spectroscopy.' Lasers in Medical Science 37.4 (2022): 2217-2226."
+                ],
+                "license": "See source"
             }
         ),
         "mind_covid": DatasetInfo(
@@ -805,3 +839,100 @@ class MiscLoader(BaseLoader):
             raman_shifts, spectra = MiscLoader.align_raman_shifts(raman_shifts_list, spectra_list)
         targets = np.array(targets, dtype=int)
         return spectra, raman_shifts, targets, class_names
+
+    @staticmethod
+    def fetch_figshare_metadata(article_id: int) -> dict:
+        r = requests.get(f"https://api.figshare.com/v2/articles/{article_id}")
+        r.raise_for_status()
+        return r.json()
+
+    @staticmethod
+    def _load_api(cache_path):
+
+        metadata = MiscLoader.fetch_figshare_metadata(27931131)
+        files = metadata["files"]
+
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            MiscLoader.logger.error("[!] Cache root for MiscLoader is not set")
+            return None
+
+        dataset_cache = os.path.join(
+            cache_root,
+            "active_pharmaceutical_ingredient",
+        )
+        os.makedirs(dataset_cache, exist_ok=True)
+
+        for f in files:
+            file_url = f["download_url"]
+            file_name = f["name"]
+            file_md5 = f.get("computed_md5")
+
+            out_path = os.path.join(dataset_cache, file_name)
+
+            # download only if missing
+            if not os.path.exists(out_path):
+                try:
+                    LoaderTools.download(
+                        url=file_url,
+                        out_dir_path=dataset_cache,
+                        out_file_name=file_name,
+                        hash_target=file_md5,
+                        hash_type=HASH_TYPE.md5,
+                        referer="https://figshare.com/",
+                    )
+                except Exception as e:
+                    MiscLoader.logger.error(
+                        f"[!] Failed to download Figshare file {file_name}: {e}"
+                    )
+                    return None
+
+        spectra_path = os.path.join(dataset_cache, "raman_spectra_api_compounds.csv")
+        product_info_path = os.path.join(dataset_cache, "API_Product_Information.xlsx")
+
+        spectra_df = pd.read_csv(spectra_path)
+        targets = spectra_df["label"]
+        raman_shifts = np.array(spectra_df.keys()[: -1].astype(float))
+        spectra = spectra_df.values[:, :-1].astype(float)
+        # product_info_df = pd.read_excel(product_info_path)
+
+        le = LabelEncoder()
+        encoded_targets = le.fit_transform(targets)
+        target_names = le.classes_
+        return spectra, raman_shifts, encoded_targets, target_names
+
+    @staticmethod
+    def _load_covid(cache_path):
+
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            MiscLoader.logger.error("[!] Cache root for MiscLoader is not set")
+            return None
+
+        dataset_cache = os.path.join(
+            cache_root,
+            "covid19",
+        )
+
+        if not os.path.exists(dataset_cache):
+            raise Exception("Dataset not found. Please contact the authors.")
+
+
+        spectra_path = os.path.join(dataset_cache, "covid19.xls")
+
+        xls = pd.ExcelFile(spectra_path)
+
+        # data = pd.read_excel(xls, 'RAW')
+        # data = pd.read_excel(xls, 'Poly7»RAW')
+        data = pd.read_excel(xls, 'N1»Poly7»RAW')
+
+        raman_shifts = data.iloc[:, 0].values.astype(float)
+        spectra = data.iloc[:, 1:].values.astype(float)
+
+        targets = data.keys()[1:].to_list()
+        encoded_targets = ["covid" in label for label in targets]
+        target_names = ["control", "covid"]
+
+        return spectra.T, raman_shifts, encoded_targets, target_names
+
+
