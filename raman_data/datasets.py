@@ -19,14 +19,14 @@ __LOADERS = [
     HuggingFaceLoader,
     ZenodoLoader,
     MiscLoader,
-    #ZipLoader
+    # ZipLoader
 ]
 
 # Create a global LRU cache instance with a capacity of 1
 lru_cache = LRUCache(maxsize=1)
 
 def list_datasets(
-    task_type: Optional[TASK_TYPE] = None
+        task_type: Optional[TASK_TYPE] = None
 ) -> List[str]:
     """
     Lists the available Raman spectroscopy datasets.
@@ -47,15 +47,15 @@ def list_datasets(
 
     if task_type:
         return [name for name, dataset_info in datasets.items() if dataset_info.task_type == task_type]
-    
+
     return list(datasets.keys())
 
 
 @cached(cache=lru_cache)
 def load_dataset(
-    dataset_name: str,
-    cache_dir: Optional[str] = None,
-    load_data: bool = True
+        dataset_name: str,
+        cache_dir: Optional[str] = None,
+        load_data: bool = True
 ) -> RamanDataset | None:
     """
     (Down-)Loads a specific Raman spectroscopy dataset.
