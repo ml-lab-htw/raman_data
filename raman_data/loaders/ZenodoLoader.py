@@ -329,14 +329,7 @@ class ZenodoLoader(BaseLoader):
         Raises:
             requests.HTTPError: If the HTTP request to Zenodo fails.
         """
-        if not LoaderTools.is_dataset_available(dataset_name, ZenodoLoader.DATASETS):
-            logger.error(f"[!] Cannot download {dataset_name} dataset with ZenodoLoader")
-            return None
-
-        if not (cache_path is None):
-            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
-        cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
-
+        cache_path = ZenodoLoader.set_cache_dir(cache_path, dataset_name)
         dataset_id = ZenodoLoader.DATASETS[dataset_name].id
         file_typ = ZenodoLoader.DATASETS[dataset_name].file_typ
         dataset_cache_path = os.path.join(cache_path, dataset_id)
@@ -358,6 +351,17 @@ class ZenodoLoader(BaseLoader):
             logger.error(f"Failed to save dataset due to filesystem error: {e}")
             return None
 
+        return cache_path
+
+    @staticmethod
+    def set_cache_dir(cache_path: str | None, dataset_name: str) -> str | None:
+        if not LoaderTools.is_dataset_available(dataset_name, ZenodoLoader.DATASETS):
+            logger.error(f"[!] Cannot download {dataset_name} dataset with ZenodoLoader")
+            raise Exception(f"Dataset {dataset_name} not available")
+
+        if not (cache_path is None):
+            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
+        cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
         return cache_path
 
     @staticmethod
@@ -385,14 +389,7 @@ class ZenodoLoader(BaseLoader):
         Raises:
             Exception: If the file download fails after maximum retry attempts.
         """
-        if not LoaderTools.is_dataset_available(dataset_name, ZenodoLoader.DATASETS):
-            logger.error(f"[!] Cannot load {dataset_name} dataset with ZenodoLoader")
-            return None
-
-        if not (cache_path is None):
-            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Zenodo)
-        cache_path = LoaderTools.get_cache_root(CACHE_DIR.Zenodo)
-
+        cache_path = ZenodoLoader.set_cache_dir(cache_path, dataset_name)
         dataset_id = ZenodoLoader.DATASETS[dataset_name].id
 
         if load_data:
