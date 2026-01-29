@@ -46,14 +46,6 @@ def test_zen_loader_load():
     assert dataset.metadata["source"] is not None
 
 @pytest.mark.skip(reason="MiscLoader datasets require manual download from OneDrive.")
-def test_misc_loader_download():
-    # Only checks that the download_dataset returns a path and creates the info file
-    for name in MiscLoader.get_dataset_names():
-        path = MiscLoader.download_dataset(name)
-        assert path is not None
-        assert os.path.exists(os.path.join(path, "onedrive_url.txt"))
-
-@pytest.mark.skip(reason="MiscLoader datasets require manual download from OneDrive.")
 def test_misc_loader_load_missing():
     # Should print missing file warning and return None if files are missing
     dataset = MiscLoader.load_dataset("deepr_denoising", cache_path="/tmp/nonexistent_misc")
