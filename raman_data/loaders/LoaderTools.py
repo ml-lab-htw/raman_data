@@ -103,7 +103,8 @@ class LoaderTools:
             out_dir_path: str,
             out_file_name: str,
             hash_target: Optional[str] = None,
-            hash_type: Optional[HASH_TYPE] = None
+            hash_type: Optional[HASH_TYPE] = None,
+            referer: Optional[str] = None
     ) -> str | None:
         """
         Download files from a URL with optional hash verification
@@ -137,9 +138,12 @@ class LoaderTools:
         checksum = hash_type.value() if hash_type else HASH_TYPE.md5.value()
 
         headers = {
-            "User-Agent": "Mozilla/5.0",
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
             "Accept": "*/*",
         }
+
+        if referer:
+            headers["Referer"] = referer
 
         os.makedirs(out_dir_path, exist_ok=True)
         out_file_path = os.path.join(out_dir_path, out_file_name)
@@ -177,12 +181,13 @@ class LoaderTools:
                             pbar.update(len(chunk))
 
         # ZIP magic-byte validation
-        with open(out_file_path, "rb") as f:
-            if f.read(4) != b"PK\x03\x04":
-                os.remove(out_file_path)
-                raise CorruptedZipFileError(
-                    f"{out_file_path} is not a ZIP (likely HTML/JSON response)"
-                )
+        if out_file_name.lower().endswith(".zip"):
+            with open(out_file_path, "rb") as f:
+                if f.read(4) != b"PK\x03\x04":
+                    os.remove(out_file_path)
+                    raise CorruptedZipFileError(
+                        f"{out_file_path} is not a ZIP (likely HTML/JSON response)"
+                    )
 
         if hash_target and checksum.hexdigest() != hash_target:
             os.remove(out_file_path)
