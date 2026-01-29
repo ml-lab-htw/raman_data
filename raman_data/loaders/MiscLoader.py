@@ -1,3 +1,4 @@
+import glob
 import logging
 import os
 import pickle
@@ -5,6 +6,7 @@ from typing import Optional, Tuple, List
 
 import numpy as np
 from scipy.io import loadmat
+import spectrochempy as scp
 
 import raman_data.loaders.helper.rruff as rruff
 from raman_data.exceptions import CorruptedZipFileError
@@ -194,6 +196,25 @@ class MiscLoader(BaseLoader):
                 ],
                 "description": "Bacterial Raman spectra dataset used in Ho et al. (2019). Add data source or download link to enable loading in the library.",
                 "license": "See paper"
+            }
+        ),
+        "rwth_acid_species": DatasetInfo(
+            task_type=TASK_TYPE.Regression,  # Likely regression (concentration monitoring)
+            id="rwth_acid_species",
+            name="Acid Species Concentrations",
+            loader=lambda df: MiscLoader._load_rwth_acid_species(df),
+            metadata={
+                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
+                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
+                "paper": [
+                    "https://doi.org/10.1177/0003702820973275",
+                    "https://publications.rwth-aachen.de/record/978266"
+                ],
+                "citation": [
+                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
+                ],
+                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
+                "license": "See paper/source."
             }
         )
     }
@@ -798,10 +819,67 @@ class MiscLoader(BaseLoader):
         return X.astype(float), raman_shifts, y.astype(int), unique
 
     @staticmethod
-    def _load_bacteria(cache_path: str):
+    def _load_rwth_acid_species(cache_path: str):
         """
-        Placeholder loader for the Ho et al. bacteria dataset. Currently unimplemented.
-        Returns None and logs that data must be provided or a loader implemented.
+        Download and load the RWTH acid species dataset.
+        Returns spectra, raman_shifts, targets, class_names (acids).
         """
-        MiscLoader.logger.warning("[!] _load_bacteria is not yet implemented. Please add data source or loader logic.")
-        return None
+        dataset_url = "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip?version=1"
+        zip_name = "Data_RWTH-2024-01177.zip"
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            MiscLoader.logger.error("[!] Cache root for MiscLoader is not set")
+            return None
+        shared_root = os.path.join(cache_root, "rwth_acid_species")
+        os.makedirs(shared_root, exist_ok=True)
+        zip_path = os.path.join(shared_root, zip_name)
+        # Download if not present
+        if not os.path.exists(zip_path) or not LoaderTools.is_valid_zip(zip_path):
+            try:
+                LoaderTools.download(url=dataset_url, out_dir_path=shared_root, out_file_name=zip_name)
+            except Exception as e:
+                MiscLoader.logger.error(f"[!] Failed to download RWTH acid species dataset: {e}")
+                return None
+        # Extract if not already extracted
+        extracted_dir = os.path.join(shared_root, "Data_RWTH-2024-01177")
+        if not os.path.isdir(extracted_dir):
+            try:
+                LoaderTools.extract_zip_file_content(zip_path)
+            except Exception as e:
+                MiscLoader.logger.error(f"[!] Failed to extract RWTH acid species zip: {e}")
+                return None
+        # Parse subfolders for each acid system
+        acid_dirs = [d for d in os.listdir(extracted_dir) if os.path.isdir(os.path.join(extracted_dir, d))]
+        spectra_list = []
+        raman_shifts_list = []
+        targets = []
+        class_names = []
+        acid_to_idx = {}
+
+
+        for acid_dir in acid_dirs:
+            acid_path = os.path.join(extracted_dir, acid_dir)
+            class_names.append(acid_dir)
+
+            spectra_files = glob.glob(os.path.join(acid_path, "*.spc"), recursive=True)
+
+            for file in spectra_files:
+                scp_dataset = scp.read_spc(file)
+                for spec in scp_dataset:
+                    print(f"{spec.name} : {spec.shape}")
+
+            # TODO
+
+        if len(spectra_list) == 0:
+            MiscLoader.logger.error(f"[!] No spectra found in {extracted_dir}")
+            return None
+        # Align raman shifts if possible
+        first_rs = raman_shifts_list[0]
+        all_equal = all(np.allclose(first_rs, rs) for rs in raman_shifts_list)
+        if all_equal:
+            raman_shifts = np.array(first_rs, dtype=float)
+            spectra = np.stack([np.array(s, dtype=float) for s in spectra_list])
+        else:
+            raman_shifts, spectra = MiscLoader.align_raman_shifts(raman_shifts_list, spectra_list)
+        targets = np.array(targets, dtype=int)
+        return spectra, raman_shifts, targets, class_names
