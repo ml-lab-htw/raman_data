@@ -28,124 +28,111 @@ class MiscLoader(BaseLoader):
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "raman-data", "misc")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Misc)
 
-    # Define DATASETS after class definition to avoid NameError
     DATASETS = {
-        # "deepr_denoising": DatasetInfo(
-        #     task_type=TASK_TYPE.Denoising,
-        #     id="deepr_denoising",
-        #     name="DeepeR Denoising",
-        #     loader=lambda df: MiscLoader._load_deepr_denoising(df),
-        #     metadata={
-        #         "full_name": "DeepeR Denoising Dataset",
-        #         "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9",
-        #         "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
-        #         "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
-        #         "description": "Raman spectral denoising dataset from DeepeR paper. Contains noisy input spectra and corresponding denoised target spectra for training deep learning denoising models.",
-        #         "license": "MIT License"
-        #     }
-        # ),
-        # "deepr_super_resolution": DatasetInfo(
-        #     task_type=TASK_TYPE.SuperResolution,
-        #     id="deepr_super_resolution",
-        #     name="DeepeR Super-Resolution Dataset",
-        #     loader=lambda df: MiscLoader._load_deepr_super_resolution(df),
-        #     metadata={
-        #         "full_name": "DeepeR Super-Resolution Dataset",
-        #         "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9",
-        #         "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
-        #         "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
-        #         "description": "Hyperspectral super-resolution dataset from DeepeR paper. Contains low-resolution input spectra and high-resolution target spectra for training super-resolution models.",
-        #         "license": "MIT License"
-        #     }
-        # ),
+        "deepr_denoising": DatasetInfo(
+            task_type=TASK_TYPE.Denoising,
+            id="deepr_denoising",
+            name="DeepeR Denoising",
+            loader=lambda df: MiscLoader._load_deepr_denoising(df),
+            metadata={
+                "full_name": "DeepeR Denoising Dataset",
+                "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9",
+                "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
+                "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
+                "description": "Raman spectral denoising dataset from DeepeR paper. Contains noisy input spectra and corresponding denoised target spectra for training deep learning denoising models.",
+                "license": "MIT License"
+            }
+        ),
+        "deepr_super_resolution": DatasetInfo(
+            task_type=TASK_TYPE.SuperResolution,
+            id="deepr_super_resolution",
+            name="DeepeR Super-Resolution Dataset",
+            loader=lambda df: MiscLoader._load_deepr_super_resolution(df),
+            metadata={
+                "full_name": "DeepeR Super-Resolution Dataset",
+                "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9",
+                "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
+                "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
+                "description": "Hyperspectral super-resolution dataset from DeepeR paper. Contains low-resolution input spectra and high-resolution target spectra for training super-resolution models.",
+                "license": "MIT License"
+            }
+        ),
         "rruff_mineral_raw": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="rruff_mineral_raw",
-            name="RRUFF - Mineral (raw)",
+            name="RRUFF Database (Raw)",
             loader=lambda df: MiscLoader._load_dtu_split(df, split="mineral_r", align_output=True),
             metadata={
-                "full_name": "RRUFF - Mineral (raw)",
-                "source": "https://data.dtu.dk/api/files/36144495",
-                "paper": [
-                    "https://www.rruff.net/wp-content/uploads/2023/04/HMC1-30.pdf",
-                    "https://doi.org/10.1039/D2AN00403H"
-                ],
+                "full_name": "RRUFF Database - Raw Spectra",
+                "source": "https://rruff.info/",
+                "paper": "https://doi.org/10.1515/9783110417104-003",
                 "citation": [
                     "Lafuente, B., Downs, R. T., Yang, H., & Stone, N. (2015). The power of databases: the RRUFF project. Highlights in Mineralogical Crystallography, T Armbruster and R M Danisi, Eds., Berlin, Germany, W. De Gruyter, 1–30."
                 ],
-                "description": "Mineral (raw) raman spectra subset from RRUFF database",
+                "description": "Comprehensive resource of raw Raman spectra for over 1,000 mineral species, representing a diverse array of crystallographic structures and chemical compositions measured under varying experimental conditions (e.g., 532 nm and 785 nm).",
                 "license": "See paper"
             }
         ),
         "rruff_mineral_preprocessed": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="rruff_mineral_preprocessed",
-            name="RRUFF - Mineral (preprocessed)",
+            name="RRUFF Database (Preprocessed)",
             loader=lambda df: MiscLoader._load_dtu_split(df, split="mineral_p", align_output=True),
             metadata={
-                "full_name": "RRUFF - Mineral (preprocessed)",
-                "source": "https://data.dtu.dk/api/files/36144495",
-                "paper": [
-                    "https://www.rruff.net/wp-content/uploads/2023/04/HMC1-30.pdf",
-                    "https://doi.org/10.1039/D2AN00403H"
-                ],
+                "full_name": "RRUFF Database - Preprocessed Spectra",
+                "source": "https://rruff.info/",
+                "paper": "https://doi.org/10.1515/9783110417104-003",
                 "citation": [
                     "Lafuente, B., Downs, R. T., Yang, H., & Stone, N. (2015). The power of databases: the RRUFF project. Highlights in Mineralogical Crystallography, T Armbruster and R M Danisi, Eds., Berlin, Germany, W. De Gruyter, 1–30."
                 ],
-                "description": "Mineral (preprocessed) raman spectra subset from RRUFF database",
+                "description": "Preprocessed Raman spectra for over 1,000 mineral species from the RRUFF Database, resampled to a common high-resolution sampling rate and truncated to their intersecting wavenumber range.",
                 "license": "See paper"
             }
         ),
         "knowitall_organics_raw": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="knowitall_organics_raw",
-            name="Knowitall Organics (raw)",
+            name="Organic Compounds (Raw)",
             loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_r", align_output=True),
             metadata={
-                "full_name": "Transfer-learning-based Raman spectra identification - Organic (raw)",
+                "full_name": "Organic Compounds Multi-Excitation Dataset - Raw",
                 "source": "https://data.dtu.dk/api/files/36144495",
-                "paper": [
-                    "https://doi.org/10.1002/jrs.5750",
-                    "https://doi.org/10.1039/D2AN00403H"
-                ],
+                "paper": "https://doi.org/10.1002/jrs.5750",
                 "citation": [
                     "Zhang, Rui et al., Transfer-learning-based Raman spectra identification, Journal of Raman Spectroscopy, 2020, 51, 1, 176-186. https://doi.org/10.1002/jrs.5992"
                 ],
-                "description": "Organic (raw) dataset from Transfer-learningbased Raman spectra identification. Organic compounds measured with several excitation sources.",
+                "description": "Raw Raman spectra of organic compounds collected with several different excitation sources. Designed to benchmark transfer learning and domain adaptation for chemical identification with limited data.",
                 "license": "See paper"
             }
         ),
         "knowitall_organics_preprocessed": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="knowitall_organics_preprocessed",
-            name="Knowitall Organics (preprocessed)",
+            name="Organic Compounds (Preprocessed)",
             loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_p", align_output=False),
             metadata={
-                "full_name": "Transfer-learning-based Raman spectra identification - Organic (preprocessed)",
+                "full_name": "Organic Compounds Multi-Excitation Dataset - Preprocessed",
                 "source": "https://data.dtu.dk/api/files/36144495",
-                "paper": [
-                    "https://doi.org/10.1002/jrs.5750",
-                    "https://doi.org/10.1039/D2AN00403H"
-                ],
+                "paper": "https://doi.org/10.1002/jrs.5750",
                 "citation": [
                     "Zhang, Rui et al., Transfer-learning-based Raman spectra identification, Journal of Raman Spectroscopy, 2020, 51, 1, 176-186. https://doi.org/10.1002/jrs.5992"
                 ],
-                "description": "Organic (preprocessed) dataset from Transfer-learningbased Raman spectra identification. Organic compounds measured with several excitation sources.",
+                "description": "Preprocessed Raman spectra of organic compounds across multiple excitation sources, evaluating the generalization capabilities of deep neural networks on instrument-specific chemical sets.",
                 "license": "See paper"
             }
         ),
         "mind_covid": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="mind_covid",
-            name="COVID-19",
+            name="Saliva COVID-19",
             loader=lambda df: MiscLoader._load_mind_dataset(df, "covid_dataset", ["CTRL", "COV+", "COV-"]),
             metadata={
-                "full_name": "MIND-Lab Raman COVID Dataset",
-                "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
-                "description": "Per-patient saliva Raman spectra and clinical metadata used for COVID diagnosis study (IRCCS Fondazione Don Carlo Gnocchi, Milano and Centro Spalenza, Rovato). Each patient folder contains spectra.csv, raman_shift.csv and user_information.csv.",
+                "full_name": "Saliva COVID-19 Raman Dataset",
+                "source": "https://github.com/dpiazza/Raman-Spectra-Data",
+                "description": "Curated for non-invasive SARS-CoV-2 screening. Includes ~25 spectral replicates per subject from 101 patients (positive, negative symptomatic, and healthy controls) acquired from dried saliva drops using a 785 nm spectrometer.",
                 "paper": "https://doi.org/10.1016/j.compbiomed.2024.108028",
                 "citation": [
-                    "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028. https://doi.org/10.1016/j.compbiomed.2024.108028"
+                    "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028."
                 ],
                 "license": "See source"
             }
@@ -153,15 +140,15 @@ class MiscLoader(BaseLoader):
         "mind_pd": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="mind_pd",
-            name="Parkinson",
+            name="Saliva Parkinson",
             loader=lambda df: MiscLoader._load_mind_dataset(df, "pd_ad_dataset", ["PD", "CTRL"]),
             metadata={
-                "full_name": "MIND-Lab Parkinson/Alzheimer Dataset",
-                "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
-                "description": "Per-patient saliva Raman spectra and clinical metadata used for Parkinson's Disease and Alzheimer studies (IRCCS Fondazione Don Carlo Gnocchi and Istituto Auxologico Italiano). Each patient folder contains spectra.csv, raman_shift.csv and user_information.csv.",
+                "full_name": "Saliva Neurodegenerative Disease Raman Dataset (Parkinson)",
+                "source": "https://github.com/dpiazza/Raman-Spectra-Data",
+                "description": "Raman spectra from dried saliva drops targeting Parkinson's Disease (PD) vs. healthy controls. Reveals hidden trends in proteins, lipids, and saccharides for early detection of cognitive and motor impairment.",
                 "paper": "https://doi.org/10.1016/j.compbiomed.2024.108028",
                 "citation": [
-                    "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028. https://doi.org/10.1016/j.compbiomed.2024.108028"
+                    "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028."
                 ],
                 "license": "See source"
             }
@@ -169,15 +156,15 @@ class MiscLoader(BaseLoader):
         "mind_ad": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="mind_ad",
-            name="Alzheimer",
+            name="Saliva Alzheimer",
             loader=lambda df: MiscLoader._load_mind_dataset(df, "pd_ad_dataset", ["AD", "CTRL"]),
             metadata={
-                "full_name": "MIND-Lab Parkinson/Alzheimer Dataset",
-                "source": "https://github.com/MIND-Lab/Raman-Spectra-Data",
-                "description": "Per-patient saliva Raman spectra and clinical metadata used for Parkinson's Disease and Alzheimer studies (IRCCS Fondazione Don Carlo Gnocchi and Istituto Auxologico Italiano). Each patient folder contains spectra.csv, raman_shift.csv and user_information.csv.",
+                "full_name": "Saliva Neurodegenerative Disease Raman Dataset (Alzheimer)",
+                "source": "https://github.com/dpiazza/Raman-Spectra-Data",
+                "description": "Raman spectra from dried saliva drops targeting Alzheimer's Disease (AD) vs. healthy controls. Serves as a liquid biopsy benchmark for identifying neurodegenerative pathology.",
                 "paper": "https://doi.org/10.1016/j.compbiomed.2024.108028",
                 "citation": [
-                    "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028. https://doi.org/10.1016/j.compbiomed.2024.108028"
+                    "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028."
                 ],
                 "license": "See source"
             }
@@ -185,21 +172,21 @@ class MiscLoader(BaseLoader):
         "csho33_bacteria": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="csho33_bacteria",
-            name="Bacteria Identification",
+            name="Pathogenic Bacteria",
             loader=lambda df: MiscLoader._load_csho33_bacteria(df),
             metadata={
-                "full_name": "Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning",
-                "source": "https://github.com/csho33/bacteria-ID or dataset provider",
+                "full_name": "Pathogenic Bacteria Raman Dataset",
+                "source": "https://github.com/csho33/bacteria-ID",
                 "paper": "https://doi.org/10.1038/s41467-019-12898-9",
                 "citation": [
-                    "Ho, C.-S., Jean, N., Hogan, C. A., et al. Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Nat Commun 10, 4927 (2019). https://doi.org/10.1038/s41467-019-12898-9"
+                    "Ho, C.-S., Jean, N., Hogan, C. A., et al. Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Nat Commun 10, 4927 (2019)."
                 ],
-                "description": "Bacterial Raman spectra dataset used in Ho et al. (2019). Add data source or download link to enable loading in the library.",
+                "description": "60,000 spectra from 30 clinically relevant bacterial and yeast isolates (including an MRSA/MSSA isogenic pair). Acquired with 633 nm illumination on gold-coated silica substrates with low SNR to simulate rapid clinical acquisition times.",
                 "license": "See paper"
             }
         ),
         "rwth_acid_species": DatasetInfo(
-            task_type=TASK_TYPE.Regression,  # Likely regression (concentration monitoring)
+            task_type=TASK_TYPE.Regression,
             id="rwth_acid_species",
             name="Acid Species Concentrations",
             loader=lambda df: MiscLoader._load_rwth_acid_species(df),
@@ -218,7 +205,6 @@ class MiscLoader(BaseLoader):
             }
         )
     }
-
     logger = logging.getLogger(__name__)
 
     @staticmethod

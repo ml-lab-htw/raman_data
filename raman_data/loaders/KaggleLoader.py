@@ -174,154 +174,151 @@ class KaggleLoader(BaseLoader):
     # requires special Kaggle consent. The same data is available via
     # andriitrelin_cells-raman-spectra which is loaded by __load_andriitrelin above.
 
-
     DATASETS = {
         "codina_diabetes_AGEs": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="AGEs",
-            name="Diabetes AGE",
+            name="Diabetes Skin (AGEs)",
             loader=__load_diabetes,
             metadata={
-                "full_name" : "codina_raman-spectroscopy-of-diabetes",
-                "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
-                "paper" : "https://doi.org/10.1364/BOE.9.004998",
-                "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
+                "full_name": "codina_raman-spectroscopy-of-diabetes",
+                "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
+                "paper": "https://doi.org/10.1364/BOE.9.004998",
+                "description": "Part of the Diabetes Skin Raman Dataset. This subset focuses on Advanced Glycation End-products (AGEs) signatures in the skin. Data acquired in vivo using a portable 785 nm Raman spectrometer to discern between diabetic patients and healthy controls."
             }
         ),
         "codina_diabetes_earLobe": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="earLobe",
-            name="Diabetes Ear Lobe",
+            name="Diabetes Skin (Ear Lobe)",
             loader=__load_diabetes,
             metadata={
-                "full_name" : "codina_raman-spectroscopy-of-diabetes",
-                "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
-                "paper" : "https://doi.org/10.1364/BOE.9.004998",
-                "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
+                "full_name": "codina_raman-spectroscopy-of-diabetes",
+                "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
+                "paper": "https://doi.org/10.1364/BOE.9.004998",
+                "description": "Raman spectra acquired from the left earlobe anatomical site. Used for non-invasive screening of Type 2 Diabetes Mellitus based on skin biochemical fingerprints."
             }
         ),
         "codina_diabetes_innerArm": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="innerArm",
-            name="Diabetes Inner Arm",
+            name="Diabetes Skin (Inner Arm)",
             loader=__load_diabetes,
             metadata={
-                "full_name" : "codina_raman-spectroscopy-of-diabetes",
-                "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
-                "paper" : "https://doi.org/10.1364/BOE.9.004998",
-                "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
+                "full_name": "codina_raman-spectroscopy-of-diabetes",
+                "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
+                "paper": "https://doi.org/10.1364/BOE.9.004998",
+                "description": "Raman spectra acquired from the inner arm anatomical site. This clinical dataset evaluates machine learning models for diabetic vs. control classification in a non-invasive context."
             }
         ),
         "codina_diabetes_thumbNail": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="thumbNail",
-            name="Diabetes Thumbnail",
+            name="Diabetes Skin (Thumbnail)",
             loader=__load_diabetes,
             metadata={
-                "full_name" : "codina_raman-spectroscopy-of-diabetes",
-                "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
-                "paper" : "https://doi.org/10.1364/BOE.9.004998",
-                "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
+                "full_name": "codina_raman-spectroscopy-of-diabetes",
+                "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
+                "paper": "https://doi.org/10.1364/BOE.9.004998",
+                "description": "Raman spectra acquired from the thumbnail anatomical site. Part of a multi-site clinical study for portable Raman-based diabetes screening."
             }
         ),
         "codina_diabetes_vein": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="vein",
-            name="Diabetes Vein",
+            name="Diabetes Skin (Median Cubital Vein)",
             loader=__load_diabetes,
             metadata={
-                "full_name" : "codina_raman-spectroscopy-of-diabetes",
-                "source" : "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
-                "paper" : "https://doi.org/10.1364/BOE.9.004998",
-                "description" : "This is the dataset of our work where the application of portable Raman spectroscopy coupled with several supervised machine-learning techniques, is used to discern between diabetic patients (DM2) and healthy controls (Ctrl), with a high degree of accuracy."
+                "full_name": "codina_raman-spectroscopy-of-diabetes",
+                "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
+                "paper": "https://doi.org/10.1364/BOE.9.004998",
+                "description": "Raman spectra acquired from the skin area over the median cubital vein. This dataset provides skin spectral signatures for diagnostic machine learning models."
             }
         ),
         "sergioalejandrod_AminoAcids_glycine": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="1",
-            name="Amino Acids Glycine",
+            name="Amino Acid LC (Glycine)",
             loader=__load_sergioalejandrod,
             metadata={
-                "full_name" : "sergioalejandrod_raman-spectroscopy",
-                "source" : "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
-                "paper" : "https://doi.org/10.1021/acs.analchem.0c03015",
-                "description" : "This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method."
+                "full_name": "sergioalejandrod_raman-spectroscopy",
+                "source": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
+                "paper": "https://arxiv.org/abs/2011.07470",
+                "description": "Time-resolved (on-line) Raman spectra for Glycine elution using a vertical flow LC-Raman method. Features 785 nm excitation and 0.2s exposure frames to benchmark label-free analyte detection."
             }
         ),
         "sergioalejandrod_AminoAcids_leucine": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="2",
-            name="Amino Acids Leucine",
+            name="Amino Acid LC (Leucine)",
             loader=__load_sergioalejandrod,
             metadata={
-                "full_name" : "sergioalejandrod_raman-spectroscopy",
-                "source" : "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
-                "paper" : "https://doi.org/10.1021/acs.analchem.0c03015",
-                "description" : "This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method."
+                "full_name": "sergioalejandrod_raman-spectroscopy",
+                "source": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
+                "paper": "https://arxiv.org/abs/2011.07470",
+                "description": "Time-resolved Raman spectra tracking the elution peak of Leucine. Benchmark for unsupervised deconvolution and time-varying spectral signal analysis."
             }
         ),
         "sergioalejandrod_AminoAcids_phenylalanine": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="3",
-            name="Amino Acids Phenylalanine",
+            name="Amino Acid LC (Phenylalanine)",
             loader=__load_sergioalejandrod,
             metadata={
-                "full_name" : "sergioalejandrod_raman-spectroscopy",
-                "source" : "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
-                "paper" : "https://doi.org/10.1021/acs.analchem.0c03015",
-                "description" : "This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method."
+                "full_name": "sergioalejandrod_raman-spectroscopy",
+                "source": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
+                "paper": "https://arxiv.org/abs/2011.07470",
+                "description": "Time-resolved Raman spectra tracking the elution peak of Phenylalanine. Captured via a hyphenated HPLC-Raman system to facilitate label-free chemometric benchmarks."
             }
         ),
         "sergioalejandrod_AminoAcids_tryptophan": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="4",
-            name="Amino Acids Tryptophan",
+            name="Amino Acid LC (Tryptophan)",
             loader=__load_sergioalejandrod,
             metadata={
-                "full_name" : "sergioalejandrod_raman-spectroscopy",
-                "source" : "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
-                "paper" : "https://doi.org/10.1021/acs.analchem.0c03015",
-                "description" : "This data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method."
+                "full_name": "sergioalejandrod_raman-spectroscopy",
+                "source": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
+                "paper": "https://arxiv.org/abs/2011.07470",
+                "description": "Time-resolved Raman spectra tracking the elution peak of Tryptophan. Benchmarks the ability of ML models to handle low-concentration analytes in solvent mixtures."
             }
         ),
         "andriitrelin_cells-raman-spectra_COOH": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="COOH",
-            name="Cancer Cells COOH",
+            name="SERS Cancer Cell Metabolite (COOH)",
             loader=__load_andriitrelin,
             metadata={
-                "full_name" : "andriitrelin_cells-raman-spectra",
-                "source" : "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
-                "paper" : "https://doi.org/10.1016/j.snb.2020.127660",
-                "description" : "SERS spectra of melanoma cells, melanocytes, fibroblasts, and culture medium collected on gold nanourchins functionalized with COOH moiety. Contains 12 cell type classes for classification."
+                "full_name": "andriitrelin_cells-raman-spectra",
+                "source": "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
+                "paper": "https://doi.org/10.1016/j.snb.2020.127660",
+                "description": "SERS spectra of cancer cell metabolites collected on gold nanourchins functionalized with the COOH moiety. Designed to provide specificity toward specific proteins and lipids for cell line identification."
             }
         ),
         "andriitrelin_cells-raman-spectra_NH2": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="NH2",
-            name="Cancer Cells NH2",
+            name="SERS Cancer Cell Metabolite (NH2)",
             loader=__load_andriitrelin,
             metadata={
-                "full_name" : "andriitrelin_cells-raman-spectra",
-                "source" : "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
-                "paper" : "https://doi.org/10.1016/j.snb.2020.127660",
-                "description" : "SERS spectra of melanoma cells, melanocytes, fibroblasts, and culture medium collected on gold nanourchins functionalized with NH2 moiety. Contains 12 cell type classes for classification."
+                "full_name": "andriitrelin_cells-raman-spectra",
+                "source": "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
+                "paper": "https://doi.org/10.1016/j.snb.2020.127660",
+                "description": "SERS spectra collected on Au nanostructures functionalized with the NH2 moiety. Used as an independent input channel for metabolic profiling and cancer cell recognition."
             }
         ),
         "andriitrelin_cells-raman-spectra_(COOH)2": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="(COOH)2",
-            name="Cancer Cells (COOH)2",
+            name="SERS Cancer Cell Metabolite ((COOH)2)",
             loader=__load_andriitrelin,
             metadata={
-                "full_name" : "andriitrelin_cells-raman-spectra",
-                "source" : "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
-                "paper" : "https://doi.org/10.1016/j.snb.2020.127660",
-                "description" : "SERS spectra of melanoma cells, melanocytes, fibroblasts, and culture medium collected on gold nanourchins functionalized with (COOH)2 moiety. Contains 12 cell type classes for classification."
+                "full_name": "andriitrelin_cells-raman-spectra",
+                "source": "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
+                "paper": "https://doi.org/10.1016/j.snb.2020.127660",
+                "description": "SERS spectra collected with the (COOH)2 functionalization. Benchmarks the performance of CNNs using multi-channel SERS data for express clinical diagnostics."
             }
         ),
-        # Note: mathiascharconnet/cancer-cells-sers-spectra requires Kaggle consent.
-        # The same data is available via andriitrelin_cells-raman-spectra above.
     }
 
 

@@ -34,14 +34,14 @@ class HuggingFaceLoader(BaseLoader):
         "chlange_SubstrateMixRaman": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="chlange_SubstrateMixRaman",
-            name="Substrate Mix",
+            name="Bioprocess Monitoring",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "chlange_SubstrateMixRaman",
+                "full_name": "Bioprocess Monitoring Raman Dataset",
                 "hf_key": "chlange/SubstrateMixRaman",
                 "source": "https://huggingface.co/datasets/chlange/SubstrateMixRaman",
-                "paper": "https://dx.doi.org/10.2139/ssrn.5239248",
-                "description": "This dataset, designed for biotechnological applications, provides a valuable resource for calibrating models used in high-throughput bioprocess development, particularly for bacterial fermentations. It features Raman spectra of samples containing varying, statistically independent concentrations of eight key metabolites, along with mineral salt medium and antifoam."
+                "paper": "https://doi.org/10.1016/j.measurement.2025.118884",
+                "description": "A benchmark dataset of 6,960 spectra featuring eight key metabolites (glucose, glycerol, acetate, etc.) sampled via a statistically independent uniform distribution. Designed to evaluate regression robustness against common bioprocess correlations, including background effects from mineral salts and antifoam."
             }
         ),
         "chlange_RamanSpectraEcoliFermentation": DatasetInfo(
@@ -50,50 +50,50 @@ class HuggingFaceLoader(BaseLoader):
             name="E. Coli Fermentation",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "chlange_RamanSpectraEcoliFermentation",
+                "full_name": "E. Coli Fermentation Raman Dataset",
                 "hf_key": "chlange/RamanSpectraEcoliFermentation",
                 "source": "https://huggingface.co/datasets/chlange/RamanSpectraEcoliFermentation",
                 "paper": "https://doi.org/10.1002/bit.70006",
-                "description": "Dataset Card for Raman Spectra from High-Throughput Bioprocess Fermentations of E. Coli. Raman spectra were obtained during an E. coli fermentation process consisting of a batch and a glucose-limited feeding phase, each lasting about four hours. Samples were automatically collected hourly, centrifuged to separate cells from the supernatant, and the latter was used for both metabolite analysis and Raman measurements. Two Raman spectra of ten seconds each were recorded per sample, with cell removal improving metabolite signal quality. More details can be found in the paper https://doi.org/10.1002/bit.70006"
+                "description": "Spectra captured during batch and fed-batch fermentation of E. coli. Measurements were performed on the supernatant using a 785 nm spectrometer to track glucose and acetate concentrations in a dynamic, high-throughput bioprocess environment."
             }
         ),
         "chlange_FuelRamanSpectraBenchtop": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="chlange_FuelRamanSpectraBenchtop",
-            name="Fuel Benchtop",
+            name="Gasoline Properties (Benchtop)",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "chlange_FuelRamanSpectraBenchtop",
+                "full_name": "Gasoline Properties Raman Dataset (Benchtop)",
                 "hf_key": "chlange/FuelRamanSpectraBenchtop",
                 "source": "https://huggingface.co/datasets/chlange/FuelRamanSpectraBenchtop",
-                "paper": "http://dx.doi.org/10.1021/acs.energyfuels.9b02944",
-                "description": "This dataset contains Raman spectra for the analysis and prediction of key parameters in commercial fuel samples (gasoline). It includes spectra of 179 fuel samples from various refineries."
+                "paper": "https://doi.org/10.1016/j.fuel.2018.09.006",
+                "description": "Raman spectra from 179 commercial gasoline samples recorded using a benchtop 1064 nm FT-Raman system. Targets include Research Octane Number (RON), Motor Octane Number (MON), and oxygenated additive concentrations."
             }
         ),
         "HTW-KI-Werkstatt_FuelRamanSpectraHandheld": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="HTW-KI-Werkstatt_FuelRamanSpectraHandheld",
-            name="Fuel Handheld",
+            name="Gasoline Properties (Handheld)",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "HTW-KI-Werkstatt_FuelRamanSpectraHandheld",
+                "full_name": "Gasoline Properties Raman Dataset (Handheld)",
                 "hf_key": "HTW-KI-Werkstatt/FuelRamanSpectraHandheld",
                 "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/FuelRamanSpectraHandheld",
-                "paper": "",
-                "description": "Handheld Raman spectra for fuel analysis. Structure similar to FuelRamanSpectraBenchtop."
+                "paper": "https://doi.org/10.1021/acs.energyfuels.9b02944",
+                "description": "Counterpart to the benchtop fuel dataset, acquired from the same 179 samples using a handheld 785 nm spectrometer. Used for benchmarking model transferability across different hardware and wavelengths."
             }
         ),
         "HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations",
-            name="Ralstonia Fermentation",
+            name="R. eutropha Copolymer Fermentations",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations",
+                "full_name": "R. eutropha Copolymer Fermentation Raman Dataset",
                 "hf_key": "HTW-KI-Werkstatt/RamanSpectraRalstoniaFermentations",
                 "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanSpectraRalstoniaFermentations",
-                "paper": "",
-                "description": "Raman spectra collected during Ralstonia fermentations. Dataset structure matches HTW-KI-Werkstatt_FuelRamanSpectraHandheld (wavenumber columns + metadata columns)."
+                "paper": "https://doi.org/10.1016/B978-0-443-28824-1.50510-X",
+                "description": "Monitoring of P(HB-co-HHx) copolymer synthesis in Ralstonia eutropha batch cultivations. Includes a hybrid mix of experimental and high-fidelity synthetic data to handle high multicollinearity between process variables."
             }
         )
     }

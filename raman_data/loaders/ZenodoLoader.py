@@ -223,10 +223,10 @@ class ZenodoLoader(BaseLoader):
             file_typ="*.zip",
             loader=lambda cache_path: ZenodoLoader.__load_10779223(cache_path, "Low SNR"),
             metadata={
-                "full_name": "Research data supporting \"Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders\"",
+                "full_name": "Sugar Mixtures Raman Dataset (Low SNR)",
                 "source": "https://doi.org/10.5281/zenodo.10779223",
                 "paper": "https://doi.org/10.1073/pnas.2407439121",
-                "description": "Experimental and synthetic Raman data used in Georgiev et al., PNAS (2024) DOI:10.1073/pnas.2407439121."
+                "description": "The low signal-to-noise ratio subset of the Sugar Mixtures benchmark (7,680 measurements at 0.5 s integration). Used for evaluating the noise-robustness of hyperspectral unmixing and quantification algorithms."
             }
         ),
         "sugar_mixtures_high_snr": DatasetInfo(
@@ -236,75 +236,75 @@ class ZenodoLoader(BaseLoader):
             file_typ="*.zip",
             loader=lambda cache_path: ZenodoLoader.__load_10779223(cache_path, "High SNR"),
             metadata={
-                "full_name": "Research data supporting \"Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders\"",
+                "full_name": "Sugar Mixtures Raman Dataset (High SNR)",
                 "source": "https://doi.org/10.5281/zenodo.10779223",
                 "paper": "https://doi.org/10.1073/pnas.2407439121",
-                "description": "Experimental and synthetic Raman data used in Georgiev et al., PNAS (2024) DOI:10.1073/pnas.2407439121."
+                "description": "The high signal-to-noise ratio subset of the Sugar Mixtures benchmark (1,920 measurements at 5 s integration). Provides a clean baseline for hyperspectral unmixing and chemical quantification in multi-component solutions."
             }
         ),
         "wheat_lines": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="7644521",
-            name="Wheat Lines",
+            name="Mutant Wheat",
             file_typ="*.mat",
             loader=lambda cache_path: ZenodoLoader.__load_7644521(cache_path),
             metadata={
-                "full_name": "DIFFERENTIATION OF ADVANCED GENERATION MUTANT wheat_lines: CONVENTIONAL TECHNIQUES VERSUS RAMAN SPECTROSCOPY",
+                "full_name": "Mutant Wheat Raman Dataset",
                 "source": "https://doi.org/10.5281/zenodo.7644521",
-                "paper": "https://doi.org/10.1016/j.foodchem.2023.134703",
-                "description": "Raman spectroscopy data used to differentiate between advanced generation mutant wheat lines and their parental cultivars."
+                "paper": "https://doi.org/10.3389/fpls.2023.1116876",
+                "description": "Raman spectra from the 7th generation of salt-stress-tolerant wheat mutant lines and their commercial cultivars. Features 785 nm excitation and tracks biochemical shifts in carotenoids and protein-related bands for agricultural phenotyping."
             }
         ),
         "adenine_cAg": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="3572359",
-            name="Adenine cAg",
+            name="Adenine Dataset (cAg)",
             file_typ="*.csv",
             loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'cAg'),
             metadata={
-                "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
+                "full_name": "SERS Interlaboratory Adenine Dataset (Colloidal Silver)",
                 "source": "https://doi.org/10.5281/zenodo.3572359",
-                "paper": "https://pubs.acs.org/doi/10.1021/acs.analchem.9b05658",
-                "description": "SERS spectra of adenine molecules on silver nanoparticles, with varying concentrations."
+                "paper": "https://doi.org/10.1021/acs.analchem.9b05658",
+                "description": "Quantitative SERS spectra of adenine measured using colloidal silver substrates across 15 different European laboratories. Benchmarks model reproducibility and inter-instrumental variability."
             }
         ),
         "adenine_sAg": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="3572359",
-            name="Adenine sAg",
+            name="Adenine Dataset (sAg)",
             file_typ="*.csv",
             loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'sAg'),
             metadata={
-                "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
+                "full_name": "SERS Interlaboratory Adenine Dataset (Solid Silver)",
                 "source": "https://doi.org/10.5281/zenodo.3572359",
-                "paper": "https://pubs.acs.org/doi/10.1021/acs.analchem.9b05658",
-                "description": "SERS spectra of adenine molecules on silver nanoparticles, with varying concentrations."
+                "paper": "https://doi.org/10.1021/acs.analchem.9b05658",
+                "description": "Adenine SERS spectra acquired using solid silver substrates. Part of the multi-instrument collaborative trial for standardizing quantitative SERS protocols."
             }
         ),
         "adenine_cAu": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="3572359",
-            name="Adenine cAu",
+            name="Adenine Dataset (cAu)",
             file_typ="*.csv",
             loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'cAu'),
             metadata={
-                "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
+                "full_name": "SERS Interlaboratory Adenine Dataset (Colloidal Gold)",
                 "source": "https://doi.org/10.5281/zenodo.3572359",
-                "paper": "https://pubs.acs.org/doi/10.1021/acs.analchem.9b05658",
-                "description": "SERS spectra of adenine molecules on silver nanoparticles, with varying concentrations."
+                "paper": "https://doi.org/10.1021/acs.analchem.9b05658",
+                "description": "Adenine SERS spectra acquired using colloidal gold substrates. Evaluates machine learning regression performance across various laboratories and instrumentation configurations."
             }
         ),
         "adenine_sAu": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             id="3572359",
-            name="Adenine sAu",
+            name="Adenine Dataset (sAu)",
             file_typ="*.csv",
             loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'sAu'),
             metadata={
-                "full_name": "Surface-Enhanced Raman Spectroscopy (SERS) dataset of adenine",
+                "full_name": "SERS Interlaboratory Adenine Dataset (Solid Gold)",
                 "source": "https://doi.org/10.5281/zenodo.3572359",
-                "paper": "https://pubs.acs.org/doi/10.1021/acs.analchem.9b05658",
-                "description": "SERS spectra of adenine molecules on silver nanoparticles, with varying concentrations."
+                "paper": "https://doi.org/10.1021/acs.analchem.9b05658",
+                "description": "Adenine SERS spectra acquired using solid gold substrates. Provides a high-resolution benchmark for testing the transferability of ML models between different spectroscopic platforms."
             }
         ),
     }
