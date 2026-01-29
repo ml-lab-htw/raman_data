@@ -33,7 +33,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Denoising,
             id="deepr_denoising",
             name="DeepeR Denoising",
-            loader=lambda df: MiscLoader._load_deepr_denoising(df),
+            loader=lambda cache_path: MiscLoader._load_deepr_denoising(cache_path),
             metadata={
                 "full_name": "DeepeR Denoising Dataset",
                 "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9",
@@ -47,7 +47,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.SuperResolution,
             id="deepr_super_resolution",
             name="DeepeR Super-Resolution Dataset",
-            loader=lambda df: MiscLoader._load_deepr_super_resolution(df),
+            loader=lambda cache_path: MiscLoader._load_deepr_super_resolution(cache_path),
             metadata={
                 "full_name": "DeepeR Super-Resolution Dataset",
                 "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9",
@@ -61,7 +61,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="rruff_mineral_raw",
             name="RRUFF Database (Raw)",
-            loader=lambda df: MiscLoader._load_dtu_split(df, split="mineral_r", align_output=True),
+            loader=lambda cache_path: MiscLoader._load_dtu_split(cache_path, split="mineral_r", align_output=True),
             metadata={
                 "full_name": "RRUFF Database - Raw Spectra",
                 "source": "https://rruff.info/",
@@ -77,7 +77,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="rruff_mineral_preprocessed",
             name="RRUFF Database (Preprocessed)",
-            loader=lambda df: MiscLoader._load_dtu_split(df, split="mineral_p", align_output=True),
+            loader=lambda cache_path: MiscLoader._load_dtu_split(cache_path, split="mineral_p", align_output=True),
             metadata={
                 "full_name": "RRUFF Database - Preprocessed Spectra",
                 "source": "https://rruff.info/",
@@ -93,7 +93,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="knowitall_organics_raw",
             name="Organic Compounds (Raw)",
-            loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_r", align_output=True),
+            loader=lambda cache_path: MiscLoader._load_dtu_split(cache_path, split="organic_r", align_output=True),
             metadata={
                 "full_name": "Organic Compounds Multi-Excitation Dataset - Raw",
                 "source": "https://data.dtu.dk/api/files/36144495",
@@ -109,7 +109,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="knowitall_organics_preprocessed",
             name="Organic Compounds (Preprocessed)",
-            loader=lambda df: MiscLoader._load_dtu_split(df, split="organic_p", align_output=False),
+            loader=lambda cache_path: MiscLoader._load_dtu_split(cache_path, split="organic_p", align_output=False),
             metadata={
                 "full_name": "Organic Compounds Multi-Excitation Dataset - Preprocessed",
                 "source": "https://data.dtu.dk/api/files/36144495",
@@ -125,7 +125,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="mind_covid",
             name="Saliva COVID-19",
-            loader=lambda df: MiscLoader._load_mind_dataset(df, "covid_dataset", ["CTRL", "COV+", "COV-"]),
+            loader=lambda cache_path: MiscLoader._load_mind_dataset(cache_path, "covid_dataset", ["CTRL", "COV+", "COV-"]),
             metadata={
                 "full_name": "Saliva COVID-19 Raman Dataset",
                 "source": "https://github.com/dpiazza/Raman-Spectra-Data",
@@ -141,7 +141,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="mind_pd",
             name="Saliva Parkinson",
-            loader=lambda df: MiscLoader._load_mind_dataset(df, "pd_ad_dataset", ["PD", "CTRL"]),
+            loader=lambda cache_path: MiscLoader._load_mind_dataset(cache_path, "pd_ad_dataset", ["PD", "CTRL"]),
             metadata={
                 "full_name": "Saliva Neurodegenerative Disease Raman Dataset (Parkinson)",
                 "source": "https://github.com/dpiazza/Raman-Spectra-Data",
@@ -157,7 +157,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="mind_ad",
             name="Saliva Alzheimer",
-            loader=lambda df: MiscLoader._load_mind_dataset(df, "pd_ad_dataset", ["AD", "CTRL"]),
+            loader=lambda cache_path: MiscLoader._load_mind_dataset(cache_path, "pd_ad_dataset", ["AD", "CTRL"]),
             metadata={
                 "full_name": "Saliva Neurodegenerative Disease Raman Dataset (Alzheimer)",
                 "source": "https://github.com/dpiazza/Raman-Spectra-Data",
@@ -173,7 +173,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             id="csho33_bacteria",
             name="Pathogenic Bacteria",
-            loader=lambda df: MiscLoader._load_csho33_bacteria(df),
+            loader=lambda cache_path: MiscLoader._load_csho33_bacteria(cache_path),
             metadata={
                 "full_name": "Pathogenic Bacteria Raman Dataset",
                 "source": "https://github.com/csho33/bacteria-ID",
@@ -189,7 +189,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Regression,
             id="rwth_acid_species",
             name="Acid Species Concentrations",
-            loader=lambda df: MiscLoader._load_rwth_acid_species(df),
+            loader=lambda cache_path: MiscLoader._load_rwth_acid_species(cache_path),
             metadata={
                 "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
                 "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
@@ -519,28 +519,30 @@ class MiscLoader(BaseLoader):
         # 2) parent/mind_shared/Raman-Spectra-Data-main/<dataset_subfolder>
 
         shared_root = os.path.join(os.path.dirname(cache_path), "mind_shared")
-        shared_main = os.path.join(shared_root, "Raman-Spectra-Data-main", "Raman-Spectra-Data-main")
+        shared_main = os.path.join(shared_root, "Raman-Spectra-Data-main")
         if os.path.isdir(shared_main) and os.listdir(shared_main):
             MiscLoader.logger.debug(f"Using existing dataset folder at {shared_main}")
         else:
-            zip_file = os.path.join(shared_root, "Raman-Spectra-Data.zip")
+            zip_name = "Raman-Spectra-Data.zip"
+            zip_file = os.path.join(shared_root, zip_name)
 
             if not os.path.exists(shared_root):
                 MiscLoader.logger.debug(f"Attempting to download dataset {dataset_subfolder} to {shared_root}")
-                # Construct dataset key matching DATASETS mapping, e.g. 'pd_ad_dataset' -> 'mind_pd_ad'
-                dataset_key = f"mind_{dataset_subfolder.replace('_dataset', '')}"
-                downloaded = MiscLoader.download_dataset(dataset_key, cache_path=os.path.dirname(cache_path))
+                os.makedirs(shared_root, exist_ok=True)
 
-                if not downloaded or not os.path.isdir(downloaded):
-                    MiscLoader.logger.error(f"[!] Could not locate or download dataset folder for {dataset_subfolder}")
-                    return None
+                if not os.path.exists(zip_file):
+                    # Download repo zip from GitHub (main branch)
+                    try:
+                        LoaderTools.download(
+                            url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip",
+                            out_dir_path=shared_root,
+                            out_file_name=zip_name
+                        )
+                    except Exception as e:
+                        MiscLoader.logger.error(f"[!] Failed to download MIND repo: {e}")
+                        return None
 
-            if os.path.exists(zip_file) and LoaderTools.is_valid_zip(zip_file):
-                # Extract dataset folder from zip
-                LoaderTools.extract_zip_file_content(zip_file, unzip_target_subdir="Raman-Spectra-Data-main")
-            else:
-                MiscLoader.logger.error(f"[!] Failed to extract dataset folder from zip: {zip_file}")
-                return None
+                LoaderTools.extract_zip_file_content(zip_file)
 
         # Iterate patient folders
         spectra_list = []
