@@ -282,70 +282,7 @@ class MiscLoader(BaseLoader):
             dataset_name: str,
             cache_path: Optional[str] = None
     ) -> Optional[str]:
-        """
-        Download helper for miscellaneous datasets. Implements download for MIND-Lab datasets
-        by fetching the GitHub repository zip and extracting it. Returns the dataset folder path
-        inside the cache.
-        """
-        # Only implement downloading for the two MIND datasets here
-        mind_map = {
-            "mind_covid": "covid_dataset",
-            "mind_pd_ad": "pd_ad_dataset",
-        }
-
-        if dataset_name not in mind_map:
-            MiscLoader.logger.warning(f"[!] download_dataset not implemented for: {dataset_name}")
-            return None
-
-        if cache_path is not None:
-            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Misc)
-
-        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
-        if cache_root is None:
-            MiscLoader.logger.error("[!] Cache root for MiscLoader is not set")
-            return None
-
-        shared_root = os.path.join(cache_root, "mind_shared")
-        os.makedirs(shared_root, exist_ok=True)
-
-        zip_name = "Raman-Spectra-Data.zip"
-        zip_path = os.path.join(shared_root, zip_name)
-        extracted_dir = os.path.join(shared_root, "Raman-Spectra-Data-main")
-
-        # Download repo zip from GitHub (main branch)
-        try:
-            LoaderTools.download(
-                url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip",
-                out_dir_path=shared_root,
-                out_file_name=zip_name
-            )
-        except Exception as e:
-            MiscLoader.logger.error(f"[!] Failed to download MIND repo: {e}")
-            return None
-
-        LoaderTools.extract_zip_file_content(zip_path, unzip_target_subdir="Raman-Spectra-Data-main")
-
-        # After extraction, the exact nesting may vary (extraction can create
-        # an extra top-level folder). Search recursively under shared_root for
-        # a directory matching the dataset_sub name and return its path.
-        dataset_sub = mind_map[dataset_name]
-        found = None
-        for root, dirs, files in os.walk(shared_root):
-            if dataset_sub in dirs:
-                found = os.path.join(root, dataset_sub)
-                break
-
-        if found is None:
-            # As a fallback, check the previously assumed path
-            dataset_folder = os.path.join(extracted_dir, dataset_sub)
-            if os.path.isdir(dataset_folder):
-                found = dataset_folder
-
-        if found is None:
-            MiscLoader.logger.error(f"[!] Expected dataset folder not found after extraction under: {shared_root}")
-            return None
-
-        return found
+        raise NotImplementedError("Cannot download datasets from Miscellaneous loader")
 
     @staticmethod
     def load_dataset(
