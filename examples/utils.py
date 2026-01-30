@@ -43,7 +43,7 @@ def plot_samples(dataset:RamanDataset, num_samples:int=5):
     plt.title(f"{dataset.name} - Random {num_to_plot}/{len(dataset)} Spectra")
 
     # export as pdf
-    plt.savefig(f"{dataset.name}.pdf", pad_inches=0, bbox_inches='tight')
+    plt.savefig(f"plots\{dataset.name}.pdf", pad_inches=0, bbox_inches='tight')
 
     plt.legend()
     plt.show()
