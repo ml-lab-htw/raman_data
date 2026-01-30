@@ -8,6 +8,7 @@ import numpy as np
 import requests
 from scipy.io import loadmat
 import spectrochempy as scp
+from scipy.optimize import anderson
 from sklearn.preprocessing import LabelEncoder
 
 import raman_data.loaders.helper.rruff as rruff
@@ -221,11 +222,88 @@ class MiscLoader(BaseLoader):
                 "license": "See paper"
             }
         ),
-        # "rwth_acid_species": DatasetInfo(
+        "acid_species_succinic": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id="acid_species_succinic",
+            name="Acid Species Concentrations (Succinic)",
+            loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Succinic"),
+            metadata={
+                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
+                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
+                "paper": [
+                    "https://doi.org/10.1177/0003702820973275",
+                    "https://publications.rwth-aachen.de/record/978266"
+                ],
+                "citation": [
+                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
+                ],
+                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
+                "license": "See paper/source."
+            }
+        ),
+        "acid_species_levulinic": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id="acid_species",
+            name="Acid Species Concentrations (Levulinic)",
+            loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Levulinic"),
+            metadata={
+                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
+                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
+                "paper": [
+                    "https://doi.org/10.1177/0003702820973275",
+                    "https://publications.rwth-aachen.de/record/978266"
+                ],
+                "citation": [
+                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
+                ],
+                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
+                "license": "See paper/source."
+            }
+        ),
+        "acid_species_formic": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id="acid_species_formic",
+            name="Acid Species Concentrations (Formic)",
+            loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Formic"),
+            metadata={
+                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
+                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
+                "paper": [
+                    "https://doi.org/10.1177/0003702820973275",
+                    "https://publications.rwth-aachen.de/record/978266"
+                ],
+                "citation": [
+                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
+                ],
+                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
+                "license": "See paper/source."
+            }
+        ),
+        "acid_species_citric": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id="acid_species_citric",
+            name="Acid Species Concentrations (Citric)",
+            loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Citric"),
+            metadata={
+                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
+                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
+                "paper": [
+                    "https://doi.org/10.1177/0003702820973275",
+                    "https://publications.rwth-aachen.de/record/978266"
+                ],
+                "citation": [
+                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
+                ],
+                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
+                "license": "See paper/source."
+            }
+        ),
+        # TODO its None when the scp files are loaded, why?
+        # "acid_species_oxalic": DatasetInfo(
         #     task_type=TASK_TYPE.Regression,
-        #     id="rwth_acid_species",
-        #     name="Acid Species Concentrations",
-        #     loader=lambda cache_path: MiscLoader._load_rwth_acid_species(cache_path),
+        #     id="acid_species_oxalic",
+        #     name="Acid Species Concentrations (Oxalic)",
+        #     loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Oxalic"),
         #     metadata={
         #         "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
         #         "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
@@ -239,7 +317,45 @@ class MiscLoader(BaseLoader):
         #         "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
         #         "license": "See paper/source."
         #     }
-        # )
+        # ),
+        "acid_species_itaconic": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id="acid_species_itaconic",
+            name="Acid Species Concentrations (Itaconic)",
+            loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Itaconic"),
+            metadata={
+                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
+                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
+                "paper": [
+                    "https://doi.org/10.1177/0003702820973275",
+                    "https://publications.rwth-aachen.de/record/978266"
+                ],
+                "citation": [
+                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
+                ],
+                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
+                "license": "See paper/source."
+            }
+        ),
+        "acid_species_acetic": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id="acid_species_acetic",
+            name="Acid Species Concentrations (Acetic)",
+            loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Acetic"),
+            metadata={
+                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
+                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
+                "paper": [
+                    "https://doi.org/10.1177/0003702820973275",
+                    "https://publications.rwth-aachen.de/record/978266"
+                ],
+                "citation": [
+                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
+                ],
+                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
+                "license": "See paper/source."
+            }
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -777,18 +893,23 @@ class MiscLoader(BaseLoader):
         return X.astype(float), raman_shifts, y.astype(int), unique
 
     @staticmethod
-    def _load_rwth_acid_species(cache_path: str):
+    def _load_acid_species(cache_path: str, subtype: str = "Succinic"):
         """
         Download and load the RWTH acid species dataset.
         Returns spectra, raman_shifts, targets, class_names (acids).
         """
+
+        if subtype not in ["Succinic", "Levulinic", "Formic", "Citric", "Oxalic", "Itaconic", "Acetic"]:
+            MiscLoader.logger.error(f"[!] Unknown RWTH acid species subtype: {subtype}")
+            return None
+
+        sub_folder = f"{subtype} acid titration"
+
         dataset_url = "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip?version=1"
         zip_name = "Data_RWTH-2024-01177.zip"
-        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
-        if cache_root is None:
-            MiscLoader.logger.error("[!] Cache root for MiscLoader is not set")
-            return None
-        shared_root = os.path.join(cache_root, "rwth_acid_species")
+
+        cache_parent = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        shared_root = os.path.join(cache_parent, "rwth_acid_species")
         os.makedirs(shared_root, exist_ok=True)
         zip_path = os.path.join(shared_root, zip_name)
         # Download if not present
@@ -798,6 +919,7 @@ class MiscLoader(BaseLoader):
             except Exception as e:
                 MiscLoader.logger.error(f"[!] Failed to download RWTH acid species dataset: {e}")
                 return None
+
         # Extract if not already extracted
         extracted_dir = os.path.join(shared_root, "Data_RWTH-2024-01177")
         if not os.path.isdir(extracted_dir):
@@ -806,41 +928,138 @@ class MiscLoader(BaseLoader):
             except Exception as e:
                 MiscLoader.logger.error(f"[!] Failed to extract RWTH acid species zip: {e}")
                 return None
+
         # Parse subfolders for each acid system
-        acid_dirs = [d for d in os.listdir(extracted_dir) if os.path.isdir(os.path.join(extracted_dir, d))]
-        spectra_list = []
-        raman_shifts_list = []
-        targets = []
-        class_names = []
-        acid_to_idx = {}
-
-
-        for acid_dir in acid_dirs:
-            acid_path = os.path.join(extracted_dir, acid_dir)
-            class_names.append(acid_dir)
-
+        acid_path = os.path.join(extracted_dir, sub_folder)
+        if "Succinic" in sub_folder:
+            spectra_files = (glob.glob(os.path.join(acid_path, "20221019_V489", "*.spc"), recursive=True) +
+                             glob.glob(os.path.join(acid_path, "20221104_V490", "*.spc"), recursive=True))
+        else:
             spectra_files = glob.glob(os.path.join(acid_path, "*.spc"), recursive=True)
 
-            for file in spectra_files:
-                scp_dataset = scp.read_spc(file)
-                for spec in scp_dataset:
-                    print(f"{spec.name} : {spec.shape}")
+        if not spectra_files:
+            raise Exception(f"[!] No spectra files found in {acid_path}")
 
-            # TODO
+        # here we have two folders for each acid subtype: 20221019_V489 and 20221104_V490
+        # TODO: how to handle this?
+        if subtype == "Succinic":
+            concentration_file_1 = os.path.join(acid_path, "20221019_V489", f"Data Table {subtype} Acid Titration 1.xlsx")
+            if not os.path.exists(concentration_file_1):
+                raise Exception(f"[!] No concentration file found in {acid_path}")
+
+            concentration_file_2 = os.path.join(acid_path, "20221104_V490", f"Data Table {subtype} Acid Titration 2.xlsx")
+            if not os.path.exists(concentration_file_2):
+                raise Exception(f"[!] No concentration file found in {acid_path}")
+
+            concentration_df_1 = pd.read_excel(concentration_file_1, skiprows=28, index_col=0)
+            concentration_df_1 = concentration_df_1.iloc[1:]
+            concentration_names = concentration_df_1.keys()[1:3].to_list() # TODO are these two really of interest?
+            concentration_df_1 = concentration_df_1[concentration_names]
+            concentration_df_1.index = [file.replace("#1", "") for file in concentration_df_1.index]
+
+            concentration_df_2 = pd.read_excel(concentration_file_2, skiprows=28, index_col=0)
+            concentration_df_2 = concentration_df_2.iloc[1:]
+            concentration_names = concentration_df_2.keys()[1:3].to_list() # TODO are these two really of interest?
+            concentration_df_2 = concentration_df_2[concentration_names]
+            concentration_df_2.index = [file.replace("#1", "") for file in concentration_df_2.index]
+
+            concentration_df = pd.concat([concentration_df_1, concentration_df_2], axis=0)
+            concentration_names = ["pH", "Mass of NaOH"] # overwrite with pretty names
+
+        else:
+
+            # xlsx file containing concentration values for each sample
+            concentration_file = os.path.join(acid_path, f"Data Table {subtype} Acid Titration.xlsx")
+            if not os.path.exists(concentration_file):
+                raise Exception(f"[!] No concentration file found in {acid_path}")
+
+            if subtype == "Levulinic":
+                concentration_df = pd.read_excel(concentration_file, skiprows=28, index_col=0)
+                concentration_df = concentration_df.iloc[1:]
+                concentration_names = concentration_df.keys()[1:3].to_list() # TODO are these two really of interest?
+                concentration_df = concentration_df[concentration_names]
+                concentration_names = ["pH", "Mass of NaOH"] # overwrite with pretty names
+                concentration_df.index = [file.replace("#1", "") for file in concentration_df.index]
+            elif subtype == "Formic":
+                concentration_df = pd.read_excel(concentration_file, skiprows=25, index_col=0)
+                concentration_df = concentration_df.iloc[1:-7]
+                concentration_names = concentration_df.keys()[1:5].to_list()
+                concentration_df = concentration_df[concentration_names]
+            elif subtype == "Citric":
+                concentration_df = pd.read_excel(concentration_file, skiprows=25, index_col=0)
+                concentration_df = concentration_df.iloc[1:-6]
+                concentration_names = concentration_df.keys()[1:3].to_list()
+                concentration_df = concentration_df[concentration_names]
+            elif subtype == "Oxalic":
+                concentration_df = pd.read_excel(concentration_file, skiprows=28, index_col=0)
+                concentration_df = concentration_df.iloc[1:]
+                concentration_names = concentration_df.keys()[1:3].to_list() # TODO are these two really of interest?
+                concentration_df = concentration_df[concentration_names]
+                concentration_names = ["pH", "Mass of NaOH"] # overwrite with pretty names
+                concentration_df.index = [file.replace("#1", "") for file in concentration_df.index]
+            elif subtype == "Itaconic":
+                concentration_df = pd.read_excel(concentration_file, skiprows=25, index_col=0)
+                concentration_df = concentration_df.iloc[1:-36]
+                concentration_names = concentration_df.keys()[1:4].to_list()
+                concentration_df = concentration_df[concentration_names]
+            elif subtype == "Acetic":
+                concentration_df = pd.read_excel(concentration_file, skiprows=25, index_col=0)
+                concentration_df = concentration_df.iloc[1:-8]
+                concentration_names = concentration_df.keys()[1:3].to_list()
+                concentration_df = concentration_df[concentration_names]
+                concentration_df.index = [file.replace(".mat#1", "") for file in concentration_df.index]
+            else:
+                raise Exception(f"Unknown subtype: {subtype}")
+
+        # filter file containing "Water_pure" since it has different raman shifts # TODO: what to do with it? subtract?
+        spectra_files = [file for file in spectra_files if "Water_pure" not in file]
+
+        spectra_list = []
+        raman_shifts_list = []
+        concentrations_list = []
+
+        for file in spectra_files:
+            scp_dataset = scp.read_spc(file)
+            if scp_dataset is None:
+                continue
+
+            idx = np.where([idx in file for idx in concentration_df.index])[0]
+            if not len(idx):
+                MiscLoader.logger.warning(f"[!] No concentration found for {file}") # TODO: what to do with it?
+                continue
+            elif len(idx) > 1:
+                MiscLoader.logger.warning(f"[!] Multiple concentrations found for {file}: {concentration_df.iloc[idx]}") # TODO: what to do with it?
+                continue
+
+            current_concentrations = concentration_df.iloc[idx[0]].to_numpy(dtype=float).flatten()
+            if current_concentrations.shape != (len(concentration_names),):
+                raise Exception(f"Concentration shape mismatch for {file}")
+
+            concentrations_list.append(current_concentrations)
+
+            for spec in scp_dataset:
+                spectra_list.append(spec.data.flatten())
+                raman_shifts_list.append(np.array(spec.x.values))
+
 
         if len(spectra_list) == 0:
             MiscLoader.logger.error(f"[!] No spectra found in {extracted_dir}")
             return None
+
         # Align raman shifts if possible
         first_rs = raman_shifts_list[0]
-        all_equal = all(np.allclose(first_rs, rs) for rs in raman_shifts_list)
+        all_equal = (all(len(first_rs) == len(rs) for rs in raman_shifts_list) and
+                     all(np.allclose(first_rs, rs) for rs in raman_shifts_list))
         if all_equal:
             raman_shifts = np.array(first_rs, dtype=float)
-            spectra = np.stack([np.array(s, dtype=float) for s in spectra_list])
         else:
-            raman_shifts, spectra = MiscLoader.align_raman_shifts(raman_shifts_list, spectra_list)
-        targets = np.array(targets, dtype=int)
-        return spectra, raman_shifts, targets, class_names
+            raise Exception("Ramachandran shifts are not aligned")
+
+        spectra = np.stack(spectra_list)
+        concentrations = np.stack(concentrations_list)
+
+        return spectra, raman_shifts, concentrations, concentration_names
+
 
     @staticmethod
     def fetch_figshare_metadata(article_id: int) -> dict:
