@@ -19,6 +19,7 @@ def plot_samples(dataset:RamanDataset, num_samples:int=5):
     # choose up to 5 random indices (handles datasets smaller than 5)
     num_to_plot = min(num_samples, len(dataset))
     indices = random.sample(range(len(dataset)), k=num_to_plot)
+    plt.figure(figsize=(8, 4))
 
     for idx, i in enumerate(indices):
         if not isinstance(dataset.raman_shifts, list):
@@ -40,5 +41,9 @@ def plot_samples(dataset:RamanDataset, num_samples:int=5):
     plt.xlabel('Raman Shift')
     plt.ylabel('Intensity')
     plt.title(f"{dataset.name} - Random {num_to_plot}/{len(dataset)} Spectra")
+
+    # export as pdf
+    plt.savefig(f"{dataset.name}.pdf", pad_inches=0, bbox_inches='tight')
+
     plt.legend()
     plt.show()
