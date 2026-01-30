@@ -1,16 +1,17 @@
-import os
-from typing import Optional, Tuple
 import logging
+import os
+from typing import Optional, Tuple, Any
 
-from kagglehub import dataset_load, dataset_download
-from kagglehub import KaggleDatasetAdapter
 import numpy as np
 import pandas as pd
+from kagglehub import KaggleDatasetAdapter
+from kagglehub import dataset_load, dataset_download
+from numpy import ndarray, dtype
 
-from raman_data.loaders.utils import encode_labels
-from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
+from raman_data.loaders.utils import encode_labels
+from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -190,13 +191,13 @@ class KaggleLoader(BaseLoader):
 
     @staticmethod
     def __load_diabetes(
-        id: str
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        dataset_id: str
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """
         Parse and extract data from the diabetes Raman spectroscopy dataset.
 
         Args:
-            id: The specific sub-dataset identifier (e.g., "AGEs", "earLobe", "innerArm").
+            dataset_id: The specific sub-dataset identifier (e.g., "AGEs", "earLobe", "innerArm").
 
         Returns:
             A tuple of (spectra, raman_shifts, concentrations) arrays,
@@ -204,65 +205,78 @@ class KaggleLoader(BaseLoader):
         """
         file_handle = "codina/raman-spectroscopy-of-diabetes"
 
-        df = dataset_load(
-            adapter=KaggleDatasetAdapter.PANDAS,
-            handle=file_handle,
-            path=f"{id}.csv"
-        )
+        try:
+            df = dataset_load(
+                adapter=KaggleDatasetAdapter.PANDAS,
+                handle=file_handle,
+                path=f"{dataset_id}.csv"
+            )
+        except Exception as e:
+            raise Exception(f"Failed to load diabetes dataset '{dataset_id}': {str(e)}") from e
 
-        if id == "AGEs":
-            spectra = df.loc[1:, "Var802":].to_numpy()
-            raman_shifts = df.loc[0, "Var802":].to_numpy()
+        if dataset_id == "AGEs":
+            # AGEs dataset has a different structure
+            spectra = df.loc[1:, "Var802":].to_numpy(dtype=float)
+            raman_shifts = df.loc[0, "Var802":].to_numpy(dtype=float)
             targets = df.loc[1:, "AGEsID"].to_numpy()
             encoded_targets, target_names = encode_labels(targets)
         else:
-            spectra = df.loc[1:, "Var2":].to_numpy()
-            raman_shifts = df.loc[0, "Var2":].to_numpy()
+            # Standard diabetes datasets
+            spectra = df.loc[1:, "Var2":].to_numpy(dtype=float)
+            raman_shifts = df.loc[0, "Var2":].to_numpy(dtype=float)
             targets = df.loc[1:, "has_DM2"].to_numpy().astype(int)
             target_names = ["No Diabetes", "Diabetes Type 2"]
             encoded_targets = targets
-
-
 
         return spectra, raman_shifts, encoded_targets, target_names
 
 
     @staticmethod
     def __load_sergioalejandrod(
-        id: str
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        sheet_id: str
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """
         Parse and extract data from the amino acids Raman spectroscopy dataset.
 
         Args:
-            id: The sheet number identifier (1-4) corresponding to different amino acids.
+            sheet_id: The sheet number identifier (1-4) corresponding to different amino acids:
+                     1 = Glycine, 2 = Leucine, 3 = Phenylalanine, 4 = Tryptophan
 
         Returns:
             A tuple of (spectra, raman_shifts, concentrations) arrays,
             or None if parsing fails.
         """
         file_handle = "sergioalejandrod/raman-spectroscopy"
-        header = ["Gly, 40 mM", "Leu, 40 mM", "Phe, 40 mM", "Trp, 40 mM"]
+        amino_acid_headers = {
+            "1": "Gly, 40 mM",
+            "2": "Leu, 40 mM",
+            "3": "Phe, 40 mM",
+            "4": "Trp, 40 mM"
+        }
+
+        header = amino_acid_headers[sheet_id]
 
         df = dataset_load(
             adapter=KaggleDatasetAdapter.PANDAS,
             handle=file_handle,
             path="AminoAcids_40mM.xlsx",
-            pandas_kwargs={"sheet_name": f"Sheet{id}"}
+            pandas_kwargs={"sheet_name": f"Sheet{sheet_id}"}
         )
 
-        spectra = df.loc[1:, 4.5:].to_numpy().T
-        raman_shifts = df.loc[1:, header[(int(id) - 1)]].to_numpy()
+        # Transpose spectra: rows become columns and vice versa
+        spectra = df.loc[1:, 4.5:].to_numpy(dtype=float).T
+        raman_shifts = df.loc[1:, header].to_numpy(dtype=float)
         concentrations = np.array(df.columns.values[2:], dtype=float)
-        concentration_name = header[(int(id) - 1)]
+        concentration_name = header[(int(sheet_id) - 1)]
 
         return spectra, raman_shifts, concentrations, concentration_name
 
 
+
     @staticmethod
     def __load_andriitrelin(
-        id: str
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        functionalization: str
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """
         Parse and extract data from the cells Raman spectra dataset.
 
@@ -271,7 +285,7 @@ class KaggleLoader(BaseLoader):
         surface functionalizations.
 
         Args:
-            id: The surface functionalization type ("COOH", "NH2", or "(COOH)2").
+            functionalization: The surface functionalization type ("COOH", "NH2", or "(COOH)2").
 
         Returns:
             A tuple of (spectra, raman_shifts, labels) arrays,
@@ -279,7 +293,7 @@ class KaggleLoader(BaseLoader):
         """
         file_handle = "andriitrelin/cells-raman-spectra"
 
-        # Cell type labels (folder names)
+        # Cell type labels (folder names in the dataset)
         cell_types = [
             "A", "A-S", "G", "G-S", "HF", "HF-S",
             "ZAM", "ZAM-S", "MEL", "MEL-S", "DMEM", "DMEM-S"
@@ -290,14 +304,16 @@ class KaggleLoader(BaseLoader):
 
         all_spectra = []
         all_labels = []
-
+        files_loaded = 0
+        files_skipped = 0
 
         for cell_type in cell_types:
             # Data is in the dataset_i subfolder
-            file_path = os.path.join(cache_path, "dataset_i", cell_type, f"{id}.csv")
+            file_path = os.path.join(cache_path, "dataset_i", cell_type, f"{functionalization}.csv")
 
             if not os.path.exists(file_path):
-                logger.warning(f"Warning: File not found: {file_path}")
+                logger.debug(f"Skipping missing file: {file_path}")
+                files_skipped += 1
                 continue
 
             try:
@@ -306,22 +322,34 @@ class KaggleLoader(BaseLoader):
 
                 all_spectra.append(spectra)
                 all_labels.extend([cell_type] * spectra.shape[0])
+                files_loaded += 1
 
             except Exception as e:
-                logger.warning(f"Warning: Could not load {file_path}: {e}")
+                logger.warning(f"Could not load {file_path}: {str(e)}")
+                files_skipped += 1
                 continue
 
         if not all_spectra:
-            return None
+            raise Exception(f"No spectra loaded for functionalization '{functionalization}'")
 
+        logger.info(
+            f"Loaded {files_loaded} cell type files for '{functionalization}' "
+            f"({files_skipped} skipped)"
+        )
 
+        # Combine all spectra
         spectra = np.vstack(all_spectra)
-        
+
+        # Ensure spectra are in the correct orientation (samples × features)
+        # Heuristic: assume more samples than features is the correct orientation
         if spectra.shape[1] < spectra.shape[0]:
             spectra = spectra.T
+            logger.debug(f"Transposed spectra from {spectra.T.shape} to {spectra.shape}")
 
         labels = np.array(all_labels)
         encoded_labels, label_names = encode_labels(labels)
+
+        # Raman shifts are fixed from the README
         raman_shifts = np.linspace(100, 4278, 2090)
 
         return spectra, raman_shifts, encoded_labels, label_names
@@ -330,9 +358,9 @@ class KaggleLoader(BaseLoader):
 
     @staticmethod
     def download_dataset(
-        dataset_name: str,
-        cache_path: Optional[str] = None,
-    ) -> str | None:
+            dataset_name: str,
+            cache_path: Optional[str] = None,
+    ) -> str:
         """
         Download a Kaggle dataset to the local cache.
 
@@ -346,25 +374,27 @@ class KaggleLoader(BaseLoader):
                         dataset is not available through this loader.
         """
         if not LoaderTools.is_dataset_available(dataset_name, KaggleLoader.DATASETS):
-            logger.error(f"[!] Cannot download {dataset_name} dataset with Kaggle loader")
-            return
+            raise ValueError(
+                f"Dataset '{dataset_name}' is not available through KaggleLoader. "
+                f"Use list_datasets() to see available datasets."
+            )
 
-        if not (cache_path is None):
+        if cache_path is not None:
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
-        cache_path = LoaderTools.get_cache_root(CACHE_DIR.HuggingFace)
+        cache_path = LoaderTools.get_cache_root(CACHE_DIR.Kaggle)
 
-        logger.debug(f"Downloading Kaggle dataset: {dataset_name}")
+        logger.info(f"Downloading Kaggle dataset: {dataset_name}")
 
         path = dataset_download(handle=dataset_name, path=cache_path)
-        logger.debug(f"Dataset downloaded into {path}")
+        logger.info(f"Dataset downloaded to: {path}")
 
         return path
 
 
     @staticmethod
     def load_dataset(
-        dataset_name: str,
-        cache_path: Optional[str] = None,
+            dataset_name: str,
+            cache_path: Optional[str] = None,
         load_data: bool = True,
     ) -> RamanDataset | None:
         """
@@ -383,15 +413,17 @@ class KaggleLoader(BaseLoader):
                                  target values, and metadata, or None if loading fails.
         """
         if not LoaderTools.is_dataset_available(dataset_name, KaggleLoader.DATASETS):
-            logger.error(f"[!] Cannot load {dataset_name} dataset with Kaggle loader")
-            return None
+            raise ValueError(
+                f"Dataset '{dataset_name}' is not available through KaggleLoader. "
+                f"Use list_datasets() to see available datasets."
+            )
 
-        if not (cache_path is None):
+        if cache_path is not None:
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
-        cache_path = LoaderTools.get_cache_root(CACHE_DIR.HuggingFace)
+        cache_path = LoaderTools.get_cache_root(CACHE_DIR.Kaggle)
 
-        logger.debug(
-            f"Loading Kaggle dataset from "
+        logger.info(
+            f"Loading Kaggle dataset '{dataset_name}' from "
             f"{cache_path if cache_path else 'default folder (~/.cache/kagglehub)'}"
         )
 
