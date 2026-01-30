@@ -16,6 +16,8 @@ from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.helper import organic
 import pandas as pd
+
+from raman_data.loaders.utils import encode_labels
 from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, HASH_TYPE
 
 
@@ -219,25 +221,25 @@ class MiscLoader(BaseLoader):
                 "license": "See paper"
             }
         ),
-        "rwth_acid_species": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            id="rwth_acid_species",
-            name="Acid Species Concentrations",
-            loader=lambda cache_path: MiscLoader._load_rwth_acid_species(cache_path),
-            metadata={
-                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
-                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
-                "paper": [
-                    "https://doi.org/10.1177/0003702820973275",
-                    "https://publications.rwth-aachen.de/record/978266"
-                ],
-                "citation": [
-                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
-                ],
-                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
-                "license": "See paper/source."
-            }
-        )
+        # "rwth_acid_species": DatasetInfo(
+        #     task_type=TASK_TYPE.Regression,
+        #     id="rwth_acid_species",
+        #     name="Acid Species Concentrations",
+        #     loader=lambda cache_path: MiscLoader._load_rwth_acid_species(cache_path),
+        #     metadata={
+        #         "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
+        #         "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
+        #         "paper": [
+        #             "https://doi.org/10.1177/0003702820973275",
+        #             "https://publications.rwth-aachen.de/record/978266"
+        #         ],
+        #         "citation": [
+        #             "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
+        #         ],
+        #         "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
+        #         "license": "See paper/source."
+        #     }
+        # )
     }
     logger = logging.getLogger(__name__)
 
@@ -896,10 +898,9 @@ class MiscLoader(BaseLoader):
         spectra = spectra_df.values[:, :-1].astype(float)
         # product_info_df = pd.read_excel(product_info_path)
 
-        le = LabelEncoder()
-        encoded_targets = le.fit_transform(targets)
-        target_names = le.classes_
+        encoded_targets, target_names = encode_labels(targets)
         return spectra, raman_shifts, encoded_targets, target_names
+
 
     @staticmethod
     def _load_covid(cache_path):
