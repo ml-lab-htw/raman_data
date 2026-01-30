@@ -62,7 +62,7 @@ class DatasetInfo:
     """
     id: str
     name: str
-    loader: Callable[[str], Tuple[np.ndarray, np.ndarray, np.ndarray] | pd.DataFrame | None]
+    loader: Callable
     metadata: dict[str, str]
     task_type: TASK_TYPE
     file_typ: Optional[str | List[str] | None] = None
