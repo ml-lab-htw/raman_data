@@ -25,25 +25,24 @@ def plot_samples(dataset:RamanDataset, num_samples:int=5):
         if not isinstance(dataset.raman_shifts, list):
             if isinstance(dataset.targets[i], (int, np.integer)):
                 plt.plot(dataset.raman_shifts, dataset.spectra[i],
-                         label=f"{i + 1}: {dataset.target_names[dataset.targets[i]]}")
+                         label=f"{dataset.target_names[dataset.targets[i]]}")
             else:
                 if isinstance(dataset.targets[i], (float, np.floating)):
                     plt.plot(dataset.raman_shifts, dataset.spectra[i],
-                             label=f"{i + 1}: {dataset.target_names[0]}: {dataset.targets[i]:.2f}")
+                             label=f"{dataset.target_names[0]}: {dataset.targets[i]:.2f}")
                 else:
                     plt.plot(dataset.raman_shifts, dataset.spectra[i],
-                             label=f"{i + 1}: {dataset.target_names[0]}: {dataset.targets[i][0]:.2f}")
+                             label=f"{dataset.target_names[0]}: {dataset.targets[i][0]:.2f}")
         else:
             plt.plot(dataset.raman_shifts[i], dataset.spectra[i],
-                     label=f"{i + 1}: {dataset.target_names[dataset.targets[i]]}")
+                     label=f"{dataset.target_names[dataset.targets[i]]}")
 
     plt.grid()
-    plt.xlabel('Raman Shift')
+    plt.xlabel('Raman Shift (cm$^{-1}$)')
     plt.ylabel('Intensity')
     plt.title(f"{dataset.name} - Random {num_to_plot}/{len(dataset)} Spectra")
+    plt.legend()
 
     # export as pdf
-    plt.savefig(f"plots\{dataset.name}.pdf", pad_inches=0, bbox_inches='tight')
-
-    plt.legend()
+    plt.savefig(f"plots/{dataset.name}.pdf", pad_inches=0, bbox_inches='tight')
     plt.show()
