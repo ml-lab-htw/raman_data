@@ -5,19 +5,16 @@ import pickle
 from typing import Optional, Tuple, List
 
 import numpy as np
+import pandas as pd
 import requests
-from scipy.io import loadmat
 import spectrochempy as scp
-from scipy.optimize import anderson
-from sklearn.preprocessing import LabelEncoder
+from scipy.io import loadmat
 
 import raman_data.loaders.helper.rruff as rruff
 from raman_data.exceptions import CorruptedZipFileError
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.helper import organic
-import pandas as pd
-
 from raman_data.loaders.utils import encode_labels
 from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, HASH_TYPE
 
