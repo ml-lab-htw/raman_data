@@ -353,6 +353,38 @@ class MiscLoader(BaseLoader):
                 "license": "See paper/source."
             }
         ),
+        "sop_spectral_library_baseline_corrected": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="sop_spectral_library_baseline_corrected",
+            name="SOP Spectral Library (Baseline Corrected)",
+            loader=lambda cache_path: MiscLoader._load_sop_spectral_library(cache_path, variant="baseline_corrected"),
+            metadata={
+                "full_name": "Synthetic Organic Pigments Raman Spectral Library - Baseline Corrected",
+                "source": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/ES5_J9PpBatLvbTe6VlFyIoBc6fFRli0YHl2qjnLxn6I8Q?download=1",
+                "paper": "https://doi.org/10.1002/jrs.4054",
+                "citation": [
+                    'Fremout, Wim, and Steven Saverwyns. "Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library." Journal of Raman Spectroscopy 43.11 (2012): 1536-1544.'
+                ],
+                "description": "Baseline-corrected Raman spectral library comprising nearly 300 reference spectra of synthetic organic pigments (SOPs). Designed for spectral matching and identification of pigments in modern and contemporary art conservation.",
+                "license": "See paper"
+            }
+        ),
+        "sop_spectral_library_raw": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            id="sop_spectral_library_raw",
+            name="SOP Spectral Library (Raw)",
+            loader=lambda cache_path: MiscLoader._load_sop_spectral_library(cache_path, variant="raw"),
+            metadata={
+                "full_name": "Synthetic Organic Pigments Raman Spectral Library - Raw",
+                "source": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/EdVQqPRI0l1FgNy1lemrYwwBaNcH2Jan0ZuKa04UnBqAWA?download=1",
+                "paper": "https://doi.org/10.1002/jrs.4054",
+                "citation": [
+                    'Fremout, Wim, and Steven Saverwyns. "Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library." Journal of Raman Spectroscopy 43.11 (2012): 1536-1544.'
+                ],
+                "description": "Raw (unprocessed) Raman spectral library comprising nearly 300 reference spectra of synthetic organic pigments (SOPs). Designed for spectral matching and identification of pigments in modern and contemporary art conservation.",
+                "license": "See paper"
+            }
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -1152,4 +1184,166 @@ class MiscLoader(BaseLoader):
 
         return spectra.T, raman_shifts, encoded_targets, target_names
 
+    @staticmethod
+    def _load_sop_spectral_library(cache_path: str, variant: str = "baseline_corrected"):
+        """
+        Load the SOP (Synthetic Organic Pigments) Spectral Library.
+
+        The library contains ~300 Raman reference spectra of synthetic organic pigments.
+        Two variants are available: 'baseline_corrected' and 'raw'.
+
+        The data is downloaded from SharePoint as a ZIP archive containing one
+        TXT file per spectrum. Each TXT file has two columns (wavenumber, intensity)
+        and the pigment name is encoded in the filename.
+
+        Args:
+            cache_path: Path to the cached dataset directory.
+            variant: Either 'baseline_corrected' or 'raw'.
+
+        Returns:
+            Tuple of (spectra, raman_shifts, targets, class_names) or None if loading fails.
+        """
+        urls = {
+            "baseline_corrected": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/ES5_J9PpBatLvbTe6VlFyIoBc6fFRli0YHl2qjnLxn6I8Q?download=1",
+            "raw": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/EdVQqPRI0l1FgNy1lemrYwwBaNcH2Jan0ZuKa04UnBqAWA?download=1",
+        }
+
+        if variant not in urls:
+            MiscLoader.logger.error(f"[!] Unknown SOP variant: {variant}. Use 'baseline_corrected' or 'raw'.")
+            return None
+
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            MiscLoader.logger.error("[!] Cache root for MiscLoader is not set")
+            return None
+
+        shared_root = os.path.join(cache_root, "sop_spectral_library")
+        os.makedirs(shared_root, exist_ok=True)
+
+        zip_name = f"sop_{variant}.zip"
+        zip_path = os.path.join(shared_root, zip_name)
+        extracted_dir = os.path.join(shared_root, f"sop_{variant}")
+
+        # Check if already extracted
+        if not os.path.isdir(extracted_dir) or not os.listdir(extracted_dir):
+            # Try to find an existing zip if the expected one doesn't exist
+            if not os.path.exists(zip_path):
+                existing_zips = glob.glob(os.path.join(shared_root, f"*{variant}*.zip"))
+                if existing_zips:
+                    zip_path = existing_zips[0]
+                    MiscLoader.logger.debug(f"Found existing SOP zip: {zip_path}")
+
+            # Download if not present
+            if not os.path.exists(zip_path):
+                try:
+                    LoaderTools.download(
+                        url=urls[variant],
+                        out_dir_path=shared_root,
+                        out_file_name=zip_name,
+                    )
+                except Exception as e:
+                    MiscLoader.logger.error(
+                        f"[!] Failed to download SOP Spectral Library ({variant}): {e}\n"
+                        f"    Please download manually from:\n"
+                        f"    {urls[variant]}\n"
+                        f"    and place the ZIP at: {zip_path}"
+                    )
+                    return None
+
+            if not os.path.exists(zip_path):
+                MiscLoader.logger.error(
+                    f"[!] SOP ZIP file not found at: {zip_path}\n"
+                    f"    Please download from: {urls[variant]}\n"
+                    f"    and save to: {zip_path}"
+                )
+                return None
+
+            # Extract
+            LoaderTools.extract_zip_file_content(
+                zip_path,
+                unzip_target_subdir=f"sop_{variant}"
+            )
+
+        if not os.path.isdir(extracted_dir):
+            MiscLoader.logger.error(f"[!] SOP extracted directory not found: {extracted_dir}")
+            return None
+
+        # Collect all TXT files recursively
+        txt_files = glob.glob(os.path.join(extracted_dir, "**", "*.txt"), recursive=True)
+        if not txt_files:
+            MiscLoader.logger.error(f"[!] No TXT files found in {extracted_dir}")
+            return None
+
+        spectra_list = []
+        raman_shifts_list = []
+        pigment_labels = []
+
+        for txt_file in sorted(txt_files):
+            try:
+                # Try common delimiters for two-column data
+                data = None
+                for sep in ["\t", ",", ";", r"\s+"]:
+                    try:
+                        candidate = pd.read_csv(
+                            txt_file, sep=sep, header=None, comment="#",
+                            engine="python", skip_blank_lines=True
+                        )
+                        if candidate.shape[1] >= 2:
+                            data = candidate
+                            break
+                    except Exception:
+                        continue
+
+                if data is None or data.shape[1] < 2:
+                    MiscLoader.logger.warning(f"[!] Skipping unparseable file: {txt_file}")
+                    continue
+
+                wavenumbers = data.iloc[:, 0].values.astype(float)
+                intensities = data.iloc[:, 1].values.astype(float)
+
+                # Sort by ascending wavenumber
+                sort_idx = np.argsort(wavenumbers)
+                wavenumbers = wavenumbers[sort_idx]
+                intensities = intensities[sort_idx]
+
+                # Extract pigment name from filename, dropping institution
+                # suffix. E.g. "PO14_A_785_kikirpa (original).txt" -> "PO14_A_785"
+                pigment_name = os.path.splitext(os.path.basename(txt_file))[0]
+                pigment_name = pigment_name.split("_kikirpa")[0].strip("_ ")
+
+                spectra_list.append(intensities)
+                raman_shifts_list.append(wavenumbers)
+                pigment_labels.append(pigment_name)
+
+            except Exception as e:
+                MiscLoader.logger.warning(f"[!] Failed to parse {txt_file}: {e}")
+                continue
+
+        if len(spectra_list) == 0:
+            MiscLoader.logger.error(f"[!] No spectra could be loaded from {extracted_dir}")
+            return None
+
+        # Check if all spectra share the same wavenumber axis
+        first_rs = raman_shifts_list[0]
+        all_equal = (
+            all(len(first_rs) == len(rs) for rs in raman_shifts_list)
+            and all(np.allclose(first_rs, rs) for rs in raman_shifts_list)
+        )
+
+        if all_equal:
+            raman_shifts = np.array(first_rs, dtype=float)
+            spectra = np.stack(spectra_list)
+        else:
+            # Interpolate all spectra to a common wavenumber grid
+            raman_shifts, spectra = MiscLoader.align_raman_shifts(raman_shifts_list, spectra_list)
+
+        encoded_targets, class_names = encode_labels(pd.Series(pigment_labels))
+
+        MiscLoader.logger.debug(
+            f"Loaded SOP library ({variant}): {spectra.shape[0]} spectra, "
+            f"{spectra.shape[1]} wavenumber points, "
+            f"{len(class_names)} unique pigments"
+        )
+
+        return spectra, raman_shifts, encoded_targets, list(class_names)
 
