@@ -261,6 +261,34 @@ class MiscLoader(BaseLoader):
             for pretreatment in ["Raw", "LinearFit", "RubberBand", "MinMax_LinearFit", "MinMax_RubberBand", "SNV_LinearFit", "SNV_RubberBand"]
             for spectral_range in ["Global", "FingerPrint"]
         },
+        **{
+            f"hmf_separation_{todo.lower()}": DatasetInfo(
+                task_type=TASK_TYPE.Regression,
+                id=f"hmf_separation_{todo.lower()}",
+                name=f"HMF Separation ({todo})",
+                loader=lambda cache_path, todo=todo: MiscLoader._load_hmf_dataset(cache_path, todo),
+                metadata={
+                    "full_name": f"Liquid–Liquid Equilibrium of 2-MTHF/Water/5-HMF with Sulfate Electrolytes ({todo})",
+                    "source": "https://doi.org/10.18154/RWTH-2024-01176",
+                    "description": (
+                        "Experimental liquid–liquid equilibrium dataset investigating the phase separation behavior "
+                        "of 2-methyltetrahydrofuran (2-MTHF), water, and 5-hydroxymethylfurfural (5-HMF) in the presence "
+                        "of sulfate salts and sulfuric acid. The dataset includes mid-infrared (MIR) spectra of organic "
+                        "and aqueous phases, calibration compositions, and equilibrium phase compositions measured "
+                        "between 293 K and 333 K at atmospheric pressure. Spectral data are analyzed using Indirect Hard "
+                        "Modeling and support thermodynamic modeling with ePC-SAFT."
+                    ),
+                    "paper": "https://doi.org/10.1021/acs.jced.2c00698",
+                    "citation": [
+                        "Roth, D. M., Haas, M., Echtermeyer, A. W. W., Kaminski, S., Viell, J., and Jupke, A. (2023). "
+                        "The Effect of Sulfate Electrolytes on the Liquid–Liquid Equilibrium of 2-MTHF/Water/5-HMF: "
+                        "Experimental Study and Thermodynamic Modeling. Journal of Chemical & Engineering Data, 68(6), 1397–1410."
+                    ],
+                    "license": "Open Access"
+                }
+            )
+            for todo in [""]
+        },
     }
     logger = logging.getLogger(__name__)
 
@@ -956,6 +984,48 @@ class MiscLoader(BaseLoader):
 
 
     @staticmethod
+    def _load_hmf_dataset(cache_path: str, subtype: str = "Succinic"):
+        """
+        Download and load the RWTH acid species dataset.
+        Returns spectra, raman_shifts, targets, class_names (acids).
+        """
+
+        # if subtype not in ["Succinic", "Levulinic", "Formic", "Citric", "Oxalic", "Itaconic", "Acetic"]:
+        #     MiscLoader.logger.error(f"[!] Unknown RWTH acid species subtype: {subtype}")
+        #     return None
+
+        # sub_folder = f"{subtype} acid titration"
+
+        dataset_url = "https://publications.rwth-aachen.de/record/978265/files/Data_RWTH-2024-01176.zip?version=1"
+        zip_name = "Data_RWTH-2024-01176.zip"
+
+        cache_parent = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        shared_root = os.path.join(cache_parent, "rwth_hmf_separation")
+        os.makedirs(shared_root, exist_ok=True)
+        zip_path = os.path.join(shared_root, zip_name)
+        # Download if not present
+        if not os.path.exists(zip_path) or not LoaderTools.is_valid_zip(zip_path):
+            try:
+                LoaderTools.download(url=dataset_url, out_dir_path=shared_root, out_file_name=zip_name)
+            except Exception as e:
+                MiscLoader.logger.error(f"[!] Failed to download RWTH acid species dataset: {e}")
+                return None
+
+        # Extract if not already extracted
+        extracted_dir = os.path.join(shared_root, "Data_RWTH-2024-01176")
+        if not os.path.isdir(extracted_dir):
+            try:
+                LoaderTools.extract_zip_file_content(zip_path)
+            except Exception as e:
+                MiscLoader.logger.error(f"[!] Failed to extract RWTH acid species zip: {e}")
+                return None
+
+        raise NotImplementedError("HMF dataset loading not implemented yet")
+
+        # return spectra, raman_shifts, concentrations, concentration_names
+
+
+    @staticmethod
     def fetch_figshare_metadata(article_id: int) -> dict:
         r = requests.get(f"https://api.figshare.com/v2/articles/{article_id}")
         r.raise_for_status()
@@ -1370,7 +1440,7 @@ class MiscLoader(BaseLoader):
                 MiscLoader.logger.error(f"[!] Failed to download Flow Synthesis dataset: {e}")
                 return None
 
-        extracted_dir = os.path.join(cache_path, "extracted")
+        extracted_dir = os.path.join(cache_path, "rwth_flow_synthesis")
         if not os.path.isdir(extracted_dir):
             try:
                 LoaderTools.extract_zip_file_content(zip_path, extracted_dir)
@@ -1378,7 +1448,7 @@ class MiscLoader(BaseLoader):
                 MiscLoader.logger.error(f"[!] Failed to extract Flow Synthesis zip: {e}")
                 return None
 
-        # The user will implement this part for loading data from `extracted_dir`
-        pass
+
+
 
 
