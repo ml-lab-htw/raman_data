@@ -51,7 +51,6 @@ def test_load_dataset():
     test_datasets = [
         "diabetes_skin_ear_lobe",                  # hosted on Kaggle
         "bioprocess_substrates",                # hosted on HuggingFace
-        # "mendeley_surface-enhanced-raman",        # hosted on external website
         "adenine_solid_gold"                               # hosted on Zenodo
     ]
     for dataset_name in test_datasets:
