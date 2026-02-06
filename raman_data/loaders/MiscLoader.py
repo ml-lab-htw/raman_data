@@ -212,172 +212,48 @@ class MiscLoader(BaseLoader):
                 "license": "See paper"
             }
         ),
-        "acid_species_succinic": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            id="acid_species_succinic",
-            name="Acid Species Concentrations (Succinic)",
-            loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Succinic"),
-            metadata={
-                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
-                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
-                "paper": [
-                    "https://doi.org/10.1177/0003702820973275",
-                    "https://publications.rwth-aachen.de/record/978266"
-                ],
-                "citation": [
-                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
-                ],
-                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
-                "license": "See paper/source."
-            }
-        ),
-        "acid_species_levulinic": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            id="acid_species",
-            name="Acid Species Concentrations (Levulinic)",
-            loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Levulinic"),
-            metadata={
-                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
-                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
-                "paper": [
-                    "https://doi.org/10.1177/0003702820973275",
-                    "https://publications.rwth-aachen.de/record/978266"
-                ],
-                "citation": [
-                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
-                ],
-                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
-                "license": "See paper/source."
-            }
-        ),
-        "acid_species_formic": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            id="acid_species_formic",
-            name="Acid Species Concentrations (Formic)",
-            loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Formic"),
-            metadata={
-                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
-                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
-                "paper": [
-                    "https://doi.org/10.1177/0003702820973275",
-                    "https://publications.rwth-aachen.de/record/978266"
-                ],
-                "citation": [
-                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
-                ],
-                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
-                "license": "See paper/source."
-            }
-        ),
-        "acid_species_citric": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            id="acid_species_citric",
-            name="Acid Species Concentrations (Citric)",
-            loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Citric"),
-            metadata={
-                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
-                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
-                "paper": [
-                    "https://doi.org/10.1177/0003702820973275",
-                    "https://publications.rwth-aachen.de/record/978266"
-                ],
-                "citation": [
-                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
-                ],
-                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
-                "license": "See paper/source."
-            }
-        ),
-        # TODO its None when the scp files are loaded, why?
-        # "acid_species_oxalic": DatasetInfo(
-        #     task_type=TASK_TYPE.Regression,
-        #     id="acid_species_oxalic",
-        #     name="Acid Species Concentrations (Oxalic)",
-        #     loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Oxalic"),
-        #     metadata={
-        #         "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
-        #         "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
-        #         "paper": [
-        #             "https://doi.org/10.1177/0003702820973275",
-        #             "https://publications.rwth-aachen.de/record/978266"
-        #         ],
-        #         "citation": [
-        #             "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
-        #         ],
-        #         "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
-        #         "license": "See paper/source."
-        #     }
-        # ),
-        "acid_species_itaconic": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            id="acid_species_itaconic",
-            name="Acid Species Concentrations (Itaconic)",
-            loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Itaconic"),
-            metadata={
-                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
-                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
-                "paper": [
-                    "https://doi.org/10.1177/0003702820973275",
-                    "https://publications.rwth-aachen.de/record/978266"
-                ],
-                "citation": [
-                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
-                ],
-                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
-                "license": "See paper/source."
-            }
-        ),
-        "acid_species_acetic": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            id="acid_species_acetic",
-            name="Acid Species Concentrations (Acetic)",
-            loader=lambda cache_path: MiscLoader._load_acid_species(cache_path, "Acetic"),
-            metadata={
-                "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
-                "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
-                "paper": [
-                    "https://doi.org/10.1177/0003702820973275",
-                    "https://publications.rwth-aachen.de/record/978266"
-                ],
-                "citation": [
-                    "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
-                ],
-                "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
-                "license": "See paper/source."
-            }
-        ),
-        "sop_spectral_library_baseline_corrected": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            id="sop_spectral_library_baseline_corrected",
-            name="SOP Spectral Library (Baseline Corrected)",
-            loader=lambda cache_path: MiscLoader._load_sop_spectral_library(cache_path, variant="baseline_corrected"),
-            metadata={
-                "full_name": "Synthetic Organic Pigments Raman Spectral Library - Baseline Corrected",
-                "source": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/ES5_J9PpBatLvbTe6VlFyIoBc6fFRli0YHl2qjnLxn6I8Q?download=1",
-                "paper": "https://doi.org/10.1002/jrs.4054",
-                "citation": [
-                    'Fremout, Wim, and Steven Saverwyns. "Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library." Journal of Raman Spectroscopy 43.11 (2012): 1536-1544.'
-                ],
-                "description": "Baseline-corrected Raman spectral library comprising nearly 300 reference spectra of synthetic organic pigments (SOPs). Designed for spectral matching and identification of pigments in modern and contemporary art conservation.",
-                "license": "See paper"
-            }
-        ),
-        "sop_spectral_library_raw": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            id="sop_spectral_library_raw",
-            name="SOP Spectral Library (Raw)",
-            loader=lambda cache_path: MiscLoader._load_sop_spectral_library(cache_path, variant="raw"),
-            metadata={
-                "full_name": "Synthetic Organic Pigments Raman Spectral Library - Raw",
-                "source": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/EdVQqPRI0l1FgNy1lemrYwwBaNcH2Jan0ZuKa04UnBqAWA?download=1",
-                "paper": "https://doi.org/10.1002/jrs.4054",
-                "citation": [
-                    'Fremout, Wim, and Steven Saverwyns. "Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library." Journal of Raman Spectroscopy 43.11 (2012): 1536-1544.'
-                ],
-                "description": "Raw (unprocessed) Raman spectral library comprising nearly 300 reference spectra of synthetic organic pigments (SOPs). Designed for spectral matching and identification of pigments in modern and contemporary art conservation.",
-                "license": "See paper"
-            }
-        ),
+        **{
+            f"acid_species_{acid.lower()}": DatasetInfo(
+                task_type=TASK_TYPE.Regression,
+                id=f"acid_species_{acid.lower()}",
+                name=f"Acid Species Concentrations ({acid})",
+                loader=lambda cache_path, a=acid: MiscLoader._load_acid_species(cache_path, a),
+                metadata={
+                    "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
+                    "source": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
+                    "paper": [
+                        "https://doi.org/10.1177/0003702820973275",
+                        "https://publications.rwth-aachen.de/record/978266"
+                    ],
+                    "citation": [
+                        "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
+                    ],
+                    "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
+                    "license": "See paper/source."
+                }
+            )
+            for acid in ["Succinic", "Levulinic", "Formic", "Citric", "Itaconic", "Acetic"] # TODO Oxalic: load scp gets None back
+        },
+        **{
+            f"sop_spectral_library_{process.lower().replace(' ', '_')}": DatasetInfo(
+                task_type=TASK_TYPE.Regression,
+                id=f"sop_spectral_library_{process.lower().replace(' ', '_')}",
+                name=f"SOP Spectral Library ({process})",
+                loader=lambda cache_path, p=process.lower().replace(' ', '_'): MiscLoader._load_sop_spectral_library(cache_path,
+                                                                                variant=p),
+                metadata={
+                    "full_name": f"Synthetic Organic Pigments Raman Spectral Library - {process}",
+                    "source": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/ES5_J9PpBatLvbTe6VlFyIoBc6fFRli0YHl2qjnLxn6I8Q?download=1",
+                    "paper": "https://doi.org/10.1002/jrs.4054",
+                    "citation": [
+                        'Fremout, Wim, and Steven Saverwyns. "Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library." Journal of Raman Spectroscopy 43.11 (2012): 1536-1544.'
+                    ],
+                    "description": f"{process} Raman spectral library comprising nearly 300 reference spectra of synthetic organic pigments (SOPs). Designed for spectral matching and identification of pigments in modern and contemporary art conservation.",
+                    "license": "See paper"
+                }
+            )
+            for process in ["Raw", "Baseline Corrected"]
+        },
         **{
             f"microgel_size_{pretreatment.lower()}_{spectral_range.lower()}": DatasetInfo(
                 task_type=TASK_TYPE.Regression,
