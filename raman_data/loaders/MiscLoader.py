@@ -164,38 +164,25 @@ class MiscLoader(BaseLoader):
                 "license": "See source"
             }
         ),
-        "mind_pd": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            id="mind_pd",
-            name="Saliva Parkinson",
-            loader=lambda cache_path: MiscLoader._load_mind_dataset(cache_path, "pd_ad_dataset", ["PD", "CTRL"]),
-            metadata={
-                "full_name": "Saliva Neurodegenerative Disease Raman Dataset (Parkinson)",
-                "source": "https://github.com/dpiazza/Raman-Spectra-Data",
-                "description": "Raman spectra from dried saliva drops targeting Parkinson's Disease (PD) vs. healthy controls. Reveals hidden trends in proteins, lipids, and saccharides for early detection of cognitive and motor impairment.",
-                "paper": "https://doi.org/10.1016/j.compbiomed.2024.108028",
-                "citation": [
-                    "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028."
-                ],
-                "license": "See source"
-            }
-        ),
-        "mind_ad": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            id="mind_ad",
-            name="Saliva Alzheimer",
-            loader=lambda cache_path: MiscLoader._load_mind_dataset(cache_path, "pd_ad_dataset", ["AD", "CTRL"]),
-            metadata={
-                "full_name": "Saliva Neurodegenerative Disease Raman Dataset (Alzheimer)",
-                "source": "https://github.com/dpiazza/Raman-Spectra-Data",
-                "description": "Raman spectra from dried saliva drops targeting Alzheimer's Disease (AD) vs. healthy controls. Serves as a liquid biopsy benchmark for identifying neurodegenerative pathology.",
-                "paper": "https://doi.org/10.1016/j.compbiomed.2024.108028",
-                "citation": [
-                    "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028."
-                ],
-                "license": "See source"
-            }
-        ),
+        **{
+            f"mind_{disease.lower()}": DatasetInfo(
+                task_type=TASK_TYPE.Classification,
+                id=f"mind_{disease.lower()}",
+                name=f"Saliva {disease}",
+                loader=lambda cache_path, c=disease[0]: MiscLoader._load_mind_dataset(cache_path, "pd_ad_dataset", [f"{c}D", "CTRL"]),
+                metadata={
+                    "full_name": f"Saliva Neurodegenerative Disease Raman Dataset ({disease})",
+                    "source": "https://github.com/dpiazza/Raman-Spectra-Data",
+                    "description": f"Raman spectra from dried saliva drops targeting {disease}'s Disease (PD) vs. healthy controls. Reveals hidden trends in proteins, lipids, and saccharides for early detection of cognitive and motor impairment.",
+                    "paper": "https://doi.org/10.1016/j.compbiomed.2024.108028",
+                    "citation": [
+                        "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028."
+                    ],
+                    "license": "See source"
+                }
+            )
+            for disease in ["Parkinson", "Alzheimer"]
+        },
         "csho33_bacteria": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="csho33_bacteria",
