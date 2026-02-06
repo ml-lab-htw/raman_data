@@ -133,6 +133,10 @@ class RamanDataset:
         return self.info.application_type if self.info is not None else APPLICATION_TYPE.Unknown
 
     @property
+    def application_type(self) -> APPLICATION_TYPE:
+        return self.info.application_type if self.info is not None else APPLICATION_TYPE.Unknown
+
+    @property
     def n_spectra(self) -> int:
         """
         Get the number of spectra in the dataset.
