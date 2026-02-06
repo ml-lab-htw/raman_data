@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple
 
 try:
-    from raman_data.types import TASK_TYPE
+    from raman_data.types import TASK_TYPE, APPLICATION_TYPE
 except Exception as e:
     print("Failed to import raman_data.types:", e)
     raise
@@ -28,18 +28,9 @@ ROOT = Path(__file__).resolve().parents[1]
 README_PATH = ROOT / "README.md"
 LOADERS_PKG = "raman_data.loaders"
 
-# Map loader class/module name -> human section title
-SECTION_MAP = {
-    "KaggleLoader": "Kaggle Datasets",
-    "HuggingFaceLoader": "Hugging Face Datasets",
-    "ZenodoLoader": "Zenodo Datasets",
-    "MiscLoader": "Miscellaneous Datasets",
-    "ZipLoader": "Zip/URL Datasets",
-}
-
 
 def gather_datasets() -> List[Tuple[str, str, str, str]]:
-    """Return a flat list of datasets as (name, source, task, description).
+    """Return a flat list of datasets as (name, application, task, description).
     """
     rows_all: List[Tuple[str, str, str, str]] = []
     try:
@@ -58,13 +49,10 @@ def gather_datasets() -> List[Tuple[str, str, str, str]]:
 
         # Try module-level DATASETS first
         datasets = None
-        # default section key fallback
-        section_key = modname
         try:
             candidate = getattr(mod, "DATASETS", None)
             if isinstance(candidate, dict) and candidate:
                 datasets = candidate
-                section_key = getattr(mod, "__name__", modname)
         except Exception:
             datasets = None
 
@@ -76,7 +64,6 @@ def gather_datasets() -> List[Tuple[str, str, str, str]]:
                         cand = getattr(obj, "DATASETS", None)
                         if isinstance(cand, dict) and cand:
                             datasets = cand
-                            section_key = getattr(obj, "__name__", modname)
                             break
                 except Exception:
                     continue
@@ -84,9 +71,13 @@ def gather_datasets() -> List[Tuple[str, str, str, str]]:
         if datasets is None:
             continue
 
-        # Use the human-friendly section title as the Source column
-        section_title = SECTION_MAP.get(section_key, section_key)
         for ds_name, ds_info in datasets.items():
+            # application type
+            try:
+                at = ds_info.application_type
+                application = at.name if isinstance(at, APPLICATION_TYPE) else str(at)
+            except Exception:
+                application = "Unknown"
             # task type
             try:
                 tt = ds_info.task_type
@@ -100,23 +91,23 @@ def gather_datasets() -> List[Tuple[str, str, str, str]]:
                 desc = meta.get("description", "") if isinstance(meta, dict) else str(meta)
             except Exception:
                 desc = ""
-            rows_all.append((ds_name, section_title, task, desc))
+            rows_all.append((ds_name, application, task, desc))
 
     return rows_all
 
 
 def render_markdown(rows: List[Tuple[str, str, str, str]]) -> str:
-    """Render a single markdown table with columns: Dataset Name | Source | Task Type | Description
+    """Render a single markdown table with columns: Dataset Name | Application | Task Type | Description
     """
     parts: List[str] = []
     parts.append("<!-- AUTO-GENERATED: START - datasets table. Do not edit manually. -->")
     parts.append("")
-    parts.append("| Dataset Name | Source | Task Type | Description |")
-    parts.append("|--------------|--------|-----------|-------------|")
-    for name, source, task, desc in sorted(rows, key=lambda x: x[0].lower()):
+    parts.append("| Dataset Name | Application | Task Type | Description |")
+    parts.append("|--------------|-------------|-----------|-------------|")
+    for name, application, task, desc in sorted(rows, key=lambda x: x[0].lower()):
         short = (desc.replace("\n", " ")[:300]).strip()
         short = short.replace("|", "\\|")
-        parts.append(f"| `{name}` | {source} | {task} | {short} |")
+        parts.append(f"| `{name}` | {application} | {task} | {short} |")
     parts.append("")
     parts.append("<!-- AUTO-GENERATED: END - datasets table. -->")
     return "\n".join(parts)
