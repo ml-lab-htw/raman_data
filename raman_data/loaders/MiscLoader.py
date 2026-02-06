@@ -1651,7 +1651,7 @@ class MiscLoader(BaseLoader):
                     continue
 
                 # TODO how to get the real target? from filename? somewhere else?
-                target = os.path.splitext(os.path.basename(spc_file))[0][18:24]
+                target = os.path.splitext(os.path.basename(spc_file))[0][18:23]
                 for spec in dataset:
                     spectra_list.append(spec.data.flatten())
                     raman_shifts_list.append(np.array(spec.x.values))
@@ -1662,7 +1662,7 @@ class MiscLoader(BaseLoader):
                 continue
 
         if len(spectra_list) == 0:
-            raise ValueError(f"[!] No spectra could be loaded from .spc files in {data_folder}")
+            raise ValueError(f"[!] No spectra could be loaded from .spc files in {extracted_dir}")
 
         # Check if all spectra share the same wavenumber axis
         first_rs = raman_shifts_list[0]
@@ -1675,6 +1675,33 @@ class MiscLoader(BaseLoader):
         else:
             # Interpolate all spectra to a common wavenumber grid
             raman_shifts, spectra = MiscLoader.align_raman_shifts(raman_shifts_list, spectra_list)
+
+
+
+        xlsx_files = {
+            20: "Dynamic_Light_Scattering_size_predictions_at_20%C2%B0C.xlsx",
+            50: "Dynamic_Light_Scattering_size_predictions_at_50%C2%B0C.xlsx"
+        }
+
+        # TODO: which one to use? or both? how to match with the spectra?
+        degree = 20
+        xlsx_file = xlsx_files[degree]
+
+        xlsx_path = os.path.join(cache_path, xlsx_file)
+        if not os.path.exists(xlsx_path):
+            xlsx_download_path = f"https://publications.rwth-aachen.de/record/959050/files/{xlsx_file}?version=1"
+            LoaderTools.download(
+                url=xlsx_download_path,
+                out_dir_path=cache_path,
+                out_file_name=xlsx_file
+            )
+
+        xlsx_data = pd.read_excel(xlsx_path, index_col=0)
+
+        hydraulic_radius = xlsx_data["hydrodynamic radius [nm]"]
+
+        # TODO: how to use this?
+        hydraulic_radius_values = [hydraulic_radius.get(target.replace("-", "."), np.nan) for target in targets_list]
 
         encoded_targets, target_names = encode_labels(targets_list)
 
