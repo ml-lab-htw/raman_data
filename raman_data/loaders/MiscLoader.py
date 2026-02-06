@@ -130,10 +130,10 @@ class MiscLoader(BaseLoader):
             )
             for processed in ["Raw", "Preprocess"]
         },
-        "active_pharmaceutical_ingredients": DatasetInfo(
+        "pharmaceutical_ingredients": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.Medical,
-            id="active_pharmaceutical_ingredients",
+            id="pharmaceutical_ingredients",
             name="Active Pharmaceutical Ingredients",
             loader=lambda cache_path: MiscLoader._load_api(cache_path),
             metadata={
@@ -1079,7 +1079,7 @@ class MiscLoader(BaseLoader):
 
         dataset_cache = os.path.join(
             cache_root,
-            "active_pharmaceutical_ingredient",
+            "pharmaceutical_ingredient",
         )
         os.makedirs(dataset_cache, exist_ok=True)
 
