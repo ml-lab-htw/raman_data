@@ -15,11 +15,11 @@ __TODO_DATASETS = {
 __DATASETS = {
     'codina_diabetes_AGEs' : TASK_TYPE.Classification,
     'sergioalejandrod_AminoAcids_glycine' : TASK_TYPE.Classification,
-    'andriitrelin_cells-raman-spectra_COOH' : TASK_TYPE.Classification,
-    'chlange_SubstrateMixRaman' : TASK_TYPE.Regression,
-    'sugar_mixtures' : TASK_TYPE.Regression,
+    'andriitrelin_cells_COOH' : TASK_TYPE.Classification,
+    'bioprocess_substrates' : TASK_TYPE.Regression,
+    'sugar_mixtures_low_snr' : TASK_TYPE.Regression,
     'wheat_lines' : TASK_TYPE.Classification,
-    'adenine' : TASK_TYPE.Regression
+    'adenine_cAg' : TASK_TYPE.Regression
 }
 
 
