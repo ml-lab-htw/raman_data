@@ -224,34 +224,23 @@ class ZenodoLoader(BaseLoader):
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
 
     DATASETS = {
-        "sugar_mixtures_low_snr": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            application_type=APPLICATION_TYPE.Chemical,
-            id="10779223",
-            name="Sugar Mixtures (Low SNR)",
-            file_typ="*.zip",
-            loader=lambda cache_path: ZenodoLoader.__load_10779223(cache_path, "Low SNR"),
-            metadata={
-                "full_name": "Sugar Mixtures Raman Dataset (Low SNR)",
-                "source": "https://doi.org/10.5281/zenodo.10779223",
-                "paper": "https://doi.org/10.1073/pnas.2407439121",
-                "description": "The low signal-to-noise ratio subset of the Sugar Mixtures benchmark (7,680 measurements at 0.5 s integration). Used for evaluating the noise-robustness of hyperspectral unmixing and quantification algorithms."
-            }
-        ),
-        "sugar_mixtures_high_snr": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            application_type=APPLICATION_TYPE.Chemical,
-            id="10779223",
-            name="Sugar Mixtures (High SNR)",
-            file_typ="*.zip",
-            loader=lambda cache_path: ZenodoLoader.__load_10779223(cache_path, "High SNR"),
-            metadata={
-                "full_name": "Sugar Mixtures Raman Dataset (High SNR)",
-                "source": "https://doi.org/10.5281/zenodo.10779223",
-                "paper": "https://doi.org/10.1073/pnas.2407439121",
-                "description": "The high signal-to-noise ratio subset of the Sugar Mixtures benchmark (1,920 measurements at 5 s integration). Provides a clean baseline for hyperspectral unmixing and chemical quantification in multi-component solutions."
-            }
-        ),
+        **{
+            f"sugar_mixtures_{snr.lower()}_snr": DatasetInfo(
+                task_type=TASK_TYPE.Regression,
+                application_type=APPLICATION_TYPE.Chemical,
+                id="10779223",
+                name=f"Sugar Mixtures ({snr} SNR)",
+                file_typ="*.zip",
+                loader=lambda cache_path, snr=snr: ZenodoLoader.__load_10779223(cache_path, f"{snr} SNR"),
+                metadata={
+                    "full_name": f"Sugar Mixtures Raman Dataset ({snr} SNR)",
+                    "source": "https://doi.org/10.5281/zenodo.10779223",
+                    "paper": "https://doi.org/10.1073/pnas.2407439121",
+                    "description": f"The {snr.lower()} signal-to-noise ratio subset of the Sugar Mixtures benchmark (7,680 measurements at 0.5 s integration). Used for evaluating the noise-robustness of hyperspectral unmixing and quantification algorithms."
+                }
+            )
+            for snr in ["Low", "High"]
+        },
         "wheat_lines": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.Biological,
