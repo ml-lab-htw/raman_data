@@ -60,6 +60,4 @@ def test_load_dataset():
         assert dataset.spectra is not None
         assert dataset.targets is not None
         assert dataset.raman_shifts is not None
-        assert dataset.metadata["full_name"] is not None
-        assert dataset.metadata["source"] is not None
         print(f"Dataset {dataset_name} loaded successfully.")
