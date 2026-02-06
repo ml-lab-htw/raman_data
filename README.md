@@ -11,6 +11,11 @@ This project aims to create a unified Python package for accessing various Raman
 - Automatic downloading and caching of datasets from their original sources.
 - A unified data format for all datasets.
 - A simple function to list available datasets, with filtering options.
+- Datasets are annotated with an **application domain** (`APPLICATION_TYPE`) for easy filtering:
+  - `MaterialScience` -- mineral identification, pigment libraries
+  - `Biological` -- bioprocess monitoring, fermentation, agricultural phenotyping
+  - `Medical` -- clinical diagnostics, pathogen identification, disease screening
+  - `Chemical` -- fuel analysis, chemical quantification, polymer characterisation
 
 ## 📦 Installation
 
@@ -39,14 +44,20 @@ The basic interface for the package is defined in `raman_data/__init__.py`. Here
 
 ```python
 from raman_data import raman_data
-# To specify a task type import this enum as well
-from raman_data import TASK_TYPE
+# To specify a task type or application domain, import these enums as well
+from raman_data import TASK_TYPE, APPLICATION_TYPE
 
 # List all available datasets
 print(raman_data())
 
 # List only classification datasets
 print(raman_data(task_type=TASK_TYPE.Classification))
+
+# List only medical datasets
+print(raman_data(application_type=APPLICATION_TYPE.Medical))
+
+# Combine filters: only medical classification datasets
+print(raman_data(task_type=TASK_TYPE.Classification, application_type=APPLICATION_TYPE.Medical))
 
 # Load a dataset by name
 dataset = raman_data(dataset_name="codina_diabetes_AGEs")
@@ -116,6 +127,7 @@ Each loaded dataset returns a `RamanDataset` object with the following attribute
 | `metadata` | `dict` | Dataset metadata including source, paper, and description |
 | `name` | `str` | Name of the dataset |
 | `task_type` | `TASK_TYPE` | Classification or Regression |
+| `application_type` | `APPLICATION_TYPE` | Application domain (MaterialScience, Biological, Medical, Chemical) |
 | `n_spectra` | `int` | Number of spectra in the dataset |
 | `n_frequencies` | `int` | Number of frequency points per spectrum |
 | `n_raman_shifts` | `int` | Number of Raman shift values |
