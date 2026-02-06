@@ -2,6 +2,7 @@ import glob
 import logging
 import os
 import pickle
+from pathlib import Path
 from typing import Optional, Tuple, List
 
 import numpy as np
@@ -59,6 +60,22 @@ class MiscLoader(BaseLoader):
         #         "license": "MIT License"
         #     }
         # ),
+        "flow_synthesis": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id="flow_synthesis",
+            name="Flow Synthesis",
+            loader=lambda cache_path: MiscLoader._load_flow_synthesis(cache_path),
+            metadata={
+                "full_name": "Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis",
+                "source": "https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
+                "paper": "https://doi.org/10.1016/j.cej.2023.147567",
+                "citation": [
+                    "Kaven, Luise F and Schweidtmann, Artur M and Keil, Jan and Israel, Jana and Wolter, Nadja and Mitsos, Alexander. Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis. Chemical Engineering Journal, 479, 147567, 2024, Elsevier"
+                ],
+                "description": "This data set contains in-line Raman spectroscopy measurements and predicted microgel sizes from Dynamic Light Scattering (DLS).The Raman spectroscopy measurements were conducted inside a customized measurement cell for monitoring in a tubular flow reactor.Inside the flow reactor, the microgel synthesis based on the monomer N-Isopropylacrylamid and the crosslinker N, N' Methylenebis(acrylamide) takes place.",
+                "license": "CC BY 4.0"
+            }
+        ),
         "rruff_mineral_raw": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="rruff_mineral_raw",
@@ -385,6 +402,26 @@ class MiscLoader(BaseLoader):
                 "license": "See paper"
             }
         ),
+        **{
+            f"microgel_size_{pretreatment.lower()}_{spectral_range.lower()}": DatasetInfo(
+                task_type=TASK_TYPE.Regression,
+                id=f"microgel_size_{pretreatment.lower()}_{spectral_range.lower()}",
+                name=f"Microgel Size ({pretreatment}, {spectral_range})",
+                loader=lambda cache_path, _p=pretreatment, _r=spectral_range: MiscLoader._load_microgel_size(cache_path, _p, _r),
+                metadata={
+                    "full_name": "Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy",
+                    "source": "https://publications.rwth-aachen.de/record/959137/files/Data_RWTH-2023-05604.zip?version=1",
+                    "paper": "https://doi.org/10.1002/smll.202311920",
+                    "citation": [
+                        "Koronaki, E. D., Scholz, J. G. T., Modelska, M. M., Nayak, P. K., Viell, J., Mitsos, A., & Barkley, S. (2024). Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy. Small, 20(23), 2311920."
+                    ],
+                    "description": f"Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: {pretreatment}, spectral range: {spectral_range}. Task: predict particle diameter from Raman spectrum.",
+                    "license": "See paper/source."
+                }
+            )
+            for pretreatment in ["Raw", "LinearFit", "RubberBand", "MinMax_LinearFit", "MinMax_RubberBand", "SNV_LinearFit", "SNV_RubberBand"]
+            for spectral_range in ["Global", "FingerPrint"]
+        },
     }
     logger = logging.getLogger(__name__)
 
@@ -1346,4 +1383,174 @@ class MiscLoader(BaseLoader):
         )
 
         return spectra, raman_shifts, encoded_targets, list(class_names)
+
+    @staticmethod
+    def _load_microgel_size(cache_path: str, pretreatment: str = "Raw", spectral_range: str = "Global"):
+        """
+        Download and load the RWTH microgel size dataset.
+
+        The data contains Raman spectra of 235 microgel samples with DLS-measured
+        particle diameters (208–483 nm). 14 variants are available: 7 pretreatments
+        × 2 spectral ranges (Global, FingerPrint).
+
+        Args:
+            cache_path: Path to the cached dataset directory.
+            pretreatment: One of Raw, LinearFit, RubberBand, MinMax_LinearFit,
+                          MinMax_RubberBand, SNV_LinearFit, SNV_RubberBand.
+            spectral_range: Either "Global" or "FingerPrint".
+
+        Returns:
+            Tuple of (spectra, raman_shifts, diameters, target_names) or None.
+        """
+        valid_pretreatments = [
+            "Raw", "LinearFit", "RubberBand",
+            "MinMax_LinearFit", "MinMax_RubberBand",
+            "SNV_LinearFit", "SNV_RubberBand"
+        ]
+        valid_ranges = ["Global", "FingerPrint"]
+
+        if pretreatment not in valid_pretreatments:
+            MiscLoader.logger.error(f"[!] Unknown pretreatment: {pretreatment}")
+            return None
+        if spectral_range not in valid_ranges:
+            MiscLoader.logger.error(f"[!] Unknown spectral range: {spectral_range}")
+            return None
+
+        dataset_url = "https://publications.rwth-aachen.de/record/959137/files/Data_RWTH-2023-05604.zip?version=1"
+        zip_name = "Data_RWTH-2023-05604.zip"
+        nested_zip_name = "Pretreated Raman intensity datasets with according diameter from DLS.zip"
+
+        cache_parent = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        shared_root = os.path.join(cache_parent, "rwth_microgel_size")
+        os.makedirs(shared_root, exist_ok=True)
+
+        zip_path = os.path.join(shared_root, zip_name)
+
+        # Download main zip if not present
+        if not os.path.exists(zip_path) or not LoaderTools.is_valid_zip(zip_path):
+            try:
+                LoaderTools.download(url=dataset_url, out_dir_path=shared_root, out_file_name=zip_name)
+            except Exception as e:
+                MiscLoader.logger.error(f"[!] Failed to download microgel size dataset: {e}")
+                return None
+
+        # Extract main zip if not already done
+        main_extracted_dir = os.path.join(shared_root, "Data_RWTH-2023-05604")
+        if not os.path.isdir(main_extracted_dir):
+            try:
+                LoaderTools.extract_zip_file_content(zip_path)
+            except Exception as e:
+                MiscLoader.logger.error(f"[!] Failed to extract main zip: {e}")
+                return None
+
+        # Find and extract the nested zip containing pretreated datasets
+        pretreated_dir = os.path.join(shared_root, "PretreatedDatasets")
+        if not os.path.isdir(pretreated_dir) or not os.listdir(pretreated_dir):
+            # Look for the nested zip in the extracted main dir
+            nested_zip_path = os.path.join(main_extracted_dir, nested_zip_name)
+            if not os.path.exists(nested_zip_path):
+                # Search recursively for the nested zip
+                import zipfile
+                candidates = glob.glob(os.path.join(main_extracted_dir, "**", "*.zip"), recursive=True)
+                nested_zip_path = None
+                for candidate in candidates:
+                    if "Pretreated" in os.path.basename(candidate):
+                        nested_zip_path = candidate
+                        break
+                if nested_zip_path is None:
+                    # Try extracting directly from the main zip
+                    import zipfile
+                    with zipfile.ZipFile(zip_path, 'r') as zf:
+                        for name in zf.namelist():
+                            if "Pretreated" in name and name.endswith(".zip"):
+                                nested_zip_path = os.path.join(shared_root, os.path.basename(name))
+                                with open(nested_zip_path, 'wb') as f:
+                                    f.write(zf.read(name))
+                                break
+
+                if nested_zip_path is None:
+                    MiscLoader.logger.error(f"[!] Could not find nested zip '{nested_zip_name}' in {main_extracted_dir}")
+                    return None
+
+            try:
+                LoaderTools.extract_zip_file_content(nested_zip_path, unzip_target_subdir="PretreatedDatasets")
+            except Exception as e:
+                MiscLoader.logger.error(f"[!] Failed to extract nested pretreated zip: {e}")
+                return None
+
+        # Find the specific MAT file
+        mat_filename = f"{pretreatment}_{spectral_range}.mat"
+        mat_path = None
+
+        # Search in the pretreated directory and its subdirectories
+        candidates = glob.glob(os.path.join(pretreated_dir, "**", mat_filename), recursive=True)
+        if candidates:
+            mat_path = candidates[0]
+        else:
+            # Also search in the main extracted dir
+            candidates = glob.glob(os.path.join(shared_root, "**", mat_filename), recursive=True)
+            if candidates:
+                mat_path = candidates[0]
+
+        if mat_path is None:
+            MiscLoader.logger.error(f"[!] MAT file not found: {mat_filename}")
+            return None
+
+        # Load the MAT file
+        mat_data = LoaderTools.read_mat_file(mat_path)
+        if mat_data is None:
+            MiscLoader.logger.error(f"[!] Failed to read MAT file: {mat_path}")
+            return None
+
+        if "X_merged" not in mat_data:
+            MiscLoader.logger.error(f"[!] 'X_merged' key not found in {mat_path}. Keys: {list(mat_data.keys())}")
+            return None
+
+        X = mat_data["X_merged"]
+
+        # Parse the matrix:
+        # Column 0: wavenumber axis (rows 7 to N-2)
+        # Columns 1+: samples
+        # Rows 0-6: metadata (part, dilution, reactor settings, monomer prediction)
+        # Rows 7 to N-2: Raman spectral intensities
+        # Row N-1 (last): DLS diameter (nm) - the regression target
+        raman_shifts = X[7:-1, 0].astype(float)
+        spectra = X[7:-1, 1:].T.astype(float)  # transpose to (n_samples, n_wavenumbers)
+        diameters = X[-1, 1:].astype(float)
+
+        MiscLoader.logger.debug(
+            f"Loaded microgel size ({pretreatment}, {spectral_range}): "
+            f"{spectra.shape[0]} samples, {spectra.shape[1]} wavenumber points, "
+            f"diameter range: {diameters.min():.0f}–{diameters.max():.0f} nm"
+        )
+
+        return spectra, raman_shifts, diameters, ["DLS diameter (nm)"]
+
+
+    @staticmethod
+    def _load_flow_synthesis(cache_path: str):
+        zip_path = os.path.join(cache_path, "Raman_Spectroscopy_Measurements.zip")
+        if not os.path.exists(zip_path):
+            # Download if not present
+            try:
+                LoaderTools.download(
+                    url="https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
+                    out_dir_path=cache_path,
+                    out_file_name="Raman_Spectroscopy_Measurements.zip"
+                )
+            except Exception as e:
+                MiscLoader.logger.error(f"[!] Failed to download Flow Synthesis dataset: {e}")
+                return None
+
+        extracted_dir = os.path.join(cache_path, "extracted")
+        if not os.path.isdir(extracted_dir):
+            try:
+                LoaderTools.extract_zip_file_content(zip_path, extracted_dir)
+            except Exception as e:
+                MiscLoader.logger.error(f"[!] Failed to extract Flow Synthesis zip: {e}")
+                return None
+
+        # The user will implement this part for loading data from `extracted_dir`
+        pass
+
 
