@@ -111,38 +111,27 @@ class MiscLoader(BaseLoader):
                 "license": "See paper"
             }
         ),
-        "knowitall_organics_raw": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            id="knowitall_organics_raw",
-            name="Organic Compounds (Raw)",
-            loader=lambda cache_path: MiscLoader._load_dtu_split(cache_path, split="organic_r", align_output=True),
-            metadata={
-                "full_name": "Organic Compounds Multi-Excitation Dataset - Raw",
-                "source": "https://data.dtu.dk/api/files/36144495",
-                "paper": "https://doi.org/10.1002/jrs.5750",
-                "citation": [
-                    "Zhang, Rui et al., Transfer-learning-based Raman spectra identification, Journal of Raman Spectroscopy, 2020, 51, 1, 176-186. https://doi.org/10.1002/jrs.5992"
-                ],
-                "description": "Raw Raman spectra of organic compounds collected with several different excitation sources. Designed to benchmark transfer learning and domain adaptation for chemical identification with limited data.",
-                "license": "See paper"
-            }
-        ),
-        "knowitall_organics_preprocessed": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            id="knowitall_organics_preprocessed",
-            name="Organic Compounds (Preprocessed)",
-            loader=lambda cache_path: MiscLoader._load_dtu_split(cache_path, split="organic_p", align_output=False),
-            metadata={
-                "full_name": "Organic Compounds Multi-Excitation Dataset - Preprocessed",
-                "source": "https://data.dtu.dk/api/files/36144495",
-                "paper": "https://doi.org/10.1002/jrs.5750",
-                "citation": [
-                    "Zhang, Rui et al., Transfer-learning-based Raman spectra identification, Journal of Raman Spectroscopy, 2020, 51, 1, 176-186. https://doi.org/10.1002/jrs.5992"
-                ],
-                "description": "Preprocessed Raman spectra of organic compounds across multiple excitation sources, evaluating the generalization capabilities of deep neural networks on instrument-specific chemical sets.",
-                "license": "See paper"
-            }
-        ),
+        **{
+            f"knowitall_organics_{processed.lower()}": DatasetInfo(
+                task_type=TASK_TYPE.Classification,
+                id=f"knowitall_organics_{processed.lower()}",
+                name=f"Organic Compounds ({processed})",
+                loader=lambda cache_path, p=processed, a=(processed=="Raw"): MiscLoader._load_dtu_split(cache_path,
+                                                                                  split=f"organic_{p.lower()}",
+                                                                                  align_output=a),
+                metadata={
+                    "full_name": f"Organic Compounds Multi-Excitation Dataset - {processed}",
+                    "source": "https://data.dtu.dk/api/files/36144495",
+                    "paper": "https://doi.org/10.1002/jrs.5750",
+                    "citation": [
+                        "Zhang, Rui et al., Transfer-learning-based Raman spectra identification, Journal of Raman Spectroscopy, 2020, 51, 1, 176-186. https://doi.org/10.1002/jrs.5992"
+                    ],
+                    "description": f"{processed} Raman spectra of organic compounds collected with several different excitation sources. Designed to benchmark transfer learning and domain adaptation for chemical identification with limited data.",
+                    "license": "See paper"
+                }
+            )
+            for processed in ["Raw", "Preprocess"]
+        },
         "covid19_serum": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="covid19_serum",
@@ -600,12 +589,12 @@ class MiscLoader(BaseLoader):
             raman_shifts_list = [arr[:, 0] for arr in spectra_data]
             spectra_list = [arr[:, 1] for arr in spectra_data]
 
-        elif split == "organic_r":
+        elif split == "organic_raw":
 
             spectra_list, raman_shifts_list, targets = organic.get_raw_data(split_root)
             class_names = [str(i) for i in range(len(np.unique(targets)))]  # TODO
 
-        elif split == "organic_p":
+        elif split == "organic_preprocess":
 
             spectra_list, raman_shifts_list, targets = organic.get_preprocessed_data(split_root)
             class_names = [str(i) for i in range(len(np.unique(targets)))] # TODO
