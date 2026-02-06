@@ -406,7 +406,7 @@ class MiscLoader(BaseLoader):
         if load_data:
             result = dataset_info.loader(dataset_cache_path)
             if result is None:
-                return None
+                raise FileNotFoundError(f"Could not load dataset {dataset_name}. Expected files may be missing. Please check logs for details.")
             spectra, raman_shifts, targets, class_names = result
         else:
             spectra = raman_shifts = targets = class_names = None
@@ -1448,7 +1448,58 @@ class MiscLoader(BaseLoader):
                 MiscLoader.logger.error(f"[!] Failed to extract Flow Synthesis zip: {e}")
                 return None
 
+        data_folder = os.path.join(extracted_dir, "RamanSpectroscopy")
+        if not os.path.exists(data_folder):
+            raise FileNotFoundError(f"[!] Expected data folder not found: {data_folder}")
 
+        spc_files = glob.glob(os.path.join(data_folder, "*.spc"), recursive=True)
+        if not spc_files:
+            raise FileNotFoundError(f"[!] No .spc files found in {data_folder}")
 
+        spectra_list = []
+        raman_shifts_list = []
+        targets_list = []
+
+        for spc_file in spc_files:
+            try:
+                dataset = scp.read_spc(spc_file)
+                if dataset is None or len(dataset) == 0:
+                    MiscLoader.logger.warning(f"[!] No spectra found in {spc_file}")
+                    continue
+
+                # TODO how to get the real target? from filename? somewhere else?
+                target = os.path.splitext(os.path.basename(spc_file))[0][18:23]
+                for spec in dataset:
+                    spectra_list.append(spec.data.flatten())
+                    raman_shifts_list.append(np.array(spec.x.values))
+                    targets_list.append(target)
+
+            except Exception as e:
+                MiscLoader.logger.warning(f"[!] Failed to read {spc_file}: {e}")
+                continue
+
+        if len(spectra_list) == 0:
+            raise ValueError(f"[!] No spectra could be loaded from .spc files in {data_folder}")
+
+        # Check if all spectra share the same wavenumber axis
+        first_rs = raman_shifts_list[0]
+        all_equal = (
+            all(len(first_rs) == len(rs) for rs in raman_shifts_list)
+            and all(np.allclose(first_rs, rs) for rs in raman_shifts_list))
+        if all_equal:
+            raman_shifts = np.array(first_rs, dtype=float)
+            spectra = np.stack(spectra_list)
+        else:
+            # Interpolate all spectra to a common wavenumber grid
+            raman_shifts, spectra = MiscLoader.align_raman_shifts(raman_shifts_list, spectra_list)
+
+        encoded_targets, target_names = encode_labels(targets_list)
+
+        MiscLoader.logger.debug(
+            f"Loaded Flow Synthesis dataset: {spectra.shape[0]} spectra, "
+            f"{spectra.shape[1]} wavenumber points, "
+            f"{len(target_names)} unique targets"
+        )
+        return spectra, raman_shifts, encoded_targets, list(target_names)
 
 
