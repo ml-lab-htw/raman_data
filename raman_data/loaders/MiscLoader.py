@@ -17,7 +17,7 @@ from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.helper import organic
 from raman_data.loaders.utils import encode_labels
-from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, HASH_TYPE
+from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, HASH_TYPE, APPLICATION_TYPE
 
 
 class MiscLoader(BaseLoader):
@@ -62,6 +62,7 @@ class MiscLoader(BaseLoader):
         # ),
         "flow_synthesis": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="flow_synthesis",
             name="Flow Synthesis",
             loader=lambda cache_path: MiscLoader._load_flow_synthesis(cache_path),
@@ -78,6 +79,7 @@ class MiscLoader(BaseLoader):
         ),
         "flow_microgel_synthesis": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="flow_microgel_synthesis",
             name="Microgel Synthesis in Flow",
             loader=lambda cache_path: MiscLoader._load_flow_microgel_synthesis(cache_path),
@@ -94,6 +96,7 @@ class MiscLoader(BaseLoader):
         ),
         "microgel_synthesis": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="microgel_synthesis",
             name="Microgel Synthesis Flow vs. Batch",
             loader=lambda cache_path: MiscLoader._load_microgel_synthesis(cache_path),
@@ -111,6 +114,7 @@ class MiscLoader(BaseLoader):
         **{
             f"rruff_mineral_{processed.lower()}": DatasetInfo(
                 task_type=TASK_TYPE.Classification,
+                application_type=APPLICATION_TYPE.MaterialScience,
                 id=f"rruff_mineral_{processed.lower()}",
                 name=f"RRUFF Database ({processed})",
                 loader=lambda cache_path, p=processed: MiscLoader._load_dtu_split(cache_path, split=f"mineral_{p.lower()}", align_output=True),
@@ -122,13 +126,13 @@ class MiscLoader(BaseLoader):
                         "Lafuente, B., Downs, R. T., Yang, H., & Stone, N. (2015). The power of databases: the RRUFF project. Highlights in Mineralogical Crystallography, T Armbruster and R M Danisi, Eds., Berlin, Germany, W. De Gruyter, 1–30."
                     ],
                     "description": "Comprehensive resource of raw Raman spectra for over 1,000 mineral species, representing a diverse array of crystallographic structures and chemical compositions measured under varying experimental conditions (e.g., 532 nm and 785 nm).",
-                    "license": "See paper"
                 }
             )
             for processed in ["Raw", "Preprocess"]
         },
         "active_pharmaceutical_ingredients": DatasetInfo(
             task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
             id="active_pharmaceutical_ingredients",
             name="Active Pharmaceutical Ingredients",
             loader=lambda cache_path: MiscLoader._load_api(cache_path),
@@ -140,12 +144,12 @@ class MiscLoader(BaseLoader):
                     "Flanagan, A.R., Glavin, F.G. Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development. Sci Data 12, 498 (2025)."
                 ],
                 "description": "A Raman spectral dataset comprising 3,510 spectra from 32 chemical substances. This dataset includes organic solvents and reagents commonly used in API development, along with information regarding the products in the XLSX, and code to visualise and perform technical validation on the data.",
-                "license": "See paper"
             }
         ),
         **{
             f"knowitall_organics_{processed.lower()}": DatasetInfo(
                 task_type=TASK_TYPE.Classification,
+                application_type=APPLICATION_TYPE.Chemical,
                 id=f"knowitall_organics_{processed.lower()}",
                 name=f"Organic Compounds ({processed})",
                 loader=lambda cache_path, p=processed, a=(processed=="Raw"): MiscLoader._load_dtu_split(cache_path,
@@ -159,13 +163,13 @@ class MiscLoader(BaseLoader):
                         "Zhang, Rui et al., Transfer-learning-based Raman spectra identification, Journal of Raman Spectroscopy, 2020, 51, 1, 176-186. https://doi.org/10.1002/jrs.5992"
                     ],
                     "description": f"{processed} Raman spectra of organic compounds collected with several different excitation sources. Designed to benchmark transfer learning and domain adaptation for chemical identification with limited data.",
-                    "license": "See paper"
                 }
             )
             for processed in ["Raw", "Preprocess"]
         },
         "covid19_serum": DatasetInfo(
             task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
             id="covid19_serum",
             name="COVID-19 Human Serum",
             loader=lambda cache_path: MiscLoader._load_covid(cache_path),
@@ -177,11 +181,11 @@ class MiscLoader(BaseLoader):
                 "citation": [
                     "Goulart, Ana Cristina Castro, et al. 'Diagnosing COVID-19 in human serum using Raman spectroscopy.' Lasers in Medical Science 37.4 (2022): 2217-2226."
                 ],
-                "license": "See source"
             }
         ),
         "mind_covid": DatasetInfo(
             task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
             id="mind_covid",
             name="Saliva COVID-19",
             loader=lambda cache_path: MiscLoader._load_mind_dataset(cache_path, "covid_dataset", ["CTRL", "COV+", "COV-"]),
@@ -193,12 +197,12 @@ class MiscLoader(BaseLoader):
                 "citation": [
                     "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028."
                 ],
-                "license": "See source"
             }
         ),
         **{
             f"mind_{disease.lower()}": DatasetInfo(
                 task_type=TASK_TYPE.Classification,
+                application_type=APPLICATION_TYPE.Medical,
                 id=f"mind_{disease.lower()}",
                 name=f"Saliva {disease}",
                 loader=lambda cache_path, c=disease[0]: MiscLoader._load_mind_dataset(cache_path, "pd_ad_dataset", [f"{c}D", "CTRL"]),
@@ -210,13 +214,13 @@ class MiscLoader(BaseLoader):
                     "citation": [
                         "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028."
                     ],
-                    "license": "See source"
                 }
             )
             for disease in ["Parkinson", "Alzheimer"]
         },
         "csho33_bacteria": DatasetInfo(
             task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
             id="csho33_bacteria",
             name="Pathogenic Bacteria",
             loader=lambda cache_path: MiscLoader._load_csho33_bacteria(cache_path),
@@ -228,12 +232,12 @@ class MiscLoader(BaseLoader):
                     "Ho, C.-S., Jean, N., Hogan, C. A., et al. Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Nat Commun 10, 4927 (2019)."
                 ],
                 "description": "60,000 spectra from 30 clinically relevant bacterial and yeast isolates (including an MRSA/MSSA isogenic pair). Acquired with 633 nm illumination on gold-coated silica substrates with low SNR to simulate rapid clinical acquisition times.",
-                "license": "See paper"
             }
         ),
         **{
             f"acid_species_{acid.lower()}": DatasetInfo(
                 task_type=TASK_TYPE.Regression,
+                application_type=APPLICATION_TYPE.Chemical,
                 id=f"acid_species_{acid.lower()}",
                 name=f"Acid Species Concentrations ({acid})",
                 loader=lambda cache_path, a=acid: MiscLoader._load_acid_species(cache_path, a),
@@ -248,7 +252,6 @@ class MiscLoader(BaseLoader):
                         "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
                     ],
                     "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
-                    "license": "See paper/source."
                 }
             )
             for acid in ["Succinic", "Levulinic", "Formic", "Citric", "Itaconic", "Acetic"] # TODO Oxalic: load scp gets None back
@@ -256,6 +259,7 @@ class MiscLoader(BaseLoader):
         **{
             f"sop_spectral_library_{process.lower().replace(' ', '_')}": DatasetInfo(
                 task_type=TASK_TYPE.Regression,
+                application_type=APPLICATION_TYPE.MaterialScience,
                 id=f"sop_spectral_library_{process.lower().replace(' ', '_')}",
                 name=f"SOP Spectral Library ({process})",
                 loader=lambda cache_path, p=process.lower().replace(' ', '_'): MiscLoader._load_sop_spectral_library(cache_path,
@@ -268,7 +272,6 @@ class MiscLoader(BaseLoader):
                         'Fremout, Wim, and Steven Saverwyns. "Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library." Journal of Raman Spectroscopy 43.11 (2012): 1536-1544.'
                     ],
                     "description": f"{process} Raman spectral library comprising nearly 300 reference spectra of synthetic organic pigments (SOPs). Designed for spectral matching and identification of pigments in modern and contemporary art conservation.",
-                    "license": "See paper"
                 }
             )
             for process in ["Raw", "Baseline Corrected"]
@@ -276,6 +279,7 @@ class MiscLoader(BaseLoader):
         **{
             f"microgel_size_{pretreatment.lower()}_{spectral_range.lower()}": DatasetInfo(
                 task_type=TASK_TYPE.Regression,
+                application_type=APPLICATION_TYPE.Chemical,
                 id=f"microgel_size_{pretreatment.lower()}_{spectral_range.lower()}",
                 name=f"Microgel Size ({pretreatment}, {spectral_range})",
                 loader=lambda cache_path, _p=pretreatment, _r=spectral_range: MiscLoader._load_microgel_size(cache_path, _p, _r),
@@ -287,40 +291,39 @@ class MiscLoader(BaseLoader):
                         "Koronaki, E. D., Scholz, J. G. T., Modelska, M. M., Nayak, P. K., Viell, J., Mitsos, A., & Barkley, S. (2024). Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy. Small, 20(23), 2311920."
                     ],
                     "description": f"Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: {pretreatment}, spectral range: {spectral_range}. Task: predict particle diameter from Raman spectrum.",
-                    "license": "See paper/source."
                 }
             )
             for pretreatment in ["Raw", "LinearFit", "RubberBand", "MinMax_LinearFit", "MinMax_RubberBand", "SNV_LinearFit", "SNV_RubberBand"]
             for spectral_range in ["Global", "FingerPrint"]
         },
-        **{
-            f"hmf_separation_{todo.lower()}": DatasetInfo(
-                task_type=TASK_TYPE.Regression,
-                id=f"hmf_separation_{todo.lower()}",
-                name=f"HMF Separation ({todo})",
-                loader=lambda cache_path, todo=todo: MiscLoader._load_hmf_dataset(cache_path, todo),
-                metadata={
-                    "full_name": f"Liquid–Liquid Equilibrium of 2-MTHF/Water/5-HMF with Sulfate Electrolytes ({todo})",
-                    "source": "https://doi.org/10.18154/RWTH-2024-01176",
-                    "description": (
-                        "Experimental liquid–liquid equilibrium dataset investigating the phase separation behavior "
-                        "of 2-methyltetrahydrofuran (2-MTHF), water, and 5-hydroxymethylfurfural (5-HMF) in the presence "
-                        "of sulfate salts and sulfuric acid. The dataset includes mid-infrared (MIR) spectra of organic "
-                        "and aqueous phases, calibration compositions, and equilibrium phase compositions measured "
-                        "between 293 K and 333 K at atmospheric pressure. Spectral data are analyzed using Indirect Hard "
-                        "Modeling and support thermodynamic modeling with ePC-SAFT."
-                    ),
-                    "paper": "https://doi.org/10.1021/acs.jced.2c00698",
-                    "citation": [
-                        "Roth, D. M., Haas, M., Echtermeyer, A. W. W., Kaminski, S., Viell, J., and Jupke, A. (2023). "
-                        "The Effect of Sulfate Electrolytes on the Liquid–Liquid Equilibrium of 2-MTHF/Water/5-HMF: "
-                        "Experimental Study and Thermodynamic Modeling. Journal of Chemical & Engineering Data, 68(6), 1397–1410."
-                    ],
-                    "license": "Open Access"
-                }
-            )
-            for todo in [""]
-        },
+        # **{ # TODO implement loading function
+        #     f"hmf_separation_{todo.lower()}": DatasetInfo(
+        #         task_type=TASK_TYPE.Regression,
+        #         application_type=APPLICATION_TYPE.Chemical,
+        #         id=f"hmf_separation_{todo.lower()}",
+        #         name=f"HMF Separation ({todo})",
+        #         loader=lambda cache_path, todo=todo: MiscLoader._load_hmf_dataset(cache_path, todo),
+        #         metadata={
+        #             "full_name": f"Liquid–Liquid Equilibrium of 2-MTHF/Water/5-HMF with Sulfate Electrolytes ({todo})",
+        #             "source": "https://doi.org/10.18154/RWTH-2024-01176",
+        #             "description": (
+        #                 "Experimental liquid–liquid equilibrium dataset investigating the phase separation behavior "
+        #                 "of 2-methyltetrahydrofuran (2-MTHF), water, and 5-hydroxymethylfurfural (5-HMF) in the presence "
+        #                 "of sulfate salts and sulfuric acid. The dataset includes mid-infrared (MIR) spectra of organic "
+        #                 "and aqueous phases, calibration compositions, and equilibrium phase compositions measured "
+        #                 "between 293 K and 333 K at atmospheric pressure. Spectral data are analyzed using Indirect Hard "
+        #                 "Modeling and support thermodynamic modeling with ePC-SAFT."
+        #             ),
+        #             "paper": "https://doi.org/10.1021/acs.jced.2c00698",
+        #             "citation": [
+        #                 "Roth, D. M., Haas, M., Echtermeyer, A. W. W., Kaminski, S., Viell, J., and Jupke, A. (2023). "
+        #                 "The Effect of Sulfate Electrolytes on the Liquid–Liquid Equilibrium of 2-MTHF/Water/5-HMF: "
+        #                 "Experimental Study and Thermodynamic Modeling. Journal of Chemical & Engineering Data, 68(6), 1397–1410."
+        #             ],
+        #         }
+        #     )
+        #     for todo in [""]
+        # },
     }
     logger = logging.getLogger(__name__)
 

@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 from zenodo_get import download
 
-from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
+from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE, APPLICATION_TYPE
 from raman_data.exceptions import CorruptedZipFileError
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import  LoaderTools
@@ -218,6 +218,7 @@ class ZenodoLoader(BaseLoader):
     DATASETS = {
         "sugar_mixtures_low_snr": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="10779223",
             name="Sugar Mixtures (Low SNR)",
             file_typ="*.zip",
@@ -231,6 +232,7 @@ class ZenodoLoader(BaseLoader):
         ),
         "sugar_mixtures_high_snr": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="10779223",
             name="Sugar Mixtures (High SNR)",
             file_typ="*.zip",
@@ -244,6 +246,7 @@ class ZenodoLoader(BaseLoader):
         ),
         "wheat_lines": DatasetInfo(
             task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Biological,
             id="7644521",
             name="Mutant Wheat",
             file_typ="*.mat",
@@ -257,6 +260,7 @@ class ZenodoLoader(BaseLoader):
         ),
         "adenine_cAg": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="3572359",
             name="Adenine Dataset (cAg)",
             file_typ="*.csv",
@@ -270,6 +274,7 @@ class ZenodoLoader(BaseLoader):
         ),
         "adenine_sAg": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="3572359",
             name="Adenine Dataset (sAg)",
             file_typ="*.csv",
@@ -283,6 +288,7 @@ class ZenodoLoader(BaseLoader):
         ),
         "adenine_cAu": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="3572359",
             name="Adenine Dataset (cAu)",
             file_typ="*.csv",
@@ -296,6 +302,7 @@ class ZenodoLoader(BaseLoader):
         ),
         "adenine_sAu": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="3572359",
             name="Adenine Dataset (sAu)",
             file_typ="*.csv",

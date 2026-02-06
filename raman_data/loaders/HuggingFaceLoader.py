@@ -8,7 +8,7 @@ import pandas as pd
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.utils import is_wavenumber
-from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
+from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE, APPLICATION_TYPE
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -33,6 +33,7 @@ class HuggingFaceLoader(BaseLoader):
     DATASETS = {
         "bioprocess_substrates": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
             id="bioprocess_substrates",
             name="Bioprocess Monitoring",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
@@ -46,6 +47,7 @@ class HuggingFaceLoader(BaseLoader):
         ),
         "ecoli_fermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
             id="ecoli_fermentation",
             name="E. Coli Fermentation",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
@@ -59,6 +61,7 @@ class HuggingFaceLoader(BaseLoader):
         ),
         "fuel_benchtop": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="fuel_benchtop",
             name="Gasoline Properties (Benchtop)",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
@@ -72,6 +75,7 @@ class HuggingFaceLoader(BaseLoader):
         ),
         "fuel_handheld": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="FuelRamanSpectraHandheld",
             name="Gasoline Properties (Handheld)",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
@@ -85,6 +89,7 @@ class HuggingFaceLoader(BaseLoader):
         ),
         "ethanolic_fermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
             id="ethanolic_fermentation",
             name="Ethanolic Fermentation of Immobilized Yeast",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
@@ -98,6 +103,7 @@ class HuggingFaceLoader(BaseLoader):
         ),
         "ralstonia_fermentations": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
             id="ralstonia_fermentations",
             name="R. eutropha Copolymer Fermentations",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),

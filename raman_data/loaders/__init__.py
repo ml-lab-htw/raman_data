@@ -23,6 +23,7 @@ __all__ = [
     "LoaderTools",
     "CACHE_DIR",
     "TASK_TYPE",
+    "APPLICATION_TYPE",
 ]
 
-from raman_data.types import CACHE_DIR, TASK_TYPE
+from raman_data.types import CACHE_DIR, TASK_TYPE, APPLICATION_TYPE

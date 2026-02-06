@@ -37,6 +37,34 @@ class TASK_TYPE(Enum):
     def __str__(self):
         return self.name
 
+
+class APPLICATION_TYPE(Enum):
+    """
+    An enum contains possible application domains of a
+    certain dataset.
+    """
+    Unknown = 0
+    MaterialScience = 1
+    Biological = 2
+    Medical = 3
+    Chemical = 4
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def label(self):
+        """Pretty display name for LaTeX table headers."""
+        labels = {
+            0: "Unknown",
+            1: "Material Science",
+            2: "Biological \\& Biotechnological",
+            3: "Medical \\& Clinical",
+            4: "Chemical \\& Industrial",
+        }
+        return labels[self.value]
+
+
 class HASH_TYPE(Enum):
     """
     An enum contains possible hash types of a
@@ -65,6 +93,7 @@ class DatasetInfo:
     loader: Callable
     metadata: dict[str, str]
     task_type: TASK_TYPE
+    application_type: APPLICATION_TYPE = APPLICATION_TYPE.Unknown
     file_typ: Optional[str | List[str] | None] = None
 
 
@@ -98,6 +127,10 @@ class RamanDataset:
     @property
     def task_type(self) -> TASK_TYPE:
         return self.info.task_type if self.info is not None else TASK_TYPE.Unknown
+
+    @property
+    def application_type(self) -> APPLICATION_TYPE:
+        return self.info.application_type if self.info is not None else APPLICATION_TYPE.Unknown
 
     @property
     def n_spectra(self) -> int:

@@ -11,7 +11,7 @@ from numpy import ndarray, dtype
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.utils import encode_labels
-from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE
+from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE, APPLICATION_TYPE
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -45,6 +45,7 @@ class KaggleLoader(BaseLoader):
     DATASETS = {
         "codina_diabetes_AGEs": DatasetInfo(
             task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
             id="codina_diabetes_AGEs",
             name="Diabetes Skin (AGEs)",
             loader=lambda: KaggleLoader.__load_diabetes("AGEs"),
@@ -57,6 +58,7 @@ class KaggleLoader(BaseLoader):
         ),
         "codina_diabetes_earLobe": DatasetInfo(
             task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
             id="codina_diabetes_earLobe",
             name="Diabetes Skin (Ear Lobe)",
             loader=lambda: KaggleLoader.__load_diabetes("earLobe"),
@@ -69,6 +71,7 @@ class KaggleLoader(BaseLoader):
         ),
         "codina_diabetes_innerArm": DatasetInfo(
             task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
             id="codina_diabetes_innerArm",
             name="Diabetes Skin (Inner Arm)",
             loader=lambda: KaggleLoader.__load_diabetes("innerArm"),
@@ -81,6 +84,7 @@ class KaggleLoader(BaseLoader):
         ),
         "codina_diabetes_thumbNail": DatasetInfo(
             task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
             id="codina_diabetes_thumbNail",
             name="Diabetes Skin (Thumbnail)",
             loader=lambda: KaggleLoader.__load_diabetes("thumbNail"),
@@ -93,6 +97,7 @@ class KaggleLoader(BaseLoader):
         ),
         "codina_diabetes_vein": DatasetInfo(
             task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
             id="codina_diabetes_vein",
             name="Diabetes Skin (Median Cubital Vein)",
             loader=lambda: KaggleLoader.__load_diabetes("vein"),
@@ -105,6 +110,7 @@ class KaggleLoader(BaseLoader):
         ),
         "sergioalejandrod_AminoAcids_glycine": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="sergioalejandrod_AminoAcids_glycine",
             name="Amino Acid LC (Glycine)",
             loader=lambda: KaggleLoader.__load_sergioalejandrod("1"),
@@ -117,6 +123,7 @@ class KaggleLoader(BaseLoader):
         ),
         "sergioalejandrod_AminoAcids_leucine": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="sergioalejandrod_AminoAcids_leucine",
             name="Amino Acid LC (Leucine)",
             loader=lambda: KaggleLoader.__load_sergioalejandrod("2"),
@@ -129,6 +136,7 @@ class KaggleLoader(BaseLoader):
         ),
         "sergioalejandrod_AminoAcids_phenylalanine": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="sergioalejandrod_AminoAcids_phenylalanine",
             name="Amino Acid LC (Phenylalanine)",
             loader=lambda: KaggleLoader.__load_sergioalejandrod("3"),
@@ -141,6 +149,7 @@ class KaggleLoader(BaseLoader):
         ),
         "sergioalejandrod_AminoAcids_tryptophan": DatasetInfo(
             task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
             id="sergioalejandrod_AminoAcids_tryptophan",
             name="Amino Acid LC (Tryptophan)",
             loader=lambda: KaggleLoader.__load_sergioalejandrod("4"),
@@ -153,6 +162,7 @@ class KaggleLoader(BaseLoader):
         ),
         "andriitrelin_cells_COOH": DatasetInfo(
             task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Biological,
             id="andriitrelin_cells_COOH",
             name="SERS Cancer Cell Metabolite (COOH)",
             loader=lambda: KaggleLoader.__load_andriitrelin("COOH"),
@@ -165,6 +175,7 @@ class KaggleLoader(BaseLoader):
         ),
         "andriitrelin_cells_NH2": DatasetInfo(
             task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Biological,
             id="andriitrelin_cells_NH2",
             name="SERS Cancer Cell Metabolite (NH2)",
             loader=lambda: KaggleLoader.__load_andriitrelin("NH2"),
@@ -177,6 +188,7 @@ class KaggleLoader(BaseLoader):
         ),
         "andriitrelin_cells_COOH2": DatasetInfo(
             task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Biological,
             id="andriitrelin_cells_COOH2",
             name="SERS Cancer Cell Metabolite ((COOH)2)",
             loader=lambda: KaggleLoader.__load_andriitrelin("(COOH)2"),

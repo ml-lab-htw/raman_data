@@ -12,7 +12,7 @@ from .types import RamanDataset
 from raman_data.loaders.KaggleLoader import KaggleLoader
 from raman_data.loaders.HuggingFaceLoader import HuggingFaceLoader
 from raman_data.loaders.ZenodoLoader import ZenodoLoader
-from raman_data.types import TASK_TYPE
+from raman_data.types import TASK_TYPE, APPLICATION_TYPE, DatasetInfo
 
 __LOADERS = [
     KaggleLoader,
@@ -25,7 +25,8 @@ __LOADERS = [
 lru_cache = LRUCache(maxsize=1)
 
 def list_datasets(
-        task_type: Optional[TASK_TYPE] = None
+        task_type: Optional[TASK_TYPE] = None,
+        application_type: Optional[APPLICATION_TYPE] = None,
 ) -> List[str]:
     """
     Lists the available Raman spectroscopy datasets.
@@ -33,6 +34,7 @@ def list_datasets(
     Args:
         task_type: If specified, filters the datasets by task type.
                    Can be 'TASK_TYPE.Classification' or 'TASK_TYPE.Regression'.
+        application_type: If specified, filters the datasets by application domain.
 
     Returns:
         A list of available dataset names.
@@ -44,10 +46,36 @@ def list_datasets(
         for name, dataset_info in loader.DATASETS.items():
             datasets.update({name: dataset_info})
 
-    if task_type:
-        return [name for name, dataset_info in datasets.items() if dataset_info.task_type == task_type]
+    result = datasets.items()
 
-    return list(datasets.keys())
+    if task_type:
+        result = [(name, info) for name, info in result if info.task_type == task_type]
+
+    if application_type:
+        result = [(name, info) for name, info in result if info.application_type == application_type]
+
+    return [name for name, info in result]
+
+
+def get_dataset_info(dataset_name: str) -> DatasetInfo:
+    """
+    Returns the DatasetInfo object for a given dataset name.
+
+    Args:
+        dataset_name: The name of the dataset.
+
+    Returns:
+        DatasetInfo: The dataset's metadata and configuration.
+
+    Raises:
+        ValueError: If the dataset name is not found.
+    """
+    for loader in __LOADERS:
+        if dataset_name in loader.DATASETS:
+            return loader.DATASETS[dataset_name]
+
+    raise ValueError(f"Dataset '{dataset_name}' not found. "
+                     f"Available datasets: {list_datasets()}")
 
 
 @cached(cache=lru_cache)
