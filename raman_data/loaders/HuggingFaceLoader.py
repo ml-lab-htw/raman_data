@@ -31,9 +31,9 @@ class HuggingFaceLoader(BaseLoader):
     """
 
     DATASETS = {
-        "chlange_SubstrateMixRaman": DatasetInfo(
+        "bioprocess_substrates": DatasetInfo(
             task_type=TASK_TYPE.Regression,
-            id="chlange_SubstrateMixRaman",
+            id="bioprocess_substrates",
             name="Bioprocess Monitoring",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
@@ -44,9 +44,9 @@ class HuggingFaceLoader(BaseLoader):
                 "description": "A benchmark dataset of 6,960 spectra featuring eight key metabolites (glucose, glycerol, acetate, etc.) sampled via a statistically independent uniform distribution. Designed to evaluate regression robustness against common bioprocess correlations, including background effects from mineral salts and antifoam."
             }
         ),
-        "chlange_RamanSpectraEcoliFermentation": DatasetInfo(
+        "ecoli_fermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
-            id="chlange_RamanSpectraEcoliFermentation",
+            id="ecoli_fermentation",
             name="E. Coli Fermentation",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
@@ -57,9 +57,9 @@ class HuggingFaceLoader(BaseLoader):
                 "description": "Spectra captured during batch and fed-batch fermentation of E. coli. Measurements were performed on the supernatant using a 785 nm spectrometer to track glucose and acetate concentrations in a dynamic, high-throughput bioprocess environment."
             }
         ),
-        "chlange_FuelRamanSpectraBenchtop": DatasetInfo(
+        "fuel_benchtop": DatasetInfo(
             task_type=TASK_TYPE.Regression,
-            id="chlange_FuelRamanSpectraBenchtop",
+            id="fuel_benchtop",
             name="Gasoline Properties (Benchtop)",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
@@ -70,9 +70,9 @@ class HuggingFaceLoader(BaseLoader):
                 "description": "Raman spectra from 179 commercial gasoline samples recorded using a benchtop 1064 nm FT-Raman system. Targets include Research Octane Number (RON), Motor Octane Number (MON), and oxygenated additive concentrations."
             }
         ),
-        "HTW-KI-Werkstatt_FuelRamanSpectraHandheld": DatasetInfo(
+        "fuel_handheld": DatasetInfo(
             task_type=TASK_TYPE.Regression,
-            id="HTW-KI-Werkstatt_FuelRamanSpectraHandheld",
+            id="FuelRamanSpectraHandheld",
             name="Gasoline Properties (Handheld)",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
@@ -83,9 +83,22 @@ class HuggingFaceLoader(BaseLoader):
                 "description": "Counterpart to the benchtop fuel dataset, acquired from the same 179 samples using a handheld 785 nm spectrometer. Used for benchmarking model transferability across different hardware and wavelengths."
             }
         ),
-        "HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations": DatasetInfo(
+        "ethanolic_fermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
-            id="HTW-KI-Werkstatt_RamanSpectraRalstoniaFermentations",
+            id="ethanolic_fermentation",
+            name="Ethanolic Fermentation of Immobilized Yeast",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Gasoline Properties Raman Dataset (Handheld)",
+                "hf_key": "HTW-KI-Werkstatt/RamanSpectraEthanolicYeastFermentations",
+                "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanSpectraEthanolicYeastFermentations",
+                "paper": "https://doi.org/10.1002/bit.27112",
+                "description": "This dataset contains Raman spectra acquired during the continuous ethanolic fermentation of sucrose using Saccharomyces cerevisiae (Baker's yeast). To facilitate continuous processing and high-quality optical measurements, the yeast cells were immobilized in calcium alginate beads."
+            }
+        ),
+        "ralstonia_fermentations": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            id="ralstonia_fermentations",
             name="R. eutropha Copolymer Fermentations",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
