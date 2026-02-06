@@ -76,38 +76,25 @@ class MiscLoader(BaseLoader):
                 "license": "CC BY 4.0"
             }
         ),
-        "rruff_mineral_raw": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            id="rruff_mineral_raw",
-            name="RRUFF Database (Raw)",
-            loader=lambda cache_path: MiscLoader._load_dtu_split(cache_path, split="mineral_r", align_output=True),
-            metadata={
-                "full_name": "RRUFF Database - Raw Spectra",
-                "source": "https://rruff.info/",
-                "paper": "https://doi.org/10.1515/9783110417104-003",
-                "citation": [
-                    "Lafuente, B., Downs, R. T., Yang, H., & Stone, N. (2015). The power of databases: the RRUFF project. Highlights in Mineralogical Crystallography, T Armbruster and R M Danisi, Eds., Berlin, Germany, W. De Gruyter, 1–30."
-                ],
-                "description": "Comprehensive resource of raw Raman spectra for over 1,000 mineral species, representing a diverse array of crystallographic structures and chemical compositions measured under varying experimental conditions (e.g., 532 nm and 785 nm).",
-                "license": "See paper"
-            }
-        ),
-        "rruff_mineral_preprocessed": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            id="rruff_mineral_preprocessed",
-            name="RRUFF Database (Preprocessed)",
-            loader=lambda cache_path: MiscLoader._load_dtu_split(cache_path, split="mineral_p", align_output=True),
-            metadata={
-                "full_name": "RRUFF Database - Preprocessed Spectra",
-                "source": "https://rruff.info/",
-                "paper": "https://doi.org/10.1515/9783110417104-003",
-                "citation": [
-                    "Lafuente, B., Downs, R. T., Yang, H., & Stone, N. (2015). The power of databases: the RRUFF project. Highlights in Mineralogical Crystallography, T Armbruster and R M Danisi, Eds., Berlin, Germany, W. De Gruyter, 1–30."
-                ],
-                "description": "Preprocessed Raman spectra for over 1,000 mineral species from the RRUFF Database, resampled to a common high-resolution sampling rate and truncated to their intersecting wavenumber range.",
-                "license": "See paper"
-            }
-        ),
+        **{
+            f"rruff_mineral_{processed.lower()}": DatasetInfo(
+                task_type=TASK_TYPE.Classification,
+                id=f"rruff_mineral_{processed.lower()}",
+                name=f"RRUFF Database ({processed})",
+                loader=lambda cache_path, p=processed: MiscLoader._load_dtu_split(cache_path, split=f"mineral_{p.lower()}", align_output=True),
+                metadata={
+                    "full_name": f"RRUFF Database - {processed} Spectra",
+                    "source": "https://rruff.info/",
+                    "paper": "https://doi.org/10.1515/9783110417104-003",
+                    "citation": [
+                        "Lafuente, B., Downs, R. T., Yang, H., & Stone, N. (2015). The power of databases: the RRUFF project. Highlights in Mineralogical Crystallography, T Armbruster and R M Danisi, Eds., Berlin, Germany, W. De Gruyter, 1–30."
+                    ],
+                    "description": "Comprehensive resource of raw Raman spectra for over 1,000 mineral species, representing a diverse array of crystallographic structures and chemical compositions measured under varying experimental conditions (e.g., 532 nm and 785 nm).",
+                    "license": "See paper"
+                }
+            )
+            for processed in ["Raw", "Preprocess"]
+        },
         "active_pharmaceutical_ingredients": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             id="active_pharmaceutical_ingredients",
@@ -582,19 +569,8 @@ class MiscLoader(BaseLoader):
             if not LoaderTools.is_valid_zip(zip_path):
                 raise CorruptedZipFileError(zip_path)
 
-        # Map logical split → folder name in ZIP
-        split_dirs = {
-            "mineral_r": "mineral_raw",
-            "mineral_p": "mineral_preprocess",
-            "organic_r": "organic_raw",
-            "organic_p": "organic_preprocess",
-        }
 
-        if split not in split_dirs:
-            MiscLoader.logger.error(f"[!] Unknown DTU split: {split}")
-            return None
-
-        split_root = os.path.join(extracted_dir, split_dirs[split])
+        split_root = os.path.join(extracted_dir, split)
         if not os.path.isdir(split_root):
             MiscLoader.logger.error(f"[!] Expected directory not found: {split_root}")
             return None
@@ -605,9 +581,9 @@ class MiscLoader(BaseLoader):
             return None
 
         # Use original repo IO for mineral and organic splits
-        if split in ("mineral_r", "mineral_p"):
+        if split in ("mineral_raw", "mineral_preprocess"):
 
-            if split == "mineral_r":
+            if split == "mineral_raw":
                 data = rruff.give_all_raw(split_root, print_info=True)
             else:
                 csv_path = os.path.join(split_root, "excellent_unoriented_unoriented.csv")
