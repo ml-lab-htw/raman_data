@@ -37,3 +37,4 @@ xxhash==3.5.0
 yarl==1.20.1
 cachetools==6.2.5
 zenodo-get==3.0.0
+spectrochempy==0.8.1
