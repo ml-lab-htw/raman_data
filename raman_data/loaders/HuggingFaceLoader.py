@@ -26,7 +26,7 @@ class HuggingFaceLoader(BaseLoader):
 
     Example:
         >>> from raman_data.loaders import HuggingFaceLoader
-        >>> dataset = HuggingFaceLoader.load_dataset("chlange_SubstrateMixRaman")
+        >>> dataset = HuggingFaceLoader.load_dataset("bioprocess_substrates")
         >>> HuggingFaceLoader.list_datasets()
     """
 
@@ -151,7 +151,7 @@ class HuggingFaceLoader(BaseLoader):
         Download a HuggingFace dataset to the local cache.
 
         Args:
-            dataset_name: The full name of the HuggingFace dataset (e.g., "chlange_SubstrateMixRaman").
+            dataset_name: The full name of the HuggingFace dataset (e.g., "bioprocess_substrates").
             cache_path: Custom directory to save the dataset. If None, uses the default
                         HuggingFace cache directory (~/.cache/huggingface).
 
@@ -194,7 +194,7 @@ class HuggingFaceLoader(BaseLoader):
         a standardized RamanDataset format.
 
         Args:
-            dataset_name: The full name of the HuggingFace dataset (e.g., "chlange_SubstrateMixRaman").
+            dataset_name: The full name of the HuggingFace dataset (e.g., "bioprocess_substrates").
             cache_path: Custom directory to load/save the dataset. If None, uses the default
                         HuggingFace cache directory (~/.cache/huggingface).
 
