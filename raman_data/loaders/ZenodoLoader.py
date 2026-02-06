@@ -179,7 +179,7 @@ class ZenodoLoader(BaseLoader):
 
     @staticmethod
     def __load_3572359(
-        cache_path: str, substrate:str = "cAg"
+        cache_path: str, type: str, material: str
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str]] | None:
         """
         Parse and extract data from the adenine SERS dataset (Zenodo ID: 3572359).
@@ -195,6 +195,14 @@ class ZenodoLoader(BaseLoader):
         data_path = os.path.join(cache_path, "3572359", "ILSdata.csv")
         if not os.path.isfile(data_path):
             raise FileNotFoundError(f"Could not find ILSdata.csv in {data_path}")
+
+        substrate = type[0].lower()
+        if material == "Gold":
+            substrate += "Au"
+        elif material == "Silver":
+            substrate += "Ag"
+        else:
+            raise ValueError(f"Unknown material {material}")
 
         if substrate not in ['cAg', 'sAg', 'cAu', 'sAu']:
             raise ValueError(f"Substrate {substrate} not available in dataset adenine")
@@ -258,62 +266,24 @@ class ZenodoLoader(BaseLoader):
                 "description": "Raman spectra from the 7th generation of salt-stress-tolerant wheat mutant lines and their commercial cultivars. Features 785 nm excitation and tracks biochemical shifts in carotenoids and protein-related bands for agricultural phenotyping."
             }
         ),
-        "adenine_cAg": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            application_type=APPLICATION_TYPE.Chemical,
-            id="3572359",
-            name="Adenine Dataset (cAg)",
-            file_typ="*.csv",
-            loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'cAg'),
-            metadata={
-                "full_name": "SERS Interlaboratory Adenine Dataset (Colloidal Silver)",
-                "source": "https://doi.org/10.5281/zenodo.3572359",
-                "paper": "https://doi.org/10.1021/acs.analchem.9b05658",
-                "description": "Quantitative SERS spectra of adenine measured using colloidal silver substrates across 15 different European laboratories. Benchmarks model reproducibility and inter-instrumental variability."
-            }
-        ),
-        "adenine_sAg": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            application_type=APPLICATION_TYPE.Chemical,
-            id="3572359",
-            name="Adenine Dataset (sAg)",
-            file_typ="*.csv",
-            loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'sAg'),
-            metadata={
-                "full_name": "SERS Interlaboratory Adenine Dataset (Solid Silver)",
-                "source": "https://doi.org/10.5281/zenodo.3572359",
-                "paper": "https://doi.org/10.1021/acs.analchem.9b05658",
-                "description": "Adenine SERS spectra acquired using solid silver substrates. Part of the multi-instrument collaborative trial for standardizing quantitative SERS protocols."
-            }
-        ),
-        "adenine_cAu": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            application_type=APPLICATION_TYPE.Chemical,
-            id="3572359",
-            name="Adenine Dataset (cAu)",
-            file_typ="*.csv",
-            loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'cAu'),
-            metadata={
-                "full_name": "SERS Interlaboratory Adenine Dataset (Colloidal Gold)",
-                "source": "https://doi.org/10.5281/zenodo.3572359",
-                "paper": "https://doi.org/10.1021/acs.analchem.9b05658",
-                "description": "Adenine SERS spectra acquired using colloidal gold substrates. Evaluates machine learning regression performance across various laboratories and instrumentation configurations."
-            }
-        ),
-        "adenine_sAu": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            application_type=APPLICATION_TYPE.Chemical,
-            id="3572359",
-            name="Adenine Dataset (sAu)",
-            file_typ="*.csv",
-            loader=lambda cache_path: ZenodoLoader.__load_3572359(cache_path, 'sAu'),
-            metadata={
-                "full_name": "SERS Interlaboratory Adenine Dataset (Solid Gold)",
-                "source": "https://doi.org/10.5281/zenodo.3572359",
-                "paper": "https://doi.org/10.1021/acs.analchem.9b05658",
-                "description": "Adenine SERS spectra acquired using solid gold substrates. Provides a high-resolution benchmark for testing the transferability of ML models between different spectroscopic platforms."
-            }
-        ),
+        **{
+            f"adenine_{type.lower()}_{material.lower()}": DatasetInfo(
+                task_type=TASK_TYPE.Regression,
+                application_type=APPLICATION_TYPE.Chemical,
+                id="3572359",
+                name=f"Adenine Dataset ({type} {material})",
+                file_typ="*.csv",
+                loader=lambda cache_path, t=type, m=material: ZenodoLoader.__load_3572359(cache_path, t, m),
+                metadata={
+                    "full_name": f"SERS Interlaboratory Adenine Dataset ({type} {material})",
+                    "source": "https://doi.org/10.5281/zenodo.3572359",
+                    "paper": "https://doi.org/10.1021/acs.analchem.9b05658",
+                    "description": f"Quantitative SERS spectra of adenine measured using {type.lower()} {material.lower()} substrates across 15 different European laboratories. Benchmarks model reproducibility and inter-instrumental variability."
+                }
+            )
+            for material in ["Gold", "Silver"]
+            for type in ["Colloidal", "Solid"]
+        },
     }
 
     @staticmethod
