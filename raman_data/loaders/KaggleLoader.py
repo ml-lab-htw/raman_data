@@ -43,167 +43,59 @@ class KaggleLoader(BaseLoader):
     # andriitrelin_cells-raman-spectra which is loaded by __load_andriitrelin above.
 
     DATASETS = {
-        "codina_diabetes_AGEs": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            application_type=APPLICATION_TYPE.Medical,
-            id="codina_diabetes_AGEs",
-            name="Diabetes Skin (AGEs)",
-            loader=lambda: KaggleLoader.__load_diabetes("AGEs"),
-            metadata={
-                "full_name": "codina_raman-spectroscopy-of-diabetes",
-                "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
-                "paper": "https://doi.org/10.1364/BOE.9.004998",
-                "description": "Part of the Diabetes Skin Raman Dataset. This subset focuses on Advanced Glycation End-products (AGEs) signatures in the skin. Data acquired in vivo using a portable 785 nm Raman spectrometer to discern between diabetic patients and healthy controls."
-            }
-        ),
-        "codina_diabetes_earLobe": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            application_type=APPLICATION_TYPE.Medical,
-            id="codina_diabetes_earLobe",
-            name="Diabetes Skin (Ear Lobe)",
-            loader=lambda: KaggleLoader.__load_diabetes("earLobe"),
-            metadata={
-                "full_name": "codina_raman-spectroscopy-of-diabetes",
-                "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
-                "paper": "https://doi.org/10.1364/BOE.9.004998",
-                "description": "Raman spectra acquired from the left earlobe anatomical site. Used for non-invasive screening of Type 2 Diabetes Mellitus based on skin biochemical fingerprints."
-            }
-        ),
-        "codina_diabetes_innerArm": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            application_type=APPLICATION_TYPE.Medical,
-            id="codina_diabetes_innerArm",
-            name="Diabetes Skin (Inner Arm)",
-            loader=lambda: KaggleLoader.__load_diabetes("innerArm"),
-            metadata={
-                "full_name": "codina_raman-spectroscopy-of-diabetes",
-                "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
-                "paper": "https://doi.org/10.1364/BOE.9.004998",
-                "description": "Raman spectra acquired from the inner arm anatomical site. This clinical dataset evaluates machine learning models for diabetic vs. control classification in a non-invasive context."
-            }
-        ),
-        "codina_diabetes_thumbNail": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            application_type=APPLICATION_TYPE.Medical,
-            id="codina_diabetes_thumbNail",
-            name="Diabetes Skin (Thumbnail)",
-            loader=lambda: KaggleLoader.__load_diabetes("thumbNail"),
-            metadata={
-                "full_name": "codina_raman-spectroscopy-of-diabetes",
-                "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
-                "paper": "https://doi.org/10.1364/BOE.9.004998",
-                "description": "Raman spectra acquired from the thumbnail anatomical site. Part of a multi-site clinical study for portable Raman-based diabetes screening."
-            }
-        ),
-        "codina_diabetes_vein": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            application_type=APPLICATION_TYPE.Medical,
-            id="codina_diabetes_vein",
-            name="Diabetes Skin (Median Cubital Vein)",
-            loader=lambda: KaggleLoader.__load_diabetes("vein"),
-            metadata={
-                "full_name": "codina_raman-spectroscopy-of-diabetes",
-                "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
-                "paper": "https://doi.org/10.1364/BOE.9.004998",
-                "description": "Raman spectra acquired from the skin area over the median cubital vein. This dataset provides skin spectral signatures for diagnostic machine learning models."
-            }
-        ),
-        "sergioalejandrod_AminoAcids_glycine": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            application_type=APPLICATION_TYPE.Chemical,
-            id="sergioalejandrod_AminoAcids_glycine",
-            name="Amino Acid LC (Glycine)",
-            loader=lambda: KaggleLoader.__load_sergioalejandrod("1"),
-            metadata={
-                "full_name": "sergioalejandrod_raman-spectroscopy",
-                "source": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
-                "paper": "https://arxiv.org/abs/2011.07470",
-                "description": "Time-resolved (on-line) Raman spectra for Glycine elution using a vertical flow LC-Raman method. Features 785 nm excitation and 0.2s exposure frames to benchmark label-free analyte detection."
-            }
-        ),
-        "sergioalejandrod_AminoAcids_leucine": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            application_type=APPLICATION_TYPE.Chemical,
-            id="sergioalejandrod_AminoAcids_leucine",
-            name="Amino Acid LC (Leucine)",
-            loader=lambda: KaggleLoader.__load_sergioalejandrod("2"),
-            metadata={
-                "full_name": "sergioalejandrod_raman-spectroscopy",
-                "source": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
-                "paper": "https://arxiv.org/abs/2011.07470",
-                "description": "Time-resolved Raman spectra tracking the elution peak of Leucine. Benchmark for unsupervised deconvolution and time-varying spectral signal analysis."
-            }
-        ),
-        "sergioalejandrod_AminoAcids_phenylalanine": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            application_type=APPLICATION_TYPE.Chemical,
-            id="sergioalejandrod_AminoAcids_phenylalanine",
-            name="Amino Acid LC (Phenylalanine)",
-            loader=lambda: KaggleLoader.__load_sergioalejandrod("3"),
-            metadata={
-                "full_name": "sergioalejandrod_raman-spectroscopy",
-                "source": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
-                "paper": "https://arxiv.org/abs/2011.07470",
-                "description": "Time-resolved Raman spectra tracking the elution peak of Phenylalanine. Captured via a hyphenated HPLC-Raman system to facilitate label-free chemometric benchmarks."
-            }
-        ),
-        "sergioalejandrod_AminoAcids_tryptophan": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            application_type=APPLICATION_TYPE.Chemical,
-            id="sergioalejandrod_AminoAcids_tryptophan",
-            name="Amino Acid LC (Tryptophan)",
-            loader=lambda: KaggleLoader.__load_sergioalejandrod("4"),
-            metadata={
-                "full_name": "sergioalejandrod_raman-spectroscopy",
-                "source": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
-                "paper": "https://arxiv.org/abs/2011.07470",
-                "description": "Time-resolved Raman spectra tracking the elution peak of Tryptophan. Benchmarks the ability of ML models to handle low-concentration analytes in solvent mixtures."
-            }
-        ),
-        "andriitrelin_cells_COOH": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            application_type=APPLICATION_TYPE.Biological,
-            id="andriitrelin_cells_COOH",
-            name="SERS Cancer Cell Metabolite (COOH)",
-            loader=lambda: KaggleLoader.__load_andriitrelin("COOH"),
-            metadata={
-                "full_name": "andriitrelin_cells-raman-spectra",
-                "source": "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
-                "paper": "https://doi.org/10.1016/j.snb.2020.127660",
-                "description": "SERS spectra of cancer cell metabolites collected on gold nanourchins functionalized with the COOH moiety. Designed to provide specificity toward specific proteins and lipids for cell line identification."
-            }
-        ),
-        "andriitrelin_cells_NH2": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            application_type=APPLICATION_TYPE.Biological,
-            id="andriitrelin_cells_NH2",
-            name="SERS Cancer Cell Metabolite (NH2)",
-            loader=lambda: KaggleLoader.__load_andriitrelin("NH2"),
-            metadata={
-                "full_name": "andriitrelin_cells-raman-spectra",
-                "source": "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
-                "paper": "https://doi.org/10.1016/j.snb.2020.127660",
-                "description": "SERS spectra collected on Au nanostructures functionalized with the NH2 moiety. Used as an independent input channel for metabolic profiling and cancer cell recognition."
-            }
-        ),
-        "andriitrelin_cells_COOH2": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            application_type=APPLICATION_TYPE.Biological,
-            id="andriitrelin_cells_COOH2",
-            name="SERS Cancer Cell Metabolite ((COOH)2)",
-            loader=lambda: KaggleLoader.__load_andriitrelin("(COOH)2"),
-            metadata={
-                "full_name": "andriitrelin_cells-raman-spectra",
-                "source": "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
-                "paper": "https://doi.org/10.1016/j.snb.2020.127660",
-                "description": "SERS spectra collected with the (COOH)2 functionalization. Benchmarks the performance of CNNs using multi-channel SERS data for express clinical diagnostics."
-            }
-        ),
+        **{
+            f"diabetes_skin_{position.lower().replace(' ', '_')}": DatasetInfo(
+                task_type=TASK_TYPE.Classification,
+                application_type=APPLICATION_TYPE.Medical,
+                id=f"diabetes_skin_{position.lower().replace(' ', '_')}",
+                name=f"Diabetes Skin ({position})",
+                loader=lambda position=position: KaggleLoader.__load_diabetes(position),
+                metadata={
+                    "full_name": "codina_raman-spectroscopy-of-diabetes",
+                    "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
+                    "paper": "https://doi.org/10.1364/BOE.9.004998",
+                    "description": f"Part of the Diabetes Skin Raman Dataset. This subset focuses on Advanced Glycation End-products ({position}) signatures in the skin. Data acquired in vivo using a portable 785 nm Raman spectrometer to discern between diabetic patients and healthy controls."
+                }
+            )
+            for position in ["AGEs", "Ear Lobe", "Inner Arm", "Thumbnail", "Vein"]
+        },
+        **{
+            f"amino_acids_{substrate.lower()}": DatasetInfo(
+                task_type=TASK_TYPE.Regression,
+                application_type=APPLICATION_TYPE.Chemical,
+                id=f"amino_acids_{substrate.lower()}",
+                name=f"Amino Acid LC ({substrate})",
+                loader=lambda idx=idx: KaggleLoader.__load_sergioalejandrod(str(idx)),
+                metadata={
+                    "full_name": f"Amino Acid LC ({substrate})",
+                    "source": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
+                    "paper": "https://arxiv.org/abs/2011.07470",
+                    "description": f"Time-resolved (on-line) Raman spectra for {substrate} elution using a vertical flow LC-Raman method. Features 785 nm excitation and 0.2s exposure frames to benchmark label-free analyte detection."
+                }
+            )
+            for idx, substrate in enumerate(["Glycine", "Leucine", "Phenylalanine", "Tryptophan"])
+        },
+        **{
+            f"cancer_cell_{element.lower()}": DatasetInfo(
+                task_type=TASK_TYPE.Classification,
+                application_type=APPLICATION_TYPE.Biological,
+                id=f"cancer_cell_{element.lower()}",
+                name=f"SERS Cancer Cell Metabolite ({element})",
+                loader=lambda element=element: KaggleLoader.__load_andriitrelin(element),
+                metadata={
+                    "full_name": "andriitrelin_cells-raman-spectra",
+                    "source": "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
+                    "paper": "https://doi.org/10.1016/j.snb.2020.127660",
+                    "description": f"SERS spectra of cancer cell metabolites collected on gold nanourchins functionalized with the {element} moiety. Designed to provide specificity toward specific proteins and lipids for cell line identification."
+                }
+            )
+            for element in ["COOH", "NH2", "(COOH)2"]
+        },
     }
 
     @staticmethod
     def __load_diabetes(
-        dataset_id: str
+        dataset: str
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """
         Parse and extract data from the diabetes Raman spectroscopy dataset.
@@ -216,6 +108,15 @@ class KaggleLoader(BaseLoader):
             or None if parsing fails.
         """
         file_handle = "codina/raman-spectroscopy-of-diabetes"
+
+        key_mapping = {
+            "AGEs": "AGEs",
+            "Ear Lobe": "earLobe",
+            "Inner Arm": "innerArm",
+            "Thumbnail": "thumbNail",
+            "Vein": "vein"
+        }
+        dataset_id = key_mapping.get(dataset, dataset)  # Use the provided dataset string directly if not in mapping
 
         try:
             df = dataset_load(
