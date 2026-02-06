@@ -19,7 +19,6 @@ __LOADERS = [
     HuggingFaceLoader,
     ZenodoLoader,
     MiscLoader,
-    # ZipLoader
 ]
 
 # Create a global LRU cache instance with a capacity of 1

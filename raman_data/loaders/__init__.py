@@ -19,8 +19,6 @@ __all__ = [
     "KaggleLoader",
     "HuggingFaceLoader",
     "ZenodoLoader",
-    "ZipLoader",
-    "BaseLoader",
     "MiscLoader",
     "LoaderTools",
     "CACHE_DIR",
