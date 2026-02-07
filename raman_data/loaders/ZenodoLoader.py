@@ -12,7 +12,7 @@ from raman_data.exceptions import CorruptedZipFileError
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import  LoaderTools
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s:%(funcName)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 

@@ -10,7 +10,7 @@ from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.utils import is_wavenumber
 from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE, APPLICATION_TYPE
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s:%(funcName)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 
