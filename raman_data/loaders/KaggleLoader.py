@@ -65,7 +65,7 @@ class KaggleLoader(BaseLoader):
                 application_type=APPLICATION_TYPE.Chemical,
                 id=f"amino_acids_{substrate.lower()}",
                 name=f"Amino Acid LC ({substrate})",
-                loader=lambda idx=idx: KaggleLoader.__load_sergioalejandrod(str(idx)),
+                loader=lambda idx=idx: KaggleLoader.__load_sergioalejandrod(str(idx+1)),
                 metadata={
                     "full_name": f"Amino Acid LC ({substrate})",
                     "source": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
