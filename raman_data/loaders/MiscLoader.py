@@ -147,10 +147,10 @@ class MiscLoader(BaseLoader):
             }
         ),
         **{
-            f"knowitall_organics_{processed.lower()}": DatasetInfo(
+            f"organic_compounds_{processed.lower()}": DatasetInfo(
                 task_type=TASK_TYPE.Classification,
                 application_type=APPLICATION_TYPE.Chemical,
-                id=f"knowitall_organics_{processed.lower()}",
+                id=f"organic_compounds_{processed.lower()}",
                 name=f"Organic Compounds ({processed})",
                 loader=lambda cache_path, p=processed, a=(processed=="Raw"): MiscLoader._load_dtu_split(cache_path,
                                                                                   split=f"organic_{p.lower()}",
@@ -183,10 +183,10 @@ class MiscLoader(BaseLoader):
                 ],
             }
         ),
-        "mind_covid": DatasetInfo(
+        "covid19_salvia": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.Medical,
-            id="mind_covid",
+            id="covid19_salvia",
             name="Saliva COVID-19",
             loader=lambda cache_path: MiscLoader._load_mind_dataset(cache_path, "covid_dataset", ["CTRL", "COV+", "COV-"]),
             metadata={
@@ -200,10 +200,10 @@ class MiscLoader(BaseLoader):
             }
         ),
         **{
-            f"mind_{disease.lower()}": DatasetInfo(
+            f"{disease.lower()}": DatasetInfo(
                 task_type=TASK_TYPE.Classification,
                 application_type=APPLICATION_TYPE.Medical,
-                id=f"mind_{disease.lower()}",
+                id=f"{disease.lower()}",
                 name=f"Saliva {disease}",
                 loader=lambda cache_path, c=disease[0]: MiscLoader._load_mind_dataset(cache_path, "pd_ad_dataset", [f"{c}D", "CTRL"]),
                 metadata={
@@ -277,12 +277,12 @@ class MiscLoader(BaseLoader):
             for process in ["Raw", "Baseline Corrected"]
         },
         **{
-            f"microgel_size_{pretreatment.lower()}_{spectral_range.lower()}": DatasetInfo(
+            f"microgel_size_{short_key}_{spectral_range.lower()}": DatasetInfo(
                 task_type=TASK_TYPE.Regression,
                 application_type=APPLICATION_TYPE.Chemical,
-                id=f"microgel_size_{pretreatment.lower()}_{spectral_range.lower()}",
-                name=f"Microgel Size ({pretreatment}, {spectral_range})",
-                loader=lambda cache_path, _p=pretreatment, _r=spectral_range: MiscLoader._load_microgel_size(cache_path, _p, _r),
+                id=f"microgel_size_{short_key}_{spectral_range.lower()}",
+                name=f"Microgel Size ({label}, {spectral_range})",
+                loader=lambda cache_path, _f=file_key, _r=spectral_range: MiscLoader._load_microgel_size(cache_path, _f, _r),
                 metadata={
                     "full_name": "Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy",
                     "source": "https://publications.rwth-aachen.de/record/959137/files/Data_RWTH-2023-05604.zip?version=1",
@@ -290,10 +290,18 @@ class MiscLoader(BaseLoader):
                     "citation": [
                         "Koronaki, E. D., Scholz, J. G. T., Modelska, M. M., Nayak, P. K., Viell, J., Mitsos, A., & Barkley, S. (2024). Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy. Small, 20(23), 2311920."
                     ],
-                    "description": f"Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: {pretreatment}, spectral range: {spectral_range}. Task: predict particle diameter from Raman spectrum.",
+                    "description": f"Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: {label}, spectral range: {spectral_range}. Task: predict particle diameter from Raman spectrum.",
                 }
             )
-            for pretreatment in ["Raw", "LinearFit", "RubberBand", "MinMax_LinearFit", "MinMax_RubberBand", "SNV_LinearFit", "SNV_RubberBand"]
+            for short_key, file_key, label in [
+                ("raw",    "Raw",                "Raw"),
+                ("lf",     "LinearFit",           "Linear Fit"),
+                ("rb",     "RubberBand",          "Rubber Band"),
+                ("mm_lf",  "MinMax_LinearFit",    "MinMax + Linear Fit"),
+                ("mm_rb",  "MinMax_RubberBand",   "MinMax + Rubber Band"),
+                ("snv_lf", "SNV_LinearFit",       "SNV + Linear Fit"),
+                ("snv_rb", "SNV_RubberBand",      "SNV + Rubber Band"),
+            ]
             for spectral_range in ["Global", "FingerPrint"]
         },
         # **{ # TODO implement loading function
@@ -1317,6 +1325,17 @@ class MiscLoader(BaseLoader):
 
         return spectra, raman_shifts, encoded_targets, list(class_names)
 
+    # Maps short dataset key fragments to the MAT filename pretreatment component
+    _MICROGEL_PRETREATMENTS = {
+        "Raw": "Raw",
+        "LinearFit": "LinearFit",
+        "RubberBand": "RubberBand",
+        "MinMax_LinearFit": "MinMax_LinearFit",
+        "MinMax_RubberBand": "MinMax_RubberBand",
+        "SNV_LinearFit": "SNV_LinearFit",
+        "SNV_RubberBand": "SNV_RubberBand",
+    }
+
     @staticmethod
     def _load_microgel_size(cache_path: str, pretreatment: str = "Raw", spectral_range: str = "Global"):
         """
@@ -1328,24 +1347,17 @@ class MiscLoader(BaseLoader):
 
         Args:
             cache_path: Path to the cached dataset directory.
-            pretreatment: One of Raw, LinearFit, RubberBand, MinMax_LinearFit,
-                          MinMax_RubberBand, SNV_LinearFit, SNV_RubberBand.
+            pretreatment: MAT filename pretreatment component, e.g. "Raw",
+                          "MinMax_LinearFit", "SNV_RubberBand".
             spectral_range: Either "Global" or "FingerPrint".
 
         Returns:
             Tuple of (spectra, raman_shifts, diameters, target_names) or None.
         """
-        valid_pretreatments = [
-            "Raw", "LinearFit", "RubberBand",
-            "MinMax_LinearFit", "MinMax_RubberBand",
-            "SNV_LinearFit", "SNV_RubberBand"
-        ]
-        valid_ranges = ["Global", "FingerPrint"]
-
-        if pretreatment not in valid_pretreatments:
+        if pretreatment not in MiscLoader._MICROGEL_PRETREATMENTS:
             MiscLoader.logger.error(f"[!] Unknown pretreatment: {pretreatment}")
             return None
-        if spectral_range not in valid_ranges:
+        if spectral_range not in ("Global", "FingerPrint"):
             MiscLoader.logger.error(f"[!] Unknown spectral range: {spectral_range}")
             return None
 
