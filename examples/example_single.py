@@ -1,7 +1,7 @@
 from examples.utils import plot_samples
 from raman_data import raman_data, TASK_TYPE
 
-# dataset_name = "knowitall_organics_raw"
+# dataset_name = "organic_compounds_raw"
 # dataset = raman_data(dataset_name)
 # plot_samples(dataset)
 
