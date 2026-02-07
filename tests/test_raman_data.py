@@ -5,12 +5,6 @@ Some general tests of package's functionality.
 from raman_data import raman_data, datasets
 from raman_data.types import TASK_TYPE
 
-__TODO_DATASETS = {
-    #"MIND_Lab_covid_and_pd_ad_bundle": TASK_TYPE.Classification,
-    #"csho33_bacteria_id": TASK_TYPE.Classification,
-    # "mendeley_surface-enhanced-raman": TASK_TYPE.Classification,
-    #"dtu_raman-spectrum-matching": TASK_TYPE.Classification,
-}
 
 __DATASETS = {
     'codina_diabetes_AGEs' : TASK_TYPE.Classification,
