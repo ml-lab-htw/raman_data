@@ -10,6 +10,10 @@ Raman spectroscopy datasets from different sources:
 - ZipLoader: Datasets from external URLs (no API)
 - BaseLoader: Abstract base class defining the loader interface
 - MiscLoader: Loader for miscellaneous datasets from various other sources
+- RWTHLoader: Datasets from RWTH Aachen University publications
+- GoogleDriveLoader: Datasets hosted on Google Drive
+- FigshareLoader: Datasets hosted on Figshare
+- GitHubLoader: Datasets hosted on GitHub repositories
 - LoaderTools: Utility functions for all loaders
 - CACHE_DIR: Enumeration of cache directory types
 - TASK_TYPE: Enumeration of different task types for datasets
@@ -20,6 +24,10 @@ __all__ = [
     "HuggingFaceLoader",
     "ZenodoLoader",
     "MiscLoader",
+    "RWTHLoader",
+    "GoogleDriveLoader",
+    "FigshareLoader",
+    "GitHubLoader",
     "LoaderTools",
     "CACHE_DIR",
     "TASK_TYPE",

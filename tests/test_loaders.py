@@ -7,6 +7,10 @@ from raman_data.loaders.KaggleLoader import KaggleLoader
 from raman_data.loaders.HuggingFaceLoader import HuggingFaceLoader
 from raman_data.loaders.ZenodoLoader import ZenodoLoader
 from raman_data.loaders.MiscLoader import MiscLoader
+from raman_data.loaders.RWTHLoader import RWTHLoader
+from raman_data.loaders.GoogleDriveLoader import GoogleDriveLoader
+from raman_data.loaders.FigshareLoader import FigshareLoader
+from raman_data.loaders.GitHubLoader import GitHubLoader
 import pytest
 import os
 
@@ -14,7 +18,11 @@ __LOADERS = [
     KaggleLoader,
     HuggingFaceLoader,
     ZenodoLoader,
-    MiscLoader
+    MiscLoader,
+    RWTHLoader,
+    GoogleDriveLoader,
+    FigshareLoader,
+    GitHubLoader,
 ]
 
 def test_interfacing():

@@ -1,7 +1,7 @@
 """
 General functions and enums meant to be used while loading certain dataset.
 """
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Tuple
 
 from tqdm import tqdm
 import requests, zipfile
@@ -296,3 +296,14 @@ class LoaderTools:
                 return True
         except zipfile.BadZipFile:
             return False
+
+    @staticmethod
+    def align_raman_shifts(raman_shifts_list: list[np.ndarray], spectra_list: list[np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
+        min_shift = np.max([rs[0] for rs in raman_shifts_list])
+        max_shift = np.min([rs[-1] for rs in raman_shifts_list])
+        frequency_steps = [rs[1] - rs[0] for rs in raman_shifts_list]
+        min_step = min(frequency_steps)
+        raman_shifts = np.arange(min_shift, max_shift, min_step)
+        new_spectra_list = [np.interp(raman_shifts, rs, spec) for rs, spec in zip(raman_shifts_list, spectra_list)]
+        spectra = np.stack(new_spectra_list)
+        return raman_shifts, spectra

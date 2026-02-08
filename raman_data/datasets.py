@@ -12,12 +12,20 @@ from .types import RamanDataset
 from raman_data.loaders.KaggleLoader import KaggleLoader
 from raman_data.loaders.HuggingFaceLoader import HuggingFaceLoader
 from raman_data.loaders.ZenodoLoader import ZenodoLoader
+from raman_data.loaders.RWTHLoader import RWTHLoader
+from raman_data.loaders.GoogleDriveLoader import GoogleDriveLoader
+from raman_data.loaders.FigshareLoader import FigshareLoader
+from raman_data.loaders.GitHubLoader import GitHubLoader
 from raman_data.types import TASK_TYPE, APPLICATION_TYPE, DatasetInfo
 
 __LOADERS = [
     KaggleLoader,
     HuggingFaceLoader,
     ZenodoLoader,
+    RWTHLoader,
+    GoogleDriveLoader,
+    FigshareLoader,
+    GitHubLoader,
     MiscLoader,
 ]
 

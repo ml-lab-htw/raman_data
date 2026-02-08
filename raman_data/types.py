@@ -21,6 +21,10 @@ class CACHE_DIR(Enum):
     Zenodo = "ZENODO_CACHE"
     Zip = "ZIP_CACHE"
     Misc = "MISC_CACHE"
+    RWTH = "RWTH_CACHE"
+    GoogleDrive = "GDRIVE_CACHE"
+    Figshare = "FIGSHARE_CACHE"
+    GitHub = "GITHUB_CACHE"
 
 
 class TASK_TYPE(Enum):
