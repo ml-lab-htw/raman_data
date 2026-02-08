@@ -1,8 +1,6 @@
 import glob
 import logging
 import os
-import pickle
-from pathlib import Path
 from typing import Optional, Tuple, List
 
 import gdown
@@ -12,11 +10,9 @@ import requests
 import spectrochempy as scp
 from scipy.io import loadmat
 
-import raman_data.loaders.helper.rruff as rruff
 from raman_data.exceptions import CorruptedZipFileError
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
-from raman_data.loaders.helper import organic
 from raman_data.loaders.utils import encode_labels
 from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, HASH_TYPE, APPLICATION_TYPE
 
@@ -118,7 +114,7 @@ class MiscLoader(BaseLoader):
                 application_type=APPLICATION_TYPE.MaterialScience,
                 id=f"rruff_mineral_{processed.lower()}",
                 name=f"RRUFF Database ({processed})",
-                loader=lambda cache_path, p=processed: MiscLoader._load_dtu_split(
+                loader=lambda cache_path, p=processed: MiscLoader._load_onewarmheart(
                     cache_path, split=f"mineral_{p.lower()}"),
                 metadata={
                     "full_name": f"RRUFF Database - {processed} Spectra",
@@ -154,7 +150,7 @@ class MiscLoader(BaseLoader):
                 application_type=APPLICATION_TYPE.Chemical,
                 id=f"organic_compounds_{processed.lower()}",
                 name=f"Organic Compounds ({processed})",
-                loader=lambda cache_path, p=processed: MiscLoader._load_dtu_split(
+                loader=lambda cache_path, p=processed: MiscLoader._load_onewarmheart(
                     cache_path, split=f"organic_{p.lower()}"),
                 metadata={
                     "full_name": f"Organic Compounds Multi-Excitation Dataset - {processed}",
@@ -464,7 +460,10 @@ class MiscLoader(BaseLoader):
         )
 
     @staticmethod
-    def _load_dtu_split(cache_path: str, split: str):
+    def _load_onewarmheart(cache_path: str, split: str):
+        # note that there is another repo loading these datasets differently:
+        # https://github.com/lyn1874/raman_spectra_matching_with_contrastive_learning
+
         shared_root = os.path.join(os.path.dirname(cache_path), "dtu_raman_shared")
         zip_path = os.path.join(shared_root, "public_dataset.zip")
         extracted_dir = os.path.join(shared_root, "data")
@@ -503,6 +502,9 @@ class MiscLoader(BaseLoader):
             raise FileNotFoundError(f"[!] Expected directory not found: {split_root}")
 
         if "mineral" in split:
+            # todo: check if we can get the class names from rruff module
+            # class_names = rruff.get_rruff_target_names()
+
             if "raw" in split:
                 raman_shifts_list = np.load(os.path.join(split_root, "xx_raw.npy"), allow_pickle=True).tolist()
                 spectra_list = np.load(os.path.join(split_root, "xy_raw.npy"), allow_pickle=True).tolist()
