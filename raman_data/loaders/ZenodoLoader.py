@@ -347,6 +347,7 @@ class ZenodoLoader(BaseLoader):
             dataset_name: The name of the dataset to load (e.g., "sugar_mixtures").
             cache_path: Custom directory to load/save the dataset. If None, uses the default
                         Zenodo cache directory (~/.cache/zenodo).
+            load_data: If True, loads the actual spectral data. If False, returns metadata only.
 
         Returns:
             RamanDataset | None: A RamanDataset object containing the spectral data,
