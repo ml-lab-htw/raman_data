@@ -13,3 +13,4 @@ scipy>=1.13.1
 tqdm>=4.66.0
 zenodo-get>=3.0.0
 spectrochempy>=0.8.0
+gdown>=5.2.1

@@ -1,12 +1,11 @@
 import logging
 import os
-from typing import Optional, Tuple, Any
+from typing import Optional, Tuple
 
 import numpy as np
 import pandas as pd
 from kagglehub import KaggleDatasetAdapter
 from kagglehub import dataset_load, dataset_download
-from numpy import ndarray, dtype
 
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
