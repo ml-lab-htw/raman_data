@@ -357,7 +357,7 @@ class MiscLoader(BaseLoader):
             if not os.path.exists(file_path):
                 MiscLoader.logger.warning(f"[!] Missing file: {fname}")
                 MiscLoader.logger.warning(f"[!] Please download manually from OneDrive and extract to: {cache_path}")
-                return None
+                raise FileNotFoundError(f"Required file '{fname}' not found in cache path: {cache_path}")
 
         try:
 
@@ -376,7 +376,7 @@ class MiscLoader(BaseLoader):
 
         except Exception as e:
             MiscLoader.logger.error(f"[!] Error loading dataset: {e}")
-            return None
+            raise e
 
 
     @staticmethod
@@ -428,8 +428,7 @@ class MiscLoader(BaseLoader):
             RamanDataset object or None if loading fails.
         """
         if not LoaderTools.is_dataset_available(dataset_name, MiscLoader.DATASETS):
-            MiscLoader.logger.warning(f"[!] Cannot load {dataset_name} dataset with Miscellaneous loader")
-            return None
+            raise FileNotFoundError(f"Dataset {dataset_name} is not available")
 
         # Get or set cache path
         if cache_path is not None:
@@ -583,15 +582,11 @@ class MiscLoader(BaseLoader):
 
                 if not os.path.exists(zip_file):
                     # Download repo zip from GitHub (main branch)
-                    try:
-                        LoaderTools.download(
-                            url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip",
-                            out_dir_path=shared_root,
-                            out_file_name=zip_name
-                        )
-                    except Exception as e:
-                        MiscLoader.logger.error(f"[!] Failed to download MIND repo: {e}")
-                        return None
+                    LoaderTools.download(
+                        url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip",
+                        out_dir_path=shared_root,
+                        out_file_name=zip_name
+                    )
 
                 LoaderTools.extract_zip_file_content(zip_file)
 
@@ -656,8 +651,7 @@ class MiscLoader(BaseLoader):
                 # targets per spectrum will be assigned later after mapping labels to indices
 
         if len(spectra_list) == 0:
-            MiscLoader.logger.error(f"[!] No spectra found in {dataset_dir}")
-            return None
+            raise Exception(f"[!] No spectra found in {dataset_dir}")
 
         # Map categories to class indices
         unique_categories = sorted(list(set(categories)))
@@ -786,11 +780,7 @@ class MiscLoader(BaseLoader):
 
         # If still not found, do a fresh download using the expected filename into shared_root
         if data_root is None:
-            try:
-                LoaderTools.download(url=dl_url, out_dir_path=shared_root, out_file_name=zip_name)
-            except Exception as e:
-                raise RuntimeError(f"[!] Failed to download csho33_bacteria dataset: {e}")
-
+            LoaderTools.download(url=dl_url, out_dir_path=shared_root, out_file_name=zip_name)
             extracted_dir = LoaderTools.extract_zip_file_content(zip_path, unzip_target_subdir="csho33_bacteria")
             if extracted_dir is None:
                 raise RuntimeError(f"[!] Failed to extract csho33_bacteria zip after download")
@@ -870,18 +860,12 @@ class MiscLoader(BaseLoader):
         zip_path = os.path.join(shared_root, zip_name)
         # Download if not present
         if not os.path.exists(zip_path) or not LoaderTools.is_valid_zip(zip_path):
-            try:
-                LoaderTools.download(url=dataset_url, out_dir_path=shared_root, out_file_name=zip_name)
-            except Exception as e:
-                raise RuntimeError(f"[!] Failed to download RWTH acid species dataset: {e}")
+            LoaderTools.download(url=dataset_url, out_dir_path=shared_root, out_file_name=zip_name)
 
         # Extract if not already extracted
         extracted_dir = os.path.join(shared_root, "Data_RWTH-2024-01177")
         if not os.path.isdir(extracted_dir):
-            try:
-                LoaderTools.extract_zip_file_content(zip_path)
-            except Exception as e:
-                raise RuntimeError(f"[!] Failed to extract RWTH acid species zip: {e}")
+            LoaderTools.extract_zip_file_content(zip_path)
 
         # Parse subfolders for each acid system
         acid_path = os.path.join(extracted_dir, sub_folder)
@@ -1030,18 +1014,13 @@ class MiscLoader(BaseLoader):
         zip_path = os.path.join(shared_root, zip_name)
         # Download if not present
         if not os.path.exists(zip_path) or not LoaderTools.is_valid_zip(zip_path):
-            try:
-                LoaderTools.download(url=dataset_url, out_dir_path=shared_root, out_file_name=zip_name)
-            except Exception as e:
-                raise Exception(f"Failed to download RWTH acid species dataset: {e}")
+            LoaderTools.download(url=dataset_url, out_dir_path=shared_root, out_file_name=zip_name)
 
         # Extract if not already extracted
         extracted_dir = os.path.join(shared_root, "Data_RWTH-2024-01176")
         if not os.path.isdir(extracted_dir):
-            try:
-                LoaderTools.extract_zip_file_content(zip_path)
-            except Exception as e:
-                raise Exception(f"Failed to extract RWTH acid species dataset: {e}")
+            LoaderTools.extract_zip_file_content(zip_path)
+
 
         raise NotImplementedError("HMF dataset loading not implemented yet")
 
@@ -1079,17 +1058,14 @@ class MiscLoader(BaseLoader):
 
             # download only if missing
             if not os.path.exists(out_path):
-                try:
-                    LoaderTools.download(
-                        url=file_url,
-                        out_dir_path=dataset_cache,
-                        out_file_name=file_name,
-                        hash_target=file_md5,
-                        hash_type=HASH_TYPE.md5,
-                        referer="https://figshare.com/",
-                    )
-                except Exception as e:
-                    raise Exception(f"Failed to download {file_name}: {e}")
+                LoaderTools.download(
+                    url=file_url,
+                    out_dir_path=dataset_cache,
+                    out_file_name=file_name,
+                    hash_target=file_md5,
+                    hash_type=HASH_TYPE.md5,
+                    referer="https://figshare.com/",
+                )
 
         spectra_path = os.path.join(dataset_cache, "raman_spectra_api_compounds.csv")
         product_info_path = os.path.join(dataset_cache, "API_Product_Information.xlsx")
@@ -1391,18 +1367,15 @@ class MiscLoader(BaseLoader):
                 mat_path = candidates[0]
 
         if mat_path is None:
-            MiscLoader.logger.error(f"[!] MAT file not found: {mat_filename}")
-            return None
+            raise FileNotFoundError(f"Could not find mat file {mat_path}")
 
         # Load the MAT file
         mat_data = LoaderTools.read_mat_file(mat_path)
         if mat_data is None:
-            MiscLoader.logger.error(f"[!] Failed to read MAT file: {mat_path}")
-            return None
+            raise FileNotFoundError(f"Could not find mat file {mat_path}")
 
         if "X_merged" not in mat_data:
-            MiscLoader.logger.error(f"[!] 'X_merged' key not found in {mat_path}. Keys: {list(mat_data.keys())}")
-            return None
+            raise FileNotFoundError(f"Could not find X_merged file {mat_path}")
 
         X = mat_data["X_merged"]
 
@@ -1430,23 +1403,15 @@ class MiscLoader(BaseLoader):
         zip_path = os.path.join(cache_path, "Raman_Spectroscopy_Measurements.zip")
         if not os.path.exists(zip_path):
             # Download if not present
-            try:
-                LoaderTools.download(
-                    url="https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
-                    out_dir_path=cache_path,
-                    out_file_name="Raman_Spectroscopy_Measurements.zip"
-                )
-            except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to download Flow Synthesis dataset: {e}")
-                return None
+            LoaderTools.download(
+                url="https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
+                out_dir_path=cache_path,
+                out_file_name="Raman_Spectroscopy_Measurements.zip"
+            )
 
         extracted_dir = os.path.join(cache_path, "RamanSpectroscopy")
         if not os.path.isdir(extracted_dir):
-            try:
-                LoaderTools.extract_zip_file_content(zip_path)
-            except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to extract Flow Synthesis zip: {e}")
-                return None
+            LoaderTools.extract_zip_file_content(zip_path)
 
         spc_files = glob.glob(os.path.join(extracted_dir, "*.spc"), recursive=True)
         if not spc_files:
@@ -1504,23 +1469,15 @@ class MiscLoader(BaseLoader):
         zip_path = os.path.join(cache_path, "Raman_spectra_and_Indirect_Hard_Models.zip")
         if not os.path.exists(zip_path):
             # Download if not present
-            try:
-                LoaderTools.download(
-                    url="https://publications.rwth-aachen.de/record/834113/files/Raman_spectra_and_Indirect_Hard_Models.zip?version=1?version=1",
-                    out_dir_path=cache_path,
-                    out_file_name="Raman_spectra_and_Indirect_Hard_Models.zip"
-                )
-            except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to download Flow Synthesis dataset: {e}")
-                return None
+            LoaderTools.download(
+                url="https://publications.rwth-aachen.de/record/834113/files/Raman_spectra_and_Indirect_Hard_Models.zip?version=1?version=1",
+                out_dir_path=cache_path,
+                out_file_name="Raman_spectra_and_Indirect_Hard_Models.zip"
+            )
 
         extracted_dir = os.path.join(cache_path, "Raman spectra and Indirect Hard Models")
         if not os.path.isdir(extracted_dir):
-            try:
-                LoaderTools.extract_zip_file_content(zip_path)
-            except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to extract Flow Synthesis zip: {e}")
-                return None
+            LoaderTools.extract_zip_file_content(zip_path)
 
         data_folder = os.path.join(extracted_dir, "Data_pub")
         if not os.path.exists(data_folder):
@@ -1585,23 +1542,15 @@ class MiscLoader(BaseLoader):
         zip_path = os.path.join(cache_path, "Raman_Spectroscopy_Measurements.zip")
         if not os.path.exists(zip_path):
             # Download if not present
-            try:
-                LoaderTools.download(
-                    url="https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
-                    out_dir_path=cache_path,
-                    out_file_name="Raman_Spectroscopy_Measurements.zip"
-                )
-            except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to download Flow Synthesis dataset: {e}")
-                return None
+            LoaderTools.download(
+                url="https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
+                out_dir_path=cache_path,
+                out_file_name="Raman_Spectroscopy_Measurements.zip"
+            )
 
         extracted_dir = os.path.join(cache_path, "RamanSpectroscopy")
         if not os.path.isdir(extracted_dir):
-            try:
-                LoaderTools.extract_zip_file_content(zip_path)
-            except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to extract Flow Synthesis zip: {e}")
-                return None
+            LoaderTools.extract_zip_file_content(zip_path)
 
         spc_files = glob.glob(os.path.join(extracted_dir, "*.spc"), recursive=True)
         if not spc_files:
