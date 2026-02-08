@@ -153,7 +153,7 @@ class GoogleDriveLoader(BaseLoader):
             if "raw" in split:
                 raman_shifts_list = np.load(os.path.join(split_root, "xx_raw.npy"), allow_pickle=True).tolist()
                 spectra_list = np.load(os.path.join(split_root, "xy_raw.npy"), allow_pickle=True).tolist()
-                targets = np.load(os.path.join(split_root, "yclass.npy"), allow_pickle=True).tolist()
+                targets = np.load(os.path.join(split_root, "yclass.npy"), allow_pickle=True)
 
                 raman_shifts, spectra = LoaderTools.align_raman_shifts(raman_shifts_list, spectra_list)
             elif "preprocess" in split:
@@ -162,9 +162,9 @@ class GoogleDriveLoader(BaseLoader):
                 spectra_train = np.load(os.path.join(split_root, "after-preprocess", "xy_train.npy"), allow_pickle=True)
                 spectra_val = np.load(os.path.join(split_root, "after-preprocess", "xy_val.npy"), allow_pickle=True)
                 spectra = np.concatenate([spectra_train, spectra_val], axis=0)
-                targets_train = np.load(os.path.join(split_root, "after-preprocess", "yclass_train.npy"), allow_pickle=True).tolist()
-                targets_val = np.load(os.path.join(split_root, "after-preprocess", "yclass_val.npy"), allow_pickle=True).tolist()
-                targets = targets_train + targets_val
+                targets_train = np.load(os.path.join(split_root, "after-preprocess", "yclass_train.npy"), allow_pickle=True)
+                targets_val = np.load(os.path.join(split_root, "after-preprocess", "yclass_val.npy"), allow_pickle=True)
+                targets = np.concatenate([targets_train, targets_val], axis=0)
             else:
                 raise ValueError(f"Unknown split type in name: {split}")
         elif "organic" in split:
