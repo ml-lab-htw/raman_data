@@ -67,10 +67,10 @@ class MiscLoader(BaseLoader):
                 ],
             }
         ),
-        "csho33_bacteria": DatasetInfo(
+        "bacteria_identification": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.Medical,
-            id="csho33_bacteria",
+            id="bacteria_identification",
             name="Pathogenic Bacteria",
             loader=lambda cache_path: MiscLoader._load_csho33_bacteria(cache_path),
             metadata={
@@ -249,12 +249,12 @@ class MiscLoader(BaseLoader):
         """
         cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
         if cache_root is None:
-            raise ValueError("Cache root for Misc loader is not set. Cannot load csho33_bacteria dataset.")
+            raise ValueError("Cache root for Misc loader is not set. Cannot load bacteria_identification dataset.")
 
-        shared_root = os.path.join(cache_root, "csho33_bacteria")
+        shared_root = os.path.join(cache_root, "bacteria_identification")
         os.makedirs(shared_root, exist_ok=True)
 
-        zip_name = "csho33_bacteria.zip"
+        zip_name = "bacteria_identification.zip"
         zip_path = os.path.join(shared_root, zip_name)
         # Use Dropbox direct-download URL (dl=1)
         dl_url = "https://www.dropbox.com/scl/fo/fb29ihfnvishuxlnpgvhg/AJToUtts-vjYdwZGeqK4k-Y?rlkey=r4p070nsuei6qj3pjp13nwf6l&dl=1"
@@ -274,7 +274,7 @@ class MiscLoader(BaseLoader):
             raise FileNotFoundError(f"Could not find directory containing all required files under: {root_dir}")
 
         # If the extracted folder already exists and contains our files, reuse it.
-        extracted_dir = os.path.join(shared_root, "csho33_bacteria")
+        extracted_dir = os.path.join(shared_root, "bacteria_identification")
         data_root = find_dir_with_files(extracted_dir, required) if os.path.isdir(extracted_dir) else None
 
         # If not found under the extracted dir, try scanning the shared_root and the wider cache_root
@@ -300,7 +300,7 @@ class MiscLoader(BaseLoader):
         # If we have an existing zip, extract it into the canonical extraction folder and search for the data
         if data_root is None and existing_zip is not None:
             try:
-                LoaderTools.extract_zip_file_content(existing_zip, unzip_target_subdir="csho33_bacteria")
+                LoaderTools.extract_zip_file_content(existing_zip, unzip_target_subdir="bacteria_identification")
             except Exception as e:
                 MiscLoader.logger.warning(f"[!] Failed to extract existing zip {existing_zip}: {e}")
             data_root = find_dir_with_files(extracted_dir, required) or find_dir_with_files(shared_root, required) or find_dir_with_files(cache_root, required)
@@ -308,14 +308,14 @@ class MiscLoader(BaseLoader):
         # If still not found, do a fresh download using the expected filename into shared_root
         if data_root is None:
             LoaderTools.download(url=dl_url, out_dir_path=shared_root, out_file_name=zip_name)
-            extracted_dir = LoaderTools.extract_zip_file_content(zip_path, unzip_target_subdir="csho33_bacteria")
+            extracted_dir = LoaderTools.extract_zip_file_content(zip_path, unzip_target_subdir="bacteria_identification")
             if extracted_dir is None:
-                raise RuntimeError(f"[!] Failed to extract csho33_bacteria zip after download")
+                raise RuntimeError(f"[!] Failed to extract bacteria_identification zip after download")
 
             data_root = find_dir_with_files(extracted_dir, required) or find_dir_with_files(shared_root, required) or find_dir_with_files(cache_root, required)
 
         if data_root is None:
-            raise FileNotFoundError(f"[!] Could not find required data files for csho33_bacteria dataset after download and extraction. Please check the cache directory: {cache_root}")
+            raise FileNotFoundError(f"[!] Could not find required data files for bacteria_identification dataset after download and extraction. Please check the cache directory: {cache_root}")
 
         try:
             # Load arrays; some archives include extra files like reference or wavenumbers
@@ -340,7 +340,7 @@ class MiscLoader(BaseLoader):
             if os.path.exists(os.path.join(data_root, "wavenumbers.npy")):
                 raman_shifts = np.load(os.path.join(data_root, "wavenumbers.npy"))
         except Exception as e:
-            raise RuntimeError(f"[!] Failed to load data arrays for csho33_bacteria dataset: {e}")
+            raise RuntimeError(f"[!] Failed to load data arrays for bacteria_identification dataset: {e}")
 
         # Concatenate datasets in order finetune, (reference if present), test, 2018, 2019
         parts_X = [X_f]
