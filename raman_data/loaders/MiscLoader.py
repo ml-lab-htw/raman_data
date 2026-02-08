@@ -5,6 +5,7 @@ import pickle
 from pathlib import Path
 from typing import Optional, Tuple, List
 
+import gdown
 import numpy as np
 import pandas as pd
 import requests
@@ -117,7 +118,8 @@ class MiscLoader(BaseLoader):
                 application_type=APPLICATION_TYPE.MaterialScience,
                 id=f"rruff_mineral_{processed.lower()}",
                 name=f"RRUFF Database ({processed})",
-                loader=lambda cache_path, p=processed: MiscLoader._load_dtu_split(cache_path, split=f"mineral_{p.lower()}", align_output=True),
+                loader=lambda cache_path, p=processed: MiscLoader._load_dtu_split(
+                    cache_path, split=f"mineral_{p.lower()}"),
                 metadata={
                     "full_name": f"RRUFF Database - {processed} Spectra",
                     "source": "https://rruff.info/",
@@ -152,9 +154,8 @@ class MiscLoader(BaseLoader):
                 application_type=APPLICATION_TYPE.Chemical,
                 id=f"organic_compounds_{processed.lower()}",
                 name=f"Organic Compounds ({processed})",
-                loader=lambda cache_path, p=processed, a=(processed=="Raw"): MiscLoader._load_dtu_split(cache_path,
-                                                                                  split=f"organic_{p.lower()}",
-                                                                                  align_output=a),
+                loader=lambda cache_path, p=processed: MiscLoader._load_dtu_split(
+                    cache_path, split=f"organic_{p.lower()}"),
                 metadata={
                     "full_name": f"Organic Compounds Multi-Excitation Dataset - {processed}",
                     "source": "https://data.dtu.dk/api/files/36144495",
@@ -463,10 +464,10 @@ class MiscLoader(BaseLoader):
         )
 
     @staticmethod
-    def _load_dtu_split(cache_path: str, split: str, align_output: bool = True):
+    def _load_dtu_split(cache_path: str, split: str):
         shared_root = os.path.join(os.path.dirname(cache_path), "dtu_raman_shared")
         zip_path = os.path.join(shared_root, "public_dataset.zip")
-        extracted_dir = os.path.join(shared_root, "public_dataset")
+        extracted_dir = os.path.join(shared_root, "data")
         os.makedirs(shared_root, exist_ok=True)
 
         # Download & extract if needed
@@ -480,68 +481,62 @@ class MiscLoader(BaseLoader):
                     os.remove(zip_path)
                 except Exception as e:
                     MiscLoader.logger.error(f"[!] Failed to remove corrupted zip: {e}")
-            LoaderTools.download(
-                url="https://data.dtu.dk/api/files/36144495/content",
-                out_dir_path=shared_root,
-                out_file_name="public_dataset.zip"
-            )
-            LoaderTools.extract_zip_file_content(
-                zip_path,
-                unzip_target_subdir="public_dataset"
-            )
+
+            file_id = "1X5OAdugcHVOF6k9WaWwCAu_IFh_7OwzR"
+            url = f"https://drive.google.com/uc?id={file_id}"
+            gdown.download(url, zip_path, quiet=False)
+
+            LoaderTools.extract_zip_file_content(zip_path)
+
             if not LoaderTools.is_valid_zip(zip_path):
                 raise CorruptedZipFileError(zip_path)
 
+        if "mineral" in split:
+            subfolder = "RRUFF_database"
+        elif "organic" in split:
+            subfolder = "organics_database"
+        else:
+            raise ValueError(f"Unknown split name: {split}")
 
-        split_root = os.path.join(extracted_dir, split)
+        split_root = os.path.join(extracted_dir, subfolder)
         if not os.path.isdir(split_root):
-            MiscLoader.logger.error(f"[!] Expected directory not found: {split_root}")
-            return None
+            raise FileNotFoundError(f"[!] Expected directory not found: {split_root}")
 
-        split_root_raw = split_root.replace("preprocess", "raw")
-        if not os.path.isdir(split_root_raw):
-            MiscLoader.logger.error(f"[!] Expected directory not found: {split_root_raw}")
-            return None
+        if "mineral" in split:
+            if "raw" in split:
+                raman_shifts_list = np.load(os.path.join(split_root, "xx_raw.npy"), allow_pickle=True).tolist()
+                spectra_list = np.load(os.path.join(split_root, "xy_raw.npy"), allow_pickle=True).tolist()
+                targets = np.load(os.path.join(split_root, "yclass.npy"), allow_pickle=True).tolist()
 
-        # Use original repo IO for mineral and organic splits
-        if split in ("mineral_raw", "mineral_preprocess"):
-
-            if split == "mineral_raw":
-                data = rruff.give_all_raw(split_root, print_info=True)
+                raman_shifts, spectra = MiscLoader.align_raman_shifts(raman_shifts_list, spectra_list)
+            elif "preprocess" in split:
+                # see: https://github.com/onewarmheart/Raman/blob/master/code-ZR/code/preprocess/rruff_interpolate.py
+                raman_shifts = np.linspace(0, 1700, 1024)
+                spectra_train = np.load(os.path.join(split_root, "after-preprocess", "xy_train.npy"), allow_pickle=True)
+                spectra_val = np.load(os.path.join(split_root, "after-preprocess", "xy_val.npy"), allow_pickle=True)
+                spectra = np.concatenate([spectra_train, spectra_val], axis=0)
+                targets_train = np.load(os.path.join(split_root, "after-preprocess", "yclass_train.npy"), allow_pickle=True).tolist()
+                targets_val = np.load(os.path.join(split_root, "after-preprocess", "yclass_val.npy"), allow_pickle=True).tolist()
+                targets = targets_train + targets_val
             else:
-                csv_path = os.path.join(split_root, "excellent_unoriented_unoriented.csv")
-                data = rruff.give_subset_of_spectrums(csv_path, None, "preprocess", print_info=True)
+                raise ValueError(f"Unknown split type in name: {split}")
+        elif "organic" in split:
+            if "raw" in split:
+                raman_shifts_list = np.load(os.path.join(split_root, "xx.npy"), allow_pickle=True).tolist()
+                spectra_list = np.load(os.path.join(split_root, "xy.npy"), allow_pickle=True).tolist()
+                targets = np.load(os.path.join(split_root, "yclass.npy"), allow_pickle=True).tolist()
 
-            class_names = list(data['name'].unique())
-            name_to_idx = {name: i for i, name in enumerate(class_names)} if class_names else {}
-            targets = data['name'].map(name_to_idx).to_numpy() if name_to_idx else np.zeros(len(data), dtype=int)
-
-            spectra_path = os.path.join(split_root, 'spectra.obj')
-            with open(spectra_path, "rb") as f:
-                spectra_data = pickle.load(f)
-
-            raman_shifts_list = [arr[:, 0] for arr in spectra_data]
-            spectra_list = [arr[:, 1] for arr in spectra_data]
-
-        elif split == "organic_raw":
-
-            spectra_list, raman_shifts_list, targets = organic.get_raw_data(split_root)
-            class_names = [str(i) for i in range(len(np.unique(targets)))]  # TODO
-
-        elif split == "organic_preprocess":
-
-            spectra_list, raman_shifts_list, targets = organic.get_preprocessed_data(split_root)
-            class_names = [str(i) for i in range(len(np.unique(targets)))] # TODO
+                raman_shifts, spectra = MiscLoader.align_raman_shifts(raman_shifts_list, spectra_list)
+            elif "preprocess" in split:
+                # see: https://github.com/onewarmheart/Raman/blob/master/code-ZR/code/preprocess/organics_interpolate.py
+                raman_shifts = np.linspace(200, 3700, 1100)[:1024] # this is from the original repo. idk why they do this so complicated
+                spectra = np.load(os.path.join(split_root, "after-preprocess", "xy.npy"), allow_pickle=True)
+                targets = np.load(os.path.join(split_root, "after-preprocess","yclass.npy"), allow_pickle=True).tolist()
 
         else:
-            raise ValueError(f"Unknown DTU split: {split}")
+            raise ValueError(f"Unknown split name: {split}")
 
-        if align_output:
-            raman_shifts, spectra = MiscLoader.align_raman_shifts(raman_shifts_list, spectra_list)
-        else:
-            raman_shifts = raman_shifts_list
-            spectra = spectra_list
-
+        class_names = targets.unique().tolist() if hasattr(targets, "unique") else list(set(targets))
         return spectra, raman_shifts, targets, class_names
 
 

@@ -7,7 +7,7 @@ from raman_data import raman_data, TASK_TYPE
 
 
 datasets = raman_data(task_type=None)
-filtered_datasets = [dataset for dataset in datasets if "amino_acids_" in dataset]
+filtered_datasets = [dataset for dataset in datasets if "organic_compounds_" in dataset]
 
 for dataset_name in filtered_datasets:
     dataset = raman_data(dataset_name)
