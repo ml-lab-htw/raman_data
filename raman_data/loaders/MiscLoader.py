@@ -728,8 +728,7 @@ class MiscLoader(BaseLoader):
         """
         cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
         if cache_root is None:
-            MiscLoader.logger.error("[!] Cache root for MiscLoader is not set")
-            return None
+            raise ValueError("Cache root for Misc loader is not set. Cannot load csho33_bacteria dataset.")
 
         shared_root = os.path.join(cache_root, "csho33_bacteria")
         os.makedirs(shared_root, exist_ok=True)
@@ -747,11 +746,11 @@ class MiscLoader(BaseLoader):
             "X_2019clinical.npy", "y_2019clinical.npy",
         ]
 
-        def find_dir_with_files(root_dir: str, filenames: list[str]) -> str | None:
+        def find_dir_with_files(root_dir: str, filenames: list[str]) -> str:
             for root, dirs, files in os.walk(root_dir):
                 if all(fname in files for fname in filenames):
                     return root
-            return None
+            raise FileNotFoundError(f"Could not find directory containing all required files under: {root_dir}")
 
         # If the extracted folder already exists and contains our files, reuse it.
         extracted_dir = os.path.join(shared_root, "csho33_bacteria")
@@ -790,19 +789,16 @@ class MiscLoader(BaseLoader):
             try:
                 LoaderTools.download(url=dl_url, out_dir_path=shared_root, out_file_name=zip_name)
             except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to download csho33 dataset: {e}")
-                return None
+                raise RuntimeError(f"[!] Failed to download csho33_bacteria dataset: {e}")
 
             extracted_dir = LoaderTools.extract_zip_file_content(zip_path, unzip_target_subdir="csho33_bacteria")
             if extracted_dir is None:
-                MiscLoader.logger.error("[!] Failed to extract csho33 zip")
-                return None
+                raise RuntimeError(f"[!] Failed to extract csho33_bacteria zip after download")
 
             data_root = find_dir_with_files(extracted_dir, required) or find_dir_with_files(shared_root, required) or find_dir_with_files(cache_root, required)
 
         if data_root is None:
-            MiscLoader.logger.error(f"[!] Could not find the expected files after extraction under: {shared_root} or {cache_root}")
-            return None
+            raise FileNotFoundError(f"[!] Could not find required data files for csho33_bacteria dataset after download and extraction. Please check the cache directory: {cache_root}")
 
         try:
             # Load arrays; some archives include extra files like reference or wavenumbers
@@ -827,8 +823,7 @@ class MiscLoader(BaseLoader):
             if os.path.exists(os.path.join(data_root, "wavenumbers.npy")):
                 raman_shifts = np.load(os.path.join(data_root, "wavenumbers.npy"))
         except Exception as e:
-            MiscLoader.logger.error(f"[!] Failed to load numpy arrays: {e}")
-            return None
+            raise RuntimeError(f"[!] Failed to load data arrays for csho33_bacteria dataset: {e}")
 
         # Concatenate datasets in order finetune, (reference if present), test, 2018, 2019
         parts_X = [X_f]
@@ -862,8 +857,7 @@ class MiscLoader(BaseLoader):
         """
 
         if subtype not in ["Succinic", "Levulinic", "Formic", "Citric", "Oxalic", "Itaconic", "Acetic"]:
-            MiscLoader.logger.error(f"[!] Unknown RWTH acid species subtype: {subtype}")
-            return None
+            raise ValueError(f"Unknown acid subtype: {subtype}. Expected one of: Succinic, Levulinic, Formic, Citric, Oxalic, Itaconic, Acetic")
 
         sub_folder = f"{subtype} acid titration"
 
@@ -879,8 +873,7 @@ class MiscLoader(BaseLoader):
             try:
                 LoaderTools.download(url=dataset_url, out_dir_path=shared_root, out_file_name=zip_name)
             except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to download RWTH acid species dataset: {e}")
-                return None
+                raise RuntimeError(f"[!] Failed to download RWTH acid species dataset: {e}")
 
         # Extract if not already extracted
         extracted_dir = os.path.join(shared_root, "Data_RWTH-2024-01177")
@@ -888,8 +881,7 @@ class MiscLoader(BaseLoader):
             try:
                 LoaderTools.extract_zip_file_content(zip_path)
             except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to extract RWTH acid species zip: {e}")
-                return None
+                raise RuntimeError(f"[!] Failed to extract RWTH acid species zip: {e}")
 
         # Parse subfolders for each acid system
         acid_path = os.path.join(extracted_dir, sub_folder)
@@ -1005,8 +997,7 @@ class MiscLoader(BaseLoader):
 
 
         if len(spectra_list) == 0:
-            MiscLoader.logger.error(f"[!] No spectra found in {extracted_dir}")
-            return None
+            raise Exception(f"No spectra in {file}")
 
         # Align raman shifts if possible
         first_rs = raman_shifts_list[0]
@@ -1030,12 +1021,6 @@ class MiscLoader(BaseLoader):
         Returns spectra, raman_shifts, targets, class_names (acids).
         """
 
-        # if subtype not in ["Succinic", "Levulinic", "Formic", "Citric", "Oxalic", "Itaconic", "Acetic"]:
-        #     MiscLoader.logger.error(f"[!] Unknown RWTH acid species subtype: {subtype}")
-        #     return None
-
-        # sub_folder = f"{subtype} acid titration"
-
         dataset_url = "https://publications.rwth-aachen.de/record/978265/files/Data_RWTH-2024-01176.zip?version=1"
         zip_name = "Data_RWTH-2024-01176.zip"
 
@@ -1048,8 +1033,7 @@ class MiscLoader(BaseLoader):
             try:
                 LoaderTools.download(url=dataset_url, out_dir_path=shared_root, out_file_name=zip_name)
             except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to download RWTH acid species dataset: {e}")
-                return None
+                raise Exception(f"Failed to download RWTH acid species dataset: {e}")
 
         # Extract if not already extracted
         extracted_dir = os.path.join(shared_root, "Data_RWTH-2024-01176")
@@ -1057,8 +1041,7 @@ class MiscLoader(BaseLoader):
             try:
                 LoaderTools.extract_zip_file_content(zip_path)
             except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to extract RWTH acid species zip: {e}")
-                return None
+                raise Exception(f"Failed to extract RWTH acid species dataset: {e}")
 
         raise NotImplementedError("HMF dataset loading not implemented yet")
 
@@ -1079,8 +1062,7 @@ class MiscLoader(BaseLoader):
 
         cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
         if cache_root is None:
-            MiscLoader.logger.error("[!] Cache root for MiscLoader is not set")
-            return None
+            raise Exception(f"No cache root found for {cache_path}")
 
         dataset_cache = os.path.join(
             cache_root,
@@ -1107,10 +1089,7 @@ class MiscLoader(BaseLoader):
                         referer="https://figshare.com/",
                     )
                 except Exception as e:
-                    MiscLoader.logger.error(
-                        f"[!] Failed to download Figshare file {file_name}: {e}"
-                    )
-                    return None
+                    raise Exception(f"Failed to download {file_name}: {e}")
 
         spectra_path = os.path.join(dataset_cache, "raman_spectra_api_compounds.csv")
         product_info_path = os.path.join(dataset_cache, "API_Product_Information.xlsx")
@@ -1130,8 +1109,7 @@ class MiscLoader(BaseLoader):
 
         cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
         if cache_root is None:
-            MiscLoader.logger.error("[!] Cache root for MiscLoader is not set")
-            return None
+            raise Exception(f"No cache root found for {cache_path}")
 
         dataset_cache = os.path.join(
             cache_root,
@@ -1184,13 +1162,11 @@ class MiscLoader(BaseLoader):
         }
 
         if variant not in urls:
-            MiscLoader.logger.error(f"[!] Unknown SOP variant: {variant}. Use 'baseline_corrected' or 'raw'.")
-            return None
+            raise Exception(f"Unknown variant: {variant}")
 
         cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
         if cache_root is None:
-            MiscLoader.logger.error("[!] Cache root for MiscLoader is not set")
-            return None
+            raise Exception(f"No cache root found for {cache_path}")
 
         shared_root = os.path.join(cache_root, "sop_spectral_library")
         os.makedirs(shared_root, exist_ok=True)
@@ -1223,15 +1199,10 @@ class MiscLoader(BaseLoader):
                         f"    {urls[variant]}\n"
                         f"    and place the ZIP at: {zip_path}"
                     )
-                    return None
+                    raise e
 
             if not os.path.exists(zip_path):
-                MiscLoader.logger.error(
-                    f"[!] SOP ZIP file not found at: {zip_path}\n"
-                    f"    Please download from: {urls[variant]}\n"
-                    f"    and save to: {zip_path}"
-                )
-                return None
+                raise Exception(f"Failed to obtain SOP zip file for variant '{variant}'. Expected at: {zip_path}")
 
             # Extract
             LoaderTools.extract_zip_file_content(
@@ -1240,14 +1211,12 @@ class MiscLoader(BaseLoader):
             )
 
         if not os.path.isdir(extracted_dir):
-            MiscLoader.logger.error(f"[!] SOP extracted directory not found: {extracted_dir}")
-            return None
+            raise FileNotFoundError(f"Failed to extract SOP Spectral Library ({variant})")
 
         # Collect all TXT files recursively
         txt_files = glob.glob(os.path.join(extracted_dir, "**", "*.txt"), recursive=True)
         if not txt_files:
-            MiscLoader.logger.error(f"[!] No TXT files found in {extracted_dir}")
-            return None
+            raise FileNotFoundError(f"Failed to extract SOP Spectral Library ({variant})")
 
         spectra_list = []
         raman_shifts_list = []
@@ -1295,8 +1264,7 @@ class MiscLoader(BaseLoader):
                 continue
 
         if len(spectra_list) == 0:
-            MiscLoader.logger.error(f"[!] No spectra could be loaded from {extracted_dir}")
-            return None
+            raise FileNotFoundError(f"Failed to parse {txt_file}")
 
         # Check if all spectra share the same wavenumber axis
         first_rs = raman_shifts_list[0]
@@ -1352,11 +1320,9 @@ class MiscLoader(BaseLoader):
             Tuple of (spectra, raman_shifts, diameters, target_names) or None.
         """
         if pretreatment not in MiscLoader._MICROGEL_PRETREATMENTS:
-            MiscLoader.logger.error(f"[!] Unknown pretreatment: {pretreatment}")
-            return None
+            raise NotImplementedError(f"Unknown pretreatment {pretreatment}")
         if spectral_range not in ("Global", "FingerPrint"):
-            MiscLoader.logger.error(f"[!] Unknown spectral range: {spectral_range}")
-            return None
+            raise NotImplementedError(f"Unknown spectral range {spectral_range}")
 
         dataset_url = "https://publications.rwth-aachen.de/record/959137/files/Data_RWTH-2023-05604.zip?version=1"
         zip_name = "Data_RWTH-2023-05604.zip"
@@ -1370,20 +1336,12 @@ class MiscLoader(BaseLoader):
 
         # Download main zip if not present
         if not os.path.exists(zip_path) or not LoaderTools.is_valid_zip(zip_path):
-            try:
-                LoaderTools.download(url=dataset_url, out_dir_path=shared_root, out_file_name=zip_name)
-            except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to download microgel size dataset: {e}")
-                return None
+            LoaderTools.download(url=dataset_url, out_dir_path=shared_root, out_file_name=zip_name)
 
         # Extract main zip if not already done
         main_extracted_dir = os.path.join(shared_root, "Data_RWTH-2023-05604")
         if not os.path.isdir(main_extracted_dir):
-            try:
-                LoaderTools.extract_zip_file_content(zip_path)
-            except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to extract main zip: {e}")
-                return None
+            LoaderTools.extract_zip_file_content(zip_path)
 
         # Find and extract the nested zip containing pretreated datasets
         pretreated_dir = os.path.join(shared_root, "PretreatedDatasets")
@@ -1411,14 +1369,12 @@ class MiscLoader(BaseLoader):
                                 break
 
                 if nested_zip_path is None:
-                    MiscLoader.logger.error(f"[!] Could not find nested zip '{nested_zip_name}' in {main_extracted_dir}")
-                    return None
+                    raise FileNotFoundError(f"Could not find zip file {nested_zip_path}")
 
             try:
                 LoaderTools.extract_zip_file_content(nested_zip_path, unzip_target_subdir="PretreatedDatasets")
             except Exception as e:
-                MiscLoader.logger.error(f"[!] Failed to extract nested pretreated zip: {e}")
-                return None
+                raise Exception(f"Failed to extract nested zip {nested_zip_path}: {e}")
 
         # Find the specific MAT file
         mat_filename = f"{pretreatment}_{spectral_range}.mat"
