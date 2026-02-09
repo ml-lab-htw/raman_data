@@ -27,7 +27,7 @@ class GoogleDriveLoader(BaseLoader):
                 task_type=TASK_TYPE.Classification,
                 application_type=APPLICATION_TYPE.MaterialScience,
                 id=f"rruff_mineral_{processed.lower()}",
-                name=f"RRUFF Database ({processed})",
+                name=f"RRUFF Minerals ({processed})",
                 loader=lambda cache_path, p=processed: GoogleDriveLoader._load_onewarmheart(
                     cache_path, split=f"mineral_{p.lower()}"),
                 metadata={
