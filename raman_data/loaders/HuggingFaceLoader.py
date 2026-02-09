@@ -87,14 +87,14 @@ class HuggingFaceLoader(BaseLoader):
                 "description": "Counterpart to the benchtop fuel dataset, acquired from the same 179 samples using a handheld 785 nm spectrometer. Used for benchmarking model transferability across different hardware and wavelengths."
             }
         ),
-        "ethanolic_fermentation": DatasetInfo(
+        "yeast_fermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             application_type=APPLICATION_TYPE.Biological,
-            id="ethanolic_fermentation",
-            name="Ethanolic Fermentation of Immobilized Yeast",
+            id="yeast_fermentation",
+            name="Yeast Fermentation",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Gasoline Properties Raman Dataset (Handheld)",
+                "full_name": "Ethanolic Yeast Fermentation Raman Dataset",
                 "hf_key": "HTW-KI-Werkstatt/RamanSpectraEthanolicYeastFermentations",
                 "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanSpectraEthanolicYeastFermentations",
                 "paper": "https://doi.org/10.1002/bit.27112",
