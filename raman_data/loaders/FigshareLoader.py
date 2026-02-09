@@ -27,7 +27,7 @@ class FigshareLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.Medical,
             id="pharmaceutical_ingredients",
-            name="Active Pharmaceutical Ingredients",
+            name="Pharmaceutical Ingredients",
             loader=lambda cache_path: FigshareLoader._load_api(cache_path),
             metadata={
                 "full_name": "Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development",
