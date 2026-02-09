@@ -381,7 +381,6 @@ class MiscLoader(BaseLoader):
         if not os.path.exists(dataset_cache):
             raise Exception("Dataset not found. Please contact the authors.")
 
-
         spectra_path = os.path.join(dataset_cache, "covid19.xls")
 
         xls = pd.ExcelFile(spectra_path)
@@ -394,7 +393,7 @@ class MiscLoader(BaseLoader):
         spectra = data.iloc[:, 1:].values.astype(float)
 
         targets = data.keys()[1:].to_list()
-        encoded_targets = ["covid" in label for label in targets]
+        encoded_targets = np.array(["covid" in label for label in targets], dtype=int)
         target_names = ["control", "covid"]
 
         return spectra.T, raman_shifts, encoded_targets, target_names
