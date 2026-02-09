@@ -79,7 +79,7 @@ class KaggleLoader(BaseLoader):
                 task_type=TASK_TYPE.Classification,
                 application_type=APPLICATION_TYPE.Biological,
                 id=f"cancer_cell_{element.lower()}",
-                name=f"SERS Cancer Cell Metabolite ({element})",
+                name=f"Cancer Cell Metabolite ({element})",
                 loader=lambda element=element: KaggleLoader.__load_andriitrelin(element),
                 metadata={
                     "full_name": "andriitrelin_cells-raman-spectra",
