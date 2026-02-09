@@ -1,7 +1,7 @@
 import glob
 import logging
 import os
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Callable
 
 import numpy as np
 import pandas as pd
@@ -25,23 +25,6 @@ class RWTHLoader(BaseLoader):
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.RWTH)
 
     DATASETS = {
-        "flow_synthesis": DatasetInfo(
-            task_type=TASK_TYPE.Regression,
-            application_type=APPLICATION_TYPE.Chemical,
-            id="flow_synthesis",
-            name="Flow Synthesis",
-            loader=lambda cache_path: RWTHLoader._load_flow_synthesis(cache_path),
-            metadata={
-                "full_name": "Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis",
-                "source": "https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
-                "paper": "https://doi.org/10.1016/j.cej.2023.147567",
-                "citation": [
-                    "Kaven, Luise F and Schweidtmann, Artur M and Keil, Jan and Israel, Jana and Wolter, Nadja and Mitsos, Alexander. Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis. Chemical Engineering Journal, 479, 147567, 2024, Elsevier"
-                ],
-                "description": "This data set contains in-line Raman spectroscopy measurements and predicted microgel sizes from Dynamic Light Scattering (DLS).The Raman spectroscopy measurements were conducted inside a customized measurement cell for monitoring in a tubular flow reactor.Inside the flow reactor, the microgel synthesis based on the monomer N-Isopropylacrylamid and the crosslinker N, N' Methylenebis(acrylamide) takes place.",
-                "license": "CC BY 4.0"
-            }
-        ),
         "flow_microgel_synthesis": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             application_type=APPLICATION_TYPE.Chemical,
@@ -49,11 +32,14 @@ class RWTHLoader(BaseLoader):
             name="Microgel Synthesis in Flow",
             loader=lambda cache_path: RWTHLoader._load_flow_microgel_synthesis(cache_path),
             metadata={
-                "full_name": "Data-driven Product-Process Optimization of N-isopropylacrylamide Microgel Synthesis in Flow",
+                "full_name": "Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis",
                 "source": "https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
-                "paper": "https://doi.org/10.18154/RWTH-2023-05551",
+                "paper": [
+                    "https://doi.org/10.1016/j.cej.2023.147567",
+                    "https://doi.org/10.18154/RWTH-2023-05551"
+                ],
                 "citation": [
-                    "Kaven, Luise F., et al. 'Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis.' Chemical Engineering Journal 479 (2024): 147567."
+                    "Kaven, Luise F and Schweidtmann, Artur M and Keil, Jan and Israel, Jana and Wolter, Nadja and Mitsos, Alexander. Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis. Chemical Engineering Journal, 479, 147567, 2024, Elsevier"
                 ],
                 "description": "This data set contains in-line Raman spectroscopy measurements and predicted microgel sizes from Dynamic Light Scattering (DLS).The Raman spectroscopy measurements were conducted inside a customized measurement cell for monitoring in a tubular flow reactor.Inside the flow reactor, the microgel synthesis based on the monomer N-Isopropylacrylamid and the crosslinker N, N' Methylenebis(acrylamide) takes place.",
                 "license": "CC BY 4.0"
@@ -211,22 +197,22 @@ class RWTHLoader(BaseLoader):
         )
 
     @staticmethod
-    def _load_flow_synthesis(cache_path: str):
-        zip_path = os.path.join(cache_path, "Raman_Spectroscopy_Measurements.zip")
+    def _download_and_extract(cache_path: str, url: str, zip_name: str, extracted_dir: str):
+        zip_path = os.path.join(cache_path, zip_name)
         if not os.path.exists(zip_path):
-            LoaderTools.download(
-                url="https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
-                out_dir_path=cache_path,
-                out_file_name="Raman_Spectroscopy_Measurements.zip"
-            )
-
-        extracted_dir = os.path.join(cache_path, "RamanSpectroscopy")
+            LoaderTools.download(url=url, out_dir_path=cache_path, out_file_name=zip_name)
         if not os.path.isdir(extracted_dir):
             LoaderTools.extract_zip_file_content(zip_path)
 
-        spc_files = glob.glob(os.path.join(extracted_dir, "*.spc"), recursive=True)
+    @staticmethod
+    def _load_spc_spectra(
+            spc_dir: str,
+            target_extractor: Callable[[str], str],
+            dataset_label: str,
+    ):
+        spc_files = glob.glob(os.path.join(spc_dir, "*.spc"), recursive=True)
         if not spc_files:
-            raise FileNotFoundError(f"[!] No .spc files found in {extracted_dir}")
+            raise FileNotFoundError(f"[!] No .spc files found in {spc_dir}")
 
         spectra_list = []
         raman_shifts_list = []
@@ -239,8 +225,7 @@ class RWTHLoader(BaseLoader):
                     RWTHLoader.logger.warning(f"[!] No spectra found in {spc_file}")
                     continue
 
-                # TODO how to get the real target? from filename? somewhere else?
-                target = os.path.splitext(os.path.basename(spc_file))[0][18:23]
+                target = target_extractor(spc_file)
                 for spec in dataset:
                     spectra_list.append(spec.data.flatten())
                     raman_shifts_list.append(np.array(spec.x.values))
@@ -251,7 +236,7 @@ class RWTHLoader(BaseLoader):
                 continue
 
         if len(spectra_list) == 0:
-            raise ValueError(f"[!] No spectra could be loaded from .spc files in {extracted_dir}")
+            raise ValueError(f"[!] No spectra could be loaded from .spc files in {spc_dir}")
 
         first_rs = raman_shifts_list[0]
         all_equal = (
@@ -266,64 +251,29 @@ class RWTHLoader(BaseLoader):
         encoded_targets, target_names = encode_labels(targets_list)
 
         RWTHLoader.logger.debug(
-            f"Loaded Flow Synthesis dataset: {spectra.shape[0]} spectra, "
+            f"Loaded {dataset_label}: {spectra.shape[0]} spectra, "
             f"{spectra.shape[1]} wavenumber points, "
             f"{len(target_names)} unique targets"
         )
-        return spectra, raman_shifts, encoded_targets, list(target_names)
+        return spectra, raman_shifts, encoded_targets, list(target_names), targets_list
 
     @staticmethod
     def _load_flow_microgel_synthesis(cache_path: str):
-        zip_path = os.path.join(cache_path, "Raman_Spectroscopy_Measurements.zip")
-        if not os.path.exists(zip_path):
-            LoaderTools.download(
-                url="https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
-                out_dir_path=cache_path,
-                out_file_name="Raman_Spectroscopy_Measurements.zip"
-            )
-
         extracted_dir = os.path.join(cache_path, "RamanSpectroscopy")
-        if not os.path.isdir(extracted_dir):
-            LoaderTools.extract_zip_file_content(zip_path)
+        RWTHLoader._download_and_extract(
+            cache_path,
+            url="https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
+            zip_name="Raman_Spectroscopy_Measurements.zip",
+            extracted_dir=extracted_dir,
+        )
 
-        spc_files = glob.glob(os.path.join(extracted_dir, "*.spc"), recursive=True)
-        if not spc_files:
-            raise FileNotFoundError(f"[!] No .spc files found in {extracted_dir}")
+        # TODO how to get the real target? from filename? somewhere else?
+        def extract_target(spc_file: str) -> str:
+            return os.path.splitext(os.path.basename(spc_file))[0][18:23]
 
-        spectra_list = []
-        raman_shifts_list = []
-        targets_list = []
-
-        for spc_file in spc_files:
-            try:
-                dataset = scp.read_spc(spc_file)
-                if dataset is None or len(dataset) == 0:
-                    RWTHLoader.logger.warning(f"[!] No spectra found in {spc_file}")
-                    continue
-
-                # TODO how to get the real target? from filename? somewhere else?
-                target = os.path.splitext(os.path.basename(spc_file))[0][18:23]
-                for spec in dataset:
-                    spectra_list.append(spec.data.flatten())
-                    raman_shifts_list.append(np.array(spec.x.values))
-                    targets_list.append(target)
-
-            except Exception as e:
-                RWTHLoader.logger.warning(f"[!] Failed to read {spc_file}: {e}")
-                continue
-
-        if len(spectra_list) == 0:
-            raise ValueError(f"[!] No spectra could be loaded from .spc files in {extracted_dir}")
-
-        first_rs = raman_shifts_list[0]
-        all_equal = (
-            all(len(first_rs) == len(rs) for rs in raman_shifts_list)
-            and all(np.allclose(first_rs, rs) for rs in raman_shifts_list))
-        if all_equal:
-            raman_shifts = np.array(first_rs, dtype=float)
-            spectra = np.stack(spectra_list)
-        else:
-            raman_shifts, spectra = LoaderTools.align_raman_shifts(raman_shifts_list, spectra_list)
+        spectra, raman_shifts, encoded_targets, target_names, targets_list = RWTHLoader._load_spc_spectra(
+            extracted_dir, extract_target, "Flow Microgel Synthesis"
+        )
 
         xlsx_files = {
             20: "Dynamic_Light_Scattering_size_predictions_at_20%C2%B0C.xlsx",
@@ -350,28 +300,17 @@ class RWTHLoader(BaseLoader):
         # TODO: how to use this?
         hydraulic_radius_values = [hydraulic_radius.get(target.replace("-", "."), np.nan) for target in targets_list]
 
-        encoded_targets, target_names = encode_labels(targets_list)
-
-        RWTHLoader.logger.debug(
-            f"Loaded Flow Microgel Synthesis dataset: {spectra.shape[0]} spectra, "
-            f"{spectra.shape[1]} wavenumber points, "
-            f"{len(target_names)} unique targets"
-        )
-        return spectra, raman_shifts, encoded_targets, list(target_names)
+        return spectra, raman_shifts, encoded_targets, target_names
 
     @staticmethod
     def _load_microgel_synthesis(cache_path: str):
-        zip_path = os.path.join(cache_path, "Raman_spectra_and_Indirect_Hard_Models.zip")
-        if not os.path.exists(zip_path):
-            LoaderTools.download(
-                url="https://publications.rwth-aachen.de/record/834113/files/Raman_spectra_and_Indirect_Hard_Models.zip?version=1?version=1",
-                out_dir_path=cache_path,
-                out_file_name="Raman_spectra_and_Indirect_Hard_Models.zip"
-            )
-
         extracted_dir = os.path.join(cache_path, "Raman spectra and Indirect Hard Models")
-        if not os.path.isdir(extracted_dir):
-            LoaderTools.extract_zip_file_content(zip_path)
+        RWTHLoader._download_and_extract(
+            cache_path,
+            url="https://publications.rwth-aachen.de/record/834113/files/Raman_spectra_and_Indirect_Hard_Models.zip?version=1?version=1",
+            zip_name="Raman_spectra_and_Indirect_Hard_Models.zip",
+            extracted_dir=extracted_dir,
+        )
 
         data_folder = os.path.join(extracted_dir, "Data_pub")
         if not os.path.exists(data_folder):
@@ -380,53 +319,14 @@ class RWTHLoader(BaseLoader):
         # TODO: which subfolder to use?
         sub_folder = os.path.join(data_folder, "3_Synthesis experiments", "20190606_70°C_Exp3")
 
-        spc_files = glob.glob(os.path.join(sub_folder, "*.spc"), recursive=True)
-        if not spc_files:
-            raise FileNotFoundError(f"[!] No .spc files found in {data_folder}")
+        # TODO how to get the real target? from filename? somewhere else?
+        def extract_target(spc_file: str) -> str:
+            return os.path.splitext(os.path.basename(spc_file))[0][19:24].replace("_", "")
 
-        spectra_list = []
-        raman_shifts_list = []
-        targets_list = []
-
-        for spc_file in spc_files:
-            try:
-                dataset = scp.read_spc(spc_file)
-                if dataset is None or len(dataset) == 0:
-                    RWTHLoader.logger.warning(f"[!] No spectra found in {spc_file}")
-                    continue
-
-                # TODO how to get the real target? from filename? somewhere else?
-                target = os.path.splitext(os.path.basename(spc_file))[0][19:24].replace("_", "")
-                for spec in dataset:
-                    spectra_list.append(spec.data.flatten())
-                    raman_shifts_list.append(np.array(spec.x.values))
-                    targets_list.append(target)
-
-            except Exception as e:
-                RWTHLoader.logger.warning(f"[!] Failed to read {spc_file}: {e}")
-                continue
-
-        if len(spectra_list) == 0:
-            raise ValueError(f"[!] No spectra could be loaded from .spc files in {data_folder}")
-
-        first_rs = raman_shifts_list[0]
-        all_equal = (
-            all(len(first_rs) == len(rs) for rs in raman_shifts_list)
-            and all(np.allclose(first_rs, rs) for rs in raman_shifts_list))
-        if all_equal:
-            raman_shifts = np.array(first_rs, dtype=float)
-            spectra = np.stack(spectra_list)
-        else:
-            raman_shifts, spectra = LoaderTools.align_raman_shifts(raman_shifts_list, spectra_list)
-
-        encoded_targets, target_names = encode_labels(targets_list)
-
-        RWTHLoader.logger.debug(
-            f"Loaded Microgel Synthesis dataset: {spectra.shape[0]} spectra, "
-            f"{spectra.shape[1]} wavenumber points, "
-            f"{len(target_names)} unique targets"
+        spectra, raman_shifts, encoded_targets, target_names, _ = RWTHLoader._load_spc_spectra(
+            sub_folder, extract_target, "Microgel Synthesis"
         )
-        return spectra, raman_shifts, encoded_targets, list(target_names)
+        return spectra, raman_shifts, encoded_targets, target_names
 
     @staticmethod
     def _load_acid_species(cache_path: str, subtype: str = "Succinic"):
