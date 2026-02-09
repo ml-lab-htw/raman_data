@@ -171,17 +171,17 @@ class GoogleDriveLoader(BaseLoader):
             if "raw" in split:
                 raman_shifts_list = np.load(os.path.join(split_root, "xx.npy"), allow_pickle=True).tolist()
                 spectra_list = np.load(os.path.join(split_root, "xy.npy"), allow_pickle=True).tolist()
-                targets = np.load(os.path.join(split_root, "yclass.npy"), allow_pickle=True).tolist()
+                targets = np.load(os.path.join(split_root, "yclass.npy"), allow_pickle=True)
 
                 raman_shifts, spectra = LoaderTools.align_raman_shifts(raman_shifts_list, spectra_list)
             elif "preprocess" in split:
                 # see: https://github.com/onewarmheart/Raman/blob/master/code-ZR/code/preprocess/organics_interpolate.py
                 raman_shifts = np.linspace(200, 3700, 1100)[:1024] # this is from the original repo. idk why they do this so complicated
                 spectra = np.load(os.path.join(split_root, "after-preprocess", "xy.npy"), allow_pickle=True)
-                targets = np.load(os.path.join(split_root, "after-preprocess","yclass.npy"), allow_pickle=True).tolist()
+                targets = np.load(os.path.join(split_root, "after-preprocess","yclass.npy"), allow_pickle=True)
 
         else:
             raise ValueError(f"Unknown split name: {split}")
 
-        class_names = targets.unique().tolist() if hasattr(targets, "unique") else list(set(targets))
+        class_names = np.unique(targets).tolist()
         return spectra, raman_shifts, targets, class_names
