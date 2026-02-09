@@ -84,11 +84,11 @@ class MiscLoader(BaseLoader):
             }
         ),
         **{
-            f"sop_spectral_library_{process.lower().replace(' ', '_')}": DatasetInfo(
+            f"synthetic_organic_pigments_{process.lower().replace(' ', '_')}": DatasetInfo(
                 task_type=TASK_TYPE.Regression,
                 application_type=APPLICATION_TYPE.MaterialScience,
-                id=f"sop_spectral_library_{process.lower().replace(' ', '_')}",
-                name=f"SOP Spectral Library ({process})",
+                id=f"synthetic_organic_pigments_{process.lower().replace(' ', '_')}",
+                name=f"Synthetic Organic Pigments ({process})",
                 loader=lambda cache_path, p=process.lower().replace(' ', '_'): MiscLoader._load_sop_spectral_library(cache_path,
                                                                                 variant=p),
                 metadata={
