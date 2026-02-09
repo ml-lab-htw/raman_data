@@ -260,7 +260,7 @@ class ZenodoLoader(BaseLoader):
                 task_type=TASK_TYPE.Regression,
                 application_type=APPLICATION_TYPE.Chemical,
                 id="3572359",
-                name=f"Adenine Dataset ({type} {material})",
+                name=f"Adenine ({type} {material})",
                 file_typ="*.csv",
                 loader=lambda cache_path, t=type, m=material: ZenodoLoader.__load_3572359(cache_path, t, m),
                 metadata={
