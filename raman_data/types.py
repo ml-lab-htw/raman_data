@@ -124,6 +124,38 @@ class RamanDataset:
     info: DatasetInfo | None = None
     target_names: List[str] = field(default_factory=list)
 
+    def __post_init__(self):
+        self.spectra = self._to_ndarray(self.spectra, "spectra")
+        self.targets = self._to_ndarray(self.targets, "targets")
+        self.raman_shifts = self._to_ndarray(self.raman_shifts, "raman_shifts")
+
+        if self.spectra.ndim not in (1, 2):
+            raise ValueError(f"spectra must be 1D or 2D, got {self.spectra.ndim}D")
+        if self.targets.ndim not in (1, 2):
+            raise ValueError(f"targets must be 1D or 2D, got {self.targets.ndim}D")
+        if self.raman_shifts.ndim != 1:
+            raise ValueError(f"raman_shifts must be 1D, got {self.raman_shifts.ndim}D")
+
+        if self.spectra.ndim == 2 and self.spectra.shape[1] != self.raman_shifts.shape[0]:
+            raise ValueError(
+                f"spectra columns ({self.spectra.shape[1]}) must match "
+                f"raman_shifts length ({self.raman_shifts.shape[0]})"
+            )
+        if self.spectra.shape[0] != self.targets.shape[0]:
+            raise ValueError(
+                f"spectra rows ({self.spectra.shape[0]}) must match "
+                f"targets rows ({self.targets.shape[0]})"
+            )
+
+    @staticmethod
+    def _to_ndarray(value, name: str) -> np.ndarray:
+        if isinstance(value, np.ndarray):
+            return value
+        try:
+            return np.asarray(value)
+        except (ValueError, TypeError) as e:
+            raise TypeError(f"Cannot convert {name} to ndarray: {e}")
+
     @property
     def name(self) -> str:
         return self.info.name if self.info is not None else "Unknown Dataset"
@@ -144,10 +176,7 @@ class RamanDataset:
         Returns:
             int: The number of individual spectra (rows in the spectra array).
         """
-        if isinstance(self.spectra, list):
-            return len(self.spectra)
-        else:
-            return self.spectra.shape[0]
+        return self.spectra.shape[0]
 
     @property
     def n_frequencies(self) -> int:
@@ -158,9 +187,7 @@ class RamanDataset:
             int: The number of frequency/wavenumber points (columns in spectra array),
                  or 0 if spectra is 1-dimensional.
         """
-        if isinstance(self.spectra, list):
-            raise ValueError("spectra with multiple frequencies")
-        return self.spectra.shape[1] if len(self.spectra.shape) > 1 else 0
+        return self.spectra.shape[1] if self.spectra.ndim > 1 else 0
 
     @property
     def n_raman_shifts(self) -> int:
@@ -170,9 +197,7 @@ class RamanDataset:
         Returns:
             int: The number of Raman shift/wavenumber values, or 0 if empty.
         """
-        if isinstance(self.spectra, list):
-            raise ValueError("spectra with multiple raman shifts")
-        return self.raman_shifts.shape[0] if len(self.raman_shifts.shape) > 0 else 0
+        return self.raman_shifts.shape[0]
 
     @property
     def n_classes(self) -> Optional[int]:
@@ -219,10 +244,7 @@ class RamanDataset:
         Returns:
             float: The minimum wavenumber/Raman shift value in cm⁻¹.
         """
-        if isinstance(self.raman_shifts, list):
-            return min([rs.min() for rs in self.raman_shifts])
-        else:
-            return self.raman_shifts.min()
+        return self.raman_shifts.min()
 
     @property
     def max_shift(self):
@@ -232,10 +254,7 @@ class RamanDataset:
         Returns:
             float: The maximum wavenumber/Raman shift value in cm⁻¹.
         """
-        if isinstance(self.raman_shifts, list):
-            return max([rs.max() for rs in self.raman_shifts])
-        else:
-            return self.raman_shifts.max()
+        return self.raman_shifts.max()
 
     def to_dataframe(self, target_idx) -> pd.DataFrame:
         """
