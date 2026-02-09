@@ -229,8 +229,9 @@ class GitHubLoader(BaseLoader):
             raman_shifts = np.array(first_rs, dtype=float)
             spectra = np.stack([np.array(s, dtype=float) for s in spectra_list])
         else:
-            raman_shifts = [np.array(rs, dtype=float) for rs in raman_shifts_list]
-            spectra = [np.array(s, dtype=float) for s in spectra_list]
+            # raman_shifts = [np.array(rs, dtype=float) for rs in raman_shifts_list]
+            # spectra = [np.array(s, dtype=float) for s in spectra_list]
+            raman_shifts, spectra = LoaderTools.align_raman_shifts(raman_shifts_list, spectra_list)
 
         class_names = unique_categories
 
