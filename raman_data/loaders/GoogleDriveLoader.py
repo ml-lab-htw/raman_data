@@ -42,26 +42,26 @@ class GoogleDriveLoader(BaseLoader):
             )
             for processed in ["Raw", "Preprocess"]
         },
-        **{
-            f"organic_compounds_{processed.lower()}": DatasetInfo(
-                task_type=TASK_TYPE.Classification,
-                application_type=APPLICATION_TYPE.Chemical,
-                id=f"organic_compounds_{processed.lower()}",
-                name=f"Organic Compounds ({processed})",
-                loader=lambda cache_path, p=processed: GoogleDriveLoader._load_onewarmheart(
-                    cache_path, split=f"organic_{p.lower()}"),
-                metadata={
-                    "full_name": f"Organic Compounds Multi-Excitation Dataset - {processed}",
-                    "source": "https://data.dtu.dk/api/files/36144495",
-                    "paper": "https://doi.org/10.1002/jrs.5750",
-                    "citation": [
-                        "Zhang, Rui et al., Transfer-learning-based Raman spectra identification, Journal of Raman Spectroscopy, 2020, 51, 1, 176-186. https://doi.org/10.1002/jrs.5992"
-                    ],
-                    "description": f"{processed} Raman spectra of organic compounds collected with several different excitation sources. Designed to benchmark transfer learning and domain adaptation for chemical identification with limited data.",
-                }
-            )
-            for processed in ["Raw", "Preprocess"]
-        },
+        # **{ TODO: temporarily disabled due to issues with the targets.
+        #     f"organic_compounds_{processed.lower()}": DatasetInfo(
+        #         task_type=TASK_TYPE.Classification,
+        #         application_type=APPLICATION_TYPE.Chemical,
+        #         id=f"organic_compounds_{processed.lower()}",
+        #         name=f"Organic Compounds ({processed})",
+        #         loader=lambda cache_path, p=processed: GoogleDriveLoader._load_onewarmheart(
+        #             cache_path, split=f"organic_{p.lower()}"),
+        #         metadata={
+        #             "full_name": f"Organic Compounds Multi-Excitation Dataset - {processed}",
+        #             "source": "https://data.dtu.dk/api/files/36144495",
+        #             "paper": "https://doi.org/10.1002/jrs.5750",
+        #             "citation": [
+        #                 "Zhang, Rui et al., Transfer-learning-based Raman spectra identification, Journal of Raman Spectroscopy, 2020, 51, 1, 176-186. https://doi.org/10.1002/jrs.5992"
+        #             ],
+        #             "description": f"{processed} Raman spectra of organic compounds collected with several different excitation sources. Designed to benchmark transfer learning and domain adaptation for chemical identification with limited data.",
+        #         }
+        #     )
+        #     for processed in ["Raw", "Preprocess"]
+        # },
     }
     logger = logging.getLogger(__name__)
 
