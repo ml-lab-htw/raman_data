@@ -58,3 +58,11 @@ def test_misc_loader_load_missing():
     # Should print missing file warning and return None if files are missing
     dataset = MiscLoader.load_dataset("deepr_denoising", cache_path="/tmp/nonexistent_misc")
     assert dataset is None
+
+
+def test_misc_loader_load_missing():
+    # the timegate dataset is small and can be included in the repo for testing
+    dataset = HuggingFaceLoader.load_dataset("bioprocess_analytes_timegate")
+    assert dataset.target_names == ["Glucose", "Acetate", "MagnesiumSulfate"]
+    assert dataset.spectra.shape == (133, 486)
+

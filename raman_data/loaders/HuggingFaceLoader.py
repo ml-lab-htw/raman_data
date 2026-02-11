@@ -114,7 +114,119 @@ class HuggingFaceLoader(BaseLoader):
                 "paper": "https://doi.org/10.1016/B978-0-443-28824-1.50510-X",
                 "description": "Monitoring of P(HB-co-HHx) copolymer synthesis in Ralstonia eutropha batch cultivations. Includes a hybrid mix of experimental and high-fidelity synthetic data to handle high multicollinearity between process variables."
             }
-        )
+        ),
+        "bioprocess_analytes_anton_532": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="bioprocess_analytes_anton_532",
+            name="Bioprocess Analytes Anton 532",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Raman Spectra of Bioprocess Analytes Anton 532",
+                "hf_key": "chlange/RamanSpectraBioprocessAnalystesAnton532",
+                "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesAnton532",
+                "paper": "https://doi.org/10.1016/j.saa.2025.125861",
+                "description": "This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground truth concentration labels verified by enzymatic assays, reflecting the concentration ranges typically found in E. coli fermentation processes."
+            }
+        ),
+        "bioprocess_analytes_anton_785": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="bioprocess_analytes_anton_785",
+            name="Bioprocess Analytes Anton 785",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Raman Spectra of Bioprocess Analytes Anton 785",
+                "hf_key": "chlange/RamanSpectraBioprocessAnalystesAnton785",
+                "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesAnton785",
+                "paper": "https://doi.org/10.1016/j.saa.2025.125861",
+                "description": "This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground truth concentration labels verified by enzymatic assays, reflecting the concentration ranges typically found in E. coli fermentation processes."
+            }
+        ),
+        "bioprocess_analytes_kaiser": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="bioprocess_analytes_kaiser",
+            name="Bioprocess Analytes Kaiser",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Raman Spectra of Bioprocess Analytes Kaiser",
+                "hf_key": "chlange/RamanSpectraBioprocessAnalystesKaiser",
+                "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesKaiser",
+                "paper": "https://doi.org/10.1016/j.saa.2025.125861",
+                "description": "This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground truth concentration labels verified by enzymatic assays, reflecting the concentration ranges typically found in E. coli fermentation processes."
+            }
+        ),
+        "bioprocess_analytes_metrohm": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="bioprocess_analytes_metrohm",
+            name="Bioprocess Analytes Metrohm",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Raman Spectra of Bioprocess Analytes Metrohm",
+                "hf_key": "chlange/RamanSpectraBioprocessAnalystesMetrohm",
+                "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesMetrohm",
+                "paper": "https://doi.org/10.1016/j.saa.2025.125861",
+                "description": "This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground truth concentration labels verified by enzymatic assays, reflecting the concentration ranges typically found in E. coli fermentation processes."
+            }
+        ),
+        "bioprocess_analytes_mettler_toledo": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="bioprocess_analytes_mettler_toledo",
+            name="Bioprocess Analytes Mettler Toledo",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Raman Spectra of Bioprocess Analytes Mettler Toledo",
+                "hf_key": "chlange/RamanSpectraBioprocessAnalystesMettlerToledo",
+                "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesMettlerToledo",
+                "paper": "https://doi.org/10.1016/j.saa.2025.125861",
+                "description": "This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground truth concentration labels verified by enzymatic assays, reflecting the concentration ranges typically found in E. coli fermentation processes."
+            }
+        ),
+        "bioprocess_analytes_tec5": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="bioprocess_analytes_tec5",
+            name="Bioprocess Analytes Tec5",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Raman Spectra of Bioprocess Analytes Tec5",
+                "hf_key": "chlange/RamanSpectraBioprocessAnalystesTec5",
+                "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesTec5",
+                "paper": "https://doi.org/10.1016/j.saa.2025.125861",
+                "description": "This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground truth concentration labels verified by enzymatic assays, reflecting the concentration ranges typically found in E. coli fermentation processes."
+            }
+        ),
+        "bioprocess_analytes_timegate": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="bioprocess_analytes_timegate",
+            name="Bioprocess Analytes Timegate",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Raman Spectra of Bioprocess Analytes Timegate",
+                "hf_key": "chlange/RamanSpectraBioprocessAnalystesTimegate",
+                "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesTimegate",
+                "paper": "https://doi.org/10.1016/j.saa.2025.125861",
+                "description": "This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground truth concentration labels verified by enzymatic assays, reflecting the concentration ranges typically found in E. coli fermentation processes."
+            }
+        ),
+        "bioprocess_analytes_tornado": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="bioprocess_analytes_tornado",
+            name="Bioprocess Analytes Tornado",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Raman Spectra of Bioprocess Analytes Tornado",
+                "hf_key": "chlange/RamanSpectraBioprocessAnalystesTornado",
+                "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesTornado",
+                "paper": "https://doi.org/10.1016/j.saa.2025.125861",
+                "description": "This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground truth concentration labels verified by enzymatic assays, reflecting the concentration ranges typically found in E. coli fermentation processes."
+            }
+        ),
     }
 
     @staticmethod
