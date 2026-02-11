@@ -38,18 +38,20 @@ def test_list_classification_datasets():
     expected = set(datasets.list_datasets(task_type=TASK_TYPE.Classification))
     assert set(classification_datasets) == expected
 
+
 def test_load_dataset():
     """
     Tests loading a dataset.
     """
     test_datasets = [
-        "diabetes_skin_ear_lobe",                  # hosted on Kaggle
-        "bioprocess_substrates",                # hosted on HuggingFace
-        "adenine_solid_gold"                               # hosted on Zenodo
+        "cancer_cell_cooh",            # hosted on Kaggle
+        "fuel_handheld",               # hosted on HuggingFace
+        "adenine_solid_gold"           # hosted on Zenodo
     ]
     for dataset_name in test_datasets:
         print(f"Loading {dataset_name} dataset...")
         dataset = raman_data(dataset_name=dataset_name)
+        print(f"Dimensions of spectra: {dataset.spectra.shape}")
         assert dataset.spectra is not None
         assert dataset.targets is not None
         assert dataset.raman_shifts is not None
