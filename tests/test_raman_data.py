@@ -45,7 +45,7 @@ def test_load_dataset():
     """
     test_datasets = [
         "cancer_cell_cooh",            # hosted on Kaggle
-        "fuel_handheld",               # hosted on HuggingFace
+        "ecoli_fermentation",          # hosted on HuggingFace
         "adenine_solid_gold"           # hosted on Zenodo
     ]
     for dataset_name in test_datasets:
