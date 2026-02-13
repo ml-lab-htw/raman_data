@@ -425,48 +425,68 @@ class MiscLoader(BaseLoader):
         RamanDataset object.
         """
         urls = {
-            "Actinolite": "https://www.odr.io/view/downloadfile/63653?error_type=json",
-            "Andesine": "https://www.odr.io/view/downloadfile/63652?error_type=json",
-            "Anhydrite": "https://www.odr.io/view/downloadfile/63758?error_type=json",
-            "Anorthite": "https://www.odr.io/view/downloadfile/63757?error_type=json",
-            "Anthophyllite": "https://www.odr.io/view/downloadfile/63756?error_type=json",
-            "Antigorite": "https://www.odr.io/view/downloadfile/63754?error_type=json",
-            "Augite": "https://www.odr.io/view/downloadfile/63753?error_type=json",
-            "Barite": "https://www.odr.io/view/downloadfile/63752?error_type=json",
-            "Biotite": "https://www.odr.io/view/downloadfile/63755?error_type=json",
-            "Bronzite": "https://www.odr.io/view/downloadfile/63750?error_type=json",
-            "Bytownite": "https://www.odr.io/view/downloadfile/63651?error_type=json",
-            "Calcite": "https://www.odr.io/view/downloadfile/63751?error_type=json",
-            "Chlorite": "https://www.odr.io/view/downloadfile/63749?error_type=json",
-            "Clinochlore": "https://www.odr.io/view/downloadfile/63748?error_type=json",
-            "Cummingtonite": "https://www.odr.io/view/downloadfile/63650?error_type=json",
-            "Diopside": "https://www.odr.io/view/downloadfile/63746?error_type=json",
-            "Dolomite": "https://www.odr.io/view/downloadfile/63649?error_type=json",
-            "Edenite": "https://www.odr.io/view/downloadfile/63648?error_type=json",
-            "Enstatite": "https://www.odr.io/view/downloadfile/63647?error_type=json",
-            "Epidote": "https://www.odr.io/view/downloadfile/63745?error_type=json",
-            "Ferroactinolite": "https://www.odr.io/view/downloadfile/63747?error_type=json",
-            "Forsterite": "https://www.odr.io/view/downloadfile/63646?error_type=json",
-            "Glaucophane": "https://www.odr.io/view/downloadfile/63744?error_type=json",
-            "Goethite": "https://www.odr.io/view/downloadfile/63743?error_type=json",
-            "Gypsum": "https://www.odr.io/view/downloadfile/63645?error_type=json",
-            "Hedenbergite": "https://www.odr.io/view/downloadfile/63741?error_type=json",
-            "Hematite": "https://www.odr.io/view/downloadfile/63644?error_type=json",
-            "Hornblende": "https://www.odr.io/view/downloadfile/63643?error_type=json",
-            "Hypersthene": "https://www.odr.io/view/downloadfile/63738?error_type=json",
-            "Illite": "https://www.odr.io/view/downloadfile/63642?error_type=json",
-            "Jadeite": "https://www.odr.io/view/downloadfile/63740?error_type=json",
-            "Kaolinite": "https://www.odr.io/view/downloadfile/63739?error_type=json",
-            "Labradorite": "https://www.odr.io/view/downloadfile/63737?error_type=json",
-            "Lizardite": "https://www.odr.io/view/downloadfile/63641?error_type=json",
-            "Magnesite": "https://www.odr.io/view/downloadfile/63659?error_type=json",
-            "Magnetite": "https://www.odr.io/view/downloadfile/63245?error_type=json",
-            "Microcline": "https://www.odr.io/view/downloadfile/63658?error_type=json",
-            "Montmorillonite": "https://www.odr.io/view/downloadfile/63657?error_type=json",
-            "Muscovite": "https://www.odr.io/view/downloadfile/63656?error_type=json",
-            "Oligoclase": "https://www.odr.io/view/downloadfile/63655?error_type=json",
-            "Omphacite": "https://www.odr.io/view/downloadfile/63654?error_type=json",
+            "qtzalb_train_60s_3000.csv": "https://www.odr.io/view/downloadfile/63653?error_type=json",
+            "qtzalb_train_30s_2000.csv": "https://www.odr.io/view/downloadfile/63652?error_type=json",
+            "qtz_train_003s_4760.csv": "https://www.odr.io/view/downloadfile/63758?error_type=json",
+            "qtz_train_003s_1148.csv": "https://www.odr.io/view/downloadfile/63757?error_type=json",
+            "qtz_train_015s_625.csv": "https://www.odr.io/view/downloadfile/63756?error_type=json",
+            "qtz_train_005s_1000.csv": "https://www.odr.io/view/downloadfile/63754?error_type=json",
+            "qtz_train_005s_0900.csv": "https://www.odr.io/view/downloadfile/63753?error_type=json",
+            "qtz_train_003s-1599.csv": "https://www.odr.io/view/downloadfile/63752?error_type=json",
+            "ms_train_015s_5900.csv": "https://www.odr.io/view/downloadfile/63755?error_type=json",
+            "mc_train_015s_3243.csv": "https://www.odr.io/view/downloadfile/63750?error_type=json",
+            "mc_train_3s_2357.csv": "https://www.odr.io/view/downloadfile/63651?error_type=json",
+            "hb_train_120s_1225_01.csv": "https://www.odr.io/view/downloadfile/63751?error_type=json",
+            "hb_train_015s_2500.csv": "https://www.odr.io/view/downloadfile/63749?error_type=json",
+            "hb_train_120s_1225_02.csv": "https://www.odr.io/view/downloadfile/63748?error_type=json",
+            "hb_train_060s_104.csv": "https://www.odr.io/view/downloadfile/63650?error_type=json",
+            "gyp_train_12s_3320.csv": "https://www.odr.io/view/downloadfile/63746?error_type=json",
+            "gyp_train_15s_1680.csv": "https://www.odr.io/view/downloadfile/63649?error_type=json",
+            "foaug_train_60s_3520.csv": "https://www.odr.io/view/downloadfile/63648?error_type=json",
+            "foaug_train_30s_1640.csv": "https://www.odr.io/view/downloadfile/63647?error_type=json",
+            "foalb_train_15s_5220.csv": "https://www.odr.io/view/downloadfile/63745?error_type=json",
+            "fo_train_030s_5040.csv": "https://www.odr.io/view/downloadfile/63747?error_type=json",
+            "fo_train_015s_1100.csv": "https://www.odr.io/view/downloadfile/63646?error_type=json",
+            "en_train_015s_5600.csv": "https://www.odr.io/view/downloadfile/63744?error_type=json",
+            "cal_train_1s_2732.csv": "https://www.odr.io/view/downloadfile/63743?error_type=json",
+            "cal_train_1s_2300.csv": "https://www.odr.io/view/downloadfile/63645?error_type=json",
+            "bt_train_120s_1225.csv": "https://www.odr.io/view/downloadfile/63741?error_type=json",
+            "bt_train_015s_5600.csv": "https://www.odr.io/view/downloadfile/63644?error_type=json",
+            "bt_train_015s_1100.csv": "https://www.odr.io/view/downloadfile/63643?error_type=json",
+            "aug_train_20s_5103.csv": "https://www.odr.io/view/downloadfile/63738?error_type=json",
+            "aug_train_15s_1000.csv": "https://www.odr.io/view/downloadfile/63642?error_type=json",
+            "an_train_015s_5600.csv": "https://www.odr.io/view/downloadfile/63740?error_type=json",
+            "albite_train_015s_5250.csv": "https://www.odr.io/view/downloadfile/63739?error_type=json",
+            "albite_train_015s_625.csv": "https://www.odr.io/view/downloadfile/63737?error_type=json",
+            "albite_train_015s_1100.csv": "https://www.odr.io/view/downloadfile/63641?error_type=json",
+            "L_raw_gabbro50dust_test_015s_9740.csv": "https://www.odr.io/view/downloadfile/63659?error_type=json",
+            "L_raw_granite50dust_test_015s_10000.csv": "https://www.odr.io/view/downloadfile/63245?error_type=json",
+            "L_raw_granite0dust_test_015s_4084_final.csv": "https://www.odr.io/view/downloadfile/63658?error_type=json",
+            "L_raw_granite0dust_test_030s_1373_final.csv": "https://www.odr.io/view/downloadfile/63657?error_type=json",
+            "L_raw_granite0dust_test_015s_5571_final.csv": "https://www.odr.io/view/downloadfile/63656?error_type=json",
+            "L_raw_gabbro0dust_test_015s_8906_final.csv": "https://www.odr.io/view/downloadfile/63655?error_type=json",
+            "L_raw_gabbro0dust_test_015s_46_final.csv": "https://www.odr.io/view/downloadfile/63654?error_type=json",
         }
+
+        label_map = {
+            0: "Quartz",
+            1: "Feldspar - Albite",
+            2: "Amphibole - Hornblende",
+            3: "Mica - Biotite",
+            4: "Mica - Muscovite",
+            5: "Olivine - Forsterite",
+            6: "Pyroxene - Augite",
+            7: "Pyroxene - Enstatite",
+            8: "Feldspar - Anorthite",
+            9: "Feldspar - Microcline",
+            10: "Carbonate - Calcite",
+            11: "Sulfate - Gypsum",
+            12: "50% Quartz / 50% Albite Mix",
+            13: "50% Forsterite / 50% Augite Mix",
+            14: "50% Forsterite / 50% Albite Mix",
+            15: "Granite slab - 50% dust", # This seems to be a mix of other labels
+        }
+
 
         cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
         if cache_root is None:
@@ -477,46 +497,59 @@ class MiscLoader(BaseLoader):
 
         all_spectra = []
         all_labels = []
-        raman_shifts = None
+        all_raman_shifts = []
 
-        file_pathes = []
-        unique_labels = {}
+        for filename, url in urls.items():
+            MiscLoader.logger.info(f"Processing MLROD file: {filename}")
+            file_path = os.path.join(shared_root, filename)
 
-        for mineral, url in urls.items():
-            MiscLoader.logger.info(f"Processing MLROD class: {mineral}")
-            file_path = LoaderTools.download(url=url, out_dir_path=shared_root)
+            if not os.path.exists(file_path):
+                try:
+                    downloaded_path = LoaderTools.download(url=url, out_dir_path=shared_root)
+                    if downloaded_path and downloaded_path != file_path:
+                        os.rename(downloaded_path, file_path)
+                except Exception as e:
+                    MiscLoader.logger.error(f"[!] Failed to download MLROD file {filename}: {e}")
+                    continue
 
-            if not file_path or not os.path.exists(file_path):
-                MiscLoader.logger.error(f"[!] Failed to download MLROD {mineral}, file path not found.")
+            if not os.path.exists(file_path):
+                MiscLoader.logger.error(f"[!] Failed to download MLROD {filename}, file path not found.")
                 continue
 
             try:
                 data = pd.read_csv(file_path, index_col=0)
-                if raman_shifts is None:
-                    raman_shifts = data.keys()[:-1].astype(float).values
 
-                spectra = data.values[:, :-1].astype(float)
-                labels = data.values[:, -1].astype(int)
+                raman_shifts = data.columns[:-1].astype(float).values
+                spectra = data.iloc[:, :-1].values
+                labels = data.iloc[:, -1].values
 
-                all_spectra.append(spectra)
-                all_labels.extend(labels)
+                # Map integer labels to string labels
+                string_labels = [label_map.get(l, "Unknown") for l in labels]
 
-                file_name = os.path.basename(file_path).split(".")[0]
-                file_pathes.append(file_path)
-                unique_labels[file_name] = labels
+                for i in range(spectra.shape[0]):
+                    all_spectra.append(spectra[i])
+                    all_raman_shifts.append(raman_shifts)
+                    all_labels.append(string_labels[i])
 
             except Exception as e:
                 MiscLoader.logger.warning(f"[!] Failed to parse {file_path}: {e}")
 
-
-        for file_path in unique_labels:
-            print(f"{file_path}.csv: {np.unique(unique_labels[file_path])}")
-
-
         if not all_spectra:
             raise FileNotFoundError("No spectra were loaded. Please check download and extraction.")
 
-        spectra_aligned = np.vstack(all_spectra)
+        # Check if all spectra share the same wavenumber axis
+        first_rs = all_raman_shifts[0]
+        all_equal = (
+            all(len(first_rs) == len(rs) for rs in all_raman_shifts)
+            and all(np.allclose(first_rs, rs) for rs in all_raman_shifts)
+        )
+
+        if all_equal:
+            raman_shifts = np.array(first_rs, dtype=float)
+            spectra_aligned = np.stack(all_spectra)
+        else:
+            # Interpolate all spectra to a common wavenumber grid
+            raman_shifts, spectra_aligned = LoaderTools.align_raman_shifts(all_raman_shifts, all_spectra)
 
         # Encode labels
         encoded_targets, class_names = encode_labels(pd.Series(all_labels))
