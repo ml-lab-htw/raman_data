@@ -1,7 +1,7 @@
 import glob
 import logging
 import os
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -81,6 +81,22 @@ class MiscLoader(BaseLoader):
                     "Ho, C.-S., Jean, N., Hogan, C. A., et al. Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Nat Commun 10, 4927 (2019)."
                 ],
                 "description": "60,000 spectra from 30 clinically relevant bacterial and yeast isolates (including an MRSA/MSSA isogenic pair). Acquired with 633 nm illumination on gold-coated silica substrates with low SNR to simulate rapid clinical acquisition times.",
+            }
+        ),
+        "mlrod": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="mlrod",
+            name="Machine Learning Raman Open Dataset (MLROD)",
+            loader=lambda cache_path: MiscLoader._load_mlrod(cache_path),
+            metadata={
+                "full_name": "Machine Learning Raman Open Dataset (MLROD)",
+                "source": "https://www.odr.io/dataset/mlrod-a-machine-learning-raman-open-dataset",
+                "paper": "https://doi.org/10.1029/2021EA002125",
+                "citation": [
+                    "Wiens, R. C., et al. (2021). Convolutional neural networks as a tool for Raman spectral mineral classification under low signal, dusty Mars conditions. Earth and Space Science, 8, e2021EA002125."
+                ],
+                "description": "500,000+ Raman spectra of common rock-forming silicate, carbonate, and sulfate minerals under low signal-to-noise-ratios, Mars-like conditions. No traditional spectral preprocessing such as cosmic ray or baseline removal was employed.",
             }
         ),
         **{
@@ -399,6 +415,115 @@ class MiscLoader(BaseLoader):
         return spectra.T, raman_shifts, encoded_targets, target_names
 
     @staticmethod
+    def _load_mlrod(cache_path: str):
+        """
+        Load the MLROD (Machine Learning Raman Open Dataset).
+
+        This dataset consists of multiple csv files, one for each mineral class.
+        Each csv file contains thousands of individual Raman spectra as columns.
+        The loader will download, and process all of these into a single
+        RamanDataset object.
+        """
+        urls = {
+            "Actinolite": "https://www.odr.io/view/downloadfile/63653?error_type=json",
+            "Andesine": "https://www.odr.io/view/downloadfile/63652?error_type=json",
+            "Anhydrite": "https://www.odr.io/view/downloadfile/63758?error_type=json",
+            "Anorthite": "https://www.odr.io/view/downloadfile/63757?error_type=json",
+            "Anthophyllite": "https://www.odr.io/view/downloadfile/63756?error_type=json",
+            "Antigorite": "https://www.odr.io/view/downloadfile/63754?error_type=json",
+            "Augite": "https://www.odr.io/view/downloadfile/63753?error_type=json",
+            "Barite": "https://www.odr.io/view/downloadfile/63752?error_type=json",
+            "Biotite": "https://www.odr.io/view/downloadfile/63755?error_type=json",
+            "Bronzite": "https://www.odr.io/view/downloadfile/63750?error_type=json",
+            "Bytownite": "https://www.odr.io/view/downloadfile/63651?error_type=json",
+            "Calcite": "https://www.odr.io/view/downloadfile/63751?error_type=json",
+            "Chlorite": "https://www.odr.io/view/downloadfile/63749?error_type=json",
+            "Clinochlore": "https://www.odr.io/view/downloadfile/63748?error_type=json",
+            "Cummingtonite": "https://www.odr.io/view/downloadfile/63650?error_type=json",
+            "Diopside": "https://www.odr.io/view/downloadfile/63746?error_type=json",
+            "Dolomite": "https://www.odr.io/view/downloadfile/63649?error_type=json",
+            "Edenite": "https://www.odr.io/view/downloadfile/63648?error_type=json",
+            "Enstatite": "https://www.odr.io/view/downloadfile/63647?error_type=json",
+            "Epidote": "https://www.odr.io/view/downloadfile/63745?error_type=json",
+            "Ferroactinolite": "https://www.odr.io/view/downloadfile/63747?error_type=json",
+            "Forsterite": "https://www.odr.io/view/downloadfile/63646?error_type=json",
+            "Glaucophane": "https://www.odr.io/view/downloadfile/63744?error_type=json",
+            "Goethite": "https://www.odr.io/view/downloadfile/63743?error_type=json",
+            "Gypsum": "https://www.odr.io/view/downloadfile/63645?error_type=json",
+            "Hedenbergite": "https://www.odr.io/view/downloadfile/63741?error_type=json",
+            "Hematite": "https://www.odr.io/view/downloadfile/63644?error_type=json",
+            "Hornblende": "https://www.odr.io/view/downloadfile/63643?error_type=json",
+            "Hypersthene": "https://www.odr.io/view/downloadfile/63738?error_type=json",
+            "Illite": "https://www.odr.io/view/downloadfile/63642?error_type=json",
+            "Jadeite": "https://www.odr.io/view/downloadfile/63740?error_type=json",
+            "Kaolinite": "https://www.odr.io/view/downloadfile/63739?error_type=json",
+            "Labradorite": "https://www.odr.io/view/downloadfile/63737?error_type=json",
+            "Lizardite": "https://www.odr.io/view/downloadfile/63641?error_type=json",
+            "Magnesite": "https://www.odr.io/view/downloadfile/63659?error_type=json",
+            "Magnetite": "https://www.odr.io/view/downloadfile/63245?error_type=json",
+            "Microcline": "https://www.odr.io/view/downloadfile/63658?error_type=json",
+            "Montmorillonite": "https://www.odr.io/view/downloadfile/63657?error_type=json",
+            "Muscovite": "https://www.odr.io/view/downloadfile/63656?error_type=json",
+            "Oligoclase": "https://www.odr.io/view/downloadfile/63655?error_type=json",
+            "Omphacite": "https://www.odr.io/view/downloadfile/63654?error_type=json",
+        }
+
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            raise Exception(f"No cache root found for {cache_path}")
+
+        shared_root = os.path.join(cache_root, "mlrod")
+        os.makedirs(shared_root, exist_ok=True)
+
+        all_spectra = []
+        all_labels = []
+        raman_shifts = None
+
+        file_pathes = []
+        unique_labels = {}
+
+        for mineral, url in urls.items():
+            MiscLoader.logger.info(f"Processing MLROD class: {mineral}")
+            file_path = LoaderTools.download(url=url, out_dir_path=shared_root)
+
+            if not file_path or not os.path.exists(file_path):
+                MiscLoader.logger.error(f"[!] Failed to download MLROD {mineral}, file path not found.")
+                continue
+
+            try:
+                data = pd.read_csv(file_path, index_col=0)
+                if raman_shifts is None:
+                    raman_shifts = data.keys()[:-1].astype(float).values
+
+                spectra = data.values[:, :-1].astype(float)
+                labels = data.values[:, -1].astype(int)
+
+                all_spectra.append(spectra)
+                all_labels.extend(labels)
+
+                file_name = os.path.basename(file_path).split(".")[0]
+                file_pathes.append(file_path)
+                unique_labels[file_name] = labels
+
+            except Exception as e:
+                MiscLoader.logger.warning(f"[!] Failed to parse {file_path}: {e}")
+
+
+        for file_path in unique_labels:
+            print(f"{file_path}.csv: {np.unique(unique_labels[file_path])}")
+
+
+        if not all_spectra:
+            raise FileNotFoundError("No spectra were loaded. Please check download and extraction.")
+
+        spectra_aligned = np.vstack(all_spectra)
+
+        # Encode labels
+        encoded_targets, class_names = encode_labels(pd.Series(all_labels))
+
+        return spectra_aligned, raman_shifts, encoded_targets, list(class_names)
+
+    @staticmethod
     def _load_sop_spectral_library(cache_path: str, variant: str = "baseline_corrected"):
         """
         Load the SOP (Synthetic Organic Pigments) Spectral Library.
@@ -483,6 +608,7 @@ class MiscLoader(BaseLoader):
         raman_shifts_list = []
         pigment_labels = []
 
+        txt_file = ""
         for txt_file in sorted(txt_files):
             try:
                 # Try common delimiters for two-column data
