@@ -1,6 +1,7 @@
 import glob
 import logging
 import os
+from io import StringIO
 from typing import Optional, Tuple
 
 import numpy as np
@@ -484,7 +485,7 @@ class MiscLoader(BaseLoader):
             12: "50% Quartz / 50% Albite Mix",
             13: "50% Forsterite / 50% Augite Mix",
             14: "50% Forsterite / 50% Albite Mix",
-            15: "Granite slab - 50% dust", # This seems to be a mix of other labels
+            15: "Granite slab - 50% dust",
         }
 
 
@@ -517,7 +518,15 @@ class MiscLoader(BaseLoader):
                 continue
 
             try:
-                data = pd.read_csv(file_path, index_col=0)
+                if "L_raw_granite0dust_test_015s_4084_final" in filename:
+                    with open(file_path, 'r') as f:
+                        file_content = f.read()
+
+                    # Fix malformed float values in the file content
+                    cleaned_content = file_content.replace('1630.89.1', '1630.90')
+                    data = pd.read_csv(StringIO(cleaned_content), index_col=0)
+                else:
+                    data = pd.read_csv(file_path, index_col=0)
 
                 raman_shifts = data.columns[:-1].astype(float).values
                 spectra = data.iloc[:, :-1].values
