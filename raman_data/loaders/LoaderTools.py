@@ -101,7 +101,7 @@ class LoaderTools:
     def download(
             url: str,
             out_dir_path: str,
-            out_file_name: str,
+            out_file_name: Optional[str] = None,
             hash_target: Optional[str] = None,
             hash_type: Optional[HASH_TYPE] = None,
             referer: Optional[str] = None
@@ -114,7 +114,8 @@ class LoaderTools:
             url (str): The URL to download the files from.
             out_dir_path (str): The full path of the directory where
                                 the downloaded files will be saved.
-            out_file_name (str): The name of the file to create.
+            out_file_name (str, optional): The name of the file to create.
+                                           If None, it will be inferred from the Content-Disposition header.
             hash_target (str, optional): Expected hash value of the file for
                                          integrity verification.
             hash_type (HASH_TYPE, optional): The type of provided hash.
@@ -146,11 +147,6 @@ class LoaderTools:
             headers["Referer"] = referer
 
         os.makedirs(out_dir_path, exist_ok=True)
-        out_file_path = os.path.join(out_dir_path, out_file_name)
-
-        # DO NOT trust existing files blindly
-        if os.path.exists(out_file_path):
-            os.remove(out_file_path)
 
         with requests.get(
                 url=url,
@@ -159,8 +155,27 @@ class LoaderTools:
                 allow_redirects=True,
                 timeout=60,
         ) as response:
-
             response.raise_for_status()
+
+            if out_file_name is None:
+                if "Content-Disposition" in response.headers:
+                    content_disposition = response.headers['Content-Disposition']
+                    parts = content_disposition.split(';')
+                    for part in parts:
+                        part = part.strip()
+                        if part.lower().startswith('filename='):
+                            out_file_name = part[len('filename='):].strip('"')
+                            break
+                    else:
+                        out_file_name = url.split('/')[-1]
+                else:
+                    out_file_name = url.split('/')[-1]
+
+            out_file_path = os.path.join(out_dir_path, out_file_name)
+
+            # DO NOT trust existing files blindly
+            if os.path.exists(out_file_path):
+                os.remove(out_file_path)
 
             total_size = (
                     int(response.headers.get("Content-Length", 0)) or None
