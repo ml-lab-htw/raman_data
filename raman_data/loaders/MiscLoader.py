@@ -501,7 +501,7 @@ class MiscLoader(BaseLoader):
         all_raman_shifts = []
 
         for filename, url in urls.items():
-            MiscLoader.logger.info(f"Processing MLROD file: {filename}")
+            MiscLoader.logger.debug(f"Processing MLROD file: {filename}")
             file_path = os.path.join(shared_root, filename)
 
             if not os.path.exists(file_path):
@@ -535,10 +535,13 @@ class MiscLoader(BaseLoader):
                 # Map integer labels to string labels
                 string_labels = [label_map.get(l, "Unknown") for l in labels]
 
-                for i in range(spectra.shape[0]):
-                    all_spectra.append(spectra[i])
-                    all_raman_shifts.append(raman_shifts)
-                    all_labels.append(string_labels[i])
+                all_spectra.extend(spectra)
+                all_raman_shifts.extend([raman_shifts] * spectra.shape[0])
+                all_labels.extend(string_labels)
+
+                # unique_labels = np.unique(labels)
+                # for ul in unique_labels:
+                #     print(f"{os.path.basename(file_path)}: {label_map.get(ul, 'Unknown')} (label {ul}) - {np.sum(labels == ul)} spectra")
 
             except Exception as e:
                 MiscLoader.logger.warning(f"[!] Failed to parse {file_path}: {e}")
