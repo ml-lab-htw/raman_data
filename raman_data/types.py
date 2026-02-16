@@ -129,6 +129,14 @@ class RamanDataset:
         self.targets = self._to_ndarray(self.targets, "targets")
         self.raman_shifts = self._to_ndarray(self.raman_shifts, "raman_shifts")
 
+        # Normalize target_names to always be a list of strings
+        if self.target_names is None:
+            self.target_names = []
+        elif isinstance(self.target_names, str):
+            self.target_names = [self.target_names]
+        else:
+            self.target_names = [str(n) for n in self.target_names]
+
         if self.spectra.ndim not in (1, 2):
             raise ValueError(f"spectra must be 1D or 2D, got {self.spectra.ndim}D")
         if self.targets.ndim not in (1, 2):
