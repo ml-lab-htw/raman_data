@@ -112,34 +112,34 @@ class RWTHLoader(BaseLoader):
             ]
             for spectral_range in ["Global", "FingerPrint"]
         },
-        # **{ # TODO implement loading function
-        #     f"hmf_separation_{todo.lower()}": DatasetInfo(
-        #         task_type=TASK_TYPE.Regression,
-        #         application_type=APPLICATION_TYPE.Chemical,
-        #         id=f"hmf_separation_{todo.lower()}",
-        #         name=f"HMF Separation ({todo})",
-        #         loader=lambda cache_path, todo=todo: RWTHLoader._load_hmf_dataset(cache_path, todo),
-        #         metadata={
-        #             "full_name": f"Liquid–Liquid Equilibrium of 2-MTHF/Water/5-HMF with Sulfate Electrolytes ({todo})",
-        #             "source": "https://doi.org/10.18154/RWTH-2024-01176",
-        #             "description": (
-        #                 "Experimental liquid–liquid equilibrium dataset investigating the phase separation behavior "
-        #                 "of 2-methyltetrahydrofuran (2-MTHF), water, and 5-hydroxymethylfurfural (5-HMF) in the presence "
-        #                 "of sulfate salts and sulfuric acid. The dataset includes mid-infrared (MIR) spectra of organic "
-        #                 "and aqueous phases, calibration compositions, and equilibrium phase compositions measured "
-        #                 "between 293 K and 333 K at atmospheric pressure. Spectral data are analyzed using Indirect Hard "
-        #                 "Modeling and support thermodynamic modeling with ePC-SAFT."
-        #             ),
-        #             "paper": "https://doi.org/10.1021/acs.jced.2c00698",
-        #             "citation": [
-        #                 "Roth, D. M., Haas, M., Echtermeyer, A. W. W., Kaminski, S., Viell, J., and Jupke, A. (2023). "
-        #                 "The Effect of Sulfate Electrolytes on the Liquid–Liquid Equilibrium of 2-MTHF/Water/5-HMF: "
-        #                 "Experimental Study and Thermodynamic Modeling. Journal of Chemical & Engineering Data, 68(6), 1397–1410."
-        #             ],
-        #         }
-        #     )
-        #     for todo in [""]
-        # },
+        **{ # TODO implement loading function
+            f"hmf_separation_{todo.lower()}": DatasetInfo(
+                task_type=TASK_TYPE.Regression,
+                application_type=APPLICATION_TYPE.Chemical,
+                id=f"hmf_separation_{todo.lower()}",
+                name=f"HMF Separation ({todo})",
+                loader=lambda cache_path, todo=todo: RWTHLoader._load_hmf_dataset(cache_path, todo),
+                metadata={
+                    "full_name": f"Liquid–Liquid Equilibrium of 2-MTHF/Water/5-HMF with Sulfate Electrolytes ({todo})",
+                    "source": "https://doi.org/10.18154/RWTH-2024-01176",
+                    "description": (
+                        "Experimental liquid–liquid equilibrium dataset investigating the phase separation behavior "
+                        "of 2-methyltetrahydrofuran (2-MTHF), water, and 5-hydroxymethylfurfural (5-HMF) in the presence "
+                        "of sulfate salts and sulfuric acid. The dataset includes mid-infrared (MIR) spectra of organic "
+                        "and aqueous phases, calibration compositions, and equilibrium phase compositions measured "
+                        "between 293 K and 333 K at atmospheric pressure. Spectral data are analyzed using Indirect Hard "
+                        "Modeling and support thermodynamic modeling with ePC-SAFT."
+                    ),
+                    "paper": "https://doi.org/10.1021/acs.jced.2c00698",
+                    "citation": [
+                        "Roth, D. M., Haas, M., Echtermeyer, A. W. W., Kaminski, S., Viell, J., and Jupke, A. (2023). "
+                        "The Effect of Sulfate Electrolytes on the Liquid–Liquid Equilibrium of 2-MTHF/Water/5-HMF: "
+                        "Experimental Study and Thermodynamic Modeling. Journal of Chemical & Engineering Data, 68(6), 1397–1410."
+                    ],
+                }
+            )
+            for todo in [""]
+        },
     }
     logger = logging.getLogger(__name__)
 

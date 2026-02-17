@@ -24,34 +24,34 @@ class MiscLoader(BaseLoader):
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Misc)
 
     DATASETS = {
-        # "deepr_denoising": DatasetInfo(
-        #     task_type=TASK_TYPE.Denoising,
-        #     id="deepr_denoising",
-        #     name="DeepeR Denoising",
-        #     loader=lambda cache_path: MiscLoader._load_deepr_denoising(cache_path),
-        #     metadata={
-        #         "full_name": "DeepeR Denoising Dataset",
-        #         "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9",
-        #         "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
-        #         "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
-        #         "description": "Raman spectral denoising dataset from DeepeR paper. Contains noisy input spectra and corresponding denoised target spectra for training deep learning denoising models.",
-        #         "license": "MIT License"
-        #     }
-        # ),
-        # "deepr_super_resolution": DatasetInfo(
-        #     task_type=TASK_TYPE.SuperResolution,
-        #     id="deepr_super_resolution",
-        #     name="DeepeR Super-Resolution Dataset",
-        #     loader=lambda cache_path: MiscLoader._load_deepr_super_resolution(cache_path),
-        #     metadata={
-        #         "full_name": "DeepeR Super-Resolution Dataset",
-        #         "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9",
-        #         "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
-        #         "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
-        #         "description": "Hyperspectral super-resolution dataset from DeepeR paper. Contains low-resolution input spectra and high-resolution target spectra for training super-resolution models.",
-        #         "license": "MIT License"
-        #     }
-        # ),
+        "deepr_denoising": DatasetInfo(
+            task_type=TASK_TYPE.Denoising,
+            id="deepr_denoising",
+            name="DeepeR Denoising",
+            loader=lambda cache_path: MiscLoader._load_deepr_denoising(cache_path),
+            metadata={
+                "full_name": "DeepeR Denoising Dataset",
+                "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9",
+                "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
+                "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
+                "description": "Raman spectral denoising dataset from DeepeR paper. Contains noisy input spectra and corresponding denoised target spectra for training deep learning denoising models.",
+                "license": "MIT License"
+            }
+        ),
+        "deepr_super_resolution": DatasetInfo(
+            task_type=TASK_TYPE.SuperResolution,
+            id="deepr_super_resolution",
+            name="DeepeR Super-Resolution Dataset",
+            loader=lambda cache_path: MiscLoader._load_deepr_super_resolution(cache_path),
+            metadata={
+                "full_name": "DeepeR Super-Resolution Dataset",
+                "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9",
+                "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
+                "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
+                "description": "Hyperspectral super-resolution dataset from DeepeR paper. Contains low-resolution input spectra and high-resolution target spectra for training super-resolution models.",
+                "license": "MIT License"
+            }
+        ),
         "covid19_serum": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.Medical,

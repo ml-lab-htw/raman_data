@@ -42,22 +42,22 @@ class KaggleLoader(BaseLoader):
     # andriitrelin_cells-raman-spectra which is loaded by __load_andriitrelin above.
 
     DATASETS = {
-        # **{ # TODO  enable when data augmentation is implemented to handle the few samples in each diabetes skin subset. Currently, the small sample size (n=6-20 per subset) makes it unsuitable for benchmarking without augmentation.
-        #     f"diabetes_skin_{position.lower().replace(' ', '_')}": DatasetInfo(
-        #         task_type=TASK_TYPE.Classification,
-        #         application_type=APPLICATION_TYPE.Medical,
-        #         id=f"diabetes_skin_{position.lower().replace(' ', '_')}",
-        #         name=f"Diabetes Skin ({position})",
-        #         loader=lambda position=position: KaggleLoader.__load_diabetes(position),
-        #         metadata={
-        #             "full_name": "codina_raman-spectroscopy-of-diabetes",
-        #             "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
-        #             "paper": "https://doi.org/10.1364/BOE.9.004998",
-        #             "description": f"Part of the Diabetes Skin Raman Dataset. This subset focuses on Advanced Glycation End-products ({position}) signatures in the skin. Data acquired in vivo using a portable 785 nm Raman spectrometer to discern between diabetic patients and healthy controls."
-        #         }
-        #     )
-        #     for position in ["AGEs", "Ear Lobe", "Inner Arm", "Thumbnail", "Vein"]
-        # },
+        **{
+            f"diabetes_skin_{position.lower().replace(' ', '_')}": DatasetInfo(
+                task_type=TASK_TYPE.Classification,
+                application_type=APPLICATION_TYPE.Medical,
+                id=f"diabetes_skin_{position.lower().replace(' ', '_')}",
+                name=f"Diabetes Skin ({position})",
+                loader=lambda position=position: KaggleLoader.__load_diabetes(position),
+                metadata={
+                    "full_name": "codina_raman-spectroscopy-of-diabetes",
+                    "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
+                    "paper": "https://doi.org/10.1364/BOE.9.004998",
+                    "description": f"Part of the Diabetes Skin Raman Dataset. This subset focuses on Advanced Glycation End-products ({position}) signatures in the skin. Data acquired in vivo using a portable 785 nm Raman spectrometer to discern between diabetic patients and healthy controls."
+                }
+            )
+            for position in ["AGEs", "Ear Lobe", "Inner Arm", "Thumbnail", "Vein"]
+        },
         **{
             f"amino_acids_{substrate.lower()}": DatasetInfo(
                 task_type=TASK_TYPE.Regression,
