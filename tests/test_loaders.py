@@ -66,3 +66,17 @@ def test_misc_loader_load_missing():
     assert dataset.target_names == ["Glucose", "Acetate", "MagnesiumSulfate"]
     assert dataset.spectra.shape == (133, 486)
 
+
+@pytest.mark.skip(reason="Google Drive dataset download is slow.")
+def test_load_organic_compounds_raw(tmp_path):
+    # given
+
+    # when
+    dataset = GoogleDriveLoader._load_onewarmheart(
+        tmp_path,
+        split=f"organic_preprocess",
+    )
+
+
+
+
