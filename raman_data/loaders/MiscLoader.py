@@ -396,7 +396,7 @@ class MiscLoader(BaseLoader):
         )
 
         if not os.path.exists(dataset_cache):
-            raise Exception("Dataset not found. Please contact the authors.")
+            raise Exception(f"Dataset covid19 not found in {cache_root}. Please contact the authors.")
 
         spectra_path = os.path.join(dataset_cache, "covid19.xls")
 
