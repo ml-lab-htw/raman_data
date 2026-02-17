@@ -5,7 +5,6 @@ from typing import Optional, Tuple, List, Callable
 
 import numpy as np
 import pandas as pd
-import spectrochempy as scp
 
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
@@ -210,6 +209,8 @@ class RWTHLoader(BaseLoader):
             target_extractor: Callable[[str], str],
             dataset_label: str,
     ):
+        import spectrochempy as scp
+
         spc_files = glob.glob(os.path.join(spc_dir, "*.spc"), recursive=True)
         if not spc_files:
             raise FileNotFoundError(f"[!] No .spc files found in {spc_dir}")
@@ -426,6 +427,8 @@ class RWTHLoader(BaseLoader):
                 concentration_df.index = [file.replace(".mat#1", "") for file in concentration_df.index]
             else:
                 raise Exception(f"Unknown subtype: {subtype}")
+
+        import spectrochempy as scp
 
         # filter file containing "Water_pure" since it has different raman shifts # TODO: what to do with it? subtract?
         spectra_files = [file for file in spectra_files if "Water_pure" not in file]
