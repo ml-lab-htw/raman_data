@@ -284,11 +284,11 @@ class MiscLoader(BaseLoader):
             "X_2019clinical.npy", "y_2019clinical.npy",
         ]
 
-        def find_dir_with_files(root_dir: str, filenames: list[str]) -> str:
+        def find_dir_with_files(root_dir: str, filenames: list[str]) -> str | None:
             for root, dirs, files in os.walk(root_dir):
                 if all(fname in files for fname in filenames):
                     return root
-            raise FileNotFoundError(f"Could not find directory containing all required files under: {root_dir}")
+            return None
 
         # If the extracted folder already exists and contains our files, reuse it.
         extracted_dir = os.path.join(shared_root, "bacteria_identification")

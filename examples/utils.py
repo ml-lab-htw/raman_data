@@ -1,3 +1,4 @@
+import os
 import random
 
 import numpy as np
@@ -46,5 +47,7 @@ def plot_samples(dataset:RamanDataset, num_samples:int=5):
     fig.set_facecolor('white')
 
     # export as pdf
+
+    os.makedirs("plots", exist_ok=True)
     plt.savefig(f"plots/{dataset.name}.pdf", pad_inches=0, bbox_inches='tight')
     plt.show()
