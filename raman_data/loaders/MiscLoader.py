@@ -115,6 +115,7 @@ class MiscLoader(BaseLoader):
                     "citation": [
                         'Fremout, Wim, and Steven Saverwyns. "Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library." Journal of Raman Spectroscopy 43.11 (2012): 1536-1544.'
                     ],
+                    "license": "Data available for research use only. Please contact the authors for access.",
                     "description": f"{process} Raman spectral library comprising nearly 300 reference spectra of synthetic organic pigments (SOPs). Designed for spectral matching and identification of pigments in modern and contemporary art conservation.",
                 }
             )
