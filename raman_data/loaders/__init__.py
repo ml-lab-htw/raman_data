@@ -28,6 +28,7 @@ __all__ = [
     "GoogleDriveLoader",
     "FigshareLoader",
     "GitHubLoader",
+    "MendeleyLoader",
     "LoaderTools",
     "CACHE_DIR",
     "TASK_TYPE",

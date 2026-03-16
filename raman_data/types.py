@@ -25,6 +25,7 @@ class CACHE_DIR(Enum):
     GoogleDrive = "GDRIVE_CACHE"
     Figshare = "FIGSHARE_CACHE"
     GitHub = "GITHUB_CACHE"
+    Mendeley = "MENDELEY_CACHE"
 
 
 class TASK_TYPE(Enum):
