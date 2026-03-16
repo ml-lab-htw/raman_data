@@ -135,6 +135,8 @@ For more detailed examples see [Demo Notebook](examples/demo.ipynb) or [Demo Scr
 | `rruff_mineral_raw` | MaterialScience | Classification | Comprehensive resource of raw Raman spectra for over 1,000 mineral species, representing a diverse array of crystallographic structures and chemical compositions measured under varying experimental conditions (e.g., 532 nm and 785 nm). |
 | `sugar_mixtures_high_snr` | Chemical | Regression | The high signal-to-noise ratio subset of the Sugar Mixtures benchmark (7,680 measurements at 0.5 s integration). Used for evaluating the noise-robustness of hyperspectral unmixing and quantification algorithms. |
 | `sugar_mixtures_low_snr` | Chemical | Regression | The low signal-to-noise ratio subset of the Sugar Mixtures benchmark (7,680 measurements at 0.5 s integration). Used for evaluating the noise-robustness of hyperspectral unmixing and quantification algorithms. |
+| `illicit_adulterants_ft_raman` | Medical | Classification | FT-Raman spectra (1064 nm, ~33–3600 cm⁻¹) of 11 SERS-active pharmaceutically active adulterants found in adulterated dietary supplements. Acquired with a benchtop Bruker RAM II FT-IR Raman module. Target: compound identity. |
+| `illicit_adulterants_sers` | Medical | Classification | SERS spectra (785 nm, 400–2300 cm⁻¹) of 11 SERS-active illicit adulterants in dietary supplements. Acquired with a portable Metrohm MISA analyzer using silver printed-SERS substrates. Target: compound identity. |
 | `wheat_lines` | Biological | Classification | Raman spectra from the 7th generation of salt-stress-tolerant wheat mutant lines and their commercial cultivars. Features 785 nm excitation and tracks biochemical shifts in carotenoids and protein-related bands for agricultural phenotyping. |
 | `yeast_fermentation` | Biological | Regression | This dataset contains Raman spectra acquired during the continuous ethanolic fermentation of sucrose using Saccharomyces cerevisiae (Baker's yeast). To facilitate continuous processing and high-quality optical measurements, the yeast cells were immobilized in calcium alginate beads. |
 
@@ -251,10 +253,6 @@ The following items remain to be added (suggested action: add a `DATASETS` entry
 - Quantitative volumetric Raman imaging (Zenodo record)
   - URL: https://zenodo.org/records/256329
   - Suggested loader: `ZenodoLoader`
-
-- Spectra of illicit adulterants (Mendeley)
-  - URL: https://data.mendeley.com/datasets/y4md8znppn/1
-  - Suggested loader: `ZipLoader` / `MiscLoader`
 
 - Raman spectra of chemical compounds (Springer / figshare)
   - URL: https://springernature.figshare.com/articles/dataset/Open-source_Raman_spectra_of_chemical_compounds_for_active_pharmaceutical_ingredient_development/27931131
