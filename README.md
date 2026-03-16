@@ -196,6 +196,26 @@ The dataset can also be converted to a pandas DataFrame:
 - [ ] Integration of other datasets
 - [ ] API documentation website
 
+## 🚢 Publishing a New Version to PyPI
+
+Releases are automated via GitHub Actions. Pushing a version tag triggers the CI pipeline: tests run first, then the package is built and published to PyPI automatically.
+
+```bash
+# 1. Ensure all changes are committed and pushed to main
+git checkout main && git pull
+
+# 2. Create and push a version tag (uses setuptools-scm for the version)
+git tag v1.2.3
+git push origin v1.2.3
+```
+
+The tag format must match `v*.*.*` (e.g., `v1.2.3`). Once pushed, the [CI workflow](https://github.com/ml-lab-htw/raman_data/actions) will:
+1. Run the test suite across Python 3.10–3.13
+2. Build the distribution packages
+3. Publish to [PyPI](https://pypi.org/project/raman-data/) using the `PYPI_API_TOKEN` secret configured in the repository settings
+
+> **Note:** The `PYPI_API_TOKEN` secret must be set in GitHub → Settings → Secrets and variables → Actions before the first publish.
+
 ## 🤝 Contributing
 
 Contributions are welcome! To add a new dataset:
