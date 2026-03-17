@@ -7,6 +7,7 @@ import pandas as pd
 
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
+from raman_data.loaders.utils import is_wavenumber, encode_labels
 from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, APPLICATION_TYPE
 
 
@@ -56,6 +57,23 @@ class GitHubLoader(BaseLoader):
             )
             for disease in ["Parkinson", "Alzheimer"]
         },
+        "biomolecules_reference": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Biological,
+            id="biomolecules_reference",
+            name="Biomolecules",
+            loader=lambda cache_path: GitHubLoader._load_ramanbiolib(cache_path),
+            metadata={
+                "full_name": "RamanBioLib — Reference Raman Spectra of Biomolecules",
+                "source": "https://github.com/mteranm/ramanbiolib",
+                "description": (
+                    "Reference Raman spectra (450–1800 cm⁻¹, 1 cm⁻¹ resolution) of ~140 pure biomolecules "
+                    "including amino acids, nucleotides, lipids, and sugars. Each spectrum is labelled by "
+                    "biomolecule name. Useful for spectral assignment and as a reference library for "
+                    "classification benchmarks."
+                ),
+            },
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -236,3 +254,59 @@ class GitHubLoader(BaseLoader):
         class_names = unique_categories
 
         return spectra, raman_shifts, targets, class_names
+
+    @staticmethod
+    def _load_ramanbiolib(cache_path: str):
+        """
+        Load the RamanBioLib reference biomolecule dataset from GitHub.
+
+        Downloads ``mteranm/ramanbiolib`` as a ZIP archive (if not cached),
+        then joins ``raman_spectra_db.csv`` with ``metadata_db.csv`` to produce
+        labelled spectra.
+
+        Returns: spectra, raman_shifts, targets, class_names
+        """
+        shared_root = cache_path
+        repo_main = os.path.join(shared_root, "ramanbiolib-main")
+
+        if not (os.path.isdir(repo_main) and os.listdir(repo_main)):
+            zip_name = "ramanbiolib.zip"
+            zip_file = os.path.join(shared_root, zip_name)
+            os.makedirs(shared_root, exist_ok=True)
+
+            if not os.path.exists(zip_file):
+                LoaderTools.download(
+                    url="https://github.com/mteranm/ramanbiolib/archive/refs/heads/main.zip",
+                    out_dir_path=shared_root,
+                    out_file_name=zip_name,
+                )
+
+            LoaderTools.extract_zip_file_content(zip_file)
+
+        db_dir = os.path.join(repo_main, "ramanbiolib", "db")
+        spectra_path = os.path.join(db_dir, "raman_spectra_db.csv")
+        metadata_path = os.path.join(db_dir, "metadata_db.csv")
+
+        if not os.path.isfile(spectra_path):
+            raise FileNotFoundError(f"Could not find raman_spectra_db.csv in {db_dir}")
+        if not os.path.isfile(metadata_path):
+            raise FileNotFoundError(f"Could not find metadata_db.csv in {db_dir}")
+
+        import ast
+        spectra_df = pd.read_csv(spectra_path)
+
+        # Each row stores wavenumbers and intensities as JSON-encoded lists
+        raman_shifts = np.array(ast.literal_eval(spectra_df["wavenumbers"].iloc[0]), dtype=float)
+        spectra = np.vstack([
+            np.array(ast.literal_eval(row), dtype=float)
+            for row in spectra_df["intensity"]
+        ])
+
+        targets, class_names = encode_labels(spectra_df["component"])
+
+        GitHubLoader.logger.debug(
+            f"Loaded biomolecules_reference: {spectra.shape[0]} spectra × {spectra.shape[1]} points, "
+            f"{len(class_names)} biomolecules"
+        )
+
+        return spectra, raman_shifts, targets, list(class_names)
