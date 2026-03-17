@@ -227,21 +227,21 @@ class HuggingFaceLoader(BaseLoader):
                 "description": "This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground truth concentration labels verified by enzymatic assays, reflecting the concentration ranges typically found in E. coli fermentation processes."
             }
         ),
-        "bioprocess_analytes_metrohm_kaggle": DatasetInfo(
+        "ecoli_metabolites_dig4bio": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             application_type=APPLICATION_TYPE.Biological,
-            id="bioprocess_analytes_metrohm_kaggle",
-            name="Bioprocess Analytes Metrohm Kaggle",
+            id="ecoli_metabolites_dig4bio",
+            name="Ecoli Metabolites Dig4Bio",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Raman Spectra of Bioprocess Analytes Metrohm Kaggle Challenge Dig4Bio",
-                "hf_key": "HTW-KI-Werkstatt/RamanSpectraBioprocessAnalystesDig4Bio",
-                "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanSpectraBioprocessAnalystesDig4Bio",
+                "full_name": "Raman Spectra of E. Coli Metabolites Dig4Bio",
+                "hf_key": "HTW-KI-Werkstatt/RamanSpectraEcoliMetabolitesDig4Bio",
+                "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanSpectraEcoliMetabolitesDig4Bio",
                 "paper": "https://doi.org/10.1002/bit.70006",
-                "description": "This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. The spectra were measured with a liquid handling station and a system for automatic Raman spectra measurements used in  High-Throughput Experimentation",
+                "description": "This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. These components are important during E. Coli fermentation processes. The spectra were measured with a liquid handling station and a system for automatic Raman spectra measurements used in  High-Throughput Experimentation",
             }
         ),
-        "bioprocess_analytes_ecoli_metabolites": DatasetInfo(
+        "ecoli_metabolites": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             application_type=APPLICATION_TYPE.Biological,
             id="bioprocess_analytes_ecoli_metabolites",
@@ -249,8 +249,8 @@ class HuggingFaceLoader(BaseLoader):
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Ecoli Metabolites",
-                "hf_key": "HTW-KI-Werkstatt/RamanSpectraBioprocessAnalystesEcoliMetabolites",
-                "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanSpectraBioprocessAnalystesEcoliMetabolites",
+                "hf_key": "HTW-KI-Werkstatt/RamanSpectraEcoliMetabolites",
+                "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanSpectraEcoliMetabolites",
                 "paper": "",
                 "description": "This dataset contains Raman spectra of mixtures of glucose and sodium acetate which are the most important metabolites during Ecoli Fermentations. The spectra were measured with a liquid handling station and a system for automatic Raman spectra measurements used in  High-Throughput Experimentation",
             }
