@@ -11,6 +11,7 @@ from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE, AP
 from raman_data.exceptions import CorruptedZipFileError
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import  LoaderTools
+from raman_data.loaders.utils import is_wavenumber, encode_labels
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s:%(funcName)s: %(message)s')
 logger = logging.getLogger(__name__)
@@ -219,6 +220,133 @@ class ZenodoLoader(BaseLoader):
         return spectra, raman_shifts, concentrations, substrates
 
 
+    @staticmethod
+    def __load_18881751(
+        cache_path: str,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str]] | None:
+        """
+        Parse and extract data from the hair_dyes_sers dataset (Zenodo ID: 18881751).
+
+        Returns a tuple of (spectra, raman_shifts, targets, class_names).
+        """
+        data_path = os.path.join(cache_path, "18881751", "All_Spectra_Raw.csv")
+        if not os.path.isfile(data_path):
+            raise FileNotFoundError(f"Could not find All_Spectra_Raw.csv in {data_path}")
+
+        df = pd.read_csv(data_path)
+        wn_cols = [c for c in df.columns if is_wavenumber(c)]
+        meta_cols = [c for c in df.columns if not is_wavenumber(c)]
+
+        spectra = df[wn_cols].to_numpy(dtype=float)
+        raman_shifts = np.array([float(c) for c in wn_cols])
+
+        brand_col = next((c for c in meta_cols if c.lower() == "brand"), None)
+        label_col = brand_col if brand_col else meta_cols[0]
+        targets, class_names = encode_labels(df[label_col])
+
+        return spectra, raman_shifts, targets, list(class_names)
+
+    @staticmethod
+    def __load_11229959(
+        cache_path: str,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str]] | None:
+        """
+        Parse and extract data from the glioma_subtyping dataset (Zenodo ID: 11229959).
+
+        Returns a tuple of (spectra, raman_shifts, targets, class_names).
+        """
+        data_path = os.path.join(cache_path, "11229959", "Spectra Data.csv")
+        if not os.path.isfile(data_path):
+            raise FileNotFoundError(f"Could not find 'Spectra Data.csv' in {data_path}")
+
+        df = pd.read_csv(data_path)
+        wn_cols = [c for c in df.columns if is_wavenumber(c)]
+        meta_cols = [c for c in df.columns if not is_wavenumber(c)]
+
+        if not wn_cols:
+            raise FileNotFoundError(f"No wavenumber columns found in {data_path}")
+
+        spectra = df[wn_cols].to_numpy(dtype=float)
+        raman_shifts = np.array([float(c) for c in wn_cols])
+
+        label_candidates = {"class", "label", "subtype", "grade", "diagnosis", "type", "group", "category"}
+        label_col = next((c for c in meta_cols if c.lower() in label_candidates), None)
+        if label_col is None and meta_cols:
+            label_col = meta_cols[0]
+
+        if label_col is None:
+            raise FileNotFoundError(
+                f"The Zenodo deposit for glioma_subtyping (11229959) does not include class labels. "
+                f"'Spectra Data.csv' contains only spectral intensities with no label column."
+            )
+
+        targets, class_names = encode_labels(df[label_col])
+
+        return spectra, raman_shifts, targets, list(class_names)
+
+    @staticmethod
+    def __load_7044324(
+        cache_path: str,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str]] | None:
+        """
+        Parse and extract data from the head_neck_cancer dataset (Zenodo ID: 7044324).
+
+        Returns a tuple of (spectra, raman_shifts, targets, class_names).
+        """
+        dataset_dir = os.path.join(cache_path, "7044324")
+        extracted_dir = os.path.join(dataset_dir, "Raw data")
+
+        if not os.path.isdir(extracted_dir) or not os.listdir(extracted_dir):
+            zip_path = os.path.join(dataset_dir, "Raw data.zip")
+            if not os.path.isfile(zip_path):
+                raise FileNotFoundError(f"Could not find 'Raw data.zip' in {dataset_dir}")
+            try:
+                LoaderTools.extract_zip_file_content(zip_path, "Raw data")
+            except CorruptedZipFileError as e:
+                logger.error(f"There seems to be an issue with dataset '7044324/head_neck_cancer'.")
+                return None
+
+        # Each .txt file is a two-column (wavenumber, intensity) file with no header.
+        # Cancer spectra: Raw data/Data/Fig 3/{Plasma,Saliva}/Cancer spectra/
+        # Non-cancer spectra: Raw data/Data/S3/{Plasma,Saliva}/Non-cancer spectra/
+        label_dirs = [
+            (os.path.join(extracted_dir, "Data", "Fig 3", "Plasma", "Cancer spectra"), "Plasma", "Cancer"),
+            (os.path.join(extracted_dir, "Data", "S3", "Plasma", "Non-cancer spectra"), "Plasma", "Non-cancer"),
+            (os.path.join(extracted_dir, "Data", "Fig 3", "Saliva", "Cancer spectra"), "Saliva", "Cancer"),
+            (os.path.join(extracted_dir, "Data", "S3", "Saliva", "Non-cancer spectra"), "Saliva", "Non-cancer"),
+        ]
+
+        spectra_list = []
+        labels_list = []
+        raman_shifts_list = []
+
+        for dir_path, tissue, diagnosis in label_dirs:
+            if not os.path.isdir(dir_path):
+                logger.warning(f"Expected directory not found: {dir_path}")
+                continue
+            label = f"{tissue} {diagnosis}"
+            for fname in sorted(os.listdir(dir_path)):
+                if not fname.lower().endswith(".txt"):
+                    continue
+                fpath = os.path.join(dir_path, fname)
+                try:
+                    arr = np.loadtxt(fpath, delimiter=",")
+                    if arr.ndim != 2 or arr.shape[1] != 2:
+                        continue
+                    raman_shifts_list.append(arr[:, 0])
+                    spectra_list.append(arr[:, 1])
+                    labels_list.append(label)
+                except Exception as e:
+                    logger.warning(f"Failed to read {fpath}: {e}")
+
+        if not spectra_list:
+            raise FileNotFoundError(f"No spectral .txt files found under {extracted_dir}/Data/")
+
+        raman_shifts, spectra = LoaderTools.align_raman_shifts(raman_shifts_list, spectra_list)
+        targets, class_names = encode_labels(pd.Series(labels_list))
+
+        return spectra, raman_shifts, targets, list(class_names)
+
     __BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "raman-data", "zenodo")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
@@ -273,6 +401,57 @@ class ZenodoLoader(BaseLoader):
             for material in ["Gold", "Silver"]
             for type in ["Colloidal", "Solid"]
         },
+        "hair_dyes_sers": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="18881751",
+            name="Hair Dyes SERS",
+            file_typ="*.csv",
+            loader=lambda cache_path: ZenodoLoader.__load_18881751(cache_path),
+            metadata={
+                "full_name": "SERS Spectra of Hair Dyes Dataset",
+                "source": "https://doi.org/10.5281/zenodo.18881751",
+                "description": (
+                    "SERS spectra of commercial hair dye products acquired with a portable Raman spectrometer. "
+                    "Each spectrum is labelled by brand, permanence (permanent/semi-permanent/temporary), and colour. "
+                    "Target: brand identity (classification)."
+                ),
+            },
+        ),
+        "glioma_subtyping": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
+            id="11229959",
+            name="Glioma Subtyping",
+            file_typ="*.csv",
+            loader=lambda cache_path: ZenodoLoader.__load_11229959(cache_path),
+            metadata={
+                "full_name": "Label-free Raman Spectroscopy Glioma Subtyping Dataset",
+                "source": "https://doi.org/10.5281/zenodo.11229959",
+                "description": (
+                    "Raman spectra of glioma tissue samples for molecular subtyping without fluorescent dyes. "
+                    "Targets correspond to WHO-grade molecular subgroups (e.g. IDH-wildtype vs IDH-mutant). "
+                    "Task: multiclass classification of glioma subtypes."
+                ),
+            },
+        ),
+        "head_neck_cancer": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
+            id="7044324",
+            name="Head & Neck Cancer",
+            file_typ="*.zip",
+            loader=lambda cache_path: ZenodoLoader.__load_7044324(cache_path),
+            metadata={
+                "full_name": "Head and Neck Cancer Raman Spectroscopy Dataset",
+                "source": "https://doi.org/10.5281/zenodo.7044324",
+                "description": (
+                    "Raman spectra of blood plasma and saliva samples from head and neck cancer patients and "
+                    "healthy controls. Acquired for non-invasive liquid biopsy screening. "
+                    "Target: cancer vs. control (binary classification)."
+                ),
+            },
+        ),
     }
 
     @staticmethod
