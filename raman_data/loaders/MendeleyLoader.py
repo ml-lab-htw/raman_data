@@ -79,6 +79,25 @@ class MendeleyLoader(BaseLoader):
                 ),
             },
         ),
+        "microplastics_weathered": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="microplastics_weathered",
+            name="Weathered Microplastics",
+            loader=lambda cache_path: MendeleyLoader._load_microplastics(cache_path),
+            metadata={
+                "full_name": "Raman Spectra of Weathered Microplastics Dataset",
+                "source": "https://data.mendeley.com/datasets/kpygrf9fg6",
+                "doi": "10.17632/kpygrf9fg6",
+                "license": "CC BY 4.0",
+                "description": (
+                    "Raman spectra of 167 virgin and UV-weathered microplastic particles spanning multiple common "
+                    "polymer types (PE, PP, PS, PET, PVC, etc.). Files prefixed 'sta-' are unweathered standards; "
+                    "'wea-' are UV-aged samples. "
+                    "Target: polymer type (classification)."
+                ),
+            },
+        ),
     }
 
     logger = logging.getLogger(__name__)
@@ -96,11 +115,11 @@ class MendeleyLoader(BaseLoader):
         return response.json()
 
     @staticmethod
-    def _download_files(shared_root: str) -> None:
+    def _download_files(shared_root: str, dataset_id: str = _MENDELEY_DATASET_ID, version: int = _MENDELEY_VERSION) -> None:
         """Download all dataset files into *shared_root* if not already cached."""
         os.makedirs(shared_root, exist_ok=True)
 
-        files = MendeleyLoader._fetch_file_listing()
+        files = MendeleyLoader._fetch_file_listing(dataset_id=dataset_id, version=version)
         for f in files:
             file_name = f.get("filename") or f.get("name")
             download_url = f.get("download_url") or f.get("content_details", {}).get("download_url")
@@ -222,6 +241,90 @@ class MendeleyLoader(BaseLoader):
         )
 
         return spectra, raman_shifts_ref, encoded_targets, list(target_names)
+
+    @staticmethod
+    def _load_microplastics(
+        cache_path: str,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str]]:
+        """
+        Download (if needed) and parse weathered microplastics Raman spectra.
+
+        Dataset: Mendeley kpygrf9fg6 — 167 TXT files (``sta-*.txt`` standard,
+        ``wea-*.txt`` weathered) plus ``content.xlsx`` metadata mapping filenames
+        to polymer type labels.
+
+        Returns:
+            Tuple of ``(spectra, raman_shifts, targets, class_names)``.
+        """
+        _DATASET_ID = "kpygrf9fg6"
+        _VERSION = 1
+
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Mendeley)
+        if cache_root is None:
+            raise ValueError("Mendeley cache root is not set.")
+
+        shared_root = os.path.join(cache_root, "microplastics_weathered")
+        MendeleyLoader._download_files(shared_root, dataset_id=_DATASET_ID, version=_VERSION)
+
+        xlsx_path = os.path.join(shared_root, "content.xlsx")
+        filename_to_label: dict = {}
+        if os.path.isfile(xlsx_path):
+            try:
+                meta = pd.read_excel(xlsx_path)
+                fname_col = next(
+                    (c for c in meta.columns if c.lower() in ("filename", "file", "name")),
+                    meta.columns[0],
+                )
+                label_col = next(
+                    (c for c in meta.columns if c.lower() in ("polymer", "type", "material", "class", "label")),
+                    meta.columns[1] if len(meta.columns) > 1 else meta.columns[0],
+                )
+                filename_to_label = dict(zip(meta[fname_col].astype(str), meta[label_col].astype(str)))
+            except Exception as e:
+                MendeleyLoader.logger.warning(f"Could not read content.xlsx: {e}")
+
+        txt_files = sorted(
+            f for f in os.listdir(shared_root)
+            if f.endswith(".txt") and (f.startswith("sta-") or f.startswith("wea-"))
+        )
+        if not txt_files:
+            raise FileNotFoundError(f"No TXT spectrum files found in {shared_root}")
+
+        spectra_list: List[np.ndarray] = []
+        raman_shifts_list: List[np.ndarray] = []
+        labels_list: List[str] = []
+
+        for fname in txt_files:
+            fpath = os.path.join(shared_root, fname)
+            try:
+                data = np.loadtxt(fpath)
+                if data.ndim != 2 or data.shape[1] < 2:
+                    continue
+                wn = data[:, 0]
+                intensity = data[:, 1]
+                order = np.argsort(wn)
+                raman_shifts_list.append(wn[order])
+                spectra_list.append(intensity[order])
+                label = filename_to_label.get(fname) or filename_to_label.get(os.path.splitext(fname)[0])
+                if label is None:
+                    label = "standard" if fname.startswith("sta-") else "weathered"
+                labels_list.append(label)
+            except Exception as e:
+                MendeleyLoader.logger.warning(f"Failed to read {fname}: {e}")
+                continue
+
+        if not spectra_list:
+            raise FileNotFoundError(f"No spectra could be loaded from {shared_root}")
+
+        raman_shifts, spectra = LoaderTools.align_raman_shifts(raman_shifts_list, spectra_list)
+        encoded_targets, target_names = encode_labels(pd.Series(labels_list))
+
+        MendeleyLoader.logger.debug(
+            f"Loaded microplastics_weathered: {spectra.shape[0]} spectra × {spectra.shape[1]} points, "
+            f"{len(target_names)} polymer types"
+        )
+
+        return spectra, raman_shifts, encoded_targets, list(target_names)
 
     # ------------------------------------------------------------------
     # BaseLoader interface
