@@ -100,27 +100,27 @@ class MiscLoader(BaseLoader):
                 "description": "500,000+ Raman spectra of common rock-forming silicate, carbonate, and sulfate minerals under low signal-to-noise-ratios, Mars-like conditions. No traditional spectral preprocessing such as cosmic ray or baseline removal was employed.",
             }
         ),
-        # **{
-        #     f"synthetic_organic_pigments_{process.lower().replace(' ', '_')}": DatasetInfo(
-        #         task_type=TASK_TYPE.Regression,
-        #         application_type=APPLICATION_TYPE.MaterialScience,
-        #         id=f"synthetic_organic_pigments_{process.lower().replace(' ', '_')}",
-        #         name=f"Synthetic Organic Pigments ({process})",
-        #         loader=lambda cache_path, p=process.lower().replace(' ', '_'): MiscLoader._load_sop_spectral_library(cache_path,
-        #                                                                         variant=p),
-        #         metadata={
-        #             "full_name": f"Synthetic Organic Pigments Raman Spectral Library - {process}",
-        #             "source": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/ES5_J9PpBatLvbTe6VlFyIoBc6fFRli0YHl2qjnLxn6I8Q?download=1",
-        #             "paper": "https://doi.org/10.1002/jrs.4054",
-        #             "citation": [
-        #                 'Fremout, Wim, and Steven Saverwyns. "Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library." Journal of Raman Spectroscopy 43.11 (2012): 1536-1544.'
-        #             ],
-        #             "license": "Data available for research use only. Please contact the authors for access.",
-        #             "description": f"{process} Raman spectral library comprising nearly 300 reference spectra of synthetic organic pigments (SOPs). Designed for spectral matching and identification of pigments in modern and contemporary art conservation.",
-        #         }
-        #     )
-        #     for process in ["Raw", "Baseline Corrected"]
-        # },
+        **{
+            f"synthetic_organic_pigments_{process.lower().replace(' ', '_')}": DatasetInfo(
+                task_type=TASK_TYPE.Regression,
+                application_type=APPLICATION_TYPE.MaterialScience,
+                id=f"synthetic_organic_pigments_{process.lower().replace(' ', '_')}",
+                name=f"Synthetic Organic Pigments ({process})",
+                loader=lambda cache_path, p=process.lower().replace(' ', '_'): MiscLoader._load_sop_spectral_library(cache_path,
+                                                                                variant=p),
+                metadata={
+                    "full_name": f"Synthetic Organic Pigments Raman Spectral Library - {process}",
+                    "source": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/ES5_J9PpBatLvbTe6VlFyIoBc6fFRli0YHl2qjnLxn6I8Q?download=1",
+                    "paper": "https://doi.org/10.1002/jrs.4054",
+                    "citation": [
+                        'Fremout, Wim, and Steven Saverwyns. "Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library." Journal of Raman Spectroscopy 43.11 (2012): 1536-1544.'
+                    ],
+                    "license": "Data available for research use only. Please contact the authors for access.",
+                    "description": f"{process} Raman spectral library comprising nearly 300 reference spectra of synthetic organic pigments (SOPs). Designed for spectral matching and identification of pigments in modern and contemporary art conservation.",
+                }
+            )
+            for process in ["Raw", "Baseline Corrected"]
+        },
     }
     logger = logging.getLogger(__name__)
 
