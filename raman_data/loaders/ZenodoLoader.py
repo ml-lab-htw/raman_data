@@ -418,23 +418,23 @@ class ZenodoLoader(BaseLoader):
                 ),
             },
         ),
-        "glioma_subtyping": DatasetInfo(
-            task_type=TASK_TYPE.Classification,
-            application_type=APPLICATION_TYPE.Medical,
-            id="11229959",
-            name="Glioma Subtyping",
-            file_typ="*.csv",
-            loader=lambda cache_path: ZenodoLoader.__load_11229959(cache_path),
-            metadata={
-                "full_name": "Label-free Raman Spectroscopy Glioma Subtyping Dataset",
-                "source": "https://doi.org/10.5281/zenodo.11229959",
-                "description": (
-                    "Raman spectra of glioma tissue samples for molecular subtyping without fluorescent dyes. "
-                    "Targets correspond to WHO-grade molecular subgroups (e.g. IDH-wildtype vs IDH-mutant). "
-                    "Task: multiclass classification of glioma subtypes."
-                ),
-            },
-        ),
+        # "glioma_subtyping": DatasetInfo(
+        #     task_type=TASK_TYPE.Classification,
+        #     application_type=APPLICATION_TYPE.Medical,
+        #     id="11229959",
+        #     name="Glioma Subtyping",
+        #     file_typ="*.csv",
+        #     loader=lambda cache_path: ZenodoLoader.__load_11229959(cache_path),
+        #     metadata={
+        #         "full_name": "Label-free Raman Spectroscopy Glioma Subtyping Dataset",
+        #         "source": "https://doi.org/10.5281/zenodo.11229959",
+        #         "description": (
+        #             "Raman spectra of glioma tissue samples for molecular subtyping without fluorescent dyes. "
+        #             "Targets correspond to WHO-grade molecular subgroups (e.g. IDH-wildtype vs IDH-mutant). "
+        #             "Task: multiclass classification of glioma subtypes."
+        #         ),
+        #     },
+        # ),
         "head_neck_cancer": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.Medical,
