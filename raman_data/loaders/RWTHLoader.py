@@ -62,11 +62,11 @@ class RWTHLoader(BaseLoader):
             }
         ),
         **{
-            f"acid_species_{acid.lower()}": DatasetInfo(
+            f"{acid.lower()}_acid_species": DatasetInfo(
                 task_type=TASK_TYPE.Regression,
                 application_type=APPLICATION_TYPE.Chemical,
-                id=f"acid_species_{acid.lower()}",
-                name=f"Acid Species Concentrations ({acid})",
+                id=f"{acid.lower()}_acid_species",
+                name=f"{acid} Concentration",
                 loader=lambda cache_path, a=acid: RWTHLoader._load_acid_species(cache_path, a),
                 metadata={
                     "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
