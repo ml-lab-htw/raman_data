@@ -541,7 +541,7 @@ class ZenodoLoader(BaseLoader):
         if load_data:
             dataset_cache_path = os.path.join(cache_path, dataset_id)
 
-            if not os.path.isdir(dataset_cache_path) or not glob.glob(dataset_cache_path):
+            if not os.path.isdir(dataset_cache_path) or not glob.glob(os.path.join(dataset_cache_path, "*")):
                 ZenodoLoader.download_dataset(dataset_name, cache_path)
 
             data = ZenodoLoader.DATASETS[dataset_name].loader(cache_path)
