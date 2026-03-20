@@ -1,5 +1,8 @@
 import logging
 import os
+import sqlite3
+import zlib
+import json
 from typing import Optional
 
 import numpy as np
@@ -39,6 +42,32 @@ class FigshareLoader(BaseLoader):
                 "description": "A Raman spectral dataset comprising 3,510 spectra from 32 chemical substances. This dataset includes organic solvents and reagents commonly used in API development, along with information regarding the products in the XLSX, and code to visualise and perform technical validation on the data.",
             }
         ),
+        **{
+            f"chembl_molecules_{col.lower()}": DatasetInfo(
+                task_type=TASK_TYPE.Regression,
+                application_type=APPLICATION_TYPE.Chemical,
+                id=f"chembl_molecules_{col.lower()}",
+                name=f"Raman-ChEMBL Molecules ({prop_name})",
+                loader=lambda cache_path, col=col: FigshareLoader._load_raman_chembl_part2(cache_path, col),
+                metadata={
+                    "full_name": "Raman-ChEMBL-part2",
+                    "source": "https://figshare.com/articles/dataset/Raman-ChEMBL-part2/28594295",
+                    "doi": "10.6084/m9.figshare.28594295.v3",
+                    "citation": [
+                        "Liang, J., Ling, J., Zhu, X. Raman-ChEMBL-part2. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28594295.v3"
+                    ],
+                    "description": f"140k DFT-computed Raman spectra for ChEMBL drug-like molecules. Target: {prop_name}.",
+                }
+            )
+            for col, prop_name in [
+                ("Eg",           "HOMO-LUMO Gap (Ha)"),
+                ("Homo",         "HOMO Energy (Ha)"),
+                ("Lumo",         "LUMO Energy (Ha)"),
+                ("isotropic_pol","Isotropic Polarizability (Bohr³)"),
+                ("heat_capacity","Heat Capacity (cal/mol/K)"),
+                ("Dtotal",       "Dipole Moment (D)"),
+            ]
+        },
     }
     logger = logging.getLogger(__name__)
 
@@ -135,3 +164,89 @@ class FigshareLoader(BaseLoader):
 
         encoded_targets, target_names = encode_labels(targets)
         return spectra, raman_shifts, encoded_targets, target_names
+
+    @staticmethod
+    def _broaden_stick_spectrum(
+            freqs: list,
+            activities: list,
+            grid: np.ndarray,
+            fwhm: float = 10.0,
+    ) -> np.ndarray:
+        """Broaden a stick Raman spectrum onto a wavenumber grid using Lorentzian functions."""
+        spectrum = np.zeros(len(grid), dtype=np.float32)
+        gamma = fwhm / 2.0
+        for freq, activity in zip(freqs, activities):
+            if freq <= 0:
+                continue
+            spectrum += activity * (gamma ** 2) / ((grid - freq) ** 2 + gamma ** 2)
+        return spectrum
+
+    @staticmethod
+    def _load_raman_chembl_part2(cache_path, target_col: str):
+        file_id = 54667760
+        file_name = "Raman-ChEMBL-part2.db"
+        file_md5 = "d8e05c28db8c5d533e297124640ce269"
+
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Figshare)
+        if cache_root is None:
+            raise Exception(f"No cache root found for {cache_path}")
+
+        dataset_cache = os.path.join(cache_root, "raman_chembl_part2")
+        os.makedirs(dataset_cache, exist_ok=True)
+
+        db_path = os.path.join(dataset_cache, file_name)
+
+        if not os.path.exists(db_path):
+            download_url = f"https://ndownloader.figshare.com/files/{file_id}"
+            LoaderTools.download(
+                url=download_url,
+                out_dir_path=dataset_cache,
+                out_file_name=file_name,
+                hash_target=file_md5,
+                hash_type=HASH_TYPE.md5,
+                referer="https://figshare.com/",
+            )
+
+        raman_shifts = np.arange(0, 3802, 2, dtype=np.float32)
+        spectra_cache = os.path.join(dataset_cache, "spectra.npy")
+        targets_cache = os.path.join(dataset_cache, f"targets_{target_col}.npy")
+
+        if os.path.exists(spectra_cache) and os.path.exists(targets_cache):
+            FigshareLoader.logger.info(f"Loading Raman-ChEMBL-part2 from cache ({target_col})")
+            return np.load(spectra_cache), raman_shifts, np.load(targets_cache), np.array([target_col])
+
+        con = sqlite3.connect(db_path)
+        try:
+            if os.path.exists(spectra_cache):
+                # Spectra already cached — only need to extract the target column
+                FigshareLoader.logger.info(f"Extracting target column '{target_col}' from db")
+                rows = con.execute(
+                    f"SELECT {target_col} FROM molecule WHERE blob_data IS NOT NULL"
+                ).fetchall()
+                targets = np.array([r[0] for r in rows], dtype=np.float32)
+                np.save(targets_cache, targets)
+                return np.load(spectra_cache), raman_shifts, targets, np.array([target_col])
+
+            # First load: parse all blobs and cache spectra + this target
+            rows = con.execute(
+                f"SELECT {target_col}, blob_data FROM molecule WHERE blob_data IS NOT NULL"
+            ).fetchall()
+        finally:
+            con.close()
+
+        FigshareLoader.logger.info(f"Processing {len(rows)} molecules from Raman-ChEMBL-part2")
+
+        spectra = np.empty((len(rows), len(raman_shifts)), dtype=np.float32)
+        targets = np.empty(len(rows), dtype=np.float32)
+
+        for i, (target_val, blob) in enumerate(rows):
+            vib = json.loads(zlib.decompress(bytes(blob)))
+            spectra[i] = FigshareLoader._broaden_stick_spectrum(
+                vib["freq"], vib["Raman Activ"], raman_shifts
+            )
+            targets[i] = target_val
+
+        np.save(spectra_cache, spectra)
+        np.save(targets_cache, targets)
+
+        return spectra, raman_shifts, targets, np.array([target_col])
