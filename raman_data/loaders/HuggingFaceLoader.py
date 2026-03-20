@@ -255,6 +255,20 @@ class HuggingFaceLoader(BaseLoader):
                 "description": "This dataset contains Raman spectra of mixtures of glucose and sodium acetate which are the most important metabolites during Ecoli Fermentations. The spectra were measured with a liquid handling station and a system for automatic Raman spectra measurements used in  High-Throughput Experimentation",
             }
         ),
+        "ht_raman_bio_catalysis_axp": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="ht_raman_bio_catalysis_axp",
+            name="High-Throughput Raman Spectroscopic Monitoring of Adenosine Phosphates",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "High-Throughput Raman Spectroscopic Monitoring of Adenosine Phosphates",
+                "hf_key": "chlange/HTRamanBioCatalysisAXP",
+                "source": "https://huggingface.co/datasets/chlange/HTRamanBioCatalysisAXP",
+                "paper": "",
+                "description": "This dataset consists of Raman spectra tailored for the real-time monitoring of biocatalytic reactions. A key feature of this data is the use of Deep Eutectic Solvents (DES) as the reaction medium.",
+            }
+        ),
     }
 
     @staticmethod
