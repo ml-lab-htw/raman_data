@@ -259,7 +259,7 @@ class HuggingFaceLoader(BaseLoader):
             task_type=TASK_TYPE.Regression,
             application_type=APPLICATION_TYPE.Biological,
             id="ht_raman_bio_catalysis_axp",
-            name="High-Throughput Raman Spectroscopic Monitoring of Adenosine Phosphates",
+            name="Adenosine Phosphates",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "High-Throughput Raman Spectroscopic Monitoring of Adenosine Phosphates",
