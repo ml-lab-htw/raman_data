@@ -88,10 +88,10 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.MaterialScience,
             id="mlrod",
-            name="Machine Learning Raman Open Dataset (MLROD)",
+            name="ML Raman Open Dataset (MLROD)",
             loader=lambda cache_path: MiscLoader._load_mlrod(cache_path),
             metadata={
-                "full_name": "Machine Learning Raman Open Dataset (MLROD)",
+                "full_name": "ML Raman Open Dataset (MLROD)",
                 "source": "https://www.odr.io/dataset/mlrod-a-machine-learning-raman-open-dataset",
                 "paper": "https://doi.org/10.1029/2021EA002125",
                 "citation": [
@@ -419,7 +419,7 @@ class MiscLoader(BaseLoader):
     @staticmethod
     def _load_mlrod(cache_path: str):
         """
-        Load the MLROD (Machine Learning Raman Open Dataset).
+        Load the MLROD (ML Raman Open Dataset).
 
         This dataset consists of multiple csv files, one for each mineral class.
         Each csv file contains thousands of individual Raman spectra as columns.
