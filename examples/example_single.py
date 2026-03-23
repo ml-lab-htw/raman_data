@@ -15,6 +15,7 @@ for dataset_name in filtered_datasets:
     print(f"Dataset: {dataset_name}")
     print(f"  Task type: {dataset.task_type}")
     print(f"  Number of samples: {len(dataset)}")
+    print(f"  Number of targets: {len(dataset.target_names)}")
     print(f"  Target names: {dataset.target_names}")
 
     plot_samples(dataset)
