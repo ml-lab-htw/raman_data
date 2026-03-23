@@ -106,7 +106,7 @@ class ZenodoLoader(BaseLoader):
         meta_data = pd.read_csv(meta_data_csv_path)
 
         # take the last 6 columns of the meta_data dataframe
-        concentrations = meta_data.iloc[:, -6:]
+        concentrations = meta_data.iloc[:, -6:-1]
 
         # take their column names as target names
         target_names = concentrations.keys().to_list()
