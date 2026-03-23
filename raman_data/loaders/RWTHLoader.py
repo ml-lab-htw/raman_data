@@ -400,7 +400,7 @@ class RWTHLoader(BaseLoader):
             elif subtype == "Formic":
                 concentration_df = pd.read_excel(concentration_file, skiprows=25, index_col=0)
                 concentration_df = concentration_df.iloc[1:-7]
-                concentration_names = concentration_df.keys()[1:5].to_list()
+                concentration_names = concentration_df.keys()[1:4].to_list()
                 concentration_df = concentration_df[concentration_names]
             elif subtype == "Citric":
                 concentration_df = pd.read_excel(concentration_file, skiprows=25, index_col=0)
