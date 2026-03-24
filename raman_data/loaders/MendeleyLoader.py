@@ -42,6 +42,7 @@ class MendeleyLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Medical,
             id="illicit_adulterants_ft_raman",
             name="Illicit Adulterants in Dietary Supplements (FT-Raman)",
+            short_name="Illicit Adult. (FT)",
             loader=lambda cache_path: MendeleyLoader._load_adulterants(cache_path, instrument="ft_raman"),
             metadata={
                 "full_name": "Dataset of Raman and SERS spectra of illicit adulterants added to dietary supplements",
@@ -63,6 +64,7 @@ class MendeleyLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Medical,
             id="illicit_adulterants_sers",
             name="Illicit Adulterants in Dietary Supplements (SERS)",
+            short_name="Illicit Adult. (SERS)",
             loader=lambda cache_path: MendeleyLoader._load_adulterants(cache_path, instrument="sers"),
             metadata={
                 "full_name": "Dataset of Raman and SERS spectra of illicit adulterants added to dietary supplements",
@@ -84,6 +86,7 @@ class MendeleyLoader(BaseLoader):
             application_type=APPLICATION_TYPE.MaterialScience,
             id="microplastics_weathered",
             name="Weathered Microplastics",
+            short_name="Weathered Microplastics",
             loader=lambda cache_path: MendeleyLoader._load_microplastics(cache_path),
             metadata={
                 "full_name": "Raman Spectra of Weathered Microplastics Dataset",

@@ -358,6 +358,7 @@ class ZenodoLoader(BaseLoader):
                 application_type=APPLICATION_TYPE.Chemical,
                 id="10779223",
                 name=f"Sugar Mixtures ({snr} SNR)",
+                short_name=f"Sugar Mix. ({snr} SNR)",
                 file_typ="*.zip",
                 loader=lambda cache_path, snr=snr: ZenodoLoader.__load_10779223(cache_path, f"{snr} SNR"),
                 metadata={
@@ -374,6 +375,7 @@ class ZenodoLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="7644521",
             name="Mutant Wheat",
+            short_name="Mutant Wheat",
             file_typ="*.mat",
             loader=lambda cache_path: ZenodoLoader.__load_7644521(cache_path),
             metadata={
@@ -389,6 +391,7 @@ class ZenodoLoader(BaseLoader):
                 application_type=APPLICATION_TYPE.Chemical,
                 id="3572359",
                 name=f"Adenine ({type} {material})",
+                short_name=f"Adenine ({type[:3]}. {material})",
                 file_typ="*.csv",
                 loader=lambda cache_path, t=type, m=material: ZenodoLoader.__load_3572359(cache_path, t, m),
                 metadata={
@@ -406,6 +409,7 @@ class ZenodoLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Chemical,
             id="18881751",
             name="Hair Dyes SERS",
+            short_name="Hair Dyes (SERS)",
             file_typ="*.csv",
             loader=lambda cache_path: ZenodoLoader.__load_18881751(cache_path),
             metadata={
@@ -440,6 +444,7 @@ class ZenodoLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Medical,
             id="7044324",
             name="Head & Neck Cancer",
+            short_name="Head & Neck Cancer",
             file_typ="*.zip",
             loader=lambda cache_path: ZenodoLoader.__load_7044324(cache_path),
             metadata={

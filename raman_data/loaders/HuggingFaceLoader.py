@@ -36,6 +36,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="bioprocess_substrates",
             name="Bioprocess Monitoring",
+            short_name="Bioprocess Monitor.",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Bioprocess Monitoring Raman Dataset",
@@ -50,6 +51,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="ecoli_fermentation",
             name="E. Coli Fermentation",
+            short_name="E. coli Fermentation",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "E. Coli Fermentation Raman Dataset",
@@ -64,6 +66,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Chemical,
             id="fuel_benchtop",
             name="Gasoline Properties (Benchtop)",
+            short_name="Gasoline (Benchtop)",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Gasoline Properties Raman Dataset (Benchtop)",
@@ -78,6 +81,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Chemical,
             id="FuelRamanSpectraHandheld",
             name="Gasoline Properties (Handheld)",
+            short_name="Gasoline (Handheld)",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Gasoline Properties Raman Dataset (Handheld)",
@@ -92,6 +96,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="yeast_fermentation",
             name="Yeast Fermentation",
+            short_name="Yeast Fermentation",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Ethanolic Yeast Fermentation Raman Dataset",
@@ -106,6 +111,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="ralstonia_fermentations",
             name="R. eutropha Copolymer Fermentations",
+            short_name="Ralstonia Ferment.",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "R. eutropha Copolymer Fermentation Raman Dataset",
@@ -120,6 +126,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="bioprocess_analytes_anton_532",
             name="Bioprocess Analytes Anton 532",
+            short_name="BP Analytes Anton 532",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Anton 532",
@@ -134,6 +141,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="bioprocess_analytes_anton_785",
             name="Bioprocess Analytes Anton 785",
+            short_name="BP Analytes Anton 785",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Anton 785",
@@ -148,6 +156,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="bioprocess_analytes_kaiser",
             name="Bioprocess Analytes Kaiser",
+            short_name="BP Analytes Kaiser",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Kaiser",
@@ -162,6 +171,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="bioprocess_analytes_metrohm",
             name="Bioprocess Analytes Metrohm",
+            short_name="BP Analytes Metrohm",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Metrohm",
@@ -176,6 +186,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="bioprocess_analytes_mettler_toledo",
             name="Bioprocess Analytes Mettler Toledo",
+            short_name="BP Analytes M. Toledo",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Mettler Toledo",
@@ -190,6 +201,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="bioprocess_analytes_tec5",
             name="Bioprocess Analytes Tec5",
+            short_name="BP Analytes Tec5",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Tec5",
@@ -204,6 +216,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="bioprocess_analytes_timegate",
             name="Bioprocess Analytes Timegate",
+            short_name="BP Analytes Timegate",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Timegate",
@@ -218,6 +231,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="bioprocess_analytes_tornado",
             name="Bioprocess Analytes Tornado",
+            short_name="BP Analytes Tornado",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Tornado",
@@ -232,6 +246,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="ecoli_metabolites_dig4bio",
             name="Ecoli Metabolites Dig4Bio",
+            short_name="E. coli Metab. D4B",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of E. Coli Metabolites Dig4Bio",
@@ -246,6 +261,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="bioprocess_analytes_ecoli_metabolites",
             name="Bioprocess Analytes Ecoli Metabolites",
+            short_name="E. coli Metabolites",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Ecoli Metabolites",
@@ -259,7 +275,8 @@ class HuggingFaceLoader(BaseLoader):
             task_type=TASK_TYPE.Regression,
             application_type=APPLICATION_TYPE.Biological,
             id="ht_raman_bio_catalysis_axp",
-            name="Bio-Catalysis Monitoring of Adenosine Phosphates",
+            name="Bio-Catalysis Monitoring of AXP",
+            short_name="Bio-Catalysis (AXP)",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "High-Throughput Raman Spectroscopic Monitoring of Adenosine Phosphates",

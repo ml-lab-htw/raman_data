@@ -28,6 +28,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.Denoising,
             id="deepr_denoising",
             name="DeepeR Denoising",
+            short_name="DeepeR Denoising",
             loader=lambda cache_path: MiscLoader._load_deepr_denoising(cache_path),
             metadata={
                 "full_name": "DeepeR Denoising Dataset",
@@ -42,6 +43,7 @@ class MiscLoader(BaseLoader):
             task_type=TASK_TYPE.SuperResolution,
             id="deepr_super_resolution",
             name="DeepeR Super-Resolution Dataset",
+            short_name="DeepeR Super-Res.",
             loader=lambda cache_path: MiscLoader._load_deepr_super_resolution(cache_path),
             metadata={
                 "full_name": "DeepeR Super-Resolution Dataset",
@@ -57,6 +59,7 @@ class MiscLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Medical,
             id="covid19_serum",
             name="COVID-19 Human Serum",
+            short_name="COVID-19 Serum",
             loader=lambda cache_path: MiscLoader._load_covid(cache_path),
             metadata={
                 "full_name": "COVID-19 in human serum using Raman spectroscopy",
@@ -73,6 +76,7 @@ class MiscLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Medical,
             id="bacteria_identification",
             name="Pathogenic Bacteria",
+            short_name="Pathogenic Bacteria",
             loader=lambda cache_path: MiscLoader._load_csho33_bacteria(cache_path),
             metadata={
                 "full_name": "Pathogenic Bacteria Raman Dataset",
@@ -89,6 +93,7 @@ class MiscLoader(BaseLoader):
             application_type=APPLICATION_TYPE.MaterialScience,
             id="mlrod",
             name="ML Raman Open Dataset (MLROD)",
+            short_name="MLROD",
             loader=lambda cache_path: MiscLoader._load_mlrod(cache_path),
             metadata={
                 "full_name": "ML Raman Open Dataset (MLROD)",
@@ -106,6 +111,7 @@ class MiscLoader(BaseLoader):
                 application_type=APPLICATION_TYPE.MaterialScience,
                 id=f"synthetic_organic_pigments_{process.lower().replace(' ', '_')}",
                 name=f"Synthetic Organic Pigments ({process})",
+                short_name=f"Org. Pigments ({'Raw' if process == 'Raw' else 'Baseline'})",
                 loader=lambda cache_path, p=process.lower().replace(' ', '_'): MiscLoader._load_sop_spectral_library(cache_path,
                                                                                 variant=p),
                 metadata={

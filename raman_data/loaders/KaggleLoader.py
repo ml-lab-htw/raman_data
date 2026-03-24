@@ -48,6 +48,7 @@ class KaggleLoader(BaseLoader):
                 application_type=APPLICATION_TYPE.Medical,
                 id=f"diabetes_skin_{position.lower().replace(' ', '_')}",
                 name=f"Diabetes Skin ({position})",
+                short_name=f"Diab. Skin ({position})",
                 loader=lambda position=position: KaggleLoader.__load_diabetes(position),
                 metadata={
                     "full_name": "codina_raman-spectroscopy-of-diabetes",
@@ -64,6 +65,7 @@ class KaggleLoader(BaseLoader):
                 application_type=APPLICATION_TYPE.Chemical,
                 id=f"amino_acids_{substrate.lower()}",
                 name=f"Amino Acid LC ({substrate})",
+                short_name=f"Amino Acids ({substrate})",
                 loader=lambda idx=idx: KaggleLoader.__load_sergioalejandrod(str(idx+1)),
                 metadata={
                     "full_name": f"Amino Acid LC ({substrate})",
@@ -80,6 +82,7 @@ class KaggleLoader(BaseLoader):
                 application_type=APPLICATION_TYPE.Biological,
                 id=f"cancer_cell_{element.lower()}",
                 name=f"Cancer Cell Metabolite ({element})",
+                short_name=f"Cancer Cells ({element})",
                 loader=lambda element=element: KaggleLoader.__load_andriitrelin(element),
                 metadata={
                     "full_name": "andriitrelin_cells-raman-spectra",

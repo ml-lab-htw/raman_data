@@ -29,6 +29,7 @@ class RWTHLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Chemical,
             id="flow_microgel_synthesis",
             name="Microgel Synthesis in Flow",
+            short_name="Microgel Flow Synth.",
             loader=lambda cache_path: RWTHLoader._load_flow_microgel_synthesis(cache_path),
             metadata={
                 "full_name": "Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis",
@@ -49,6 +50,7 @@ class RWTHLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Chemical,
             id="microgel_synthesis",
             name="Microgel Synthesis Flow vs. Batch",
+            short_name="µGel Synthesis F/B",
             loader=lambda cache_path: RWTHLoader._load_microgel_synthesis(cache_path),
             metadata={
                 "full_name": "In-line Monitoring of Microgel Synthesis: Flow versus Batch Reactor",
@@ -67,6 +69,7 @@ class RWTHLoader(BaseLoader):
                 application_type=APPLICATION_TYPE.Chemical,
                 id=f"{acid.lower()}_acid_species",
                 name=f"{acid} Concentration",
+                short_name=f"{acid} Acid",
                 loader=lambda cache_path, a=acid: RWTHLoader._load_acid_species(cache_path, a),
                 metadata={
                     "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
@@ -89,6 +92,7 @@ class RWTHLoader(BaseLoader):
                 application_type=APPLICATION_TYPE.Chemical,
                 id=f"microgel_size_{short_key}_{spectral_range.lower()}",
                 name=f"Microgel Size ({label}, {spectral_range})",
+                short_name=f"µGel ({'FP' if spectral_range == 'FingerPrint' else 'Gl.'}, {short_key.upper()})",
                 loader=lambda cache_path, _f=file_key, _r=spectral_range: RWTHLoader._load_microgel_size(cache_path, _f, _r),
                 metadata={
                     "full_name": "Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy",

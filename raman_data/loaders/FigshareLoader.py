@@ -31,6 +31,7 @@ class FigshareLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Medical,
             id="pharmaceutical_ingredients",
             name="Pharmaceutical Ingredients",
+            short_name="Pharma Ingredients",
             loader=lambda cache_path: FigshareLoader._load_api(cache_path),
             metadata={
                 "full_name": "Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development",
@@ -47,6 +48,7 @@ class FigshareLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Chemical,
             id="chembl_molecules",
             name="Raman-ChEMBL Molecules",
+            short_name="Raman-ChEMBL",
             loader=lambda cache_path: FigshareLoader._load_raman_chembl_part2(cache_path),
             metadata={
                 "full_name": "Raman-ChEMBL-part2",
