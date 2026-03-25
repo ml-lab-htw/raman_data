@@ -286,6 +286,36 @@ class HuggingFaceLoader(BaseLoader):
                 "description": "This dataset consists of Raman spectra tailored for the real-time monitoring of biocatalytic reactions. A key feature of this data is the use of Deep Eutectic Solvents (DES) as the reaction medium.",
             }
         ),
+        "streptococcus_thermophilus_fermentation_timegate": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="streptococcus_thermophilus_fermentation_timegate",
+            name="Time-Gated Raman Spectra of Streptococcus thermophilus Fermentations",
+            short_name="Streptococcus thermophilus Fermentations (Timegate)",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Time-Gated Raman Spectra of Streptococcus thermophilus Fermentations",
+                "hf_key": "chlange/streptococcus_thermophilus_fermentation_timegate",
+                "source": "https://huggingface.co/datasets/chlange/streptococcus_thermophilus_fermentation_timegate",
+                "paper": "",
+                "description": "This dataset contains offline Raman spectra collected during batch cultivations of Streptococcus thermophilus. Unlike conventional continuous-wave Raman, these measurements were captured using Time-Gated Raman Spectroscopy. The dataset includes two distinct fermentation runs conducted in shake flasks over a 24-hour period.",
+            }
+        ),
+        "streptococcus_thermophilus_fermentation_kaiser": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="streptococcus_thermophilus_fermentation_kaiser",
+            name="Raman Spectra of Streptococcus thermophilus Fermentations Kaiser",
+            short_name="Streptococcus thermophilus Fermentations (Kaiser)",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Raman Spectra of Streptococcus thermophilus Fermentations Kaiser",
+                "hf_key": "chlange/streptococcus_thermophilus_fermentation_kaiser",
+                "source": "https://huggingface.co/datasets/chlange/streptococcus_thermophilus_fermentation_kaiser",
+                "paper": "",
+                "description": "This dataset contains offline Raman spectra collected during batch cultivations of Streptococcus thermophilus. The spectra were measured using a Kaiser RXN1. The dataset includes two distinct fermentation runs conducted in shake flasks over a 24-hour period.",
+            }
+        ),
     }
 
     @staticmethod

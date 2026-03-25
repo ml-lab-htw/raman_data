@@ -67,6 +67,13 @@ def test_misc_loader_load_missing():
     assert dataset.spectra.shape == (133, 486)
 
 
+def test_streptococcus_thermophilus_fermentation_timegate():
+    # the timegate dataset is small and can be included in the repo for testing
+    dataset = HuggingFaceLoader.load_dataset("streptococcus_thermophilus_fermentation_timegate")
+    assert dataset.target_names == ["Lactose", "Galactose", "Lactate", "OD600"]
+    assert dataset.spectra.shape == (14, 117)
+
+
 @pytest.mark.skip(reason="Google Drive dataset download is slow.")
 def test_load_organic_compounds_raw(tmp_path):
     # given
