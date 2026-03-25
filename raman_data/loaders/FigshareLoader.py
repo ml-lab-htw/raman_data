@@ -43,6 +43,23 @@ class FigshareLoader(BaseLoader):
                 "description": "A Raman spectral dataset comprising 3,510 spectra from 32 chemical substances. This dataset includes organic solvents and reagents commonly used in API development, along with information regarding the products in the XLSX, and code to visualise and perform technical validation on the data.",
             }
         ),
+        "comfile_ad": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
+            id="comfile_ad",
+            name="SERS Serum Spectra for Alzheimer's Disease",
+            short_name="SERS AD/MCI/Control",
+            loader=lambda cache_path: FigshareLoader._load_comfile_ad(cache_path),
+            metadata={
+                "full_name": "ComFilE for AD",
+                "source": "https://figshare.com/articles/dataset/ComFilE_for_AD/28107578",
+                "doi": "10.6084/m9.figshare.28107578.v1",
+                "citation": [
+                    "Xue, Bingsen (2024). ComFilE for AD. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28107578.v1"
+                ],
+                "description": "Serum SERS spectra for classifying Alzheimer's disease (AD), Mild Cognitive Impairment (MCI), and healthy controls. Contains 17 PyTorch tensor files organised by class label.",
+            }
+        ),
         "chembl_molecules": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             application_type=APPLICATION_TYPE.Chemical,
@@ -249,3 +266,71 @@ class FigshareLoader(BaseLoader):
         np.save(targets_cache, targets)
 
         return spectra, raman_shifts, targets, target_cols
+
+    _COMFILE_AD_CLASSES = {1: "AD", 2: "MCI", 3: "Control"}
+
+    @staticmethod
+    def _load_comfile_ad(cache_path):
+        try:
+            import torch
+        except ImportError:
+            raise ImportError(
+                "Loading the ComFilE AD dataset requires PyTorch. "
+                "Install it with: pip install torch"
+            )
+
+        article_id = 28107578
+        metadata = FigshareLoader.fetch_figshare_metadata(article_id)
+        files = metadata["files"]
+
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Figshare)
+        if cache_root is None:
+            raise Exception(f"No cache root found for {cache_path}")
+
+        dataset_cache = os.path.join(cache_root, "comfile_ad")
+        os.makedirs(dataset_cache, exist_ok=True)
+
+        for f in files:
+            out_path = os.path.join(dataset_cache, f["name"])
+            if not os.path.exists(out_path):
+                LoaderTools.download(
+                    url=f["download_url"],
+                    out_dir_path=dataset_cache,
+                    out_file_name=f["name"],
+                    hash_target=f.get("computed_md5"),
+                    hash_type=HASH_TYPE.md5,
+                    referer="https://figshare.com/",
+                )
+
+        spectra_list, label_list = [], []
+        raman_shifts = None
+
+        for f in files:
+            name = f["name"]
+            # filename format: "[N] ID nobase.pt"
+            bracket_end = name.find("]")
+            if bracket_end == -1:
+                continue
+            class_idx = int(name[1:bracket_end])
+
+            tensor = torch.load(
+                os.path.join(dataset_cache, name), map_location="cpu", weights_only=True
+            )
+            # tensor shape: (N_spectra, N_wavenumbers) or (N_wavenumbers,)
+            if tensor.ndim == 1:
+                tensor = tensor.unsqueeze(0)
+            data = tensor.numpy().astype(np.float32)
+            spectra_list.append(data)
+            label_list.extend([class_idx] * len(data))
+
+            if raman_shifts is None:
+                raman_shifts = np.arange(data.shape[1], dtype=np.float32)
+
+        spectra = np.concatenate(spectra_list, axis=0)
+        labels = np.array(label_list, dtype=np.int32)
+        class_map = FigshareLoader._COMFILE_AD_CLASSES
+        target_names = [class_map[i] for i in sorted(class_map)]
+        # remap class indices to 0-based
+        targets = labels - 1
+
+        return spectra, raman_shifts, targets, target_names
