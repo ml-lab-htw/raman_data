@@ -60,6 +60,29 @@ class FigshareLoader(BaseLoader):
                 "description": "Serum SERS spectra for classifying Alzheimer's disease (AD), Mild Cognitive Impairment (MCI), and healthy controls. Contains 17 PyTorch tensor files organised by class label.",
             }
         ),
+        "comfile_stroke": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
+            id="comfile_stroke",
+            name="Stroke SERS Serum",
+            short_name="Stroke SERS Serum",
+            loader=lambda cache_path: FigshareLoader._load_comfile_stroke(cache_path),
+            metadata={
+                "full_name": "ComFilE: SERS serum spectra for stroke classification",
+                "source": "https://figshare.com/articles/dataset/ComFilE_/28107431",
+                "doi": "10.6084/m9.figshare.28107431",
+                "paper": "https://www.nature.com/articles/s42256-025-01027-5",
+                "citation": [
+                    "Xue, B. et al. ComFilE: a large-scale benchmark dataset for computational spectroscopy. "
+                    "Nat Mach Intell (2025). https://doi.org/10.1038/s42256-025-01027-5"
+                ],
+                "description": (
+                    "SERS serum spectra for binary stroke vs. healthy-control classification. "
+                    "20 tab-separated files (10 stroke, 10 healthy control), each containing ~201 spectra "
+                    "across 723 wavenumber points (202.985–1999.92 cm⁻¹). ~4,020 spectra total."
+                ),
+            }
+        ),
         "chembl_molecules": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             application_type=APPLICATION_TYPE.Chemical,
@@ -266,6 +289,67 @@ class FigshareLoader(BaseLoader):
         np.save(targets_cache, targets)
 
         return spectra, raman_shifts, targets, target_cols
+
+    _COMFILE_STROKE_CLASSES = {1: "Stroke", 2: "Control"}
+
+    @staticmethod
+    def _load_comfile_stroke(cache_path):
+        article_id = 28107431
+        metadata = FigshareLoader.fetch_figshare_metadata(article_id)
+        files = metadata["files"]
+
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Figshare)
+        if cache_root is None:
+            raise Exception(f"No cache root found for {cache_path}")
+
+        dataset_cache = os.path.join(cache_root, "comfile_stroke")
+        os.makedirs(dataset_cache, exist_ok=True)
+
+        # Download only .txt files (the SERS spectra)
+        txt_files = [f for f in files if f["name"].endswith(".txt")]
+        for f in txt_files:
+            out_path = os.path.join(dataset_cache, f["name"])
+            if not os.path.exists(out_path):
+                LoaderTools.download(
+                    url=f["download_url"],
+                    out_dir_path=dataset_cache,
+                    out_file_name=f["name"],
+                    hash_target=f.get("computed_md5"),
+                    hash_type=HASH_TYPE.md5,
+                    referer="https://figshare.com/",
+                )
+
+        spectra_list, label_list = [], []
+        raman_shifts = None
+
+        for f in txt_files:
+            name = f["name"]
+            # filename format: "[1]T ..." (stroke) or "[2]H ..." (healthy control)
+            bracket_end = name.find("]")
+            if bracket_end == -1:
+                continue
+            class_idx = int(name[1:bracket_end])
+
+            file_path = os.path.join(dataset_cache, name)
+            # Tab-separated: row 0 = header (wavenumbers + leading empty col),
+            # rows 1+ = spectra (first col = spatial position, rest = intensities)
+            df = pd.read_csv(file_path, sep="\t", header=0, index_col=0)
+            # Row 0 of the original file is the wavenumber header — after read_csv
+            # with header=0, the columns are the wavenumber strings.
+            if raman_shifts is None:
+                raman_shifts = np.array([float(c) for c in df.columns], dtype=np.float32)
+            data = df.values.astype(np.float32)
+            spectra_list.append(data)
+            label_list.extend([class_idx] * len(data))
+
+        spectra = np.concatenate(spectra_list, axis=0)
+        labels = np.array(label_list, dtype=np.int32)
+        class_map = FigshareLoader._COMFILE_STROKE_CLASSES
+        target_names = [class_map[i] for i in sorted(class_map)]
+        # remap class indices to 0-based
+        targets = labels - 1
+
+        return spectra, raman_shifts, targets, target_names
 
     _COMFILE_AD_CLASSES = {1: "AD", 2: "MCI", 3: "Control"}
 
