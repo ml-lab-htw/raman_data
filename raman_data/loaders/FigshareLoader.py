@@ -43,13 +43,30 @@ class FigshareLoader(BaseLoader):
                 "description": "A Raman spectral dataset comprising 3,510 spectra from 32 chemical substances. This dataset includes organic solvents and reagents commonly used in API development, along with information regarding the products in the XLSX, and code to visualise and perform technical validation on the data.",
             }
         ),
-        "comfile_ad": DatasetInfo(
+        "serum_prostate_cancer": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.Medical,
-            id="comfile_ad",
+            id="serum_prostate_cancer",
+            name="SERS Serum Spectra for Prostate Cancer",
+            short_name="SERS PCa/BPH/Control",
+            loader=lambda cache_path: FigshareLoader._load_serum_prostate_cancer(cache_path),
+            metadata={
+                "full_name": "ComFilE for PCa",
+                "source": "https://figshare.com/articles/dataset/ComFilE_for_PCa/28107395",
+                "doi": "10.6084/m9.figshare.28107395.v1",
+                "citation": [
+                    "Xue, Bingsen (2024). ComFilE for PCa. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28107395.v1"
+                ],
+                "description": "Serum SERS spectra for classifying Prostate Cancer (PCa), Benign Prostatic Hyperplasia (BPH), and healthy controls.",
+            }
+        ),
+        "serum_alzheimer_disease": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
+            id="serum_alzheimer_disease",
             name="SERS Serum Spectra for Alzheimer's Disease",
             short_name="SERS AD/MCI/Control",
-            loader=lambda cache_path: FigshareLoader._load_comfile_ad(cache_path),
+            loader=lambda cache_path: FigshareLoader._load_serum_alzheimer_disease(cache_path),
             metadata={
                 "full_name": "ComFilE for AD",
                 "source": "https://figshare.com/articles/dataset/ComFilE_for_AD/28107578",
@@ -300,7 +317,7 @@ class FigshareLoader(BaseLoader):
 
         cache_root = LoaderTools.get_cache_root(CACHE_DIR.Figshare)
         if cache_root is None:
-            raise Exception(f"No cache root found for {cache_path}")
+            raise Exception(f"No cache root found for Figshare")
 
         dataset_cache = os.path.join(cache_root, "comfile_stroke")
         os.makedirs(dataset_cache, exist_ok=True)
@@ -346,24 +363,36 @@ class FigshareLoader(BaseLoader):
         labels = np.array(label_list, dtype=np.int32)
         class_map = FigshareLoader._COMFILE_STROKE_CLASSES
         target_names = [class_map[i] for i in sorted(class_map)]
-        # remap class indices to 0-based
-        targets = labels - 1
+        targets = labels - 1  # remap to 0-based
 
         return spectra, raman_shifts, targets, target_names
 
-    _COMFILE_AD_CLASSES = {1: "AD", 2: "MCI", 3: "Control"}
+    @staticmethod
+    def _load_serum_alzheimer_disease(cache_path):
+        return FigshareLoader._load_comfile(
+            article_id=28107578,
+            cache_dir_name="serum_alzheimer_disease",
+            class_map={1: "AD", 2: "MCI", 3: "Control"},
+        )
 
     @staticmethod
-    def _load_comfile_ad(cache_path):
+    def _load_serum_prostate_cancer(cache_path):
+        return FigshareLoader._load_comfile(
+            article_id=28107395,
+            cache_dir_name="serum_prostate_cancer",
+            class_map={1: "PCa", 2: "BPH", 3: "Control"},
+        )
+
+    @staticmethod
+    def _load_comfile(article_id: int, cache_dir_name: str, class_map: dict):
         try:
             import torch
         except ImportError:
             raise ImportError(
-                "Loading the ComFilE AD dataset requires PyTorch. "
+                "Loading ComFilE datasets requires PyTorch. "
                 "Install it with: pip install torch"
             )
 
-        article_id = 28107578
         metadata = FigshareLoader.fetch_figshare_metadata(article_id)
         files = metadata["files"]
 
@@ -371,7 +400,7 @@ class FigshareLoader(BaseLoader):
         if cache_root is None:
             raise Exception(f"No cache root found for {cache_path}")
 
-        dataset_cache = os.path.join(cache_root, "comfile_ad")
+        dataset_cache = os.path.join(cache_root, cache_dir_name)
         os.makedirs(dataset_cache, exist_ok=True)
 
         for f in files:
@@ -412,7 +441,6 @@ class FigshareLoader(BaseLoader):
 
         spectra = np.concatenate(spectra_list, axis=0)
         labels = np.array(label_list, dtype=np.int32)
-        class_map = FigshareLoader._COMFILE_AD_CLASSES
         target_names = [class_map[i] for i in sorted(class_map)]
         # remap class indices to 0-based
         targets = labels - 1
