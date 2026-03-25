@@ -316,6 +316,66 @@ class HuggingFaceLoader(BaseLoader):
                 "description": "This dataset contains offline Raman spectra collected during batch cultivations of Streptococcus thermophilus. The spectra were measured using a Kaiser RXN1. The dataset includes two distinct fermentation runs conducted in shake flasks over a 24-hour period.",
             }
         ),
+        "kaiser_ecoli_fermentation_supernatant": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="kaiser_ecoli_fermentation_supernatant",
+            name="Kaiser Raman E. coli Fermentation Supernatant",
+            short_name="Kaiser E. coli Supern.",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Kaiser Raman Spectra of E. coli Fermentation Supernatant",
+                "hf_key": "chlange/kaiser_raman_ecoli_fermentation_supernatant",
+                "source": "https://huggingface.co/datasets/chlange/kaiser_raman_ecoli_fermentation_supernatant",
+                "paper": "https://doi.org/10.1002/btpr.2665",
+                "description": "Raman spectra collected during E. coli fermentation, measured on the supernatant using a Kaiser spectrometer.",
+            }
+        ),
+        "kaiser_ecoli_fermentation": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="kaiser_ecoli_fermentation",
+            name="Kaiser Raman E. coli Fermentation",
+            short_name="Kaiser E. coli Ferment.",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Kaiser Raman Spectra of E. coli Fermentation",
+                "hf_key": "chlange/kaiser_raman_ecoli_fermentation",
+                "source": "https://huggingface.co/datasets/chlange/kaiser_raman_ecoli_fermentation",
+                "paper": "https://doi.org/10.1002/btpr.2665",
+                "description": "Raman spectra collected during E. coli fermentation using a Kaiser spectrometer.",
+            }
+        ),
+        "tg_ecoli_fermentation_supernatant": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="tg_ecoli_fermentation_supernatant",
+            name="Time-Gated Raman E. coli Fermentation Supernatant",
+            short_name="TG E. coli Supern.",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Time-Gated Raman Spectra of E. coli Fermentation Supernatant",
+                "hf_key": "chlange/tg_raman_ecoli_fermentation_supernatant",
+                "source": "https://huggingface.co/datasets/chlange/tg_raman_ecoli_fermentation_supernatant",
+                "paper": "https://doi.org/10.1002/btpr.2665",
+                "description": "Raman spectra collected during E. coli fermentation, measured on the supernatant using Time-Gated Raman Spectroscopy.",
+            }
+        ),
+        "tg_ecoli_fermentation": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="tg_ecoli_fermentation",
+            name="Time-Gated Raman E. coli Fermentation",
+            short_name="TG E. coli Ferment.",
+            loader=lambda df: HuggingFaceLoader._load_chlange(df),
+            metadata={
+                "full_name": "Time-Gated Raman Spectra of E. coli Fermentation",
+                "hf_key": "chlange/tg_raman_ecoli_fermentation",
+                "source": "https://huggingface.co/datasets/chlange/tg_raman_ecoli_fermentation",
+                "paper": "https://doi.org/10.1002/btpr.2665",
+                "description": "Raman spectra collected during E. coli fermentation using Time-Gated Raman Spectroscopy.",
+            }
+        ),
     }
 
     @staticmethod
