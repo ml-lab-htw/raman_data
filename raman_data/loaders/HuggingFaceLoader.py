@@ -291,7 +291,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="streptococcus_thermophilus_fermentation_timegate",
             name="Time-Gated Raman Spectra of Streptococcus thermophilus Fermentations",
-            short_name="Streptococcus thermophilus Fermentations (Timegate)",
+            short_name="S. thermophilus Ferment. (Timegate)",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Time-Gated Raman Spectra of Streptococcus thermophilus Fermentations",
@@ -306,7 +306,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="streptococcus_thermophilus_fermentation_kaiser",
             name="Raman Spectra of Streptococcus thermophilus Fermentations Kaiser",
-            short_name="Streptococcus thermophilus Fermentations (Kaiser)",
+            short_name="S. thermophilus Ferment. (Kaiser)",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Streptococcus thermophilus Fermentations Kaiser",
