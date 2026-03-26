@@ -1,79 +1,77 @@
-# Raman-Data: A Unified Python Library for Raman Spectroscopy Datasets
+# raman-data
 
 [![PyPI version](https://badge.fury.io/py/raman-data.svg)](https://pypi.org/project/raman-data/)
-[![GitHub](https://img.shields.io/github/license/ml-lab-htw/raman_data)](https://github.com/ml-lab-htw/raman_data/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/ml-lab-htw/raman_data)](https://github.com/ml-lab-htw/raman_data/blob/main/LICENSE)
+[![Python](https://img.shields.io/pypi/pyversions/raman-data)](https://pypi.org/project/raman-data/)
 
-This project aims to create a unified Python package for accessing various Raman spectroscopy datasets. The goal is to provide a simple and consistent API to load data from different sources like Kaggle, Hugging Face, GitHub, and Zenodo. This will be beneficial for the Raman spectroscopy community, enabling easier evaluation of models, such as foundation models for Raman spectroscopy.
+A unified Python library for accessing public Raman spectroscopy datasets.
+`raman-data` is the dataset layer of [RamanBench](https://github.com/ml-lab-htw/RamanBench), a large-scale benchmark for machine learning on Raman spectroscopy data.
+It provides a single API to discover, download, and load **77 datasets** from diverse sources (Kaggle, HuggingFace, Zenodo, Figshare, GitHub) in a standardized, ML-ready format.
 
-## ✨ Features
-
-- A single, easy-to-use Python package available on [PyPI](https://pypi.org/project/raman-data/).
-- Automatic downloading and caching of datasets from their original sources.
-- A unified data format for all datasets.
-- A simple function to list available datasets, with filtering options.
-- Datasets are annotated with an **application domain** (`APPLICATION_TYPE`) for easy filtering:
-  - `MaterialScience` -- mineral identification, pigment libraries
-  - `Biological` -- bioprocess monitoring, fermentation, agricultural phenotyping
-  - `Medical` -- clinical diagnostics, pathogen identification, disease screening
-  - `Chemical` -- fuel analysis, chemical quantification, polymer characterisation
-
-## 📦 Installation
-
-Install directly from PyPI:
+## Installation
 
 ```bash
 pip install raman-data
 ```
 
-Or install from source:
+> **Kaggle datasets** require API credentials. Follow the [Kaggle API setup guide](https://www.kaggle.com/docs/api) and place your `kaggle.json` in `~/.kaggle/`.
 
-```bash
-# Clone the repository
-git clone https://github.com/ml-lab-htw/raman_data.git
-cd raman_data
-
-# Install the package
-pip install -e .
-```
-
-**Note:** For Kaggle datasets, you need to configure your Kaggle API credentials. See [Kaggle API documentation](https://www.kaggle.com/docs/api) for details.
-
-## 🚀 Getting Started
-
-The basic interface for the package is defined in `raman_data/__init__.py`. Here's a preview of how it works:
+## Quick Start
 
 ```python
-from raman_data import raman_data
-# To specify a task type or application domain, import these enums as well
-from raman_data import TASK_TYPE, APPLICATION_TYPE
+from raman_data import raman_data, TASK_TYPE, APPLICATION_TYPE
 
 # List all available datasets
-print(raman_data())
+raman_data()
 
-# List only classification datasets
-print(raman_data(task_type=TASK_TYPE.Classification))
+# Filter by task type or application domain
+raman_data(task_type=TASK_TYPE.Classification)
+raman_data(application_type=APPLICATION_TYPE.Medical)
+raman_data(task_type=TASK_TYPE.Regression, application_type=APPLICATION_TYPE.Biological)
 
-# List only medical datasets
-print(raman_data(application_type=APPLICATION_TYPE.Medical))
+# Load a dataset by ID
+dataset = raman_data("bioprocess_substrates")
 
-# Combine filters: only medical classification datasets
-print(raman_data(task_type=TASK_TYPE.Classification, application_type=APPLICATION_TYPE.Medical))
+# Access data
+X = dataset.spectra          # np.ndarray (n_samples × n_wavenumbers)
+w = dataset.raman_shifts     # np.ndarray of wavenumber values in cm⁻¹
+y = dataset.targets          # np.ndarray of labels or values
+print(dataset.metadata)
 
-# Load a dataset by name
-dataset = raman_data(dataset_name="codina_diabetes_AGEs")
-
-# Access the spectra (intensity data), raman_shifts (wavenumbers), targets, and metadata
-spectra = dataset.spectra           # 2D array: (n_samples, n_wavenumbers)
-raman_shifts = dataset.raman_shifts # 1D array: wavenumber values in cm⁻¹
-targets = dataset.targets            # Target labels or values
-metadata = dataset.metadata         # Dataset metadata (source, paper, description)
-
-print(f"Number of spectra: {dataset.n_spectra}")
-print(f"Raman shift range: {dataset.min_shift} - {dataset.max_shift} cm⁻¹")
-print(metadata)
+# Convert to pandas DataFrame
+df = dataset.to_dataframe()
 ```
 
-For more detailed examples see [Demo Notebook](examples/demo.ipynb) or [Demo Script](examples/example_all.py).
+See [`examples/demo.ipynb`](examples/demo.ipynb) for a full walkthrough.
+
+## RamanDataset API
+
+Every `raman_data(dataset_id)` call returns a `RamanDataset` object:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `spectra` | `np.ndarray` | Intensity matrix (samples × wavenumbers) |
+| `raman_shifts` | `np.ndarray` | Wavenumber axis in cm⁻¹ |
+| `targets` | `np.ndarray` | Labels (classification) or values (regression) |
+| `target_names` | `list` | Target column names (regression) or class names (classification) |
+| `metadata` | `dict` | Source, paper reference, description |
+| `name` | `str` | Dataset identifier |
+| `task_type` | `TASK_TYPE` | `Classification` or `Regression` |
+| `application_type` | `APPLICATION_TYPE` | `Medical`, `Biological`, `Chemical`, or `MaterialScience` |
+| `n_spectra` | `int` | Number of spectra |
+| `n_frequencies` | `int` | Number of wavenumber points |
+| `n_classes` | `int \| None` | Number of classes (classification only) |
+| `target_range` | `tuple \| None` | (min, max) of target values (regression only) |
+| `min_shift` / `max_shift` | `float` | Spectral range in cm⁻¹ |
+
+**Variable-length spectra:** If spectra share the same wavenumber axis, `spectra` and `raman_shifts` are standard 2D/1D arrays.
+If the axis differs per sample, both are returned as object arrays of 1D arrays.
+For machine learning, interpolate or pad to a common grid as needed.
+
+## Available Datasets
+
+<details>
+<summary>77 datasets across Medical, Biological, Chemical, and MaterialScience domains (click to expand)</summary>
 
 <!-- DATASETS_TABLE_START -->
 <!-- AUTO-GENERATED: START - datasets table. Do not edit manually. -->
@@ -92,211 +90,177 @@ For more detailed examples see [Demo Notebook](examples/demo.ipynb) or [Demo Scr
 | `amino_acids_tryptophan` | Chemical | Regression | Time-resolved (on-line) Raman spectra for Tryptophan elution using a vertical flow LC-Raman method. Features 785 nm excitation and 0.2s exposure frames to benchmark label-free analyte detection. |
 | `bacteria_identification` | Medical | Classification | 60,000 spectra from 30 clinically relevant bacterial and yeast isolates (including an MRSA/MSSA isogenic pair). Acquired with 633 nm illumination on gold-coated silica substrates with low SNR to simulate rapid clinical acquisition times. |
 | `biomolecules_reference` | Biological | Classification | Reference Raman spectra (450–1800 cm⁻¹, 1 cm⁻¹ resolution) of ~140 pure biomolecules including amino acids, nucleotides, lipids, and sugars. Each spectrum is labelled by biomolecule name. Useful for spectral assignment and as a reference library for classification benchmarks. |
-| `bioprocess_analytes_anton_532` | Biological | Regression | This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground |
-| `bioprocess_analytes_anton_785` | Biological | Regression | This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground |
-| `bioprocess_analytes_kaiser` | Biological | Regression | This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground |
-| `bioprocess_analytes_metrohm` | Biological | Regression | This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground |
-| `bioprocess_analytes_mettler_toledo` | Biological | Regression | This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground |
-| `bioprocess_analytes_tec5` | Biological | Regression | This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground |
-| `bioprocess_analytes_timegate` | Biological | Regression | This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground |
-| `bioprocess_analytes_tornado` | Biological | Regression | This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. It is part of a series of 8 datasets that use eight different spectrometers that measure nearly the same samples. Some datasets have a bit more samples than others. Each spectrum is paired with ground |
-| `bioprocess_substrates` | Biological | Regression | A benchmark dataset of 6,960 spectra featuring eight key metabolites (glucose, glycerol, acetate, etc.) sampled via a statistically independent uniform distribution. Designed to evaluate regression robustness against common bioprocess correlations, including background effects from mineral salts and |
+| `bioprocess_analytes_anton_532` | Biological | Regression | Raman spectra of glucose, sodium acetate, and magnesium sulfate mixtures measured with an Anton Paar 532 nm spectrometer. Part of an 8-spectrometer cross-instrument series. |
+| `bioprocess_analytes_anton_785` | Biological | Regression | Raman spectra of glucose, sodium acetate, and magnesium sulfate mixtures measured with an Anton Paar 785 nm spectrometer. Part of an 8-spectrometer cross-instrument series. |
+| `bioprocess_analytes_kaiser` | Biological | Regression | Raman spectra of glucose, sodium acetate, and magnesium sulfate mixtures measured with a Kaiser spectrometer. Part of an 8-spectrometer cross-instrument series. |
+| `bioprocess_analytes_metrohm` | Biological | Regression | Raman spectra of glucose, sodium acetate, and magnesium sulfate mixtures measured with a Metrohm spectrometer. Part of an 8-spectrometer cross-instrument series. |
+| `bioprocess_analytes_mettler_toledo` | Biological | Regression | Raman spectra of glucose, sodium acetate, and magnesium sulfate mixtures measured with a Mettler Toledo spectrometer. Part of an 8-spectrometer cross-instrument series. |
+| `bioprocess_analytes_tec5` | Biological | Regression | Raman spectra of glucose, sodium acetate, and magnesium sulfate mixtures measured with a Tec5 spectrometer. Part of an 8-spectrometer cross-instrument series. |
+| `bioprocess_analytes_timegate` | Biological | Regression | Raman spectra of glucose, sodium acetate, and magnesium sulfate mixtures measured with a Timegate spectrometer. Part of an 8-spectrometer cross-instrument series. |
+| `bioprocess_analytes_tornado` | Biological | Regression | Raman spectra of glucose, sodium acetate, and magnesium sulfate mixtures measured with a Tornado spectrometer. Part of an 8-spectrometer cross-instrument series. |
+| `bioprocess_substrates` | Biological | Regression | A benchmark dataset of 6,960 spectra featuring eight key metabolites (glucose, glycerol, acetate, etc.) sampled via a statistically independent uniform distribution. Designed to evaluate regression robustness against common bioprocess correlations. |
 | `cancer_cell_(cooh)2` | Biological | Classification | SERS spectra of cancer cell metabolites collected on gold nanourchins functionalized with the (COOH)2 moiety. Designed to provide specificity toward specific proteins and lipids for cell line identification. |
 | `cancer_cell_cooh` | Biological | Classification | SERS spectra of cancer cell metabolites collected on gold nanourchins functionalized with the COOH moiety. Designed to provide specificity toward specific proteins and lipids for cell line identification. |
 | `cancer_cell_nh2` | Biological | Classification | SERS spectra of cancer cell metabolites collected on gold nanourchins functionalized with the NH2 moiety. Designed to provide specificity toward specific proteins and lipids for cell line identification. |
-| `citric_acid_species` | Chemical | Regression | Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling. |
-| `covid19_salvia` | Medical | Classification | Curated for non-invasive SARS-CoV-2 screening. Includes ~25 spectral replicates per subject from 101 patients (positive, negative symptomatic, and healthy controls) acquired from dried saliva drops using a 785 nm spectrometer. |
-| `covid19_serum` | Medical | Classification | This study proposed the diagnosis of COVID-19 by means of Raman spectroscopy. Samples of blood serum from 10 patients positive and 10 patients negative for COVID-19 by RT-PCR RNA and ELISA tests were analyzed. |
-| `deepr_denoising` | Unknown | Denoising | Raman spectral denoising dataset from DeepeR paper. Contains noisy input spectra and corresponding denoised target spectra for training deep learning denoising models. |
-| `deepr_super_resolution` | Unknown | SuperResolution | Hyperspectral super-resolution dataset from DeepeR paper. Contains low-resolution input spectra and high-resolution target spectra for training super-resolution models. |
-| `diabetes_skin_ages` | Medical | Classification | Part of the Diabetes Skin Raman Dataset. This subset focuses on Advanced Glycation End-products (AGEs) signatures in the skin. Data acquired in vivo using a portable 785 nm Raman spectrometer to discern between diabetic patients and healthy controls. |
-| `diabetes_skin_ear_lobe` | Medical | Classification | Part of the Diabetes Skin Raman Dataset. This subset focuses on Advanced Glycation End-products (Ear Lobe) signatures in the skin. Data acquired in vivo using a portable 785 nm Raman spectrometer to discern between diabetic patients and healthy controls. |
-| `diabetes_skin_inner_arm` | Medical | Classification | Part of the Diabetes Skin Raman Dataset. This subset focuses on Advanced Glycation End-products (Inner Arm) signatures in the skin. Data acquired in vivo using a portable 785 nm Raman spectrometer to discern between diabetic patients and healthy controls. |
-| `diabetes_skin_thumbnail` | Medical | Classification | Part of the Diabetes Skin Raman Dataset. This subset focuses on Advanced Glycation End-products (Thumbnail) signatures in the skin. Data acquired in vivo using a portable 785 nm Raman spectrometer to discern between diabetic patients and healthy controls. |
-| `diabetes_skin_vein` | Medical | Classification | Part of the Diabetes Skin Raman Dataset. This subset focuses on Advanced Glycation End-products (Vein) signatures in the skin. Data acquired in vivo using a portable 785 nm Raman spectrometer to discern between diabetic patients and healthy controls. |
-| `ecoli_fermentation` | Biological | Regression | Spectra captured during batch and fed-batch fermentation of E. coli. Measurements were performed on the supernatant using a 785 nm spectrometer to track glucose and acetate concentrations in a dynamic, high-throughput bioprocess environment. |
-| `ecoli_metabolites` | Biological | Regression | This dataset contains Raman spectra of mixtures of glucose and sodium acetate which are the most important metabolites during Ecoli Fermentations. The spectra were measured with a liquid handling station and a system for automatic Raman spectra measurements used in  High-Throughput Experimentation |
-| `ecoli_metabolites_dig4bio` | Biological | Regression | This dataset contains Raman spectra of mixtures of glucose, sodium acetate, and magnesium sulfate. These components are important during E. Coli fermentation processes. The spectra were measured with a liquid handling station and a system for automatic Raman spectra measurements used in  High-Throug |
-| `flow_microgel_synthesis` | Chemical | Regression | This data set contains in-line Raman spectroscopy measurements and predicted microgel sizes from Dynamic Light Scattering (DLS).The Raman spectroscopy measurements were conducted inside a customized measurement cell for monitoring in a tubular flow reactor.Inside the flow reactor, the microgel synth |
-| `formic_acid_species` | Chemical | Regression | Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling. |
-| `fuel_benchtop` | Chemical | Regression | Raman spectra from 179 commercial gasoline samples recorded using a benchtop 1064 nm FT-Raman system. Targets include Research Octane Number (RON), Motor Octane Number (MON), and oxygenated additive concentrations. |
-| `fuel_handheld` | Chemical | Regression | Counterpart to the benchtop fuel dataset, acquired from the same 179 samples using a handheld 785 nm spectrometer. Used for benchmarking model transferability across different hardware and wavelengths. |
-| `hair_dyes_sers` | Chemical | Classification | SERS spectra of commercial hair dye products acquired with a portable Raman spectrometer. Each spectrum is labelled by brand, permanence (permanent/semi-permanent/temporary), and colour. Target: brand identity (classification). |
-| `head_neck_cancer` | Medical | Classification | Raman spectra of blood plasma and saliva samples from head and neck cancer patients and healthy controls. Acquired for non-invasive liquid biopsy screening. Target: cancer vs. control (binary classification). |
-| `illicit_adulterants_ft_raman` | Medical | Classification | FT-Raman spectra (1064 nm, ~33–3600 cm⁻¹, 1851 points) of 11 SERS-active pharmaceutically active adulterants commonly found in adulterated dietary supplements. Acquired with a benchtop Bruker RAM II FT-IR Raman module. One spectrum per compound. Target: compound identity (classification). |
-| `illicit_adulterants_sers` | Medical | Classification | SERS spectra (785 nm, 400–2300 cm⁻¹, 1901 points) of 11 SERS-active illicit adulterants found in dietary supplements. Acquired with a portable Metrohm MISA analyzer using silver printed-SERS substrates. One spectrum per compound. Target: compound identity (classification). |
-| `itaconic_acid_species` | Chemical | Regression | Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling. |
-| `levulinic_acid_species` | Chemical | Regression | Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling. |
-| `microgel_size_lf_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: Linear Fit, spectral range: FingerPrint. Task: predict particle diameter from Raman spectrum. |
-| `microgel_size_lf_global` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: Linear Fit, spectral range: Global. Task: predict particle diameter from Raman spectrum. |
-| `microgel_size_mm_lf_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: MinMax + Linear Fit, spectral range: FingerPrint. Task: predict particle diameter from Raman spectrum. |
-| `microgel_size_mm_lf_global` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: MinMax + Linear Fit, spectral range: Global. Task: predict particle diameter from Raman spectrum. |
-| `microgel_size_mm_rb_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: MinMax + Rubber Band, spectral range: FingerPrint. Task: predict particle diameter from Raman spectrum. |
-| `microgel_size_mm_rb_global` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: MinMax + Rubber Band, spectral range: Global. Task: predict particle diameter from Raman spectrum. |
-| `microgel_size_raw_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: Raw, spectral range: FingerPrint. Task: predict particle diameter from Raman spectrum. |
-| `microgel_size_raw_global` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: Raw, spectral range: Global. Task: predict particle diameter from Raman spectrum. |
-| `microgel_size_rb_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: Rubber Band, spectral range: FingerPrint. Task: predict particle diameter from Raman spectrum. |
-| `microgel_size_rb_global` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: Rubber Band, spectral range: Global. Task: predict particle diameter from Raman spectrum. |
-| `microgel_size_snv_lf_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: SNV + Linear Fit, spectral range: FingerPrint. Task: predict particle diameter from Raman spectrum. |
-| `microgel_size_snv_lf_global` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: SNV + Linear Fit, spectral range: Global. Task: predict particle diameter from Raman spectrum. |
-| `microgel_size_snv_rb_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: SNV + Rubber Band, spectral range: FingerPrint. Task: predict particle diameter from Raman spectrum. |
-| `microgel_size_snv_rb_global` | Chemical | Regression | Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: SNV + Rubber Band, spectral range: Global. Task: predict particle diameter from Raman spectrum. |
-| `microgel_synthesis` | Chemical | Regression | This data set contains in-line Raman spectroscopy measurements inside a customized measurement cell for monitoring in a tubular flow reactor. The setup aims at monitoring the microgel synthesis in a flow reactor while aiming at a high measurement precision. The measurements include a systematic accu |
-| `microplastics_weathered` | MaterialScience | Classification | Raman spectra of 167 virgin and UV-weathered microplastic particles spanning multiple common polymer types (PE, PP, PS, PET, PVC, etc.). Files prefixed 'sta-' are unweathered standards; 'wea-' are UV-aged samples. Target: polymer type (classification). |
-| `mlrod` | MaterialScience | Classification | 500,000+ Raman spectra of common rock-forming silicate, carbonate, and sulfate minerals under low signal-to-noise-ratios, Mars-like conditions. No traditional spectral preprocessing such as cosmic ray or baseline removal was employed. |
-| `organic_compounds_preprocess` | Chemical | Classification | Preprocess Raman spectra of organic compounds collected with several different excitation sources. Designed to benchmark transfer learning and domain adaptation for chemical identification with limited data. |
-| `organic_compounds_raw` | Chemical | Classification | Raw Raman spectra of organic compounds collected with several different excitation sources. Designed to benchmark transfer learning and domain adaptation for chemical identification with limited data. |
-| `parkinson` | Medical | Classification | Raman spectra from dried saliva drops targeting Parkinson's Disease (PD) vs. healthy controls. Reveals hidden trends in proteins, lipids, and saccharides for early detection of cognitive and motor impairment. |
-| `pharmaceutical_ingredients` | Medical | Classification | A Raman spectral dataset comprising 3,510 spectra from 32 chemical substances. This dataset includes organic solvents and reagents commonly used in API development, along with information regarding the products in the XLSX, and code to visualise and perform technical validation on the data. |
-| `ralstonia_fermentations` | Biological | Regression | Monitoring of P(HB-co-HHx) copolymer synthesis in Ralstonia eutropha batch cultivations. Includes a hybrid mix of experimental and high-fidelity synthetic data to handle high multicollinearity between process variables. |
-| `rruff_mineral_preprocess` | MaterialScience | Classification | Comprehensive resource of raw Raman spectra for over 1,000 mineral species, representing a diverse array of crystallographic structures and chemical compositions measured under varying experimental conditions (e.g., 532 nm and 785 nm). |
-| `rruff_mineral_raw` | MaterialScience | Classification | Comprehensive resource of raw Raman spectra for over 1,000 mineral species, representing a diverse array of crystallographic structures and chemical compositions measured under varying experimental conditions (e.g., 532 nm and 785 nm). |
-| `succinic_acid_species` | Chemical | Regression | Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling. |
-| `sugar_mixtures_high_snr` | Chemical | Regression | The high signal-to-noise ratio subset of the Sugar Mixtures benchmark (7,680 measurements at 0.5 s integration). Used for evaluating the noise-robustness of hyperspectral unmixing and quantification algorithms. |
-| `sugar_mixtures_low_snr` | Chemical | Regression | The low signal-to-noise ratio subset of the Sugar Mixtures benchmark (7,680 measurements at 0.5 s integration). Used for evaluating the noise-robustness of hyperspectral unmixing and quantification algorithms. |
-| `synthetic_organic_pigments_baseline_corrected` | MaterialScience | Regression | Baseline Corrected Raman spectral library comprising nearly 300 reference spectra of synthetic organic pigments (SOPs). Designed for spectral matching and identification of pigments in modern and contemporary art conservation. |
-| `synthetic_organic_pigments_raw` | MaterialScience | Regression | Raw Raman spectral library comprising nearly 300 reference spectra of synthetic organic pigments (SOPs). Designed for spectral matching and identification of pigments in modern and contemporary art conservation. |
-| `wheat_lines` | Biological | Classification | Raman spectra from the 7th generation of salt-stress-tolerant wheat mutant lines and their commercial cultivars. Features 785 nm excitation and tracks biochemical shifts in carotenoids and protein-related bands for agricultural phenotyping. |
-| `yeast_fermentation` | Biological | Regression | This dataset contains Raman spectra acquired during the continuous ethanolic fermentation of sucrose using Saccharomyces cerevisiae (Baker's yeast). To facilitate continuous processing and high-quality optical measurements, the yeast cells were immobilized in calcium alginate beads. |
+| `chembl_molecules` | Chemical | Regression | 140k DFT-computed Raman spectra for ChEMBL drug-like molecules. Targets: HOMO-LUMO gap, HOMO/LUMO energies, isotropic polarizability, heat capacity, dipole moment. |
+| `citric_acid_species` | Chemical | Regression | Raman spectra and composition data for titration experiments of various acids in aqueous solution. |
+| `comfile_stroke` | Medical | Classification | SERS serum spectra for binary stroke vs. healthy-control classification. ~4,020 spectra across 723 wavenumber points (202.985–1999.92 cm⁻¹). |
+| `covid19_salvia` | Medical | Classification | Non-invasive SARS-CoV-2 screening from dried saliva drops. ~25 spectral replicates per subject from 101 patients (positive, negative symptomatic, and healthy controls), 785 nm excitation. |
+| `covid19_serum` | Medical | Classification | Blood serum Raman spectra from 10 COVID-19 positive and 10 negative patients validated by RT-PCR and ELISA. |
+| `deepr_denoising` | Unknown | Denoising | Raman spectral denoising dataset from the DeepeR paper. Noisy input spectra paired with denoised targets. |
+| `deepr_super_resolution` | Unknown | SuperResolution | Hyperspectral super-resolution dataset from the DeepeR paper. Low-resolution inputs paired with high-resolution targets. |
+| `diabetes_skin_ages` | Medical | Classification | AGEs signatures in skin Raman spectra, acquired in vivo with a portable 785 nm spectrometer to distinguish diabetic patients from healthy controls. |
+| `diabetes_skin_ear_lobe` | Medical | Classification | Ear lobe skin Raman spectra for diabetic vs. healthy classification using a portable 785 nm spectrometer. |
+| `diabetes_skin_inner_arm` | Medical | Classification | Inner arm skin Raman spectra for diabetic vs. healthy classification using a portable 785 nm spectrometer. |
+| `diabetes_skin_thumbnail` | Medical | Classification | Thumbnail skin Raman spectra for diabetic vs. healthy classification using a portable 785 nm spectrometer. |
+| `diabetes_skin_vein` | Medical | Classification | Vein skin Raman spectra for diabetic vs. healthy classification using a portable 785 nm spectrometer. |
+| `ecoli_fermentation` | Biological | Regression | Batch and fed-batch E. coli fermentation spectra. Supernatant measurements with a 785 nm spectrometer tracking glucose and acetate concentrations. |
+| `ecoli_metabolites` | Biological | Regression | Raman spectra of glucose and sodium acetate mixtures measured with an automated liquid handling station for high-throughput E. coli fermentation monitoring. |
+| `ecoli_metabolites_dig4bio` | Biological | Regression | Raman spectra of glucose, sodium acetate, and magnesium sulfate mixtures measured with an automated high-throughput system for E. coli fermentation monitoring. |
+| `flow_microgel_synthesis` | Chemical | Regression | In-line Raman spectra from a tubular flow reactor during microgel synthesis, paired with DLS-measured particle sizes. |
+| `formic_acid_species` | Chemical | Regression | Raman spectra and composition data for titration experiments of various acids in aqueous solution. |
+| `fuel_benchtop` | Chemical | Regression | Raman spectra from 179 commercial gasoline samples recorded with a benchtop 1064 nm FT-Raman system. Targets: RON, MON, and oxygenated additive concentrations. |
+| `fuel_handheld` | Chemical | Regression | Same 179 gasoline samples as `fuel_benchtop`, acquired with a handheld 785 nm spectrometer. Benchmarks model transferability across hardware. |
+| `hair_dyes_sers` | Chemical | Classification | SERS spectra of commercial hair dye products acquired with a portable Raman spectrometer. Target: brand identity. |
+| `head_neck_cancer` | Medical | Classification | Raman spectra of blood plasma and saliva from head and neck cancer patients and healthy controls. Target: cancer vs. control (binary). |
+| `ht_raman_bio_catalysis_axp` | Biological | Regression | Raman spectra for real-time monitoring of biocatalytic reactions in Deep Eutectic Solvents (DES). |
+| `illicit_adulterants_ft_raman` | Medical | Classification | FT-Raman spectra (1064 nm) of 11 pharmaceutically active adulterants in dietary supplements. Target: compound identity. |
+| `illicit_adulterants_sers` | Medical | Classification | SERS spectra (785 nm) of 11 illicit adulterants in dietary supplements. Target: compound identity. |
+| `itaconic_acid_species` | Chemical | Regression | Raman spectra and composition data for titration experiments of various acids in aqueous solution. |
+| `kaiser_ecoli_fermentation` | Biological | Regression | E. coli fermentation Raman spectra collected with a Kaiser spectrometer. |
+| `kaiser_ecoli_fermentation_supernatant` | Biological | Regression | E. coli fermentation supernatant Raman spectra collected with a Kaiser spectrometer. |
+| `levulinic_acid_species` | Chemical | Regression | Raman spectra and composition data for titration experiments of various acids in aqueous solution. |
+| `microgel_size_lf_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: Linear Fit, range: fingerprint region. |
+| `microgel_size_lf_global` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: Linear Fit, range: global. |
+| `microgel_size_mm_lf_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: MinMax + Linear Fit, range: fingerprint region. |
+| `microgel_size_mm_lf_global` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: MinMax + Linear Fit, range: global. |
+| `microgel_size_mm_rb_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: MinMax + Rubber Band, range: fingerprint region. |
+| `microgel_size_mm_rb_global` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: MinMax + Rubber Band, range: global. |
+| `microgel_size_raw_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: Raw, range: fingerprint region. |
+| `microgel_size_raw_global` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: Raw, range: global. |
+| `microgel_size_rb_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: Rubber Band, range: fingerprint region. |
+| `microgel_size_rb_global` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: Rubber Band, range: global. |
+| `microgel_size_snv_lf_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: SNV + Linear Fit, range: fingerprint region. |
+| `microgel_size_snv_lf_global` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: SNV + Linear Fit, range: global. |
+| `microgel_size_snv_rb_fingerprint` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: SNV + Rubber Band, range: fingerprint region. |
+| `microgel_size_snv_rb_global` | Chemical | Regression | Raman spectra of 235 microgel samples (208–483 nm diameter). Pretreatment: SNV + Rubber Band, range: global. |
+| `microgel_synthesis` | Chemical | Regression | In-line Raman spectra monitoring microgel synthesis in a tubular flow reactor with a customized measurement cell. |
+| `microplastics_weathered` | MaterialScience | Classification | Raman spectra of 167 virgin and UV-weathered microplastic particles across multiple polymer types (PE, PP, PS, PET, PVC, etc.). Target: polymer type. |
+| `mlrod` | MaterialScience | Classification | 500,000+ Raman spectra of rock-forming silicate, carbonate, and sulfate minerals under Mars-like low-SNR conditions, without spectral preprocessing. |
+| `organic_compounds_preprocess` | Chemical | Classification | Preprocessed Raman spectra of organic compounds from multiple excitation sources. Designed for transfer learning and domain adaptation benchmarks. |
+| `organic_compounds_raw` | Chemical | Classification | Raw Raman spectra of organic compounds from multiple excitation sources. Designed for transfer learning and domain adaptation benchmarks. |
+| `parkinson` | Medical | Classification | Raman spectra from dried saliva drops for Parkinson's Disease vs. healthy control classification. |
+| `pharmaceutical_ingredients` | Medical | Classification | 3,510 Raman spectra from 32 chemical substances including organic solvents and API development reagents. Target: compound identity. |
+| `ralstonia_fermentations` | Biological | Regression | P(HB-co-HHx) copolymer synthesis monitoring in Ralstonia eutropha batch cultivations, combining experimental and high-fidelity synthetic data. |
+| `rruff_mineral_preprocess` | MaterialScience | Classification | Preprocessed Raman spectra of 1,000+ mineral species from the RRUFF database, measured under varying conditions (532 nm and 785 nm). |
+| `rruff_mineral_raw` | MaterialScience | Classification | Raw Raman spectra of 1,000+ mineral species from the RRUFF database, measured under varying conditions (532 nm and 785 nm). |
+| `serum_alzheimer_disease` | Medical | Classification | Serum SERS spectra for classifying Alzheimer's disease (AD), Mild Cognitive Impairment (MCI), and healthy controls. |
+| `serum_prostate_cancer` | Medical | Classification | Serum SERS spectra for classifying Prostate Cancer (PCa), Benign Prostatic Hyperplasia (BPH), and healthy controls. |
+| `streptococcus_thermophilus_fermentation_kaiser` | Biological | Regression | Offline Raman spectra of Streptococcus thermophilus batch cultivations using a Kaiser RXN1 spectrometer. Two 24-hour fermentation runs in shake flasks. |
+| `streptococcus_thermophilus_fermentation_timegate` | Biological | Regression | Offline Time-Gated Raman spectra of Streptococcus thermophilus batch cultivations. Two 24-hour fermentation runs in shake flasks. |
+| `succinic_acid_species` | Chemical | Regression | Raman spectra and composition data for titration experiments of various acids in aqueous solution. |
+| `sugar_mixtures_high_snr` | Chemical | Regression | High-SNR sugar mixture Raman spectra (7,680 measurements at 0.5 s integration) for benchmarking quantification algorithms. |
+| `sugar_mixtures_low_snr` | Chemical | Regression | Low-SNR sugar mixture Raman spectra (7,680 measurements at 0.5 s integration) for evaluating noise robustness. |
+| `synthetic_organic_pigments_baseline_corrected` | MaterialScience | Regression | Baseline-corrected spectral library of ~300 synthetic organic pigments for art conservation identification. |
+| `synthetic_organic_pigments_raw` | MaterialScience | Regression | Raw spectral library of ~300 synthetic organic pigments for art conservation identification. |
+| `tg_ecoli_fermentation` | Biological | Regression | E. coli fermentation Raman spectra collected using Time-Gated Raman Spectroscopy. |
+| `tg_ecoli_fermentation_supernatant` | Biological | Regression | E. coli fermentation supernatant Raman spectra collected using Time-Gated Raman Spectroscopy. |
+| `wheat_lines` | Biological | Classification | Raman spectra of salt-stress-tolerant wheat mutant lines and commercial cultivars (785 nm). Target: mutant line vs. cultivar. |
+| `yeast_fermentation` | Biological | Regression | Raman spectra from continuous ethanolic fermentation of sucrose using Saccharomyces cerevisiae immobilized in calcium alginate beads. |
 
 <!-- AUTO-GENERATED: END - datasets table. -->
 <!-- DATASETS_TABLE_END -->
 
-## 📊 RamanDataset Class
+</details>
 
-Each loaded dataset returns a `RamanDataset` object with the following attributes and properties:
+## Contributing a Dataset
 
-| Attribute/Property | Type | Description |
-|-------------------|------|-------------|
-| `spectra` | `np.ndarray` | Raman spectra intensity data (2D: samples × wavenumbers, or 2D/object array if variable) |
-| `raman_shifts` | `np.ndarray` | Wavenumber/Raman shift values in cm⁻¹ (1D array, or 2D/object array if variable) |
-| `targets` | `np.ndarray` | Target labels (classification) or values (regression) |
-| `metadata` | `dict` | Dataset metadata including source, paper, and description |
-| `name` | `str` | Name of the dataset |
-| `task_type` | `TASK_TYPE` | Classification or Regression |
-| `application_type` | `APPLICATION_TYPE` | Application domain (MaterialScience, Biological, Medical, Chemical) |
-| `n_spectra` | `int` | Number of spectra in the dataset |
-| `n_frequencies` | `int` | Number of frequency points per spectrum |
-| `n_raman_shifts` | `int` | Number of Raman shift values |
-| `n_classes` | `int \| None` | Number of classes (classification only) |
-| `class_names` | `list \| None` | Unique class names (classification only) |
-| `target_range` | `tuple \| None` | (min, max) targets values (regression only) |
-| `min_shift` | `float` | Minimum Raman shift value |
-| `max_shift` | `float` | Maximum Raman shift value |
+We welcome contributions of new Raman datasets, especially from underrepresented domains, novel instrumentation, or larger sample sizes.
+A dataset is eligible for inclusion if it:
 
-**Support for Datasets with Multiple Raman Shifts:**
+- Contains **real, experimentally acquired** 1D Raman spectra (not synthetic or simulated)
+- Is **publicly available** without access restrictions or upon-request-only policies
+- Provides **ground-truth labels** (class labels for classification; continuous values for regression)
+- Is accompanied by a **citable reference** (paper, report, or dataset DOI)
 
-- If all spectra share identical raman_shifts, `raman_shifts` is a 1D array and `spectra` is a 2D array (n_samples × n_points).
-- If all spectra have the same number of points but different raman_shift values, both `raman_shifts` and `spectra` are 2D arrays (n_samples × n_points).
-- If spectra have different numbers of points, both `raman_shifts` and `spectra` are returned as 1D object arrays, where each entry is a 1D array for that sample.
-- This allows the library to support real-world datasets with variable or non-uniform spectral grids.
+### Step-by-step
 
-**Note:**
-- Downstream code should check the shape and dtype of `raman_shifts` and `spectra` to handle all cases robustly.
-- For machine learning, it is recommended to interpolate or pad spectra to a common grid if uniformity is required.
+**1. Host your data publicly.**
+Upload your dataset to [HuggingFace Datasets](https://huggingface.co/docs/datasets), [Zenodo](https://zenodo.org), [Figshare](https://figshare.com), or [Kaggle](https://www.kaggle.com/datasets).
+HuggingFace is preferred for its versioning and direct streaming support — see [`dataset_to_huggingface.md`](dataset_to_huggingface.md) for a step-by-step guide.
 
-The dataset can also be converted to a pandas DataFrame:
+**2. Choose the right loader.**
+Add your dataset entry to the corresponding loader file in `raman_data/loaders/`:
+
+| Source | Loader file |
+|--------|-------------|
+| HuggingFace | `HuggingFaceLoader.py` |
+| Zenodo | `ZenodoLoader.py` |
+| Figshare | `FigshareLoader.py` |
+| Kaggle | `KaggleLoader.py` |
+| Other URL (ZIP/file) | `ZipLoader.py` |
+
+**3. Add a dataset entry.**
+Each loader contains a `DATASETS` list. Add an entry following the existing pattern:
 
 ```python
-# df = dataset.to_dataframe()
+RamanDatasetConfig(
+    dataset_id="your_dataset_id",        # unique snake_case identifier
+    name="Your Dataset Name",            # human-readable name
+    short_name="Short Name",             # for tables and figures (≤ 30 chars)
+    task_type=TASK_TYPE.Regression,      # or TASK_TYPE.Classification
+    application_type=APPLICATION_TYPE.Biological,
+    description="One-sentence description of the dataset and task.",
+    source="https://doi.org/...",        # DOI or URL of the dataset
+    paper="https://doi.org/...",         # DOI of the associated paper
+    loader_fn=_load_your_dataset,        # function that returns (spectra, shifts, targets)
+)
 ```
 
-## 🎯 Milestones
+**4. Implement the loader function.**
+The loader function must return a tuple `(spectra, raman_shifts, targets)`:
 
-- [x] View Datasets
-- [x] Software architecture with dummy data
-- [x] Software tests
-- [x] Integration of Kaggle
-- [x] Integration of Huggingface
-- [x] Integration of Github
-- [x] Integration of Zenodo
-- [x] Code documentation (docstrings)
-- [x] Publish to PyPi
-- [ ] Integration of other datasets
-- [ ] API documentation website
+```python
+def _load_your_dataset(config: RamanDatasetConfig):
+    # Download / read your data here
+    spectra      = ...  # np.ndarray, shape (n_samples, n_wavenumbers)
+    raman_shifts = ...  # np.ndarray, shape (n_wavenumbers,), values in cm⁻¹
+    targets      = ...  # np.ndarray, shape (n_samples,) or (n_samples, n_targets)
+    return spectra, raman_shifts, targets
+```
 
-## 🚢 Publishing a New Version to PyPI
+**5. Add tests and open a pull request.**
+Add a test in `tests/` that loads your dataset and checks basic properties (shape, dtype, value ranges).
+Then open a pull request — we will review it and, if it meets the inclusion criteria, merge it and include it in the next RamanBench release.
 
-Releases are automated via GitHub Actions. Pushing a version tag triggers the CI pipeline: tests run first, then the package is built and published to PyPI automatically.
+## Releasing a New Version
+
+Releases are automated via GitHub Actions. A version tag triggers the CI pipeline: tests run first, then the package is built and published to PyPI automatically.
 
 ```bash
-# 1. Ensure all changes are committed and pushed to main
+# Ensure all changes are committed and pushed to main
 git checkout main && git pull
 
-# 2. Create and push a version tag (uses setuptools-scm for the version)
+# Tag and push (uses setuptools-scm for versioning)
 git tag v1.2.3
 git push origin v1.2.3
 ```
 
-The tag format must match `v*.*.*` (e.g., `v1.2.3`). Once pushed, the [CI workflow](https://github.com/ml-lab-htw/raman_data/actions) will:
-1. Run the test suite across Python 3.10–3.13
-2. Build the distribution packages
-3. Publish to [PyPI](https://pypi.org/project/raman-data/) using the `PYPI_API_TOKEN` secret configured in the repository settings
+The tag must match `v*.*.*`. The [CI workflow](https://github.com/ml-lab-htw/raman_data/actions) will run tests across Python 3.10–3.13, build the package, and publish to [PyPI](https://pypi.org/project/raman-data/).
 
-> **Note:** The `PYPI_API_TOKEN` secret must be set in GitHub → Settings → Secrets and variables → Actions before the first publish.
+## Citation
 
-## 🤝 Contributing
+If you use `raman-data` in your research, please cite the RamanBench paper:
 
-Contributions are welcome! To add a new dataset:
+```bibtex
+@article{koddenbrock2026ramanbench,
+  title={{RamanBench}: A Large-Scale Benchmark for Machine Learning on Raman Spectroscopy},
+  author={Koddenbrock, Mario and Lange, Christoph and others},
+  year={2026}
+}
+```
 
-1. Choose the appropriate loader based on the data source:
-   - `KaggleLoader` for Kaggle datasets
-   - `HuggingFaceLoader` for Hugging Face datasets
-   - `ZenodoLoader` for Zenodo datasets
-   - `ZipLoader` for other URL-based sources
-   - `MiscLoader` for datasets that do not fit into the above categories (e.g., DeepeR)
+## License
 
-2. Implement a loader function that returns a tuple of `(spectra, raman_shifts, targets)`:
-   - `spectra`: 2D numpy array of intensity values (samples × wavenumbers)
-   - `raman_shifts`: 1D numpy array of wavenumber values in cm⁻¹
-   - `targets`: numpy array of target labels or values
-
-3. Add the dataset to the loader's `DATASETS` dictionary with appropriate metadata.
-
-4. Add tests for the new dataset.
-
-## 🔮 For Later (Future Datasets)
-
-### Remaining / For Later (still not integrated)
-The following items remain to be added (suggested action: add a `DATASETS` entry under the appropriate loader, or add a loader placeholder with the source link):
-
-- High-throughput molecular imaging (DeepeR)
-  - URL: https://github.com/conor-horgan/DeepeR?tab=readme-ov-file#dataset
-  - Suggested loader: `MiscLoader` or `ZipLoader` depending on availability of packaged data
-  - Notes: README points to datasets; may require dataset-specific processing
-
-- spectrai raman spectra
-  - URL: https://github.com/conor-horgan/spectrai
-  - Suggested loader: `MiscLoader` / `ZipLoader`
-
-- Quantitative volumetric Raman imaging (Zenodo record)
-  - URL: https://zenodo.org/records/256329
-  - Suggested loader: `ZenodoLoader`
-
-- Raman spectra of chemical compounds (Springer / figshare)
-  - URL: https://springernature.figshare.com/articles/dataset/Open-source_Raman_spectra_of_chemical_compounds_for_active_pharmaceutical_ingredient_development/27931131
-  - Suggested loader: `ZipLoader`
-
-- Inline Raman Spectroscopy and Indirect Hard Modeling
-  - URL: https://publications.rwth-aachen.de/record/978266/files/
-  - Suggested loader: `ZipLoader` (file formats may be non-standard)
-
-- The Effect of Sulfate Electrolytes on the Liquid-Liquid Equilibrium
-  - URL: https://publications.rwth-aachen.de/record/978265/files/
-  - Suggested loader: `ZipLoader`
-
-- In-line Monitoring of Microgel Synthesis (weird format)
-  - URL: https://publications.rwth-aachen.de/record/834113/files/
-  - Suggested loader: `ZipLoader` (may require manual preprocessing)
-
-- N-isopropylacrylamide Microgel Synthesis
-  - URL: https://publications.rwth-aachen.de/record/959050/files/
-  - Suggested loader: `ZipLoader`
-
-- Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy
-  - URL: https://publications.rwth-aachen.de/record/959137
-  - Suggested loader: `ZipLoader`
-
-- NASA AHEAD dataset
-  - URL: https://ahed.nasa.gov/datasets/f5b6051bfeb18c5a7eaef6504582
-  - Suggested loader: `ZipLoader` / `MiscLoader`
+This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
+The individual datasets retain their original licenses as specified in each dataset's metadata.
