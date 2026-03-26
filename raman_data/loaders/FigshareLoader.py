@@ -47,7 +47,7 @@ class FigshareLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.Medical,
             id="serum_prostate_cancer",
-            name="SERS Serum Spectra for Prostate Cancer",
+            name="Prostate Cancer SERS Serum",
             short_name="SERS PCa/BPH/Control",
             loader=lambda cache_path: FigshareLoader._load_serum_prostate_cancer(cache_path),
             metadata={
@@ -64,7 +64,7 @@ class FigshareLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.Medical,
             id="serum_alzheimer_disease",
-            name="SERS Serum Spectra for Alzheimer's Disease",
+            name="Alzheimer's SERS Serum",
             short_name="SERS AD/MCI/Control",
             loader=lambda cache_path: FigshareLoader._load_serum_alzheimer_disease(cache_path),
             metadata={
