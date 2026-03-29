@@ -1,5 +1,6 @@
+from collections import Counter
 from examples.utils import plot_samples
-from raman_data import raman_data, TASK_TYPE
+from raman_data import raman_data
 
 # dataset_name = "organic_compounds_raw"
 # dataset = raman_data(dataset_name)
@@ -7,15 +8,21 @@ from raman_data import raman_data, TASK_TYPE
 
 
 datasets = raman_data(task_type=None)
-filtered_datasets = [dataset for dataset in datasets if "sugar_mixtures" in dataset]
+# datasets = [dataset for dataset in datasets if "diabetes_skin_ear_lobe" in dataset]
 
-for dataset_name in filtered_datasets:
+for dataset_name in datasets:
     dataset = raman_data(dataset_name)
 
-    print(f"Dataset: {dataset_name}")
-    print(f"  Task type: {dataset.task_type}")
-    print(f"  Number of samples: {len(dataset)}")
-    print(f"  Number of targets: {len(dataset.target_names)}")
-    print(f"  Target names: {dataset.target_names}")
 
-    plot_samples(dataset)
+    class_counts = Counter(dataset.targets)
+
+    filtered_classes = {class_name: count for class_name, count in class_counts.items() if count >= 9}
+    sorted_classes = sorted(filtered_classes.items(), key=lambda x: x[1])
+
+    if len(class_counts) != len(filtered_classes):
+        print(f"Dataset: {dataset_name}")
+        print(f"  Number of classes before filtering: {len(class_counts)}")
+        print(f"  Number of classes after filtering: {len(filtered_classes)}")
+
+
+    # plot_samples(dataset)
