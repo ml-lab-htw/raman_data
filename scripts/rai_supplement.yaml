@@ -1,0 +1,2541 @@
+# Editable RAI supplement for raman_data Croissant files.
+# Each top-level key is a dataset_key (as used in raman_data()).
+# Values here override the auto-generated RAI defaults on the next run.
+# Run generate_croissant.py after editing to regenerate the JSON-LD files.
+#
+# Available RAI fields per dataset:
+#   rai:dataCollection          — how the spectra were physically acquired
+#   rai:dataCollectionType      — type of measurement (e.g. patient samples)
+#   rai:dataPreprocessingProtocol — preprocessing applied before release
+#   rai:dataAnnotationProtocol  — how labels / targets were determined
+#   rai:personalSensitiveInformation — note if human data is present
+#   rai:dataBiases              — known biases and their sources
+#   rai:dataLimitations         — conditions where dataset may not apply
+#   rai:dataSocialImpact        — potential societal benefits or risks
+#   rai:dataUseCases            — recommended ML use cases
+
+acetic_acid_species:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+adenine_colloidal_gold:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+adenine_colloidal_silver:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+adenine_solid_gold:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+adenine_solid_silver:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+alzheimer:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+amino_acids_glycine:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+amino_acids_leucine:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+amino_acids_phenylalanine:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+amino_acids_tryptophan:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+bacteria_identification:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+biomolecules_reference:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+bioprocess_analytes_anton_532:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+bioprocess_analytes_anton_785:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+bioprocess_analytes_kaiser:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+bioprocess_analytes_metrohm:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+bioprocess_analytes_mettler_toledo:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+bioprocess_analytes_tec5:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+bioprocess_analytes_timegate:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+bioprocess_analytes_tornado:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+bioprocess_substrates:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+cancer_cell_(cooh)2:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+cancer_cell_cooh:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+cancer_cell_nh2:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+chembl_molecules:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+citric_acid_species:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+comfile_stroke:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+covid19_salvia:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+covid19_serum:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors. Access
+    to this dataset requires direct contact with the authors or a manual download
+    step; it is not publicly available via an open API.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+deepr_denoising:
+  rai:dataAnnotationProtocol: Reference (clean) spectra are high-SNR acquisitions
+    of the same samples obtained under longer integration times or reduced noise conditions.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory spectroscopic measurements.
+  rai:dataLimitations: Generalisability to other instruments or sample conditions
+    should be validated separately. Access to this dataset requires direct contact
+    with the authors or a manual download step; it is not publicly available via an
+    open API.
+  rai:dataPreprocessingProtocol: Raw noisy spectra are paired with high-SNR reference
+    spectra of the same samples for supervised denoising model training.
+  rai:dataSocialImpact: Raman spectroscopy datasets support the development of machine
+    learning models for non-destructive molecular analysis across a broad range of
+    scientific and industrial domains.
+  rai:dataUseCases: Training and benchmarking deep learning denoising models for low-SNR
+    Raman spectra.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+deepr_super_resolution:
+  rai:dataAnnotationProtocol: High-resolution reference spectra acquired with finer
+    wavenumber spacing than the low-resolution counterpart.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory spectroscopic measurements.
+  rai:dataLimitations: Generalisability to other instruments or sample conditions
+    should be validated separately. Access to this dataset requires direct contact
+    with the authors or a manual download step; it is not publicly available via an
+    open API.
+  rai:dataPreprocessingProtocol: Low-resolution spectra are paired with high-resolution
+    reference spectra of the same samples for supervised super-resolution model training.
+  rai:dataSocialImpact: Raman spectroscopy datasets support the development of machine
+    learning models for non-destructive molecular analysis across a broad range of
+    scientific and industrial domains.
+  rai:dataUseCases: Training and benchmarking spectral super-resolution models for
+    Raman resolution enhancement.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+diabetes_skin_ages:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+diabetes_skin_ear_lobe:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+diabetes_skin_inner_arm:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+diabetes_skin_thumbnail:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+diabetes_skin_vein:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+ecoli_fermentation:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+ecoli_metabolites:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+ecoli_metabolites_dig4bio:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+flow_microgel_synthesis:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended.
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+formic_acid_species:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+fuel_benchtop:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+fuel_handheld:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+hair_dyes_sers:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+head_neck_cancer:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+ht_raman_bio_catalysis_axp:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+illicit_adulterants_ft_raman:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration.
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+illicit_adulterants_sers:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration.
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+itaconic_acid_species:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+kaiser_ecoli_fermentation:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+kaiser_ecoli_fermentation_supernatant:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+levulinic_acid_species:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_lf_fingerprint:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_lf_global:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_mm_lf_fingerprint:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_mm_lf_global:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_mm_rb_fingerprint:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_mm_rb_global:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_raw_fingerprint:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_raw_global:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_rb_fingerprint:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_rb_global:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_snv_lf_fingerprint:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_snv_lf_global:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_snv_rb_fingerprint:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_size_snv_rb_global:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microgel_synthesis:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended.
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+microplastics_weathered:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on solid or liquid material samples
+    including minerals, polymers, and organic pigments.
+  rai:dataLimitations: Reference spectra represent ideal laboratory conditions; real-world
+    samples may show additional interference from impurities, fluorescence, or surface
+    effects.
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Facilitates non-destructive material characterisation and
+    identification with applications in geology, environmental science, art conservation,
+    and industrial quality assurance.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+mlrod:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on solid or liquid material samples
+    including minerals, polymers, and organic pigments.
+  rai:dataLimitations: 'Reference spectra represent ideal laboratory conditions; real-world
+    samples may show additional interference from impurities, fluorescence, or surface
+    effects. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Facilitates non-destructive material characterisation and
+    identification with applications in geology, environmental science, art conservation,
+    and industrial quality assurance.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+organic_compounds_preprocess:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+organic_compounds_raw:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+parkinson:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+pharmaceutical_ingredients:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+ralstonia_fermentations:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+rruff_mineral_preprocess:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on solid or liquid material samples
+    including minerals, polymers, and organic pigments.
+  rai:dataLimitations: 'Reference spectra represent ideal laboratory conditions; real-world
+    samples may show additional interference from impurities, fluorescence, or surface
+    effects. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Facilitates non-destructive material characterisation and
+    identification with applications in geology, environmental science, art conservation,
+    and industrial quality assurance.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+rruff_mineral_raw:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on solid or liquid material samples
+    including minerals, polymers, and organic pigments.
+  rai:dataLimitations: 'Reference spectra represent ideal laboratory conditions; real-world
+    samples may show additional interference from impurities, fluorescence, or surface
+    effects. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Facilitates non-destructive material characterisation and
+    identification with applications in geology, environmental science, art conservation,
+    and industrial quality assurance.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+serum_alzheimer_disease:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+serum_prostate_cancer:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
+    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
+    instruments, sample matrices, or patient populations without re-calibration. Note:
+    No explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
+    potential to support the development of non-invasive, low-cost screening tools
+    with particular relevance to resource-limited healthcare settings. Results must
+    be validated by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: Spectra are derived from human biological samples
+    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
+    but biological measurements may constitute sensitive health-related data under
+    applicable data-protection regulations.
+streptococcus_thermophilus_fermentation_kaiser:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+streptococcus_thermophilus_fermentation_timegate:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+succinic_acid_species:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+sugar_mixtures_high_snr:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+sugar_mixtures_low_snr:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
+    compounds, mixtures, and solutions.
+  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
+    and chemical matrix of the training data; extrapolation outside these ranges is
+    not recommended. Note: No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
+    original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology
+    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
+    processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+synthetic_organic_pigments_baseline_corrected:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on solid or liquid material samples
+    including minerals, polymers, and organic pigments.
+  rai:dataLimitations: Reference spectra represent ideal laboratory conditions; real-world
+    samples may show additional interference from impurities, fluorescence, or surface
+    effects. Access to this dataset requires direct contact with the authors or a
+    manual download step; it is not publicly available via an open API.
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Facilitates non-destructive material characterisation and
+    identification with applications in geology, environmental science, art conservation,
+    and industrial quality assurance.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+synthetic_organic_pigments_raw:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on solid or liquid material samples
+    including minerals, polymers, and organic pigments.
+  rai:dataLimitations: Reference spectra represent ideal laboratory conditions; real-world
+    samples may show additional interference from impurities, fluorescence, or surface
+    effects. Access to this dataset requires direct contact with the authors or a
+    manual download step; it is not publicly available via an open API.
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Facilitates non-destructive material characterisation and
+    identification with applications in geology, environmental science, art conservation,
+    and industrial quality assurance.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+tg_ecoli_fermentation:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+tg_ecoli_fermentation_supernatant:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+wheat_lines:
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
+yeast_fermentation:
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
+    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
+    calibration transfer to other setups requires additional validation. Note: No
+    explicit license was stated by the original data providers; CC BY 4.0 has been
+    assumed. Users should verify the applicable terms with the original authors.'
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
+    quantitative spectral analysis, process analytical technology (PAT).
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
