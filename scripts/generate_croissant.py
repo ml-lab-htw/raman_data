@@ -704,7 +704,7 @@ def build_croissant_from_scratch(
     meta = info.metadata
     source: str = meta.get("source", "") or ""
 
-    license_url, conditions_of_access, _ = normalise_license(meta.get("license"))
+    license_url, conditions_of_access, _ = normalise_license(info.license)
 
     papers = normalise_papers(meta.get("paper"))
     doi_field: str = meta.get("doi", "") or ""
@@ -870,7 +870,7 @@ def process_dataset(
     platform = detect_platform(info)
     manual = is_manual_access(info)
 
-    _, _, license_inferred = normalise_license(meta.get("license"))
+    _, _, license_inferred = normalise_license(info.license)
     if license_inferred:
         warnings.append("license assumed CC BY 4.0")
     if manual:
