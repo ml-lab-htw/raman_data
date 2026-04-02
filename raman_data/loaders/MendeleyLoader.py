@@ -43,6 +43,7 @@ class MendeleyLoader(BaseLoader):
             id="illicit_adulterants_ft_raman",
             name="Illicit Adulterants in Dietary Supplements (FT-Raman)",
             short_name="Illicit Adult. (FT)",
+            license="CC BY 4.0",
             loader=lambda cache_path: MendeleyLoader._load_adulterants(cache_path, instrument="ft_raman"),
             metadata={
                 "full_name": "Dataset of Raman and SERS spectra of illicit adulterants added to dietary supplements",
@@ -50,7 +51,6 @@ class MendeleyLoader(BaseLoader):
                 "doi": "10.17632/y4md8znppn/1",
                 "paper": "https://doi.org/10.1016/j.heliyon.2023.e18509",
                 "citation": _CITATION,
-                "license": "CC BY 4.0",
                 "description": (
                     "FT-Raman spectra (1064 nm, ~33–3600 cm⁻¹, 1851 points) of 11 SERS-active pharmaceutically "
                     "active adulterants commonly found in adulterated dietary supplements. Acquired with a benchtop "
@@ -65,6 +65,7 @@ class MendeleyLoader(BaseLoader):
             id="illicit_adulterants_sers",
             name="Illicit Adulterants in Dietary Supplements (SERS)",
             short_name="Illicit Adult. (SERS)",
+            license="CC BY 4.0",
             loader=lambda cache_path: MendeleyLoader._load_adulterants(cache_path, instrument="sers"),
             metadata={
                 "full_name": "Dataset of Raman and SERS spectra of illicit adulterants added to dietary supplements",
@@ -72,7 +73,6 @@ class MendeleyLoader(BaseLoader):
                 "doi": "10.17632/y4md8znppn/1",
                 "paper": "https://doi.org/10.1016/j.heliyon.2023.e18509",
                 "citation": _CITATION,
-                "license": "CC BY 4.0",
                 "description": (
                     "SERS spectra (785 nm, 400–2300 cm⁻¹, 1901 points) of 11 SERS-active illicit adulterants "
                     "found in dietary supplements. Acquired with a portable Metrohm MISA analyzer using silver "
@@ -87,12 +87,12 @@ class MendeleyLoader(BaseLoader):
             id="microplastics_weathered",
             name="Weathered Microplastics",
             short_name="Weathered Microplastics",
+            license="CC BY 4.0",
             loader=lambda cache_path: MendeleyLoader._load_microplastics(cache_path),
             metadata={
                 "full_name": "Raman Spectra of Weathered Microplastics Dataset",
                 "source": "https://data.mendeley.com/datasets/kpygrf9fg6",
                 "doi": "10.17632/kpygrf9fg6",
-                "license": "CC BY 4.0",
                 "description": (
                     "Raman spectra of 167 virgin and UV-weathered microplastic particles spanning multiple common "
                     "polymer types (PE, PP, PS, PET, PVC, etc.). Files prefixed 'sta-' are unweathered standards; "

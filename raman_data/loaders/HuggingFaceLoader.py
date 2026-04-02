@@ -37,6 +37,7 @@ class HuggingFaceLoader(BaseLoader):
             id="bioprocess_substrates",
             name="Bioprocess Monitoring",
             short_name="Bioprocess Monitor.",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Bioprocess Monitoring Raman Dataset",
@@ -52,6 +53,7 @@ class HuggingFaceLoader(BaseLoader):
             id="ecoli_fermentation",
             name="E. Coli Fermentation",
             short_name="E. coli Fermentation",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "E. Coli Fermentation Raman Dataset",
@@ -67,6 +69,7 @@ class HuggingFaceLoader(BaseLoader):
             id="fuel_benchtop",
             name="Gasoline Properties (Benchtop)",
             short_name="Gasoline (Benchtop)",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Gasoline Properties Raman Dataset (Benchtop)",
@@ -82,6 +85,7 @@ class HuggingFaceLoader(BaseLoader):
             id="FuelRamanSpectraHandheld",
             name="Gasoline Properties (Handheld)",
             short_name="Gasoline (Handheld)",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Gasoline Properties Raman Dataset (Handheld)",
@@ -97,6 +101,7 @@ class HuggingFaceLoader(BaseLoader):
             id="yeast_fermentation",
             name="Yeast Fermentation",
             short_name="Yeast Fermentation",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Ethanolic Yeast Fermentation Raman Dataset",
@@ -112,6 +117,7 @@ class HuggingFaceLoader(BaseLoader):
             id="ralstonia_fermentations",
             name="R. eutropha Copolymer Fermentations",
             short_name="Ralstonia Ferment.",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "R. eutropha Copolymer Fermentation Raman Dataset",
@@ -127,6 +133,7 @@ class HuggingFaceLoader(BaseLoader):
             id="bioprocess_analytes_anton_532",
             name="Bioprocess Analytes Anton 532",
             short_name="BP Analytes Anton 532",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Anton 532",
@@ -142,6 +149,7 @@ class HuggingFaceLoader(BaseLoader):
             id="bioprocess_analytes_anton_785",
             name="Bioprocess Analytes Anton 785",
             short_name="BP Analytes Anton 785",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Anton 785",
@@ -157,6 +165,7 @@ class HuggingFaceLoader(BaseLoader):
             id="bioprocess_analytes_kaiser",
             name="Bioprocess Analytes Kaiser",
             short_name="BP Analytes Kaiser",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Kaiser",
@@ -172,6 +181,7 @@ class HuggingFaceLoader(BaseLoader):
             id="bioprocess_analytes_metrohm",
             name="Bioprocess Analytes Metrohm",
             short_name="BP Analytes Metrohm",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Metrohm",
@@ -187,6 +197,7 @@ class HuggingFaceLoader(BaseLoader):
             id="bioprocess_analytes_mettler_toledo",
             name="Bioprocess Analytes Mettler Toledo",
             short_name="BP Analytes M. Toledo",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Mettler Toledo",
@@ -202,6 +213,7 @@ class HuggingFaceLoader(BaseLoader):
             id="bioprocess_analytes_tec5",
             name="Bioprocess Analytes Tec5",
             short_name="BP Analytes Tec5",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Tec5",
@@ -217,6 +229,7 @@ class HuggingFaceLoader(BaseLoader):
             id="bioprocess_analytes_timegate",
             name="Bioprocess Analytes Timegate",
             short_name="BP Analytes Timegate",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Timegate",
@@ -232,6 +245,7 @@ class HuggingFaceLoader(BaseLoader):
             id="bioprocess_analytes_tornado",
             name="Bioprocess Analytes Tornado",
             short_name="BP Analytes Tornado",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes Tornado",
@@ -247,6 +261,7 @@ class HuggingFaceLoader(BaseLoader):
             id="ecoli_metabolites_dig4bio",
             name="E. Coli Metabolites Dig4Bio",
             short_name="E. Coli Metab. D4B",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of E. Coli Metabolites Dig4Bio",
@@ -262,6 +277,7 @@ class HuggingFaceLoader(BaseLoader):
             id="bioprocess_analytes_ecoli_metabolites",
             name="Bioprocess Analytes E. Coli Metabolites",
             short_name="E. Coli Metabolites",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Bioprocess Analytes E. Coli Metabolites",
@@ -277,6 +293,7 @@ class HuggingFaceLoader(BaseLoader):
             id="ht_raman_bio_catalysis_axp",
             name="Bio-Catalysis Monitoring of AXP",
             short_name="Bio-Catalysis (AXP)",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "High-Throughput Raman Spectroscopic Monitoring of Adenosine Phosphates",
@@ -292,6 +309,7 @@ class HuggingFaceLoader(BaseLoader):
             id="streptococcus_thermophilus_fermentation_timegate",
             name="Time-Gated Raman Spectra of Streptococcus thermophilus Fermentations",
             short_name="S. thermophilus Ferment. (Timegate)",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Time-Gated Raman Spectra of Streptococcus thermophilus Fermentations",
@@ -307,6 +325,7 @@ class HuggingFaceLoader(BaseLoader):
             id="streptococcus_thermophilus_fermentation_kaiser",
             name="Raman Spectra of Streptococcus thermophilus Fermentations Kaiser",
             short_name="S. thermophilus Ferment. (Kaiser)",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Raman Spectra of Streptococcus thermophilus Fermentations Kaiser",
@@ -322,6 +341,7 @@ class HuggingFaceLoader(BaseLoader):
             id="kaiser_ecoli_fermentation_supernatant",
             name="Kaiser Raman E. coli Fermentation Supernatant",
             short_name="Kaiser E. coli Supern.",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Kaiser Raman Spectra of E. coli Fermentation Supernatant",
@@ -337,6 +357,7 @@ class HuggingFaceLoader(BaseLoader):
             id="kaiser_ecoli_fermentation",
             name="Kaiser Raman E. coli Fermentation",
             short_name="Kaiser E. coli Ferment.",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Kaiser Raman Spectra of E. coli Fermentation",
@@ -352,6 +373,7 @@ class HuggingFaceLoader(BaseLoader):
             id="tg_ecoli_fermentation_supernatant",
             name="Time-Gated Raman E. coli Fermentation Supernatant",
             short_name="TG E. coli Supern.",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Time-Gated Raman Spectra of E. coli Fermentation Supernatant",
@@ -367,6 +389,7 @@ class HuggingFaceLoader(BaseLoader):
             id="tg_ecoli_fermentation",
             name="Time-Gated Raman E. coli Fermentation",
             short_name="TG E. coli Ferment.",
+            license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
                 "full_name": "Time-Gated Raman Spectra of E. coli Fermentation",

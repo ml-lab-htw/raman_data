@@ -28,6 +28,7 @@ class GitHubLoader(BaseLoader):
             id="covid19_salvia",
             name="Saliva COVID-19",
             short_name="Saliva COVID-19",
+            license="unknown",
             loader=lambda cache_path: GitHubLoader._load_mind_dataset(cache_path, "covid_dataset", ["CTRL", "COV+", "COV-"]),
             metadata={
                 "full_name": "Saliva COVID-19 Raman Dataset",
@@ -46,6 +47,7 @@ class GitHubLoader(BaseLoader):
                 id=f"{disease.lower()}",
                 name=f"Saliva {disease}",
                 short_name=f"Saliva {disease}",
+                license="unknown",
                 loader=lambda cache_path, c=disease[0]: GitHubLoader._load_mind_dataset(cache_path, "pd_ad_dataset", [f"{c}D", "CTRL"]),
                 metadata={
                     "full_name": f"Saliva Neurodegenerative Disease Raman Dataset ({disease})",
@@ -65,6 +67,7 @@ class GitHubLoader(BaseLoader):
             id="biomolecules_reference",
             name="Biomolecules",
             short_name="Biomolecules Ref.",
+            license="GPL-3.0",
             loader=lambda cache_path: GitHubLoader._load_ramanbiolib(cache_path),
             metadata={
                 "full_name": "RamanBioLib — Reference Raman Spectra of Biomolecules",

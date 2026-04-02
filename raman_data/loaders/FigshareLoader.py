@@ -32,6 +32,7 @@ class FigshareLoader(BaseLoader):
             id="pharmaceutical_ingredients",
             name="Pharmaceutical Ingredients",
             short_name="Pharma Ingredients",
+            license="CC BY 4.0",
             loader=lambda cache_path: FigshareLoader._load_api(cache_path),
             metadata={
                 "full_name": "Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development",
@@ -49,6 +50,7 @@ class FigshareLoader(BaseLoader):
             id="serum_prostate_cancer",
             name="Prostate Cancer SERS Serum",
             short_name="SERS PCa/BPH/Control",
+            license="CC BY 4.0",
             loader=lambda cache_path: FigshareLoader._load_serum_prostate_cancer(cache_path),
             metadata={
                 "full_name": "ComFilE for PCa",
@@ -66,6 +68,7 @@ class FigshareLoader(BaseLoader):
             id="serum_alzheimer_disease",
             name="Alzheimer's SERS Serum",
             short_name="SERS AD/MCI/Control",
+            license="CC BY 4.0",
             loader=lambda cache_path: FigshareLoader._load_serum_alzheimer_disease(cache_path),
             metadata={
                 "full_name": "ComFilE for AD",
@@ -83,6 +86,7 @@ class FigshareLoader(BaseLoader):
             id="comfile_stroke",
             name="Stroke SERS Serum",
             short_name="Stroke SERS Serum",
+            license="CC BY 4.0",
             loader=lambda cache_path: FigshareLoader._load_comfile_stroke(cache_path),
             metadata={
                 "full_name": "ComFilE: SERS serum spectra for stroke classification",
@@ -106,6 +110,7 @@ class FigshareLoader(BaseLoader):
             id="chembl_molecules",
             name="Raman-ChEMBL Molecules",
             short_name="Raman-ChEMBL",
+            license="CC BY 4.0",
             loader=lambda cache_path: FigshareLoader._load_raman_chembl_part2(cache_path),
             metadata={
                 "full_name": "Raman-ChEMBL-part2",

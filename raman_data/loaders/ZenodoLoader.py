@@ -360,6 +360,7 @@ class ZenodoLoader(BaseLoader):
                 name=f"Sugar Mixtures ({snr} SNR)",
                 short_name=f"Sugar Mix. ({snr} SNR)",
                 file_typ="*.zip",
+                license="CC BY 4.0",
                 loader=lambda cache_path, snr=snr: ZenodoLoader.__load_10779223(cache_path, f"{snr} SNR"),
                 metadata={
                     "full_name": f"Sugar Mixtures Raman Dataset ({snr} SNR)",
@@ -377,6 +378,7 @@ class ZenodoLoader(BaseLoader):
             name="Mutant Wheat",
             short_name="Mutant Wheat",
             file_typ="*.mat",
+            license="CC BY 4.0",
             loader=lambda cache_path: ZenodoLoader.__load_7644521(cache_path),
             metadata={
                 "full_name": "Mutant Wheat Raman Dataset",
@@ -393,6 +395,7 @@ class ZenodoLoader(BaseLoader):
                 name=f"Adenine ({type} {material})",
                 short_name=f"Adenine ({type[:3]}. {material})",
                 file_typ="*.csv",
+                license="CC BY 4.0",
                 loader=lambda cache_path, t=type, m=material: ZenodoLoader.__load_3572359(cache_path, t, m),
                 metadata={
                     "full_name": f"SERS Interlaboratory Adenine Dataset ({type} {material})",
@@ -411,6 +414,7 @@ class ZenodoLoader(BaseLoader):
             name="Hair Dyes SERS",
             short_name="Hair Dyes (SERS)",
             file_typ="*.csv",
+            license="CC BY 4.0",
             loader=lambda cache_path: ZenodoLoader.__load_18881751(cache_path),
             metadata={
                 "full_name": "SERS Spectra of Hair Dyes Dataset",
@@ -446,6 +450,7 @@ class ZenodoLoader(BaseLoader):
             name="Head & Neck Cancer",
             short_name="Head & Neck Cancer",
             file_typ="*.zip",
+            license="CC BY 4.0",
             loader=lambda cache_path: ZenodoLoader.__load_7044324(cache_path),
             metadata={
                 "full_name": "Head and Neck Cancer Raman Spectroscopy Dataset",

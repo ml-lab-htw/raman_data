@@ -30,6 +30,7 @@ class RWTHLoader(BaseLoader):
             id="flow_microgel_synthesis",
             name="Microgel Synthesis in Flow",
             short_name="Microgel Flow Synth.",
+            license="CC BY 4.0",
             loader=lambda cache_path: RWTHLoader._load_flow_microgel_synthesis(cache_path),
             metadata={
                 "full_name": "Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis",
@@ -42,7 +43,6 @@ class RWTHLoader(BaseLoader):
                     "Kaven, Luise F and Schweidtmann, Artur M and Keil, Jan and Israel, Jana and Wolter, Nadja and Mitsos, Alexander. Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis. Chemical Engineering Journal, 479, 147567, 2024, Elsevier"
                 ],
                 "description": "This data set contains in-line Raman spectroscopy measurements and predicted microgel sizes from Dynamic Light Scattering (DLS).The Raman spectroscopy measurements were conducted inside a customized measurement cell for monitoring in a tubular flow reactor.Inside the flow reactor, the microgel synthesis based on the monomer N-Isopropylacrylamid and the crosslinker N, N' Methylenebis(acrylamide) takes place.",
-                "license": "CC BY 4.0"
             }
         ),
         "microgel_synthesis": DatasetInfo(
@@ -51,6 +51,7 @@ class RWTHLoader(BaseLoader):
             id="microgel_synthesis",
             name="Microgel Synthesis Flow vs. Batch",
             short_name="µGel Synthesis F/B",
+            license="CC BY 4.0",
             loader=lambda cache_path: RWTHLoader._load_microgel_synthesis(cache_path),
             metadata={
                 "full_name": "In-line Monitoring of Microgel Synthesis: Flow versus Batch Reactor",
@@ -60,7 +61,6 @@ class RWTHLoader(BaseLoader):
                     "Kaven, Luise F., et al. 'In-line monitoring of microgel synthesis: flow versus batch reactor.' Organic Process Research & Development 25.9 (2021): 2039-2051."
                 ],
                 "description": "This data set contains in-line Raman spectroscopy measurements inside a customized measurement cell for monitoring in a tubular flow reactor. The setup aims at monitoring the microgel synthesis in a flow reactor while aiming at a high measurement precision. The measurements include a systematic accuracy analysis, where different aspects of the flowing analyte are considered: solvent flow, flowing monomer solution, and flowing microgel solution. In addition, measurements for different calibration strategies are included. Lastly, this data set contains measurements of the microgel synthesis at varying residence times inside the tubular flow reactor.",
-                "license": "CC BY 4.0"
             }
         ),
         **{
@@ -70,6 +70,7 @@ class RWTHLoader(BaseLoader):
                 id=f"{acid.lower()}_acid_species",
                 name=f"{acid} Concentration",
                 short_name=f"{acid} Acid",
+                license="CC0 1.0",
                 loader=lambda cache_path, a=acid: RWTHLoader._load_acid_species(cache_path, a),
                 metadata={
                     "full_name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
@@ -93,6 +94,7 @@ class RWTHLoader(BaseLoader):
                 id=f"microgel_size_{short_key}_{spectral_range.lower()}",
                 name=f"Microgel Size ({label}, {spectral_range})",
                 short_name=f"µGel ({'FP' if spectral_range == 'FingerPrint' else 'Gl.'}, {short_key.upper()})",
+                license="CC BY-NC 3.0",
                 loader=lambda cache_path, _f=file_key, _r=spectral_range: RWTHLoader._load_microgel_size(cache_path, _f, _r),
                 metadata={
                     "full_name": "Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy",

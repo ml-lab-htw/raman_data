@@ -29,6 +29,7 @@ class GoogleDriveLoader(BaseLoader):
                 id=f"rruff_mineral_{processed.lower()}",
                 name=f"RRUFF Minerals ({processed})",
                 short_name=f"RRUFF ({'Raw' if processed == 'Raw' else 'Pre.'})",
+                license="unknown",
                 loader=lambda cache_path, p=processed: GoogleDriveLoader._load_onewarmheart(
                     cache_path, split=f"mineral_{p.lower()}"),
                 metadata={
@@ -50,6 +51,7 @@ class GoogleDriveLoader(BaseLoader):
                 id=f"organic_compounds_{processed.lower()}",
                 name=f"Organic Compounds ({processed})",
                 short_name=f"Organic Cpds. ({'Raw' if processed == 'Raw' else 'Pre.'})",
+                license="unknown",
                 loader=lambda cache_path, p=processed: GoogleDriveLoader._load_onewarmheart(
                     cache_path, split=f"organic_{p.lower()}"),
                 metadata={

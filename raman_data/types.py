@@ -101,6 +101,7 @@ class DatasetInfo:
     application_type: APPLICATION_TYPE = APPLICATION_TYPE.Unknown
     file_typ: Optional[str | List[str] | None] = None
     short_name: str = ""
+    license: str = "unknown"
 
 
 
