@@ -26,6 +26,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import mlcroissant as mlc
 import requests
 import yaml
 
@@ -47,13 +48,43 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-_CROISSANT_CONTEXT: dict[str, str] = {
+_CROISSANT_CONTEXT: dict = {
     "@language": "en",
     "@vocab": "https://schema.org/",
-    "sc": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
     "cr": "http://mlcommons.org/croissant/",
     "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {"@id": "cr:data", "@type": "@json"},
+    "dataType": {"@id": "cr:dataType", "@type": "@vocab"},
     "dct": "http://purl.org/dc/terms/",
+    "examples": {"@id": "cr:examples", "@type": "@json"},
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
 }
 
 _CROISSANT_CONFORMS_TO: str = "http://mlcommons.org/croissant/1.0"
@@ -774,11 +805,12 @@ def extend_croissant(existing: dict, rai: dict) -> dict:
 
     result["dct:conformsTo"] = primary_conforms or _CROISSANT_CONFORMS_TO
 
-    # Ensure rai namespace is declared in @context
+    # Ensure the @context contains all standard Croissant keys.
+    # Platform-fetched contexts are often incomplete; fill gaps from the
+    # canonical context so the mlcroissant validator does not warn.
     ctx = result.get("@context", {})
-    if isinstance(ctx, dict) and "rai" not in ctx:
-        ctx = dict(ctx)
-        ctx["rai"] = "http://mlcommons.org/croissant/RAI/"
+    if isinstance(ctx, dict):
+        ctx = {**_CROISSANT_CONTEXT, **ctx}
         result["@context"] = ctx
 
     # Patch FileObject/FileSet @type to use cr: (mlcommons) namespace, which
@@ -929,6 +961,37 @@ def process_dataset(
 
 
 # ---------------------------------------------------------------------------
+# Validation
+# ---------------------------------------------------------------------------
+
+def validate_croissant(path: Path) -> tuple[list[str], list[str]]:
+    """
+    Validate a written Croissant JSON-LD file with mlcroissant.
+
+    Returns (errors, warnings) as lists of strings.  Both are empty on success.
+    """
+    errors: list[str] = []
+    warnings: list[str] = []
+    try:
+        with path.open("r", encoding="utf-8") as fh:
+            json_data = json.load(fh)
+        mlc.Dataset(jsonld=json_data)
+    except mlc.ValidationError as exc:
+        msg = str(exc)
+        for line in msg.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            if line.startswith("- ") or "error" in line.lower():
+                errors.append(line.lstrip("- "))
+            elif "warning" in line.lower():
+                warnings.append(line.lstrip("- "))
+    except Exception as exc:
+        errors.append(f"unexpected validation error: {exc}")
+    return errors, warnings
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -952,6 +1015,12 @@ def main() -> None:
             "Path to the editable RAI supplement YAML. "
             "Created automatically on first run; edit to refine RAI descriptions."
         ),
+    )
+    parser.add_argument(
+        "--validate",
+        action="store_true",
+        default=False,
+        help="Validate each generated file with mlcroissant after writing it.",
     )
     args = parser.parse_args()
 
@@ -977,8 +1046,17 @@ def main() -> None:
         with out_path.open("w", encoding="utf-8") as fh:
             json.dump(doc, fh, indent=2, ensure_ascii=False)
 
+        if args.validate:
+            val_errors, val_warnings = validate_croissant(out_path)
+            if val_errors:
+                warns.append(f"VALIDATION ERRORS: {'; '.join(val_errors)}")
+            elif val_warnings:
+                warns.append(f"validation warnings: {len(val_warnings)}")
+            else:
+                warns.append("validation ok")
+
         if dataset_key not in rai_supplement:
-            _, _, license_inferred = normalise_license(info.metadata.get("license"))
+            _, _, license_inferred = normalise_license(info.license)
             new_rai_entries[dataset_key] = auto_rai_fields(
                 info, license_inferred, is_manual_access(info)
             )
@@ -998,10 +1076,13 @@ def main() -> None:
     n_ok = sum(1 for *_, fname, _ in rows if fname != "FAILED")
     n_fetched = sum(1 for *_, _, warns in rows if warns and warns[0].startswith("fetched from"))
     n_fail = len(rows) - n_ok
+    n_val_errors = sum(1 for *_, _, warns in rows if any("VALIDATION ERRORS" in w for w in warns))
     print(f"\nGenerated {n_ok} Croissant files → {output_dir}/")
     print(f"  {n_fetched} fetched from platform   |   {n_ok - n_fetched} generated from metadata")
     if n_fail:
         print(f"  {n_fail} failed — see log above")
+    if args.validate:
+        print(f"  {n_val_errors} validation errors   |   {n_ok - n_val_errors} passed validation")
     print(f"\n{'Dataset key':<55} {'Loader':<15} Notes")
     print("─" * 100)
     for key, loader, fname, warns in rows:

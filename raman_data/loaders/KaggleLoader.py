@@ -49,7 +49,7 @@ class KaggleLoader(BaseLoader):
                 id=f"diabetes_skin_{position.lower().replace(' ', '_')}",
                 name=f"Diabetes Skin ({position})",
                 short_name=f"Diab. Skin ({position})",
-                license="unknown",
+                license="Optica Open Access Publishing Agreement",
                 loader=lambda position=position: KaggleLoader.__load_diabetes(position),
                 metadata={
                     "full_name": "codina_raman-spectroscopy-of-diabetes",
@@ -85,7 +85,7 @@ class KaggleLoader(BaseLoader):
                 id=f"cancer_cell_{element.lower()}",
                 name=f"Cancer Cell Metabolite ({element})",
                 short_name=f"Cancer Cells ({element})",
-                license="unknown",
+                license="CC BY-NC-SA 4.0",
                 loader=lambda element=element: KaggleLoader.__load_andriitrelin(element),
                 metadata={
                     "full_name": "andriitrelin_cells-raman-spectra",
