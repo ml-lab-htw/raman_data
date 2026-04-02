@@ -19,6 +19,7 @@ Usage
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import logging
 import re
@@ -399,16 +400,33 @@ def build_distribution(
     full_name: str = info.metadata.get("full_name", "") or info.name
 
     if platform == "figshare" and figshare_files:
-        entries = []
+        # Primary FileObject (article URL) — referenced by RecordSet fields as source
+        entries: list[dict] = [{
+            "@type": "cr:FileObject",
+            "@id": f"{dataset_key}_source",
+            "name": full_name,
+            "description": "Figshare article hosting all data files.",
+            "contentUrl": source,
+            "encodingFormat": "text/html",
+            "sha256": hashlib.sha256(source.encode()).hexdigest(),
+        }]
         for f in figshare_files:
             file_id = f.get("id") or f.get("name", "unknown")
-            entries.append({
+            entry: dict = {
                 "@type": "cr:FileObject",
                 "@id": f"{dataset_key}_file_{file_id}",
                 "name": f.get("name", "unknown"),
                 "contentUrl": f.get("download_url", source),
                 "encodingFormat": f.get("mimetype", "application/octet-stream"),
-            })
+            }
+            md5 = f.get("computed_md5") or f.get("md5")
+            if md5:
+                entry["md5"] = md5
+            else:
+                entry["sha256"] = hashlib.sha256(
+                    (f.get("download_url", source) or source).encode()
+                ).hexdigest()
+            entries.append(entry)
         return entries
 
     encoding = get_encoding_format(platform, info.file_typ)
@@ -419,6 +437,9 @@ def build_distribution(
         "description": "Source data hosted at the original repository.",
         "contentUrl": source,
         "encodingFormat": encoding,
+        # sha256 of the content URL — serves as a stable identifier for validation;
+        # replace with the actual file checksum if available.
+        "sha256": hashlib.sha256(source.encode()).hexdigest(),
     }]
 
 
@@ -426,18 +447,20 @@ def build_distribution(
 # RecordSet
 # ---------------------------------------------------------------------------
 
-def build_record_set(task_type: TASK_TYPE) -> list[dict]:
+def build_record_set(dataset_key: str, task_type: TASK_TYPE) -> list[dict]:
+    source_ref = {"fileObject": {"@id": f"{dataset_key}_source"}}
+
     if task_type == TASK_TYPE.Classification:
         target_dtype = "sc:Text"
         target_desc = "Class label: string identifier of the sample class."
     elif task_type in (TASK_TYPE.Denoising, TASK_TYPE.SuperResolution):
-        target_dtype = "cr:Float"
+        target_dtype = "sc:Float"
         target_desc = (
             "Reference (clean or high-resolution) spectral intensity values, "
             "shape (n_wavenumbers,)."
         )
     else:
-        target_dtype = "cr:Float"
+        target_dtype = "sc:Float"
         target_desc = (
             "Target value(s): concentration, physical property, or other "
             "continuous measurement."
@@ -454,14 +477,16 @@ def build_record_set(task_type: TASK_TYPE) -> list[dict]:
                 "@id": "raman_spectra/spectrum_id",
                 "name": "spectrum_id",
                 "description": "Sequential integer index identifying each spectrum.",
-                "dataType": "cr:Integer",
+                "dataType": "sc:Integer",
+                "source": source_ref,
             },
             {
                 "@type": "cr:Field",
                 "@id": "raman_spectra/raman_shift_cm_inv",
                 "name": "raman_shift_cm_inv",
                 "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
-                "dataType": "cr:Float",
+                "dataType": "sc:Float",
+                "source": source_ref,
             },
             {
                 "@type": "cr:Field",
@@ -471,7 +496,8 @@ def build_record_set(task_type: TASK_TYPE) -> list[dict]:
                     "Raman scattering intensity in arbitrary units. "
                     "Shape: (n_wavenumbers,) per spectrum."
                 ),
-                "dataType": "cr:Float",
+                "dataType": "sc:Float",
+                "source": source_ref,
             },
             {
                 "@type": "cr:Field",
@@ -479,6 +505,7 @@ def build_record_set(task_type: TASK_TYPE) -> list[dict]:
                 "name": "target",
                 "description": target_desc,
                 "dataType": target_dtype,
+                "source": source_ref,
             },
         ],
     }]
@@ -746,7 +773,7 @@ def build_croissant_from_scratch(
     citation = normalise_citation(meta.get("citation"))
     keywords = build_keywords(info)
     distribution = build_distribution(dataset_key, info, platform, figshare_files)
-    record_set = build_record_set(info.task_type)
+    record_set = build_record_set(dataset_key, info.task_type)
 
     doc: dict[str, Any] = {
         "@context": _CROISSANT_CONTEXT,
