@@ -56,10 +56,7 @@ _CROISSANT_CONTEXT: dict[str, str] = {
     "dct": "http://purl.org/dc/terms/",
 }
 
-_CROISSANT_CONFORMS_TO: list[str] = [
-    "http://mlcommons.org/croissant/1.0",
-    "http://mlcommons.org/croissant/RAI/1.0",
-]
+_CROISSANT_CONFORMS_TO: str = "http://mlcommons.org/croissant/1.0"
 
 _LICENSE_MAP: dict[str, str] = {
     "cc by 4.0": "https://creativecommons.org/licenses/by/4.0/",
@@ -757,28 +754,25 @@ def extend_croissant(existing: dict, rai: dict) -> dict:
     Different platforms use different key names for conformsTo:
     - Kaggle uses ``"conformsTo"``
     - HuggingFace uses ``"dct:conformsTo"``
-    Both are merged into a single ``"dct:conformsTo"`` list.
+    Both are normalised to a single ``"dct:conformsTo"`` string (the primary
+    Croissant version from the platform).  The RAI URL is not appended here
+    because mlcroissant validates ``conformsTo`` as a single string value.
     """
     result = dict(existing)
 
-    # Collect all existing conformsTo values from both possible keys
-    all_conforms: list[str] = []
-    seen: set[str] = set()
+    # Collect the primary conformsTo value from whichever key the platform used
+    primary_conforms: str | None = None
     for key in ("conformsTo", "dct:conformsTo"):
         val = result.pop(key, None)
         if not val:
             continue
-        entries = [val] if isinstance(val, str) else list(val)
-        for e in entries:
-            if e and e not in seen:
-                all_conforms.append(e)
-                seen.add(e)
+        # Prefer the first non-RAI URL we find (the core Croissant version)
+        candidates = [val] if isinstance(val, str) else list(val)
+        for c in candidates:
+            if c and "RAI" not in c and primary_conforms is None:
+                primary_conforms = c
 
-    rai_url = "http://mlcommons.org/croissant/RAI/1.0"
-    if rai_url not in seen:
-        all_conforms.append(rai_url)
-
-    result["dct:conformsTo"] = all_conforms
+    result["dct:conformsTo"] = primary_conforms or _CROISSANT_CONFORMS_TO
 
     # Ensure rai namespace is declared in @context
     ctx = result.get("@context", {})
@@ -786,6 +780,21 @@ def extend_croissant(existing: dict, rai: dict) -> dict:
         ctx = dict(ctx)
         ctx["rai"] = "http://mlcommons.org/croissant/RAI/"
         result["@context"] = ctx
+
+    # Patch FileObject/FileSet @type to use cr: (mlcommons) namespace, which
+    # is what the mlcroissant validator expects.  Platform-fetched files often
+    # use sc: (schema.org) which expands to the wrong URI.
+    _TYPE_MAP = {
+        "sc:FileObject": "cr:FileObject",
+        "sc:FileSet": "cr:FileSet",
+        "https://schema.org/FileObject": "cr:FileObject",
+        "https://schema.org/FileSet": "cr:FileSet",
+    }
+    for dist_entry in result.get("distribution", []):
+        if isinstance(dist_entry, dict):
+            t = dist_entry.get("@type")
+            if t in _TYPE_MAP:
+                dist_entry["@type"] = _TYPE_MAP[t]
 
     result.update(rai)
     return result
