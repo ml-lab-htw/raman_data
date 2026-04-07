@@ -15,34 +15,43 @@
 #   rai:dataUseCases            — recommended ML use cases
 
 acetic_acid_species:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Mole fraction targets for two acid species (AA, AA⁻)
+    derived from pH-based acid dissociation equilibria combined with Indirect Hard
+    Modeling (IHM). Method A uses literature pKa values; method B estimates pKa =
+    4.70 via MCR-ALS and IHM fitting (close to literature). Calibration validated
+    with leave-10%-out cross-validation; RMSECV ≤ 2.43 × 10⁻⁴ mol mol⁻¹.
+  rai:dataBiases: Spectra collected under ideal dilute mixture assumption (activity
+    coefficients = 1), which introduces systematic error at ionic strengths above
+    0.01 mol L⁻¹. Data acquired at a single instrument (Kaiser RXN2, 785 nm) and
+    temperature (25 °C); models may not transfer without recalibration. Monoprotic
+    system covers only two species (AA, AA⁻).
+  rai:dataCollection: Inline Raman spectra acquired during NaOH (1 mol L⁻¹) titration
+    of acetic acid (Merck, 99–100%) in deionized water (0.8 μS cm⁻¹) at 25 °C using
+    a Kaiser RXN2 Raman analyzer (400 mW, 785 nm) with NIR fiber-optic immersion probe,
+    spectral range 160–3285 cm⁻¹, 4 cm⁻¹ resolution, 60 s acquisition time. Ambient
+    light excluded by non-transparent black PVC liner. pH monitored continuously with
+    SenTix 940 electrode and Multil 3420 pH meter (WTW).
+  rai:dataCollectionType: Titration Raman spectroscopy of monoprotic acetic acid (CH₃COOH)
+    in aqueous solution. Spectra recorded at pH equilibrium across the full titration
+    range for two dissociation species (AA, AA⁻).
+  rai:dataLimitations: Models calibrated on NaOH titration in deionized water at 25 °C;
+    not directly applicable to complex matrices, elevated temperatures, or concentrations
+    outside the calibration range. Ideal mixture assumption not strictly valid at concentrations
+    above 0.1 mol L⁻¹. Extrapolation to other instruments requires recalibration.
+  rai:dataPreprocessingProtocol: Standard Normal Variate (SNV) normalisation, linear
+    baseline correction, and offset subtraction applied. Evaluation range 1025–1850
+    cm⁻¹ selected, excluding atmospheric O₂ signal (1545–1565 cm⁻¹). Preprocessing
+    performed in MATLAB R2017a (spectral subtraction) and PEAXACT ver. 4.5 (S-PACT).
+  rai:dataSocialImpact: Acetic acid is a key platform chemical in biorefinery, fermentation,
+    and chemical manufacturing. Inline quantification of its dissociation species supports
+    real-time monitoring and control of biotransformation and acid purification processes,
+    contributing to more efficient biobased production.
+  rai:dataUseCases: Inline concentration monitoring of monoprotic acid dissociation
+    in aqueous solution; IHM vs. PLS benchmarking; pKa estimation for systems with
+    unknown dissociation constants; process analytical technology (PAT) in biobased
+    acid production and purification.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 adenine_colloidal_gold:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
@@ -723,34 +732,44 @@ chembl_molecules:
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 citric_acid_species:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Mole fraction targets for four acid species (CA, CA⁻,
+    CA²⁻, CA³⁻) derived from pH-based dissociation equilibria and Indirect Hard Modeling
+    (IHM) using reported pKa values (method A). RMSECV ranges from 2.99 × 10⁻⁴ (CA)
+    to 10.13 × 10⁻⁴ mol mol⁻¹ (water); accuracy is markedly lower for CA²⁻ (8.81 × 10⁻⁴)
+    and CA³⁻ (7.20 × 10⁻⁴) due to the structural similarity of these two species.
+  rai:dataBiases: The high structural similarity of CA²⁻ and CA³⁻ makes their Pure
+    Component Models (PCMs) nearly indistinguishable by IHM, causing systematic calibration
+    errors at the higher dissociation stages. Ideal dilute mixture assumption applied
+    despite activities deviating from unity at experimental concentrations. Data acquired
+    at a single instrument (Kaiser RXN2, 785 nm) and temperature (25 °C).
+  rai:dataCollection: Inline Raman spectra acquired during NaOH (1 mol L⁻¹) titration
+    of citric acid (KMF Laborchemie, ≥99%) in deionized water (0.8 μS cm⁻¹) at 25 °C
+    using a Kaiser RXN2 Raman analyzer (400 mW, 785 nm) with NIR fiber-optic immersion
+    probe, spectral range 160–3285 cm⁻¹, 4 cm⁻¹ resolution, 60 s acquisition time.
+    Ambient light excluded by non-transparent black PVC liner. pH monitored continuously
+    with SenTix 940 electrode and Multil 3420 pH meter (WTW).
+  rai:dataCollectionType: Titration Raman spectroscopy of triprotic citric acid in
+    aqueous solution. Spectra recorded at pH equilibrium over the full titration range
+    for four dissociation species (CA, CA⁻, CA²⁻, CA³⁻).
+  rai:dataLimitations: Quantification accuracy is significantly reduced for CA²⁻ (R²
+    = 0.9225, RMSECV = 8.81 × 10⁻⁴) and CA³⁻ (R² = 0.9154, RMSECV = 7.20 × 10⁻⁴)
+    due to near-identical Raman signatures; not suitable for high-precision individual
+    monitoring of higher dissociation stages without additional prior information.
+    Models calibrated on NaOH titration in deionized water at 25 °C; ideal mixture
+    assumption not valid above 0.1 mol L⁻¹.
+  rai:dataPreprocessingProtocol: Standard Normal Variate (SNV) normalisation, linear
+    baseline correction, and offset subtraction applied. Evaluation range 1025–1850
+    cm⁻¹, excluding atmospheric O₂ signal (1545–1565 cm⁻¹). Preprocessing performed
+    in MATLAB R2017a (spectral subtraction) and PEAXACT ver. 4.5 (S-PACT).
+  rai:dataSocialImpact: Citric acid is widely used in food, pharmaceutical, and chemical
+    industries, and is a major product of fungal fermentation. Accurate multi-stage
+    dissociation monitoring enables better process control in pH-dependent extraction,
+    crystallisation, and downstream purification, supporting efficient biobased production.
+  rai:dataUseCases: Process monitoring in triprotic acid systems; benchmarking IHM
+    for structurally similar multi-species mixtures; evaluation of limits of spectroscopic
+    species discrimination; PAT in citric acid production and purification processes.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 comfile_stroke:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
     or validated analytical reference methods.
@@ -1120,61 +1139,92 @@ ecoli_metabolites_dig4bio:
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 flow_microgel_synthesis:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended.
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: NIPAM weight fraction (w_NIPAM) ground truth derived
+    from inline Raman spectra using an Indirect Hard Modeling (IHM) calibration model
+    with RMSECV = 0.037 wt-%. Microgel hydrodynamic radius measured offline by Dynamic
+    Light Scattering (DLS) on a Zetasizer Ultra (Malvern Panalytical) at 50 °C and
+    90° scattering angle (4 measurements per sample). Data points with polydispersity
+    index (PDI) > 0.6 or relative size error > 3.8% were excluded.
+  rai:dataBiases: Data originate from a single tubular glass flow reactor setup; results
+    may not transfer directly to different reactor geometries or scales. The Gaussian
+    Process surrogate model used in the optimization loop exhibits high variance in
+    sparsely sampled regions, which may bias the acquisition function toward unexplored
+    but unreliable conditions. Offline DLS reference measurements prevent fully autonomous
+    closed-loop optimization and introduce a latency between Raman monitoring and size
+    feedback.
+  rai:dataCollection: Inline Raman spectra acquired with a Kaiser RXN2 spectrometer
+    using HoloGRAMS software (40 s acquisition time) at reaction temperature inside
+    a tubular glass flow reactor. The reactor feed consists of a monomer solution
+    (110.6 mmol/L NIPAM, 2.7 mmol/L BIS crosslinker, 0.41 mmol/L CTAB surfactant)
+    and an initiator solution (1.5 mmol/L AMPA), both nitrogen-degassed. Process
+    variables are initiator flow (0.1–0.9 mL/min), monomer flow (2–18 mL/min),
+    CTAB concentration (0.14–0.41 mmol/L), and temperature (60–80 °C). A Latin
+    Hypercube Sampling (LHS) initial design of 15 experiments was followed by 11
+    TS-EMO optimization iterations of 5 experiments each.
+  rai:dataCollectionType: Inline process Raman measurements during flow synthesis of
+    N-isopropylacrylamide (NIPAM) microgels by precipitation polymerization, combined
+    with offline DLS size characterization. Dataset collected as part of a hardware-in-the-loop
+    Bayesian optimization campaign.
+  rai:dataLimitations: The IHM Raman model and GP surrogate are valid only within
+    the explored process variable ranges; extrapolation beyond the design space is
+    unreliable. Only a single reactor configuration was studied. The dataset represents
+    a relatively small number of experiments (approx. 70 total), limiting the density
+    of coverage across the four-dimensional input space.
+  rai:dataPreprocessingProtocol: Raman spectra evaluated with an IHM calibration model
+    developed in HoloGRAMS. Microgel size data preprocessed by filtering out samples
+    with PDI > 0.6 (indicating failed microgel formation or hydrogel) and those with
+    relative DLS size error > 3.8%. Product flow rate computed from NIPAM conversion
+    and feed flows; size deviation target defined as squared difference from 100 nm
+    radius.
+  rai:dataSocialImpact: Enables data-driven optimization of colloidal microgel synthesis
+    in continuous flow, supporting scalable production of responsive hydrogel particles
+    for drug delivery, diagnostics, and smart material applications. Demonstrates
+    hardware-in-the-loop Bayesian optimization as a strategy for autonomous process
+    development in chemical engineering.
+  rai:dataUseCases: Multi-objective Bayesian optimization of flow synthesis processes;
+    GP surrogate modeling for process variable screening; inline Raman monitoring
+    of polymerization reactions; PAT-enabled continuous manufacturing; development
+    of hardware-in-the-loop optimization frameworks for chemical production.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All data originate from chemical process measurements without individual human
+    identifiers.
 formic_acid_species:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Mole fraction targets for two acid species (FA, FA⁻)
+    derived from pH-based dissociation equilibria and Indirect Hard Modeling (IHM).
+    Method A uses reported pKa values; method B estimates pKa = 3.59 via MCR-ALS and
+    IHM fitting (close to literature). Calibration validated with leave-10%-out cross-validation;
+    RMSECV ≤ 2.61 × 10⁻⁴ mol mol⁻¹.
+  rai:dataBiases: Spectra collected under ideal dilute mixture assumption (activity
+    coefficients = 1) at a single instrument (Kaiser RXN2, 785 nm) and temperature
+    (25 °C); models may not transfer without recalibration. Monoprotic system covers
+    only two species (FA, FA⁻). Acid purity 98–100% (Merck); trace impurities may
+    contribute minor spectral artefacts.
+  rai:dataCollection: Inline Raman spectra acquired during NaOH (1 mol L⁻¹) titration
+    of formic acid (Merck, 98–100%) in deionized water (0.8 μS cm⁻¹) at 25 °C using
+    a Kaiser RXN2 Raman analyzer (400 mW, 785 nm) with NIR fiber-optic immersion probe,
+    spectral range 160–3285 cm⁻¹, 4 cm⁻¹ resolution, 60 s acquisition time. Ambient
+    light excluded by non-transparent black PVC liner. pH monitored continuously with
+    SenTix 940 electrode and Multil 3420 pH meter (WTW).
+  rai:dataCollectionType: Titration Raman spectroscopy of monoprotic formic acid (HCOOH)
+    in aqueous solution. Spectra recorded at pH equilibrium across the full titration
+    range for two dissociation species (FA, FA⁻).
+  rai:dataLimitations: Models calibrated on NaOH titration in deionized water at 25 °C;
+    not directly applicable to complex matrices, elevated temperatures, or concentrations
+    outside calibration range. Ideal mixture assumption not strictly valid above 0.1
+    mol L⁻¹. Extrapolation to other instruments requires recalibration.
+  rai:dataPreprocessingProtocol: Standard Normal Variate (SNV) normalisation, linear
+    baseline correction, and offset subtraction applied. Evaluation range 1025–1850
+    cm⁻¹, excluding atmospheric O₂ signal (1545–1565 cm⁻¹). Preprocessing in MATLAB
+    R2017a (spectral subtraction) and PEAXACT ver. 4.5 (S-PACT).
+  rai:dataSocialImpact: Formic acid is a C1 platform chemical with applications in
+    hydrogen storage, biomass conversion, and preservation. Inline monitoring of its
+    dissociation state supports real-time optimisation of synthesis and separation
+    processes in the biobased chemical industry and electrochemical CO₂ reduction.
+  rai:dataUseCases: Inline monitoring of monoprotic acid dissociation in aqueous solution;
+    validation case for the method B (unknown pKa) approach; IHM vs. PLS benchmarking;
+    PAT in formic acid production and biobased acid separation processes.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 fuel_benchtop:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
@@ -1373,34 +1423,50 @@ illicit_adulterants_sers:
     but biological measurements may constitute sensitive health-related data under
     applicable data-protection regulations.
 itaconic_acid_species:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Mole fraction targets for three acid species (IA, IA⁻,
+    IA²⁻) and water derived from pH-based dissociation equilibria and Indirect Hard
+    Modeling (IHM). Method A uses pKa1 = 3.85, pKa2 = 5.45 (literature); method B
+    estimates pKa1 = 3.68, pKa2 = 5.00 via MCR-ALS fitting (literature range 3.48–3.95
+    and 4.98–5.67). Full set (22 samples) RMSECV ≤ 2.13 × 10⁻⁴ mol mol⁻¹; minimum
+    set (4 samples) RMSEP < 2.87 × 10⁻⁴ mol mol⁻¹. Primary method-development case
+    study of the source publication.
+  rai:dataBiases: Three structurally similar species co-exist near the first dissociation
+    step (pH ≈ 4.68), requiring weighted spectral subtraction to isolate individual
+    species. Equal Raman activity assumed across species. Ionic strength varies during
+    titration (mean ≈ 0.34 mol L⁻¹); ideal mixture assumption applied throughout.
+    Data acquired at a single instrument (Kaiser RXN2, 785 nm) and temperature (25 °C).
+  rai:dataCollection: Inline Raman spectra acquired during NaOH (1 mol L⁻¹) titration
+    of itaconic acid (Alfa Aesar, ≥99%) in deionized water (0.8 μS cm⁻¹) at 25 °C
+    across 22 titration steps, using a Kaiser RXN2 Raman analyzer (400 mW, 785 nm)
+    with NIR fiber-optic immersion probe, spectral range 160–3285 cm⁻¹, 4 cm⁻¹ resolution,
+    60 s acquisition time. Ambient light excluded by non-transparent black PVC liner.
+    pH measured with SenTix 940 electrode and Multil 3420 pH meter (WTW).
+  rai:dataCollectionType: Titration Raman spectroscopy of diprotic itaconic acid (C₅H₆O₄)
+    in aqueous solution. Three dissociation species characterised (IA, IA⁻, IA²⁻)
+    across the full pH range. Key Raman bands include ν_s,C=O at 1700 cm⁻¹, ν_C=C
+    at 1643 cm⁻¹, combined ν_C-O/γ_O-H around 1400 cm⁻¹, and ν_C-O at 1220 cm⁻¹.
+  rai:dataLimitations: Diprotic system with two overlapping dissociation steps; species
+    co-existence near pH 4.68 requires careful spectral processing. Minimum calibration
+    set of 4 samples requires samples at maximum concentration of each species. Ideal
+    mixture assumption applied despite ionic strength ≈ 0.34 mol L⁻¹. Models calibrated
+    at 25 °C in deionized water; not directly applicable to other matrices or temperatures.
+  rai:dataPreprocessingProtocol: Standard Normal Variate (SNV) normalisation, linear
+    baseline correction, and offset subtraction applied. Evaluation range 1025–1850
+    cm⁻¹, excluding atmospheric O₂ signal (1545–1565 cm⁻¹). Two-component species
+    spectra generated by weighted linear spectral subtraction (method A) or MCR-ALS
+    in PEAXACT ver. 4.5 (method B). PCMs constructed with IHM using pseudo-Voigt profiles
+    (9 for IA, 10 for IA⁻ and IA²⁻). Preprocessing in MATLAB R2017a and PEAXACT ver. 4.5.
+  rai:dataSocialImpact: Itaconic acid is a biobased platform chemical produced by
+    fungal fermentation, used as a polymer and resin precursor. Accurate inline monitoring
+    of dissociation states is directly relevant to downstream crystallisation and extraction
+    processes, where the dissociation state governs extraction selectivity, supporting
+    optimisation of biobased chemical production.
+  rai:dataUseCases: Primary reference dataset for IHM method development and benchmarking
+    against PLS; minimum-sample calibration strategies (as few as 4 samples); simultaneous
+    pKa estimation and spectral calibration; inline monitoring of diprotic carboxylic
+    acid dissociation; PAT in itaconic acid fermentation and purification.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 kaiser_ecoli_fermentation:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
@@ -1458,440 +1524,622 @@ kaiser_ecoli_fermentation_supernatant:
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 levulinic_acid_species:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+  rai:dataAnnotationProtocol: Mole fraction targets for acid species derived from
+    pH-based dissociation equilibria and Indirect Hard Modeling (IHM), following the
+    same methodology established for itaconic, formic, acetic, and citric acid in
+    the source publication (DOI 10.1177/0003702820973275). Levulinic acid is monoprotic
+    (pKa ≈ 4.59); two species (LA, LA⁻) are present in the titration data. Detailed
+    accuracy metrics for levulinic acid are not reported in the main paper.
+  rai:dataBiases: Spectra collected under ideal dilute mixture assumption (activity
+    coefficients = 1) at a single instrument (Kaiser RXN2, 785 nm) and temperature
+    (25 °C). Monoprotic system covers only two species (LA, LA⁻). Levulinic acid data
+    is part of the extended dataset repository but not the primary focus of the source
     publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataCollection: Inline Raman spectra acquired during NaOH (1 mol L⁻¹) titration
+    of levulinic acid in deionized water (0.8 μS cm⁻¹) at 25 °C using a Kaiser RXN2
+    Raman analyzer (400 mW, 785 nm) with NIR fiber-optic immersion probe, spectral
+    range 160–3285 cm⁻¹, 4 cm⁻¹ resolution, 60 s acquisition time. Ambient light
+    excluded by non-transparent black PVC liner. pH monitored continuously with SenTix
+    940 electrode and Multil 3420 pH meter (WTW).
+  rai:dataCollectionType: Titration Raman spectroscopy of monoprotic levulinic acid
+    (C₅H₈O₃) in aqueous solution. Spectra recorded at pH equilibrium across the full
+    titration range for two dissociation species (LA, LA⁻).
+  rai:dataLimitations: Detailed calibration accuracy metrics not reported in the main
+    paper (Echtermeyer et al., 2021); refer to the dataset repository for further
+    details. Models calibrated on NaOH titration in deionized water at 25 °C only;
+    ideal mixture assumption not strictly valid above 0.1 mol L⁻¹. Extrapolation to
+    other instruments or process matrices requires recalibration.
+  rai:dataPreprocessingProtocol: Standard Normal Variate (SNV) normalisation, linear
+    baseline correction, and offset subtraction applied, following the same protocol
+    as for the other acid species in this collection. Evaluation range 1025–1850 cm⁻¹,
+    excluding atmospheric O₂ signal (1545–1565 cm⁻¹). Preprocessing in MATLAB R2017a
+    and PEAXACT ver. 4.5 (S-PACT).
+  rai:dataSocialImpact: Levulinic acid is a renewable platform chemical derived from
+    lignocellulosic biomass, with applications in biofuels, pharmaceuticals, and polymer
+    synthesis. Inline dissociation monitoring supports optimisation of pH-dependent
+    separation and purification processes in biorefineries.
+  rai:dataUseCases: Inline monitoring of monoprotic carboxylic acid dissociation in
+    aqueous solution; PAT in levulinic acid production from biomass; IHM and chemometric
+    model development for biobased acid systems.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_lf_fingerprint:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
+    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: Linear fit baseline correction applied to fingerprint
+    region spectra (850–1800 cm⁻¹). A linear function is fitted to the spectral baseline
+    and subtracted. No normalisation applied. Fingerprint region excludes the atmospheric
+    O₂ signal (1552–1560 cm⁻¹). Pretreated data published at DOI 10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; benchmarking
+    nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS
+    and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic
+    data; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_lf_global:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
+    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: Linear fit baseline correction applied to full global
+    range spectra (100–3425 cm⁻¹). A linear function is fitted to the spectral baseline
+    and subtracted. No normalisation applied. Pretreated data published at DOI 10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; benchmarking
+    nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS
+    and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic
+    data; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_mm_lf_fingerprint:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
+    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: Min-Max normalisation combined with linear fit baseline
+    correction applied to fingerprint region spectra (850–1800 cm⁻¹, excluding O₂
+    region 1552–1560 cm⁻¹). Baseline subtracted first, then spectra rescaled to [0, 1]
+    range. Pretreated data published at DOI 10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; benchmarking
+    nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS
+    and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic
+    data; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_mm_lf_global:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
+    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: Min-Max normalisation combined with linear fit baseline
+    correction applied to full global range spectra (100–3425 cm⁻¹). Baseline subtracted
+    first, then spectra rescaled to [0, 1] range. Pretreated data published at DOI
+    10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; benchmarking
+    nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS
+    and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic
+    data; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_mm_rb_fingerprint:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
+    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: Min-Max normalisation combined with rubber band baseline
+    correction applied to fingerprint region spectra (850–1800 cm⁻¹, excluding O₂
+    region 1552–1560 cm⁻¹). Rubber band baseline subtracted first, then spectra rescaled
+    to [0, 1] range. Pretreated data published at DOI 10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; benchmarking
+    nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS
+    and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic
+    data; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_mm_rb_global:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
+    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: Min-Max normalisation combined with rubber band baseline
+    correction applied to full global range spectra (100–3425 cm⁻¹). Rubber band
+    baseline subtracted first, then spectra rescaled to [0, 1] range. Pretreated
+    data published at DOI 10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; benchmarking
+    nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS
+    and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic
+    data; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_raw_fingerprint:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
+    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: No baseline correction or normalisation applied. Raw
+    Raman intensity values restricted to the fingerprint region (850–1800 cm⁻¹) with
+    atmospheric O₂ signal (1552–1560 cm⁻¹) excluded. Among PLS benchmarks in the
+    source publication, raw fingerprint spectra achieved the best overall test performance
+    (R² = 0.730, RMSE = 28.038 nm, MAPE = 7.887%). Raw data published at DOI 10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; benchmarking
+    nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS
+    and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic
+    data; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_raw_global:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
+    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: No baseline correction or normalisation applied. Raw
+    Raman intensity values over the full global range (100–3425 cm⁻¹). The global
+    raw spectra are the input to the nonlinear manifold learning methods (DMAPs, AltDMAPs,
+    Y-shaped autoencoder) proposed in the source publication. Raw data published at
+    DOI 10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; primary
+    input for nonlinear manifold learning methods (diffusion maps, alternating diffusion
+    maps, Y-shaped conformal autoencoders); benchmarking against PLS and IHM+PLS
+    baselines; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_rb_fingerprint:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
+    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: Rubber band baseline correction applied to fingerprint
+    region spectra (850–1800 cm⁻¹, excluding O₂ region 1552–1560 cm⁻¹). An iterative
+    rubber band algorithm fits and subtracts a non-linear background. No normalisation
+    applied. Pretreated data published at DOI 10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; benchmarking
+    nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS
+    and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic
+    data; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_rb_global:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
+    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: Rubber band baseline correction applied to full global
+    range spectra (100–3425 cm⁻¹). An iterative rubber band algorithm fits and subtracts
+    a non-linear background. No normalisation applied. Pretreated data published at
+    DOI 10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; benchmarking
+    nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS
+    and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic
+    data; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_snv_lf_fingerprint:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
+    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: Standard Normal Variate (SNV) normalisation combined
+    with linear fit baseline correction applied to fingerprint region spectra (850–1800
+    cm⁻¹, excluding O₂ region 1552–1560 cm⁻¹). SNV scales each spectrum to zero mean
+    and unit variance after baseline subtraction. Pretreated data published at DOI
+    10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; benchmarking
+    nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS
+    and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic
+    data; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_snv_lf_global:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
+    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: Standard Normal Variate (SNV) normalisation combined
+    with linear fit baseline correction applied to full global range spectra (100–3425
+    cm⁻¹). SNV scales each spectrum to zero mean and unit variance after baseline
+    subtraction. Pretreated data published at DOI 10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; benchmarking
+    nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS
+    and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic
+    data; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_snv_rb_fingerprint:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
+    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: Standard Normal Variate (SNV) normalisation combined
+    with rubber band baseline correction applied to fingerprint region spectra (850–1800
+    cm⁻¹, excluding O₂ region 1552–1560 cm⁻¹). SNV scales each spectrum to zero mean
+    and unit variance after rubber band baseline subtraction. Pretreated data published
+    at DOI 10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; benchmarking
+    nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS
+    and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic
+    data; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_size_snv_rb_global:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
+    by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at
+    20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer
+    software. DLS precision is approximately ±2%. The source publication used 40 training
+    samples and 7 test samples.
+  rai:dataBiases: Offline measurements at 20 °C (microgels in swollen state) may not
+    transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state).
+    Two distinct spectral clusters exist in the raw data attributed to different synthesis
+    conditions. Multiple factors beyond particle size influence Raman spectra (monomer,
+    inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical
+    robustness and generalisability.
+  rai:dataCollection: Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel
+    samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation
+    days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer
+    with 40 s acquisition time; each sample measured three times. Microgels synthesised
+    in a continuous flow reactor at varying temperature, flow rate, initiator, and
+    surfactant concentrations.
+  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
+    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
+    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
+    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
+    state findings cannot be generalised beyond the employed data sets. Samples from
+    a single continuous flow reactor (RWTH Aachen University); generalisability to
+    other reactor types or polymer systems not demonstrated. Offline measurements at
+    20 °C may not directly apply to inline process conditions at reaction temperature.
+  rai:dataPreprocessingProtocol: Standard Normal Variate (SNV) normalisation combined
+    with rubber band baseline correction applied to full global range spectra (100–3425
+    cm⁻¹). SNV scales each spectrum to zero mean and unit variance after rubber band
+    baseline subtraction. Pretreated data published at DOI 10.18154/RWTH-2023-05604.
+  rai:dataSocialImpact: Enables data-driven polymer particle size monitoring from
+    Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports
+    closed-loop control of polymerisation processes, contributing to consistent product
+    quality in polymer manufacturing and potential application to crystallisation processes.
+  rai:dataUseCases: Microgel particle size prediction from Raman spectra; benchmarking
+    nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS
+    and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic
+    data; PAT for particle size monitoring in continuous polymer synthesis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 microgel_synthesis:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
@@ -2286,34 +2534,48 @@ streptococcus_thermophilus_fermentation_timegate:
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 succinic_acid_species:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Mole fraction targets for acid species derived from
+    pH-based dissociation equilibria and Indirect Hard Modeling (IHM), following the
+    same methodology established for itaconic, formic, acetic, and citric acid in
+    the source publication (DOI 10.1177/0003702820973275). Succinic acid is diprotic
+    (pKa1 ≈ 4.21, pKa2 ≈ 5.64); three species (SA, SA⁻, SA²⁻) are present in the
+    titration data. Detailed accuracy metrics for succinic acid are not reported in
+    the main paper.
+  rai:dataBiases: Spectra collected under ideal dilute mixture assumption (activity
+    coefficients = 1) at a single instrument (Kaiser RXN2, 785 nm) and temperature
+    (25 °C). Succinic acid data is part of the extended dataset repository but not
+    the primary focus of the source publication. As a diprotic acid, SA⁻ and SA²⁻
+    species may exhibit spectral similarity, potentially limiting their individual
+    quantification accuracy, analogous to the CA²⁻ / CA³⁻ challenge in citric acid.
+  rai:dataCollection: Inline Raman spectra acquired during NaOH (1 mol L⁻¹) titration
+    of succinic acid in deionized water (0.8 μS cm⁻¹) at 25 °C using a Kaiser RXN2
+    Raman analyzer (400 mW, 785 nm) with NIR fiber-optic immersion probe, spectral
+    range 160–3285 cm⁻¹, 4 cm⁻¹ resolution, 60 s acquisition time. Ambient light
+    excluded by non-transparent black PVC liner. pH monitored continuously with SenTix
+    940 electrode and Multil 3420 pH meter (WTW).
+  rai:dataCollectionType: Titration Raman spectroscopy of diprotic succinic acid (C₄H₆O₄)
+    in aqueous solution. Spectra recorded at pH equilibrium across the full titration
+    range for three dissociation species (SA, SA⁻, SA²⁻).
+  rai:dataLimitations: Detailed calibration accuracy metrics not reported in the main
+    paper (Echtermeyer et al., 2021); refer to the dataset repository for further
+    details. Diprotic system with two overlapping dissociation steps may cause spectral
+    co-elution of SA⁻ and SA²⁻. Models calibrated on NaOH titration in deionized
+    water at 25 °C only; ideal mixture assumption not strictly valid above 0.1 mol L⁻¹.
+  rai:dataPreprocessingProtocol: Standard Normal Variate (SNV) normalisation, linear
+    baseline correction, and offset subtraction applied, following the same protocol
+    as for the other acid species in this collection. Evaluation range 1025–1850 cm⁻¹,
+    excluding atmospheric O₂ signal (1545–1565 cm⁻¹). Preprocessing in MATLAB R2017a
+    and PEAXACT ver. 4.5 (S-PACT).
+  rai:dataSocialImpact: Succinic acid is one of the top twelve biobased platform chemicals
+    identified by the US Department of Energy, with applications in polymers, coatings,
+    and food additives. Inline dissociation monitoring is directly relevant to pH-dependent
+    extraction and crystallisation in bio-succinic acid production from fermentation.
+  rai:dataUseCases: Inline monitoring of diprotic carboxylic acid dissociation; PAT
+    in succinic acid fermentation and downstream purification; IHM and chemometric
+    model development for biobased diprotic acid systems; comparison with itaconic
+    acid (also diprotic) for method validation and transfer.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from chemical samples without individual human identifiers.
 sugar_mixtures_high_snr:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
