@@ -67,7 +67,7 @@ class MiscLoader(BaseLoader):
             metadata={
                 "full_name": "COVID-19 in human serum using Raman spectroscopy",
                 "source": "Only via E-Mail",
-                "description": "This study proposed the diagnosis of COVID-19 by means of Raman spectroscopy. Samples of blood serum from 10 patients positive and 10 patients negative for COVID-19 by RT-PCR RNA and ELISA tests were analyzed.",
+                "description": "Raman spectra of blood serum from 20 subjects (10 RT-PCR/ELISA-confirmed COVID-19 patients and 10 healthy controls) collected under Ethics Committee protocol 26691419.6.0000.5492 (Universidade Anhembi Morumbi). Acquired with a Dimension P1 dispersive Raman spectrometer (Lambda Solutions), 830 nm excitation, 350 mW, 400–1800 cm⁻¹, 4 cm⁻¹ resolution, 30 s acquisition (3 s × 10 accumulations), 80 µL serum per measurement, triplicate per sample. Preprocessed with 7th-order polynomial baseline correction and area normalisation (1-norm). Published PCA-DA/PLS-DA model achieved 87% sensitivity and 100% specificity.",
                 "paper": "https://doi.org/10.1007/s10103-021-03488-7",
                 "bibtex": "@article{Goulart_2022, title={Diagnosing COVID-19 in human serum using Raman spectroscopy}, volume={37}, ISSN={1435-604X}, url={http://dx.doi.org/10.1007/s10103-021-03488-7}, DOI={10.1007/s10103-021-03488-7}, number={4}, journal={Lasers in Medical Science}, publisher={Springer Science and Business Media LLC}, author={Goulart, Ana Cristina Castro and Silveira, Landulfo and Carvalho, Henrique Cunha and Dorta, Cristiane Bissoli and Pacheco, Marcos Tadeu T. and Zangaro, Renato Amaro}, year={2022}, month=jan, pages={2217--2226}}",
                 "citation": [
@@ -91,7 +91,7 @@ class MiscLoader(BaseLoader):
                 "citation": [
                     "Ho, C.-S., Jean, N., Hogan, C. A., et al. Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Nat Commun 10, 4927 (2019)."
                 ],
-                "description": "60,000 spectra from 30 clinically relevant bacterial and yeast isolates (including an MRSA/MSSA isogenic pair). Acquired with 633 nm illumination on gold-coated silica substrates with low SNR to simulate rapid clinical acquisition times.",
+                "description": "60,000 SERS spectra (2,000 per isolate across three measurement time-points) from 30 clinically relevant bacterial and yeast isolates, including an MRSA/MSSA isogenic pair. Acquired on a Horiba LabRAM HR Evolution spectrometer (633 nm, 13.17 mW, 300 l/mm grating, 1.2 cm⁻¹ dispersion, Olympus MPLAN 100× NA 0.9, ~1 µm spot) at 1 s integration time (SNR ~4.1) on gold-coated silica substrates (200 nm Au, electron beam evaporation). Published 25-layer 1D ResNet CNN (Adam, batch 10) achieved 82.2 ± 0.3% isolate accuracy, 97.0 ± 0.3% antibiotic treatment accuracy, and 99.7% treatment classification with 10 spectra in clinical validation on 50 patients (Stanford/Palo Alto VA).",
             }
         ),
         "mlrod": DatasetInfo(
@@ -110,7 +110,7 @@ class MiscLoader(BaseLoader):
                 "citation": [
                     "Wiens, R. C., et al. (2021). Convolutional neural networks as a tool for Raman spectral mineral classification under low signal, dusty Mars conditions. Earth and Space Science, 8, e2021EA002125."
                 ],
-                "description": "500,000+ Raman spectra of common rock-forming silicate, carbonate, and sulfate minerals under low signal-to-noise-ratios, Mars-like conditions. No traditional spectral preprocessing such as cosmic ray or baseline removal was employed.",
+                "description": "500,000+ point-mapping Raman spectra of Mars-analogue geological samples acquired on a Horiba LabRAM HR Evolution (532 nm, 100 mW, 1800 l/mm grating, ~1 cm⁻¹ resolution, open-electrode CCD at −60 °C, 50× LWD NA 0.5 objective, 0.1 µm XY step, 100–1800 cm⁻¹). Samples include gabbro (Madagascar), granite, Hawaiian basalt dust, 12 pure reference minerals, and 4 binary mixtures, measured at 0% and 50% basalt dust surface coverage. No cosmic ray removal, baseline correction, or other preprocessing applied. Motivated by NASA Perseverance SuperCam mineral identification.",
             }
         ),
         **{
@@ -131,7 +131,7 @@ class MiscLoader(BaseLoader):
                     "citation": [
                         'Fremout, Wim, and Steven Saverwyns. "Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library." Journal of Raman Spectroscopy 43.11 (2012): 1536-1544.'
                     ],
-                    "description": f"{process} Raman spectral library comprising nearly 300 reference spectra of synthetic organic pigments (SOPs). Designed for spectral matching and identification of pigments in modern and contemporary art conservation.",
+                    "description": f"{process} Raman spectral library of approximately 270 synthetic organic pigments (~300 reference spectra, nearly 400 samples total) compiled at the Royal Institute for Cultural Heritage (KIK/IRPA), Brussels. Acquired on a Renishaw inVia dispersive Raman spectrometer (785 nm, Peltier-cooled CCD 203 K, 1200 mm⁻¹ grating, 50× LWD objective, ±0.5 cm⁻¹ calibration). Pigment classes cover azo (monoazo, disazo), heterocyclic, and polycyclic types (phthalocyanine, quinacridone, perylene, anthraquinone, dioxazine, triarylcarbonium, diketopyrrole). Validated for pigment identification on four Stedelijk Museum (Amsterdam) paintings. {'No baseline correction applied; raw fluorescence background retained.' if process == 'Raw' else 'Baseline correction applied to remove fluorescence background.'}",
                 }
             )
             for process in ["Raw", "Baseline Corrected"]

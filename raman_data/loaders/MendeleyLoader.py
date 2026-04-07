@@ -53,9 +53,11 @@ class MendeleyLoader(BaseLoader):
                 "bibtex": "@article{Rizzo_2023, title={A multi-analyte screening method for the rapid detection of illicit adulterants in dietary supplements using a portable SERS analyzer}, volume={9}, ISSN={2405-8440}, url={http://dx.doi.org/10.1016/j.heliyon.2023.e18509}, DOI={10.1016/j.heliyon.2023.e18509}, number={8}, journal={Heliyon}, publisher={Elsevier BV}, author={Rizzo, Serena and Weesepoel, Yannick and Erasmus, Sara and Sinkeldam, Joost and Piccinelli, Anna Lisa and van Ruth, Saskia}, year={2023}, month=aug, pages={e18509}}",
                 "citation": _CITATION,
                 "description": (
-                    "FT-Raman spectra (1064 nm, ~33–3600 cm⁻¹, 1851 points) of 11 SERS-active pharmaceutically "
-                    "active adulterants commonly found in adulterated dietary supplements. Acquired with a benchtop "
-                    "Bruker RAM II FT-IR Raman module. One spectrum per compound. "
+                    "FT-Raman reference spectra (1064 nm, 50–3600 cm⁻¹, 4 cm⁻¹ resolution, 32 scans) of 11 "
+                    "SERS-active pharmaceutically active adulterants found in dietary supplements, acquired with a "
+                    "benchtop Bruker RAM II FT-IR Raman module (OPUS v7.2, 300 mW). Compounds selected from RASFF "
+                    "portal EU alerts. Library spectra at 1 mg/mL in ethanol; three replicates per compound. "
+                    "Companion to the portable SERS dataset (illicit_adulterants_sers). "
                     "Target: compound identity (classification)."
                 ),
             },
@@ -76,9 +78,13 @@ class MendeleyLoader(BaseLoader):
                 "bibtex": "@article{Rizzo_2023, title={A multi-analyte screening method for the rapid detection of illicit adulterants in dietary supplements using a portable SERS analyzer}, volume={9}, ISSN={2405-8440}, url={http://dx.doi.org/10.1016/j.heliyon.2023.e18509}, DOI={10.1016/j.heliyon.2023.e18509}, number={8}, journal={Heliyon}, publisher={Elsevier BV}, author={Rizzo, Serena and Weesepoel, Yannick and Erasmus, Sara and Sinkeldam, Joost and Piccinelli, Anna Lisa and van Ruth, Saskia}, year={2023}, month=aug, pages={e18509}}",
                 "citation": _CITATION,
                 "description": (
-                    "SERS spectra (785 nm, 400–2300 cm⁻¹, 1901 points) of 11 SERS-active illicit adulterants "
-                    "found in dietary supplements. Acquired with a portable Metrohm MISA analyzer using silver "
-                    "printed-SERS substrates. One spectrum per compound. "
+                    "Portable SERS spectra (785 nm, 400–2300 cm⁻¹, 8 cm⁻¹ FWHM, 3 scans) of 11 SERS-active "
+                    "illicit adulterants in dietary supplements. Acquired with a Metrohm Instant SERS analyzer "
+                    "(MISA) using silver printed-SERS (p-SERS) substrates and Orbital Raster Scan (ORS™) technology "
+                    "(30 µm spot, ~2 mm raster, 100 mW, ASTM 1840 calibration). Sample prep: 10 mg/100 µL EtOH, "
+                    "centrifuge 806,400 RCF, 10 µL on strip, dry 15 min, triplicates. Enhancement factors 10³–10⁴. "
+                    "Adulteration LOI 0.1–5.0% w/w in 18 commercial dietary supplements. "
+                    "Developed with the Dutch Food and Consumer Product Safety Authority. "
                     "Target: compound identity (classification)."
                 ),
             },
@@ -95,11 +101,31 @@ class MendeleyLoader(BaseLoader):
                 "full_name": "Raman Spectra of Weathered Microplastics Dataset",
                 "source": "https://data.mendeley.com/datasets/kpygrf9fg6",
                 "doi": "10.17632/kpygrf9fg6",
+                "paper": "https://doi.org/10.1016/j.scitotenv.2020.139990",
+                "bibtex": (
+                    "@article{DONG2020139990,\n"
+                    "  title = {Raman spectra and surface changes of microplastics weathered under natural environments},\n"
+                    "  journal = {Science of The Total Environment},\n"
+                    "  volume = {739},\n"
+                    "  pages = {139990},\n"
+                    "  year = {2020},\n"
+                    "  issn = {0048-9697},\n"
+                    "  doi = {https://doi.org/10.1016/j.scitotenv.2020.139990},\n"
+                    "  url = {https://www.sciencedirect.com/science/article/pii/S0048969720335105},\n"
+                    "  author = {Mingtan Dong and Qiaoqiao Zhang and Xinli Xing and Wei Chen and Zhenbing She and Zejiao Luo},\n"
+                    "  keywords = {Microplastics, Raman spectra, Weathering, Surface changes, Fourier transform infrared spectrometry},\n"
+                    "}"
+                ),
                 "description": (
-                    "Raman spectra of 167 virgin and UV-weathered microplastic particles spanning multiple common "
-                    "polymer types (PE, PP, PS, PET, PVC, etc.). Files prefixed 'sta-' are unweathered standards; "
-                    "'wea-' are UV-aged samples. "
-                    "Target: polymer type (classification)."
+                    "Raman spectra of field-collected weathered microplastic debris (155 samples) and unweathered "
+                    "standard plastics (18 samples), acquired from sediments near waste plastics recycling industries "
+                    "in Laizhou City, Shandong Province, China (August 2018). WITec alpha300-R confocal Raman "
+                    "(532 nm, 5 mW typical, 200–3500 cm⁻¹, 600 l/mm grating, 4 cm⁻¹ resolution, 5 s integration, "
+                    "4 accumulations typical). 124 spectra with distinct peaks selected for the Raman Database of "
+                    "Weathered Plastics (RDWP); polymer types: PE (62), PP (44), PET (10), PVC (4), PA (2), plus "
+                    "minor classes and 20 unidentified. Weathered spectra show weakened CH₂ peaks and broad "
+                    "2100–2200 cm⁻¹ bands absent from standard spectra. Prefixes: 'sta-' = unweathered standards, "
+                    "'wea-' = field-weathered debris. Target: polymer type (classification)."
                 ),
             },
         ),

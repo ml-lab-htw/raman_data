@@ -467,34 +467,48 @@ amino_acids_tryptophan:
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 bacteria_identification:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+  rai:dataAnnotationProtocol: Species and antibiotic-treatment labels assigned based
+    on known sample identity (30 bacterial/yeast isolates from clinical collections);
+    60,000 reference spectra (2,000 per isolate across three measurement time-points).
+    Clinical validation performed on 50 patients at Stanford University Medical Center
+    and Palo Alto VA Hospital.
+  rai:dataBiases: Spectra collected under standardised laboratory conditions (Horiba
+    LabRAM HR Evolution, 633 nm, 13.17 mW, 300 l/mm grating, 1 s integration, gold-coated
+    silica substrates). Performance may degrade for isolates, antibiotic regimens,
+    or clinical environments not represented in the reference library. The 30-isolate
+    set covers common pathogens but is not exhaustive. SNR of approximately 4.1 was
+    measured at 1 s integration time.
+  rai:dataCollection: Surface-enhanced Raman scattering (SERS) spectra acquired on
+    gold-coated silica substrates (200 nm Au by electron beam evaporation). Horiba
+    LabRAM HR Evolution spectrometer, 633 nm excitation, 13.17 mW laser power, 300
+    l/mm diffraction grating, 1.2 cm-1 dispersion, Olympus MPLAN 100x objective (NA
+    0.9), approximately 1 µm spot size, 1 s integration time per spectrum.
+  rai:dataCollectionType: Laboratory measurements of bacterial and yeast cells on SERS
+    substrates, plus clinical validation measurements from patient isolates.
+  rai:dataLimitations: The 30-isolate reference library covers common nosocomial pathogens
+    but may not generalise to rare or emerging species. Performance on clinical isolates
+    is validated for MRSA/MSSA identification (89.1 ± 0.1% accuracy) and antibiotic
+    treatment classification (97.0 ± 0.3% with a single spectrum; 99.7% with 10 spectra).
+    Transfer to instruments with different excitation wavelengths or substrate chemistries
+    requires re-calibration. No explicit license was stated by the original data providers;
+    CC BY 4.0 has been assumed.
+  rai:dataPreprocessingProtocol: Spectra are provided as raw SERS intensities. Labels
+    encode isolate identity and antibiotic treatment status. The published CNN model
+    uses a 25-layer 1D ResNet trained with Adam optimiser (betas 0.5/0.999), batch
+    size 10, without explicit spectral preprocessing — no baseline correction or
+    normalisation is described in the paper.
+  rai:dataSocialImpact: Rapid, culture-free bacterial identification directly from
+    patient samples could reduce time-to-treatment from days to hours, with particular
+    impact on sepsis management and antibiotic stewardship. Clinical deployment requires
+    regulatory approval and validation by qualified healthcare professionals.
+  rai:dataUseCases: Bacterial species identification, antibiotic susceptibility prediction,
+    MRSA/MSSA discrimination, clinical diagnostics decision support, deep learning
+    benchmarks for spectral classification.
+  rai:personalSensitiveInformation: Clinical validation spectra were derived from patient
+    isolates at Stanford University Medical Center and Palo Alto VA Hospital. No direct
+    patient identifiers are included in the released dataset, but the clinical context
+    means data should be treated as potentially sensitive health-related information
+    under applicable data-protection regulations.
 biomolecules_reference:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
     or validated analytical reference methods.
@@ -982,86 +996,146 @@ covid19_salvia:
     but biological measurements may constitute sensitive health-related data under
     applicable data-protection regulations.
 covid19_serum:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors. Access
-    to this dataset requires direct contact with the authors or a manual download
-    step; it is not publicly available via an open API.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
+  rai:dataAnnotationProtocol: Binary COVID-19 labels (positive/negative) assigned
+    by RT-PCR confirmation and ELISA serology. 20 subjects (10 RT-PCR-confirmed COVID-19
+    patients and 10 healthy controls. Study conducted under Ethics Committee protocol
+    26691419.6.0000.5492 (Universidade Anhembi Morumbi). Each sample measured in
+    triplicate at three anatomically distinct serum positions.
+  rai:dataBiases: Small cohort (20 subjects) limits statistical power; results may
+    not generalise beyond this Brazilian clinical population. Equal-sized COVID-19
+    and control groups simplify analysis but may not reflect true disease prevalence.
+    Serum spectra are sensitive to sample handling and storage conditions not fully
+    controlled across sites. Instrument-specific fluorescence background (830 nm
+    excitation) and correction method (7th-order polynomial baseline) may differ
+    from other published COVID-19 serum datasets.
+  rai:dataCollection: Dispersive Raman spectroscopy of blood serum. Dimension P1
+    spectrometer (Lambda Solutions), 830 nm excitation, 350 mW laser power, 400-1800
+    cm-1 spectral window, 4 cm-1 resolution, 30 s total acquisition (3 s x 10 accumulations),
+    80 µL serum in aluminium holder. Three replicate spectra per sample.
+  rai:dataCollectionType: Laboratory measurements of human blood serum collected from
+    clinical patients and healthy controls under an institutional ethics protocol.
+  rai:dataLimitations: Twenty-subject pilot study; published discriminant model achieved
+    87% sensitivity and 100% specificity using PCA-DA/PLS-DA (Chemoface, PC2+PC4+PC5+PC6).
+    Performance on independent cohorts, different instruments, or other SARS-CoV-2
+    variants is unknown. Access requires direct contact with the authors; the dataset
+    is not available via an open API. No explicit open license was stated; CC BY 4.0
+    has been assumed — users should verify terms with the original authors.
+  rai:dataPreprocessingProtocol: 7th-order polynomial baseline correction applied
+    to raw spectra to remove fluorescence background; spectra subsequently normalised
+    by area (1-norm). Processed spectra used for PCA-DA and PLS-DA classification
+    in Chemoface software.
+  rai:dataSocialImpact: Demonstrates feasibility of rapid, low-cost COVID-19 screening
+    from serum Raman spectra. Potential value in resource-limited settings where
+    RT-PCR capacity is constrained. Clinical deployment requires large-scale validation
+    and regulatory approval; findings must not be used for diagnostic decisions without
+    qualified medical oversight.
+  rai:dataUseCases: COVID-19 binary classification, serum biomarker discovery, PCA/PLS-DA
+    benchmarking, Raman-based infectious-disease screening research.
+  rai:personalSensitiveInformation: Spectra are derived from identified COVID-19 patients
+    and healthy volunteers. No direct identifiers are included in the released dataset,
+    but the clinical context means data should be treated as sensitive health information
+    under applicable data-protection regulations (e.g., LGPD in Brazil, GDPR in the EU).
     applicable data-protection regulations.
 deepr_denoising:
-  rai:dataAnnotationProtocol: Reference (clean) spectra are high-SNR acquisitions
-    of the same samples obtained under longer integration times or reduced noise conditions.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory spectroscopic measurements.
-  rai:dataLimitations: Generalisability to other instruments or sample conditions
-    should be validated separately. Access to this dataset requires direct contact
-    with the authors or a manual download step; it is not publicly available via an
-    open API.
-  rai:dataPreprocessingProtocol: Raw noisy spectra are paired with high-SNR reference
-    spectra of the same samples for supervised denoising model training.
-  rai:dataSocialImpact: Raman spectroscopy datasets support the development of machine
-    learning models for non-destructive molecular analysis across a broad range of
-    scientific and industrial domains.
-  rai:dataUseCases: Training and benchmarking deep learning denoising models for low-SNR
-    Raman spectra.
-  rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+  rai:dataAnnotationProtocol: Each low-SNR spectrum (0.1 s integration time) is paired
+    pixel-by-pixel with the corresponding high-SNR spectrum (1 s integration time)
+    acquired from the same spatial location in the same hyperspectral Raman cell image.
+    Ground-truth targets are defined purely by acquisition conditions; no manual annotation
+    was performed.
+  rai:dataBiases: All 172,312 spectral pairs originate from a single cancer cell line
+    (MDA-MB-231 breast cancer) imaged on one confocal Raman system at 532 nm. The
+    denoising model learns noise characteristics specific to this instrument and the
+    0.1 s vs. 1 s integration-time regime; generalisation to other instruments, cell
+    types, excitation wavelengths, or noise regimes requires revalidation. The 11
+    cell images used for 11-fold cross-validation may not capture the full range of
+    cellular morphological variability.
+  rai:dataCollection: 172,312 paired low-SNR (0.1 s) and high-SNR (1 s) confocal
+    Raman spectra from n=11 hyperspectral Raman cell images of MDA-MB-231 breast
+    cancer cells, acquired at 532 nm excitation. Spectra cover the fingerprint region
+    (~600-1800 cm-1) with key bands at 795 cm-1 (nucleic acids), 1004 cm-1
+    (phenylalanine), 1300 and 1440 cm-1 (lipids), and 1660 cm-1 (amide I, proteins).
+    Training augmentation included spectral flipping, shifting, and background
+    subtraction.
+  rai:dataCollectionType: In vitro hyperspectral confocal Raman microscopy of cultured
+    MDA-MB-231 human breast cancer cells; no human subjects were involved in data
+    collection.
+  rai:dataLimitations: The 1D ResUNet learns noise characteristics specific to the
+    acquisition instrument and the 0.1 s/1 s integration-time pairing. Performance
+    on other spectrometers, sample types, or noise levels is not guaranteed without
+    retraining or fine-tuning. Dataset access is via a SharePoint link provided by
+    the authors rather than a stable versioned repository, which may affect long-term
+    reproducibility. The 11 cell images may not represent the full biological
+    variability of the cell line.
+  rai:dataPreprocessingProtocol: Low-SNR (0.1 s) and high-SNR (1 s) spectra from
+    the same pixel are paired directly. A 1D ResUNet was trained for 500 epochs using
+    the Adam optimizer with an L1-norm loss function and a one-cycle learning rate
+    scheduler. Eleven independent models were trained via 11-fold cross-validation
+    (10 cell images for training/validation, 1 held-out test image per fold). The
+    network achieved a mean MSE 10x lower than Savitzky-Golay filtering (mean PSNR
+    45.76, mean SSIM 0.9532 across 11 test folds).
+  rai:dataSocialImpact: A 10x improvement in Raman denoising over classical methods
+    (Savitzky-Golay, wavelet, PCA) directly enables high-throughput label-free
+    molecular imaging of cells, potentially accelerating drug screening, cancer
+    diagnostics, and histopathology workflows that currently require prohibitively
+    long acquisition times.
+  rai:dataUseCases: Training and benchmarking 1D deep learning denoising models for
+    hyperspectral Raman imaging; comparison against classical spectral filters
+    (Savitzky-Golay, wavelet, PCA); component of hybrid denoising + super-resolution
+    pipelines for high-throughput Raman microscopy.
+  rai:personalSensitiveInformation: No personal or sensitive information. All spectra
+    are from the MDA-MB-231 human breast cancer cell line cultured in vitro; no
+    patient-derived primary specimens and no individual human identifiers are
+    present.
 deepr_super_resolution:
-  rai:dataAnnotationProtocol: High-resolution reference spectra acquired with finer
-    wavenumber spacing than the low-resolution counterpart.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory spectroscopic measurements.
-  rai:dataLimitations: Generalisability to other instruments or sample conditions
-    should be validated separately. Access to this dataset requires direct contact
-    with the authors or a manual download step; it is not publicly available via an
-    open API.
-  rai:dataPreprocessingProtocol: Low-resolution spectra are paired with high-resolution
-    reference spectra of the same samples for supervised super-resolution model training.
-  rai:dataSocialImpact: Raman spectroscopy datasets support the development of machine
-    learning models for non-destructive molecular analysis across a broad range of
-    scientific and industrial domains.
-  rai:dataUseCases: Training and benchmarking spectral super-resolution models for
-    Raman resolution enhancement.
-  rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+  rai:dataAnnotationProtocol: Low-resolution (LR) inputs are generated synthetically
+    by 2x, 3x, or 4x spatial downsampling of high-resolution (HR) hyperspectral
+    Raman images. HR images at native spatial resolution serve as ground-truth targets.
+    No manual annotation was performed; pairing is determined entirely by the
+    downsampling procedure.
+  rai:dataBiases: All 169 hyperspectral images are from MDA-MB-231 breast cancer cells
+    imaged on a single confocal Raman system at 532 nm. The HyRISR network learns
+    spatial and spectral correlations specific to this cell line and instrument.
+    At 4x super-resolution, the network introduces increased blurring that limits
+    its suitability for high-resolution cellular imaging; 2x and 3x demonstrated
+    better spatial fidelity. Transfer learning to tissue-engineered cartilage was
+    shown (n=16 training patches), but generalisation to other tissue types or
+    instruments has not been systematically benchmarked.
+  rai:dataCollection: 169 hyperspectral Raman images of MDA-MB-231 breast cancer cells
+    (1.4 million spectra, 389 h total acquisition) at 532 nm excitation. Each image
+    contains 64x64x500 or 63x63x500 pixels (height x width x spectral channels).
+    LR inputs were generated by 2x, 3x, or 4x spatial downsampling of HR acquisitions.
+    Dataset split 85:10:5 (training/validation/test). Augmentation included random
+    image cropping, flipping, rotation, mixup, spectral flipping, shifting, and
+    background subtraction.
+  rai:dataCollectionType: In vitro hyperspectral confocal Raman microscopy of cultured
+    MDA-MB-231 human breast cancer cells; no human subjects were involved in data
+    collection.
+  rai:dataLimitations: HyRISR learns spatial correlations specific to MDA-MB-231 cells
+    and the acquisition instrument. At 4x super-resolution, blurring artefacts are
+    significant and reconstruction fidelity is markedly reduced compared to 2x and 3x.
+    Dataset access is via a SharePoint link rather than a stable versioned repository.
+    The training set of 144 images is small relative to typical RGB super-resolution
+    benchmarks; extending the dataset would likely further improve performance.
+  rai:dataPreprocessingProtocol: HR Raman images at native resolution are spatially
+    downsampled 2x, 3x, or 4x to generate LR inputs. HyRISR (adapted RCAN
+    architecture with spectral downsampling) was trained for 600 epochs using the
+    Adam optimizer with L1-norm loss and a constant learning rate. Performance was
+    assessed via PSNR, SSIM, and MSE against ground-truth HR images. Achieved 40x
+    (2x SR), 90x (3x SR), and 160x (4x SR) imaging speed-up while preserving
+    molecular spatial information.
+  rai:dataSocialImpact: Enables 40-160x speed-up in hyperspectral Raman cell imaging,
+    reducing acquisition times from over one hour to under one minute. This could
+    make label-free molecular imaging practical for high-throughput drug screening,
+    pathological tissue analysis, and cell biology studies that are currently
+    prohibitively slow with conventional Raman microscopy.
+  rai:dataUseCases: Training and benchmarking hyperspectral spatial super-resolution
+    models (2x, 3x, 4x); comparison against nearest-neighbour and bicubic
+    upsampling baselines; transfer learning to new sample types with limited training
+    data; hybrid combination with spectral denoising for extreme imaging speed-ups.
+  rai:personalSensitiveInformation: No personal or sensitive information. All spectra
+    are from the MDA-MB-231 human breast cancer cell line cultured in vitro; no
+    patient-derived primary specimens and no individual human identifiers are
+    present.
 diabetes_skin_ages:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
     or validated analytical reference methods.
@@ -1594,59 +1668,98 @@ ht_raman_bio_catalysis_axp:
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 illicit_adulterants_ft_raman:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration.
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+  rai:dataAnnotationProtocol: Compound identity labels assigned from known analytical-grade
+    reference standards (purchased from Biosynth International and Sigma-Aldrich).
+    23 pharmaceutically active adulterants selected based on RASFF portal alerts for
+    dietary supplements in the EU. Spectra of 11 SERS-active compounds recorded at
+    1 mg/mL in ethanol; library built in MISA Cal software for HQI-based matching.
+  rai:dataBiases: Library spectra represent pure analytical-grade standards dissolved
+    in ethanol; real dietary supplement matrices contain excipients (microcrystalline
+    cellulose, magnesium stearate, silicon dioxide, hydroxypropyl methylcellulose,
+    titanium oxide) and plant-based extracts that can overlap with adulterant signals.
+    The 23-compound panel covers RASFF-flagged targets but not all possible novel
+    synthetic analogues or undeclared substances. FT-Raman at 1064 nm minimises
+    fluorescence but differs from portable SERS; spectral transfer between instruments
+    requires re-calibration.
+  rai:dataCollection: Benchtop FT-Raman spectroscopy. Bruker RAM II FT-IR Raman module
+    coupled to FT-IR VERTEX 70 spectrometer, 1064 nm excitation, 300 mW laser power,
+    50–3600 cm-1, 4 cm-1 resolution, 32 scans averaged per spectrum, data acquired
+    in OPUS software v7.2. Pure adulterant powders (n=19) and liquids (n=4) measured
+    directly; library spectra at 1 mg/mL in ethanol.
+  rai:dataCollectionType: Laboratory reference spectroscopy of pure pharmaceutical
+    compounds and commercially sourced dietary supplement products for food-fraud
+    screening research.
+  rai:dataLimitations: Small spectral library (11 SERS-active reference compounds,
+    one spectrum per compound); insufficient for training data-driven models without
+    augmentation. Spectra represent ideal pure-compound conditions; detection performance
+    in real DS matrices is limited by excipient interference and low analyte concentrations
+    (LOI 0.1–5.0% w/w). Dataset does not cover SERS-inactive adulterants (AND, DMAA,
+    DMAE, DMBA, TSIL, VAR, XAN) or structural analogues without reference standards.
+  rai:dataPreprocessingProtocol: Spectra provided as raw FT-Raman intensities. Three
+    replicate spectra per sample were recorded and averaged in the subsequent analysis
+    step. No explicit baseline correction or normalisation described for the library
+    spectra; statistical correspondence scores computed via Pearson correlation on
+    first-derivative spectra using the pracma R package.
+  rai:dataSocialImpact: Enables rapid, portable screening for undeclared pharmaceutically
+    active adulterants in dietary supplements at customs, retail inspections, and border
+    control without skilled operators or lengthy sample preparation. Supports EU RASFF
+    compliance and consumer safety enforcement. Low specificity of SERS benefits
+    detection of newly synthesised structural analogues where reference standards
+    are unavailable.
+  rai:dataUseCases: Spectral library matching for compound identification, food-fraud
+    detection in dietary supplements, benchmarking of SERS vs. FT-Raman performance,
+    reference spectra for adulterant screening algorithms.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra are from pure analytical-grade chemical standards and commercial
+    dietary supplement products without any human identifiers.
 illicit_adulterants_sers:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration.
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+  rai:dataAnnotationProtocol: Compound identity labels assigned from known analytical-grade
+    reference standards. 11 SERS-active adulterants (out of 23 tested) selected for
+    library building based on confirmed SERS activity on silver printed-SERS substrates —
+    acetildenafil, fluoxetine HCl, homo sildenafil, melatonin, phenethylamine, piperin,
+    sildenafil citrate, synephrine, thiosildenafil, vardenafil HCl, vinpocetine.
+    Enhancement factors 10³–10⁴ confirmed. Library built in MISA Cal software; HQI
+    similarity scores used for identification (red >0.95, orange >0.85, yellow >0.75).
+  rai:dataBiases: Library spectra represent pure analytical-grade standards in ethanol;
+    real dietary supplement excipients and plant-based extracts may interfere. The
+    11-compound panel is limited to SERS-active RASFF-flagged targets; novel analogues
+    or SERS-inactive compounds cannot be identified from this library alone. Silver
+    p-SERS substrates are single-use and non-reusable; SERS substrate batch variability
+    can affect reproducibility. Gold p-SERS substrates also tested for SERS-inactive
+    compounds.
+  rai:dataCollection: Portable SERS spectroscopy. Metrohm Instant SERS analyzer (MISA),
+    785 nm ± 0.5 nm excitation, Orbital Raster Scan (ORS™) technology, 30 µm spot
+    continuously rasterised over ~2 mm diameter, 400–2300 cm-1, 8 cm-1 FWHM resolution,
+    100 mW laser power, 3 scans averaged per spectrum, silver printed-SERS (p-SERS)
+    substrates, ASTM 1840 calibration standard. Sample prep — 10 mg dissolved
+    in 100 µL ethanol, vortex 20 s, centrifuge 806,400 RCF for 2 min, 10 µL supernatant
+    pipetted onto silver p-SERS strip, dried 15 min, measured in triplicate.
+  rai:dataCollectionType: Portable surface-enhanced Raman spectroscopy of pure pharmaceutical
+    compounds and artificially adulterated dietary supplement formulations for rapid
+    food-fraud field screening.
+  rai:dataLimitations: Small SERS library (11 reference compounds); insufficient for
+    data-driven ML without augmentation. LOI for adulteration detection is 0.1–5.0%
+    w/w in commercial dietary supplements (18 commercial products tested). SERS-inactive
+    compounds (AND, DMAA, DMAE, DMBA, TSIL, VAR, XAN) cannot be identified with this
+    method and require the complementary FT-Raman dataset. Substrate adsorption
+    selectivity and solubility in ethanol affect SERS activity per compound.
+  rai:dataPreprocessingProtocol: SERS spectra acquired via MISA Cal software in Smart
+    Acquire mode (laser power level 5, auto-integration, averages of 3 scans, raster
+    on). HQI matching performed against the built spectral library. Secondary Pearson
+    correlation analysis performed in R (prospectr, signal, Rtools packages) on first-
+    derivative spectra. No explicit baseline correction described for the library
+    spectra; raw spectra with three replicates per adulteration level.
+  rai:dataSocialImpact: Enables customs inspectors and food safety officers to perform
+    on-site screening of dietary supplements for undeclared pharmaceutical adulterants
+    within 20 minutes, with no skilled operators required. Developed in collaboration
+    with the Dutch Food and Consumer Product Safety Authority. Supports EU RASFF
+    rapid alert enforcement and consumer protection from unsafe supplement adulteration.
+  rai:dataUseCases: Portable SERS spectral library matching, dietary supplement food-fraud
+    screening, adulterant identification, benchmarking of portable vs. benchtop Raman
+    performance, detection-limit studies for pharmaceutical compound mixtures.
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra are from pure analytical-grade chemical standards and commercial
+    dietary supplement products without any human identifiers.
 itaconic_acid_species:
   rai:dataAnnotationProtocol: Mole fraction targets for three acid species (IA, IA⁻,
     IA²⁻) and water derived from pH-based dissociation equilibria and Indirect Hard
@@ -2393,59 +2506,97 @@ microgel_synthesis:
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 microplastics_weathered:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on solid or liquid material samples
-    including minerals, polymers, and organic pigments.
-  rai:dataLimitations: Reference spectra represent ideal laboratory conditions; real-world
-    samples may show additional interference from impurities, fluorescence, or surface
-    effects.
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Facilitates non-destructive material characterisation and
-    identification with applications in geology, environmental science, art conservation,
-    and industrial quality assurance.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
+  rai:dataAnnotationProtocol: Polymer-type labels assigned by combined Raman spectroscopy
+    and ATR-FTIR identification against a Raman Database of Standard Microplastics
+    (RDSP, 18 spectra of 8 polymer types). 155 microplastic debris samples hand-picked
+    from sediments near waste plastics recycling industries in Laizhou City, Shandong
+    Province, China (August 2018); 18 standard unweathered spectra from commercial
+    plastic packaging. 124 spectra with distinct peaks selected for the final Raman
+    Database of Weathered Plastics (RDWP). 20 debris samples remained unidentified.
+    KnowItAll Informatics System 2018 (Bio-Rad) used for spectral matching.
+  rai:dataBiases: Samples collected from a single geographic location (Laizhou City)
+    dominated by PE and PP recycling waste; polymer distribution (PE 45%, PP 33%)
+    reflects the local recycling industry and may not represent global environmental
+    microplastic composition. Weathered spectra show high fluorescence background
+    and weakened diagnostic peaks, increasing identification uncertainty. Class sizes
+    are highly unequal (PE 62, PP 44, PET 10, PVC 4, PC 1, PA 2, ABS 1). All samples
+    collected in a single season (August 2018); seasonal and geographic variability
+    in weathering is not captured.
+  rai:dataCollection: Confocal micro-Raman spectroscopy on selected microplastic
+    debris targets. WITec alpha300-R confocal Raman imaging microscope, 532 nm excitation,
+    2–10 mW (usually 5 mW), 10×–100× magnification (up to 360 nm spatial resolution),
+    200–3500 cm-1, 600 lines/mm grating, 4 cm-1 spectral resolution, 1–10 s integration
+    (usually 5 s), 1–10 accumulations (usually 4). Multiple spectra collected at
+    different depths on the same sample using confocal function to minimise surface
+    contamination artefacts. Complementary ATR-FTIR on Nicolet iS50 FT-IR (Thermo
+    Scientific), 650–4000 cm-1, 0.482 cm-1 resolution, 20 accumulations.
+  rai:dataCollectionType: Field-collected environmental samples (sediment microplastic
+    debris) and commercial standard plastic materials analysed by laboratory micro-Raman
+    spectroscopy and ATR-FTIR.
+  rai:dataLimitations: 124-spectrum RDWP is a preliminary database; broader coverage
+    of polymer types, geographic origins, and weathering durations is needed. Weathered
+    spectra of PVC are particularly inconsistent with standard spectra due to dechlorination.
+    Fluorescence from organic matter and surface oxidation products affects spectrum
+    quality; 11 spectra were excluded from RDWP for this reason. RDWP effectiveness
+    for identifying weathered microplastics requires validation by independent researchers.
+    PS, PA, and ABS are represented by only 0–2 spectra; models cannot be trained
+    for these classes.
+  rai:dataPreprocessingProtocol: Raman spectra acquired without baseline subtraction
+    (raw intensities). Spectra with large fluorescence background or inconsistent
+    peaks were excluded from RDWP during curation. FTIR spectra collected with ATR
+    accessory at 0.482 cm-1 resolution, 20 accumulations, 650–4000 cm-1. KnowItAll
+    2018 used for spectral library search and polymer-type identification.
+  rai:dataSocialImpact: Enables accurate identification of environmentally weathered
+    microplastics, which standard reference libraries fail to match. Advances understanding
+    of plastic degradation and persistence in natural environments. Supports environmental
+    monitoring, policy compliance, and research into microplastic pollution pathways,
+    toxicity, and remediation strategies.
+  rai:dataUseCases: Weathered microplastic identification and classification, spectral
+    database benchmarking, polymer degradation studies, environmental pollution monitoring,
+    method development for field-applicable microplastic detection.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from environmental plastic debris and standard polymer materials
+    without any human identifiers.
 mlrod:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on solid or liquid material samples
-    including minerals, polymers, and organic pigments.
-  rai:dataLimitations: 'Reference spectra represent ideal laboratory conditions; real-world
-    samples may show additional interference from impurities, fluorescence, or surface
-    effects. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Facilitates non-destructive material characterisation and
-    identification with applications in geology, environmental science, art conservation,
-    and industrial quality assurance.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
+  rai:dataAnnotationProtocol: Mineralogical class labels assigned from known sample
+    identity (gabbro from Madagascar, granite, Hawaiian basalt dust, 12 pure reference
+    minerals, and 4 binary mineral mixtures) measured at 0%  and 50% basalt dust
+    surface coverage. Over 500,000 spectra acquired by automated point-mapping
+    at 0.1 µm XY step size.
+  rai:dataBiases: All samples measured under controlled laboratory conditions (Horiba
+    LabRAM HR Evolution, 532 nm, 100 mW, 1800 l/mm grating). Performance on natural
+    outcrops, in-situ planetary surfaces, or mixed-lithology samples may differ.
+    The dataset targets Mars analogue mineralogy (silicates, carbonates, sulfates)
+    relevant to Perseverance/SuperCam; coverage of other planetary or terrestrial
+    mineral assemblages is limited. No cosmic ray removal, baseline correction, or
+    other preprocessing was applied — raw spectra include instrument artefacts.
+  rai:dataCollection: Point-mapping Raman spectroscopy of geological samples. Horiba
+    LabRAM HR Evolution, 532 nm excitation, 100 mW laser power, 1800 l/mm diffraction
+    grating, approximately 1 cm-1 spectral resolution, open-electrode CCD cooled
+    to -60 degrees C, 50x LWD objective (NA 0.5), 100-1800 cm-1 spectral window,
+    0.1 µm XY step size.
+  rai:dataCollectionType: Automated hyperspectral Raman mapping of solid geological
+    samples in a laboratory setting.
+  rai:dataLimitations: More than 500,000 spectra acquired from a limited set of rock
+    types and pure mineral standards; rare or amorphous mineral phases are under-represented.
+    No preprocessing was applied (no cosmic ray removal, no baseline subtraction),
+    so raw spectra contain instrument artefacts. Models trained on these data are
+    optimised for Mars analogue conditions (NASA Perseverance SuperCam context) and
+    may require re-calibration for other instruments or geological settings. No explicit
+    license was stated; CC BY 4.0 has been assumed.
+  rai:dataPreprocessingProtocol: Spectra provided as raw Raman intensities without
+    cosmic ray removal, baseline correction, smoothing, or normalisation. Labels
+    encode mineral class and basalt dust coverage fraction.
+  rai:dataSocialImpact: Supports development of automated mineralogical analysis
+    algorithms for planetary exploration (Mars, Moon) and terrestrial geoscience.
+    Enables benchmarking of machine learning methods for spectral classification
+    under realistic signal-to-noise and mixing conditions.
+  rai:dataUseCases: Mineral identification and classification, spectral unmixing,
+    Mars analogue mineralogy, deep learning benchmarks for geological spectroscopy,
+    robotic planetary exploration support.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from geological samples (rocks, minerals, and dust) without
+    any human identifiers.
 organic_compounds_preprocess:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
     or validated analytical reference methods.
@@ -2920,61 +3071,89 @@ sugar_mixtures_low_snr:
     All spectra originate from aqueous sugar solutions without individual human
     identifiers.
 synthetic_organic_pigments_baseline_corrected:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on solid or liquid material samples
-    including minerals, polymers, and organic pigments.
-  rai:dataLimitations: Reference spectra represent ideal laboratory conditions; real-world
-    samples may show additional interference from impurities, fluorescence, or surface
-    effects. Access to this dataset requires direct contact with the authors or a
-    manual download step; it is not publicly available via an open API.
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Facilitates non-destructive material characterisation and
-    identification with applications in geology, environmental science, art conservation,
-    and industrial quality assurance.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Pigment class labels assigned from known sample identity.
+    Approximately 300 reference spectra of approximately 270 synthetic organic pigments
+    (nearly 400 samples total) sourced from research institutes, manufacturers, and
+    resellers. Library compiled at the Royal Institute for Cultural Heritage (KIK/IRPA),
+    Brussels. Pigment classes include azo (monoazo, disazo), heterocyclic, and polycyclic
+    types (phthalocyanine, quinacridone, perylene, anthraquinone, dioxazine, triarylcarbonium,
+    diketopyrrole).
+  rai:dataBiases: Reference library covers modern synthetic organic pigments used
+    in 20th-century fine-art painting and design; historic inorganic pigments and
+    natural colorants are excluded. Spectra acquired on a single instrument at KIK/IRPA;
+    fluorescence and sample morphology vary across pigment classes. Class sizes are
+    unequal, reflecting commercial availability. Tested for identification on four
+    Stedelijk Museum paintings (Amsterdam), but broader applicability to in-situ
+    measurements under different conditions has not been validated.
+  rai:dataCollection: Dispersive Raman spectroscopy of synthetic organic pigment
+    powders. Renishaw inVia spectrometer, Peltier-cooled CCD (203 K, 576x384 pixels),
+    785 nm excitation, 1200 mm-1 grating, 50x LWD objective, wavelength calibration
+    ±0.5 cm-1. Samples measured as dry powders or from original manufacturer packaging.
+  rai:dataCollectionType: Laboratory reference measurements of synthetic organic
+    pigment standards assembled from research institutes, commercial manufacturers,
+    and resellers.
+  rai:dataLimitations: Measurements represent pure pigment standards; real paintings
+    contain binders, varnishes, and mixed pigment layers that alter spectra. Access
+    requires direct contact with KIK/IRPA or the dataset authors; not available via
+    an open API. No explicit open license was stated for this variant; users should
+    verify applicable terms with the original authors.
+  rai:dataPreprocessingProtocol: Baseline correction applied to remove fluorescence
+    background. Exact algorithm and parameters are described in the source publication
+    (Fremout et al. 2012, Journal of Raman Spectroscopy 43).
+  rai:dataSocialImpact: Enables non-invasive identification of modern synthetic pigments
+    in cultural heritage objects (paintings, textiles, plastics) without sampling.
+    Supports provenance research, forgery detection, and conservation decision-making
+    in museums and heritage institutions.
+  rai:dataUseCases: Pigment identification and classification, spectral library matching,
+    art conservation and authentication, benchmarking of chemometric classifiers on
+    organic colorants.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from synthetic organic pigment standards without any human
+    identifiers.
 synthetic_organic_pigments_raw:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on solid or liquid material samples
-    including minerals, polymers, and organic pigments.
-  rai:dataLimitations: Reference spectra represent ideal laboratory conditions; real-world
-    samples may show additional interference from impurities, fluorescence, or surface
-    effects. Access to this dataset requires direct contact with the authors or a
-    manual download step; it is not publicly available via an open API.
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Facilitates non-destructive material characterisation and
-    identification with applications in geology, environmental science, art conservation,
-    and industrial quality assurance.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Pigment class labels assigned from known sample identity.
+    Approximately 300 reference spectra of approximately 270 synthetic organic pigments
+    (nearly 400 samples total) sourced from research institutes, manufacturers, and
+    resellers. Library compiled at the Royal Institute for Cultural Heritage (KIK/IRPA),
+    Brussels. Pigment classes include azo (monoazo, disazo), heterocyclic, and polycyclic
+    types (phthalocyanine, quinacridone, perylene, anthraquinone, dioxazine, triarylcarbonium,
+    diketopyrrole).
+  rai:dataBiases: Reference library covers modern synthetic organic pigments used
+    in 20th-century fine-art painting and design; historic inorganic pigments and
+    natural colorants are excluded. Spectra acquired on a single instrument at KIK/IRPA;
+    fluorescence and sample morphology vary across pigment classes. Class sizes are
+    unequal, reflecting commercial availability. Tested for identification on four
+    Stedelijk Museum paintings (Amsterdam), but broader applicability to in-situ
+    measurements under different conditions has not been validated.
+  rai:dataCollection: Dispersive Raman spectroscopy of synthetic organic pigment
+    powders. Renishaw inVia spectrometer, Peltier-cooled CCD (203 K, 576x384 pixels),
+    785 nm excitation, 1200 mm-1 grating, 50x LWD objective, wavelength calibration
+    ±0.5 cm-1. Samples measured as dry powders or from original manufacturer packaging.
+  rai:dataCollectionType: Laboratory reference measurements of synthetic organic
+    pigment standards assembled from research institutes, commercial manufacturers,
+    and resellers.
+  rai:dataLimitations: Measurements represent pure pigment standards; real paintings
+    contain binders, varnishes, and mixed pigment layers that alter spectra. This
+    variant provides raw spectra without baseline correction; fluorescence background
+    may strongly influence intensities for certain pigment classes. Access requires
+    direct contact with KIK/IRPA or the dataset authors; not available via an open
+    API. No explicit open license was stated; users should verify applicable terms
+    with the original authors.
+  rai:dataPreprocessingProtocol: Raw spectra provided without baseline correction,
+    smoothing, or normalisation. Fluorescence background is present and varies by
+    pigment class. The companion baseline-corrected variant (synthetic_organic_pigments_baseline_corrected)
+    provides the same spectra with background removed.
+  rai:dataSocialImpact: Enables non-invasive identification of modern synthetic pigments
+    in cultural heritage objects (paintings, textiles, plastics) without sampling.
+    The raw variant is valuable for benchmarking baseline correction algorithms and
+    fluorescence suppression methods. Supports provenance research, forgery detection,
+    and conservation decision-making in museums and heritage institutions.
+  rai:dataUseCases: Pigment identification and classification, spectral library matching,
+    baseline correction benchmarking, art conservation and authentication, fluorescence
+    interference studies.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from synthetic organic pigment standards without any human
+    identifiers.
 tg_ecoli_fermentation:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
