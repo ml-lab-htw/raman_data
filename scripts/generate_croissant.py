@@ -768,7 +768,8 @@ def build_croissant_from_scratch(
     doi_field: str = meta.get("doi", "") or ""
     if doi_field and not doi_field.startswith("http"):
         doi_field = f"https://doi.org/{doi_field}"
-    same_as: list[str] = list(dict.fromkeys(filter(None, papers + ([doi_field] if doi_field else []))))
+    # doi identifies the same dataset resource; paper(s) are the preferred citation.
+    same_as: list[str] = list(dict.fromkeys(filter(None, [doi_field] if doi_field else [])))
 
     citation = normalise_citation(meta.get("citation"))
     keywords = build_keywords(info)
@@ -792,6 +793,8 @@ def build_croissant_from_scratch(
         doc["conditionsOfAccess"] = conditions_of_access
     if same_as:
         doc["sameAs"] = same_as if len(same_as) > 1 else same_as[0]
+    if papers:
+        doc["citeAs"] = papers[0] if len(papers) == 1 else papers
     if citation:
         doc["citation"] = citation
 
@@ -806,7 +809,7 @@ def build_croissant_from_scratch(
 # Extend a platform-provided Croissant with RAI fields
 # ---------------------------------------------------------------------------
 
-def extend_croissant(existing: dict, rai: dict) -> dict:
+def extend_croissant(existing: dict, rai: dict, papers: list[str] | None = None) -> dict:
     """Keep the platform-provided JSON intact; add RAI fields and conformsTo.
 
     Different platforms use different key names for conformsTo:
@@ -855,6 +858,8 @@ def extend_croissant(existing: dict, rai: dict) -> dict:
             if t in _TYPE_MAP:
                 dist_entry["@type"] = _TYPE_MAP[t]
 
+    if papers:
+        result["citeAs"] = papers[0] if len(papers) == 1 else papers
     result.update(rai)
     return result
 
@@ -978,8 +983,10 @@ def process_dataset(
         if article_id:
             figshare_files = fetch_figshare_files(article_id) or None
 
+    papers_list = normalise_papers(meta.get("paper"))
+
     if fetched is not None:
-        doc = extend_croissant(fetched, rai)
+        doc = extend_croissant(fetched, rai, papers_list)
         warnings.insert(0, f"fetched from {platform}")
     else:
         doc = build_croissant_from_scratch(dataset_key, info, rai, platform, figshare_files)
