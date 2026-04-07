@@ -36,6 +36,7 @@ class GoogleDriveLoader(BaseLoader):
                     "full_name": f"RRUFF Database - {processed} Spectra",
                     "source": "https://rruff.info/",
                     "paper": "https://doi.org/10.1515/9783110417104-003",
+                    "bibtex": "@inbook{Lafuente_2015, title={The power of databases: The RRUFF project}, ISBN={9783110417104}, url={http://dx.doi.org/10.1515/9783110417104-003}, DOI={10.1515/9783110417104-003}, booktitle={Highlights in Mineralogical Crystallography}, publisher={DE GRUYTER}, author={Lafuente, Barbara and Downs, R. T. and Yang, H. and Stone, N.}, year={2015}, month=nov, pages={1--30}}",
                     "citation": [
                         "Lafuente, B., Downs, R. T., Yang, H., & Stone, N. (2015). The power of databases: the RRUFF project. Highlights in Mineralogical Crystallography, T Armbruster and R M Danisi, Eds., Berlin, Germany, W. De Gruyter, 1–30."
                     ],
@@ -58,6 +59,7 @@ class GoogleDriveLoader(BaseLoader):
                     "full_name": f"Organic Compounds Multi-Excitation Dataset - {processed}",
                     "source": "https://data.dtu.dk/api/files/36144495",
                     "paper": "https://doi.org/10.1002/jrs.5750",
+                    "bibtex": "@article{Zhang_2019, title={Transfer-learning-based Raman spectra identification}, volume={51}, ISSN={1097-4555}, url={http://dx.doi.org/10.1002/jrs.5750}, DOI={10.1002/jrs.5750}, number={1}, journal={Journal of Raman Spectroscopy}, publisher={Wiley}, author={Zhang, Rui and Xie, Huimin and Cai, Shuning and Hu, Yong and Liu, Guo-kun and Hong, Wenjing and Tian, Zhong-qun}, year={2019}, month=nov, pages={176--186}}",
                     "citation": [
                         "Zhang, Rui et al., Transfer-learning-based Raman spectra identification, Journal of Raman Spectroscopy, 2020, 51, 1, 176-186. https://doi.org/10.1002/jrs.5992"
                     ],

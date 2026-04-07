@@ -366,6 +366,7 @@ class ZenodoLoader(BaseLoader):
                     "full_name": f"Sugar Mixtures Raman Dataset ({snr} SNR)",
                     "source": "https://doi.org/10.5281/zenodo.10779223",
                     "paper": "https://doi.org/10.1073/pnas.2407439121",
+                    "bibtex": "@article{Georgiev_2024, title={Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders}, volume={121}, ISSN={1091-6490}, url={http://dx.doi.org/10.1073/pnas.2407439121}, DOI={10.1073/pnas.2407439121}, number={45}, journal={Proceedings of the National Academy of Sciences}, publisher={Proceedings of the National Academy of Sciences}, author={Georgiev, Dimitar and Fernandez-Galiana, Alvaro and Vilms Pedersen, Simon and Papadopoulos, Georgios and Xie, Ruoxiao and Stevens, Molly M. and Barahona, Mauricio}, year={2024}, month=oct}",
                     "description": f"The {snr.lower()} signal-to-noise ratio subset of the Sugar Mixtures benchmark (7,680 measurements at 0.5 s integration). Used for evaluating the noise-robustness of hyperspectral unmixing and quantification algorithms."
                 }
             )
@@ -384,6 +385,7 @@ class ZenodoLoader(BaseLoader):
                 "full_name": "Mutant Wheat Raman Dataset",
                 "source": "https://doi.org/10.5281/zenodo.7644521",
                 "paper": "https://doi.org/10.3389/fpls.2023.1116876",
+                "bibtex": "@article{Sen_2023, title={Differentiation of advanced generation mutant wheat lines: Conventional techniques versus Raman spectroscopy}, volume={14}, ISSN={1664-462X}, url={http://dx.doi.org/10.3389/fpls.2023.1116876}, DOI={10.3389/fpls.2023.1116876}, journal={Frontiers in Plant Science}, publisher={Frontiers Media SA}, author={Sen, Ayse and Kecoglu, Ibrahim and Ahmed, Muhammad and Parlatan, Ugur and Unlu, Mehmet Burcin}, year={2023}, month=feb}",
                 "description": "Raman spectra from the 7th generation of salt-stress-tolerant wheat mutant lines and their commercial cultivars. Features 785 nm excitation and tracks biochemical shifts in carotenoids and protein-related bands for agricultural phenotyping."
             }
         ),
@@ -401,6 +403,7 @@ class ZenodoLoader(BaseLoader):
                     "full_name": f"SERS Interlaboratory Adenine Dataset ({type} {material})",
                     "source": "https://doi.org/10.5281/zenodo.3572359",
                     "paper": "https://doi.org/10.1021/acs.analchem.9b05658",
+                    "bibtex": "@article{Fornasaro_2020, title={Surface Enhanced Raman Spectroscopy for Quantitative Analysis: Results of a Large-Scale European Multi-Instrument Interlaboratory Study}, volume={92}, ISSN={1520-6882}, url={http://dx.doi.org/10.1021/acs.analchem.9b05658}, DOI={10.1021/acs.analchem.9b05658}, number={5}, journal={Analytical Chemistry}, publisher={American Chemical Society (ACS)}, author={Fornasaro, Stefano and Alsamad, Fatima and Baia, Monica and Batista de Carvalho, Luis A. E. and Beleites, Claudia and Byrne, Hugh J. and Chiado, Alessandro and Chis, Mihaela and Chisanga, Malama and Daniel, Amuthachelvi and Dybas, Jakub and Eppe, Gauthier and Falgayrac, Guillaume and Faulds, Karen and Gebavi, Hrvoje and Giorgis, Fabrizio and Goodacre, Royston and Graham, Duncan and La Manna, Pietro and Laing, Stacey and Litti, Lucio and Lyng, Fiona M. and Malek, Kamilla and Malherbe, Cedric and Marques, Maria P. M. and Meneghetti, Moreno and Mitri, Elisa and Mohacek-Grosev, Vlasta and Morasso, Carlo and Muhamadali, Howbeer and Musto, Pellegrino and Novara, Chiara and Pannico, Marianna and Penel, Guillaume and Piot, Olivier and Rindzevicius, Tomas and Rusu, Elena A. and Schmidt, Michael S. and Sergo, Valter and Sockalingum, Ganesh D. and Untereiner, Valerie and Vanna, Renzo and Wiercigroch, Ewelina and Bonifacio, Alois}, year={2020}, month=feb, pages={4053--4064}}",
                     "description": f"Quantitative SERS spectra of adenine measured using {type.lower()} {material.lower()} substrates across 15 different European laboratories. Benchmarks model reproducibility and inter-instrumental variability."
                 }
             )
@@ -418,7 +421,9 @@ class ZenodoLoader(BaseLoader):
             loader=lambda cache_path: ZenodoLoader.__load_18881751(cache_path),
             metadata={
                 "full_name": "SERS Spectra of Hair Dyes Dataset",
-                "source": "https://doi.org/10.5281/zenodo.18881751",
+                "source": "https://doi.org/10.5281/zen  odo.18881751",
+                "paper": "https://doi.org/10.1016/j.talanta.2022.123762",
+                "bibtex": "@article{Higgins_2023, title={Surface-enhanced Raman spectroscopy enables highly accurate identification of different brands, types and colors of hair dyes}, volume={251}, ISSN={0039-9140}, url={http://dx.doi.org/10.1016/j.talanta.2022.123762}, DOI={10.1016/j.talanta.2022.123762}, journal={Talanta}, publisher={Elsevier BV}, author={Higgins, Samantha and Kurouski, Dmitry}, year={2023}, month=jan, pages={123762}}",
                 "description": (
                     "SERS spectra of commercial hair dye products acquired with a portable Raman spectrometer. "
                     "Each spectrum is labelled by brand, permanence (permanent/semi-permanent/temporary), and colour. "
@@ -455,6 +460,8 @@ class ZenodoLoader(BaseLoader):
             metadata={
                 "full_name": "Head and Neck Cancer Raman Spectroscopy Dataset",
                 "source": "https://doi.org/10.5281/zenodo.7044324",
+                "paper": "https://doi.org/10.1038/s41598-022-22197-x",
+                "bibtex": "@article{koster2022fused, title={Fused Raman spectroscopic analysis of blood and saliva delivers high accuracy for head and neck cancer diagnostics}, author={Koster, Hanna J and Guillen-Perez, Antonio and Gomez-Diaz, Juan Sebastian and Navas-Moreno, Maria and Birkeland, Andrew C and Carney, Randy P}, journal={Scientific Reports}, volume={12}, number={1}, pages={18464}, year={2022}, publisher={Nature Publishing Group UK London}}",
                 "description": (
                     "Raman spectra of blood plasma and saliva samples from head and neck cancer patients and "
                     "healthy controls. Acquired for non-invasive liquid biopsy screening. "

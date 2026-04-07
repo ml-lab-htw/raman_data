@@ -50,6 +50,7 @@ class MendeleyLoader(BaseLoader):
                 "source": "https://data.mendeley.com/datasets/y4md8znppn/1",
                 "doi": "10.17632/y4md8znppn/1",
                 "paper": "https://doi.org/10.1016/j.heliyon.2023.e18509",
+                "bibtex": "@article{Rizzo_2023, title={A multi-analyte screening method for the rapid detection of illicit adulterants in dietary supplements using a portable SERS analyzer}, volume={9}, ISSN={2405-8440}, url={http://dx.doi.org/10.1016/j.heliyon.2023.e18509}, DOI={10.1016/j.heliyon.2023.e18509}, number={8}, journal={Heliyon}, publisher={Elsevier BV}, author={Rizzo, Serena and Weesepoel, Yannick and Erasmus, Sara and Sinkeldam, Joost and Piccinelli, Anna Lisa and van Ruth, Saskia}, year={2023}, month=aug, pages={e18509}}",
                 "citation": _CITATION,
                 "description": (
                     "FT-Raman spectra (1064 nm, ~33–3600 cm⁻¹, 1851 points) of 11 SERS-active pharmaceutically "
@@ -72,6 +73,7 @@ class MendeleyLoader(BaseLoader):
                 "source": "https://data.mendeley.com/datasets/y4md8znppn/1",
                 "doi": "10.17632/y4md8znppn/1",
                 "paper": "https://doi.org/10.1016/j.heliyon.2023.e18509",
+                "bibtex": "@article{Rizzo_2023, title={A multi-analyte screening method for the rapid detection of illicit adulterants in dietary supplements using a portable SERS analyzer}, volume={9}, ISSN={2405-8440}, url={http://dx.doi.org/10.1016/j.heliyon.2023.e18509}, DOI={10.1016/j.heliyon.2023.e18509}, number={8}, journal={Heliyon}, publisher={Elsevier BV}, author={Rizzo, Serena and Weesepoel, Yannick and Erasmus, Sara and Sinkeldam, Joost and Piccinelli, Anna Lisa and van Ruth, Saskia}, year={2023}, month=aug, pages={e18509}}",
                 "citation": _CITATION,
                 "description": (
                     "SERS spectra (785 nm, 400–2300 cm⁻¹, 1901 points) of 11 SERS-active illicit adulterants "

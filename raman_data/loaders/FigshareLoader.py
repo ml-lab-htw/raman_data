@@ -38,6 +38,7 @@ class FigshareLoader(BaseLoader):
                 "full_name": "Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development",
                 "source": "https://springernature.figshare.com/ndownloader/articles/27931131/versions/1",
                 "paper": "https://doi.org/10.1038/s41597-025-04848-6",
+                "bibtex": "@article{Flanagan_2025, title={Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development}, volume={12}, ISSN={2052-4463}, url={http://dx.doi.org/10.1038/s41597-025-04848-6}, DOI={10.1038/s41597-025-04848-6}, number={1}, journal={Scientific Data}, publisher={Springer Science and Business Media LLC}, author={Flanagan, Aaron R. and Glavin, Frank G.}, year={2025}, month=mar}",
                 "citation": [
                     "Flanagan, A.R., Glavin, F.G. Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development. Sci Data 12, 498 (2025)."
                 ],
@@ -93,6 +94,7 @@ class FigshareLoader(BaseLoader):
                 "source": "https://figshare.com/articles/dataset/ComFilE_/28107431",
                 "doi": "10.6084/m9.figshare.28107431",
                 "paper": "https://www.nature.com/articles/s42256-025-01027-5",
+                "bibtex": "@article{Xue_2025, title={Deep spectral component filtering as a foundation model for spectral analysis demonstrated in metabolic profiling}, volume={7}, ISSN={2522-5839}, url={http://dx.doi.org/10.1038/s42256-025-01027-5}, DOI={10.1038/s42256-025-01027-5}, number={5}, journal={Nature Machine Intelligence}, publisher={Springer Science and Business Media LLC}, author={Xue, Bingsen and Bi, Xinyuan and Dong, Zheyi and Xu, Yunzhe and Liang, Minghui and Fang, Xin and Yuan, Yizhe and Wang, Ruoxi and Liu, Shuyu and Jiao, Rushi and Chen, Yuze and Zu, Weitao and Wang, Chengxiang and Zhang, Jianhao and Liu, Jiang and Zhang, Qin and Yuan, Ye and Xu, Midie and Zhang, Ya and Wang, Yanfeng and Ye, Jian and Jin, Cheng}, year={2025}, month=may, pages={743--757}}",
                 "citation": [
                     "Xue, B. et al. ComFilE: a large-scale benchmark dataset for computational spectroscopy. "
                     "Nat Mach Intell (2025). https://doi.org/10.1038/s42256-025-01027-5"
