@@ -53,121 +53,274 @@ acetic_acid_species:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical samples without individual human identifiers.
 adenine_colloidal_gold:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Ground-truth adenine concentrations were gravimetrically
+    prepared by the organizing laboratory (University of Trieste) as standard solutions
+    in 0.01 M pH 7.4 phosphate buffer, then aliquoted and shipped to all participants.
+    A blind design was applied - only the organizing laboratory knew the test set concentrations.
+    Calibration models were built by inverse least-squares regression on integrated
+    SERS band areas of the adenine ring-breathing mode (715-750 cm⁻¹).
+  rai:dataBiases: Data collected with a single colloidal substrate type (naked Au
+    nanoparticles from laser ablation synthesis, University of Padova) and a single
+    analyte (adenine); results are specific to this substrate-analyte combination and
+    should not be extrapolated to other SERS substrates or analytes. Only 785 nm
+    excitation was used for the gold colloidal method (cAu@785); no green-laser
+    coverage is included. Signal variability arises from differences in laser power,
+    optics, and detector responsivities across participating instruments (six models
+    from three manufacturers). Only five of eight expected laboratory datasets reached
+    the final analysis, limiting statistical power.
+  rai:dataCollection: SERS spectra of adenine in 0.01 M pH 7.4 phosphate buffer
+    acquired on colloidal gold nanoparticle substrates (naked Au nanoparticles
+    produced by laser ablation synthesis, University of Padova) at 785 nm excitation.
+    Collected as part of the first European multi-instrument SERS interlaboratory
+    study (ILS) within EU COST Action BM1401 Raman4Clinics, involving 15 laboratories
+    from 11 European countries and 44 researchers (July-October 2018). Six instrument
+    models from three manufacturers were used across labs (WiTec Alpha 300R, Horiba
+    LabRAM 300, Horiba LabRAM ARAMIS, Horiba LabRAM HR 800, Horiba T64000, Renishaw
+    InVia); laser power and acquisition time were set by each lab within prescribed
+    limits. Three batches of colloidal substrate and three replicates per sample
+    were used, yielding nine spectra per concentration level per method per laboratory.
+    The analyte concentration range spans 0 to approximately 0.8 µM at five levels.
+  rai:dataCollectionType: Quantitative SERS measurements of adenine on colloidal gold
+    nanoparticle substrates, collected in a multi-laboratory interlaboratory study to
+    assess the inter-instrument reproducibility and trueness of quantitative SERS
+    across European research facilities.
+  rai:dataLimitations: Results valid only within the studied concentration range
+    (0-0.8 µM) and for the specific colloidal gold substrate; extrapolation to other
+    concentrations or substrates is not validated. RMSEP 13%, SEP 13%, BIAS 3%
+    (normalized) characterise the average accuracy across all participating laboratories
+    and do not represent the uncertainty achievable by a single optimised setup.
+    Only five of eight expected laboratory datasets are included in the final analysis.
+    Intrinsic SERS signal variability (hot spots, colloidal batch-to-batch differences)
+    limits the reproducibility of quantitative models. The interlaboratory RMSEP
+    cannot be used directly as a single-lab prediction uncertainty.
+  rai:dataPreprocessingProtocol: Raw spectra preprocessed following a centrally
+    defined Data Analysis Protocol (DAP) implemented in R (version 3.4.3, packages
+    hyperSpec and dplyr). Steps include extended multiplicative scatter correction
+    (EMSC), smoothing, spectral range selection, baseline correction, and
+    normalization. Quantification performed by integrating the SERS ring-breathing
+    band area between 715 and 750 cm⁻¹ and fitting a linear inverse least-squares
+    calibration model. Calibration curves with poor linear fit (r² < 0.6 or
+    F-test p > 0.01) were excluded from the final analysis.
+  rai:dataSocialImpact: Represents the first large-scale European collaborative
+    benchmark for quantitative SERS, contributing to the standardisation of SERS
+    measurement protocols across laboratories. Supports the development of reproducible,
+    validated SERS methods for clinical diagnostics, food safety, and environmental
+    monitoring within the Raman4Clinics initiative (EU COST Action BM1401).
+  rai:dataUseCases: Benchmarking quantitative SERS calibration methods across
+    instruments and laboratories; evaluating inter-laboratory reproducibility and
+    trueness of SERS quantification; development and testing of SERS spectral
+    preprocessing and regression algorithms; comparing colloidal gold versus other
+    SERS substrate types for quantitative analytical applications.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from adenine reference solutions without individual human
+    identifiers.
 adenine_colloidal_silver:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Ground-truth adenine concentrations were gravimetrically
+    prepared by the organizing laboratory (University of Trieste) as standard solutions
+    in 0.01 M pH 7.4 phosphate buffer, then aliquoted and shipped to all participants.
+    A blind design was applied - only the organizing laboratory knew the test set concentrations.
+    Calibration models were built by inverse least-squares regression on integrated
+    SERS band areas of the adenine ring-breathing mode (715-750 cm⁻¹). This dataset
+    combines two excitation methods - cAg@532 (532 nm) and cAg@785 (785 nm).
+  rai:dataBiases: Data collected with a single colloidal substrate type (naked Ag
+    nanoparticles from laser ablation synthesis, University of Padova) and a single
+    analyte (adenine); results are specific to this substrate-analyte combination and
+    should not be extrapolated to other SERS substrates or analytes. Signal variability
+    arises from differences in laser power, optics, and detector responsivities across
+    participating instruments (six models from three manufacturers). The 532 nm method
+    (cAg@532) data from one laboratory (P10) was rejected due to parafilm contamination
+    of the hydrophobic colloidal substrate, which interfered with adenine bands; this
+    risk is absent for the 785 nm method but illustrates substrate preparation
+    sensitivity. The cAg@532 method showed significant systematic BIAS (11%),
+    whereas cAg@785 showed negligible BIAS (-4%). The cAg@785 calibration curves
+    from some labs exhibited slight nonlinearity symptoms at higher concentrations.
+  rai:dataCollection: SERS spectra of adenine in 0.01 M pH 7.4 phosphate buffer
+    acquired on colloidal silver nanoparticle substrates (naked Ag nanoparticles
+    produced by laser ablation synthesis, University of Padova) at both 532 nm and
+    785 nm excitation. Collected as part of the first European multi-instrument SERS
+    interlaboratory study (ILS) within EU COST Action BM1401 Raman4Clinics, involving
+    15 laboratories from 11 European countries and 44 researchers (July-October 2018).
+    Six instrument models from three manufacturers were used across labs (WiTec Alpha
+    300R, Horiba LabRAM 300, Horiba LabRAM ARAMIS, Horiba LabRAM HR 800, Horiba
+    T64000, Renishaw InVia); laser power and acquisition time were set by each lab
+    within prescribed limits. Three batches of colloidal substrate and three replicates
+    per sample were used, yielding nine spectra per concentration level per method per
+    laboratory. The analyte concentration range spans 0 to approximately 2 µM at
+    five levels. Final analysis included five labs for cAg@532 and seven labs for
+    cAg@785.
+  rai:dataCollectionType: Quantitative SERS measurements of adenine on colloidal
+    silver nanoparticle substrates using two excitation wavelengths (532 nm and 785 nm),
+    collected in a multi-laboratory interlaboratory study to assess the inter-instrument
+    reproducibility and trueness of quantitative SERS across European research facilities.
+  rai:dataLimitations: Results valid only within the studied concentration range
+    (0-2 µM) and for the specific colloidal silver substrate; extrapolation to other
+    concentrations or substrates is not validated. Performance differs significantly
+    between excitation wavelengths - cAg@532 achieves RMSEP 24% (SEP 21%, BIAS 11%)
+    while cAg@785 achieves RMSEP 19% (SEP 19%, BIAS -4%). The large BIAS at 532 nm
+    may indicate systematic differences between laboratories using different 532 nm
+    instruments. Intrinsic SERS signal variability (hot spots, colloidal batch-to-batch
+    differences) limits quantitative reproducibility. The interlaboratory RMSEP cannot
+    be used directly as a single-lab prediction uncertainty.
+  rai:dataPreprocessingProtocol: Raw spectra preprocessed following a centrally
+    defined Data Analysis Protocol (DAP) implemented in R (version 3.4.3, packages
+    hyperSpec and dplyr). Steps include extended multiplicative scatter correction
+    (EMSC), smoothing, spectral range selection, baseline correction, and
+    normalization. Quantification performed by integrating the SERS ring-breathing
+    band area between 715 and 750 cm⁻¹ and fitting a linear inverse least-squares
+    calibration model. Calibration curves with poor linear fit (r² < 0.6 or
+    F-test p > 0.01) were excluded. Additionally, cAg@532 and cAu@785 data from
+    laboratory P10 were excluded at the data inspection stage due to parafilm
+    interference with adenine bands.
+  rai:dataSocialImpact: Represents the first large-scale European collaborative
+    benchmark for quantitative SERS, contributing to the standardisation of SERS
+    measurement protocols across laboratories. Supports the development of reproducible,
+    validated SERS methods for clinical diagnostics, food safety, and environmental
+    monitoring within the Raman4Clinics initiative (EU COST Action BM1401).
+  rai:dataUseCases: Benchmarking quantitative SERS calibration methods across
+    instruments and laboratories; evaluating the effect of excitation wavelength
+    (532 nm vs. 785 nm) on inter-laboratory reproducibility; development and testing
+    of SERS spectral preprocessing and regression algorithms; comparing colloidal
+    silver versus other SERS substrate types for quantitative analytical applications.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from adenine reference solutions without individual human
+    identifiers.
 adenine_solid_gold:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Ground-truth adenine concentrations were gravimetrically
+    prepared by the organizing laboratory (University of Trieste) as standard solutions
+    in 0.01 M pH 7.4 phosphate buffer, then aliquoted and shipped to all participants.
+    A blind design was applied - only the organizing laboratory knew the test set concentrations.
+    Calibration models were built by inverse least-squares regression on integrated
+    SERS band areas of the adenine ring-breathing mode (715-750 cm⁻¹).
+  rai:dataBiases: Data collected with a single solid substrate type (commercially
+    available gold-coated silicon nanopillars, Silmeco ApS, Denmark) and a single
+    analyte (adenine); results are specific to this substrate-analyte combination
+    and should not be extrapolated to other SERS substrates or analytes. Only 785 nm
+    excitation was used for the solid gold method (sAu@785); no green-laser coverage
+    is included. Signal variability arises from differences in laser power, optics,
+    and detector responsivities across participating instruments (six models from
+    three manufacturers). The producer's recommended measurement (full substrate map)
+    was replaced by three spectra from random locations per substrate due to practical
+    constraints, which may reduce spatial averaging of signal heterogeneity. Only
+    five of eight expected laboratory datasets reached the final analysis.
+  rai:dataCollection: SERS spectra of adenine in 0.01 M pH 7.4 phosphate buffer
+    acquired on solid gold substrate (gold-coated silicon nanopillar arrays, Silmeco
+    ApS, Denmark) at 785 nm excitation. Collected as part of the first European
+    multi-instrument SERS interlaboratory study (ILS) within EU COST Action BM1401
+    Raman4Clinics, involving 15 laboratories from 11 European countries and 44
+    researchers (July-October 2018). Six instrument models from three manufacturers
+    were used across labs (WiTec Alpha 300R, Horiba LabRAM 300, Horiba LabRAM
+    ARAMIS, Horiba LabRAM HR 800, Horiba T64000, Renishaw InVia); laser power
+    and acquisition time were set by each lab within prescribed limits (10x or 20x
+    magnification). Three different substrates and three spectra per substrate
+    were collected per sample, yielding nine spectra per concentration level per
+    method per laboratory. The analyte concentration range spans 0 to approximately
+    4 µM at five levels.
+  rai:dataCollectionType: Quantitative SERS measurements of adenine on solid gold
+    nanostructured substrate (metal-coated silicon nanopillars), collected in a
+    multi-laboratory interlaboratory study to assess the inter-instrument reproducibility
+    and trueness of quantitative SERS across European research facilities.
+  rai:dataLimitations: Results valid only within the studied concentration range
+    (0-4 µM) and for the specific solid gold substrate; extrapolation to other
+    concentrations or substrates is not validated. RMSEP 28% (SEP 29%, BIAS -2%)
+    represents the highest variability among the four substrate methods in this
+    study, indicating lower inter-laboratory reproducibility for this substrate.
+    The three-spectra-per-substrate sampling replaces the producer-recommended
+    full map and may under-represent spatial heterogeneity of the substrate. Only
+    five of eight expected laboratory datasets are included in the final analysis.
+    Intrinsic SERS signal variability (substrate-to-substrate fabrication differences,
+    hot spot distribution) limits quantitative reproducibility.
+  rai:dataPreprocessingProtocol: Raw spectra preprocessed following a centrally
+    defined Data Analysis Protocol (DAP) implemented in R (version 3.4.3, packages
+    hyperSpec and dplyr). Steps include extended multiplicative scatter correction
+    (EMSC), smoothing, spectral range selection, baseline correction, and
+    normalization. Quantification performed by integrating the SERS ring-breathing
+    band area between 715 and 750 cm⁻¹ and fitting a linear inverse least-squares
+    calibration model. Calibration curves with poor linear fit (r² < 0.6 or
+    F-test p > 0.01) were excluded from the final analysis.
+  rai:dataSocialImpact: Represents the first large-scale European collaborative
+    benchmark for quantitative SERS, contributing to the standardisation of SERS
+    measurement protocols across laboratories. Supports the development of reproducible,
+    validated SERS methods for clinical diagnostics, food safety, and environmental
+    monitoring within the Raman4Clinics initiative (EU COST Action BM1401).
+  rai:dataUseCases: Benchmarking quantitative SERS calibration methods on solid
+    gold substrates across instruments and laboratories; evaluating inter-laboratory
+    reproducibility and trueness; development and testing of SERS spectral preprocessing
+    and regression algorithms; comparing solid gold versus colloidal and solid silver
+    SERS substrates for quantitative analytical applications.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from adenine reference solutions without individual human
+    identifiers.
 adenine_solid_silver:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Ground-truth adenine concentrations were gravimetrically
+    prepared by the organizing laboratory (University of Trieste) as standard solutions
+    in 0.01 M pH 7.4 phosphate buffer, then aliquoted and shipped to all participants.
+    A blind design was applied - only the organizing laboratory knew the test set concentrations.
+    Calibration models were built by inverse least-squares regression on integrated
+    SERS band areas of the adenine ring-breathing mode (715-750 cm⁻¹). This dataset
+    combines two excitation methods - sAg@532 (532 nm) and sAg@785 (785 nm).
+  rai:dataBiases: Data collected with a single solid substrate type (commercially
+    available silver-coated silicon nanopillars, Silmeco ApS, Denmark) and a single
+    analyte (adenine); results are specific to this substrate-analyte combination and
+    should not be extrapolated to other SERS substrates or analytes. Signal variability
+    arises from differences in laser power, optics, and detector responsivities across
+    participating instruments (six models from three manufacturers). The producer's
+    recommended full substrate map was replaced by three spectra from random locations
+    per substrate due to practical constraints, which may reduce spatial averaging
+    of signal heterogeneity. Performance differs markedly between excitation wavelengths -
+    sAg@532 shows high BIAS (11%) suggesting systematic lab-dependent offsets, while
+    sAg@785 is among the most reproducible methods in the entire study.
+  rai:dataCollection: SERS spectra of adenine in 0.01 M pH 7.4 phosphate buffer
+    acquired on solid silver substrate (silver-coated silicon nanopillar arrays,
+    Silmeco ApS, Denmark) at both 532 nm and 785 nm excitation. Collected as part
+    of the first European multi-instrument SERS interlaboratory study (ILS) within
+    EU COST Action BM1401 Raman4Clinics, involving 15 laboratories from 11 European
+    countries and 44 researchers (July-October 2018). Six instrument models from
+    three manufacturers were used across labs (WiTec Alpha 300R, Horiba LabRAM 300,
+    Horiba LabRAM ARAMIS, Horiba LabRAM HR 800, Horiba T64000, Renishaw InVia);
+    laser power and acquisition time were set by each lab within prescribed limits
+    (10x or 20x magnification). Three different substrates and three spectra per
+    substrate were collected per sample, yielding nine spectra per concentration
+    level per method per laboratory. The analyte concentration range spans 0 to
+    approximately 10 µM at five levels. Final analysis included seven labs for
+    sAg@532 and six labs for sAg@785.
+  rai:dataCollectionType: Quantitative SERS measurements of adenine on solid silver
+    nanostructured substrate (metal-coated silicon nanopillars) using two excitation
+    wavelengths (532 nm and 785 nm), collected in a multi-laboratory interlaboratory
+    study to assess the inter-instrument reproducibility and trueness of quantitative
+    SERS across European research facilities.
+  rai:dataLimitations: Results valid only within the studied concentration range
+    (0-10 µM) and for the specific solid silver substrate; extrapolation to other
+    concentrations or substrates is not validated. Performance differs significantly
+    between excitation wavelengths - sAg@532 achieves RMSEP 29% (SEP 27%, BIAS 11%)
+    while sAg@785 achieves RMSEP 13% (SEP 12%, BIAS 4%), making sAg@785 one of the
+    two best-performing methods in the study alongside cAu@785. The large BIAS at
+    532 nm indicates systematic inter-laboratory offsets at that excitation wavelength.
+    Intrinsic SERS signal variability (substrate fabrication differences, hot spot
+    distribution) and the replacement of full substrate maps with three spot
+    measurements limit quantitative reproducibility.
+  rai:dataPreprocessingProtocol: Raw spectra preprocessed following a centrally
+    defined Data Analysis Protocol (DAP) implemented in R (version 3.4.3, packages
+    hyperSpec and dplyr). Steps include extended multiplicative scatter correction
+    (EMSC), smoothing, spectral range selection, baseline correction, and
+    normalization. Quantification performed by integrating the SERS ring-breathing
+    band area between 715 and 750 cm⁻¹ and fitting a linear inverse least-squares
+    calibration model. Calibration curves with poor linear fit (r² < 0.6 or
+    F-test p > 0.01) were excluded; one sAu@785 calibration curve from laboratory
+    P06 was rejected at the model evaluation stage.
+  rai:dataSocialImpact: Represents the first large-scale European collaborative
+    benchmark for quantitative SERS, contributing to the standardisation of SERS
+    measurement protocols across laboratories. Supports the development of reproducible,
+    validated SERS methods for clinical diagnostics, food safety, and environmental
+    monitoring within the Raman4Clinics initiative (EU COST Action BM1401).
+  rai:dataUseCases: Benchmarking quantitative SERS calibration methods on solid
+    silver substrates across instruments and laboratories; evaluating the effect
+    of excitation wavelength (532 nm vs. 785 nm) on inter-laboratory reproducibility;
+    development and testing of SERS spectral preprocessing and regression algorithms;
+    comparing solid silver versus colloidal and solid gold SERS substrate performance
+    for quantitative analytical applications.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from adenine reference solutions without individual human
+    identifiers.
 alzheimer:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
     or validated analytical reference methods.
@@ -1284,62 +1437,134 @@ fuel_handheld:
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 hair_dyes_sers:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+  rai:dataAnnotationProtocol: Class labels assigned based on known a priori identity
+    of each commercial hair colorant. Four hierarchical label sets are provided -
+    individual colorant (33 classes), brand (4 classes - Ion, Wella, Clairol, L'Oreal),
+    permanency type (3 classes - permanent, semi-permanent, demi-permanent), and
+    hair color (7 classes - auburn, brown, black, blue, purple, pink, red). Labels
+    were confirmed by product packaging and visual inspection of color. No independent
+    chemical analysis of colorant composition was performed for label assignment.
+  rai:dataBiases: All spectra collected from blonde Caucasian hair obtained from a
+    single anonymous donor at one hair salon; results may not generalise to other
+    hair colors, hair types, or donors of different racial, gender, or age backgrounds.
+    Uncolored hair exhibits no SERS signal with AuNRs (no protein detected by this
+    substrate), making the approach specific to colored hair only. Only 4 commercial
+    brands (Ion, Wella, Clairol, L'Oreal) and 33 colorants from a single retail
+    outlet (Sally Beauty Supply, College Station TX) are represented; other brands
+    and formulations are not covered. Misclassifications occurred between colorants
+    sharing similar molecular formulations (e.g., Clairol semi-permanent black and
+    demi-permanent brown reached only 72% TPR). Hair samples were stored for at
+    most 1 month before analysis; the effect of longer storage, sun exposure, or
+    washing routines on SERS signal readability has not been investigated.
+  rai:dataCollection: SERS spectra of dye-treated human hair acquired on a TE-2000U
+    Nikon inverted confocal microscope with a 20x objective. Excitation at 785 nm
+    (1.8 mW solid-state laser); scattered light directed via a 50/50 beam splitter
+    into an IsoPlane-320 spectrometer (Princeton Instruments, 600 groove/mm grating)
+    with a PIX-400BR CCD detector and Semrock LP03-785RS-25 long-pass filter.
+    Acquisition time approximately 60 s per spectrum. SERS substrate was 5 µL of
+    gold nanorod (AuNR) solution applied directly on hair placed on a glass coverslip;
+    AuNRs synthesised by laser ablation in solution following Esparza et al. Raw
+    spectra provided with no corrections or smoothing applied; photodegradation
+    absence verified by consecutive 1-min exposure measurements. Blonde Caucasian
+    hair from a single anonymous donor was dyed with each of 33 commercial colorants
+    from 4 brands (Ion, Wella, Clairol, L'Oreal) spanning 7 colors and 3 permanency
+    types; 50 SERS spectra collected per colorant class, yielding 1,650 spectra total.
+  rai:dataCollectionType: SERS measurements on dye-treated human hair samples using
+    gold nanorod substrates, designed to benchmark SERS-based forensic identification
+    of commercial hair colorants by brand, permanency type, and hair color.
+  rai:dataLimitations: Only 50 spectra per class limits statistical power and
+    sensitivity to AuNR batch-to-batch variability. Results are specific to blonde
+    Caucasian hair; hair biology (melanin content, cuticle structure) varies by
+    donor, race, and age, and robustness across demographics has not been established.
+    Only 33 of the many commercially available colorants are included; new market
+    products cannot be classified without model retraining. The effect of environmental
+    exposure (sunlight, repeated washing, chemical treatments) on SERS signal
+    stability has not been characterised. Data were originally available upon request
+    only, not openly released at time of publication.
+  rai:dataPreprocessingProtocol: Raw SERS spectra acquired with no corrections or
+    smoothing. PLS-DA preprocessing applied in PLS_Toolbox (Eigenvector Research
+    Inc) in MATLAB, with separate preprocessing pipelines per task. For brand and
+    type classification, spectra were baselined to second order, area normalised,
+    and mean centred. For color classification, spectra were additionally subjected
+    to a first derivative (filter length 15, second polynomial order) before area
+    normalisation and mean centring. A 66%/34% calibration/validation split was
+    used (approximately 33 training and 17 test spectra per class). PLS-DA models
+    used 14, 13, 11, and 15 principal components for the individual colorant, brand,
+    type, and color tasks respectively.
+  rai:dataSocialImpact: Demonstrates that SERS can provide highly accurate forensic
+    analysis of hair dye evidence, enabling identification of the brand, permanency
+    type, and color of a colorant present on a hair sample regardless of visual
+    appearance. Average individual colorant identification accuracy of 97%, with
+    near-perfect brand and color-type discrimination, supports development of
+    portable SERS-based forensic tools for rapid in-situ crime scene analysis.
+  rai:dataUseCases: Forensic identification of hair colorant brand, permanency type,
+    and color from hair SERS spectra; benchmarking PLS-DA and other multivariate
+    classifiers for multi-label SERS-based hair forensics; development of SERS
+    spectral libraries for hair dye identification; evaluation of AuNR-based SERS
+    substrates for analysis of biological samples.
+  rai:personalSensitiveInformation: Spectra were acquired from dye-treated human
+    hair. The hair donor is anonymous (single salon source, College Station TX)
+    and no personally identifiable information is included in the dataset. However,
+    as human biological material, the hair carries intrinsic donor characteristics
+    (race, sex, age) that are not separately disclosed; spectral features may
+    partially reflect donor biology in addition to hair dye composition.
 head_neck_cancer:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+  rai:dataAnnotationProtocol: Class labels (HNC squamous cell carcinoma vs. benign
+    control) were assigned based on confirmed clinical diagnosis for each of the 53
+    patients (34 cancer, 19 benign) recruited at the UC Davis Department of Otolaryngology
+    under IRB approval no. 930499-8. Blood plasma and saliva were collected from each
+    participant; a biofluid-stitching step concatenated the mean plasma and mean saliva
+    spectra into a single unified spectrum per patient for combined-biofluid classification.
+  rai:dataBiases: The cohort is limited to 53 patients from a single academic medical
+    centre (UC Davis), which may not reflect the spectral variability encountered in
+    broader or more diverse populations. The class ratio (34 cancer vs. 19 benign) is
+    moderately imbalanced. All measurements were made on a single custom-built confocal
+    Raman microscope at 785 nm excitation; spectral signatures are therefore instrument-
+    and protocol-specific and may not transfer directly to other instruments without
+    recalibration. Both native (wet) and dried biofluid conditions were measured, but
+    best classification performance is reported only for dried samples under a specific
+    quadratic discriminant model.
+  rai:dataCollection: Raman spectra were acquired with a custom-built inverted confocal
+    Raman microscope (Olympus IX73, 60x, 1.2 NA water-immersion objective) at 785 nm
+    excitation, 65 mW laser power, 30 s exposure, using an Andor Kymera-3281-C
+    spectrophotometer with a Newton DU920P-BR-DD CCD detector (Solis software). Five
+    randomly sampled regions were measured per substrate for each biofluid type (blood
+    plasma and saliva) under both native (wet) and dried conditions.
+  rai:dataCollectionType: Clinical liquid-biopsy study; blood plasma and saliva collected
+    from 53 patients at a hospital outpatient setting under informed consent and IRB
+    approval (UC Davis IRB no. 930499-8).
+  rai:dataLimitations: Models trained on this dataset are specific to the instrument,
+    substrate preparation, and patient population used in the original study; external
+    validation on independent cohorts and different Raman systems is required before
+    any clinical use. The biofluid-stitching augmentation introduces a data-fusion
+    step whose generalisation properties are not yet established. GC-MS metabolite
+    assignments are provided as supporting evidence but are not part of the spectral
+    data itself.
+  rai:dataPreprocessingProtocol: Raw spectra underwent spectral cropping to the
+    informative fingerprint region, PLS baseline correction, Savitzky-Golay smoothing,
+    unit (min-max) normalisation, and cosmic-ray removal. For the combined-biofluid
+    analysis, the mean spectrum of each biofluid was computed per patient and the two
+    mean vectors were concatenated to form a stitched spectrum spanning indices 1-1694.
+    Classification was performed with PLS-DA and LDA/QDA over PC1-PC5 combinations
+    in MATLAB R2021a.
+  rai:dataSocialImpact: A non-invasive, liquid-biopsy Raman approach to head-and-neck
+    cancer screening could reduce the need for invasive biopsies and enable earlier
+    detection, with potential benefit in resource-limited healthcare settings. The
+    reported combined sensitivity of 96.3 % and specificity of 85.7 % are promising
+    but require independent clinical validation before any diagnostic use. Misclassification
+    in a cancer-screening context carries serious patient-safety implications, so the
+    dataset and any derived models should only be used for research and must be reviewed
+    by qualified clinicians before informing medical decisions.
+  rai:dataUseCases: Development and benchmarking of Raman-based liquid-biopsy classifiers
+    for head-and-neck cancer; multimodal biofluid fusion strategies; PLS-DA and
+    dimensionality-reduction method comparison; spectral preprocessing evaluation;
+    metabolomic-spectroscopic correlation studies.
+  rai:personalSensitiveInformation: Spectra are derived from blood plasma and saliva
+    of cancer patients and healthy controls. No direct patient identifiers are included
+    in the released data, but the measurements constitute sensitive health-related
+    information (cancer status). Data were collected under IRB approval and informed
+    consent; users must comply with applicable data-protection regulations (e.g.,
+    HIPAA, GDPR) and must not attempt to re-identify individual donors.
 ht_raman_bio_catalysis_axp:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
@@ -2577,63 +2802,123 @@ succinic_acid_species:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical samples without individual human identifiers.
 sugar_mixtures_high_snr:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Ground-truth endmember signatures obtained from the
+    median of reference spectra collected from five additional pure-solution wells
+    (water, sucrose, fructose, maltose, glucose at 375 µL each; 8 reference spectra
+    per component in the high-SNR setup). Ground-truth fractional abundances determined
+    from the volume ratios of the components present in each mixture. No supervised
+    concentration labels are used; unmixing performance is evaluated against these
+    reference-derived ground truths.
+  rai:dataBiases: Dataset collected on a single custom B-Raman microspectroscopy
+    platform; spectral characteristics are instrument-specific and may not transfer
+    directly to other Raman systems. Only four sugar species (sucrose, fructose,
+    maltose, glucose) are represented; models trained on this data may not generalise
+    to chemical systems with more endmembers or different spectral properties. The
+    volume-based concentration design (0, 30, 75, 120 µL in 375 µL total) limits
+    coverage of arbitrary mixture compositions. Linear mixing is assumed; bilinear
+    or nonlinear interactions are not modelled.
+  rai:dataCollection: Raman spectra acquired at 5 s integration time using a custom
+    B-Raman microspectroscopy platform (Thorlabs Cerna body with BWTek
+    BRM-785-0.55-100-0.22-SMA laser excitation source at 785 nm and 36.3 mW, and
+    Ibsen EAGLE RAMAN-S spectrometer). Spectra collected in reflection via a Leica
+    N PLAN 10x/0.25 objective (0.25 NA) over wavenumbers 142–3684.8 cm⁻¹. A library
+    of 240 aqueous sugar mixture solutions was prepared in 96-well plates (375 µL
+    per well) covering a full factorial design of four sugar types at four volume
+    levels each; five additional pure-solution wells provided reference endmember
+    spectra. Measurements repeated at two positions per well with four repetitions,
+    yielding 1,920 spectra (1,960 including reference spectra).
+  rai:dataCollectionType: Experimental Raman microspectroscopy measurements on aqueous
+    sugar mixture solutions (sucrose, fructose, maltose, glucose), collected in a
+    controlled laboratory setting as a benchmark for hyperspectral unmixing algorithms
+    under high signal-to-noise conditions (5 s integration).
+  rai:dataLimitations: Only four sugar species at a limited set of discrete volume
+    levels; models may not generalise to broader chemical diversity or continuously
+    varying concentrations. Ground-truth fractional abundances are derived from volume
+    ratios rather than independent analytical measurements such as HPLC. Linear mixing
+    is assumed throughout; bilinear or post-nonlinear interactions are not modelled.
+    Dataset size (1,920 spectra) is relatively small compared to imaging datasets.
+  rai:dataPreprocessingProtocol: Spectra cropped to 400–1,800 cm⁻¹; baseline correction
+    using Adaptive Smoothness Parameter Penalized Least Squares (ASPLS) with smoothing
+    parameter lambda = 1e5, differential matrix order 2, maximum 100 iterations,
+    and exit-criteria tolerance 0.001; global vector normalization dividing each
+    spectrum by its maximum observed intensity. For model training on high-SNR data,
+    an additional MSE abundance term (weight 1000) augments the spectral angle
+    divergence loss to improve abundance estimation given the weak water endmember.
+  rai:dataSocialImpact: Provides a rigorously characterised experimental benchmark
+    for evaluating unsupervised and self-supervised hyperspectral unmixing algorithms
+    in Raman spectroscopy. Improved unmixing accuracy supports label-free, nondestructive
+    chemical characterisation in food quality control, pharmaceutical analysis,
+    biological imaging, and environmental monitoring.
+  rai:dataUseCases: Benchmarking hyperspectral unmixing algorithms for endmember
+    extraction and fractional abundance estimation; development and evaluation of
+    unsupervised autoencoder-based unmixing methods; paired comparison with the
+    low-SNR variant to study the effect of signal-to-noise ratio on unmixing
+    performance; validation of physics-constrained neural network architectures.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from aqueous sugar solutions without individual human
+    identifiers.
 sugar_mixtures_low_snr:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Ground-truth endmember signatures obtained from the
+    median of reference spectra collected from five additional pure-solution wells
+    (water, sucrose, fructose, maltose, glucose at 375 µL each; 32 reference spectra
+    per component in the low-SNR setup). Ground-truth fractional abundances determined
+    from the volume ratios of the components present in each mixture. No supervised
+    concentration labels are used; unmixing performance is evaluated against these
+    reference-derived ground truths.
+  rai:dataBiases: Dataset collected on a single custom B-Raman microspectroscopy
+    platform; spectral characteristics are instrument-specific and may not transfer
+    directly to other Raman systems. Only four sugar species (sucrose, fructose,
+    maltose, glucose) are represented; models trained on this data may not generalise
+    to chemical systems with more endmembers or different spectral properties. The
+    short integration time (0.5 s) introduces substantial shot noise and baseline
+    artefacts; conventional unmixing methods are known to degrade significantly under
+    these conditions, which may bias benchmarking results in favour of noise-robust
+    approaches. Linear mixing is assumed; bilinear or nonlinear interactions are
+    not modelled.
+  rai:dataCollection: Raman spectra acquired at 0.5 s integration time using a custom
+    B-Raman microspectroscopy platform (Thorlabs Cerna body with BWTek
+    BRM-785-0.55-100-0.22-SMA laser excitation source at 785 nm and 36.3 mW, and
+    Ibsen EAGLE RAMAN-S spectrometer). Spectra collected in reflection via a Leica
+    N PLAN 10x/0.25 objective (0.25 NA) over wavenumbers 142–3684.8 cm⁻¹. A library
+    of 240 aqueous sugar mixture solutions was prepared in 96-well plates (375 µL
+    per well) covering a full factorial design of four sugar types at four volume
+    levels each; five additional pure-solution wells provided reference endmember
+    spectra. Measurements repeated at eight positions per well with four repetitions,
+    yielding 7,840 spectra (7,840 including reference spectra).
+  rai:dataCollectionType: Experimental Raman microspectroscopy measurements on aqueous
+    sugar mixture solutions (sucrose, fructose, maltose, glucose), collected in a
+    controlled laboratory setting as a benchmark for hyperspectral unmixing algorithms
+    under low signal-to-noise conditions (0.5 s integration).
+  rai:dataLimitations: Only four sugar species at a limited set of discrete volume
+    levels; models may not generalise to broader chemical diversity or continuously
+    varying concentrations. Ground-truth fractional abundances are derived from volume
+    ratios rather than independent analytical measurements such as HPLC. The low
+    SNR (0.5 s integration) causes the spectra to exhibit substantial noise, baseline
+    variations, and cosmic spikes; this makes endmember identification challenging
+    and increases the difficulty of the benchmark relative to the high-SNR variant.
+    Linear mixing is assumed throughout; bilinear or post-nonlinear interactions
+    are not modelled.
+  rai:dataPreprocessingProtocol: Spectra cropped to 400–1,800 cm⁻¹; baseline correction
+    using Adaptive Smoothness Parameter Penalized Least Squares (ASPLS) with smoothing
+    parameter lambda = 1e5, differential matrix order 2, maximum 100 iterations,
+    and exit-criteria tolerance 0.001; global vector normalization dividing each
+    spectrum by its maximum observed intensity. Standard spectral angle divergence
+    (SAD) loss used for model training without the additional MSE abundance term
+    applied in the high-SNR variant.
+  rai:dataSocialImpact: Provides a challenging low-SNR experimental benchmark for
+    evaluating the noise robustness of unsupervised and self-supervised hyperspectral
+    unmixing algorithms in Raman spectroscopy. Demonstrates the advantage of
+    autoencoder-based methods over conventional approaches when data quality is limited,
+    with relevance to rapid screening, in-line monitoring, and portable Raman
+    applications where long integration times are impractical.
+  rai:dataUseCases: Benchmarking hyperspectral unmixing algorithms under realistic
+    low-SNR conditions; evaluation of noise robustness in endmember extraction and
+    fractional abundance estimation; paired comparison with the high-SNR variant to
+    study signal-to-noise effects; development and testing of denoising-aware
+    autoencoder architectures for Raman spectroscopy.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from aqueous sugar solutions without individual human
+    identifiers.
 synthetic_organic_pigments_baseline_corrected:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
@@ -2747,32 +3032,74 @@ tg_ecoli_fermentation_supernatant:
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 wheat_lines:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
-  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
-    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
-    and biotechnology.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
+  rai:dataAnnotationProtocol: Class labels assigned based on known genotype and
+    treatment condition. Four classes are present in the dataset - commercial
+    cultivar without salt stress (COM), commercial cultivar under 125 mM NaCl
+    (COM_125mM), Mutant Line 1 under 125 mM NaCl (ML1_125mM), and Mutant Line
+    2 under 125 mM NaCl (ML2_125mM). Mutant lines were advanced to the seventh
+    generation under alternating in vitro and in vivo salt-stress selection before
+    spectral acquisition; genotype identity is therefore known a priori.
+  rai:dataBiases: Dataset derived from a single wheat cultivar (Triticum aestivum
+    L. Adana-99) and only two derived mutant lines; results may not generalise to
+    other wheat varieties or mutagenesis strategies. Salt stress applied at only
+    one concentration (125 mM NaCl); other salinities are not represented. Only
+    leaf tissue was studied; root or shoot tissue responses are not captured.
+    Spectra acquired on a custom single-site instrument at Bogazici University;
+    instrument-specific optical characteristics (bandpass filter, fiber coupling,
+    objective) may affect transferability to other Raman setups. Quantile
+    elimination (0.005-0.995) and random downsampling to 6,836 spectra per class
+    may discard informative measurements and introduce sampling bias.
+  rai:dataCollection: Raman spectra acquired using a custom confocal Raman
+    microspectroscopy system at Bogazici University Department of Physics,
+    consisting of a diode laser (785 nm, 100 mW, LaserGlow), an Ocean QE-Pro
+    spectrometer, and a Nikon Ti rigid-body microscope with a 10x/0.25 NA Olympus
+    objective. Backscattered Raman signal collected at 180-degree geometry with
+    Rayleigh rejection via Semrock bandpass and edge filters; spectra visualized
+    using Oceanview software. Leaf tissue collected from three leaves per group
+    (commercial cultivar with and without salt stress, two advanced mutant lines
+    under 125 mM NaCl); 4,221 spectra measured per leaf scan, giving 12,663 raw
+    spectra per class before outlier removal. Plants grown in peat moss/perlite
+    (1:2 v/v) under 16 h/8 h photoperiod at 500 µmol/m2/s and 26 degrees C;
+    salt treatment applied as 1/10 Hoagland solution with 125 mM NaCl for 2 weeks
+    starting 14 days after germination.
+  rai:dataCollectionType: Confocal Raman microspectroscopy of leaf tissue from
+    Triticum aestivum L. Adana-99 commercial cultivar and two sodium-azide-derived
+    advanced mutant lines, collected to benchmark Raman spectroscopy as a rapid
+    phenotyping alternative to conventional biochemical techniques in plant breeding.
+  rai:dataLimitations: Only one commercial cultivar and two mutant lines are
+    represented; the classifier may not generalise to other wheat varieties,
+    mutagen types, or stress conditions. Salt treatment studied at a single
+    concentration (125 mM NaCl) only; intermediate or higher salinities are not
+    covered. No integration time is reported in the source publication, which
+    limits exact reproducibility. The balanced dataset was produced by random
+    downsampling to 6,836 spectra per class, discarding a portion of the acquired
+    spectra. The trained decision tree is specific to MATLAB R2021b and may
+    require retraining for other analysis environments.
+  rai:dataPreprocessingProtocol: Preprocessing performed in MATLAB using published
+    analysis codes (github.com/ikecoglu/PhotonicsLab) in three steps - Raman
+    shift calibration, baseline correction via polynomial curve fitting, and vector
+    normalization (Heraud et al., 2006). Outliers removed by quantile elimination
+    retaining the 0.005-0.995 interval. To balance class sizes, random sampling
+    reduced each class to 6,836 spectra (the size of the smallest group after
+    elimination), yielding 13,672 spectra from the commercial cultivar and 13,672
+    from the mutant lines. A decision tree classifier (Gini index, max 100 splits)
+    trained on 80% of the data and tested on 20%, achieving 94.62% accuracy with
+    95.06% sensitivity and 94.18% specificity in the source publication.
+  rai:dataSocialImpact: Demonstrates that Raman spectroscopy can replace
+    time-consuming biochemical assays (antioxidant enzyme activity, chlorophyll
+    quantification, ion analysis, qPCR gene expression) for differentiating
+    salt-tolerant wheat mutant lines from commercial cultivars. Supports faster
+    and lower-cost phenotyping pipelines in plant breeding programs, contributing
+    to the development of salt-tolerant wheat varieties for food security in
+    saline-affected agricultural regions.
+  rai:dataUseCases: Classification of wheat genotypes and stress-treatment groups
+    from leaf Raman spectra; benchmarking machine learning classifiers for
+    agricultural plant phenotyping; development of rapid Raman-based screening
+    tools for salt-tolerance breeding programs; spectral band assignment for
+    protein, carotenoid, and amino-acid markers in plant tissue Raman analysis.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from wheat plant leaf tissue without individual human
+    identifiers.
 yeast_fermentation:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
