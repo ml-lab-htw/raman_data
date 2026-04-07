@@ -35,6 +35,7 @@ class MiscLoader(BaseLoader):
                 "full_name": "DeepeR Denoising Dataset",
                 "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9",
                 "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
+                "bibtex": "@article{Horgan_2021, title={High-Throughput Molecular Imaging via Deep-Learning-Enabled Raman Spectroscopy}, volume={93}, ISSN={1520-6882}, url={http://dx.doi.org/10.1021/acs.analchem.1c02178}, DOI={10.1021/acs.analchem.1c02178}, number={48}, journal={Analytical Chemistry}, publisher={American Chemical Society (ACS)}, author={Horgan, Conor C. and Jensen, Magnus and Nagelkerke, Anika and St-Pierre, Jean-Philippe and Vercauteren, Tom and Stevens, Molly M. and Bergholt, Mads S.}, year={2021}, month=nov, pages={15850--15860}}",
                 "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
                 "description": "Raman spectral denoising dataset from DeepeR paper. Contains noisy input spectra and corresponding denoised target spectra for training deep learning denoising models.",
             }
@@ -50,6 +51,7 @@ class MiscLoader(BaseLoader):
                 "full_name": "DeepeR Super-Resolution Dataset",
                 "source": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9",
                 "paper": "https://doi.org/10.1021/acs.analchem.1c02178",
+                "bibtex": "@article{Horgan_2021, title={High-Throughput Molecular Imaging via Deep-Learning-Enabled Raman Spectroscopy}, volume={93}, ISSN={1520-6882}, url={http://dx.doi.org/10.1021/acs.analchem.1c02178}, DOI={10.1021/acs.analchem.1c02178}, number={48}, journal={Analytical Chemistry}, publisher={American Chemical Society (ACS)}, author={Horgan, Conor C. and Jensen, Magnus and Nagelkerke, Anika and St-Pierre, Jean-Philippe and Vercauteren, Tom and Stevens, Molly M. and Bergholt, Mads S.}, year={2021}, month=nov, pages={15850--15860}}",
                 "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
                 "description": "Hyperspectral super-resolution dataset from DeepeR paper. Contains low-resolution input spectra and high-resolution target spectra for training super-resolution models.",
             }
@@ -67,6 +69,7 @@ class MiscLoader(BaseLoader):
                 "source": "Only via E-Mail",
                 "description": "This study proposed the diagnosis of COVID-19 by means of Raman spectroscopy. Samples of blood serum from 10 patients positive and 10 patients negative for COVID-19 by RT-PCR RNA and ELISA tests were analyzed.",
                 "paper": "https://doi.org/10.1007/s10103-021-03488-7",
+                "bibtex": "@article{Goulart_2022, title={Diagnosing COVID-19 in human serum using Raman spectroscopy}, volume={37}, ISSN={1435-604X}, url={http://dx.doi.org/10.1007/s10103-021-03488-7}, DOI={10.1007/s10103-021-03488-7}, number={4}, journal={Lasers in Medical Science}, publisher={Springer Science and Business Media LLC}, author={Goulart, Ana Cristina Castro and Silveira, Landulfo and Carvalho, Henrique Cunha and Dorta, Cristiane Bissoli and Pacheco, Marcos Tadeu T. and Zangaro, Renato Amaro}, year={2022}, month=jan, pages={2217--2226}}",
                 "citation": [
                     "Goulart, Ana Cristina Castro, et al. 'Diagnosing COVID-19 in human serum using Raman spectroscopy.' Lasers in Medical Science 37.4 (2022): 2217-2226."
                 ],
@@ -84,6 +87,7 @@ class MiscLoader(BaseLoader):
                 "full_name": "Pathogenic Bacteria Raman Dataset",
                 "source": "https://github.com/csho33/bacteria-ID",
                 "paper": "https://doi.org/10.1038/s41467-019-12898-9",
+                "bibtex": "@article{Ho_2019, title={Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning}, volume={10}, ISSN={2041-1723}, url={http://dx.doi.org/10.1038/s41467-019-12898-9}, DOI={10.1038/s41467-019-12898-9}, number={1}, journal={Nature Communications}, publisher={Springer Science and Business Media LLC}, author={Ho, Chi-Sing and Jean, Neal and Hogan, Catherine A. and Blackmon, Lena and Jeffrey, Stefanie S. and Holodniy, Mark and Banaei, Niaz and Saleh, Amr A. E. and Ermon, Stefano and Dionne, Jennifer}, year={2019}, month=oct}",
                 "citation": [
                     "Ho, C.-S., Jean, N., Hogan, C. A., et al. Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Nat Commun 10, 4927 (2019)."
                 ],
@@ -102,6 +106,7 @@ class MiscLoader(BaseLoader):
                 "full_name": "ML Raman Open Dataset (MLROD)",
                 "source": "https://www.odr.io/dataset/mlrod-a-machine-learning-raman-open-dataset",
                 "paper": "https://doi.org/10.1029/2021EA002125",
+                "bibtex": "@article{Berlanga_2022, title={Convolutional Neural Networks as a Tool for Raman Spectral Mineral Classification Under Low Signal, Dusty Mars Conditions}, volume={9}, ISSN={2333-5084}, url={http://dx.doi.org/10.1029/2021EA002125}, DOI={10.1029/2021EA002125}, number={10}, journal={Earth and Space Science}, publisher={American Geophysical Union (AGU)}, author={Berlanga, Genesis and Williams, Quentin and Temiquel, Nathan}, year={2022}, month=oct}",
                 "citation": [
                     "Wiens, R. C., et al. (2021). Convolutional neural networks as a tool for Raman spectral mineral classification under low signal, dusty Mars conditions. Earth and Space Science, 8, e2021EA002125."
                 ],
@@ -122,6 +127,7 @@ class MiscLoader(BaseLoader):
                     "full_name": f"Synthetic Organic Pigments Raman Spectral Library - {process}",
                     "source": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/ES5_J9PpBatLvbTe6VlFyIoBc6fFRli0YHl2qjnLxn6I8Q?download=1",
                     "paper": "https://doi.org/10.1002/jrs.4054",
+                    "bibtex": "@article{Fremout_2012, title={Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library}, volume={43}, ISSN={1097-4555}, url={http://dx.doi.org/10.1002/jrs.4054}, DOI={10.1002/jrs.4054}, number={11}, journal={Journal of Raman Spectroscopy}, publisher={Wiley}, author={Fremout, Wim and Saverwyns, Steven}, year={2012}, month=jul, pages={1536--1544}}",
                     "citation": [
                         'Fremout, Wim, and Steven Saverwyns. "Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library." Journal of Raman Spectroscopy 43.11 (2012): 1536-1544.'
                     ],

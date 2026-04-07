@@ -55,6 +55,7 @@ class KaggleLoader(BaseLoader):
                     "full_name": "codina_raman-spectroscopy-of-diabetes",
                     "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
                     "paper": "https://doi.org/10.1364/BOE.9.004998",
+                    "bibtex": "@article{Guevara_2018, title={Use of Raman spectroscopy to screen diabetes mellitus with machine learning tools}, volume={9}, ISSN={2156-7085}, url={http://dx.doi.org/10.1364/BOE.9.004998}, DOI={10.1364/BOE.9.004998}, number={10}, journal={Biomedical Optics Express}, publisher={Optica Publishing Group}, author={Guevara, Edgar and Torres-Galvan, Juan Carlos and Ramirez-Elias, Miguel G. and Luevano-Contreras, Claudia and Gonzalez, Francisco Javier}, year={2018}, month=sep, pages={4998}}",
                     "description": f"Part of the Diabetes Skin Raman Dataset. This subset focuses on Advanced Glycation End-products ({position}) signatures in the skin. Data acquired in vivo using a portable 785 nm Raman spectrometer to discern between diabetic patients and healthy controls."
                 }
             )
@@ -73,6 +74,7 @@ class KaggleLoader(BaseLoader):
                     "full_name": f"Amino Acid LC ({substrate})",
                     "source": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
                     "paper": "https://arxiv.org/abs/2011.07470",
+                    "bibtex": "@misc{Rini_2020, title={An efficient label-free analyte detection algorithm for time-resolved spectroscopy}, author={Rini, Stefano and Hiramatsu, Hirotsugu}, year={2020}, eprint={2011.07470}, archivePrefix={arXiv}, primaryClass={eess.SP}}",
                     "description": f"Time-resolved (on-line) Raman spectra for {substrate} elution using a vertical flow LC-Raman method. Features 785 nm excitation and 0.2s exposure frames to benchmark label-free analyte detection."
                 }
             )
@@ -91,6 +93,7 @@ class KaggleLoader(BaseLoader):
                     "full_name": "andriitrelin_cells-raman-spectra",
                     "source": "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
                     "paper": "https://doi.org/10.1016/j.snb.2020.127660",
+                    "bibtex": "@article{Erzina_2020, title={Precise cancer detection via the combination of functionalized SERS surfaces and convolutional neural network with independent inputs}, volume={308}, ISSN={0925-4005}, url={http://dx.doi.org/10.1016/j.snb.2020.127660}, DOI={10.1016/j.snb.2020.127660}, journal={Sensors and Actuators B: Chemical}, publisher={Elsevier BV}, author={Erzina, M. and Trelin, A. and Guselnikova, O. and Dvorankova, B. and Strnadova, K. and Perminova, A. and Ulbrich, P. and Mares, D. and Jerabek, V. and Elashnikov, R. and Svorcik, V. and Lyutakov, O.}, year={2020}, month=apr, pages={127660}}",
                     "description": f"SERS spectra of cancer cell metabolites collected on gold nanourchins functionalized with the {element} moiety. Designed to provide specificity toward specific proteins and lipids for cell line identification."
                 }
             )

@@ -793,7 +793,10 @@ def build_croissant_from_scratch(
         doc["conditionsOfAccess"] = conditions_of_access
     if same_as:
         doc["sameAs"] = same_as if len(same_as) > 1 else same_as[0]
-    if papers:
+    bibtex: str | None = meta.get("bibtex") or None
+    if bibtex:
+        doc["citeAs"] = bibtex
+    elif papers:
         doc["citeAs"] = papers[0] if len(papers) == 1 else papers
     if citation:
         doc["citation"] = citation
@@ -809,7 +812,7 @@ def build_croissant_from_scratch(
 # Extend a platform-provided Croissant with RAI fields
 # ---------------------------------------------------------------------------
 
-def extend_croissant(existing: dict, rai: dict, papers: list[str] | None = None) -> dict:
+def extend_croissant(existing: dict, rai: dict, papers: list[str] | None = None, bibtex: str | None = None) -> dict:
     """Keep the platform-provided JSON intact; add RAI fields and conformsTo.
 
     Different platforms use different key names for conformsTo:
@@ -858,7 +861,9 @@ def extend_croissant(existing: dict, rai: dict, papers: list[str] | None = None)
             if t in _TYPE_MAP:
                 dist_entry["@type"] = _TYPE_MAP[t]
 
-    if papers:
+    if bibtex:
+        result["citeAs"] = bibtex
+    elif papers:
         result["citeAs"] = papers[0] if len(papers) == 1 else papers
     result.update(rai)
     return result
@@ -984,9 +989,10 @@ def process_dataset(
             figshare_files = fetch_figshare_files(article_id) or None
 
     papers_list = normalise_papers(meta.get("paper"))
+    bibtex: str | None = meta.get("bibtex") or None
 
     if fetched is not None:
-        doc = extend_croissant(fetched, rai, papers_list)
+        doc = extend_croissant(fetched, rai, papers_list, bibtex)
         warnings.insert(0, f"fetched from {platform}")
     else:
         doc = build_croissant_from_scratch(dataset_key, info, rai, platform, figshare_files)

@@ -39,6 +39,7 @@ class RWTHLoader(BaseLoader):
                     "https://doi.org/10.1016/j.cej.2023.147567",
                     "https://doi.org/10.18154/RWTH-2023-05551"
                 ],
+                "bibtex": "@article{Kaven_2024, title={Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis}, volume={479}, ISSN={1385-8947}, url={http://dx.doi.org/10.1016/j.cej.2023.147567}, DOI={10.1016/j.cej.2023.147567}, journal={Chemical Engineering Journal}, publisher={Elsevier BV}, author={Kaven, Luise F. and Schweidtmann, Artur M. and Keil, Jan and Israel, Jana and Wolter, Nadja and Mitsos, Alexander}, year={2024}, month=jan, pages={147567}}",
                 "citation": [
                     "Kaven, Luise F and Schweidtmann, Artur M and Keil, Jan and Israel, Jana and Wolter, Nadja and Mitsos, Alexander. Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis. Chemical Engineering Journal, 479, 147567, 2024, Elsevier"
                 ],
@@ -79,6 +80,7 @@ class RWTHLoader(BaseLoader):
                         "https://doi.org/10.1177/0003702820973275",
                         "https://publications.rwth-aachen.de/record/978266"
                     ],
+                    "bibtex": "@article{Echtermeyer_2020, title={Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species}, volume={75}, ISSN={1943-3530}, url={http://dx.doi.org/10.1177/0003702820973275}, DOI={10.1177/0003702820973275}, number={5}, journal={Applied Spectroscopy}, publisher={SAGE Publications}, author={Echtermeyer, Alexander and Marks, Caroline and Mitsos, Alexander and Viell, Jorn}, year={2020}, month=dec, pages={506--519}}",
                     "citation": [
                         "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
                     ],
@@ -100,6 +102,7 @@ class RWTHLoader(BaseLoader):
                     "full_name": "Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy",
                     "source": "https://publications.rwth-aachen.de/record/959137/files/Data_RWTH-2023-05604.zip?version=1",
                     "paper": "https://doi.org/10.1002/smll.202311920",
+                    "bibtex": "@article{Koronaki_2024, title={Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy}, volume={20}, ISSN={1613-6829}, url={http://dx.doi.org/10.1002/smll.202311920}, DOI={10.1002/smll.202311920}, number={23}, journal={Small}, publisher={Wiley}, author={Koronaki, Eleni D. and Scholz, Jan G. T. and Modelska, Magdalena M. and Nayak, Prabhat K. and Viell, Jorn and Mitsos, Alexander and Barkley, Samuel}, year={2024}}",
                     "citation": [
                         "Koronaki, E. D., Scholz, J. G. T., Modelska, M. M., Nayak, P. K., Viell, J., Mitsos, A., & Barkley, S. (2024). Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy. Small, 20(23), 2311920."
                     ],
