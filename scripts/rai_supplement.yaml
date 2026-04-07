@@ -351,121 +351,156 @@ alzheimer:
     but biological measurements may constitute sensitive health-related data under
     applicable data-protection regulations.
 amino_acids_glycine:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Time-resolved LC-Raman elution data for glycine (100 mM
+    injection concentration). Labels are elution-time concentration profiles. Each
+    amino acid eluted separately through an HPLC column (hydrophobic resin) using
+    an H₂O-to-acetonitrile gradient mobile phase (7 mL/min, 50 µL injection). Data
+    collected at NCTU, Taiwan (Lo, Hiramatsu lab). Purpose is benchmarking unsupervised
+    label-free analyte detection algorithms; no per-spectrum expert labels required.
+  rai:dataBiases: Single-laboratory, single-instrument benchmark dataset. Each amino
+    acid measured in isolation — simultaneous multi-analyte elution not covered.
+    Analyte concentrations are in the millimolar range (100 mM for glycine and leucine,
+    55 mM for phenylalanine and tryptophan); performance of detection algorithms at
+    lower physiological concentrations is unknown. arXiv preprint — findings not
+    yet peer-reviewed at time of dataset release.
+  rai:dataCollection: Liquid chromatography coupled Raman spectroscopy (LC-Raman)
+    with vertical flow method. Mobile Raman probe attached to HPLC system (hydrophobic
+    resin column, H₂O to acetonitrile gradient, 7 mL/min flow rate, 50 µL injection).
+    Time-resolved acquisition at 0.2 s exposure per spectrum frame (~100 frames per
+    20 s window per elution peak).
+  rai:dataCollectionType: Time-resolved LC-Raman spectroscopy of amino acid solutions
+    in a liquid chromatography flow cell.
+  rai:dataLimitations: Small benchmark dataset covering only four amino acids in
+    single-analyte conditions. The detection challenge arises from millimolar analyte
+    concentrations against a strong H₂O/ACE solvent background. No explicit license
+    stated; CC BY 4.0 assumed — verify with original authors.
+  rai:dataPreprocessingProtocol: Fluorescence background removed by asymmetric polynomial
+    fitting at each time step. Solvent spectrum (H₂O/ACE) removed by linear regression.
+    Savitzky-Golay filter applied for smoothing. Resulting time-frequency matrix used
+    directly for unsupervised algorithm benchmarking.
+  rai:dataSocialImpact: LC-Raman with vertical flow enables real-time, label-free
+    detection of analytes in chromatographic separations without destructive sampling.
+    Applications include pharmaceutical process monitoring, metabolomics, and inline
+    quality control in biomanufacturing.
+  rai:dataUseCases: Benchmarking time-resolved analyte detection algorithms, unsupervised
+    elution peak detection, PCA/NMF/MCR-ALS dimensionality reduction, LC-Raman method
+    development.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from pure amino acid aqueous solutions without any human
+    identifiers.
 amino_acids_leucine:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Time-resolved LC-Raman elution data for leucine (100 mM
+    injection concentration). Labels are elution-time concentration profiles. Each
+    amino acid eluted separately through an HPLC column (hydrophobic resin) using
+    an H₂O-to-acetonitrile gradient mobile phase (7 mL/min, 50 µL injection). Data
+    collected at NCTU, Taiwan (Lo, Hiramatsu lab). Purpose is benchmarking unsupervised
+    label-free analyte detection algorithms; no per-spectrum expert labels required.
+  rai:dataBiases: Single-laboratory, single-instrument benchmark dataset. Each amino
+    acid measured in isolation — simultaneous multi-analyte elution not covered.
+    Analyte concentrations are in the millimolar range (100 mM for glycine and leucine,
+    55 mM for phenylalanine and tryptophan); performance of detection algorithms at
+    lower physiological concentrations is unknown. arXiv preprint — findings not
+    yet peer-reviewed at time of dataset release.
+  rai:dataCollection: Liquid chromatography coupled Raman spectroscopy (LC-Raman)
+    with vertical flow method. Mobile Raman probe attached to HPLC system (hydrophobic
+    resin column, H₂O to acetonitrile gradient, 7 mL/min flow rate, 50 µL injection).
+    Time-resolved acquisition at 0.2 s exposure per spectrum frame (~100 frames per
+    20 s window per elution peak).
+  rai:dataCollectionType: Time-resolved LC-Raman spectroscopy of amino acid solutions
+    in a liquid chromatography flow cell.
+  rai:dataLimitations: Small benchmark dataset covering only four amino acids in
+    single-analyte conditions. The detection challenge arises from millimolar analyte
+    concentrations against a strong H₂O/ACE solvent background. No explicit license
+    stated; CC BY 4.0 assumed — verify with original authors.
+  rai:dataPreprocessingProtocol: Fluorescence background removed by asymmetric polynomial
+    fitting at each time step. Solvent spectrum (H₂O/ACE) removed by linear regression.
+    Savitzky-Golay filter applied for smoothing. Resulting time-frequency matrix used
+    directly for unsupervised algorithm benchmarking.
+  rai:dataSocialImpact: LC-Raman with vertical flow enables real-time, label-free
+    detection of analytes in chromatographic separations without destructive sampling.
+    Applications include pharmaceutical process monitoring, metabolomics, and inline
+    quality control in biomanufacturing.
+  rai:dataUseCases: Benchmarking time-resolved analyte detection algorithms, unsupervised
+    elution peak detection, PCA/NMF/MCR-ALS dimensionality reduction, LC-Raman method
+    development.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from pure amino acid aqueous solutions without any human
+    identifiers.
 amino_acids_phenylalanine:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Time-resolved LC-Raman elution data for phenylalanine
+    (55 mM injection concentration). Labels are elution-time concentration profiles.
+    Each amino acid eluted separately through an HPLC column (hydrophobic resin)
+    using an H₂O-to-acetonitrile gradient mobile phase (7 mL/min, 50 µL injection).
+    Data collected at NCTU, Taiwan (Lo, Hiramatsu lab). Purpose is benchmarking
+    unsupervised label-free analyte detection algorithms.
+  rai:dataBiases: Single-laboratory, single-instrument benchmark dataset. Each amino
+    acid measured in isolation — simultaneous multi-analyte elution not covered.
+    Phenylalanine injected at 55 mM (lower than glycine/leucine at 100 mM), making
+    analyte detection more challenging relative to solvent background. arXiv preprint
+    — findings not yet peer-reviewed at time of dataset release.
+  rai:dataCollection: Liquid chromatography coupled Raman spectroscopy (LC-Raman)
+    with vertical flow method. Mobile Raman probe attached to HPLC system (hydrophobic
+    resin column, H₂O to acetonitrile gradient, 7 mL/min flow rate, 50 µL injection).
+    Time-resolved acquisition at 0.2 s exposure per spectrum frame (~100 frames per
+    20 s window per elution peak).
+  rai:dataCollectionType: Time-resolved LC-Raman spectroscopy of amino acid solutions
+    in a liquid chromatography flow cell.
+  rai:dataLimitations: Small benchmark dataset covering only four amino acids in
+    single-analyte conditions. The detection challenge arises from millimolar analyte
+    concentrations against a strong H₂O/ACE solvent background. No explicit license
+    stated; CC BY 4.0 assumed — verify with original authors.
+  rai:dataPreprocessingProtocol: Fluorescence background removed by asymmetric polynomial
+    fitting at each time step. Solvent spectrum (H₂O/ACE) removed by linear regression.
+    Savitzky-Golay filter applied for smoothing. Resulting time-frequency matrix used
+    directly for unsupervised algorithm benchmarking.
+  rai:dataSocialImpact: LC-Raman with vertical flow enables real-time, label-free
+    detection of analytes in chromatographic separations without destructive sampling.
+    Applications include pharmaceutical process monitoring, metabolomics, and inline
+    quality control in biomanufacturing.
+  rai:dataUseCases: Benchmarking time-resolved analyte detection algorithms, unsupervised
+    elution peak detection, PCA/NMF/MCR-ALS dimensionality reduction, LC-Raman method
+    development.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from pure amino acid aqueous solutions without any human
+    identifiers.
 amino_acids_tryptophan:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+  rai:dataAnnotationProtocol: Time-resolved LC-Raman elution data for tryptophan
+    (55 mM injection concentration). Labels are elution-time concentration profiles.
+    Each amino acid eluted separately through an HPLC column (hydrophobic resin)
+    using an H₂O-to-acetonitrile gradient mobile phase (7 mL/min, 50 µL injection).
+    Data collected at NCTU, Taiwan (Lo, Hiramatsu lab). Purpose is benchmarking
+    unsupervised label-free analyte detection algorithms.
+  rai:dataBiases: Single-laboratory, single-instrument benchmark dataset. Each amino
+    acid measured in isolation — simultaneous multi-analyte elution not covered.
+    Tryptophan injected at 55 mM (lower than glycine/leucine at 100 mM), making
+    analyte detection more challenging relative to solvent background. Tryptophan
+    exhibits intrinsic fluorescence under Raman excitation, which may additionally
+    complicate signal extraction. arXiv preprint — findings not yet peer-reviewed
+    at time of dataset release.
+  rai:dataCollection: Liquid chromatography coupled Raman spectroscopy (LC-Raman)
+    with vertical flow method. Mobile Raman probe attached to HPLC system (hydrophobic
+    resin column, H₂O to acetonitrile gradient, 7 mL/min flow rate, 50 µL injection).
+    Time-resolved acquisition at 0.2 s exposure per spectrum frame (~100 frames per
+    20 s window per elution peak).
+  rai:dataCollectionType: Time-resolved LC-Raman spectroscopy of amino acid solutions
+    in a liquid chromatography flow cell.
+  rai:dataLimitations: Small benchmark dataset covering only four amino acids in
+    single-analyte conditions. Tryptophan fluorescence increases background uncertainty.
+    No explicit license stated; CC BY 4.0 assumed — verify with original authors.
+  rai:dataPreprocessingProtocol: Fluorescence background removed by asymmetric polynomial
+    fitting at each time step. Solvent spectrum (H₂O/ACE) removed by linear regression.
+    Savitzky-Golay filter applied for smoothing. Resulting time-frequency matrix used
+    directly for unsupervised algorithm benchmarking.
+  rai:dataSocialImpact: LC-Raman with vertical flow enables real-time, label-free
+    detection of analytes in chromatographic separations without destructive sampling.
+    Applications include pharmaceutical process monitoring, metabolomics, and inline
+    quality control in biomanufacturing.
+  rai:dataUseCases: Benchmarking time-resolved analyte detection algorithms, unsupervised
+    elution peak detection, PCA/NMF/MCR-ALS dimensionality reduction, LC-Raman method
+    development.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+    All spectra originate from pure amino acid aqueous solutions without any human
+    identifiers.
 bacteria_identification:
   rai:dataAnnotationProtocol: Species and antibiotic-treatment labels assigned based
     on known sample identity (30 bacterial/yeast isolates from clinical collections);
@@ -789,86 +824,151 @@ bioprocess_substrates:
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 cancer_cell_(cooh)2:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
-  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
-    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
-    and biotechnology.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+  rai:dataAnnotationProtocol: Cell-line and culture-condition labels assigned from
+    known sample identity. 12 categories (Table 1 in Erzina et al. 2020) — A2058
+    melanoma cells, G361 melanoma cells, HPM neonatal melanocytes, HF normal skin
+    fibroblasts, ZAM tumour-associated fibroblasts, DMEM pure medium control, each
+    at 10% and 0% FBS serum content. This subset uses gold nanourchins (AuMs) functionalized
+    with ADT-(COOH)₂ (dicarboxybenzenediazonium tosylate), which provides selectivity
+    toward lipids and amino acids. 19,056 SERS spectra collected in total across all
+    three functionalization variants; cell line composition per subset given in Table S1.
+    Ethics approved by Local Ethics Committee of General University Hospital Prague
+    in accordance with Helsinki Declaration.
+  rai:dataBiases: Cell lines (A2058, G361) and primary cultures (HPM, HF, ZAM) differ
+    in growth conditions and serum content (0% vs. 10% FBS), introducing biological
+    variability beyond cancer/normal status. SERS spectra show high inter-spectrum
+    variability from random sampling of heterogeneous culture media; individual spectra
+    cannot be directly interpreted without CNN processing. Measurements performed on
+    conditioned culture media (metabolite secretions), not directly on cells. Single-
+    laboratory data (Czech University of Technology / Charles University Prague); transfer
+    to other AuMs batches or instruments requires validation.
+  rai:dataCollection: SERS of conditioned cell culture media on gold grating substrates.
+    AuMs (gold multibranched nanoparticles, ~50 nm diameter) functionalized with
+    ADT-(COOH)₂, deposited on Au grating surface. ProRaman-L spectrometer (Ondax),
+    785 nm excitation, 33 mW laser power, automatic regime, 30 spectra per sample
+    (10 spatial points × 3 s accumulation each). 106 biological specimens total across
+    all three functionalization variants.
+  rai:dataCollectionType: SERS of cell culture media metabolites entrapped by functionalized
+    gold nanoparticles; cell lines and primary cultures from human skin cancer biopsies
+    and healthy tissue.
+  rai:dataLimitations: SERS spectra of complex biological media are highly variable
+    and non-interpretable without CNN; direct spectral matching against reference
+    libraries is not feasible. Model trained on 75% / validated on 25% split; external
+    validation on independent patient samples not demonstrated. Published CNN achieved
+    100% accuracy on the validation set, but this should be interpreted cautiously
+    given the small dataset size and the controlled in-vitro conditions.
+  rai:dataPreprocessingProtocol: Background removal via Asymmetric Least Squares Smoothing
+    (ALSS, lambda 1e5, p 0.01). MinMax normalization to [0, 1] per spectrum. CNN
+    architecture uses convolutional feature extractors (one per functionalization input)
+    concatenated into a shared fully connected classifier (SoftMax), trained for 400
+    epochs, batch size 16, Keras/TensorFlow.
+  rai:dataSocialImpact: Demonstrates feasibility of SERS-CNN cancer detection from
+    conditioned culture media without cell labelling or sample preparation. Potential
+    path toward non-invasive, rapid cancer diagnostics. Clinical translation requires
+    extensive validation on patient-derived samples under regulatory oversight.
+  rai:dataUseCases: Cancer cell-line classification, SERS-based metabolite fingerprinting,
+    multi-input CNN benchmarking, comparison of surface functionalization selectivity
+    for biomolecule entrapping.
+  rai:personalSensitiveInformation: Spectra derived from conditioned media of human
+    melanoma cell lines and primary skin cultures collected under ethics approval.
+    No direct patient identifiers in the released dataset, but the clinical origin
+    means data should be treated with appropriate care under applicable data-protection
+    regulations.
 cancer_cell_cooh:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
-  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
-    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
-    and biotechnology.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+  rai:dataAnnotationProtocol: Cell-line and culture-condition labels assigned from
+    known sample identity. 12 categories — A2058 melanoma cells, G361 melanoma cells,
+    HPM neonatal melanocytes, HF normal skin fibroblasts, ZAM tumour-associated fibroblasts,
+    DMEM pure medium control, each at 10% and 0% FBS serum content. This subset uses
+    AuMs functionalized with ADT-COOH (4-carboxybenzenediazonium tosylate), which
+    provides selectivity toward RNA, proteins, and nucleic acids. Ethics approved by
+    Local Ethics Committee of General University Hospital Prague in accordance with
+    Helsinki Declaration.
+  rai:dataBiases: Cell lines (A2058, G361) and primary cultures (HPM, HF, ZAM) differ
+    in growth conditions and serum content (0% vs. 10% FBS), introducing biological
+    variability beyond cancer/normal status. SERS spectra show high inter-spectrum
+    variability from random sampling of heterogeneous culture media; individual spectra
+    cannot be directly interpreted without CNN processing. Measurements performed on
+    conditioned culture media (metabolite secretions), not directly on cells. Single-
+    laboratory data (Czech University of Technology / Charles University Prague); transfer
+    to other AuMs batches or instruments requires validation.
+  rai:dataCollection: SERS of conditioned cell culture media on gold grating substrates.
+    AuMs functionalized with ADT-COOH, deposited on Au grating surface. ProRaman-L
+    spectrometer (Ondax), 785 nm excitation, 33 mW laser power, automatic regime,
+    30 spectra per sample (10 spatial points × 3 s accumulation each). 106 biological
+    specimens total across all three functionalization variants.
+  rai:dataCollectionType: SERS of cell culture media metabolites entrapped by functionalized
+    gold nanoparticles; cell lines and primary cultures from human skin cancer biopsies
+    and healthy tissue.
+  rai:dataLimitations: SERS spectra of complex biological media are highly variable
+    and non-interpretable without CNN; direct spectral matching against reference
+    libraries is not feasible. Model trained on 75% / validated on 25% split; external
+    validation on independent patient samples not demonstrated. Published CNN achieved
+    100% accuracy on the validation set, but this should be interpreted cautiously
+    given the small dataset size and the controlled in-vitro conditions.
+  rai:dataPreprocessingProtocol: Background removal via Asymmetric Least Squares Smoothing
+    (ALSS, lambda 1e5, p 0.01). MinMax normalization to [0, 1] per spectrum. CNN
+    architecture uses convolutional feature extractors (one per functionalization input)
+    concatenated into a shared fully connected classifier (SoftMax), trained for 400
+    epochs, batch size 16, Keras/TensorFlow.
+  rai:dataSocialImpact: Demonstrates feasibility of SERS-CNN cancer detection from
+    conditioned culture media without cell labelling or sample preparation. Potential
+    path toward non-invasive, rapid cancer diagnostics. Clinical translation requires
+    extensive validation on patient-derived samples under regulatory oversight.
+  rai:dataUseCases: Cancer cell-line classification, SERS-based metabolite fingerprinting,
+    multi-input CNN benchmarking, comparison of surface functionalization selectivity
+    for biomolecule entrapping.
+  rai:personalSensitiveInformation: Spectra derived from conditioned media of human
+    melanoma cell lines and primary skin cultures collected under ethics approval.
+    No direct patient identifiers in the released dataset, but the clinical origin
+    means data should be treated with appropriate care under applicable data-protection
+    regulations.
 cancer_cell_nh2:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
-  rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
-    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
-    and biotechnology.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+  rai:dataAnnotationProtocol: Cell-line and culture-condition labels assigned from
+    known sample identity. 12 categories — A2058 melanoma cells, G361 melanoma cells,
+    HPM neonatal melanocytes, HF normal skin fibroblasts, ZAM tumour-associated fibroblasts,
+    DMEM pure medium control, each at 10% and 0% FBS serum content. This subset uses
+    AuMs functionalized with ADT-NH₂ (4-aminobenzenediazonium tosylate), which provides
+    selectivity toward proteins and lipids. Ethics approved by Local Ethics Committee
+    of General University Hospital Prague in accordance with Helsinki Declaration.
+  rai:dataBiases: Cell lines (A2058, G361) and primary cultures (HPM, HF, ZAM) differ
+    in growth conditions and serum content (0% vs. 10% FBS), introducing biological
+    variability beyond cancer/normal status. SERS spectra show high inter-spectrum
+    variability from random sampling of heterogeneous culture media; individual spectra
+    cannot be directly interpreted without CNN processing. Measurements performed on
+    conditioned culture media (metabolite secretions), not directly on cells. Single-
+    laboratory data (Czech University of Technology / Charles University Prague); transfer
+    to other AuMs batches or instruments requires validation.
+  rai:dataCollection: SERS of conditioned cell culture media on gold grating substrates.
+    AuMs functionalized with ADT-NH₂, deposited on Au grating surface. ProRaman-L
+    spectrometer (Ondax), 785 nm excitation, 33 mW laser power, automatic regime,
+    30 spectra per sample (10 spatial points × 3 s accumulation each). 106 biological
+    specimens total across all three functionalization variants.
+  rai:dataCollectionType: SERS of cell culture media metabolites entrapped by functionalized
+    gold nanoparticles; cell lines and primary cultures from human skin cancer biopsies
+    and healthy tissue.
+  rai:dataLimitations: SERS spectra of complex biological media are highly variable
+    and non-interpretable without CNN; direct spectral matching against reference
+    libraries is not feasible. Model trained on 75% / validated on 25% split; external
+    validation on independent patient samples not demonstrated. Published CNN achieved
+    100% accuracy on the validation set, but this should be interpreted cautiously
+    given the small dataset size and the controlled in-vitro conditions.
+  rai:dataPreprocessingProtocol: Background removal via Asymmetric Least Squares Smoothing
+    (ALSS, lambda 1e5, p 0.01). MinMax normalization to [0, 1] per spectrum. CNN
+    architecture uses convolutional feature extractors (one per functionalization input)
+    concatenated into a shared fully connected classifier (SoftMax), trained for 400
+    epochs, batch size 16, Keras/TensorFlow.
+  rai:dataSocialImpact: Demonstrates feasibility of SERS-CNN cancer detection from
+    conditioned culture media without cell labelling or sample preparation. Potential
+    path toward non-invasive, rapid cancer diagnostics. Clinical translation requires
+    extensive validation on patient-derived samples under regulatory oversight.
+  rai:dataUseCases: Cancer cell-line classification, SERS-based metabolite fingerprinting,
+    multi-input CNN benchmarking, comparison of surface functionalization selectivity
+    for biomolecule entrapping.
+  rai:personalSensitiveInformation: Spectra derived from conditioned media of human
+    melanoma cell lines and primary skin cultures collected under ethics approval.
+    No direct patient identifiers in the released dataset, but the clinical origin
+    means data should be treated with appropriate care under applicable data-protection
+    regulations.
 chembl_molecules:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
@@ -1137,149 +1237,173 @@ deepr_super_resolution:
     patient-derived primary specimens and no individual human identifiers are
     present.
 diabetes_skin_ages:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+  rai:dataAnnotationProtocol: Multi-class labels for advanced glycation end-product
+    (AGE) signatures in diabetic vs. healthy skin. 11 DM2 patients (7 female, 49.5
+    ± 6.7 years) and 9 healthy controls (7 female, 33.2 ± 4.9 years); University
+    of Guanajuato, Mexico; IRB approved; all subjects provided informed consent. DM2
+    diagnosis confirmed by standard clinical methods (fasting glucose; HbA1c by
+    boronic acid affinity chromatography, LabonaCheck MH-200). This subset focuses
+    on AGE-related spectral signatures (GOLD, MG-H2, pentosidine and precursors —
+    3-deoxyglucosone, glyoxal, methylglyoxal); PCA correlation analysis with digitised
+    AGE reference spectra from the literature.
+  rai:dataBiases: Small cohort (20 subjects) from a single Mexican academic centre;
+    generalisability to other ethnic groups, age ranges, or DM2 severity stages is
+    unknown. Slight age difference between DM2 (49.5 y) and control (33.2 y) groups
+    may confound AGE accumulation signals. The portable PEK-785 spectrometer (12 cm⁻¹
+    resolution) limits spectral detail compared to benchtop instruments. Probe-angle
+    variability at 90° and subject motion during ~15 s acquisition are potential
+    sources of noise.
+  rai:dataCollection: In vivo portable Raman spectroscopy on skin. PEK-785 spectrometer
+    (Agiltron Inc.), 785 nm excitation, 90 mW, 200 µm spot size, 12 cm⁻¹ resolution,
+    5 scans per measurement (~15 s total exposure, ANSI Z136.1 compliant). Probe
+    held at 90° against the skin without exerting pressure. Sequential acquisition
+    at four anatomical sites per subject (~3 min total per subject). Spectral range
+    800–1800 cm⁻¹ after preprocessing.
+  rai:dataCollectionType: In vivo non-invasive portable Raman spectroscopy of human
+    skin, collected under an IRB-approved clinical research protocol.
+  rai:dataLimitations: 20-subject pilot study; published ANN model achieved 88.9–90.9%
+    DM2/Control accuracy (site-dependent), SVM 76.0–82.5%, 10-fold cross-validation.
+    AGE-spectrum correlation is exploratory; causal attribution to specific molecular
+    species requires further validation. Ostica Open Access Publishing Agreement
+    license; dataset available via Kaggle.
+  rai:dataPreprocessingProtocol: Vancouver Raman Algorithm (VRA) applied for iterative
+    polynomial fluorescence background removal. Spectra cropped to 800–1800 cm⁻¹
+    (AGE fingerprint region). Area-normalised (unitary area under curve). Zero-mean
+    centered before classification.
+  rai:dataSocialImpact: Non-invasive skin Raman spectroscopy has the potential to
+    provide a low-cost, painless screening tool for type 2 diabetes — particularly
+    valuable in resource-limited settings where laboratory glucose testing is inaccessible.
+    Clinical deployment requires large-scale multicentre validation and regulatory
+    approval.
+  rai:dataUseCases: DM2 vs. healthy classification, AGE biomarker correlation, non-
+    invasive glucose-proxy screening, portable Raman benchmarking, ANN/SVM comparison
+    on small clinical datasets.
+  rai:personalSensitiveInformation: Spectra acquired in vivo from human subjects
+    under an IRB-approved protocol. No direct identifiers in the dataset, but the
+    medical context (diabetes status, age, sex) means data should be treated as
+    sensitive health information under applicable data-protection regulations (e.g.,
+    LFPDPPP in Mexico, GDPR in the EU).
 diabetes_skin_ear_lobe:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+  rai:dataAnnotationProtocol: Binary DM2/Control labels. 11 DM2 patients (7 female,
+    49.5 ± 6.7 years) and 9 healthy controls (7 female, 33.2 ± 4.9 years); University
+    of Guanajuato, Mexico; IRB approved; all subjects provided informed consent. DM2
+    diagnosis confirmed by fasting glucose and HbA1c (LabonaCheck MH-200, boronic
+    acid affinity chromatography). This subset contains spectra from the left ear
+    lobe.
+  rai:dataBiases: Small cohort (20 subjects) from a single Mexican academic centre.
+    Slight age difference between DM2 (49.5 y) and control (33.2 y) groups may confound
+    signals. The portable PEK-785 spectrometer (12 cm⁻¹ resolution) limits spectral
+    detail. Ear lobe spectra may include contributions from adipose tissue and cartilage.
+  rai:dataCollection: In vivo portable Raman spectroscopy on skin. PEK-785 spectrometer
+    (Agiltron Inc.), 785 nm excitation, 90 mW, 200 µm spot size, 12 cm⁻¹ resolution,
+    5 scans per measurement (~15 s total exposure, ANSI Z136.1 compliant). Probe
+    held at 90° against the skin without exerting pressure.
+  rai:dataCollectionType: In vivo non-invasive portable Raman spectroscopy of human
+    skin (left ear lobe), collected under an IRB-approved clinical research protocol.
+  rai:dataLimitations: 20-subject pilot study; ANN 88.9–90.9% accuracy, SVM 76.0–82.5%,
+    10-fold cross-validation. Performance depends on sampling site; ear lobe is one
+    of four sites measured. Optica Open Access Publishing Agreement license.
+  rai:dataPreprocessingProtocol: Vancouver Raman Algorithm (VRA) fluorescence background
+    removal, cropped to 800–1800 cm⁻¹, area-normalised (unitary area), zero-mean
+    centered.
+  rai:dataSocialImpact: Non-invasive skin Raman spectroscopy has potential as a
+    low-cost DM2 screening tool. Clinical deployment requires large-scale multicentre
+    validation and regulatory approval.
+  rai:dataUseCases: DM2 vs. healthy skin classification, non-invasive glucose-proxy
+    screening, portable Raman site comparison, ANN/SVM benchmarking.
+  rai:personalSensitiveInformation: Spectra acquired in vivo from human subjects under
+    IRB approval. No direct identifiers included, but medical context (diabetes status,
+    age, sex) makes this sensitive health data under applicable regulations.
 diabetes_skin_inner_arm:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+  rai:dataAnnotationProtocol: Binary DM2/Control labels. 11 DM2 patients (7 female,
+    49.5 ± 6.7 years) and 9 healthy controls (7 female, 33.2 ± 4.9 years); University
+    of Guanajuato, Mexico; IRB approved; all subjects provided informed consent. DM2
+    confirmed by fasting glucose and HbA1c (LabonaCheck MH-200). This subset contains
+    spectra from the left inner arm.
+  rai:dataBiases: Small cohort (20 subjects) from a single Mexican academic centre.
+    Slight age difference between groups may confound signals. Inner arm skin is
+    thin; probe pressure variability at 90° may affect signal. Spectra include skin
+    tissue components (collagen, keratin, lipids) whose contributions may vary by
+    body site and individual.
+  rai:dataCollection: In vivo portable Raman spectroscopy on skin. PEK-785 spectrometer
+    (Agiltron Inc.), 785 nm excitation, 90 mW, 200 µm spot size, 12 cm⁻¹ resolution,
+    5 scans per measurement (~15 s total exposure, ANSI Z136.1 compliant). Probe
+    held at 90° against the skin without exerting pressure.
+  rai:dataCollectionType: In vivo non-invasive portable Raman spectroscopy of human
+    skin (left inner arm), collected under an IRB-approved clinical research protocol.
+  rai:dataLimitations: 20-subject pilot study; ANN 88.9–90.9% accuracy, SVM 76.0–82.5%,
+    10-fold cross-validation. Optica Open Access Publishing Agreement license.
+  rai:dataPreprocessingProtocol: Vancouver Raman Algorithm (VRA) fluorescence background
+    removal, cropped to 800–1800 cm⁻¹, area-normalised (unitary area), zero-mean
+    centered.
+  rai:dataSocialImpact: Non-invasive skin Raman spectroscopy has potential as a
+    low-cost DM2 screening tool. Clinical deployment requires large-scale multicentre
+    validation and regulatory approval.
+  rai:dataUseCases: DM2 vs. healthy skin classification, non-invasive glucose-proxy
+    screening, portable Raman site comparison, ANN/SVM benchmarking.
+  rai:personalSensitiveInformation: Spectra acquired in vivo from human subjects under
+    IRB approval. No direct identifiers included, but medical context (diabetes status,
+    age, sex) makes this sensitive health data under applicable regulations.
 diabetes_skin_thumbnail:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+  rai:dataAnnotationProtocol: Binary DM2/Control labels. 11 DM2 patients (7 female,
+    49.5 ± 6.7 years) and 9 healthy controls (7 female, 33.2 ± 4.9 years); University
+    of Guanajuato, Mexico; IRB approved; all subjects provided informed consent. DM2
+    confirmed by fasting glucose and HbA1c (LabonaCheck MH-200). This subset contains
+    spectra from the left thumbnail.
+  rai:dataBiases: Small cohort (20 subjects) from a single Mexican academic centre.
+    Thumbnail spectra are dominated by keratin features; the signal-to-noise ratio
+    for diabetes-related biomarkers may be lower than at soft-tissue sites. Age
+    difference between groups may confound keratin composition.
+  rai:dataCollection: In vivo portable Raman spectroscopy on skin. PEK-785 spectrometer
+    (Agiltron Inc.), 785 nm excitation, 90 mW, 200 µm spot size, 12 cm⁻¹ resolution,
+    5 scans per measurement (~15 s total exposure, ANSI Z136.1 compliant). Probe
+    held at 90° against the thumbnail without exerting pressure.
+  rai:dataCollectionType: In vivo non-invasive portable Raman spectroscopy of human
+    thumbnail, collected under an IRB-approved clinical research protocol.
+  rai:dataLimitations: 20-subject pilot study; ANN 88.9–90.9% accuracy, SVM 76.0–82.5%,
+    10-fold cross-validation. Thumbnail site may yield lower DM2 discriminability
+    than soft-tissue sites. Optica Open Access Publishing Agreement license.
+  rai:dataPreprocessingProtocol: Vancouver Raman Algorithm (VRA) fluorescence background
+    removal, cropped to 800–1800 cm⁻¹, area-normalised (unitary area), zero-mean
+    centered.
+  rai:dataSocialImpact: Non-invasive skin Raman spectroscopy has potential as a
+    low-cost DM2 screening tool. Clinical deployment requires large-scale multicentre
+    validation and regulatory approval.
+  rai:dataUseCases: DM2 vs. healthy skin classification, nail keratin Raman benchmarking,
+    non-invasive screening, ANN/SVM site comparison.
+  rai:personalSensitiveInformation: Spectra acquired in vivo from human subjects under
+    IRB approval. No direct identifiers included, but medical context (diabetes status,
+    age, sex) makes this sensitive health data under applicable regulations.
 diabetes_skin_vein:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
+  rai:dataAnnotationProtocol: Binary DM2/Control labels. 11 DM2 patients (7 female,
+    49.5 ± 6.7 years) and 9 healthy controls (7 female, 33.2 ± 4.9 years); University
+    of Guanajuato, Mexico; IRB approved; all subjects provided informed consent. DM2
+    confirmed by fasting glucose and HbA1c (LabonaCheck MH-200). This subset contains
+    spectra from the left median cubital vein.
+  rai:dataBiases: Small cohort (20 subjects) from a single Mexican academic centre.
+    Vein spectra may include subsurface blood-vessel contributions in addition to
+    skin tissue. Age difference between groups may confound biomarker signals.
+    The portable PEK-785 spectrometer (12 cm⁻¹ resolution) limits spectral detail.
+  rai:dataCollection: In vivo portable Raman spectroscopy on skin overlying the left
+    median cubital vein. PEK-785 spectrometer (Agiltron Inc.), 785 nm excitation,
+    90 mW, 200 µm spot size, 12 cm⁻¹ resolution, 5 scans per measurement (~15 s
+    total exposure, ANSI Z136.1 compliant). Probe held at 90° without pressure.
+  rai:dataCollectionType: In vivo non-invasive portable Raman spectroscopy of human
+    skin overlying the median cubital vein, collected under an IRB-approved clinical
+    research protocol.
+  rai:dataLimitations: 20-subject pilot study; ANN 88.9–90.9% accuracy, SVM 76.0–82.5%,
+    10-fold cross-validation. Optica Open Access Publishing Agreement license.
+  rai:dataPreprocessingProtocol: Vancouver Raman Algorithm (VRA) fluorescence background
+    removal, cropped to 800–1800 cm⁻¹, area-normalised (unitary area), zero-mean
+    centered.
+  rai:dataSocialImpact: Non-invasive skin Raman spectroscopy has potential as a
+    low-cost DM2 screening tool. Clinical deployment requires large-scale multicentre
+    validation and regulatory approval.
+  rai:dataUseCases: DM2 vs. healthy skin classification, non-invasive screening near
+    vascular sites, ANN/SVM benchmarking, portable Raman site comparison.
+  rai:personalSensitiveInformation: Spectra acquired in vivo from human subjects under
+    IRB approval. No direct identifiers included, but medical context (diabetes status,
+    age, sex) makes this sensitive health data under applicable regulations.
     applicable data-protection regulations.
 ecoli_fermentation:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference

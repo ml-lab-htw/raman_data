@@ -56,7 +56,19 @@ class KaggleLoader(BaseLoader):
                     "source": "https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes",
                     "paper": "https://doi.org/10.1364/BOE.9.004998",
                     "bibtex": "@article{Guevara_2018, title={Use of Raman spectroscopy to screen diabetes mellitus with machine learning tools}, volume={9}, ISSN={2156-7085}, url={http://dx.doi.org/10.1364/BOE.9.004998}, DOI={10.1364/BOE.9.004998}, number={10}, journal={Biomedical Optics Express}, publisher={Optica Publishing Group}, author={Guevara, Edgar and Torres-Galvan, Juan Carlos and Ramirez-Elias, Miguel G. and Luevano-Contreras, Claudia and Gonzalez, Francisco Javier}, year={2018}, month=sep, pages={4998}}",
-                    "description": f"Part of the Diabetes Skin Raman Dataset. This subset focuses on Advanced Glycation End-products ({position}) signatures in the skin. Data acquired in vivo using a portable 785 nm Raman spectrometer to discern between diabetic patients and healthy controls."
+                    "description": (
+                        f"In vivo portable Raman spectra of human skin at the {position} site for DM2 screening. "
+                        "11 type 2 diabetes patients (7F, 49.5±6.7 y) and 9 healthy controls (7F, 33.2±4.9 y), "
+                        "University of Guanajuato, Mexico, IRB approved. PEK-785 spectrometer (Agiltron), 785 nm, "
+                        "90 mW, 200 µm spot, 12 cm⁻¹ resolution, 5 scans (~15 s, ANSI Z136.1). "
+                        "Preprocessed: Vancouver Raman Algorithm (VRA) fluorescence removal, cropped 800–1800 cm⁻¹, "
+                        "area-normalised, zero-mean. Published ANN accuracy 88.9–90.9%, SVM 76.0–82.5% (site-dependent), "
+                        "10-fold CV. HbA1c reference by boronic acid affinity chromatography (LabonaCheck MH-200). "
+                        + ("AGEs subset explores correlation with advanced glycation end-product signatures "
+                           "(GOLD, MG-H2, pentosidine) and precursors (3-deoxyglucosone, glyoxal, methylglyoxal). "
+                           if position == "AGEs" else "")
+                        + "Target: DM2 / healthy control classification."
+                    )
                 }
             )
             for position in ["AGEs", "Ear Lobe", "Inner Arm", "Thumbnail", "Vein"]
@@ -75,7 +87,16 @@ class KaggleLoader(BaseLoader):
                     "source": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy",
                     "paper": "https://arxiv.org/abs/2011.07470",
                     "bibtex": "@misc{Rini_2020, title={An efficient label-free analyte detection algorithm for time-resolved spectroscopy}, author={Rini, Stefano and Hiramatsu, Hirotsugu}, year={2020}, eprint={2011.07470}, archivePrefix={arXiv}, primaryClass={eess.SP}}",
-                    "description": f"Time-resolved (on-line) Raman spectra for {substrate} elution using a vertical flow LC-Raman method. Features 785 nm excitation and 0.2s exposure frames to benchmark label-free analyte detection."
+                    "description": (
+                        f"Time-resolved LC-Raman spectra for {substrate} elution using the vertical flow method "
+                        f"(Lo, Hiramatsu lab, NCTU Taiwan). {substrate} injected at "
+                        + ("100 mM" if substrate in ["Glycine", "Leucine"] else "55 mM")
+                        + " into an HPLC system (hydrophobic resin column, H₂O→ACE gradient, 7 mL/min, 50 µL "
+                        "injection). Time-resolved acquisition at 0.2 s/frame. Preprocessing: solvent background "
+                        "removal (linear regression), fluorescence removal (polynomial fitting), Savitzky-Golay "
+                        "smoothing. Designed to benchmark unsupervised label-free analyte detection algorithms. "
+                        "Target: elution concentration profile (regression)."
+                    )
                 }
             )
             for idx, substrate in enumerate(["Glycine", "Leucine", "Phenylalanine", "Tryptophan"])
@@ -94,7 +115,21 @@ class KaggleLoader(BaseLoader):
                     "source": "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra",
                     "paper": "https://doi.org/10.1016/j.snb.2020.127660",
                     "bibtex": "@article{Erzina_2020, title={Precise cancer detection via the combination of functionalized SERS surfaces and convolutional neural network with independent inputs}, volume={308}, ISSN={0925-4005}, url={http://dx.doi.org/10.1016/j.snb.2020.127660}, DOI={10.1016/j.snb.2020.127660}, journal={Sensors and Actuators B: Chemical}, publisher={Elsevier BV}, author={Erzina, M. and Trelin, A. and Guselnikova, O. and Dvorankova, B. and Strnadova, K. and Perminova, A. and Ulbrich, P. and Mares, D. and Jerabek, V. and Elashnikov, R. and Svorcik, V. and Lyutakov, O.}, year={2020}, month=apr, pages={127660}}",
-                    "description": f"SERS spectra of cancer cell metabolites collected on gold nanourchins functionalized with the {element} moiety. Designed to provide specificity toward specific proteins and lipids for cell line identification."
+                    "description": (
+                        f"SERS spectra of conditioned cell culture media metabolites entrapped on gold multibranched "
+                        f"nanoparticles (AuMs, ~50 nm) functionalized with {element}. 12 sample categories from "
+                        "Table 1 (Erzina et al. 2020): A2058/G361 melanoma cells, HPM melanocytes, HF skin "
+                        "fibroblasts, ZAM tumour-associated fibroblasts, DMEM control — each at 0% and 10% FBS. "
+                        "19,056 SERS spectra total (all three functionalization variants). ProRaman-L spectrometer "
+                        "(Ondax), 785 nm, 33 mW, 30 spectra/sample, 3 s accumulation. Preprocessing: ALSS "
+                        "background removal (λ=1e5, p=0.01), MinMax normalisation [0,1]. Published multi-input CNN "
+                        "(Keras/TF, 400 epochs, 75:25 split) achieved 100% validation accuracy. Ethics approved by "
+                        "Local Ethics Committee, General University Hospital Prague (Helsinki Declaration). "
+                        f"The {element} functionalization provides selectivity toward "
+                        + ("proteins and lipids." if element == "NH2"
+                           else "RNA and nucleic acids." if element == "COOH"
+                           else "lipids and amino acids.")
+                    )
                 }
             )
             for element in ["COOH", "NH2", "(COOH)2"]
