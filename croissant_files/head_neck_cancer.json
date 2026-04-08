@@ -1,0 +1,142 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Head and Neck Cancer Raman Spectroscopy Dataset",
+  "description": "Raman spectra of blood plasma and saliva samples from head and neck cancer patients and healthy controls. Acquired for non-invasive liquid biopsy screening. Target: cancer vs. control (binary classification).",
+  "url": "https://doi.org/10.5281/zenodo.7044324",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Classification",
+    "oncology"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{koster2022fused, title={Fused Raman spectroscopic analysis of blood and saliva delivers high accuracy for head and neck cancer diagnostics}, author={Koster, Hanna J and Guillen-Perez, Antonio and Gomez-Diaz, Juan Sebastian and Navas-Moreno, Maria and Birkeland, Andrew C and Carney, Randy P}, journal={Scientific Reports}, volume={12}, number={1}, pages={18464}, year={2022}, publisher={Nature Publishing Group UK London}}",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "head_neck_cancer_source",
+      "name": "Head and Neck Cancer Raman Spectroscopy Dataset",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://doi.org/10.5281/zenodo.7044324",
+      "encodingFormat": "application/zip",
+      "sha256": "f32066aa00633b7f56d836b9907e021b8ef5888b8642635af27de5def418ef56"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "head_neck_cancer_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "head_neck_cancer_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "head_neck_cancer_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "head_neck_cancer_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra were acquired with a custom-built inverted confocal Raman microscope (Olympus IX73, 60x, 1.2 NA water-immersion objective) at 785 nm excitation, 65 mW laser power, 30 s exposure, using an Andor Kymera-3281-C spectrophotometer with a Newton DU920P-BR-DD CCD detector (Solis software). Five randomly sampled regions were measured per substrate for each biofluid type (blood plasma and saliva) under both native (wet) and dried conditions.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Raw spectra underwent spectral cropping to the informative fingerprint region, PLS baseline correction, Savitzky-Golay smoothing, unit (min-max) normalisation, and cosmic-ray removal. For the combined-biofluid analysis, the mean spectrum of each biofluid was computed per patient and the two mean vectors were concatenated to form a stitched spectrum spanning indices 1-1694. Classification was performed with PLS-DA and LDA/QDA over PC1-PC5 combinations in MATLAB R2021a.",
+  "rai:dataAnnotationProtocol": "Class labels (HNC squamous cell carcinoma vs. benign control) were assigned based on confirmed clinical diagnosis for each of the 53 patients (34 cancer, 19 benign) recruited at the UC Davis Department of Otolaryngology under IRB approval no. 930499-8. Blood plasma and saliva were collected from each participant; a biofluid-stitching step concatenated the mean plasma and mean saliva spectra into a single unified spectrum per patient for combined-biofluid classification.",
+  "rai:personalSensitiveInformation": "Spectra are derived from blood plasma and saliva of cancer patients and healthy controls. No direct patient identifiers are included in the released data, but the measurements constitute sensitive health-related information (cancer status). Data were collected under IRB approval and informed consent; users must comply with applicable data-protection regulations (e.g., HIPAA, GDPR) and must not attempt to re-identify individual donors.",
+  "rai:dataBiases": "The cohort is limited to 53 patients from a single academic medical centre (UC Davis), which may not reflect the spectral variability encountered in broader or more diverse populations. The class ratio (34 cancer vs. 19 benign) is moderately imbalanced. All measurements were made on a single custom-built confocal Raman microscope at 785 nm excitation; spectral signatures are therefore instrument- and protocol-specific and may not transfer directly to other instruments without recalibration. Both native (wet) and dried biofluid conditions were measured, but best classification performance is reported only for dried samples under a specific quadratic discriminant model.",
+  "rai:dataLimitations": "Models trained on this dataset are specific to the instrument, substrate preparation, and patient population used in the original study; external validation on independent cohorts and different Raman systems is required before any clinical use. The biofluid-stitching augmentation introduces a data-fusion step whose generalisation properties are not yet established. GC-MS metabolite assignments are provided as supporting evidence but are not part of the spectral data itself.",
+  "rai:dataSocialImpact": "A non-invasive, liquid-biopsy Raman approach to head-and-neck cancer screening could reduce the need for invasive biopsies and enable earlier detection, with potential benefit in resource-limited healthcare settings. The reported combined sensitivity of 96.3 % and specificity of 85.7 % are promising but require independent clinical validation before any diagnostic use. Misclassification in a cancer-screening context carries serious patient-safety implications, so the dataset and any derived models should only be used for research and must be reviewed by qualified clinicians before informing medical decisions.",
+  "rai:dataUseCases": "Development and benchmarking of Raman-based liquid-biopsy classifiers for head-and-neck cancer; multimodal biofluid fusion strategies; PLS-DA and dimensionality-reduction method comparison; spectral preprocessing evaluation; metabolomic-spectroscopic correlation studies."
+}

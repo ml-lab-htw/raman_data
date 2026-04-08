@@ -1,0 +1,142 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "SERS Interlaboratory Adenine Dataset (Colloidal Silver)",
+  "description": "Quantitative SERS spectra of adenine measured using colloidal silver substrates across 15 different European laboratories. Benchmarks model reproducibility and inter-instrumental variability.",
+  "url": "https://doi.org/10.5281/zenodo.3572359",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression",
+    "SERS"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Fornasaro_2020, title={Surface Enhanced Raman Spectroscopy for Quantitative Analysis: Results of a Large-Scale European Multi-Instrument Interlaboratory Study}, volume={92}, ISSN={1520-6882}, url={http://dx.doi.org/10.1021/acs.analchem.9b05658}, DOI={10.1021/acs.analchem.9b05658}, number={5}, journal={Analytical Chemistry}, publisher={American Chemical Society (ACS)}, author={Fornasaro, Stefano and Alsamad, Fatima and Baia, Monica and Batista de Carvalho, Luis A. E. and Beleites, Claudia and Byrne, Hugh J. and Chiado, Alessandro and Chis, Mihaela and Chisanga, Malama and Daniel, Amuthachelvi and Dybas, Jakub and Eppe, Gauthier and Falgayrac, Guillaume and Faulds, Karen and Gebavi, Hrvoje and Giorgis, Fabrizio and Goodacre, Royston and Graham, Duncan and La Manna, Pietro and Laing, Stacey and Litti, Lucio and Lyng, Fiona M. and Malek, Kamilla and Malherbe, Cedric and Marques, Maria P. M. and Meneghetti, Moreno and Mitri, Elisa and Mohacek-Grosev, Vlasta and Morasso, Carlo and Muhamadali, Howbeer and Musto, Pellegrino and Novara, Chiara and Pannico, Marianna and Penel, Guillaume and Piot, Olivier and Rindzevicius, Tomas and Rusu, Elena A. and Schmidt, Michael S. and Sergo, Valter and Sockalingum, Ganesh D. and Untereiner, Valerie and Vanna, Renzo and Wiercigroch, Ewelina and Bonifacio, Alois}, year={2020}, month=feb, pages={4053--4064}}",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "adenine_colloidal_silver_source",
+      "name": "SERS Interlaboratory Adenine Dataset (Colloidal Silver)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://doi.org/10.5281/zenodo.3572359",
+      "encodingFormat": "text/csv",
+      "sha256": "3947c1dae97934ca1693c94d974e55c316d06cb8418a611549d05f6b77cfbdb6"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "adenine_colloidal_silver_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "adenine_colloidal_silver_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "adenine_colloidal_silver_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "adenine_colloidal_silver_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "SERS spectra of adenine in 0.01 M pH 7.4 phosphate buffer acquired on colloidal silver nanoparticle substrates (naked Ag nanoparticles produced by laser ablation synthesis, University of Padova) at both 532 nm and 785 nm excitation. Collected as part of the first European multi-instrument SERS interlaboratory study (ILS) within EU COST Action BM1401 Raman4Clinics, involving 15 laboratories from 11 European countries and 44 researchers (July-October 2018). Six instrument models from three manufacturers were used across labs (WiTec Alpha 300R, Horiba LabRAM 300, Horiba LabRAM ARAMIS, Horiba LabRAM HR 800, Horiba T64000, Renishaw InVia); laser power and acquisition time were set by each lab within prescribed limits. Three batches of colloidal substrate and three replicates per sample were used, yielding nine spectra per concentration level per method per laboratory. The analyte concentration range spans 0 to approximately 2 µM at five levels. Final analysis included five labs for cAg@532 and seven labs for cAg@785.",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "Raw spectra preprocessed following a centrally defined Data Analysis Protocol (DAP) implemented in R (version 3.4.3, packages hyperSpec and dplyr). Steps include extended multiplicative scatter correction (EMSC), smoothing, spectral range selection, baseline correction, and normalization. Quantification performed by integrating the SERS ring-breathing band area between 715 and 750 cm⁻¹ and fitting a linear inverse least-squares calibration model. Calibration curves with poor linear fit (r² < 0.6 or F-test p > 0.01) were excluded. Additionally, cAg@532 and cAu@785 data from laboratory P10 were excluded at the data inspection stage due to parafilm interference with adenine bands.",
+  "rai:dataAnnotationProtocol": "Ground-truth adenine concentrations were gravimetrically prepared by the organizing laboratory (University of Trieste) as standard solutions in 0.01 M pH 7.4 phosphate buffer, then aliquoted and shipped to all participants. A blind design was applied - only the organizing laboratory knew the test set concentrations. Calibration models were built by inverse least-squares regression on integrated SERS band areas of the adenine ring-breathing mode (715-750 cm⁻¹). This dataset combines two excitation methods - cAg@532 (532 nm) and cAg@785 (785 nm).",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from adenine reference solutions without individual human identifiers.",
+  "rai:dataBiases": "Data collected with a single colloidal substrate type (naked Ag nanoparticles from laser ablation synthesis, University of Padova) and a single analyte (adenine); results are specific to this substrate-analyte combination and should not be extrapolated to other SERS substrates or analytes. Signal variability arises from differences in laser power, optics, and detector responsivities across participating instruments (six models from three manufacturers). The 532 nm method (cAg@532) data from one laboratory (P10) was rejected due to parafilm contamination of the hydrophobic colloidal substrate, which interfered with adenine bands; this risk is absent for the 785 nm method but illustrates substrate preparation sensitivity. The cAg@532 method showed significant systematic BIAS (11%), whereas cAg@785 showed negligible BIAS (-4%). The cAg@785 calibration curves from some labs exhibited slight nonlinearity symptoms at higher concentrations.",
+  "rai:dataLimitations": "Results valid only within the studied concentration range (0-2 µM) and for the specific colloidal silver substrate; extrapolation to other concentrations or substrates is not validated. Performance differs significantly between excitation wavelengths - cAg@532 achieves RMSEP 24% (SEP 21%, BIAS 11%) while cAg@785 achieves RMSEP 19% (SEP 19%, BIAS -4%). The large BIAS at 532 nm may indicate systematic differences between laboratories using different 532 nm instruments. Intrinsic SERS signal variability (hot spots, colloidal batch-to-batch differences) limits quantitative reproducibility. The interlaboratory RMSEP cannot be used directly as a single-lab prediction uncertainty.",
+  "rai:dataSocialImpact": "Represents the first large-scale European collaborative benchmark for quantitative SERS, contributing to the standardisation of SERS measurement protocols across laboratories. Supports the development of reproducible, validated SERS methods for clinical diagnostics, food safety, and environmental monitoring within the Raman4Clinics initiative (EU COST Action BM1401).",
+  "rai:dataUseCases": "Benchmarking quantitative SERS calibration methods across instruments and laboratories; evaluating the effect of excitation wavelength (532 nm vs. 785 nm) on inter-laboratory reproducibility; development and testing of SERS spectral preprocessing and regression algorithms; comparing colloidal silver versus other SERS substrate types for quantitative analytical applications."
+}

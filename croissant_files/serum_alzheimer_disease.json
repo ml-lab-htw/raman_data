@@ -1,0 +1,280 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "ComFilE for AD",
+  "description": "SERS serum metabolite spectra for classifying Alzheimer's disease (AD), mild cognitive impairment (MCI), and healthy controls. 139 serum samples (57 male, 82 female) collected at Rui Jin Hospital, Shanghai Jiao Tong University. Organized as SERSomes (200 spectra per sample, 638 nm laser, quartz capillary), spanning 600–1800 cm⁻¹. 17 PyTorch tensor files organised by class label.",
+  "url": "https://figshare.com/articles/dataset/ComFilE_for_AD/28107578",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Classification",
+    "SERS",
+    "neurology"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "sameAs": "https://doi.org/10.6084/m9.figshare.28107578.v1",
+  "citation": "Xue, Bingsen (2024). ComFilE for AD. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28107578.v1",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_source",
+      "name": "ComFilE for AD",
+      "description": "Figshare article hosting all data files.",
+      "contentUrl": "https://figshare.com/articles/dataset/ComFilE_for_AD/28107578",
+      "encodingFormat": "text/html",
+      "sha256": "6baad1e885f94bb9c39e5bedbffa1b4416450bf5b8e421ffb1c146664c86c479"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415355",
+      "name": "[1] 003 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415355",
+      "encodingFormat": "application/zip",
+      "md5": "831a78e3875112b2d49184ab12996322"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415358",
+      "name": "[1] 005 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415358",
+      "encodingFormat": "application/zip",
+      "md5": "d596655c067aebd8c120de631bd187fd"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415361",
+      "name": "[1] 006 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415361",
+      "encodingFormat": "application/zip",
+      "md5": "148e64d35d608fcdb09595138d506c34"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415364",
+      "name": "[1] 008 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415364",
+      "encodingFormat": "application/zip",
+      "md5": "ea27871695dd8800f560c184c4b85dc0"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415367",
+      "name": "[1] 009 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415367",
+      "encodingFormat": "application/zip",
+      "md5": "efa08825ce2e518663e570456fdee0ed"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415370",
+      "name": "[1] 026 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415370",
+      "encodingFormat": "application/zip",
+      "md5": "a8ca1c6bb26e92d6f6608a909a89daf2"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415373",
+      "name": "[1] 028 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415373",
+      "encodingFormat": "application/zip",
+      "md5": "dc92cdbd0ce2efcce1febf72d8b71dd2"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415376",
+      "name": "[2] 001 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415376",
+      "encodingFormat": "application/zip",
+      "md5": "dc1f7e86241ce8defc708c502a0c651b"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415379",
+      "name": "[2] 007 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415379",
+      "encodingFormat": "application/zip",
+      "md5": "6986dccf1275fad441ece64eb3db48ae"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415382",
+      "name": "[2] 011 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415382",
+      "encodingFormat": "application/zip",
+      "md5": "38d199833900d70b1ab92fab1b3b21ee"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415385",
+      "name": "[2] 012 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415385",
+      "encodingFormat": "application/zip",
+      "md5": "356dee962a4ea5542988482edb1cd956"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415388",
+      "name": "[2] 020 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415388",
+      "encodingFormat": "application/zip",
+      "md5": "e49e5aefe4c6e132a58df3d7d5a6a42d"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415391",
+      "name": "[3] 002 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415391",
+      "encodingFormat": "application/zip",
+      "md5": "ba7d596c70d3e7c75754e63f65f9c3f1"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415394",
+      "name": "[3] 004 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415394",
+      "encodingFormat": "application/zip",
+      "md5": "aa7083021037f1db0273bd575ae01e37"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415397",
+      "name": "[3] 010 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415397",
+      "encodingFormat": "application/zip",
+      "md5": "7dcc8f6b1a835a4f56ece9626ad600ab"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415400",
+      "name": "[3] 013 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415400",
+      "encodingFormat": "application/zip",
+      "md5": "43180b7f4aec1491fddf680d3d811642"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_alzheimer_disease_file_51415403",
+      "name": "[3] 014 nobase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415403",
+      "encodingFormat": "application/zip",
+      "md5": "d4259c62fb6f487e948231cdc4902960"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "serum_alzheimer_disease_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "serum_alzheimer_disease_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "serum_alzheimer_disease_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "serum_alzheimer_disease_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "SERS serum spectra collected using the SERSome methodology from 139 participants. Fasting venous blood collected; serum ultrafiltered through a 3-kDa cutoff membrane (Millipore, Amicon Ultra-4) to isolate small metabolites. Citrate-reduced Ag NPs mixed with filtered metabolites; 200 spectra per SERSome acquired on a Horiba XploRA INV confocal Raman system (638 nm laser, 10× objective, quartz capillary), 10 µm step size, spectral range 600–1800 cm⁻¹. Samples measured within 28 days of collection.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Baseline removal applied using LabSpec 6 software (polynomial method, degree 10, max 200 points). Raw spectra stored as PyTorch tensor files organised by class label.",
+  "rai:dataAnnotationProtocol": "Class labels (AD, MCI, control) assigned by clinical diagnosis per National Institute on Aging-Alzheimer's Association (NIA-AA) criteria, confirmed by two neurologists each with ≥5 years of clinical experience. MCI patients diagnosed using Peterson criteria. Participants enrolled at the Department of Neurology, Rui Jin Hospital, Shanghai Jiao Tong University School of Medicine. Ethics approval obtained (number 2021-46).",
+  "rai:personalSensitiveInformation": "Spectra are derived from human blood serum of clinical patients. No direct patient identifiers are included, but biological measurements constitute sensitive health-related data under applicable data-protection regulations. Ethics approval obtained from Rui Jin Hospital affiliated with SJTU School of Medicine (number 2021-46).",
+  "rai:dataBiases": "Dataset includes 57 male and 82 female participants; sex distribution is unequal. Recruitment from a single hospital in Shanghai limits geographic and demographic diversity. AD diagnosis is based on clinical criteria; neuropathological confirmation was not available for most participants. Small cohort size (139 total) may affect model generalisation.",
+  "rai:dataLimitations": "Small sample size (139 participants) limits statistical power and generalisability. Diagnosis based on clinical criteria; neuropathological validation was not performed. Dataset is China-specific; performance on other ethnicities and healthcare populations is unknown. Performance may vary with different Ag NP batches or Raman instrument configurations.",
+  "rai:dataSocialImpact": "SERS metabolomics for Alzheimer's disease diagnosis from blood serum could enable early-stage screening with minimal invasiveness, potentially improving patient outcomes through earlier intervention. Key serum biomarkers identified include hypoxanthine, uric acid, and fumaric acid. Clinical application requires validation by qualified healthcare professionals.",
+  "rai:dataUseCases": "Classification of neurodegenerative disease states (AD vs. MCI vs. control); serum metabolic biomarker discovery; benchmarking spectral deep learning and component filtering models for neurological disease diagnostics."
+}

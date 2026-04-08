@@ -1,0 +1,143 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "RRUFF Database - Preprocess Spectra",
+  "description": "Comprehensive resource of raw Raman spectra for over 1,000 mineral species, representing a diverse array of crystallographic structures and chemical compositions measured under varying experimental conditions (e.g., 532 nm and 785 nm).",
+  "url": "https://rruff.info/",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "MaterialScience",
+    "Classification",
+    "mineralogy"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@inbook{Lafuente_2015, title={The power of databases: The RRUFF project}, ISBN={9783110417104}, url={http://dx.doi.org/10.1515/9783110417104-003}, DOI={10.1515/9783110417104-003}, booktitle={Highlights in Mineralogical Crystallography}, publisher={DE GRUYTER}, author={Lafuente, Barbara and Downs, R. T. and Yang, H. and Stone, N.}, year={2015}, month=nov, pages={1--30}}",
+  "citation": "Lafuente, B., Downs, R. T., Yang, H., & Stone, N. (2015). The power of databases: the RRUFF project. Highlights in Mineralogical Crystallography, T Armbruster and R M Danisi, Eds., Berlin, Germany, W. De Gruyter, 1–30.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "rruff_mineral_preprocess_source",
+      "name": "RRUFF Database - Preprocess Spectra",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://rruff.info/",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "9a3d7f58d0576e7a8d7355ee0e660c796d7fb5ae0e37473c1398dfa28fb55314"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "rruff_mineral_preprocess_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "rruff_mineral_preprocess_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "rruff_mineral_preprocess_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "rruff_mineral_preprocess_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication.",
+  "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods. Labels were assigned by domain experts or clinical diagnosis; no crowdsourced annotation was used.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical, biological, or material samples without individual human identifiers.",
+  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
+  "rai:dataLimitations": "Reference spectra represent ideal laboratory conditions; real-world samples may show additional interference from impurities, fluorescence, or surface effects. Note: No explicit license was stated by the original data providers; CC BY 4.0 has been assumed. Users should verify the applicable terms with the original authors.",
+  "rai:dataSocialImpact": "Facilitates non-destructive material characterisation and identification with applications in geology, environmental science, art conservation, and industrial quality assurance.",
+  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control. Not recommended for direct clinical diagnosis without professional validation and regulatory approval."
+}

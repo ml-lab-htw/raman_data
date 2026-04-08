@@ -1,0 +1,143 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "ML Raman Open Dataset (MLROD)",
+  "description": "500,000+ point-mapping Raman spectra of Mars-analogue geological samples acquired on a Horiba LabRAM HR Evolution (532 nm, 100 mW, 1800 l/mm grating, ~1 cm⁻¹ resolution, open-electrode CCD at −60 °C, 50× LWD NA 0.5 objective, 0.1 µm XY step, 100–1800 cm⁻¹). Samples include gabbro (Madagascar), granite, Hawaiian basalt dust, 12 pure reference minerals, and 4 binary mixtures, measured at 0% and 50% basalt dust surface coverage. No cosmic ray removal, baseline correction, or other preprocessing applied. Motivated by NASA Perseverance SuperCam mineral identification.",
+  "url": "https://www.odr.io/dataset/mlrod-a-machine-learning-raman-open-dataset",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "MaterialScience",
+    "Classification",
+    "mineralogy"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Berlanga_2022, title={Convolutional Neural Networks as a Tool for Raman Spectral Mineral Classification Under Low Signal, Dusty Mars Conditions}, volume={9}, ISSN={2333-5084}, url={http://dx.doi.org/10.1029/2021EA002125}, DOI={10.1029/2021EA002125}, number={10}, journal={Earth and Space Science}, publisher={American Geophysical Union (AGU)}, author={Berlanga, Genesis and Williams, Quentin and Temiquel, Nathan}, year={2022}, month=oct}",
+  "citation": "Wiens, R. C., et al. (2021). Convolutional neural networks as a tool for Raman spectral mineral classification under low signal, dusty Mars conditions. Earth and Space Science, 8, e2021EA002125.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "mlrod_source",
+      "name": "ML Raman Open Dataset (MLROD)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://www.odr.io/dataset/mlrod-a-machine-learning-raman-open-dataset",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "728597e31f0dca813ae1324ded18824d04e8760ae7ab48c876f938c7f71d92d9"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "mlrod_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "mlrod_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "mlrod_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "mlrod_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Point-mapping Raman spectroscopy of geological samples. Horiba LabRAM HR Evolution, 532 nm excitation, 100 mW laser power, 1800 l/mm diffraction grating, approximately 1 cm-1 spectral resolution, open-electrode CCD cooled to -60 degrees C, 50x LWD objective (NA 0.5), 100-1800 cm-1 spectral window, 0.1 µm XY step size.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Spectra provided as raw Raman intensities without cosmic ray removal, baseline correction, smoothing, or normalisation. Labels encode mineral class and basalt dust coverage fraction.",
+  "rai:dataAnnotationProtocol": "Mineralogical class labels assigned from known sample identity (gabbro from Madagascar, granite, Hawaiian basalt dust, 12 pure reference minerals, and 4 binary mineral mixtures) measured at 0%  and 50% basalt dust surface coverage. Over 500,000 spectra acquired by automated point-mapping at 0.1 µm XY step size.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from geological samples (rocks, minerals, and dust) without any human identifiers.",
+  "rai:dataBiases": "All samples measured under controlled laboratory conditions (Horiba LabRAM HR Evolution, 532 nm, 100 mW, 1800 l/mm grating). Performance on natural outcrops, in-situ planetary surfaces, or mixed-lithology samples may differ. The dataset targets Mars analogue mineralogy (silicates, carbonates, sulfates) relevant to Perseverance/SuperCam; coverage of other planetary or terrestrial mineral assemblages is limited. No cosmic ray removal, baseline correction, or other preprocessing was applied — raw spectra include instrument artefacts.",
+  "rai:dataLimitations": "More than 500,000 spectra acquired from a limited set of rock types and pure mineral standards; rare or amorphous mineral phases are under-represented. No preprocessing was applied (no cosmic ray removal, no baseline subtraction), so raw spectra contain instrument artefacts. Models trained on these data are optimised for Mars analogue conditions (NASA Perseverance SuperCam context) and may require re-calibration for other instruments or geological settings. No explicit license was stated; CC BY 4.0 has been assumed.",
+  "rai:dataSocialImpact": "Supports development of automated mineralogical analysis algorithms for planetary exploration (Mars, Moon) and terrestrial geoscience. Enables benchmarking of machine learning methods for spectral classification under realistic signal-to-noise and mixing conditions.",
+  "rai:dataUseCases": "Mineral identification and classification, spectral unmixing, Mars analogue mineralogy, deep learning benchmarks for geological spectroscopy, robotic planetary exploration support."
+}

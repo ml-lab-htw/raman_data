@@ -1,0 +1,143 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Synthetic Organic Pigments Raman Spectral Library - Baseline Corrected",
+  "description": "Baseline Corrected Raman spectral library of approximately 270 synthetic organic pigments (~300 reference spectra, nearly 400 samples total) compiled at the Royal Institute for Cultural Heritage (KIK/IRPA), Brussels. Acquired on a Renishaw inVia dispersive Raman spectrometer (785 nm, Peltier-cooled CCD 203 K, 1200 mm⁻¹ grating, 50× LWD objective, ±0.5 cm⁻¹ calibration). Pigment classes cover azo (monoazo, disazo), heterocyclic, and polycyclic types (phthalocyanine, quinacridone, perylene, anthraquinone, dioxazine, triarylcarbonium, diketopyrrole). Validated for pigment identification on four Stedelijk Museum (Amsterdam) paintings. Baseline correction applied to remove fluorescence background.",
+  "url": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/ES5_J9PpBatLvbTe6VlFyIoBc6fFRli0YHl2qjnLxn6I8Q?download=1",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "MaterialScience",
+    "Regression",
+    "art conservation"
+  ],
+  "isAccessibleForFree": false,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Fremout_2012, title={Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library}, volume={43}, ISSN={1097-4555}, url={http://dx.doi.org/10.1002/jrs.4054}, DOI={10.1002/jrs.4054}, number={11}, journal={Journal of Raman Spectroscopy}, publisher={Wiley}, author={Fremout, Wim and Saverwyns, Steven}, year={2012}, month=jul, pages={1536--1544}}",
+  "citation": "Fremout, Wim, and Steven Saverwyns. \"Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library.\" Journal of Raman Spectroscopy 43.11 (2012): 1536-1544.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "synthetic_organic_pigments_baseline_corrected_source",
+      "name": "Synthetic Organic Pigments Raman Spectral Library - Baseline Corrected",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/ES5_J9PpBatLvbTe6VlFyIoBc6fFRli0YHl2qjnLxn6I8Q?download=1",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "3fe34f03ae560624803c198814e6fb1b184115d4fc993fbf2f4205a887d7e418"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "synthetic_organic_pigments_baseline_corrected_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "synthetic_organic_pigments_baseline_corrected_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "synthetic_organic_pigments_baseline_corrected_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "synthetic_organic_pigments_baseline_corrected_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Dispersive Raman spectroscopy of synthetic organic pigment powders. Renishaw inVia spectrometer, Peltier-cooled CCD (203 K, 576x384 pixels), 785 nm excitation, 1200 mm-1 grating, 50x LWD objective, wavelength calibration ±0.5 cm-1. Samples measured as dry powders or from original manufacturer packaging.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Baseline correction applied to remove fluorescence background. Exact algorithm and parameters are described in the source publication (Fremout et al. 2012, Journal of Raman Spectroscopy 43).",
+  "rai:dataAnnotationProtocol": "Pigment class labels assigned from known sample identity. Approximately 300 reference spectra of approximately 270 synthetic organic pigments (nearly 400 samples total) sourced from research institutes, manufacturers, and resellers. Library compiled at the Royal Institute for Cultural Heritage (KIK/IRPA), Brussels. Pigment classes include azo (monoazo, disazo), heterocyclic, and polycyclic types (phthalocyanine, quinacridone, perylene, anthraquinone, dioxazine, triarylcarbonium, diketopyrrole).",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from synthetic organic pigment standards without any human identifiers.",
+  "rai:dataBiases": "Reference library covers modern synthetic organic pigments used in 20th-century fine-art painting and design; historic inorganic pigments and natural colorants are excluded. Spectra acquired on a single instrument at KIK/IRPA; fluorescence and sample morphology vary across pigment classes. Class sizes are unequal, reflecting commercial availability. Tested for identification on four Stedelijk Museum paintings (Amsterdam), but broader applicability to in-situ measurements under different conditions has not been validated.",
+  "rai:dataLimitations": "Measurements represent pure pigment standards; real paintings contain binders, varnishes, and mixed pigment layers that alter spectra. Access requires direct contact with KIK/IRPA or the dataset authors; not available via an open API. No explicit open license was stated for this variant; users should verify applicable terms with the original authors.",
+  "rai:dataSocialImpact": "Enables non-invasive identification of modern synthetic pigments in cultural heritage objects (paintings, textiles, plastics) without sampling. Supports provenance research, forgery detection, and conservation decision-making in museums and heritage institutions.",
+  "rai:dataUseCases": "Pigment identification and classification, spectral library matching, art conservation and authentication, benchmarking of chemometric classifiers on organic colorants."
+}

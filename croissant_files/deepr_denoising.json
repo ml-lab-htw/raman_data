@@ -1,0 +1,141 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "DeepeR Denoising Dataset",
+  "description": "Raman spectral denoising dataset from DeepeR paper. Contains noisy input spectra and corresponding denoised target spectra for training deep learning denoising models.",
+  "url": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Denoising"
+  ],
+  "isAccessibleForFree": false,
+  "license": "https://opensource.org/licenses/MIT",
+  "citeAs": "@article{Horgan_2021, title={High-Throughput Molecular Imaging via Deep-Learning-Enabled Raman Spectroscopy}, volume={93}, ISSN={1520-6882}, url={http://dx.doi.org/10.1021/acs.analchem.1c02178}, DOI={10.1021/acs.analchem.1c02178}, number={48}, journal={Analytical Chemistry}, publisher={American Chemical Society (ACS)}, author={Horgan, Conor C. and Jensen, Magnus and Nagelkerke, Anika and St-Pierre, Jean-Philippe and Vercauteren, Tom and Stevens, Molly M. and Bergholt, Mads S.}, year={2021}, month=nov, pages={15850--15860}}",
+  "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "deepr_denoising_source",
+      "name": "DeepeR Denoising Dataset",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "db4dac15e1ff534b1df1e72507b7973c5e87fa87579ae577f2e594cbba41e45e"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "deepr_denoising_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "deepr_denoising_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "deepr_denoising_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Reference (clean or high-resolution) spectral intensity values, shape (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "deepr_denoising_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "172,312 paired low-SNR (0.1 s) and high-SNR (1 s) confocal Raman spectra from n=11 hyperspectral Raman cell images of MDA-MB-231 breast cancer cells, acquired at 532 nm excitation. Spectra cover the fingerprint region (~600-1800 cm-1) with key bands at 795 cm-1 (nucleic acids), 1004 cm-1 (phenylalanine), 1300 and 1440 cm-1 (lipids), and 1660 cm-1 (amide I, proteins). Training augmentation included spectral flipping, shifting, and background subtraction.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Low-SNR (0.1 s) and high-SNR (1 s) spectra from the same pixel are paired directly. A 1D ResUNet was trained for 500 epochs using the Adam optimizer with an L1-norm loss function and a one-cycle learning rate scheduler. Eleven independent models were trained via 11-fold cross-validation (10 cell images for training/validation, 1 held-out test image per fold). The network achieved a mean MSE 10x lower than Savitzky-Golay filtering (mean PSNR 45.76, mean SSIM 0.9532 across 11 test folds).",
+  "rai:dataAnnotationProtocol": "Each low-SNR spectrum (0.1 s integration time) is paired pixel-by-pixel with the corresponding high-SNR spectrum (1 s integration time) acquired from the same spatial location in the same hyperspectral Raman cell image. Ground-truth targets are defined purely by acquisition conditions; no manual annotation was performed.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information. All spectra are from the MDA-MB-231 human breast cancer cell line cultured in vitro; no patient-derived primary specimens and no individual human identifiers are present.",
+  "rai:dataBiases": "All 172,312 spectral pairs originate from a single cancer cell line (MDA-MB-231 breast cancer) imaged on one confocal Raman system at 532 nm. The denoising model learns noise characteristics specific to this instrument and the 0.1 s vs. 1 s integration-time regime; generalisation to other instruments, cell types, excitation wavelengths, or noise regimes requires revalidation. The 11 cell images used for 11-fold cross-validation may not capture the full range of cellular morphological variability.",
+  "rai:dataLimitations": "The 1D ResUNet learns noise characteristics specific to the acquisition instrument and the 0.1 s/1 s integration-time pairing. Performance on other spectrometers, sample types, or noise levels is not guaranteed without retraining or fine-tuning. Dataset access is via a SharePoint link provided by the authors rather than a stable versioned repository, which may affect long-term reproducibility. The 11 cell images may not represent the full biological variability of the cell line.",
+  "rai:dataSocialImpact": "A 10x improvement in Raman denoising over classical methods (Savitzky-Golay, wavelet, PCA) directly enables high-throughput label-free molecular imaging of cells, potentially accelerating drug screening, cancer diagnostics, and histopathology workflows that currently require prohibitively long acquisition times.",
+  "rai:dataUseCases": "Training and benchmarking 1D deep learning denoising models for hyperspectral Raman imaging; comparison against classical spectral filters (Savitzky-Golay, wavelet, PCA); component of hybrid denoising + super-resolution pipelines for high-throughput Raman microscopy."
+}

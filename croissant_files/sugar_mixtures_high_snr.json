@@ -1,0 +1,142 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Sugar Mixtures Raman Dataset (High SNR)",
+  "description": "The high signal-to-noise ratio subset of the Sugar Mixtures benchmark (7,680 measurements at 0.5 s integration). Used for evaluating the noise-robustness of hyperspectral unmixing and quantification algorithms.",
+  "url": "https://doi.org/10.5281/zenodo.10779223",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression",
+    "food science"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Georgiev_2024, title={Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders}, volume={121}, ISSN={1091-6490}, url={http://dx.doi.org/10.1073/pnas.2407439121}, DOI={10.1073/pnas.2407439121}, number={45}, journal={Proceedings of the National Academy of Sciences}, publisher={Proceedings of the National Academy of Sciences}, author={Georgiev, Dimitar and Fernandez-Galiana, Alvaro and Vilms Pedersen, Simon and Papadopoulos, Georgios and Xie, Ruoxiao and Stevens, Molly M. and Barahona, Mauricio}, year={2024}, month=oct}",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "sugar_mixtures_high_snr_source",
+      "name": "Sugar Mixtures Raman Dataset (High SNR)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://doi.org/10.5281/zenodo.10779223",
+      "encodingFormat": "application/zip",
+      "sha256": "01c3456ac3863dacd5bef423cc158b61c4e634b6be82b8e9fa970a4f53bfdba3"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "sugar_mixtures_high_snr_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "sugar_mixtures_high_snr_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "sugar_mixtures_high_snr_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "sugar_mixtures_high_snr_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra acquired at 5 s integration time using a custom B-Raman microspectroscopy platform (Thorlabs Cerna body with BWTek BRM-785-0.55-100-0.22-SMA laser excitation source at 785 nm and 36.3 mW, and Ibsen EAGLE RAMAN-S spectrometer). Spectra collected in reflection via a Leica N PLAN 10x/0.25 objective (0.25 NA) over wavenumbers 142–3684.8 cm⁻¹. A library of 240 aqueous sugar mixture solutions was prepared in 96-well plates (375 µL per well) covering a full factorial design of four sugar types at four volume levels each; five additional pure-solution wells provided reference endmember spectra. Measurements repeated at two positions per well with four repetitions, yielding 1,920 spectra (1,960 including reference spectra).",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Spectra cropped to 400–1,800 cm⁻¹; baseline correction using Adaptive Smoothness Parameter Penalized Least Squares (ASPLS) with smoothing parameter lambda = 1e5, differential matrix order 2, maximum 100 iterations, and exit-criteria tolerance 0.001; global vector normalization dividing each spectrum by its maximum observed intensity. For model training on high-SNR data, an additional MSE abundance term (weight 1000) augments the spectral angle divergence loss to improve abundance estimation given the weak water endmember.",
+  "rai:dataAnnotationProtocol": "Ground-truth endmember signatures obtained from the median of reference spectra collected from five additional pure-solution wells (water, sucrose, fructose, maltose, glucose at 375 µL each; 8 reference spectra per component in the high-SNR setup). Ground-truth fractional abundances determined from the volume ratios of the components present in each mixture. No supervised concentration labels are used; unmixing performance is evaluated against these reference-derived ground truths.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from aqueous sugar solutions without individual human identifiers.",
+  "rai:dataBiases": "Dataset collected on a single custom B-Raman microspectroscopy platform; spectral characteristics are instrument-specific and may not transfer directly to other Raman systems. Only four sugar species (sucrose, fructose, maltose, glucose) are represented; models trained on this data may not generalise to chemical systems with more endmembers or different spectral properties. The volume-based concentration design (0, 30, 75, 120 µL in 375 µL total) limits coverage of arbitrary mixture compositions. Linear mixing is assumed; bilinear or nonlinear interactions are not modelled.",
+  "rai:dataLimitations": "Only four sugar species at a limited set of discrete volume levels; models may not generalise to broader chemical diversity or continuously varying concentrations. Ground-truth fractional abundances are derived from volume ratios rather than independent analytical measurements such as HPLC. Linear mixing is assumed throughout; bilinear or post-nonlinear interactions are not modelled. Dataset size (1,920 spectra) is relatively small compared to imaging datasets.",
+  "rai:dataSocialImpact": "Provides a rigorously characterised experimental benchmark for evaluating unsupervised and self-supervised hyperspectral unmixing algorithms in Raman spectroscopy. Improved unmixing accuracy supports label-free, nondestructive chemical characterisation in food quality control, pharmaceutical analysis, biological imaging, and environmental monitoring.",
+  "rai:dataUseCases": "Benchmarking hyperspectral unmixing algorithms for endmember extraction and fractional abundance estimation; development and evaluation of unsupervised autoencoder-based unmixing methods; paired comparison with the low-SNR variant to study the effect of signal-to-noise ratio on unmixing performance; validation of physics-constrained neural network architectures."
+}

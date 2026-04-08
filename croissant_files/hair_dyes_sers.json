@@ -1,0 +1,142 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "SERS Spectra of Hair Dyes Dataset",
+  "description": "SERS spectra of commercial hair dye products acquired with a portable Raman spectrometer. Each spectrum is labelled by brand, permanence (permanent/semi-permanent/temporary), and colour. Target: brand identity (classification).",
+  "url": "https://doi.org/10.5281/zen  odo.18881751",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Classification",
+    "SERS"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Higgins_2023, title={Surface-enhanced Raman spectroscopy enables highly accurate identification of different brands, types and colors of hair dyes}, volume={251}, ISSN={0039-9140}, url={http://dx.doi.org/10.1016/j.talanta.2022.123762}, DOI={10.1016/j.talanta.2022.123762}, journal={Talanta}, publisher={Elsevier BV}, author={Higgins, Samantha and Kurouski, Dmitry}, year={2023}, month=jan, pages={123762}}",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "hair_dyes_sers_source",
+      "name": "SERS Spectra of Hair Dyes Dataset",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://doi.org/10.5281/zen  odo.18881751",
+      "encodingFormat": "text/csv",
+      "sha256": "3da98d61fbe194892f4eda97bfbe77dc538e3eef7700a8d685a32007b8e7b0ad"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "hair_dyes_sers_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "hair_dyes_sers_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "hair_dyes_sers_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "hair_dyes_sers_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "SERS spectra of dye-treated human hair acquired on a TE-2000U Nikon inverted confocal microscope with a 20x objective. Excitation at 785 nm (1.8 mW solid-state laser); scattered light directed via a 50/50 beam splitter into an IsoPlane-320 spectrometer (Princeton Instruments, 600 groove/mm grating) with a PIX-400BR CCD detector and Semrock LP03-785RS-25 long-pass filter. Acquisition time approximately 60 s per spectrum. SERS substrate was 5 µL of gold nanorod (AuNR) solution applied directly on hair placed on a glass coverslip; AuNRs synthesised by laser ablation in solution following Esparza et al. Raw spectra provided with no corrections or smoothing applied; photodegradation absence verified by consecutive 1-min exposure measurements. Blonde Caucasian hair from a single anonymous donor was dyed with each of 33 commercial colorants from 4 brands (Ion, Wella, Clairol, L'Oreal) spanning 7 colors and 3 permanency types; 50 SERS spectra collected per colorant class, yielding 1,650 spectra total.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Raw SERS spectra acquired with no corrections or smoothing. PLS-DA preprocessing applied in PLS_Toolbox (Eigenvector Research Inc) in MATLAB, with separate preprocessing pipelines per task. For brand and type classification, spectra were baselined to second order, area normalised, and mean centred. For color classification, spectra were additionally subjected to a first derivative (filter length 15, second polynomial order) before area normalisation and mean centring. A 66%/34% calibration/validation split was used (approximately 33 training and 17 test spectra per class). PLS-DA models used 14, 13, 11, and 15 principal components for the individual colorant, brand, type, and color tasks respectively.",
+  "rai:dataAnnotationProtocol": "Class labels assigned based on known a priori identity of each commercial hair colorant. Four hierarchical label sets are provided - individual colorant (33 classes), brand (4 classes - Ion, Wella, Clairol, L'Oreal), permanency type (3 classes - permanent, semi-permanent, demi-permanent), and hair color (7 classes - auburn, brown, black, blue, purple, pink, red). Labels were confirmed by product packaging and visual inspection of color. No independent chemical analysis of colorant composition was performed for label assignment.",
+  "rai:personalSensitiveInformation": "Spectra were acquired from dye-treated human hair. The hair donor is anonymous (single salon source, College Station TX) and no personally identifiable information is included in the dataset. However, as human biological material, the hair carries intrinsic donor characteristics (race, sex, age) that are not separately disclosed; spectral features may partially reflect donor biology in addition to hair dye composition.",
+  "rai:dataBiases": "All spectra collected from blonde Caucasian hair obtained from a single anonymous donor at one hair salon; results may not generalise to other hair colors, hair types, or donors of different racial, gender, or age backgrounds. Uncolored hair exhibits no SERS signal with AuNRs (no protein detected by this substrate), making the approach specific to colored hair only. Only 4 commercial brands (Ion, Wella, Clairol, L'Oreal) and 33 colorants from a single retail outlet (Sally Beauty Supply, College Station TX) are represented; other brands and formulations are not covered. Misclassifications occurred between colorants sharing similar molecular formulations (e.g., Clairol semi-permanent black and demi-permanent brown reached only 72% TPR). Hair samples were stored for at most 1 month before analysis; the effect of longer storage, sun exposure, or washing routines on SERS signal readability has not been investigated.",
+  "rai:dataLimitations": "Only 50 spectra per class limits statistical power and sensitivity to AuNR batch-to-batch variability. Results are specific to blonde Caucasian hair; hair biology (melanin content, cuticle structure) varies by donor, race, and age, and robustness across demographics has not been established. Only 33 of the many commercially available colorants are included; new market products cannot be classified without model retraining. The effect of environmental exposure (sunlight, repeated washing, chemical treatments) on SERS signal stability has not been characterised. Data were originally available upon request only, not openly released at time of publication.",
+  "rai:dataSocialImpact": "Demonstrates that SERS can provide highly accurate forensic analysis of hair dye evidence, enabling identification of the brand, permanency type, and color of a colorant present on a hair sample regardless of visual appearance. Average individual colorant identification accuracy of 97%, with near-perfect brand and color-type discrimination, supports development of portable SERS-based forensic tools for rapid in-situ crime scene analysis.",
+  "rai:dataUseCases": "Forensic identification of hair colorant brand, permanency type, and color from hair SERS spectra; benchmarking PLS-DA and other multivariate classifiers for multi-label SERS-based hair forensics; development of SERS spectral libraries for hair dye identification; evaluation of AuNR-based SERS substrates for analysis of biological samples."
+}

@@ -1,0 +1,143 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "COVID-19 in human serum using Raman spectroscopy",
+  "description": "Raman spectra of blood serum from 20 subjects (10 RT-PCR/ELISA-confirmed COVID-19 patients and 10 healthy controls) collected under Ethics Committee protocol 26691419.6.0000.5492 (Universidade Anhembi Morumbi). Acquired with a Dimension P1 dispersive Raman spectrometer (Lambda Solutions), 830 nm excitation, 350 mW, 400–1800 cm⁻¹, 4 cm⁻¹ resolution, 30 s acquisition (3 s × 10 accumulations), 80 µL serum per measurement, triplicate per sample. Preprocessed with 7th-order polynomial baseline correction and area normalisation (1-norm). Published PCA-DA/PLS-DA model achieved 87% sensitivity and 100% specificity.",
+  "url": "Only via E-Mail",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Classification",
+    "infectious disease"
+  ],
+  "isAccessibleForFree": false,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Goulart_2022, title={Diagnosing COVID-19 in human serum using Raman spectroscopy}, volume={37}, ISSN={1435-604X}, url={http://dx.doi.org/10.1007/s10103-021-03488-7}, DOI={10.1007/s10103-021-03488-7}, number={4}, journal={Lasers in Medical Science}, publisher={Springer Science and Business Media LLC}, author={Goulart, Ana Cristina Castro and Silveira, Landulfo and Carvalho, Henrique Cunha and Dorta, Cristiane Bissoli and Pacheco, Marcos Tadeu T. and Zangaro, Renato Amaro}, year={2022}, month=jan, pages={2217--2226}}",
+  "citation": "Goulart, Ana Cristina Castro, et al. 'Diagnosing COVID-19 in human serum using Raman spectroscopy.' Lasers in Medical Science 37.4 (2022): 2217-2226.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "covid19_serum_source",
+      "name": "COVID-19 in human serum using Raman spectroscopy",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "Only via E-Mail",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "da9ff466c5997c5e79751ce631c6c111f66368c8b989c0411c67101adb66e65b"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "covid19_serum_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "covid19_serum_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "covid19_serum_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "covid19_serum_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Dispersive Raman spectroscopy of blood serum. Dimension P1 spectrometer (Lambda Solutions), 830 nm excitation, 350 mW laser power, 400-1800 cm-1 spectral window, 4 cm-1 resolution, 30 s total acquisition (3 s x 10 accumulations), 80 µL serum in aluminium holder. Three replicate spectra per sample.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "7th-order polynomial baseline correction applied to raw spectra to remove fluorescence background; spectra subsequently normalised by area (1-norm). Processed spectra used for PCA-DA and PLS-DA classification in Chemoface software.",
+  "rai:dataAnnotationProtocol": "Binary COVID-19 labels (positive/negative) assigned by RT-PCR confirmation and ELISA serology. 20 subjects (10 RT-PCR-confirmed COVID-19 patients and 10 healthy controls. Study conducted under Ethics Committee protocol 26691419.6.0000.5492 (Universidade Anhembi Morumbi). Each sample measured in triplicate at three anatomically distinct serum positions.",
+  "rai:personalSensitiveInformation": "Spectra are derived from identified COVID-19 patients and healthy volunteers. No direct identifiers are included in the released dataset, but the clinical context means data should be treated as sensitive health information under applicable data-protection regulations (e.g., LGPD in Brazil, GDPR in the EU). applicable data-protection regulations.",
+  "rai:dataBiases": "Small cohort (20 subjects) limits statistical power; results may not generalise beyond this Brazilian clinical population. Equal-sized COVID-19 and control groups simplify analysis but may not reflect true disease prevalence. Serum spectra are sensitive to sample handling and storage conditions not fully controlled across sites. Instrument-specific fluorescence background (830 nm excitation) and correction method (7th-order polynomial baseline) may differ from other published COVID-19 serum datasets.",
+  "rai:dataLimitations": "Twenty-subject pilot study; published discriminant model achieved 87% sensitivity and 100% specificity using PCA-DA/PLS-DA (Chemoface, PC2+PC4+PC5+PC6). Performance on independent cohorts, different instruments, or other SARS-CoV-2 variants is unknown. Access requires direct contact with the authors; the dataset is not available via an open API. No explicit open license was stated; CC BY 4.0 has been assumed — users should verify terms with the original authors.",
+  "rai:dataSocialImpact": "Demonstrates feasibility of rapid, low-cost COVID-19 screening from serum Raman spectra. Potential value in resource-limited settings where RT-PCR capacity is constrained. Clinical deployment requires large-scale validation and regulatory approval; findings must not be used for diagnostic decisions without qualified medical oversight.",
+  "rai:dataUseCases": "COVID-19 binary classification, serum biomarker discovery, PCA/PLS-DA benchmarking, Raman-based infectious-disease screening research."
+}

@@ -1,0 +1,143 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis",
+  "description": "This data set contains in-line Raman spectroscopy measurements and predicted microgel sizes from Dynamic Light Scattering (DLS).The Raman spectroscopy measurements were conducted inside a customized measurement cell for monitoring in a tubular flow reactor.Inside the flow reactor, the microgel synthesis based on the monomer N-Isopropylacrylamid and the crosslinker N, N' Methylenebis(acrylamide) takes place.",
+  "url": "https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression",
+    "polymer chemistry"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Kaven_2024, title={Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis}, volume={479}, ISSN={1385-8947}, url={http://dx.doi.org/10.1016/j.cej.2023.147567}, DOI={10.1016/j.cej.2023.147567}, journal={Chemical Engineering Journal}, publisher={Elsevier BV}, author={Kaven, Luise F. and Schweidtmann, Artur M. and Keil, Jan and Israel, Jana and Wolter, Nadja and Mitsos, Alexander}, year={2024}, month=jan, pages={147567}}",
+  "citation": "Kaven, Luise F and Schweidtmann, Artur M and Keil, Jan and Israel, Jana and Wolter, Nadja and Mitsos, Alexander. Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis. Chemical Engineering Journal, 479, 147567, 2024, Elsevier",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "flow_microgel_synthesis_source",
+      "name": "Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "58e2a6e7246d24595c1a16d71ea629559236d5031b73dfac78c8dca2c61b822e"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "flow_microgel_synthesis_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "flow_microgel_synthesis_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "flow_microgel_synthesis_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "flow_microgel_synthesis_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Inline Raman spectra acquired with a Kaiser RXN2 spectrometer using HoloGRAMS software (40 s acquisition time) at reaction temperature inside a tubular glass flow reactor. The reactor feed consists of a monomer solution (110.6 mmol/L NIPAM, 2.7 mmol/L BIS crosslinker, 0.41 mmol/L CTAB surfactant) and an initiator solution (1.5 mmol/L AMPA), both nitrogen-degassed. Process variables are initiator flow (0.1–0.9 mL/min), monomer flow (2–18 mL/min), CTAB concentration (0.14–0.41 mmol/L), and temperature (60–80 °C). A Latin Hypercube Sampling (LHS) initial design of 15 experiments was followed by 11 TS-EMO optimization iterations of 5 experiments each.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Raman spectra evaluated with an IHM calibration model developed in HoloGRAMS. Microgel size data preprocessed by filtering out samples with PDI > 0.6 (indicating failed microgel formation or hydrogel) and those with relative DLS size error > 3.8%. Product flow rate computed from NIPAM conversion and feed flows; size deviation target defined as squared difference from 100 nm radius.",
+  "rai:dataAnnotationProtocol": "NIPAM weight fraction (w_NIPAM) ground truth derived from inline Raman spectra using an Indirect Hard Modeling (IHM) calibration model with RMSECV = 0.037 wt-%. Microgel hydrodynamic radius measured offline by Dynamic Light Scattering (DLS) on a Zetasizer Ultra (Malvern Panalytical) at 50 °C and 90° scattering angle (4 measurements per sample). Data points with polydispersity index (PDI) > 0.6 or relative size error > 3.8% were excluded.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All data originate from chemical process measurements without individual human identifiers.",
+  "rai:dataBiases": "Data originate from a single tubular glass flow reactor setup; results may not transfer directly to different reactor geometries or scales. The Gaussian Process surrogate model used in the optimization loop exhibits high variance in sparsely sampled regions, which may bias the acquisition function toward unexplored but unreliable conditions. Offline DLS reference measurements prevent fully autonomous closed-loop optimization and introduce a latency between Raman monitoring and size feedback.",
+  "rai:dataLimitations": "The IHM Raman model and GP surrogate are valid only within the explored process variable ranges; extrapolation beyond the design space is unreliable. Only a single reactor configuration was studied. The dataset represents a relatively small number of experiments (approx. 70 total), limiting the density of coverage across the four-dimensional input space.",
+  "rai:dataSocialImpact": "Enables data-driven optimization of colloidal microgel synthesis in continuous flow, supporting scalable production of responsive hydrogel particles for drug delivery, diagnostics, and smart material applications. Demonstrates hardware-in-the-loop Bayesian optimization as a strategy for autonomous process development in chemical engineering.",
+  "rai:dataUseCases": "Multi-objective Bayesian optimization of flow synthesis processes; GP surrogate modeling for process variable screening; inline Raman monitoring of polymerization reactions; PAT-enabled continuous manufacturing; development of hardware-in-the-loop optimization frameworks for chemical production."
+}

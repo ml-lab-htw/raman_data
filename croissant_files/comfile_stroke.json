@@ -1,0 +1,304 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "ComFilE: SERS serum spectra for stroke classification",
+  "description": "SERS serum spectra for binary stroke vs. healthy-control classification. 20 tab-separated files (10 stroke, 10 healthy control), each containing ~201 spectra across 723 wavenumber points (202.985–1999.92 cm⁻¹). ~4,020 spectra total.",
+  "url": "https://figshare.com/articles/dataset/ComFilE_/28107431",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Classification",
+    "SERS"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "sameAs": "https://doi.org/10.6084/m9.figshare.28107431",
+  "citeAs": "@article{Xue_2025, title={Deep spectral component filtering as a foundation model for spectral analysis demonstrated in metabolic profiling}, volume={7}, ISSN={2522-5839}, url={http://dx.doi.org/10.1038/s42256-025-01027-5}, DOI={10.1038/s42256-025-01027-5}, number={5}, journal={Nature Machine Intelligence}, publisher={Springer Science and Business Media LLC}, author={Xue, Bingsen and Bi, Xinyuan and Dong, Zheyi and Xu, Yunzhe and Liang, Minghui and Fang, Xin and Yuan, Yizhe and Wang, Ruoxi and Liu, Shuyu and Jiao, Rushi and Chen, Yuze and Zu, Weitao and Wang, Chengxiang and Zhang, Jianhao and Liu, Jiang and Zhang, Qin and Yuan, Ye and Xu, Midie and Zhang, Ya and Wang, Yanfeng and Ye, Jian and Jin, Cheng}, year={2025}, month=may, pages={743--757}}",
+  "citation": "Xue, B. et al. ComFilE: a large-scale benchmark dataset for computational spectroscopy. Nat Mach Intell (2025). https://doi.org/10.1038/s42256-025-01027-5",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_source",
+      "name": "ComFilE: SERS serum spectra for stroke classification",
+      "description": "Figshare article hosting all data files.",
+      "contentUrl": "https://figshare.com/articles/dataset/ComFilE_/28107431",
+      "encodingFormat": "text/html",
+      "sha256": "5b1b884222af7af72618b02d8fcece6ffcc303e7077b9a1d894fd208b09d3e93"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415070",
+      "name": "[1]T01_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415070",
+      "encodingFormat": "text/plain",
+      "md5": "c293af166f01ac20002b192df63467a4"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415073",
+      "name": "[1]T02_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415073",
+      "encodingFormat": "text/plain",
+      "md5": "a032be7b90fa3e82e9aece66bed98b8f"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415076",
+      "name": "[1]T03_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415076",
+      "encodingFormat": "text/plain",
+      "md5": "855adb4c7893d83657b94662b2a71ad5"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415079",
+      "name": "[1]T04_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415079",
+      "encodingFormat": "text/plain",
+      "md5": "47947d98d41a0e1229b4e510dc9565f7"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415082",
+      "name": "[1]T05_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415082",
+      "encodingFormat": "text/plain",
+      "md5": "658b56ea070fa0155614a50b0c1c80ca"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415085",
+      "name": "[1]T06_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415085",
+      "encodingFormat": "text/plain",
+      "md5": "6bb44b1ef933b2bc258016f592eeabe4"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415088",
+      "name": "[1]T07_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415088",
+      "encodingFormat": "text/plain",
+      "md5": "b8d7499bfeda52ca0164054ee814b70e"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415091",
+      "name": "[1]T08_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415091",
+      "encodingFormat": "text/plain",
+      "md5": "484b6bab53200904e7e0c1b027c65624"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415094",
+      "name": "[1]T09_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415094",
+      "encodingFormat": "text/plain",
+      "md5": "bc1614341fda222aa5e7ee511c9c63e5"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415097",
+      "name": "[1]T10_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415097",
+      "encodingFormat": "text/plain",
+      "md5": "e66f187620a699f42bb0aacf8f9bccab"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415103",
+      "name": "[2]H01_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415103",
+      "encodingFormat": "text/plain",
+      "md5": "824a406b9c4a3816bed034ea9c8e3aa6"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415100",
+      "name": "[2]H02_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415100",
+      "encodingFormat": "text/plain",
+      "md5": "11535137404571879e429f64ad3fd254"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415106",
+      "name": "[2]H03_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415106",
+      "encodingFormat": "text/plain",
+      "md5": "aca5fb80cdbcc454136490d3d742e1c9"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415109",
+      "name": "[2]H04_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415109",
+      "encodingFormat": "text/plain",
+      "md5": "67ae3ccb24b18b1d8fb4492d3249211f"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415112",
+      "name": "[2]H05_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415112",
+      "encodingFormat": "text/plain",
+      "md5": "ba0be5d5f0611dccdb6c69b107c73cff"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415115",
+      "name": "[2]H06_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415115",
+      "encodingFormat": "text/plain",
+      "md5": "6f7e89991b7d05e8e7978f6576929c64"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415118",
+      "name": "[2]H07_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415118",
+      "encodingFormat": "text/plain",
+      "md5": "7d10c2bcb54609c0a6dce3cd4eedf316"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415121",
+      "name": "[2]H08_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415121",
+      "encodingFormat": "text/plain",
+      "md5": "fe2aceea69c316850569636be81e6c29"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415124",
+      "name": "[2]H09_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415124",
+      "encodingFormat": "text/plain",
+      "md5": "be91e3e20e3e0b930a3df528af23f930"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "comfile_stroke_file_51415127",
+      "name": "[2]H10_negative nobase.txt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415127",
+      "encodingFormat": "text/plain",
+      "md5": "88eb078b42acab3532d5a9a41bb5986a"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "comfile_stroke_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "comfile_stroke_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "comfile_stroke_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "comfile_stroke_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "SERS serum spectra collected using the SERSome methodology from 121 participants (52 ischemic stroke, 69 controls; ages 45–80). Fasting venous blood collected and serum ultrafiltered through a 3-kDa cutoff membrane (Millipore, Amicon Ultra-4) to isolate small metabolites. Citrate-reduced Ag NPs mixed with filtered metabolites; 200 spectra per SERSome acquired on a Horiba XploRA INV confocal Raman system (638 nm laser, 10.36 mW, 10× objective, quartz capillary ID 1 mm / OD 2 mm), 10 µm step size, spectral range 200–2000 cm⁻¹. Samples measured within 28 days of collection.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Baseline removal applied using LabSpec 6 software (polynomial method, degree 10, max 200 points). Raw spectra stored as tab-separated text files with wavenumber axis included.",
+  "rai:dataAnnotationProtocol": "Class labels (ischemic stroke vs. control) assigned by clinical diagnosis confirmed by computed tomography (CT) and magnetic resonance imaging (MRI). Patients enrolled within 24 hours after arterial thrombectomy or tPA therapy at Minhang Hospital, Fudan University. Ethics approval obtained (number 2021-008-01K).",
+  "rai:personalSensitiveInformation": "Spectra are derived from human blood serum of clinical patients. No direct patient identifiers are included, but biological measurements constitute sensitive health-related data under applicable data-protection regulations. Ethics approval obtained from Minhang Hospital, Fudan University (number 2021-008-01K).",
+  "rai:dataBiases": "Dataset includes 65 male and 55 female participants aged 45–80; younger and older age groups are not represented. Recruitment from a single hospital (Minhang Hospital, Fudan University) limits geographic and demographic diversity. Small cohort (52 stroke, 69 controls) may affect model generalisation. Restricted to ischemic stroke; haemorrhagic stroke is not represented.",
+  "rai:dataLimitations": "Small dataset (121 participants); trained models may not generalise without additional data from diverse populations. Single-site recruitment limits demographic representativeness. Serum must be processed and measured within 28 days of collection. Performance may vary with different Ag NP batches or Raman instrument configurations.",
+  "rai:dataSocialImpact": "Rapid SERS-based serum metabolomics for ischemic stroke diagnosis could support time-critical clinical triage. Key serum biomarkers identified include trimethyllysine, uric acid, and hypoxanthine. Diagnostic results must be validated by qualified healthcare professionals before any clinical application.",
+  "rai:dataUseCases": "Binary classification (stroke vs. control); serum metabolic biomarker discovery; benchmarking spectral deep learning and component filtering models for neurological disease diagnostics."
+}

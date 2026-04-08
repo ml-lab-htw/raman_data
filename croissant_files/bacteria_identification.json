@@ -1,0 +1,144 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Pathogenic Bacteria Raman Dataset",
+  "description": "60,000 SERS spectra (2,000 per isolate across three measurement time-points) from 30 clinically relevant bacterial and yeast isolates, including an MRSA/MSSA isogenic pair. Acquired on a Horiba LabRAM HR Evolution spectrometer (633 nm, 13.17 mW, 300 l/mm grating, 1.2 cm⁻¹ dispersion, Olympus MPLAN 100× NA 0.9, ~1 µm spot) at 1 s integration time (SNR ~4.1) on gold-coated silica substrates (200 nm Au, electron beam evaporation). Published 25-layer 1D ResNet CNN (Adam, batch 10) achieved 82.2 ± 0.3% isolate accuracy, 97.0 ± 0.3% antibiotic treatment accuracy, and 99.7% treatment classification with 10 spectra in clinical validation on 50 patients (Stanford/Palo Alto VA).",
+  "url": "https://github.com/csho33/bacteria-ID",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Classification",
+    "SERS",
+    "microbiology"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://opensource.org/licenses/MIT",
+  "citeAs": "@article{Ho_2019, title={Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning}, volume={10}, ISSN={2041-1723}, url={http://dx.doi.org/10.1038/s41467-019-12898-9}, DOI={10.1038/s41467-019-12898-9}, number={1}, journal={Nature Communications}, publisher={Springer Science and Business Media LLC}, author={Ho, Chi-Sing and Jean, Neal and Hogan, Catherine A. and Blackmon, Lena and Jeffrey, Stefanie S. and Holodniy, Mark and Banaei, Niaz and Saleh, Amr A. E. and Ermon, Stefano and Dionne, Jennifer}, year={2019}, month=oct}",
+  "citation": "Ho, C.-S., Jean, N., Hogan, C. A., et al. Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Nat Commun 10, 4927 (2019).",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "bacteria_identification_source",
+      "name": "Pathogenic Bacteria Raman Dataset",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://github.com/csho33/bacteria-ID",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "8096b15756d0fb0b5944234f33cf7d54fd1366d1db22d50fe17ca8eaa623140f"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "bacteria_identification_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "bacteria_identification_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "bacteria_identification_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "bacteria_identification_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Surface-enhanced Raman scattering (SERS) spectra acquired on gold-coated silica substrates (200 nm Au by electron beam evaporation). Horiba LabRAM HR Evolution spectrometer, 633 nm excitation, 13.17 mW laser power, 300 l/mm diffraction grating, 1.2 cm-1 dispersion, Olympus MPLAN 100x objective (NA 0.9), approximately 1 µm spot size, 1 s integration time per spectrum.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Spectra are provided as raw SERS intensities. Labels encode isolate identity and antibiotic treatment status. The published CNN model uses a 25-layer 1D ResNet trained with Adam optimiser (betas 0.5/0.999), batch size 10, without explicit spectral preprocessing — no baseline correction or normalisation is described in the paper.",
+  "rai:dataAnnotationProtocol": "Species and antibiotic-treatment labels assigned based on known sample identity (30 bacterial/yeast isolates from clinical collections); 60,000 reference spectra (2,000 per isolate across three measurement time-points). Clinical validation performed on 50 patients at Stanford University Medical Center and Palo Alto VA Hospital.",
+  "rai:personalSensitiveInformation": "Clinical validation spectra were derived from patient isolates at Stanford University Medical Center and Palo Alto VA Hospital. No direct patient identifiers are included in the released dataset, but the clinical context means data should be treated as potentially sensitive health-related information under applicable data-protection regulations.",
+  "rai:dataBiases": "Spectra collected under standardised laboratory conditions (Horiba LabRAM HR Evolution, 633 nm, 13.17 mW, 300 l/mm grating, 1 s integration, gold-coated silica substrates). Performance may degrade for isolates, antibiotic regimens, or clinical environments not represented in the reference library. The 30-isolate set covers common pathogens but is not exhaustive. SNR of approximately 4.1 was measured at 1 s integration time.",
+  "rai:dataLimitations": "The 30-isolate reference library covers common nosocomial pathogens but may not generalise to rare or emerging species. Performance on clinical isolates is validated for MRSA/MSSA identification (89.1 ± 0.1% accuracy) and antibiotic treatment classification (97.0 ± 0.3% with a single spectrum; 99.7% with 10 spectra). Transfer to instruments with different excitation wavelengths or substrate chemistries requires re-calibration. No explicit license was stated by the original data providers; CC BY 4.0 has been assumed.",
+  "rai:dataSocialImpact": "Rapid, culture-free bacterial identification directly from patient samples could reduce time-to-treatment from days to hours, with particular impact on sepsis management and antibiotic stewardship. Clinical deployment requires regulatory approval and validation by qualified healthcare professionals.",
+  "rai:dataUseCases": "Bacterial species identification, antibiotic susceptibility prediction, MRSA/MSSA discrimination, clinical diagnostics decision support, deep learning benchmarks for spectral classification."
+}

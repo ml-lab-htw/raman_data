@@ -1,0 +1,145 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Dataset of Raman and SERS spectra of illicit adulterants added to dietary supplements",
+  "description": "FT-Raman reference spectra (1064 nm, 50–3600 cm⁻¹, 4 cm⁻¹ resolution, 32 scans) of 11 SERS-active pharmaceutically active adulterants found in dietary supplements, acquired with a benchtop Bruker RAM II FT-IR Raman module (OPUS v7.2, 300 mW). Compounds selected from RASFF portal EU alerts. Library spectra at 1 mg/mL in ethanol; three replicates per compound. Companion to the portable SERS dataset (illicit_adulterants_sers). Target: compound identity (classification).",
+  "url": "https://data.mendeley.com/datasets/y4md8znppn/1",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Classification",
+    "SERS",
+    "pharmaceutical science"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "sameAs": "https://doi.org/10.17632/y4md8znppn/1",
+  "citeAs": "@article{Rizzo_2023, title={A multi-analyte screening method for the rapid detection of illicit adulterants in dietary supplements using a portable SERS analyzer}, volume={9}, ISSN={2405-8440}, url={http://dx.doi.org/10.1016/j.heliyon.2023.e18509}, DOI={10.1016/j.heliyon.2023.e18509}, number={8}, journal={Heliyon}, publisher={Elsevier BV}, author={Rizzo, Serena and Weesepoel, Yannick and Erasmus, Sara and Sinkeldam, Joost and Piccinelli, Anna Lisa and van Ruth, Saskia}, year={2023}, month=aug, pages={e18509}}",
+  "citation": "Rizzo, S., Weesepoel, Y., Erasmus, S., Sinkeldam, J., Piccinelli, A. L., van Ruth, S. (2023). Dataset of Raman and Surface-enhanced Raman Spectroscopy spectra of illicit adulterants added to dietary supplements. Wageningen University & Research. https://doi.org/10.17632/y4md8znppn/1",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "illicit_adulterants_ft_raman_source",
+      "name": "Dataset of Raman and SERS spectra of illicit adulterants added to dietary supplements",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://data.mendeley.com/datasets/y4md8znppn/1",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "b4f2e5cbd6651968128e62395cbc6abe1a911eca126d1bb9955c38a435891b00"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "illicit_adulterants_ft_raman_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "illicit_adulterants_ft_raman_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "illicit_adulterants_ft_raman_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "illicit_adulterants_ft_raman_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Benchtop FT-Raman spectroscopy. Bruker RAM II FT-IR Raman module coupled to FT-IR VERTEX 70 spectrometer, 1064 nm excitation, 300 mW laser power, 50–3600 cm-1, 4 cm-1 resolution, 32 scans averaged per spectrum, data acquired in OPUS software v7.2. Pure adulterant powders (n=19) and liquids (n=4) measured directly; library spectra at 1 mg/mL in ethanol.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Spectra provided as raw FT-Raman intensities. Three replicate spectra per sample were recorded and averaged in the subsequent analysis step. No explicit baseline correction or normalisation described for the library spectra; statistical correspondence scores computed via Pearson correlation on first-derivative spectra using the pracma R package.",
+  "rai:dataAnnotationProtocol": "Compound identity labels assigned from known analytical-grade reference standards (purchased from Biosynth International and Sigma-Aldrich). 23 pharmaceutically active adulterants selected based on RASFF portal alerts for dietary supplements in the EU. Spectra of 11 SERS-active compounds recorded at 1 mg/mL in ethanol; library built in MISA Cal software for HQI-based matching.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra are from pure analytical-grade chemical standards and commercial dietary supplement products without any human identifiers.",
+  "rai:dataBiases": "Library spectra represent pure analytical-grade standards dissolved in ethanol; real dietary supplement matrices contain excipients (microcrystalline cellulose, magnesium stearate, silicon dioxide, hydroxypropyl methylcellulose, titanium oxide) and plant-based extracts that can overlap with adulterant signals. The 23-compound panel covers RASFF-flagged targets but not all possible novel synthetic analogues or undeclared substances. FT-Raman at 1064 nm minimises fluorescence but differs from portable SERS; spectral transfer between instruments requires re-calibration.",
+  "rai:dataLimitations": "Small spectral library (11 SERS-active reference compounds, one spectrum per compound); insufficient for training data-driven models without augmentation. Spectra represent ideal pure-compound conditions; detection performance in real DS matrices is limited by excipient interference and low analyte concentrations (LOI 0.1–5.0% w/w). Dataset does not cover SERS-inactive adulterants (AND, DMAA, DMAE, DMBA, TSIL, VAR, XAN) or structural analogues without reference standards.",
+  "rai:dataSocialImpact": "Enables rapid, portable screening for undeclared pharmaceutically active adulterants in dietary supplements at customs, retail inspections, and border control without skilled operators or lengthy sample preparation. Supports EU RASFF compliance and consumer safety enforcement. Low specificity of SERS benefits detection of newly synthesised structural analogues where reference standards are unavailable.",
+  "rai:dataUseCases": "Spectral library matching for compound identification, food-fraud detection in dietary supplements, benchmarking of SERS vs. FT-Raman performance, reference spectra for adulterant screening algorithms."
+}

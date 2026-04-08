@@ -1,0 +1,141 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "DeepeR Super-Resolution Dataset",
+  "description": "Hyperspectral super-resolution dataset from DeepeR paper. Contains low-resolution input spectra and high-resolution target spectra for training super-resolution models.",
+  "url": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "SuperResolution"
+  ],
+  "isAccessibleForFree": false,
+  "license": "https://opensource.org/licenses/MIT",
+  "citeAs": "@article{Horgan_2021, title={High-Throughput Molecular Imaging via Deep-Learning-Enabled Raman Spectroscopy}, volume={93}, ISSN={1520-6882}, url={http://dx.doi.org/10.1021/acs.analchem.1c02178}, DOI={10.1021/acs.analchem.1c02178}, number={48}, journal={Analytical Chemistry}, publisher={American Chemical Society (ACS)}, author={Horgan, Conor C. and Jensen, Magnus and Nagelkerke, Anika and St-Pierre, Jean-Philippe and Vercauteren, Tom and Stevens, Molly M. and Bergholt, Mads S.}, year={2021}, month=nov, pages={15850--15860}}",
+  "citation": "Horgan et al., Analytical Chemistry 2021, 93, 48, 15850-15860.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "deepr_super_resolution_source",
+      "name": "DeepeR Super-Resolution Dataset",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "39e74a5337e4daddbced666206055baf753eaa2c3acd508f4fa4dac61b178cc4"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "deepr_super_resolution_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "deepr_super_resolution_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "deepr_super_resolution_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Reference (clean or high-resolution) spectral intensity values, shape (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "deepr_super_resolution_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "169 hyperspectral Raman images of MDA-MB-231 breast cancer cells (1.4 million spectra, 389 h total acquisition) at 532 nm excitation. Each image contains 64x64x500 or 63x63x500 pixels (height x width x spectral channels). LR inputs were generated by 2x, 3x, or 4x spatial downsampling of HR acquisitions. Dataset split 85:10:5 (training/validation/test). Augmentation included random image cropping, flipping, rotation, mixup, spectral flipping, shifting, and background subtraction.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "HR Raman images at native resolution are spatially downsampled 2x, 3x, or 4x to generate LR inputs. HyRISR (adapted RCAN architecture with spectral downsampling) was trained for 600 epochs using the Adam optimizer with L1-norm loss and a constant learning rate. Performance was assessed via PSNR, SSIM, and MSE against ground-truth HR images. Achieved 40x (2x SR), 90x (3x SR), and 160x (4x SR) imaging speed-up while preserving molecular spatial information.",
+  "rai:dataAnnotationProtocol": "Low-resolution (LR) inputs are generated synthetically by 2x, 3x, or 4x spatial downsampling of high-resolution (HR) hyperspectral Raman images. HR images at native spatial resolution serve as ground-truth targets. No manual annotation was performed; pairing is determined entirely by the downsampling procedure.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information. All spectra are from the MDA-MB-231 human breast cancer cell line cultured in vitro; no patient-derived primary specimens and no individual human identifiers are present.",
+  "rai:dataBiases": "All 169 hyperspectral images are from MDA-MB-231 breast cancer cells imaged on a single confocal Raman system at 532 nm. The HyRISR network learns spatial and spectral correlations specific to this cell line and instrument. At 4x super-resolution, the network introduces increased blurring that limits its suitability for high-resolution cellular imaging; 2x and 3x demonstrated better spatial fidelity. Transfer learning to tissue-engineered cartilage was shown (n=16 training patches), but generalisation to other tissue types or instruments has not been systematically benchmarked.",
+  "rai:dataLimitations": "HyRISR learns spatial correlations specific to MDA-MB-231 cells and the acquisition instrument. At 4x super-resolution, blurring artefacts are significant and reconstruction fidelity is markedly reduced compared to 2x and 3x. Dataset access is via a SharePoint link rather than a stable versioned repository. The training set of 144 images is small relative to typical RGB super-resolution benchmarks; extending the dataset would likely further improve performance.",
+  "rai:dataSocialImpact": "Enables 40-160x speed-up in hyperspectral Raman cell imaging, reducing acquisition times from over one hour to under one minute. This could make label-free molecular imaging practical for high-throughput drug screening, pathological tissue analysis, and cell biology studies that are currently prohibitively slow with conventional Raman microscopy.",
+  "rai:dataUseCases": "Training and benchmarking hyperspectral spatial super-resolution models (2x, 3x, 4x); comparison against nearest-neighbour and bicubic upsampling baselines; transfer learning to new sample types with limited training data; hybrid combination with spectral denoising for extreme imaging speed-ups."
+}

@@ -1,0 +1,142 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
+  "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
+  "url": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "citeAs": "@article{Echtermeyer_2020, title={Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species}, volume={75}, ISSN={1943-3530}, url={http://dx.doi.org/10.1177/0003702820973275}, DOI={10.1177/0003702820973275}, number={5}, journal={Applied Spectroscopy}, publisher={SAGE Publications}, author={Echtermeyer, Alexander and Marks, Caroline and Mitsos, Alexander and Viell, Jorn}, year={2020}, month=dec, pages={506--519}}",
+  "citation": "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "itaconic_acid_species_source",
+      "name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "c84efb0918977a4cc294d2d613fb670e960f65ae2900a8fc1567dfa50b9ac97e"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "itaconic_acid_species_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "itaconic_acid_species_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "itaconic_acid_species_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "itaconic_acid_species_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Inline Raman spectra acquired during NaOH (1 mol L⁻¹) titration of itaconic acid (Alfa Aesar, ≥99%) in deionized water (0.8 μS cm⁻¹) at 25 °C across 22 titration steps, using a Kaiser RXN2 Raman analyzer (400 mW, 785 nm) with NIR fiber-optic immersion probe, spectral range 160–3285 cm⁻¹, 4 cm⁻¹ resolution, 60 s acquisition time. Ambient light excluded by non-transparent black PVC liner. pH measured with SenTix 940 electrode and Multil 3420 pH meter (WTW).",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "Standard Normal Variate (SNV) normalisation, linear baseline correction, and offset subtraction applied. Evaluation range 1025–1850 cm⁻¹, excluding atmospheric O₂ signal (1545–1565 cm⁻¹). Two-component species spectra generated by weighted linear spectral subtraction (method A) or MCR-ALS in PEAXACT ver. 4.5 (method B). PCMs constructed with IHM using pseudo-Voigt profiles (9 for IA, 10 for IA⁻ and IA²⁻). Preprocessing in MATLAB R2017a and PEAXACT ver. 4.5.",
+  "rai:dataAnnotationProtocol": "Mole fraction targets for three acid species (IA, IA⁻, IA²⁻) and water derived from pH-based dissociation equilibria and Indirect Hard Modeling (IHM). Method A uses pKa1 = 3.85, pKa2 = 5.45 (literature); method B estimates pKa1 = 3.68, pKa2 = 5.00 via MCR-ALS fitting (literature range 3.48–3.95 and 4.98–5.67). Full set (22 samples) RMSECV ≤ 2.13 × 10⁻⁴ mol mol⁻¹; minimum set (4 samples) RMSEP < 2.87 × 10⁻⁴ mol mol⁻¹. Primary method-development case study of the source publication.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical samples without individual human identifiers.",
+  "rai:dataBiases": "Three structurally similar species co-exist near the first dissociation step (pH ≈ 4.68), requiring weighted spectral subtraction to isolate individual species. Equal Raman activity assumed across species. Ionic strength varies during titration (mean ≈ 0.34 mol L⁻¹); ideal mixture assumption applied throughout. Data acquired at a single instrument (Kaiser RXN2, 785 nm) and temperature (25 °C).",
+  "rai:dataLimitations": "Diprotic system with two overlapping dissociation steps; species co-existence near pH 4.68 requires careful spectral processing. Minimum calibration set of 4 samples requires samples at maximum concentration of each species. Ideal mixture assumption applied despite ionic strength ≈ 0.34 mol L⁻¹. Models calibrated at 25 °C in deionized water; not directly applicable to other matrices or temperatures.",
+  "rai:dataSocialImpact": "Itaconic acid is a biobased platform chemical produced by fungal fermentation, used as a polymer and resin precursor. Accurate inline monitoring of dissociation states is directly relevant to downstream crystallisation and extraction processes, where the dissociation state governs extraction selectivity, supporting optimisation of biobased chemical production.",
+  "rai:dataUseCases": "Primary reference dataset for IHM method development and benchmarking against PLS; minimum-sample calibration strategies (as few as 4 samples); simultaneous pKa estimation and spectral calibration; inline monitoring of diprotic carboxylic acid dissociation; PAT in itaconic acid fermentation and purification."
+}

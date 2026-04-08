@@ -1,0 +1,143 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy",
+  "description": "Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: Raw, spectral range: FingerPrint. Task: predict particle diameter from Raman spectrum.",
+  "url": "https://publications.rwth-aachen.de/record/959137/files/Data_RWTH-2023-05604.zip?version=1",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression",
+    "polymer chemistry"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Koronaki_2024, title={Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy}, volume={20}, ISSN={1613-6829}, url={http://dx.doi.org/10.1002/smll.202311920}, DOI={10.1002/smll.202311920}, number={23}, journal={Small}, publisher={Wiley}, author={Koronaki, Eleni D. and Scholz, Jan G. T. and Modelska, Magdalena M. and Nayak, Prabhat K. and Viell, Jorn and Mitsos, Alexander and Barkley, Samuel}, year={2024}}",
+  "citation": "Koronaki, E. D., Scholz, J. G. T., Modelska, M. M., Nayak, P. K., Viell, J., Mitsos, A., & Barkley, S. (2024). Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy. Small, 20(23), 2311920.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "microgel_size_raw_fingerprint_source",
+      "name": "Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://publications.rwth-aachen.de/record/959137/files/Data_RWTH-2023-05604.zip?version=1",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "b04c173600b5659b2315d4d4e2fef80af577d9a58290fce1c140c377e75cd293"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "microgel_size_raw_fingerprint_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "microgel_size_raw_fingerprint_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "microgel_size_raw_fingerprint_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "microgel_size_raw_fingerprint_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Offline Raman spectra of 47 N-isopropylacrylamide (NIPAM) microgel samples acquired at 20 °C in glass vials (identical fluid level) over two experimentation days without prior filtration or dialysis, using a Kaiser RXN2 Raman Analyzer with 40 s acquisition time; each sample measured three times. Microgels synthesised in a continuous flow reactor at varying temperature, flow rate, initiator, and surfactant concentrations.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "No baseline correction or normalisation applied. Raw Raman intensity values restricted to the fingerprint region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded. Among PLS benchmarks in the source publication, raw fingerprint spectra achieved the best overall test performance (R² = 0.730, RMSE = 28.038 nm, MAPE = 7.887%). Raw data published at DOI 10.18154/RWTH-2023-05604.",
+  "rai:dataAnnotationProtocol": "Target values are hydrodynamic diameters (nm) measured by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at 20 °C and scattering angle 90°, each repeated 4 times and analysed with ZS Xplorer software. DLS precision is approximately ±2%. The source publication used 40 training samples and 7 test samples.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical samples without individual human identifiers.",
+  "rai:dataBiases": "Offline measurements at 20 °C (microgels in swollen state) may not transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state). Two distinct spectral clusters exist in the raw data attributed to different synthesis conditions. Multiple factors beyond particle size influence Raman spectra (monomer, inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical robustness and generalisability.",
+  "rai:dataLimitations": "Small dataset (47 samples) is a restrictive factor; authors state findings cannot be generalised beyond the employed data sets. Samples from a single continuous flow reactor (RWTH Aachen University); generalisability to other reactor types or polymer systems not demonstrated. Offline measurements at 20 °C may not directly apply to inline process conditions at reaction temperature.",
+  "rai:dataSocialImpact": "Enables data-driven polymer particle size monitoring from Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports closed-loop control of polymerisation processes, contributing to consistent product quality in polymer manufacturing and potential application to crystallisation processes.",
+  "rai:dataUseCases": "Microgel particle size prediction from Raman spectra; benchmarking nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic data; PAT for particle size monitoring in continuous polymer synthesis."
+}

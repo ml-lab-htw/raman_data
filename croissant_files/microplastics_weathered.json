@@ -1,0 +1,142 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Raman Spectra of Weathered Microplastics Dataset",
+  "description": "Raman spectra of field-collected weathered microplastic debris (155 samples) and unweathered standard plastics (18 samples), acquired from sediments near waste plastics recycling industries in Laizhou City, Shandong Province, China (August 2018). WITec alpha300-R confocal Raman (532 nm, 5 mW typical, 200–3500 cm⁻¹, 600 l/mm grating, 4 cm⁻¹ resolution, 5 s integration, 4 accumulations typical). 124 spectra with distinct peaks selected for the Raman Database of Weathered Plastics (RDWP); polymer types: PE (62), PP (44), PET (10), PVC (4), PA (2), plus minor classes and 20 unidentified. Weathered spectra show weakened CH₂ peaks and broad 2100–2200 cm⁻¹ bands absent from standard spectra. Prefixes: 'sta-' = unweathered standards, 'wea-' = field-weathered debris. Target: polymer type (classification).",
+  "url": "https://data.mendeley.com/datasets/kpygrf9fg6",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "MaterialScience",
+    "Classification"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "sameAs": "https://doi.org/10.17632/kpygrf9fg6",
+  "citeAs": "@article{DONG2020139990,\n  title = {Raman spectra and surface changes of microplastics weathered under natural environments},\n  journal = {Science of The Total Environment},\n  volume = {739},\n  pages = {139990},\n  year = {2020},\n  issn = {0048-9697},\n  doi = {https://doi.org/10.1016/j.scitotenv.2020.139990},\n  url = {https://www.sciencedirect.com/science/article/pii/S0048969720335105},\n  author = {Mingtan Dong and Qiaoqiao Zhang and Xinli Xing and Wei Chen and Zhenbing She and Zejiao Luo},\n  keywords = {Microplastics, Raman spectra, Weathering, Surface changes, Fourier transform infrared spectrometry},\n}",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "microplastics_weathered_source",
+      "name": "Raman Spectra of Weathered Microplastics Dataset",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://data.mendeley.com/datasets/kpygrf9fg6",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "a15901d98220053cd9409e1ae3eb87740a16d8a858ef8f4129008bde1279eb74"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "microplastics_weathered_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "microplastics_weathered_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "microplastics_weathered_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "microplastics_weathered_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Confocal micro-Raman spectroscopy on selected microplastic debris targets. WITec alpha300-R confocal Raman imaging microscope, 532 nm excitation, 2–10 mW (usually 5 mW), 10×–100× magnification (up to 360 nm spatial resolution), 200–3500 cm-1, 600 lines/mm grating, 4 cm-1 spectral resolution, 1–10 s integration (usually 5 s), 1–10 accumulations (usually 4). Multiple spectra collected at different depths on the same sample using confocal function to minimise surface contamination artefacts. Complementary ATR-FTIR on Nicolet iS50 FT-IR (Thermo Scientific), 650–4000 cm-1, 0.482 cm-1 resolution, 20 accumulations.",
+  "rai:dataCollectionType": "Physical data collection",
+  "rai:dataPreprocessingProtocol": "Raman spectra acquired without baseline subtraction (raw intensities). Spectra with large fluorescence background or inconsistent peaks were excluded from RDWP during curation. FTIR spectra collected with ATR accessory at 0.482 cm-1 resolution, 20 accumulations, 650–4000 cm-1. KnowItAll 2018 used for spectral library search and polymer-type identification.",
+  "rai:dataAnnotationProtocol": "Polymer-type labels assigned by combined Raman spectroscopy and ATR-FTIR identification against a Raman Database of Standard Microplastics (RDSP, 18 spectra of 8 polymer types). 155 microplastic debris samples hand-picked from sediments near waste plastics recycling industries in Laizhou City, Shandong Province, China (August 2018); 18 standard unweathered spectra from commercial plastic packaging. 124 spectra with distinct peaks selected for the final Raman Database of Weathered Plastics (RDWP). 20 debris samples remained unidentified. KnowItAll Informatics System 2018 (Bio-Rad) used for spectral matching.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from environmental plastic debris and standard polymer materials without any human identifiers.",
+  "rai:dataBiases": "Samples collected from a single geographic location (Laizhou City) dominated by PE and PP recycling waste; polymer distribution (PE 45%, PP 33%) reflects the local recycling industry and may not represent global environmental microplastic composition. Weathered spectra show high fluorescence background and weakened diagnostic peaks, increasing identification uncertainty. Class sizes are highly unequal (PE 62, PP 44, PET 10, PVC 4, PC 1, PA 2, ABS 1). All samples collected in a single season (August 2018); seasonal and geographic variability in weathering is not captured.",
+  "rai:dataLimitations": "124-spectrum RDWP is a preliminary database; broader coverage of polymer types, geographic origins, and weathering durations is needed. Weathered spectra of PVC are particularly inconsistent with standard spectra due to dechlorination. Fluorescence from organic matter and surface oxidation products affects spectrum quality; 11 spectra were excluded from RDWP for this reason. RDWP effectiveness for identifying weathered microplastics requires validation by independent researchers. PS, PA, and ABS are represented by only 0–2 spectra; models cannot be trained for these classes.",
+  "rai:dataSocialImpact": "Enables accurate identification of environmentally weathered microplastics, which standard reference libraries fail to match. Advances understanding of plastic degradation and persistence in natural environments. Supports environmental monitoring, policy compliance, and research into microplastic pollution pathways, toxicity, and remediation strategies.",
+  "rai:dataUseCases": "Weathered microplastic identification and classification, spectral database benchmarking, polymer degradation studies, environmental pollution monitoring, method development for field-applicable microplastic detection."
+}

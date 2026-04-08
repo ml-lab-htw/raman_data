@@ -1,0 +1,152 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Raman-ChEMBL-part2",
+  "description": "140k DFT-computed Raman spectra for ChEMBL drug-like molecules. Targets: HOMO-LUMO gap, HOMO/LUMO energies, isotropic polarizability, heat capacity, dipole moment.",
+  "url": "https://figshare.com/articles/dataset/Raman-ChEMBL-part2/28594295",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression",
+    "computational chemistry"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "sameAs": "https://doi.org/10.6084/m9.figshare.28594295.v3",
+  "citeAs": "@article{liang2025dataset, title={A Dataset of Raman and Infrared Spectra as an Extension to the ChEMBL}, author={Liang, Jiechun and Ling, Jack and Xu, Limin and Zhu, Xi}, journal={Scientific Data}, volume={12}, number={1}, pages={939}, year={2025}, publisher={Nature Publishing Group UK London}}",
+  "citation": "Liang, J., Ling, J., Zhu, X. Raman-ChEMBL-part2. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28594295.v3",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "chembl_molecules_source",
+      "name": "Raman-ChEMBL-part2",
+      "description": "Figshare article hosting all data files.",
+      "contentUrl": "https://figshare.com/articles/dataset/Raman-ChEMBL-part2/28594295",
+      "encodingFormat": "text/html",
+      "sha256": "31c44eb98d4609ce10c42a767c6be224a8aad07c2a5eb7ab52d78e1f55224f8a"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "chembl_molecules_file_54667760",
+      "name": "Raman-ChEMBL-part2.db",
+      "contentUrl": "https://ndownloader.figshare.com/files/54667760",
+      "encodingFormat": "undefined",
+      "md5": "d8e05c28db8c5d533e297124640ce269"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "chembl_molecules_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "chembl_molecules_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "chembl_molecules_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "chembl_molecules_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "DFT Raman spectra computed for ~220,000 drug-like molecules from the ChEMBL database using Gaussian09 (PBEPBE/6-31G level of theory) in gas phase. Harmonic frequencies and Raman activities stored as stick spectra; Lorentz broadening applied for continuous spectral representation. Molecular property targets computed at the same DFT level.",
+  "rai:dataCollectionType": "Software Collection",
+  "rai:dataPreprocessingProtocol": "Raw DFT harmonic frequencies and Raman activities stored as stick spectra. Lorentz broadening applied to produce continuous spectral profiles. No further preprocessing is applied to the provided files.",
+  "rai:dataAnnotationProtocol": "Molecular properties (HOMO, LUMO, band gap Eg, isotropic polarizability, heat capacity, dipole moment) computed via DFT at PBEPBE/6-31G level using Gaussian09 in gas phase. Raman activities derived from harmonic frequency calculations; spectra broadened by Lorentz fitting. Approximately 220,000 ChEMBL drug-like molecules processed; ~140,000 included after filtering.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information. All spectra and properties are computationally derived from chemical structures in the public ChEMBL database.",
+  "rai:dataBiases": "Spectra are DFT-computed (gas phase, PBEPBE/6-31G) and do not account for solvent effects, temperature broadening, or instrument-specific artefacts present in experimental Raman spectra. 96.3% of molecules are aromatic; non-aromatic drug-like molecules are underrepresented. Computational accuracy is limited by the DFT functional and basis set; high-frequency modes may be overestimated under the harmonic approximation.",
+  "rai:dataLimitations": "Gas-phase DFT calculations do not capture solvent effects or conformational flexibility at finite temperature. The PBEPBE/6-31G level of theory provides moderate accuracy; harmonic approximation may overestimate high-frequency modes. Direct comparison with experimental spectra requires careful scaling and calibration. Licensed CC BY-NC-ND 4.0; commercial use is not permitted.",
+  "rai:dataSocialImpact": "A large-scale DFT Raman spectral library for drug-like molecules enables virtual screening, spectral prediction, and training of deep learning models for molecular property prediction, supporting computational drug discovery and materials science research.",
+  "rai:dataUseCases": "DFT spectral library for computational chemistry; training spectral prediction models; molecular property regression (HOMO, LUMO, band gap, polarizability, heat capacity, dipole moment); benchmarking machine learning potentials. Not recommended for commercial use (CC BY-NC-ND 4.0 license). Not recommended for direct comparison with experimental spectra without frequency scaling and instrument calibration."
+}

@@ -1,0 +1,649 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "ComFilE for PCa",
+  "description": "SERS serum metabolite spectra for classifying prostate cancer (PCa), benign prostatic hyperplasia (BPH), and healthy controls. 424 serum samples from male participants (ages 41–89) collected at Ren Ji Hospital, Shanghai Jiao Tong University. Organized as SERSomes (200 spectra per sample, 638 nm laser, quartz capillary), spanning 600–1800 cm⁻¹ (724 data points per spectrum).",
+  "url": "https://figshare.com/articles/dataset/ComFilE_for_PCa/28107395",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Classification",
+    "SERS",
+    "oncology"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "sameAs": "https://doi.org/10.6084/m9.figshare.28107395.v1",
+  "citeAs": "@article{bi2024sersomes, title={SERSomes for metabolic phenotyping and prostate cancer diagnosis}, author={Bi, Xinyuan and Wang, Jiayi and Xue, Bingsen and He, Chang and Liu, Fugang and Chen, Haoran and Lin, Linley Li and Dong, Baijun and Li, Butang and Jin, Cheng and others}, journal={Cell Reports Medicine}, volume={5}, number={6}, year={2024}, publisher={Elsevier}}",
+  "citation": "Xue, Bingsen (2024). ComFilE for PCa. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28107395.v1",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_source",
+      "name": "ComFilE for PCa",
+      "description": "Figshare article hosting all data files.",
+      "contentUrl": "https://figshare.com/articles/dataset/ComFilE_for_PCa/28107395",
+      "encodingFormat": "text/html",
+      "sha256": "0c45f7f33f1f2b22c2326924aee5082729d1ba301e930a1dc64d8110c4c7da5e"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414857",
+      "name": "[1]1Ag110 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414857",
+      "encodingFormat": "application/zip",
+      "md5": "01d65d70bf29925dced21d3e51cabd81"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414881",
+      "name": "[1]1Ag123 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414881",
+      "encodingFormat": "application/zip",
+      "md5": "41710060e9e96c995d6887092202db54"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414866",
+      "name": "[1]1Ag124.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414866",
+      "encodingFormat": "application/zip",
+      "md5": "d14c382cc010c245b85f5a60c193fad7"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414875",
+      "name": "[1]1Ag125 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414875",
+      "encodingFormat": "application/zip",
+      "md5": "227af4e05efb44e18444c24ec4d189f6"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414869",
+      "name": "[1]1Ag125.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414869",
+      "encodingFormat": "application/zip",
+      "md5": "ea6c511add8618d81491d120ae48856b"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414878",
+      "name": "[1]1Ag139 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414878",
+      "encodingFormat": "application/zip",
+      "md5": "3e20783981c73735695874d7749a4c45"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414863",
+      "name": "[1]1Ag140 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414863",
+      "encodingFormat": "application/zip",
+      "md5": "2a29137e6083e49f112ac42023f114f0"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414860",
+      "name": "[1]1Ag148 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414860",
+      "encodingFormat": "application/zip",
+      "md5": "243d06b20c7cf4ab02a9795a71235dc4"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414884",
+      "name": "[1]1Ag157 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414884",
+      "encodingFormat": "application/zip",
+      "md5": "10a44beba9c4da7b66966720723a991d"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414872",
+      "name": "[1]1Ag160 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414872",
+      "encodingFormat": "application/zip",
+      "md5": "e05332e0a9be3db9f4dc9eb22dee70a5"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414854",
+      "name": "[1]1Ag165 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414854",
+      "encodingFormat": "application/zip",
+      "md5": "e52f029c5c766dd704270134d919a100"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414887",
+      "name": "[1]1Ag166 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414887",
+      "encodingFormat": "application/zip",
+      "md5": "f94331def9c7f31d9416e5b253db918c"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414890",
+      "name": "[1]1Ag182 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414890",
+      "encodingFormat": "application/zip",
+      "md5": "3252209464c50d165041eecc9c46f8d3"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414893",
+      "name": "[1]1Ag30 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414893",
+      "encodingFormat": "application/zip",
+      "md5": "f94ec2b9a54893f0cb83a2e18425bff5"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414896",
+      "name": "[1]1Ag33 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414896",
+      "encodingFormat": "application/zip",
+      "md5": "397c31fe556ea3f7eeba8c88a18cb360"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414899",
+      "name": "[1]1Ag4 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414899",
+      "encodingFormat": "application/zip",
+      "md5": "cb7f59d541b8db2f2f4c2cb740f3e261"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414902",
+      "name": "[1]1Ag41 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414902",
+      "encodingFormat": "application/zip",
+      "md5": "ef7a280456d52b56b0f1f379e6df1c6e"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414905",
+      "name": "[1]1Ag43 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414905",
+      "encodingFormat": "application/zip",
+      "md5": "d0d2783d0d98ecc7f5167352a4fc1a4c"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414908",
+      "name": "[1]1Ag5 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414908",
+      "encodingFormat": "application/zip",
+      "md5": "22ffdb69c17bf2c6a02be5116e3724d1"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414911",
+      "name": "[1]1Ag60 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414911",
+      "encodingFormat": "application/zip",
+      "md5": "d016576b41aa89694193a273ab3a8953"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414914",
+      "name": "[1]1Ag62 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414914",
+      "encodingFormat": "application/zip",
+      "md5": "4de4554fe9613e2a391c9b1fbd84a1f7"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414917",
+      "name": "[1]1Ag69 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414917",
+      "encodingFormat": "application/zip",
+      "md5": "b8d0c114af2739992861d4e85c4f693e"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414920",
+      "name": "[1]1Ag92 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414920",
+      "encodingFormat": "application/zip",
+      "md5": "9da5d3308554dc7a2a1879bed55a28c3"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414923",
+      "name": "[1]630 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414923",
+      "encodingFormat": "application/zip",
+      "md5": "27c660a2a718458fd977effe3d0ad5b4"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414926",
+      "name": "[2]1Ag104 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414926",
+      "encodingFormat": "application/zip",
+      "md5": "098da2073dee112d6d383697ab634ed0"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414929",
+      "name": "[2]1Ag112 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414929",
+      "encodingFormat": "application/zip",
+      "md5": "f18e7ebb501bcbcf9bfce5f72643fbbd"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414932",
+      "name": "[2]1Ag128 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414932",
+      "encodingFormat": "application/zip",
+      "md5": "11adb5f94c8d48a64505067ed94350f6"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414935",
+      "name": "[2]1Ag132 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414935",
+      "encodingFormat": "application/zip",
+      "md5": "fe57dd6487172b1215a3f8b7e10c6206"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414938",
+      "name": "[2]1Ag16 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414938",
+      "encodingFormat": "application/zip",
+      "md5": "63bd5c3619a2fed4c97ff2f01daced31"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414941",
+      "name": "[2]1Ag169 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414941",
+      "encodingFormat": "application/zip",
+      "md5": "f6a87eabd1d47912a61d37bd8a57f6ca"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414944",
+      "name": "[2]1Ag210 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414944",
+      "encodingFormat": "application/zip",
+      "md5": "531be6dc728a15d99849365421b4a11e"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414947",
+      "name": "[2]1Ag259 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414947",
+      "encodingFormat": "application/zip",
+      "md5": "5d737b51578373ef40bfdf8529c21aac"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414950",
+      "name": "[2]1Ag262 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414950",
+      "encodingFormat": "application/zip",
+      "md5": "f5180768335e83fa26523f172688e7ed"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414953",
+      "name": "[2]1Ag263 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414953",
+      "encodingFormat": "application/zip",
+      "md5": "071f47e5fe18c1b093b900e6f015aa56"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414956",
+      "name": "[2]1Ag284 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414956",
+      "encodingFormat": "application/zip",
+      "md5": "b88ef49e4651e06552cad68156fcdab4"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414959",
+      "name": "[2]1Ag63 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414959",
+      "encodingFormat": "application/zip",
+      "md5": "f6dc2b2d36544386b5c3a37121d02ad3"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414962",
+      "name": "[2]1Ag67 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414962",
+      "encodingFormat": "application/zip",
+      "md5": "18a6412f1791b097fd4179a22b46f799"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414968",
+      "name": "[2]1Ag76 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414968",
+      "encodingFormat": "application/zip",
+      "md5": "267c3c5058992edaafffe9ce6b88eea4"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414965",
+      "name": "[2]1Ag8 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414965",
+      "encodingFormat": "application/zip",
+      "md5": "b857da79e6d9b014ae6014b3c0d4913a"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414971",
+      "name": "[2]1Ag9 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414971",
+      "encodingFormat": "application/zip",
+      "md5": "05c15df48d63f13d7bb052fe4f54237f"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414977",
+      "name": "[2]625 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414977",
+      "encodingFormat": "application/zip",
+      "md5": "9a660cc01158a3f616da9c2aea41aa0c"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414974",
+      "name": "[2]634 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414974",
+      "encodingFormat": "application/zip",
+      "md5": "0ac985fcddbfed642c37ac522bd8be48"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414980",
+      "name": "[2]646 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414980",
+      "encodingFormat": "application/zip",
+      "md5": "2e1da7f7a1c8929cf1293cfa144a8516"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414983",
+      "name": "[2]647 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414983",
+      "encodingFormat": "application/zip",
+      "md5": "569f9e96a6a9ab18d3e4abde80289aa1"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414986",
+      "name": "[2]698 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414986",
+      "encodingFormat": "application/zip",
+      "md5": "0d49f2d1cd977538e06f44754dba79e6"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414989",
+      "name": "[2]771 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414989",
+      "encodingFormat": "application/zip",
+      "md5": "b6127f5e7d31ed9d80eb50e95e98127b"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414992",
+      "name": "[2]776 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414992",
+      "encodingFormat": "application/zip",
+      "md5": "06221392fa6df7b67e493330432b6f3e"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414995",
+      "name": "[3]1Ag313 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414995",
+      "encodingFormat": "application/zip",
+      "md5": "6b2022bbc1d6fb2100b9e94386743dd7"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51414998",
+      "name": "[3]1Ag328 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51414998",
+      "encodingFormat": "application/zip",
+      "md5": "54bced44d3f1816bab2cc3d3a476fa66"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415001",
+      "name": "[3]1Ag353 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415001",
+      "encodingFormat": "application/zip",
+      "md5": "67bfa9d87958070e9bfdbb8fa4a8c4b7"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415004",
+      "name": "[3]1Ag361 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415004",
+      "encodingFormat": "application/zip",
+      "md5": "f58866768289ebc90463cd9458c994ce"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415007",
+      "name": "[3]1Ag380 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415007",
+      "encodingFormat": "application/zip",
+      "md5": "2b1d95e510151e60761a7246d2924e05"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415010",
+      "name": "[3]1Ag387 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415010",
+      "encodingFormat": "application/zip",
+      "md5": "379c5b2a3a35c6574e72b36efe0088c8"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415013",
+      "name": "[3]1Ag409 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415013",
+      "encodingFormat": "application/zip",
+      "md5": "9b20a6d58a1e74d79d7a916f24923ee4"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415016",
+      "name": "[3]1Ag417 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415016",
+      "encodingFormat": "application/zip",
+      "md5": "050323c2489e83a0663cfd428979e510"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415019",
+      "name": "[3]1Ag51 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415019",
+      "encodingFormat": "application/zip",
+      "md5": "e2ee89cd5eb33eac0407d7421bf571cd"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415022",
+      "name": "[3]1Ag52 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415022",
+      "encodingFormat": "application/zip",
+      "md5": "058945909d9dc9da0ffaab00a1974959"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415025",
+      "name": "[3]1Ag58 NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415025",
+      "encodingFormat": "application/zip",
+      "md5": "a2bf975dee6cfe9c6d28d55bcd76eec9"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415028",
+      "name": "[3]LJW NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415028",
+      "encodingFormat": "application/zip",
+      "md5": "23e4bb43034fa62463c6766434ab74f7"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415031",
+      "name": "[3]WSX NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415031",
+      "encodingFormat": "application/zip",
+      "md5": "9fd2a76f22cdc19ba3f8f8ffe8d60412"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415034",
+      "name": "[3]XSB NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415034",
+      "encodingFormat": "application/zip",
+      "md5": "8e82130b7cb0769f1eaa9967a1705a6e"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415037",
+      "name": "[3]ZGQ NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415037",
+      "encodingFormat": "application/zip",
+      "md5": "e85f5ddadf076b0829d3a8c08372cacd"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "serum_prostate_cancer_file_51415040",
+      "name": "[3]ZXY NoBase.pt",
+      "contentUrl": "https://ndownloader.figshare.com/files/51415040",
+      "encodingFormat": "application/zip",
+      "md5": "5e59f51c6d405f578981c8a90581224a"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "serum_prostate_cancer_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "serum_prostate_cancer_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "serum_prostate_cancer_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "serum_prostate_cancer_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "SERS serum spectra collected using the SERSome methodology from 424 participants (PCa, BPH, and controls; all male; ages 41–89). Fasting venous blood collected; serum ultrafiltered through a 3-kDa cutoff membrane (Millipore, Amicon Ultra-4) to isolate small metabolites. Citrate-reduced Ag NPs (~61 nm TEM diameter) mixed with filtered metabolites at 1:1 vol:vol ratio; 200 spectra per SERSome acquired on a Horiba XploRA INV confocal Raman system (638 nm laser, 12.67 mW, 10× objective, quartz capillary ID 1 mm / OD 2 mm), 10 µm step size. 724 data points per spectrum, spectral range 600–1800 cm⁻¹.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Baseline removal applied using LabSpec 6 software (polynomial method, degree 10, max 200 points). Raw spectra stored as PyTorch tensor files organised by class label.",
+  "rai:dataAnnotationProtocol": "Class labels (PCa, BPH, control) assigned by clinical diagnosis confirmed by transrectal prostate biopsy with H&E staining and Gleason scoring. T stage and N stage determined by urologists per AJCC 8th staging system. Participants enrolled at Ren Ji Hospital, School of Medicine, Shanghai Jiao Tong University. Ethics approval obtained (KY2021-030).",
+  "rai:personalSensitiveInformation": "Spectra are derived from human blood serum of clinical patients. No direct patient identifiers are included, but biological measurements constitute sensitive health-related data under applicable data-protection regulations. Ethics approval obtained from Ren Ji Hospital, SJTU School of Medicine (KY2021-030).",
+  "rai:dataBiases": "All participants are male (biologically); dataset is specific to prostate cancer and does not generalise to other tumour types or female populations. Recruitment from two hospital systems in Shanghai and one in Ningbo/Jiading; geographic and demographic diversity is limited to eastern China. Age range 41–89 years; very young or elderly populations are not represented.",
+  "rai:dataLimitations": "Diagnostic accuracy of 80.8% (internal test set) and 73% (external validation) requires further improvement before clinical deployment. Performance may differ with varying Ag NP batches, serum collection protocols, or Raman instrument configurations. External validation cohorts are also China-based; generalisability to other ethnicities and healthcare systems has not been established.",
+  "rai:dataSocialImpact": "Serum SERS metabolomics for prostate cancer screening offers a minimally invasive alternative to PSA testing or tissue biopsy. Key serum biomarkers identified include uric acid, hypoxanthine, uracil, and tryptamine. Diagnostic results must be validated by qualified healthcare professionals before any clinical application.",
+  "rai:dataUseCases": "Multiclass classification (PCa vs. BPH vs. control); serum metabolic biomarker discovery; development and benchmarking of spectral deep learning models for cancer diagnostics; Gleason score prediction."
+}

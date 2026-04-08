@@ -1,0 +1,142 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Organic Compounds Multi-Excitation Dataset - Raw",
+  "description": "Raw Raman spectra of organic compounds collected with several different excitation sources. Designed to benchmark transfer learning and domain adaptation for chemical identification with limited data.",
+  "url": "https://data.dtu.dk/api/files/36144495",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Classification"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Zhang_2019, title={Transfer-learning-based Raman spectra identification}, volume={51}, ISSN={1097-4555}, url={http://dx.doi.org/10.1002/jrs.5750}, DOI={10.1002/jrs.5750}, number={1}, journal={Journal of Raman Spectroscopy}, publisher={Wiley}, author={Zhang, Rui and Xie, Huimin and Cai, Shuning and Hu, Yong and Liu, Guo-kun and Hong, Wenjing and Tian, Zhong-qun}, year={2019}, month=nov, pages={176--186}}",
+  "citation": "Zhang, Rui et al., Transfer-learning-based Raman spectra identification, Journal of Raman Spectroscopy, 2020, 51, 1, 176-186. https://doi.org/10.1002/jrs.5992",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "organic_compounds_raw_source",
+      "name": "Organic Compounds Multi-Excitation Dataset - Raw",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://data.dtu.dk/api/files/36144495",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "7e628c3b6ac4dc3ddf8e8c0e5412c96036842b11f1f94916d84c2e88ccf30b76"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "organic_compounds_raw_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "organic_compounds_raw_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "organic_compounds_raw_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "organic_compounds_raw_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication.",
+  "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods. Labels were assigned by domain experts or clinical diagnosis; no crowdsourced annotation was used.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical, biological, or material samples without individual human identifiers.",
+  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
+  "rai:dataLimitations": "Quantitative models are valid within the concentration ranges and chemical matrix of the training data; extrapolation outside these ranges is not recommended. Note: No explicit license was stated by the original data providers; CC BY 4.0 has been assumed. Users should verify the applicable terms with the original authors.",
+  "rai:dataSocialImpact": "Supports inline quality control and process analytical technology (PAT) in chemical manufacturing, contributing to safer and more efficient industrial processes.",
+  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control. Not recommended for direct clinical diagnosis without professional validation and regulatory approval."
+}

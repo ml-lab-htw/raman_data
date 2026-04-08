@@ -1,0 +1,142 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
+  "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
+  "url": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "citeAs": "@article{Echtermeyer_2020, title={Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species}, volume={75}, ISSN={1943-3530}, url={http://dx.doi.org/10.1177/0003702820973275}, DOI={10.1177/0003702820973275}, number={5}, journal={Applied Spectroscopy}, publisher={SAGE Publications}, author={Echtermeyer, Alexander and Marks, Caroline and Mitsos, Alexander and Viell, Jorn}, year={2020}, month=dec, pages={506--519}}",
+  "citation": "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "succinic_acid_species_source",
+      "name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "c84efb0918977a4cc294d2d613fb670e960f65ae2900a8fc1567dfa50b9ac97e"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "succinic_acid_species_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "succinic_acid_species_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "succinic_acid_species_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "succinic_acid_species_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Inline Raman spectra acquired during NaOH (1 mol L⁻¹) titration of succinic acid in deionized water (0.8 μS cm⁻¹) at 25 °C using a Kaiser RXN2 Raman analyzer (400 mW, 785 nm) with NIR fiber-optic immersion probe, spectral range 160–3285 cm⁻¹, 4 cm⁻¹ resolution, 60 s acquisition time. Ambient light excluded by non-transparent black PVC liner. pH monitored continuously with SenTix 940 electrode and Multil 3420 pH meter (WTW).",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "Standard Normal Variate (SNV) normalisation, linear baseline correction, and offset subtraction applied, following the same protocol as for the other acid species in this collection. Evaluation range 1025–1850 cm⁻¹, excluding atmospheric O₂ signal (1545–1565 cm⁻¹). Preprocessing in MATLAB R2017a and PEAXACT ver. 4.5 (S-PACT).",
+  "rai:dataAnnotationProtocol": "Mole fraction targets for acid species derived from pH-based dissociation equilibria and Indirect Hard Modeling (IHM), following the same methodology established for itaconic, formic, acetic, and citric acid in the source publication (DOI 10.1177/0003702820973275). Succinic acid is diprotic (pKa1 ≈ 4.21, pKa2 ≈ 5.64); three species (SA, SA⁻, SA²⁻) are present in the titration data. Detailed accuracy metrics for succinic acid are not reported in the main paper.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical samples without individual human identifiers.",
+  "rai:dataBiases": "Spectra collected under ideal dilute mixture assumption (activity coefficients = 1) at a single instrument (Kaiser RXN2, 785 nm) and temperature (25 °C). Succinic acid data is part of the extended dataset repository but not the primary focus of the source publication. As a diprotic acid, SA⁻ and SA²⁻ species may exhibit spectral similarity, potentially limiting their individual quantification accuracy, analogous to the CA²⁻ / CA³⁻ challenge in citric acid.",
+  "rai:dataLimitations": "Detailed calibration accuracy metrics not reported in the main paper (Echtermeyer et al., 2021); refer to the dataset repository for further details. Diprotic system with two overlapping dissociation steps may cause spectral co-elution of SA⁻ and SA²⁻. Models calibrated on NaOH titration in deionized water at 25 °C only; ideal mixture assumption not strictly valid above 0.1 mol L⁻¹.",
+  "rai:dataSocialImpact": "Succinic acid is one of the top twelve biobased platform chemicals identified by the US Department of Energy, with applications in polymers, coatings, and food additives. Inline dissociation monitoring is directly relevant to pH-dependent extraction and crystallisation in bio-succinic acid production from fermentation.",
+  "rai:dataUseCases": "Inline monitoring of diprotic carboxylic acid dissociation; PAT in succinic acid fermentation and downstream purification; IHM and chemometric model development for biobased diprotic acid systems; comparison with itaconic acid (also diprotic) for method validation and transfer."
+}

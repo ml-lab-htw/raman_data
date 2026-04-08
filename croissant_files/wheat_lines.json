@@ -1,0 +1,141 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Mutant Wheat Raman Dataset",
+  "description": "Raman spectra from the 7th generation of salt-stress-tolerant wheat mutant lines and their commercial cultivars. Features 785 nm excitation and tracks biochemical shifts in carotenoids and protein-related bands for agricultural phenotyping.",
+  "url": "https://doi.org/10.5281/zenodo.7644521",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Biological",
+    "Classification"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Sen_2023, title={Differentiation of advanced generation mutant wheat lines: Conventional techniques versus Raman spectroscopy}, volume={14}, ISSN={1664-462X}, url={http://dx.doi.org/10.3389/fpls.2023.1116876}, DOI={10.3389/fpls.2023.1116876}, journal={Frontiers in Plant Science}, publisher={Frontiers Media SA}, author={Sen, Ayse and Kecoglu, Ibrahim and Ahmed, Muhammad and Parlatan, Ugur and Unlu, Mehmet Burcin}, year={2023}, month=feb}",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "wheat_lines_source",
+      "name": "Mutant Wheat Raman Dataset",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://doi.org/10.5281/zenodo.7644521",
+      "encodingFormat": "application/x-matlab-data",
+      "sha256": "5aba62ebaa67004a2800b35e691e43bd69f3aad5e160c368218370fefa8acc45"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "wheat_lines_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "wheat_lines_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "wheat_lines_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "wheat_lines_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra acquired using a custom confocal Raman microspectroscopy system at Bogazici University Department of Physics, consisting of a diode laser (785 nm, 100 mW, LaserGlow), an Ocean QE-Pro spectrometer, and a Nikon Ti rigid-body microscope with a 10x/0.25 NA Olympus objective. Backscattered Raman signal collected at 180-degree geometry with Rayleigh rejection via Semrock bandpass and edge filters; spectra visualized using Oceanview software. Leaf tissue collected from three leaves per group (commercial cultivar with and without salt stress, two advanced mutant lines under 125 mM NaCl); 4,221 spectra measured per leaf scan, giving 12,663 raw spectra per class before outlier removal. Plants grown in peat moss/perlite (1:2 v/v) under 16 h/8 h photoperiod at 500 µmol/m2/s and 26 degrees C; salt treatment applied as 1/10 Hoagland solution with 125 mM NaCl for 2 weeks starting 14 days after germination.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Preprocessing performed in MATLAB using published analysis codes (github.com/ikecoglu/PhotonicsLab) in three steps - Raman shift calibration, baseline correction via polynomial curve fitting, and vector normalization (Heraud et al., 2006). Outliers removed by quantile elimination retaining the 0.005-0.995 interval. To balance class sizes, random sampling reduced each class to 6,836 spectra (the size of the smallest group after elimination), yielding 13,672 spectra from the commercial cultivar and 13,672 from the mutant lines. A decision tree classifier (Gini index, max 100 splits) trained on 80% of the data and tested on 20%, achieving 94.62% accuracy with 95.06% sensitivity and 94.18% specificity in the source publication.",
+  "rai:dataAnnotationProtocol": "Class labels assigned based on known genotype and treatment condition. Four classes are present in the dataset - commercial cultivar without salt stress (COM), commercial cultivar under 125 mM NaCl (COM_125mM), Mutant Line 1 under 125 mM NaCl (ML1_125mM), and Mutant Line 2 under 125 mM NaCl (ML2_125mM). Mutant lines were advanced to the seventh generation under alternating in vitro and in vivo salt-stress selection before spectral acquisition; genotype identity is therefore known a priori.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from wheat plant leaf tissue without individual human identifiers.",
+  "rai:dataBiases": "Dataset derived from a single wheat cultivar (Triticum aestivum L. Adana-99) and only two derived mutant lines; results may not generalise to other wheat varieties or mutagenesis strategies. Salt stress applied at only one concentration (125 mM NaCl); other salinities are not represented. Only leaf tissue was studied; root or shoot tissue responses are not captured. Spectra acquired on a custom single-site instrument at Bogazici University; instrument-specific optical characteristics (bandpass filter, fiber coupling, objective) may affect transferability to other Raman setups. Quantile elimination (0.005-0.995) and random downsampling to 6,836 spectra per class may discard informative measurements and introduce sampling bias.",
+  "rai:dataLimitations": "Only one commercial cultivar and two mutant lines are represented; the classifier may not generalise to other wheat varieties, mutagen types, or stress conditions. Salt treatment studied at a single concentration (125 mM NaCl) only; intermediate or higher salinities are not covered. No integration time is reported in the source publication, which limits exact reproducibility. The balanced dataset was produced by random downsampling to 6,836 spectra per class, discarding a portion of the acquired spectra. The trained decision tree is specific to MATLAB R2021b and may require retraining for other analysis environments.",
+  "rai:dataSocialImpact": "Demonstrates that Raman spectroscopy can replace time-consuming biochemical assays (antioxidant enzyme activity, chlorophyll quantification, ion analysis, qPCR gene expression) for differentiating salt-tolerant wheat mutant lines from commercial cultivars. Supports faster and lower-cost phenotyping pipelines in plant breeding programs, contributing to the development of salt-tolerant wheat varieties for food security in saline-affected agricultural regions.",
+  "rai:dataUseCases": "Classification of wheat genotypes and stress-treatment groups from leaf Raman spectra; benchmarking machine learning classifiers for agricultural plant phenotyping; development of rapid Raman-based screening tools for salt-tolerance breeding programs; spectral band assignment for protein, carotenoid, and amino-acid markers in plant tissue Raman analysis."
+}

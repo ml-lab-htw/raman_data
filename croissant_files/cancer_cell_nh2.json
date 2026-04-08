@@ -1,0 +1,138 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "dataBiases": "cr:dataBiases",
+    "dataCollection": "cr:dataCollection",
+    "isEnumeration": "cr:isEnumeration",
+    "personalSensitiveInformation": "cr:personalSensitiveInformation"
+  },
+  "alternateName": "Raman spectra of the culture medium of normal and cancer cells",
+  "license": {
+    "@type": "sc:CreativeWork",
+    "name": "Other (specified in description)"
+  },
+  "distribution": [
+    {
+      "contentUrl": "https://www.kaggle.com/api/v1/datasets/download/andriitrelin/cells-raman-spectra?datasetVersionNumber=2",
+      "contentSize": "68.525 MB",
+      "md5": "qSGbJ/TYzFmYqv0Rtww1Zw==",
+      "encodingFormat": "application/zip",
+      "@id": "archive.zip",
+      "@type": "cr:FileObject",
+      "name": "archive.zip",
+      "description": "Archive containing all the contents of the Cells Raman Spectra dataset"
+    },
+    {
+      "includes": "*.csv",
+      "containedIn": {
+        "@id": "archive.zip"
+      },
+      "encodingFormat": "text/csv",
+      "@id": "text-csv_fileset",
+      "@type": "cr:FileSet",
+      "name": "text/csv files",
+      "description": "text/csv files contained in archive.zip"
+    },
+    {
+      "includes": "*.txt",
+      "containedIn": {
+        "@id": "archive.zip"
+      },
+      "encodingFormat": "text/plain",
+      "@id": "text-plain_fileset",
+      "@type": "cr:FileSet",
+      "name": "text/plain files",
+      "description": "text/plain files contained in archive.zip"
+    }
+  ],
+  "version": 2,
+  "keywords": [
+    "subject > health and fitness > health > medicine",
+    "subject > earth and nature > physical science > chemistry",
+    "subject > health and fitness > health > health conditions > cancer",
+    "subject > earth and nature > biology",
+    "subject > earth and nature",
+    "subject > science and technology > computer science",
+    "subject > science and technology > computer science > programming"
+  ],
+  "isAccessibleForFree": true,
+  "includedInDataCatalog": {
+    "@type": "sc:DataCatalog",
+    "name": "Kaggle",
+    "url": "https://www.kaggle.com"
+  },
+  "creator": {
+    "@type": "sc:Person",
+    "name": "Andrii Trelin",
+    "url": "/andriitrelin",
+    "image": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png"
+  },
+  "publisher": {
+    "@type": "sc:Organization",
+    "name": "Kaggle",
+    "url": "https://www.kaggle.com/organizations/kaggle",
+    "image": "https://storage.googleapis.com/kaggle-organizations/4/thumbnail.png"
+  },
+  "thumbnailUrl": "https://storage.googleapis.com/kaggle-datasets-images/202387/445308/5a266510c8c4aaffabb8f69b23a11542/dataset-card.png?t=2019-05-23-13-55-19",
+  "dateModified": "2019-08-04T12:02:10.613",
+  "datePublished": "2019-05-23T13:55:39.3255813",
+  "@type": "sc:Dataset",
+  "name": "Cells Raman Spectra",
+  "url": "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra/versions/2",
+  "description": "### Context\n\nThis dataset was collected during research project on cancer cell determination by analysis of surface enhanced \nRaman spectra of the cell medium.\n\n\n### Content\n\nThis dataset contains Raman spectra of the culture medium, corresponding to several kinds of cancer and normal cells. Spectra are background-subtracted, unfiltered, unnormalized. Dataset consists of 12 folders with 3 CSV files in each. Folders are named after specific samples (tabulated in the README.txt). Each CSV in folder contains spectra of medium, collected on the gold nanourchins functionalized with corresponding functional group (please refer to the original publication for details (coming soon)). Each row of the CSV files is a single Raman spectrum (intensities, y-values). Corresponding Raman shift scale (x-values) in reciprocal centimeters:  \n&gt; start: 100, end: 4278, number of points: 2090  \n\nIt is convinient to use NumPy or MATLAB linspace function for it:  \n```\nx = linspace(100, 4278, 2090)\n```\n### Goal  \nMain goal here is to classify the spectra belonging to different cells using three subsets as independent inputs, i.e. map triple [NH2, COOH, (COOH)2] to the corresponding class. \n\n### Acknowledgements\n\nThis dataset was manually collected by A. Perminova, who devote it hundreds of hours.\n",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "citeAs": "@article{Erzina_2020, title={Precise cancer detection via the combination of functionalized SERS surfaces and convolutional neural network with independent inputs}, volume={308}, ISSN={0925-4005}, url={http://dx.doi.org/10.1016/j.snb.2020.127660}, DOI={10.1016/j.snb.2020.127660}, journal={Sensors and Actuators B: Chemical}, publisher={Elsevier BV}, author={Erzina, M. and Trelin, A. and Guselnikova, O. and Dvorankova, B. and Strnadova, K. and Perminova, A. and Ulbrich, P. and Mares, D. and Jerabek, V. and Elashnikov, R. and Svorcik, V. and Lyutakov, O.}, year={2020}, month=apr, pages={127660}}",
+  "rai:dataCollection": "SERS of conditioned cell culture media on gold grating substrates. AuMs functionalized with ADT-NH₂, deposited on Au grating surface. ProRaman-L spectrometer (Ondax), 785 nm excitation, 33 mW laser power, automatic regime, 30 spectra per sample (10 spatial points × 3 s accumulation each). 106 biological specimens total across all three functionalization variants.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Background removal via Asymmetric Least Squares Smoothing (ALSS, lambda 1e5, p 0.01). MinMax normalization to [0, 1] per spectrum. CNN architecture uses convolutional feature extractors (one per functionalization input) concatenated into a shared fully connected classifier (SoftMax), trained for 400 epochs, batch size 16, Keras/TensorFlow.",
+  "rai:dataAnnotationProtocol": "Cell-line and culture-condition labels assigned from known sample identity. 12 categories — A2058 melanoma cells, G361 melanoma cells, HPM neonatal melanocytes, HF normal skin fibroblasts, ZAM tumour-associated fibroblasts, DMEM pure medium control, each at 10% and 0% FBS serum content. This subset uses AuMs functionalized with ADT-NH₂ (4-aminobenzenediazonium tosylate), which provides selectivity toward lipids and amino acids. Ethics approved by Local Ethics Committee of General University Hospital Prague in accordance with Helsinki Declaration.",
+  "rai:personalSensitiveInformation": "Spectra derived from conditioned media of human melanoma cell lines and primary skin cultures collected under ethics approval. No direct patient identifiers in the released dataset, but the clinical origin means data should be treated with appropriate care under applicable data-protection regulations.",
+  "rai:dataBiases": "Cell lines (A2058, G361) and primary cultures (HPM, HF, ZAM) differ in growth conditions and serum content (0% vs. 10% FBS), introducing biological variability beyond cancer/normal status. SERS spectra show high inter-spectrum variability from random sampling of heterogeneous culture media; individual spectra cannot be directly interpreted without CNN processing. Measurements performed on conditioned culture media (metabolite secretions), not directly on cells. Single- laboratory data (Czech University of Technology / Charles University Prague); transfer to other AuMs batches or instruments requires validation.",
+  "rai:dataLimitations": "SERS spectra of complex biological media are highly variable and non-interpretable without CNN; direct spectral matching against reference libraries is not feasible. Model trained on 75% / validated on 25% split; external validation on independent patient samples not demonstrated. Published CNN achieved 100% accuracy on the validation set, but this should be interpreted cautiously given the small dataset size and the controlled in-vitro conditions.",
+  "rai:dataSocialImpact": "Demonstrates feasibility of SERS-CNN cancer detection from conditioned culture media without cell labelling or sample preparation. Potential path toward non-invasive, rapid cancer diagnostics. Clinical translation requires extensive validation on patient-derived samples under regulatory oversight.",
+  "rai:dataUseCases": "Cancer cell-line classification, SERS-based metabolite fingerprinting, multi-input CNN benchmarking, comparison of surface functionalization selectivity for biomolecule entrapping."
+}

@@ -1,0 +1,143 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "In-line Monitoring of Microgel Synthesis: Flow versus Batch Reactor",
+  "description": "This data set contains in-line Raman spectroscopy measurements inside a customized measurement cell for monitoring in a tubular flow reactor. The setup aims at monitoring the microgel synthesis in a flow reactor while aiming at a high measurement precision. The measurements include a systematic accuracy analysis, where different aspects of the flowing analyte are considered: solvent flow, flowing monomer solution, and flowing microgel solution. In addition, measurements for different calibration strategies are included. Lastly, this data set contains measurements of the microgel synthesis at varying residence times inside the tubular flow reactor.",
+  "url": "https://publications.rwth-aachen.de/record/834113/files/Raman_spectra_and_Indirect_Hard_Models.zip?version=1",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression",
+    "polymer chemistry"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "https://doi.org/10.18154/RWTH-2021-09666",
+  "citation": "Kaven, Luise F., et al. 'In-line monitoring of microgel synthesis: flow versus batch reactor.' Organic Process Research & Development 25.9 (2021): 2039-2051.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "microgel_synthesis_source",
+      "name": "In-line Monitoring of Microgel Synthesis: Flow versus Batch Reactor",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://publications.rwth-aachen.de/record/834113/files/Raman_spectra_and_Indirect_Hard_Models.zip?version=1",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "da30656081574fda9182a7114d1955f0113832216588b9f7956c26b39504cafe"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "microgel_synthesis_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "microgel_synthesis_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "microgel_synthesis_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "microgel_synthesis_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication.",
+  "rai:dataAnnotationProtocol": "Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation). Annotation was performed automatically by instrumentation or computation; no human annotators were involved.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical, biological, or material samples without individual human identifiers.",
+  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
+  "rai:dataLimitations": "Quantitative models are valid within the concentration ranges and chemical matrix of the training data; extrapolation outside these ranges is not recommended.",
+  "rai:dataSocialImpact": "Supports inline quality control and process analytical technology (PAT) in chemical manufacturing, contributing to safer and more efficient industrial processes.",
+  "rai:dataUseCases": "Chemometric modelling, calibration transfer, multivariate regression, quantitative spectral analysis, process analytical technology (PAT). Not recommended for deployment on instruments or at conditions not covered by the training data without re-calibration."
+}

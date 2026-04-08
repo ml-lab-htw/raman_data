@@ -1,0 +1,167 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development",
+  "description": "A Raman spectral dataset comprising 3,510 spectra from 32 chemical substances. This dataset includes organic solvents and reagents commonly used in API development, along with information regarding the products in the XLSX, and code to visualise and perform technical validation on the data.",
+  "url": "https://springernature.figshare.com/ndownloader/articles/27931131/versions/1",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Classification",
+    "pharmaceutical science"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Flanagan_2025, title={Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development}, volume={12}, ISSN={2052-4463}, url={http://dx.doi.org/10.1038/s41597-025-04848-6}, DOI={10.1038/s41597-025-04848-6}, number={1}, journal={Scientific Data}, publisher={Springer Science and Business Media LLC}, author={Flanagan, Aaron R. and Glavin, Frank G.}, year={2025}, month=mar}",
+  "citation": "Flanagan, A.R., Glavin, F.G. Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development. Sci Data 12, 498 (2025).",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "pharmaceutical_ingredients_source",
+      "name": "Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development",
+      "description": "Figshare article hosting all data files.",
+      "contentUrl": "https://springernature.figshare.com/ndownloader/articles/27931131/versions/1",
+      "encodingFormat": "text/html",
+      "sha256": "738f40979a7f7966d35ae6ded092220d175f312a1cc215034aa058d8fd36238d"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "pharmaceutical_ingredients_file_50881917",
+      "name": "raman_spectra_api_compounds.csv",
+      "contentUrl": "https://ndownloader.figshare.com/files/50881917",
+      "encodingFormat": "text/csv",
+      "md5": "9c0a37f1433217d1ae7a1b4e61ecaf9b"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "pharmaceutical_ingredients_file_50881992",
+      "name": "API_Product_Information.xlsx",
+      "contentUrl": "https://ndownloader.figshare.com/files/50881992",
+      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "md5": "19b7cf25329b2bcc0c87804ff502201c"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "pharmaceutical_ingredients_file_52737962",
+      "name": "code.zip",
+      "contentUrl": "https://ndownloader.figshare.com/files/52737962",
+      "encodingFormat": "application/zip",
+      "md5": "568fd014d2c535c073d7de633bb5d50d"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "pharmaceutical_ingredients_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "pharmaceutical_ingredients_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "pharmaceutical_ingredients_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "pharmaceutical_ingredients_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "3,510 Raman spectra of 32 pure chemical compounds (organic solvents and reagents for active pharmaceutical ingredient development) acquired with an Endress+Hauser Raman Rxn2 analyser (785 nm laser) using a non-contact probe in a static measurement chamber with amber glass vials. Spectral range 150–3,425 cm⁻¹ (3,276 data points); ~1 cm⁻¹ resolution. 110 spectra per compound.",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Raw spectra as recorded by the instrument; dark-noise, cosmic-ray, and intensity corrections applied by instrument firmware. No additional baseline correction or normalisation was performed on the provided files.",
+  "rai:dataAnnotationProtocol": "Class labels are the known compound identity of each reference material. 32 pure compounds measured in 110 spectra each (3,510 spectra total). Sample identity confirmed by the known composition of commercial-grade reference chemicals.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information. All spectra originate from pure chemical reference compounds without individual human identifiers.",
+  "rai:dataBiases": "All 32 compounds are pure reference materials measured individually; mixtures and impure samples are not represented. Spectra acquired with a single instrument (Endress+Hauser Raman Rxn2, 785 nm) in a static non-contact probe setup; performance may differ for inline or immersion probe configurations. Selection of compounds focuses on solvents and reagents relevant to API development and may not cover all pharmaceutical-grade materials.",
+  "rai:dataLimitations": "Dataset covers 32 compounds only; models may not generalise to untested substances. Spectra are of single pure compounds; mixture analysis requires additional data. All spectra acquired with one instrument model at 785 nm; calibration transfer to other instruments or wavelengths has not been validated.",
+  "rai:dataSocialImpact": "An open-source Raman spectral library for pharmaceutical solvents and reagents supports the development of inline quality-control and process analytical technology (PAT) tools in API manufacturing, contributing to safer and more consistent pharmaceutical production.",
+  "rai:dataUseCases": "Spectral library construction; compound identification and classification; chemometric modelling for API quality control; process analytical technology (PAT); benchmarking Raman spectral analysis algorithms."
+}

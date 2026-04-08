@@ -1,0 +1,133 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "dataBiases": "cr:dataBiases",
+    "dataCollection": "cr:dataCollection",
+    "isEnumeration": "cr:isEnumeration",
+    "personalSensitiveInformation": "cr:personalSensitiveInformation"
+  },
+  "alternateName": "Spectral data of mixtures containing 4 amino acids at different concentrations. ",
+  "license": {
+    "@type": "sc:CreativeWork",
+    "name": "Unknown"
+  },
+  "distribution": [
+    {
+      "contentUrl": "https://www.kaggle.com/api/v1/datasets/download/sergioalejandrod/raman-spectroscopy?datasetVersionNumber=1",
+      "contentSize": "58.607 MB",
+      "md5": "ok4iMtD9qCd3LiUB4d52/g==",
+      "encodingFormat": "application/zip",
+      "@id": "archive.zip",
+      "@type": "cr:FileObject",
+      "name": "archive.zip",
+      "description": "Archive containing all the contents of the Liquid Chromatography Raman Spectroscopy dataset"
+    },
+    {
+      "includes": "*.xlsx",
+      "containedIn": {
+        "@id": "archive.zip"
+      },
+      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "@id": "application-vnd.openxmlformats-officedocument.spreadsheetml.sheet_fileset",
+      "@type": "cr:FileSet",
+      "name": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet files",
+      "description": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet files contained in archive.zip"
+    },
+    {
+      "includes": "*.pdf",
+      "containedIn": {
+        "@id": "archive.zip"
+      },
+      "encodingFormat": "application/pdf",
+      "@id": "application-pdf_fileset",
+      "@type": "cr:FileSet",
+      "name": "application/pdf files",
+      "description": "application/pdf files contained in archive.zip"
+    }
+  ],
+  "version": 1,
+  "keywords": [
+    "subject > earth and nature > physical science > chemistry",
+    "subject > science and technology > computer science > programming > python"
+  ],
+  "isAccessibleForFree": true,
+  "includedInDataCatalog": {
+    "@type": "sc:DataCatalog",
+    "name": "Kaggle",
+    "url": "https://www.kaggle.com"
+  },
+  "creator": {
+    "@type": "sc:Person",
+    "name": "Sergio Alejandro D.",
+    "url": "/sergioalejandrod",
+    "image": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png"
+  },
+  "publisher": {
+    "@type": "sc:Organization",
+    "name": "Kaggle",
+    "url": "https://www.kaggle.com/organizations/kaggle",
+    "image": "https://storage.googleapis.com/kaggle-organizations/4/thumbnail.png"
+  },
+  "thumbnailUrl": "https://storage.googleapis.com/kaggle-datasets-images/new-version-temp-images/default-backgrounds-77.png-5230615/dataset-card.png",
+  "dateModified": "2020-10-21T06:51:19.717",
+  "datePublished": "2020-11-13T06:36:55.0052201",
+  "@type": "sc:Dataset",
+  "name": "Liquid Chromatography Raman Spectroscopy",
+  "url": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy/versions/1",
+  "description": "### Context\n\nThis data set was produced by Hirotsugu Hiramatsu as part of his experiment revolving around the enhancement of Raman signal utilizing a vertical flow method.  \n\n### Content\n\nThe raman_mix files contain raman spectral data for the mixtures containing 4 amino acids (glycine, leucine, phenylalanine, tryptophan). \nUv_spectrum contains spectral data utilizing UV.\nAminoAcids file is comprised several sheets. Each sheet corresponds to the data of a single amino acid and is labeled accordingly. \n\n### Acknowledgements\n\n The spectral data was produced by Professor Hirotsugu Hiramatsu (hiramatu@nctu.edu.tw) and processed by Professor Stefano Rini (stefano@nctu.edu.tw).\n\n### Inspiration\n\nWe seek to change the method of analysis of the spectral data. The conventional methods usually revolve around the use of supervised methods such as PCA and require an expert on the field to correctly reconstruct analyte spectra and elution patterns. Our proposed method utilizes unsupervised learning methods to minimize the requirement of expert and input.  \n",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "citeAs": "@misc{Rini_2020, title={An efficient label-free analyte detection algorithm for time-resolved spectroscopy}, author={Rini, Stefano and Hiramatsu, Hirotsugu}, year={2020}, eprint={2011.07470}, archivePrefix={arXiv}, primaryClass={eess.SP}}",
+  "rai:dataCollection": "Liquid chromatography coupled Raman spectroscopy (LC-Raman) with vertical flow method. Mobile Raman probe attached to HPLC system (hydrophobic resin column, H₂O to acetonitrile gradient, 7 mL/min flow rate, 50 µL injection). Time-resolved acquisition at 0.2 s exposure per spectrum frame (~100 frames per 20 s window per elution peak).",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Fluorescence background removed by asymmetric polynomial fitting at each time step. Solvent spectrum (H₂O/ACE) removed by linear regression. Savitzky-Golay filter applied for smoothing. Resulting time-frequency matrix used directly for unsupervised algorithm benchmarking.",
+  "rai:dataAnnotationProtocol": "Time-resolved LC-Raman elution data for tryptophan (55 mM injection concentration). Labels are elution-time concentration profiles. Each amino acid eluted separately through an HPLC column (hydrophobic resin) using an H₂O-to-acetonitrile gradient mobile phase (7 mL/min, 50 µL injection). Data collected at NCTU, Taiwan (Lo, Hiramatsu lab). Purpose is benchmarking unsupervised label-free analyte detection algorithms.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from pure amino acid aqueous solutions without any human identifiers.",
+  "rai:dataBiases": "Single-laboratory, single-instrument benchmark dataset. Each amino acid measured in isolation — simultaneous multi-analyte elution not covered. Tryptophan injected at 55 mM (lower than glycine/leucine at 100 mM), making analyte detection more challenging relative to solvent background. Tryptophan exhibits intrinsic fluorescence under Raman excitation, which may additionally complicate signal extraction. arXiv preprint — findings not yet peer-reviewed at time of dataset release.",
+  "rai:dataLimitations": "Small benchmark dataset covering only four amino acids in single-analyte conditions. Tryptophan fluorescence increases background uncertainty. No explicit license stated; CC BY 4.0 assumed — verify with original authors.",
+  "rai:dataSocialImpact": "LC-Raman with vertical flow enables real-time, label-free detection of analytes in chromatographic separations without destructive sampling. Applications include pharmaceutical process monitoring, metabolomics, and inline quality control in biomanufacturing.",
+  "rai:dataUseCases": "Benchmarking time-resolved analyte detection algorithms, unsupervised elution peak detection, PCA/NMF/MCR-ALS dimensionality reduction, LC-Raman method development."
+}

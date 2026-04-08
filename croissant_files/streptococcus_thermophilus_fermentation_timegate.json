@@ -1,0 +1,1743 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "arrayShape": "cr:arrayShape",
+    "containedIn": "cr:containedIn",
+    "dataBiases": "cr:dataBiases",
+    "dataCollection": "cr:dataCollection",
+    "isArray": "cr:isArray",
+    "personalSensitiveInformation": "cr:personalSensitiveInformation"
+  },
+  "@type": "sc:Dataset",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "repo",
+      "name": "repo",
+      "description": "The Hugging Face git repository.",
+      "contentUrl": "https://huggingface.co/datasets/chlange/streptococcus_thermophilus_fermentation_timegate/tree/refs%2Fconvert%2Fparquet",
+      "encodingFormat": "git+https",
+      "sha256": "https://github.com/mlcommons/croissant/issues/80"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "parquet-files-for-config-default",
+      "containedIn": {
+        "@id": "repo"
+      },
+      "encodingFormat": "application/x-parquet",
+      "includes": "default/*/*.parquet"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "dataType": "cr:Split",
+      "key": {
+        "@id": "default_splits/split_name"
+      },
+      "@id": "default_splits",
+      "name": "default_splits",
+      "description": "Splits for the default config.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "default_splits/split_name",
+          "dataType": "sc:Text"
+        }
+      ],
+      "data": [
+        {
+          "default_splits/split_name": "train"
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "default",
+      "description": "chlange/streptococcus_thermophilus_fermentation_timegate - 'default' subset",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "default/split",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "fileProperty": "fullpath"
+            },
+            "transform": {
+              "regex": "default/(?:partial-)?(train)/.+parquet$"
+            }
+          },
+          "references": {
+            "field": {
+              "@id": "default_splits/split_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/487.3633",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "487.3633"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/495.7407",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "495.7407"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/504.1124",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "504.1124"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/512.4784",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "512.4784"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/520.8387",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "520.8387"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/529.1933",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "529.1933"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/537.5423",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "537.5423"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/545.8855",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "545.8855"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/554.2231",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "554.2231"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/562.555",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "562.555"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/570.8813",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "570.8813"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/579.2019",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "579.2019"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/587.5169",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "587.5169"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/595.8262",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "595.8262"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/604.1299",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "604.1299"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/612.428",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "612.428"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/620.7205",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "620.7205"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/629.0074",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "629.0074"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/637.2886",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "637.2886"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/645.5643",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "645.5643"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/653.8343",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "653.8343"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/662.0988",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "662.0988"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/670.3577",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "670.3577"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/678.611",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "678.611"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/686.8588",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "686.8588"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/695.101",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "695.101"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/703.3376",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "703.3376"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/711.5687",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "711.5687"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/719.7943",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "719.7943"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/728.0143",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "728.0143"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/736.2288",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "736.2288"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/744.4377",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "744.4377"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/752.6412",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "752.6412"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/760.8391",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "760.8391"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/769.0316",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "769.0316"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/777.2185",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "777.2185"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/785.4",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "785.4"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/793.5759",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "793.5759"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/801.7464",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "801.7464"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/809.9114",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "809.9114"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/818.071",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "818.071"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/826.2251",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "826.2251"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/834.3737",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "834.3737"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/842.5169",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "842.5169"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/850.6546",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "850.6546"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/858.7869",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "858.7869"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/866.9138",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "866.9138"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/875.0352",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "875.0352"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/883.1513",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "883.1513"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/891.2619",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "891.2619"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/899.3671",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "899.3671"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/907.4669",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "907.4669"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/915.5613",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "915.5613"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/923.6504",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "923.6504"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/931.734",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "931.734"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/939.8123",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "939.8123"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/947.8852",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "947.8852"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/955.9528",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "955.9528"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/964.015",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "964.015"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/972.0718",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "972.0718"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/980.1233",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "980.1233"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/988.1695",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "988.1695"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/996.2103",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "996.2103"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1004.2458",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1004.2458"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1012.276",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1012.276"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1020.3009",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1020.3009"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1028.3204",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1028.3204"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1036.3347",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1036.3347"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1044.3436",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1044.3436"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1052.3473",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1052.3473"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1060.3457",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1060.3457"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1068.3388",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1068.3388"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1076.3266",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1076.3266"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1084.3092",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1084.3092"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1092.2865",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1092.2865"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1100.2585",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1100.2585"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1108.2253",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1108.2253"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1116.1869",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1116.1869"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1124.1432",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1124.1432"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1132.0943",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1132.0943"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1140.0401",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1140.0401"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1147.9807",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1147.9807"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1155.9162",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1155.9162"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1163.8464",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1163.8464"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1171.7714",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1171.7714"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1179.6912",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1179.6912"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1187.6058",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1187.6058"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1195.5153",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1195.5153"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1203.4195",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1203.4195"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1211.3186",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1211.3186"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1219.2125",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1219.2125"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1227.1013",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1227.1013"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1234.9849",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1234.9849"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1242.8633",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1242.8633"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1250.7367",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1250.7367"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1258.6048",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1258.6048"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1266.4679",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1266.4679"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1274.3258",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1274.3258"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1282.1785",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1282.1785"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1290.0262",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1290.0262"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1297.8688",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1297.8688"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1305.7062",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1305.7062"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1313.5386",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1313.5386"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1321.3658",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1321.3658"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1329.188",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1329.188"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1337.0051",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1337.0051"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1344.8171",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1344.8171"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1352.6241",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1352.6241"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1360.4259",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1360.4259"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1368.2227",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1368.2227"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1376.0145",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1376.0145"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1383.8012",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1383.8012"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1391.5829",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1391.5829"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1399.3595",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1399.3595"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1407.1311",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1407.1311"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1414.8977",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1414.8977"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/1422.6593",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "1422.6593"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/Lactose",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "Lactose"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/Galactose",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "Galactose"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/Lactate",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "Lactate"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "default/OD600",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-default"
+            },
+            "extract": {
+              "column": "OD600"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "name": "streptococcus_thermophilus_fermentation_timegate",
+  "description": "\n\t\n\t\t\n\t\tDataset Card for Time-Gated Raman Spectra from Fermentations of Streptococcus thermophilus\n\t\n\n\n\t\n\t\t\n\t\tDataset Summary\n\t\n\nThis dataset contains offline Raman spectra collected during batch cultivations of Streptococcus thermophilus. Unlike conventional continuous-wave Raman, these measurements were captured using Time-Gated Raman Spectroscopy, which allows for the temporal separation of the Raman signal from background fluorescence.\nThe dataset includes two distinct fermentation runs… See the full description on the dataset page: https://huggingface.co/datasets/chlange/streptococcus_thermophilus_fermentation_timegate.",
+  "alternateName": [
+    "chlange/streptococcus_thermophilus_fermentation_timegate",
+    "Time-Gated Raman Spectra of Streptococcus thermophilus Fermentations"
+  ],
+  "creator": {
+    "@type": "Person",
+    "name": "Christoph L.",
+    "url": "https://huggingface.co/chlange"
+  },
+  "keywords": [
+    "English",
+    "cc-by-4.0",
+    "< 1K",
+    "csv",
+    "Tabular",
+    "Datasets",
+    "pandas",
+    "Polars",
+    "Croissant",
+    "🇺🇸 Region: US",
+    "raman-spectroscopy",
+    "time-gated-raman",
+    "biotechnology",
+    "streptococcus-thermophilus",
+    "fermentation",
+    "batch-cultivation",
+    "process-analytical-technology"
+  ],
+  "license": "https://choosealicense.com/licenses/cc-by-4.0/",
+  "url": "https://huggingface.co/datasets/chlange/streptococcus_thermophilus_fermentation_timegate",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication.",
+  "rai:dataAnnotationProtocol": "Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation). Annotation was performed automatically by instrumentation or computation; no human annotators were involved.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical, biological, or material samples without individual human identifiers.",
+  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
+  "rai:dataLimitations": "Spectral signatures are process- and instrument-specific; calibration transfer to other setups requires additional validation. Note: No explicit license was stated by the original data providers; CC BY 4.0 has been assumed. Users should verify the applicable terms with the original authors.",
+  "rai:dataSocialImpact": "Enables the development of rapid, inline bioprocess monitoring tools that can reduce waste, improve yield, and lower costs in biomanufacturing and biotechnology.",
+  "rai:dataUseCases": "Chemometric modelling, calibration transfer, multivariate regression, quantitative spectral analysis, process analytical technology (PAT). Not recommended for deployment on instruments or at conditions not covered by the training data without re-calibration."
+}
