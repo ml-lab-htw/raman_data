@@ -880,7 +880,7 @@ cancer_cell_cooh:
     HPM neonatal melanocytes, HF normal skin fibroblasts, ZAM tumour-associated fibroblasts,
     DMEM pure medium control, each at 10% and 0% FBS serum content. This subset uses
     AuMs functionalized with ADT-COOH (4-carboxybenzenediazonium tosylate), which
-    provides selectivity toward RNA, proteins, and nucleic acids. Ethics approved by
+    provides selectivity toward RNA and proteins. Ethics approved by
     Local Ethics Committee of General University Hospital Prague in accordance with
     Helsinki Declaration.
   rai:dataBiases: Cell lines (A2058, G361) and primary cultures (HPM, HF, ZAM) differ
@@ -928,7 +928,7 @@ cancer_cell_nh2:
     HPM neonatal melanocytes, HF normal skin fibroblasts, ZAM tumour-associated fibroblasts,
     DMEM pure medium control, each at 10% and 0% FBS serum content. This subset uses
     AuMs functionalized with ADT-NH₂ (4-aminobenzenediazonium tosylate), which provides
-    selectivity toward proteins and lipids. Ethics approved by Local Ethics Committee
+    selectivity toward lipids and amino acids. Ethics approved by Local Ethics Committee
     of General University Hospital Prague in accordance with Helsinki Declaration.
   rai:dataBiases: Cell lines (A2058, G361) and primary cultures (HPM, HF, ZAM) differ
     in growth conditions and serum content (0% vs. 10% FBS), introducing biological
@@ -970,34 +970,41 @@ cancer_cell_nh2:
     means data should be treated with appropriate care under applicable data-protection
     regulations.
 chembl_molecules:
-  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
-    analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
-  rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
-    and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
-  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
-    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
-    publication.
-  rai:dataSocialImpact: Supports inline quality control and process analytical technology
-    (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
-    processes.
-  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
-  rai:personalSensitiveInformation: No personal or sensitive information is included.
-    All spectra originate from chemical, biological, or material samples without individual
-    human identifiers.
+  rai:dataAnnotationProtocol: Molecular properties (HOMO, LUMO, band gap Eg, isotropic
+    polarizability, heat capacity, dipole moment) computed via DFT at PBEPBE/6-31G
+    level using Gaussian09 in gas phase. Raman activities derived from harmonic frequency
+    calculations; spectra broadened by Lorentz fitting. Approximately 220,000 ChEMBL
+    drug-like molecules processed; ~140,000 included after filtering.
+  rai:dataBiases: Spectra are DFT-computed (gas phase, PBEPBE/6-31G) and do not account
+    for solvent effects, temperature broadening, or instrument-specific artefacts present
+    in experimental Raman spectra. 96.3% of molecules are aromatic; non-aromatic drug-like
+    molecules are underrepresented. Computational accuracy is limited by the DFT functional
+    and basis set; high-frequency modes may be overestimated under the harmonic approximation.
+  rai:dataCollection: DFT Raman spectra computed for ~220,000 drug-like molecules from
+    the ChEMBL database using Gaussian09 (PBEPBE/6-31G level of theory) in gas phase.
+    Harmonic frequencies and Raman activities stored as stick spectra; Lorentz broadening
+    applied for continuous spectral representation. Molecular property targets computed
+    at the same DFT level.
+  rai:dataCollectionType: Computationally generated dataset; spectra derived from quantum-chemical
+    DFT calculations, not laboratory measurements.
+  rai:dataLimitations: Gas-phase DFT calculations do not capture solvent effects or
+    conformational flexibility at finite temperature. The PBEPBE/6-31G level of theory
+    provides moderate accuracy; harmonic approximation may overestimate high-frequency
+    modes. Direct comparison with experimental spectra requires careful scaling and
+    calibration. Licensed CC BY-NC-ND 4.0; commercial use is not permitted.
+  rai:dataPreprocessingProtocol: Raw DFT harmonic frequencies and Raman activities
+    stored as stick spectra. Lorentz broadening applied to produce continuous spectral
+    profiles. No further preprocessing is applied to the provided files.
+  rai:dataSocialImpact: A large-scale DFT Raman spectral library for drug-like molecules
+    enables virtual screening, spectral prediction, and training of deep learning models
+    for molecular property prediction, supporting computational drug discovery and
+    materials science research.
+  rai:dataUseCases: DFT spectral library for computational chemistry; training spectral
+    prediction models; molecular property regression (HOMO, LUMO, band gap, polarizability,
+    heat capacity, dipole moment); benchmarking machine learning potentials.
+  rai:personalSensitiveInformation: No personal or sensitive information. All spectra
+    and properties are computationally derived from chemical structures in the public
+    ChEMBL database.
 citric_acid_species:
   rai:dataAnnotationProtocol: Mole fraction targets for four acid species (CA, CA⁻,
     CA²⁻, CA³⁻) derived from pH-based dissociation equilibria and Indirect Hard Modeling
@@ -1038,34 +1045,46 @@ citric_acid_species:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical samples without individual human identifiers.
 comfile_stroke:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+  rai:dataAnnotationProtocol: Class labels (ischemic stroke vs. control) assigned
+    by clinical diagnosis confirmed by computed tomography (CT) and magnetic resonance
+    imaging (MRI). Patients enrolled within 24 hours after arterial thrombectomy or
+    tPA therapy at Minhang Hospital, Fudan University. Ethics approval obtained (number
+    2021-008-01K).
+  rai:dataBiases: Dataset includes 65 male and 55 female participants aged 45–80;
+    younger and older age groups are not represented. Recruitment from a single hospital
+    (Minhang Hospital, Fudan University) limits geographic and demographic diversity.
+    Small cohort (52 stroke, 69 controls) may affect model generalisation. Restricted
+    to ischemic stroke; haemorrhagic stroke is not represented.
+  rai:dataCollection: SERS serum spectra collected using the SERSome methodology from
+    121 participants (52 ischemic stroke, 69 controls; ages 45–80). Fasting venous
+    blood collected and serum ultrafiltered through a 3-kDa cutoff membrane (Millipore,
+    Amicon Ultra-4) to isolate small metabolites. Citrate-reduced Ag NPs mixed with
+    filtered metabolites; 200 spectra per SERSome acquired on a Horiba XploRA INV
+    confocal Raman system (638 nm laser, 10.36 mW, 10× objective, quartz capillary
+    ID 1 mm / OD 2 mm), 10 µm step size, spectral range 200–2000 cm⁻¹. Samples measured
+    within 28 days of collection.
+  rai:dataCollectionType: Laboratory SERS measurements of human blood serum metabolite
+    extracts collected under a clinical research protocol with ethics approval (Minhang
+    Hospital, Fudan University, number 2021-008-01K).
+  rai:dataLimitations: Small dataset (121 participants); trained models may not generalise
+    without additional data from diverse populations. Single-site recruitment limits
+    demographic representativeness. Serum must be processed and measured within 28
+    days of collection. Performance may vary with different Ag NP batches or Raman
+    instrument configurations.
+  rai:dataPreprocessingProtocol: Baseline removal applied using LabSpec 6 software
+    (polynomial method, degree 10, max 200 points). Raw spectra stored as tab-separated
+    text files with wavenumber axis included.
+  rai:dataSocialImpact: Rapid SERS-based serum metabolomics for ischemic stroke diagnosis
+    could support time-critical clinical triage. Key serum biomarkers identified include
+    trimethyllysine, uric acid, and hypoxanthine. Diagnostic results must be validated
+    by qualified healthcare professionals before any clinical application.
+  rai:dataUseCases: Binary classification (stroke vs. control); serum metabolic biomarker
+    discovery; benchmarking spectral deep learning and component filtering models for
+    neurological disease diagnostics.
+  rai:personalSensitiveInformation: Spectra are derived from human blood serum of clinical
+    patients. No direct patient identifiers are included, but biological measurements
+    constitute sensitive health-related data under applicable data-protection regulations.
+    Ethics approval obtained from Minhang Hospital, Fudan University (number 2021-008-01K).
 covid19_salvia:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
     or validated analytical reference methods.
@@ -1264,7 +1283,7 @@ diabetes_skin_ages:
   rai:dataLimitations: 20-subject pilot study; published ANN model achieved 88.9–90.9%
     DM2/Control accuracy (site-dependent), SVM 76.0–82.5%, 10-fold cross-validation.
     AGE-spectrum correlation is exploratory; causal attribution to specific molecular
-    species requires further validation. Ostica Open Access Publishing Agreement
+    species requires further validation. Optica Open Access Publishing Agreement
     license; dataset available via Kaggle.
   rai:dataPreprocessingProtocol: Vancouver Raman Algorithm (VRA) applied for iterative
     polynomial fluorescence background removal. Spectra cropped to 800–1800 cm⁻¹
@@ -2807,34 +2826,39 @@ parkinson:
     but biological measurements may constitute sensitive health-related data under
     applicable data-protection regulations.
 pharmaceutical_ingredients:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+  rai:dataAnnotationProtocol: Class labels are the known compound identity of each
+    reference material. 32 pure compounds measured in 110 spectra each (3,510 spectra
+    total). Sample identity confirmed by the known composition of commercial-grade
+    reference chemicals.
+  rai:dataBiases: All 32 compounds are pure reference materials measured individually;
+    mixtures and impure samples are not represented. Spectra acquired with a single
+    instrument (Endress+Hauser Raman Rxn2, 785 nm) in a static non-contact probe
+    setup; performance may differ for inline or immersion probe configurations. Selection
+    of compounds focuses on solvents and reagents relevant to API development and may
+    not cover all pharmaceutical-grade materials.
+  rai:dataCollection: 3,510 Raman spectra of 32 pure chemical compounds (organic solvents
+    and reagents for active pharmaceutical ingredient development) acquired with an
+    Endress+Hauser Raman Rxn2 analyser (785 nm laser) using a non-contact probe in
+    a static measurement chamber with amber glass vials. Spectral range 150–3,425
+    cm⁻¹ (3,276 data points); ~1 cm⁻¹ resolution. 110 spectra per compound.
+  rai:dataCollectionType: Laboratory measurements of pure chemical reference compounds
+    in a static non-contact Raman probe setup at University of Galway.
+  rai:dataLimitations: Dataset covers 32 compounds only; models may not generalise
+    to untested substances. Spectra are of single pure compounds; mixture analysis
+    requires additional data. All spectra acquired with one instrument model at 785
+    nm; calibration transfer to other instruments or wavelengths has not been validated.
+  rai:dataPreprocessingProtocol: Raw spectra as recorded by the instrument; dark-noise,
+    cosmic-ray, and intensity corrections applied by instrument firmware. No additional
+    baseline correction or normalisation was performed on the provided files.
+  rai:dataSocialImpact: An open-source Raman spectral library for pharmaceutical solvents
+    and reagents supports the development of inline quality-control and process analytical
+    technology (PAT) tools in API manufacturing, contributing to safer and more consistent
+    pharmaceutical production.
+  rai:dataUseCases: Spectral library construction; compound identification and classification;
+    chemometric modelling for API quality control; process analytical technology (PAT);
+    benchmarking Raman spectral analysis algorithms.
+  rai:personalSensitiveInformation: No personal or sensitive information. All spectra
+    originate from pure chemical reference compounds without individual human identifiers.
 ralstonia_fermentations:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
@@ -2920,63 +2944,90 @@ rruff_mineral_raw:
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 serum_alzheimer_disease:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+  rai:dataAnnotationProtocol: Class labels (AD, MCI, control) assigned by clinical
+    diagnosis per National Institute on Aging-Alzheimer's Association (NIA-AA) criteria,
+    confirmed by two neurologists each with ≥5 years of clinical experience. MCI patients
+    diagnosed using Peterson criteria. Participants enrolled at the Department of Neurology,
+    Rui Jin Hospital, Shanghai Jiao Tong University School of Medicine. Ethics approval
+    obtained (number 2021-46).
+  rai:dataBiases: Dataset includes 57 male and 82 female participants; sex distribution
+    is unequal. Recruitment from a single hospital in Shanghai limits geographic and
+    demographic diversity. AD diagnosis is based on clinical criteria; neuropathological
+    confirmation was not available for most participants. Small cohort size (139 total)
+    may affect model generalisation.
+  rai:dataCollection: SERS serum spectra collected using the SERSome methodology from
+    139 participants. Fasting venous blood collected; serum ultrafiltered through a
+    3-kDa cutoff membrane (Millipore, Amicon Ultra-4) to isolate small metabolites.
+    Citrate-reduced Ag NPs mixed with filtered metabolites; 200 spectra per SERSome
+    acquired on a Horiba XploRA INV confocal Raman system (638 nm laser, 10× objective,
+    quartz capillary), 10 µm step size, spectral range 600–1800 cm⁻¹. Samples measured
+    within 28 days of collection.
+  rai:dataCollectionType: Laboratory SERS measurements of human blood serum metabolite
+    extracts collected under a clinical research protocol with ethics approval (Rui
+    Jin Hospital affiliated with SJTU School of Medicine, number 2021-46).
+  rai:dataLimitations: Small sample size (139 participants) limits statistical power
+    and generalisability. Diagnosis based on clinical criteria; neuropathological validation
+    was not performed. Dataset is China-specific; performance on other ethnicities and
+    healthcare populations is unknown. Performance may vary with different Ag NP batches
+    or Raman instrument configurations.
+  rai:dataPreprocessingProtocol: Baseline removal applied using LabSpec 6 software
+    (polynomial method, degree 10, max 200 points). Raw spectra stored as PyTorch
+    tensor files organised by class label.
+  rai:dataSocialImpact: SERS metabolomics for Alzheimer's disease diagnosis from blood
+    serum could enable early-stage screening with minimal invasiveness, potentially
+    improving patient outcomes through earlier intervention. Key serum biomarkers identified
+    include hypoxanthine, uric acid, and fumaric acid. Clinical application requires
+    validation by qualified healthcare professionals.
+  rai:dataUseCases: Classification of neurodegenerative disease states (AD vs. MCI
+    vs. control); serum metabolic biomarker discovery; benchmarking spectral deep learning
+    and component filtering models for neurological disease diagnostics.
+  rai:personalSensitiveInformation: Spectra are derived from human blood serum of clinical
+    patients. No direct patient identifiers are included, but biological measurements
+    constitute sensitive health-related data under applicable data-protection regulations.
+    Ethics approval obtained from Rui Jin Hospital affiliated with SJTU School of Medicine
+    (number 2021-46).
 serum_prostate_cancer:
-  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
-  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
-    not generalise to field or clinical settings. Spectral profiles are influenced
-    by instrument-specific factors (laser wavelength, detector type, optical path
-    length, integration time). Class imbalances may be present in classification datasets.
-  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
-    Each spectrum represents the scattered light intensity as a function of Raman
-    shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
-  rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
-  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
-    applied (baseline correction, smoothing, normalisation) is described in the source
-    publication.
-  rai:dataSocialImpact: Raman spectroscopy datasets for medical diagnostics have the
-    potential to support the development of non-invasive, low-cost screening tools
-    with particular relevance to resource-limited healthcare settings. Results must
-    be validated by qualified healthcare professionals before any clinical application.
-  rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+  rai:dataAnnotationProtocol: Class labels (PCa, BPH, control) assigned by clinical
+    diagnosis confirmed by transrectal prostate biopsy with H&E staining and Gleason
+    scoring. T stage and N stage determined by urologists per AJCC 8th staging system.
+    Participants enrolled at Ren Ji Hospital, School of Medicine, Shanghai Jiao Tong
+    University. Ethics approval obtained (KY2021-030).
+  rai:dataBiases: All participants are male (biologically); dataset is specific to
+    prostate cancer and does not generalise to other tumour types or female populations.
+    Recruitment from two hospital systems in Shanghai and one in Ningbo/Jiading; geographic
+    and demographic diversity is limited to eastern China. Age range 41–89 years; very
+    young or elderly populations are not represented.
+  rai:dataCollection: SERS serum spectra collected using the SERSome methodology from
+    424 participants (PCa, BPH, and controls; all male; ages 41–89). Fasting venous
+    blood collected; serum ultrafiltered through a 3-kDa cutoff membrane (Millipore,
+    Amicon Ultra-4) to isolate small metabolites. Citrate-reduced Ag NPs (~61 nm TEM
+    diameter) mixed with filtered metabolites at 1:1 vol:vol ratio; 200 spectra per
+    SERSome acquired on a Horiba XploRA INV confocal Raman system (638 nm laser, 12.67
+    mW, 10× objective, quartz capillary ID 1 mm / OD 2 mm), 10 µm step size. 724
+    data points per spectrum, spectral range 600–1800 cm⁻¹.
+  rai:dataCollectionType: Laboratory SERS measurements of human blood serum metabolite
+    extracts collected under a clinical research protocol with ethics approval (Ren
+    Ji Hospital, SJTU School of Medicine, KY2021-030).
+  rai:dataLimitations: Diagnostic accuracy of 80.8% (internal test set) and 73% (external
+    validation) requires further improvement before clinical deployment. Performance
+    may differ with varying Ag NP batches, serum collection protocols, or Raman instrument
+    configurations. External validation cohorts are also China-based; generalisability
+    to other ethnicities and healthcare systems has not been established.
+  rai:dataPreprocessingProtocol: Baseline removal applied using LabSpec 6 software
+    (polynomial method, degree 10, max 200 points). Raw spectra stored as PyTorch
+    tensor files organised by class label.
+  rai:dataSocialImpact: Serum SERS metabolomics for prostate cancer screening offers
+    a minimally invasive alternative to PSA testing or tissue biopsy. Key serum biomarkers
+    identified include uric acid, hypoxanthine, uracil, and tryptamine. Diagnostic
+    results must be validated by qualified healthcare professionals before any clinical
+    application.
+  rai:dataUseCases: Multiclass classification (PCa vs. BPH vs. control); serum metabolic
+    biomarker discovery; development and benchmarking of spectral deep learning models
+    for cancer diagnostics; Gleason score prediction.
+  rai:personalSensitiveInformation: Spectra are derived from human blood serum of clinical
+    patients. No direct patient identifiers are included, but biological measurements
+    constitute sensitive health-related data under applicable data-protection regulations.
+    Ethics approval obtained from Ren Ji Hospital, SJTU School of Medicine (KY2021-030).
 streptococcus_thermophilus_fermentation_kaiser:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,

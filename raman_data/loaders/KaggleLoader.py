@@ -126,8 +126,8 @@ class KaggleLoader(BaseLoader):
                         "(Keras/TF, 400 epochs, 75:25 split) achieved 100% validation accuracy. Ethics approved by "
                         "Local Ethics Committee, General University Hospital Prague (Helsinki Declaration). "
                         f"The {element} functionalization provides selectivity toward "
-                        + ("proteins and lipids." if element == "NH2"
-                           else "RNA and nucleic acids." if element == "COOH"
+                        + ("lipids and amino acids." if element == "NH2"
+                           else "RNA and proteins." if element == "COOH"
                            else "lipids and amino acids.")
                     )
                 }

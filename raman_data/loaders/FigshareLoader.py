@@ -56,11 +56,13 @@ class FigshareLoader(BaseLoader):
             metadata={
                 "full_name": "ComFilE for PCa",
                 "source": "https://figshare.com/articles/dataset/ComFilE_for_PCa/28107395",
+                "paper": "https://doi.org/10.1016/j.xcrm.2024.101579",
+                "bibtex": "@article{bi2024sersomes, title={SERSomes for metabolic phenotyping and prostate cancer diagnosis}, author={Bi, Xinyuan and Wang, Jiayi and Xue, Bingsen and He, Chang and Liu, Fugang and Chen, Haoran and Lin, Linley Li and Dong, Baijun and Li, Butang and Jin, Cheng and others}, journal={Cell Reports Medicine}, volume={5}, number={6}, year={2024}, publisher={Elsevier}}",
                 "doi": "10.6084/m9.figshare.28107395.v1",
                 "citation": [
                     "Xue, Bingsen (2024). ComFilE for PCa. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28107395.v1"
                 ],
-                "description": "Serum SERS spectra for classifying Prostate Cancer (PCa), Benign Prostatic Hyperplasia (BPH), and healthy controls.",
+                "description": "SERS serum metabolite spectra for classifying prostate cancer (PCa), benign prostatic hyperplasia (BPH), and healthy controls. 424 serum samples from male participants (ages 41–89) collected at Ren Ji Hospital, Shanghai Jiao Tong University. Organized as SERSomes (200 spectra per sample, 638 nm laser, quartz capillary), spanning 600–1800 cm⁻¹ (724 data points per spectrum).",
             }
         ),
         "serum_alzheimer_disease": DatasetInfo(
@@ -78,7 +80,7 @@ class FigshareLoader(BaseLoader):
                 "citation": [
                     "Xue, Bingsen (2024). ComFilE for AD. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28107578.v1"
                 ],
-                "description": "Serum SERS spectra for classifying Alzheimer's disease (AD), Mild Cognitive Impairment (MCI), and healthy controls. Contains 17 PyTorch tensor files organised by class label.",
+                "description": "SERS serum metabolite spectra for classifying Alzheimer's disease (AD), mild cognitive impairment (MCI), and healthy controls. 139 serum samples (57 male, 82 female) collected at Rui Jin Hospital, Shanghai Jiao Tong University. Organized as SERSomes (200 spectra per sample, 638 nm laser, quartz capillary), spanning 600–1800 cm⁻¹. 17 PyTorch tensor files organised by class label.",
             }
         ),
         "comfile_stroke": DatasetInfo(
@@ -112,12 +114,14 @@ class FigshareLoader(BaseLoader):
             id="chembl_molecules",
             name="Raman-ChEMBL Molecules",
             short_name="Raman-ChEMBL",
-            license="CC BY 4.0",
+            license="CC BY-NC-ND 4.0",
             loader=lambda cache_path: FigshareLoader._load_raman_chembl_part2(cache_path),
             metadata={
                 "full_name": "Raman-ChEMBL-part2",
                 "source": "https://figshare.com/articles/dataset/Raman-ChEMBL-part2/28594295",
                 "doi": "10.6084/m9.figshare.28594295.v3",
+                "paper": "https://doi.org/10.1038/s41597-025-05289-x",
+                "bibtex": "@article{liang2025dataset, title={A Dataset of Raman and Infrared Spectra as an Extension to the ChEMBL}, author={Liang, Jiechun and Ling, Jack and Xu, Limin and Zhu, Xi}, journal={Scientific Data}, volume={12}, number={1}, pages={939}, year={2025}, publisher={Nature Publishing Group UK London}}",
                 "citation": [
                     "Liang, J., Ling, J., Zhu, X. Raman-ChEMBL-part2. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28594295.v3"
                 ],
