@@ -31,9 +31,7 @@ acetic_acid_species:
     spectral range 160–3285 cm⁻¹, 4 cm⁻¹ resolution, 60 s acquisition time. Ambient
     light excluded by non-transparent black PVC liner. pH monitored continuously with
     SenTix 940 electrode and Multil 3420 pH meter (WTW).
-  rai:dataCollectionType: Titration Raman spectroscopy of monoprotic acetic acid (CH₃COOH)
-    in aqueous solution. Spectra recorded at pH equilibrium across the full titration
-    range for two dissociation species (AA, AA⁻).
+  rai:dataCollectionType: Experiments
   rai:dataLimitations: Models calibrated on NaOH titration in deionized water at 25 °C;
     not directly applicable to complex matrices, elevated temperatures, or concentrations
     outside the calibration range. Ideal mixture assumption not strictly valid at concentrations
@@ -80,10 +78,7 @@ adenine_colloidal_gold:
     limits. Three batches of colloidal substrate and three replicates per sample
     were used, yielding nine spectra per concentration level per method per laboratory.
     The analyte concentration range spans 0 to approximately 0.8 µM at five levels.
-  rai:dataCollectionType: Quantitative SERS measurements of adenine on colloidal gold
-    nanoparticle substrates, collected in a multi-laboratory interlaboratory study to
-    assess the inter-instrument reproducibility and trueness of quantitative SERS
-    across European research facilities.
+  rai:dataCollectionType: Experiments
   rai:dataLimitations: Results valid only within the studied concentration range
     (0-0.8 µM) and for the specific colloidal gold substrate; extrapolation to other
     concentrations or substrates is not validated. RMSEP 13%, SEP 13%, BIAS 3%
@@ -148,10 +143,7 @@ adenine_colloidal_silver:
     laboratory. The analyte concentration range spans 0 to approximately 2 µM at
     five levels. Final analysis included five labs for cAg@532 and seven labs for
     cAg@785.
-  rai:dataCollectionType: Quantitative SERS measurements of adenine on colloidal
-    silver nanoparticle substrates using two excitation wavelengths (532 nm and 785 nm),
-    collected in a multi-laboratory interlaboratory study to assess the inter-instrument
-    reproducibility and trueness of quantitative SERS across European research facilities.
+  rai:dataCollectionType: Experiments
   rai:dataLimitations: Results valid only within the studied concentration range
     (0-2 µM) and for the specific colloidal silver substrate; extrapolation to other
     concentrations or substrates is not validated. Performance differs significantly
@@ -215,10 +207,7 @@ adenine_solid_gold:
     were collected per sample, yielding nine spectra per concentration level per
     method per laboratory. The analyte concentration range spans 0 to approximately
     4 µM at five levels.
-  rai:dataCollectionType: Quantitative SERS measurements of adenine on solid gold
-    nanostructured substrate (metal-coated silicon nanopillars), collected in a
-    multi-laboratory interlaboratory study to assess the inter-instrument reproducibility
-    and trueness of quantitative SERS across European research facilities.
+  rai:dataCollectionType: Experiments
   rai:dataLimitations: Results valid only within the studied concentration range
     (0-4 µM) and for the specific solid gold substrate; extrapolation to other
     concentrations or substrates is not validated. RMSEP 28% (SEP 29%, BIAS -2%)
@@ -283,11 +272,7 @@ adenine_solid_silver:
     level per method per laboratory. The analyte concentration range spans 0 to
     approximately 10 µM at five levels. Final analysis included seven labs for
     sAg@532 and six labs for sAg@785.
-  rai:dataCollectionType: Quantitative SERS measurements of adenine on solid silver
-    nanostructured substrate (metal-coated silicon nanopillars) using two excitation
-    wavelengths (532 nm and 785 nm), collected in a multi-laboratory interlaboratory
-    study to assess the inter-instrument reproducibility and trueness of quantitative
-    SERS across European research facilities.
+  rai:dataCollectionType: Experiments
   rai:dataLimitations: Results valid only within the studied concentration range
     (0-10 µM) and for the specific solid silver substrate; extrapolation to other
     concentrations or substrates is not validated. Performance differs significantly
@@ -323,7 +308,8 @@ adenine_solid_silver:
     identifiers.
 alzheimer:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
+    or validated analytical reference methods. Labels were assigned by domain experts
+    or clinical diagnosis; no crowdsourced annotation was used.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -331,8 +317,7 @@ alzheimer:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Models trained on this dataset may not transfer to different
     instruments, sample matrices, or patient populations without re-calibration. Note:
     No explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -345,11 +330,12 @@ alzheimer:
     with particular relevance to resource-limited healthcare settings. Results must
     be validated by qualified healthcare professionals before any clinical application.
   rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+    compound recognition, quality control. Not recommended for direct clinical diagnosis
+    without professional validation and regulatory approval.
+  rai:personalSensitiveInformation: Sensitive attributes present in the dataset — health
+    condition (disease class labels). Spectra are derived from human biological samples;
+    no direct patient identifiers are included in the released spectral files. Other
+    demographic attributes (age, gender, geography) are not part of the released data.
 amino_acids_glycine:
   rai:dataAnnotationProtocol: Time-resolved LC-Raman elution data for glycine (100 mM
     injection concentration). Labels are elution-time concentration profiles. Each
@@ -368,8 +354,7 @@ amino_acids_glycine:
     resin column, H₂O to acetonitrile gradient, 7 mL/min flow rate, 50 µL injection).
     Time-resolved acquisition at 0.2 s exposure per spectrum frame (~100 frames per
     20 s window per elution peak).
-  rai:dataCollectionType: Time-resolved LC-Raman spectroscopy of amino acid solutions
-    in a liquid chromatography flow cell.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small benchmark dataset covering only four amino acids in
     single-analyte conditions. The detection challenge arises from millimolar analyte
     concentrations against a strong H₂O/ACE solvent background. No explicit license
@@ -406,8 +391,7 @@ amino_acids_leucine:
     resin column, H₂O to acetonitrile gradient, 7 mL/min flow rate, 50 µL injection).
     Time-resolved acquisition at 0.2 s exposure per spectrum frame (~100 frames per
     20 s window per elution peak).
-  rai:dataCollectionType: Time-resolved LC-Raman spectroscopy of amino acid solutions
-    in a liquid chromatography flow cell.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small benchmark dataset covering only four amino acids in
     single-analyte conditions. The detection challenge arises from millimolar analyte
     concentrations against a strong H₂O/ACE solvent background. No explicit license
@@ -443,8 +427,7 @@ amino_acids_phenylalanine:
     resin column, H₂O to acetonitrile gradient, 7 mL/min flow rate, 50 µL injection).
     Time-resolved acquisition at 0.2 s exposure per spectrum frame (~100 frames per
     20 s window per elution peak).
-  rai:dataCollectionType: Time-resolved LC-Raman spectroscopy of amino acid solutions
-    in a liquid chromatography flow cell.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small benchmark dataset covering only four amino acids in
     single-analyte conditions. The detection challenge arises from millimolar analyte
     concentrations against a strong H₂O/ACE solvent background. No explicit license
@@ -482,8 +465,7 @@ amino_acids_tryptophan:
     resin column, H₂O to acetonitrile gradient, 7 mL/min flow rate, 50 µL injection).
     Time-resolved acquisition at 0.2 s exposure per spectrum frame (~100 frames per
     20 s window per elution peak).
-  rai:dataCollectionType: Time-resolved LC-Raman spectroscopy of amino acid solutions
-    in a liquid chromatography flow cell.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small benchmark dataset covering only four amino acids in
     single-analyte conditions. Tryptophan fluorescence increases background uncertainty.
     No explicit license stated; CC BY 4.0 assumed — verify with original authors.
@@ -518,8 +500,7 @@ bacteria_identification:
     LabRAM HR Evolution spectrometer, 633 nm excitation, 13.17 mW laser power, 300
     l/mm diffraction grating, 1.2 cm-1 dispersion, Olympus MPLAN 100x objective (NA
     0.9), approximately 1 µm spot size, 1 s integration time per spectrum.
-  rai:dataCollectionType: Laboratory measurements of bacterial and yeast cells on SERS
-    substrates, plus clinical validation measurements from patient isolates.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: The 30-isolate reference library covers common nosocomial pathogens
     but may not generalise to rare or emerging species. Performance on clinical isolates
     is validated for MRSA/MSSA identification (89.1 ± 0.1% accuracy) and antibiotic
@@ -546,7 +527,8 @@ bacteria_identification:
     under applicable data-protection regulations.
 biomolecules_reference:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
+    or validated analytical reference methods. Labels were assigned by domain experts
+    or clinical diagnosis; no crowdsourced annotation was used.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -554,8 +536,7 @@ biomolecules_reference:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -567,14 +548,16 @@ biomolecules_reference:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
+    compound recognition, quality control. Not recommended for direct clinical diagnosis
+    without professional validation and regulatory approval.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 bioprocess_analytes_anton_532:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -582,8 +565,7 @@ bioprocess_analytes_anton_532:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -595,14 +577,17 @@ bioprocess_analytes_anton_532:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 bioprocess_analytes_anton_785:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -610,8 +595,7 @@ bioprocess_analytes_anton_785:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -623,14 +607,17 @@ bioprocess_analytes_anton_785:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 bioprocess_analytes_kaiser:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -638,8 +625,7 @@ bioprocess_analytes_kaiser:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -651,14 +637,17 @@ bioprocess_analytes_kaiser:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 bioprocess_analytes_metrohm:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -666,8 +655,7 @@ bioprocess_analytes_metrohm:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -679,14 +667,17 @@ bioprocess_analytes_metrohm:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 bioprocess_analytes_mettler_toledo:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -694,8 +685,7 @@ bioprocess_analytes_mettler_toledo:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -707,14 +697,17 @@ bioprocess_analytes_mettler_toledo:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 bioprocess_analytes_tec5:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -722,8 +715,7 @@ bioprocess_analytes_tec5:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -735,14 +727,17 @@ bioprocess_analytes_tec5:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 bioprocess_analytes_timegate:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -750,8 +745,7 @@ bioprocess_analytes_timegate:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -763,14 +757,17 @@ bioprocess_analytes_timegate:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 bioprocess_analytes_tornado:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -778,8 +775,7 @@ bioprocess_analytes_tornado:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -791,14 +787,17 @@ bioprocess_analytes_tornado:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 bioprocess_substrates:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -806,8 +805,7 @@ bioprocess_substrates:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -819,7 +817,9 @@ bioprocess_substrates:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
@@ -848,9 +848,7 @@ cancer_cell_(cooh)2:
     785 nm excitation, 33 mW laser power, automatic regime, 30 spectra per sample
     (10 spatial points × 3 s accumulation each). 106 biological specimens total across
     all three functionalization variants.
-  rai:dataCollectionType: SERS of cell culture media metabolites entrapped by functionalized
-    gold nanoparticles; cell lines and primary cultures from human skin cancer biopsies
-    and healthy tissue.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: SERS spectra of complex biological media are highly variable
     and non-interpretable without CNN; direct spectral matching against reference
     libraries is not feasible. Model trained on 75% / validated on 25% split; external
@@ -896,9 +894,7 @@ cancer_cell_cooh:
     spectrometer (Ondax), 785 nm excitation, 33 mW laser power, automatic regime,
     30 spectra per sample (10 spatial points × 3 s accumulation each). 106 biological
     specimens total across all three functionalization variants.
-  rai:dataCollectionType: SERS of cell culture media metabolites entrapped by functionalized
-    gold nanoparticles; cell lines and primary cultures from human skin cancer biopsies
-    and healthy tissue.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: SERS spectra of complex biological media are highly variable
     and non-interpretable without CNN; direct spectral matching against reference
     libraries is not feasible. Model trained on 75% / validated on 25% split; external
@@ -943,9 +939,7 @@ cancer_cell_nh2:
     spectrometer (Ondax), 785 nm excitation, 33 mW laser power, automatic regime,
     30 spectra per sample (10 spatial points × 3 s accumulation each). 106 biological
     specimens total across all three functionalization variants.
-  rai:dataCollectionType: SERS of cell culture media metabolites entrapped by functionalized
-    gold nanoparticles; cell lines and primary cultures from human skin cancer biopsies
-    and healthy tissue.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: SERS spectra of complex biological media are highly variable
     and non-interpretable without CNN; direct spectral matching against reference
     libraries is not feasible. Model trained on 75% / validated on 25% split; external
@@ -985,8 +979,7 @@ chembl_molecules:
     Harmonic frequencies and Raman activities stored as stick spectra; Lorentz broadening
     applied for continuous spectral representation. Molecular property targets computed
     at the same DFT level.
-  rai:dataCollectionType: Computationally generated dataset; spectra derived from quantum-chemical
-    DFT calculations, not laboratory measurements.
+  rai:dataCollectionType: Software Collection
   rai:dataLimitations: Gas-phase DFT calculations do not capture solvent effects or
     conformational flexibility at finite temperature. The PBEPBE/6-31G level of theory
     provides moderate accuracy; harmonic approximation may overestimate high-frequency
@@ -1001,7 +994,9 @@ chembl_molecules:
     materials science research.
   rai:dataUseCases: DFT spectral library for computational chemistry; training spectral
     prediction models; molecular property regression (HOMO, LUMO, band gap, polarizability,
-    heat capacity, dipole moment); benchmarking machine learning potentials.
+    heat capacity, dipole moment); benchmarking machine learning potentials. Not recommended
+    for commercial use (CC BY-NC-ND 4.0 license). Not recommended for direct comparison
+    with experimental spectra without frequency scaling and instrument calibration.
   rai:personalSensitiveInformation: No personal or sensitive information. All spectra
     and properties are computationally derived from chemical structures in the public
     ChEMBL database.
@@ -1022,9 +1017,7 @@ citric_acid_species:
     probe, spectral range 160–3285 cm⁻¹, 4 cm⁻¹ resolution, 60 s acquisition time.
     Ambient light excluded by non-transparent black PVC liner. pH monitored continuously
     with SenTix 940 electrode and Multil 3420 pH meter (WTW).
-  rai:dataCollectionType: Titration Raman spectroscopy of triprotic citric acid in
-    aqueous solution. Spectra recorded at pH equilibrium over the full titration range
-    for four dissociation species (CA, CA⁻, CA²⁻, CA³⁻).
+  rai:dataCollectionType: Experiments
   rai:dataLimitations: Quantification accuracy is significantly reduced for CA²⁻ (R²
     = 0.9225, RMSECV = 8.81 × 10⁻⁴) and CA³⁻ (R² = 0.9154, RMSECV = 7.20 × 10⁻⁴)
     due to near-identical Raman signatures; not suitable for high-precision individual
@@ -1063,9 +1056,7 @@ comfile_stroke:
     confocal Raman system (638 nm laser, 10.36 mW, 10× objective, quartz capillary
     ID 1 mm / OD 2 mm), 10 µm step size, spectral range 200–2000 cm⁻¹. Samples measured
     within 28 days of collection.
-  rai:dataCollectionType: Laboratory SERS measurements of human blood serum metabolite
-    extracts collected under a clinical research protocol with ethics approval (Minhang
-    Hospital, Fudan University, number 2021-008-01K).
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (121 participants); trained models may not generalise
     without additional data from diverse populations. Single-site recruitment limits
     demographic representativeness. Serum must be processed and measured within 28
@@ -1087,7 +1078,8 @@ comfile_stroke:
     Ethics approval obtained from Minhang Hospital, Fudan University (number 2021-008-01K).
 covid19_salvia:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
+    or validated analytical reference methods. Labels were assigned by domain experts
+    or clinical diagnosis; no crowdsourced annotation was used.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -1095,8 +1087,7 @@ covid19_salvia:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Models trained on this dataset may not transfer to different
     instruments, sample matrices, or patient populations without re-calibration. Note:
     No explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -1109,11 +1100,12 @@ covid19_salvia:
     with particular relevance to resource-limited healthcare settings. Results must
     be validated by qualified healthcare professionals before any clinical application.
   rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+    compound recognition, quality control. Not recommended for direct clinical diagnosis
+    without professional validation and regulatory approval.
+  rai:personalSensitiveInformation: Sensitive attributes present in the dataset — health
+    condition (disease class labels). Spectra are derived from human biological samples;
+    no direct patient identifiers are included in the released spectral files. Other
+    demographic attributes (age, gender, geography) are not part of the released data.
 covid19_serum:
   rai:dataAnnotationProtocol: Binary COVID-19 labels (positive/negative) assigned
     by RT-PCR confirmation and ELISA serology. 20 subjects (10 RT-PCR-confirmed COVID-19
@@ -1131,8 +1123,7 @@ covid19_serum:
     spectrometer (Lambda Solutions), 830 nm excitation, 350 mW laser power, 400-1800
     cm-1 spectral window, 4 cm-1 resolution, 30 s total acquisition (3 s x 10 accumulations),
     80 µL serum in aluminium holder. Three replicate spectra per sample.
-  rai:dataCollectionType: Laboratory measurements of human blood serum collected from
-    clinical patients and healthy controls under an institutional ethics protocol.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Twenty-subject pilot study; published discriminant model achieved
     87% sensitivity and 100% specificity using PCA-DA/PLS-DA (Chemoface, PC2+PC4+PC5+PC6).
     Performance on independent cohorts, different instruments, or other SARS-CoV-2
@@ -1175,9 +1166,7 @@ deepr_denoising:
     (phenylalanine), 1300 and 1440 cm-1 (lipids), and 1660 cm-1 (amide I, proteins).
     Training augmentation included spectral flipping, shifting, and background
     subtraction.
-  rai:dataCollectionType: In vitro hyperspectral confocal Raman microscopy of cultured
-    MDA-MB-231 human breast cancer cells; no human subjects were involved in data
-    collection.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: The 1D ResUNet learns noise characteristics specific to the
     acquisition instrument and the 0.1 s/1 s integration-time pairing. Performance
     on other spectrometers, sample types, or noise levels is not guaranteed without
@@ -1226,9 +1215,7 @@ deepr_super_resolution:
     Dataset split 85:10:5 (training/validation/test). Augmentation included random
     image cropping, flipping, rotation, mixup, spectral flipping, shifting, and
     background subtraction.
-  rai:dataCollectionType: In vitro hyperspectral confocal Raman microscopy of cultured
-    MDA-MB-231 human breast cancer cells; no human subjects were involved in data
-    collection.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: HyRISR learns spatial correlations specific to MDA-MB-231 cells
     and the acquisition instrument. At 4x super-resolution, blurring artefacts are
     significant and reconstruction fidelity is markedly reduced compared to 2x and 3x.
@@ -1278,8 +1265,7 @@ diabetes_skin_ages:
     held at 90° against the skin without exerting pressure. Sequential acquisition
     at four anatomical sites per subject (~3 min total per subject). Spectral range
     800–1800 cm⁻¹ after preprocessing.
-  rai:dataCollectionType: In vivo non-invasive portable Raman spectroscopy of human
-    skin, collected under an IRB-approved clinical research protocol.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 20-subject pilot study; published ANN model achieved 88.9–90.9%
     DM2/Control accuracy (site-dependent), SVM 76.0–82.5%, 10-fold cross-validation.
     AGE-spectrum correlation is exploratory; causal attribution to specific molecular
@@ -1317,8 +1303,7 @@ diabetes_skin_ear_lobe:
     (Agiltron Inc.), 785 nm excitation, 90 mW, 200 µm spot size, 12 cm⁻¹ resolution,
     5 scans per measurement (~15 s total exposure, ANSI Z136.1 compliant). Probe
     held at 90° against the skin without exerting pressure.
-  rai:dataCollectionType: In vivo non-invasive portable Raman spectroscopy of human
-    skin (left ear lobe), collected under an IRB-approved clinical research protocol.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 20-subject pilot study; ANN 88.9–90.9% accuracy, SVM 76.0–82.5%,
     10-fold cross-validation. Performance depends on sampling site; ear lobe is one
     of four sites measured. Optica Open Access Publishing Agreement license.
@@ -1348,8 +1333,7 @@ diabetes_skin_inner_arm:
     (Agiltron Inc.), 785 nm excitation, 90 mW, 200 µm spot size, 12 cm⁻¹ resolution,
     5 scans per measurement (~15 s total exposure, ANSI Z136.1 compliant). Probe
     held at 90° against the skin without exerting pressure.
-  rai:dataCollectionType: In vivo non-invasive portable Raman spectroscopy of human
-    skin (left inner arm), collected under an IRB-approved clinical research protocol.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 20-subject pilot study; ANN 88.9–90.9% accuracy, SVM 76.0–82.5%,
     10-fold cross-validation. Optica Open Access Publishing Agreement license.
   rai:dataPreprocessingProtocol: Vancouver Raman Algorithm (VRA) fluorescence background
@@ -1377,8 +1361,7 @@ diabetes_skin_thumbnail:
     (Agiltron Inc.), 785 nm excitation, 90 mW, 200 µm spot size, 12 cm⁻¹ resolution,
     5 scans per measurement (~15 s total exposure, ANSI Z136.1 compliant). Probe
     held at 90° against the thumbnail without exerting pressure.
-  rai:dataCollectionType: In vivo non-invasive portable Raman spectroscopy of human
-    thumbnail, collected under an IRB-approved clinical research protocol.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 20-subject pilot study; ANN 88.9–90.9% accuracy, SVM 76.0–82.5%,
     10-fold cross-validation. Thumbnail site may yield lower DM2 discriminability
     than soft-tissue sites. Optica Open Access Publishing Agreement license.
@@ -1407,9 +1390,7 @@ diabetes_skin_vein:
     median cubital vein. PEK-785 spectrometer (Agiltron Inc.), 785 nm excitation,
     90 mW, 200 µm spot size, 12 cm⁻¹ resolution, 5 scans per measurement (~15 s
     total exposure, ANSI Z136.1 compliant). Probe held at 90° without pressure.
-  rai:dataCollectionType: In vivo non-invasive portable Raman spectroscopy of human
-    skin overlying the median cubital vein, collected under an IRB-approved clinical
-    research protocol.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 20-subject pilot study; ANN 88.9–90.9% accuracy, SVM 76.0–82.5%,
     10-fold cross-validation. Optica Open Access Publishing Agreement license.
   rai:dataPreprocessingProtocol: Vancouver Raman Algorithm (VRA) fluorescence background
@@ -1427,7 +1408,8 @@ diabetes_skin_vein:
 ecoli_fermentation:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -1435,8 +1417,7 @@ ecoli_fermentation:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -1448,14 +1429,17 @@ ecoli_fermentation:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 ecoli_metabolites:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -1463,8 +1447,7 @@ ecoli_metabolites:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -1476,14 +1459,17 @@ ecoli_metabolites:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 ecoli_metabolites_dig4bio:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -1491,8 +1477,7 @@ ecoli_metabolites_dig4bio:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -1504,7 +1489,9 @@ ecoli_metabolites_dig4bio:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
@@ -1531,10 +1518,7 @@ flow_microgel_synthesis:
     CTAB concentration (0.14–0.41 mmol/L), and temperature (60–80 °C). A Latin
     Hypercube Sampling (LHS) initial design of 15 experiments was followed by 11
     TS-EMO optimization iterations of 5 experiments each.
-  rai:dataCollectionType: Inline process Raman measurements during flow synthesis of
-    N-isopropylacrylamide (NIPAM) microgels by precipitation polymerization, combined
-    with offline DLS size characterization. Dataset collected as part of a hardware-in-the-loop
-    Bayesian optimization campaign.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: The IHM Raman model and GP surrogate are valid only within
     the explored process variable ranges; extrapolation beyond the design space is
     unreliable. Only a single reactor configuration was studied. The dataset represents
@@ -1575,9 +1559,7 @@ formic_acid_species:
     spectral range 160–3285 cm⁻¹, 4 cm⁻¹ resolution, 60 s acquisition time. Ambient
     light excluded by non-transparent black PVC liner. pH monitored continuously with
     SenTix 940 electrode and Multil 3420 pH meter (WTW).
-  rai:dataCollectionType: Titration Raman spectroscopy of monoprotic formic acid (HCOOH)
-    in aqueous solution. Spectra recorded at pH equilibrium across the full titration
-    range for two dissociation species (FA, FA⁻).
+  rai:dataCollectionType: Experiments
   rai:dataLimitations: Models calibrated on NaOH titration in deionized water at 25 °C;
     not directly applicable to complex matrices, elevated temperatures, or concentrations
     outside calibration range. Ideal mixture assumption not strictly valid above 0.1
@@ -1598,7 +1580,8 @@ formic_acid_species:
 fuel_benchtop:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -1606,8 +1589,7 @@ fuel_benchtop:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
     and chemical matrix of the training data; extrapolation outside these ranges is
     not recommended. Note: No explicit license was stated by the original data providers;
@@ -1620,14 +1602,17 @@ fuel_benchtop:
     (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
     processes.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 fuel_handheld:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -1635,8 +1620,7 @@ fuel_handheld:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
     and chemical matrix of the training data; extrapolation outside these ranges is
     not recommended. Note: No explicit license was stated by the original data providers;
@@ -1649,7 +1633,9 @@ fuel_handheld:
     (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
     processes.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
@@ -1686,9 +1672,7 @@ hair_dyes_sers:
     hair from a single anonymous donor was dyed with each of 33 commercial colorants
     from 4 brands (Ion, Wella, Clairol, L'Oreal) spanning 7 colors and 3 permanency
     types; 50 SERS spectra collected per colorant class, yielding 1,650 spectra total.
-  rai:dataCollectionType: SERS measurements on dye-treated human hair samples using
-    gold nanorod substrates, designed to benchmark SERS-based forensic identification
-    of commercial hair colorants by brand, permanency type, and hair color.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Only 50 spectra per class limits statistical power and
     sensitivity to AuNR batch-to-batch variability. Results are specific to blonde
     Caucasian hair; hair biology (melanin content, cuticle structure) varies by
@@ -1747,9 +1731,7 @@ head_neck_cancer:
     spectrophotometer with a Newton DU920P-BR-DD CCD detector (Solis software). Five
     randomly sampled regions were measured per substrate for each biofluid type (blood
     plasma and saliva) under both native (wet) and dried conditions.
-  rai:dataCollectionType: Clinical liquid-biopsy study; blood plasma and saliva collected
-    from 53 patients at a hospital outpatient setting under informed consent and IRB
-    approval (UC Davis IRB no. 930499-8).
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Models trained on this dataset are specific to the instrument,
     substrate preparation, and patient population used in the original study; external
     validation on independent cohorts and different Raman systems is required before
@@ -1785,7 +1767,8 @@ head_neck_cancer:
 ht_raman_bio_catalysis_axp:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -1793,8 +1776,7 @@ ht_raman_bio_catalysis_axp:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -1806,7 +1788,9 @@ ht_raman_bio_catalysis_axp:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
@@ -1829,9 +1813,7 @@ illicit_adulterants_ft_raman:
     50–3600 cm-1, 4 cm-1 resolution, 32 scans averaged per spectrum, data acquired
     in OPUS software v7.2. Pure adulterant powders (n=19) and liquids (n=4) measured
     directly; library spectra at 1 mg/mL in ethanol.
-  rai:dataCollectionType: Laboratory reference spectroscopy of pure pharmaceutical
-    compounds and commercially sourced dietary supplement products for food-fraud
-    screening research.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small spectral library (11 SERS-active reference compounds,
     one spectrum per compound); insufficient for training data-driven models without
     augmentation. Spectra represent ideal pure-compound conditions; detection performance
@@ -1877,9 +1859,7 @@ illicit_adulterants_sers:
     substrates, ASTM 1840 calibration standard. Sample prep — 10 mg dissolved
     in 100 µL ethanol, vortex 20 s, centrifuge 806,400 RCF for 2 min, 10 µL supernatant
     pipetted onto silver p-SERS strip, dried 15 min, measured in triplicate.
-  rai:dataCollectionType: Portable surface-enhanced Raman spectroscopy of pure pharmaceutical
-    compounds and artificially adulterated dietary supplement formulations for rapid
-    food-fraud field screening.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small SERS library (11 reference compounds); insufficient for
     data-driven ML without augmentation. LOI for adulteration detection is 0.1–5.0%
     w/w in commercial dietary supplements (18 commercial products tested). SERS-inactive
@@ -1922,10 +1902,7 @@ itaconic_acid_species:
     with NIR fiber-optic immersion probe, spectral range 160–3285 cm⁻¹, 4 cm⁻¹ resolution,
     60 s acquisition time. Ambient light excluded by non-transparent black PVC liner.
     pH measured with SenTix 940 electrode and Multil 3420 pH meter (WTW).
-  rai:dataCollectionType: Titration Raman spectroscopy of diprotic itaconic acid (C₅H₆O₄)
-    in aqueous solution. Three dissociation species characterised (IA, IA⁻, IA²⁻)
-    across the full pH range. Key Raman bands include ν_s,C=O at 1700 cm⁻¹, ν_C=C
-    at 1643 cm⁻¹, combined ν_C-O/γ_O-H around 1400 cm⁻¹, and ν_C-O at 1220 cm⁻¹.
+  rai:dataCollectionType: Experiments
   rai:dataLimitations: Diprotic system with two overlapping dissociation steps; species
     co-existence near pH 4.68 requires careful spectral processing. Minimum calibration
     set of 4 samples requires samples at maximum concentration of each species. Ideal
@@ -1951,7 +1928,8 @@ itaconic_acid_species:
 kaiser_ecoli_fermentation:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -1959,8 +1937,7 @@ kaiser_ecoli_fermentation:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -1972,14 +1949,17 @@ kaiser_ecoli_fermentation:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 kaiser_ecoli_fermentation_supernatant:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -1987,8 +1967,7 @@ kaiser_ecoli_fermentation_supernatant:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -2000,7 +1979,9 @@ kaiser_ecoli_fermentation_supernatant:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
@@ -2022,9 +2003,7 @@ levulinic_acid_species:
     range 160–3285 cm⁻¹, 4 cm⁻¹ resolution, 60 s acquisition time. Ambient light
     excluded by non-transparent black PVC liner. pH monitored continuously with SenTix
     940 electrode and Multil 3420 pH meter (WTW).
-  rai:dataCollectionType: Titration Raman spectroscopy of monoprotic levulinic acid
-    (C₅H₈O₃) in aqueous solution. Spectra recorded at pH equilibrium across the full
-    titration range for two dissociation species (LA, LA⁻).
+  rai:dataCollectionType: Experiments
   rai:dataLimitations: Detailed calibration accuracy metrics not reported in the main
     paper (Echtermeyer et al., 2021); refer to the dataset repository for further
     details. Models calibrated on NaOH titration in deionized water at 25 °C only;
@@ -2062,10 +2041,7 @@ microgel_size_lf_fingerprint:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
-    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2103,10 +2079,7 @@ microgel_size_lf_global:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
-    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2143,10 +2116,7 @@ microgel_size_mm_lf_fingerprint:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
-    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2184,10 +2154,7 @@ microgel_size_mm_lf_global:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
-    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2225,10 +2192,7 @@ microgel_size_mm_rb_fingerprint:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
-    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2266,10 +2230,7 @@ microgel_size_mm_rb_global:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
-    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2307,10 +2268,7 @@ microgel_size_raw_fingerprint:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
-    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2349,10 +2307,7 @@ microgel_size_raw_global:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
-    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2391,10 +2346,7 @@ microgel_size_rb_fingerprint:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
-    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2432,10 +2384,7 @@ microgel_size_rb_global:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
-    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2473,10 +2422,7 @@ microgel_size_snv_lf_fingerprint:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
-    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2515,10 +2461,7 @@ microgel_size_snv_lf_global:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
-    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2556,10 +2499,7 @@ microgel_size_snv_rb_fingerprint:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Fingerprint spectral
-    region (850–1800 cm⁻¹) with atmospheric O₂ signal (1552–1560 cm⁻¹) excluded.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2598,10 +2538,7 @@ microgel_size_snv_rb_global:
     with 40 s acquisition time; each sample measured three times. Microgels synthesised
     in a continuous flow reactor at varying temperature, flow rate, initiator, and
     surfactant concentrations.
-  rai:dataCollectionType: Offline Raman spectroscopy for prediction of hydrodynamic
-    diameter of monodisperse cross-linked poly(N-isopropylacrylamide) (PNIPAM) microgels
-    (208–483 nm, PDI < 0.368) synthesised in continuous flow. Full global spectral
-    range (100–3425 cm⁻¹, approximately 11,084 wavenumbers per spectrum).
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small dataset (47 samples) is a restrictive factor; authors
     state findings cannot be generalised beyond the employed data sets. Samples from
     a single continuous flow reactor (RWTH Aachen University); generalisability to
@@ -2624,7 +2561,8 @@ microgel_size_snv_rb_global:
 microgel_synthesis:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -2632,8 +2570,7 @@ microgel_synthesis:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Quantitative models are valid within the concentration ranges
     and chemical matrix of the training data; extrapolation outside these ranges is
     not recommended.
@@ -2644,7 +2581,9 @@ microgel_synthesis:
     (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
     processes.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
@@ -2673,9 +2612,7 @@ microplastics_weathered:
     different depths on the same sample using confocal function to minimise surface
     contamination artefacts. Complementary ATR-FTIR on Nicolet iS50 FT-IR (Thermo
     Scientific), 650–4000 cm-1, 0.482 cm-1 resolution, 20 accumulations.
-  rai:dataCollectionType: Field-collected environmental samples (sediment microplastic
-    debris) and commercial standard plastic materials analysed by laboratory micro-Raman
-    spectroscopy and ATR-FTIR.
+  rai:dataCollectionType: Physical data collection
   rai:dataLimitations: 124-spectrum RDWP is a preliminary database; broader coverage
     of polymer types, geographic origins, and weathering durations is needed. Weathered
     spectra of PVC are particularly inconsistent with standard spectra due to dechlorination.
@@ -2718,8 +2655,7 @@ mlrod:
     grating, approximately 1 cm-1 spectral resolution, open-electrode CCD cooled
     to -60 degrees C, 50x LWD objective (NA 0.5), 100-1800 cm-1 spectral window,
     0.1 µm XY step size.
-  rai:dataCollectionType: Automated hyperspectral Raman mapping of solid geological
-    samples in a laboratory setting.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: More than 500,000 spectra acquired from a limited set of rock
     types and pure mineral standards; rare or amorphous mineral phases are under-represented.
     No preprocessing was applied (no cosmic ray removal, no baseline subtraction),
@@ -2742,7 +2678,8 @@ mlrod:
     any human identifiers.
 organic_compounds_preprocess:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
+    or validated analytical reference methods. Labels were assigned by domain experts
+    or clinical diagnosis; no crowdsourced annotation was used.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -2750,8 +2687,7 @@ organic_compounds_preprocess:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
     and chemical matrix of the training data; extrapolation outside these ranges is
     not recommended. Note: No explicit license was stated by the original data providers;
@@ -2764,13 +2700,15 @@ organic_compounds_preprocess:
     (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
     processes.
   rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
+    compound recognition, quality control. Not recommended for direct clinical diagnosis
+    without professional validation and regulatory approval.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 organic_compounds_raw:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
+    or validated analytical reference methods. Labels were assigned by domain experts
+    or clinical diagnosis; no crowdsourced annotation was used.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -2778,8 +2716,7 @@ organic_compounds_raw:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on chemical samples including pure
-    compounds, mixtures, and solutions.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
     and chemical matrix of the training data; extrapolation outside these ranges is
     not recommended. Note: No explicit license was stated by the original data providers;
@@ -2792,13 +2729,15 @@ organic_compounds_raw:
     (PAT) in chemical manufacturing, contributing to safer and more efficient industrial
     processes.
   rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
+    compound recognition, quality control. Not recommended for direct clinical diagnosis
+    without professional validation and regulatory approval.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 parkinson:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
+    or validated analytical reference methods. Labels were assigned by domain experts
+    or clinical diagnosis; no crowdsourced annotation was used.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -2806,8 +2745,7 @@ parkinson:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on human biological samples (blood
-    serum, saliva, tissue biopsies) collected under clinical or research protocols.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Models trained on this dataset may not transfer to different
     instruments, sample matrices, or patient populations without re-calibration. Note:
     No explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -2820,11 +2758,12 @@ parkinson:
     with particular relevance to resource-limited healthcare settings. Results must
     be validated by qualified healthcare professionals before any clinical application.
   rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
-  rai:personalSensitiveInformation: Spectra are derived from human biological samples
-    (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
-    but biological measurements may constitute sensitive health-related data under
-    applicable data-protection regulations.
+    compound recognition, quality control. Not recommended for direct clinical diagnosis
+    without professional validation and regulatory approval.
+  rai:personalSensitiveInformation: Sensitive attributes present in the dataset — health
+    condition (disease class labels). Spectra are derived from human biological samples;
+    no direct patient identifiers are included in the released spectral files. Other
+    demographic attributes (age, gender, geography) are not part of the released data.
 pharmaceutical_ingredients:
   rai:dataAnnotationProtocol: Class labels are the known compound identity of each
     reference material. 32 pure compounds measured in 110 spectra each (3,510 spectra
@@ -2841,8 +2780,7 @@ pharmaceutical_ingredients:
     Endress+Hauser Raman Rxn2 analyser (785 nm laser) using a non-contact probe in
     a static measurement chamber with amber glass vials. Spectral range 150–3,425
     cm⁻¹ (3,276 data points); ~1 cm⁻¹ resolution. 110 spectra per compound.
-  rai:dataCollectionType: Laboratory measurements of pure chemical reference compounds
-    in a static non-contact Raman probe setup at University of Galway.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Dataset covers 32 compounds only; models may not generalise
     to untested substances. Spectra are of single pure compounds; mixture analysis
     requires additional data. All spectra acquired with one instrument model at 785
@@ -2862,7 +2800,8 @@ pharmaceutical_ingredients:
 ralstonia_fermentations:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -2870,8 +2809,7 @@ ralstonia_fermentations:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -2883,13 +2821,16 @@ ralstonia_fermentations:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 rruff_mineral_preprocess:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
+    or validated analytical reference methods. Labels were assigned by domain experts
+    or clinical diagnosis; no crowdsourced annotation was used.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -2897,8 +2838,7 @@ rruff_mineral_preprocess:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on solid or liquid material samples
-    including minerals, polymers, and organic pigments.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Reference spectra represent ideal laboratory conditions; real-world
     samples may show additional interference from impurities, fluorescence, or surface
     effects. Note: No explicit license was stated by the original data providers;
@@ -2911,13 +2851,15 @@ rruff_mineral_preprocess:
     identification with applications in geology, environmental science, art conservation,
     and industrial quality assurance.
   rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
+    compound recognition, quality control. Not recommended for direct clinical diagnosis
+    without professional validation and regulatory approval.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 rruff_mineral_raw:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
-    or validated analytical reference methods.
+    or validated analytical reference methods. Labels were assigned by domain experts
+    or clinical diagnosis; no crowdsourced annotation was used.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -2925,8 +2867,7 @@ rruff_mineral_raw:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on solid or liquid material samples
-    including minerals, polymers, and organic pigments.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Reference spectra represent ideal laboratory conditions; real-world
     samples may show additional interference from impurities, fluorescence, or surface
     effects. Note: No explicit license was stated by the original data providers;
@@ -2939,7 +2880,8 @@ rruff_mineral_raw:
     identification with applications in geology, environmental science, art conservation,
     and industrial quality assurance.
   rai:dataUseCases: Spectral library matching, material identification, disease screening,
-    compound recognition, quality control.
+    compound recognition, quality control. Not recommended for direct clinical diagnosis
+    without professional validation and regulatory approval.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
@@ -2962,9 +2904,7 @@ serum_alzheimer_disease:
     acquired on a Horiba XploRA INV confocal Raman system (638 nm laser, 10× objective,
     quartz capillary), 10 µm step size, spectral range 600–1800 cm⁻¹. Samples measured
     within 28 days of collection.
-  rai:dataCollectionType: Laboratory SERS measurements of human blood serum metabolite
-    extracts collected under a clinical research protocol with ethics approval (Rui
-    Jin Hospital affiliated with SJTU School of Medicine, number 2021-46).
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Small sample size (139 participants) limits statistical power
     and generalisability. Diagnosis based on clinical criteria; neuropathological validation
     was not performed. Dataset is China-specific; performance on other ethnicities and
@@ -3005,9 +2945,7 @@ serum_prostate_cancer:
     SERSome acquired on a Horiba XploRA INV confocal Raman system (638 nm laser, 12.67
     mW, 10× objective, quartz capillary ID 1 mm / OD 2 mm), 10 µm step size. 724
     data points per spectrum, spectral range 600–1800 cm⁻¹.
-  rai:dataCollectionType: Laboratory SERS measurements of human blood serum metabolite
-    extracts collected under a clinical research protocol with ethics approval (Ren
-    Ji Hospital, SJTU School of Medicine, KY2021-030).
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Diagnostic accuracy of 80.8% (internal test set) and 73% (external
     validation) requires further improvement before clinical deployment. Performance
     may differ with varying Ag NP batches, serum collection protocols, or Raman instrument
@@ -3031,7 +2969,8 @@ serum_prostate_cancer:
 streptococcus_thermophilus_fermentation_kaiser:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -3039,8 +2978,7 @@ streptococcus_thermophilus_fermentation_kaiser:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -3052,14 +2990,17 @@ streptococcus_thermophilus_fermentation_kaiser:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 streptococcus_thermophilus_fermentation_timegate:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -3067,8 +3008,7 @@ streptococcus_thermophilus_fermentation_timegate:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -3080,7 +3020,9 @@ streptococcus_thermophilus_fermentation_timegate:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
@@ -3104,9 +3046,7 @@ succinic_acid_species:
     range 160–3285 cm⁻¹, 4 cm⁻¹ resolution, 60 s acquisition time. Ambient light
     excluded by non-transparent black PVC liner. pH monitored continuously with SenTix
     940 electrode and Multil 3420 pH meter (WTW).
-  rai:dataCollectionType: Titration Raman spectroscopy of diprotic succinic acid (C₄H₆O₄)
-    in aqueous solution. Spectra recorded at pH equilibrium across the full titration
-    range for three dissociation species (SA, SA⁻, SA²⁻).
+  rai:dataCollectionType: Experiments
   rai:dataLimitations: Detailed calibration accuracy metrics not reported in the main
     paper (Echtermeyer et al., 2021); refer to the dataset repository for further
     details. Diprotic system with two overlapping dissociation steps may cause spectral
@@ -3153,10 +3093,7 @@ sugar_mixtures_high_snr:
     levels each; five additional pure-solution wells provided reference endmember
     spectra. Measurements repeated at two positions per well with four repetitions,
     yielding 1,920 spectra (1,960 including reference spectra).
-  rai:dataCollectionType: Experimental Raman microspectroscopy measurements on aqueous
-    sugar mixture solutions (sucrose, fructose, maltose, glucose), collected in a
-    controlled laboratory setting as a benchmark for hyperspectral unmixing algorithms
-    under high signal-to-noise conditions (5 s integration).
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Only four sugar species at a limited set of discrete volume
     levels; models may not generalise to broader chemical diversity or continuously
     varying concentrations. Ground-truth fractional abundances are derived from volume
@@ -3211,10 +3148,7 @@ sugar_mixtures_low_snr:
     levels each; five additional pure-solution wells provided reference endmember
     spectra. Measurements repeated at eight positions per well with four repetitions,
     yielding 7,840 spectra (7,840 including reference spectra).
-  rai:dataCollectionType: Experimental Raman microspectroscopy measurements on aqueous
-    sugar mixture solutions (sucrose, fructose, maltose, glucose), collected in a
-    controlled laboratory setting as a benchmark for hyperspectral unmixing algorithms
-    under low signal-to-noise conditions (0.5 s integration).
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Only four sugar species at a limited set of discrete volume
     levels; models may not generalise to broader chemical diversity or continuously
     varying concentrations. Ground-truth fractional abundances are derived from volume
@@ -3264,9 +3198,7 @@ synthetic_organic_pigments_baseline_corrected:
     powders. Renishaw inVia spectrometer, Peltier-cooled CCD (203 K, 576x384 pixels),
     785 nm excitation, 1200 mm-1 grating, 50x LWD objective, wavelength calibration
     ±0.5 cm-1. Samples measured as dry powders or from original manufacturer packaging.
-  rai:dataCollectionType: Laboratory reference measurements of synthetic organic
-    pigment standards assembled from research institutes, commercial manufacturers,
-    and resellers.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Measurements represent pure pigment standards; real paintings
     contain binders, varnishes, and mixed pigment layers that alter spectra. Access
     requires direct contact with KIK/IRPA or the dataset authors; not available via
@@ -3304,9 +3236,7 @@ synthetic_organic_pigments_raw:
     powders. Renishaw inVia spectrometer, Peltier-cooled CCD (203 K, 576x384 pixels),
     785 nm excitation, 1200 mm-1 grating, 50x LWD objective, wavelength calibration
     ±0.5 cm-1. Samples measured as dry powders or from original manufacturer packaging.
-  rai:dataCollectionType: Laboratory reference measurements of synthetic organic
-    pigment standards assembled from research institutes, commercial manufacturers,
-    and resellers.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Measurements represent pure pigment standards; real paintings
     contain binders, varnishes, and mixed pigment layers that alter spectra. This
     variant provides raw spectra without baseline correction; fluorescence background
@@ -3332,7 +3262,8 @@ synthetic_organic_pigments_raw:
 tg_ecoli_fermentation:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -3340,8 +3271,7 @@ tg_ecoli_fermentation:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -3353,14 +3283,17 @@ tg_ecoli_fermentation:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
 tg_ecoli_fermentation_supernatant:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -3368,8 +3301,7 @@ tg_ecoli_fermentation_supernatant:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -3381,7 +3313,9 @@ tg_ecoli_fermentation_supernatant:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
@@ -3416,10 +3350,7 @@ wheat_lines:
     (1:2 v/v) under 16 h/8 h photoperiod at 500 µmol/m2/s and 26 degrees C;
     salt treatment applied as 1/10 Hoagland solution with 125 mM NaCl for 2 weeks
     starting 14 days after germination.
-  rai:dataCollectionType: Confocal Raman microspectroscopy of leaf tissue from
-    Triticum aestivum L. Adana-99 commercial cultivar and two sodium-azide-derived
-    advanced mutant lines, collected to benchmark Raman spectroscopy as a rapid
-    phenotyping alternative to conventional biochemical techniques in plant breeding.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: Only one commercial cultivar and two mutant lines are
     represented; the classifier may not generalise to other wheat varieties,
     mutagen types, or stress conditions. Salt treatment studied at a single
@@ -3457,7 +3388,8 @@ wheat_lines:
 yeast_fermentation:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
-    or DFT computation).
+    or DFT computation). Annotation was performed automatically by instrumentation or
+    computation; no human annotators were involved.
   rai:dataBiases: Data were acquired under controlled laboratory conditions and may
     not generalise to field or clinical settings. Spectral profiles are influenced
     by instrument-specific factors (laser wavelength, detector type, optical path
@@ -3465,8 +3397,7 @@ yeast_fermentation:
   rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
     Each spectrum represents the scattered light intensity as a function of Raman
     shift (cm⁻¹).
-  rai:dataCollectionType: Laboratory measurements on biological materials including
-    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
     calibration transfer to other setups requires additional validation. Note: No
     explicit license was stated by the original data providers; CC BY 4.0 has been
@@ -3478,7 +3409,9 @@ yeast_fermentation:
     tools that can reduce waste, improve yield, and lower costs in biomanufacturing
     and biotechnology.
   rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression,
-    quantitative spectral analysis, process analytical technology (PAT).
+    quantitative spectral analysis, process analytical technology (PAT). Not recommended
+    for deployment on instruments or at conditions not covered by the training data
+    without re-calibration.
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
