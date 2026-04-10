@@ -3,6 +3,8 @@ from typing import Any
 from pandas import Series
 from sklearn.preprocessing import LabelEncoder
 
+LOG_FORMAT = '%(asctime)s %(levelname)s %(name)s:%(funcName)s:%(lineno)d: %(message)s'
+
 
 def is_wavenumber(col: str) -> bool:
     """Checks if a column name can be converted to a float."""
