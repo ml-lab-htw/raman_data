@@ -100,7 +100,7 @@ class MiscLoader(BaseLoader):
             id="mlrod",
             name="ML Raman Open Dataset (MLROD)",
             short_name="MLROD",
-            license="unknown",
+            license="BY-NC",
             loader=lambda cache_path: MiscLoader._load_mlrod(cache_path),
             metadata={
                 "full_name": "ML Raman Open Dataset (MLROD)",

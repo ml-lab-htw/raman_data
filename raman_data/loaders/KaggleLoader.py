@@ -80,7 +80,7 @@ class KaggleLoader(BaseLoader):
                 id=f"amino_acids_{substrate.lower()}",
                 name=f"Amino Acid LC ({substrate})",
                 short_name=f"Amino Acids ({substrate})",
-                license="unknown",
+                license="Requested from authors",
                 loader=lambda idx=idx: KaggleLoader.__load_sergioalejandrod(str(idx+1)),
                 metadata={
                     "full_name": f"Amino Acid LC ({substrate})",
