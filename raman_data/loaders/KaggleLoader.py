@@ -49,7 +49,7 @@ class KaggleLoader(BaseLoader):
                 id=f"diabetes_skin_{position.lower().replace(' ', '_')}",
                 name=f"Diabetes Skin ({position})",
                 short_name=f"Diab. Skin ({position})",
-                license="Optica Open Access Publishing Agreement",
+                license="Optica OAPA",
                 loader=lambda position=position: KaggleLoader.__load_diabetes(position),
                 metadata={
                     "full_name": "codina_raman-spectroscopy-of-diabetes",
