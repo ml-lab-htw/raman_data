@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Pathogenic Bacteria Raman Dataset",
   "description": "60,000 SERS spectra (2,000 per isolate across three measurement time-points) from 30 clinically relevant bacterial and yeast isolates, including an MRSA/MSSA isogenic pair. Acquired on a Horiba LabRAM HR Evolution spectrometer (633 nm, 13.17 mW, 300 l/mm grating, 1.2 cm⁻¹ dispersion, Olympus MPLAN 100× NA 0.9, ~1 µm spot) at 1 s integration time (SNR ~4.1) on gold-coated silica substrates (200 nm Au, electron beam evaporation). Published 25-layer 1D ResNet CNN (Adam, batch 10) achieved 82.2 ± 0.3% isolate accuracy, 97.0 ± 0.3% antibiotic treatment accuracy, and 99.7% treatment classification with 10 spectra in clinical validation on 50 patients (Stanford/Palo Alto VA).",
   "url": "https://github.com/csho33/bacteria-ID",
@@ -140,5 +141,8 @@
   "rai:dataBiases": "Spectra collected under standardised laboratory conditions (Horiba LabRAM HR Evolution, 633 nm, 13.17 mW, 300 l/mm grating, 1 s integration, gold-coated silica substrates). Performance may degrade for isolates, antibiotic regimens, or clinical environments not represented in the reference library. The 30-isolate set covers common pathogens but is not exhaustive. SNR of approximately 4.1 was measured at 1 s integration time.",
   "rai:dataLimitations": "The 30-isolate reference library covers common nosocomial pathogens but may not generalise to rare or emerging species. Performance on clinical isolates is validated for MRSA/MSSA identification (89.1 ± 0.1% accuracy) and antibiotic treatment classification (97.0 ± 0.3% with a single spectrum; 99.7% with 10 spectra). Transfer to instruments with different excitation wavelengths or substrate chemistries requires re-calibration. No explicit license was stated by the original data providers; CC BY 4.0 has been assumed.",
   "rai:dataSocialImpact": "Rapid, culture-free bacterial identification directly from patient samples could reduce time-to-treatment from days to hours, with particular impact on sepsis management and antibiotic stewardship. Clinical deployment requires regulatory approval and validation by qualified healthcare professionals.",
-  "rai:dataUseCases": "Bacterial species identification, antibiotic susceptibility prediction, MRSA/MSSA discrimination, clinical diagnostics decision support, deep learning benchmarks for spectral classification."
+  "rai:dataUseCases": "Bacterial species identification, antibiotic susceptibility prediction, MRSA/MSSA discrimination, clinical diagnostics decision support, deep learning benchmarks for spectral classification.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://github.com/csho33/bacteria-ID"
 }

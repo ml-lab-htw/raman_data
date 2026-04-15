@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Raman Spectra of Weathered Microplastics Dataset",
   "description": "Raman spectra of field-collected weathered microplastic debris (155 samples) and unweathered standard plastics (18 samples), acquired from sediments near waste plastics recycling industries in Laizhou City, Shandong Province, China (August 2018). WITec alpha300-R confocal Raman (532 nm, 5 mW typical, 200–3500 cm⁻¹, 600 l/mm grating, 4 cm⁻¹ resolution, 5 s integration, 4 accumulations typical). 124 spectra with distinct peaks selected for the Raman Database of Weathered Plastics (RDWP); polymer types: PE (62), PP (44), PET (10), PVC (4), PA (2), plus minor classes and 20 unidentified. Weathered spectra show weakened CH₂ peaks and broad 2100–2200 cm⁻¹ bands absent from standard spectra. Prefixes: 'sta-' = unweathered standards, 'wea-' = field-weathered debris. Target: polymer type (classification).",
   "url": "https://data.mendeley.com/datasets/kpygrf9fg6",
@@ -138,5 +139,8 @@
   "rai:dataBiases": "Samples collected from a single geographic location (Laizhou City) dominated by PE and PP recycling waste; polymer distribution (PE 45%, PP 33%) reflects the local recycling industry and may not represent global environmental microplastic composition. Weathered spectra show high fluorescence background and weakened diagnostic peaks, increasing identification uncertainty. Class sizes are highly unequal (PE 62, PP 44, PET 10, PVC 4, PC 1, PA 2, ABS 1). All samples collected in a single season (August 2018); seasonal and geographic variability in weathering is not captured.",
   "rai:dataLimitations": "124-spectrum RDWP is a preliminary database; broader coverage of polymer types, geographic origins, and weathering durations is needed. Weathered spectra of PVC are particularly inconsistent with standard spectra due to dechlorination. Fluorescence from organic matter and surface oxidation products affects spectrum quality; 11 spectra were excluded from RDWP for this reason. RDWP effectiveness for identifying weathered microplastics requires validation by independent researchers. PS, PA, and ABS are represented by only 0–2 spectra; models cannot be trained for these classes.",
   "rai:dataSocialImpact": "Enables accurate identification of environmentally weathered microplastics, which standard reference libraries fail to match. Advances understanding of plastic degradation and persistence in natural environments. Supports environmental monitoring, policy compliance, and research into microplastic pollution pathways, toxicity, and remediation strategies.",
-  "rai:dataUseCases": "Weathered microplastic identification and classification, spectral database benchmarking, polymer degradation studies, environmental pollution monitoring, method development for field-applicable microplastic detection."
+  "rai:dataUseCases": "Weathered microplastic identification and classification, spectral database benchmarking, polymer degradation studies, environmental pollution monitoring, method development for field-applicable microplastic detection.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on solid or liquid material samples including minerals, polymers, and organic pigments. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://data.mendeley.com/datasets/kpygrf9fg6"
 }

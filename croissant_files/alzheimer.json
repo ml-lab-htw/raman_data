@@ -44,13 +44,14 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Saliva Neurodegenerative Disease Raman Dataset (Alzheimer)",
   "description": "Raman spectra from dried saliva drops targeting Alzheimer's Disease (PD) vs. healthy controls. Reveals hidden trends in proteins, lipids, and saccharides for early detection of cognitive and motor impairment.",
-  "url": "https://github.com/dpiazza/Raman-Spectra-Data",
+  "url": "https://github.com/piazzam/Robust-SVM-Raman",
   "keywords": [
     "Raman spectroscopy",
     "spectroscopy",
@@ -68,9 +69,9 @@
       "@id": "alzheimer_source",
       "name": "Saliva Neurodegenerative Disease Raman Dataset (Alzheimer)",
       "description": "Source data hosted at the original repository.",
-      "contentUrl": "https://github.com/dpiazza/Raman-Spectra-Data",
+      "contentUrl": "https://github.com/piazzam/Robust-SVM-Raman",
       "encodingFormat": "application/octet-stream",
-      "sha256": "af7013cdb8a038f006545ac5919e75e36cfe0e2616da7a6e285588436cbc7985"
+      "sha256": "d854f5a9e1d1752f6c79f638c4e1c318eaa2ae7725ddee6046a5c8283c7fd371"
     }
   ],
   "recordSet": [
@@ -139,5 +140,8 @@
   "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
   "rai:dataLimitations": "Models trained on this dataset may not transfer to different instruments, sample matrices, or patient populations without re-calibration. Note: No explicit license was stated by the original data providers; CC BY 4.0 has been assumed. Users should verify the applicable terms with the original authors.",
   "rai:dataSocialImpact": "Raman spectroscopy datasets for medical diagnostics have the potential to support the development of non-invasive, low-cost screening tools with particular relevance to resource-limited healthcare settings. Results must be validated by qualified healthcare professionals before any clinical application.",
-  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control. Not recommended for direct clinical diagnosis without professional validation and regulatory approval."
+  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control. Not recommended for direct clinical diagnosis without professional validation and regulatory approval.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://github.com/piazzam/Robust-SVM-Raman"
 }

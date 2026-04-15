@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "ComFilE for AD",
   "description": "SERS serum metabolite spectra for classifying Alzheimer's disease (AD), mild cognitive impairment (MCI), and healthy controls. 139 serum samples (57 male, 82 female) collected at Rui Jin Hospital, Shanghai Jiao Tong University. Organized as SERSomes (200 spectra per sample, 638 nm laser, quartz capillary), spanning 600–1800 cm⁻¹. 17 PyTorch tensor files organised by class label.",
   "url": "https://figshare.com/articles/dataset/ComFilE_for_AD/28107578",
@@ -276,5 +277,8 @@
   "rai:dataBiases": "Dataset includes 57 male and 82 female participants; sex distribution is unequal. Recruitment from a single hospital in Shanghai limits geographic and demographic diversity. AD diagnosis is based on clinical criteria; neuropathological confirmation was not available for most participants. Small cohort size (139 total) may affect model generalisation.",
   "rai:dataLimitations": "Small sample size (139 participants) limits statistical power and generalisability. Diagnosis based on clinical criteria; neuropathological validation was not performed. Dataset is China-specific; performance on other ethnicities and healthcare populations is unknown. Performance may vary with different Ag NP batches or Raman instrument configurations.",
   "rai:dataSocialImpact": "SERS metabolomics for Alzheimer's disease diagnosis from blood serum could enable early-stage screening with minimal invasiveness, potentially improving patient outcomes through earlier intervention. Key serum biomarkers identified include hypoxanthine, uric acid, and fumaric acid. Clinical application requires validation by qualified healthcare professionals.",
-  "rai:dataUseCases": "Classification of neurodegenerative disease states (AD vs. MCI vs. control); serum metabolic biomarker discovery; benchmarking spectral deep learning and component filtering models for neurological disease diagnostics."
+  "rai:dataUseCases": "Classification of neurodegenerative disease states (AD vs. MCI vs. control); serum metabolic biomarker discovery; benchmarking spectral deep learning and component filtering models for neurological disease diagnostics.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://figshare.com/articles/dataset/ComFilE_for_AD/28107578"
 }

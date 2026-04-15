@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Raman-ChEMBL-part2",
   "description": "140k DFT-computed Raman spectra for ChEMBL drug-like molecules. Targets: HOMO-LUMO gap, HOMO/LUMO energies, isotropic polarizability, heat capacity, dipole moment.",
   "url": "https://figshare.com/articles/dataset/Raman-ChEMBL-part2/28594295",
@@ -148,5 +149,8 @@
   "rai:dataBiases": "Spectra are DFT-computed (gas phase, PBEPBE/6-31G) and do not account for solvent effects, temperature broadening, or instrument-specific artefacts present in experimental Raman spectra. 96.3% of molecules are aromatic; non-aromatic drug-like molecules are underrepresented. Computational accuracy is limited by the DFT functional and basis set; high-frequency modes may be overestimated under the harmonic approximation.",
   "rai:dataLimitations": "Gas-phase DFT calculations do not capture solvent effects or conformational flexibility at finite temperature. The PBEPBE/6-31G level of theory provides moderate accuracy; harmonic approximation may overestimate high-frequency modes. Direct comparison with experimental spectra requires careful scaling and calibration. Licensed CC BY-NC-ND 4.0; commercial use is not permitted.",
   "rai:dataSocialImpact": "A large-scale DFT Raman spectral library for drug-like molecules enables virtual screening, spectral prediction, and training of deep learning models for molecular property prediction, supporting computational drug discovery and materials science research.",
-  "rai:dataUseCases": "DFT spectral library for computational chemistry; training spectral prediction models; molecular property regression (HOMO, LUMO, band gap, polarizability, heat capacity, dipole moment); benchmarking machine learning potentials. Not recommended for commercial use (CC BY-NC-ND 4.0 license). Not recommended for direct comparison with experimental spectra without frequency scaling and instrument calibration."
+  "rai:dataUseCases": "DFT spectral library for computational chemistry; training spectral prediction models; molecular property regression (HOMO, LUMO, band gap, polarizability, heat capacity, dipole moment); benchmarking machine learning potentials. Not recommended for commercial use (CC BY-NC-ND 4.0 license). Not recommended for direct comparison with experimental spectra without frequency scaling and instrument calibration.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions. Preprocessing: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication. Annotation: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "prov:wasDerivedFrom": "https://figshare.com/articles/dataset/Raman-ChEMBL-part2/28594295"
 }

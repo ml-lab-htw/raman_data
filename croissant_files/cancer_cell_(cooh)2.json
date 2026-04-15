@@ -45,6 +45,7 @@
     "subField": "cr:subField",
     "transform": "cr:transform",
     "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#",
     "dataBiases": "cr:dataBiases",
     "dataCollection": "cr:dataCollection",
     "isEnumeration": "cr:isEnumeration",
@@ -134,5 +135,8 @@
   "rai:dataBiases": "Cell lines (A2058, G361) and primary cultures (HPM, HF, ZAM) differ in growth conditions and serum content (0% vs. 10% FBS), introducing biological variability beyond cancer/normal status. SERS spectra show high inter-spectrum variability from random sampling of heterogeneous culture media; individual spectra cannot be directly interpreted without CNN processing. Measurements performed on conditioned culture media (metabolite secretions), not directly on cells. Single- laboratory data (Czech University of Technology / Charles University Prague); transfer to other AuMs batches or instruments requires validation.",
   "rai:dataLimitations": "SERS spectra of complex biological media are highly variable and non-interpretable without CNN; direct spectral matching against reference libraries is not feasible. Model trained on 75% / validated on 25% split; external validation on independent patient samples not demonstrated. Published CNN achieved 100% accuracy on the validation set, but this should be interpreted cautiously given the small dataset size and the controlled in-vitro conditions.",
   "rai:dataSocialImpact": "Demonstrates feasibility of SERS-CNN cancer detection from conditioned culture media without cell labelling or sample preparation. Potential path toward non-invasive, rapid cancer diagnostics. Clinical translation requires extensive validation on patient-derived samples under regulatory oversight.",
-  "rai:dataUseCases": "Cancer cell-line classification, SERS-based metabolite fingerprinting, multi-input CNN benchmarking, comparison of surface functionalization selectivity for biomolecule entrapping."
+  "rai:dataUseCases": "Cancer cell-line classification, SERS-based metabolite fingerprinting, multi-input CNN benchmarking, comparison of surface functionalization selectivity for biomolecule entrapping.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://www.kaggle.com/datasets/andriitrelin/cells-raman-spectra"
 }

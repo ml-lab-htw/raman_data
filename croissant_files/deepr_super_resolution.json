@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "DeepeR Super-Resolution Dataset",
   "description": "Hyperspectral super-resolution dataset from DeepeR paper. Contains low-resolution input spectra and high-resolution target spectra for training super-resolution models.",
   "url": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9",
@@ -137,5 +138,8 @@
   "rai:dataBiases": "All 169 hyperspectral images are from MDA-MB-231 breast cancer cells imaged on a single confocal Raman system at 532 nm. The HyRISR network learns spatial and spectral correlations specific to this cell line and instrument. At 4x super-resolution, the network introduces increased blurring that limits its suitability for high-resolution cellular imaging; 2x and 3x demonstrated better spatial fidelity. Transfer learning to tissue-engineered cartilage was shown (n=16 training patches), but generalisation to other tissue types or instruments has not been systematically benchmarked.",
   "rai:dataLimitations": "HyRISR learns spatial correlations specific to MDA-MB-231 cells and the acquisition instrument. At 4x super-resolution, blurring artefacts are significant and reconstruction fidelity is markedly reduced compared to 2x and 3x. Dataset access is via a SharePoint link rather than a stable versioned repository. The training set of 144 images is small relative to typical RGB super-resolution benchmarks; extending the dataset would likely further improve performance.",
   "rai:dataSocialImpact": "Enables 40-160x speed-up in hyperspectral Raman cell imaging, reducing acquisition times from over one hour to under one minute. This could make label-free molecular imaging practical for high-throughput drug screening, pathological tissue analysis, and cell biology studies that are currently prohibitively slow with conventional Raman microscopy.",
-  "rai:dataUseCases": "Training and benchmarking hyperspectral spatial super-resolution models (2x, 3x, 4x); comparison against nearest-neighbour and bicubic upsampling baselines; transfer learning to new sample types with limited training data; hybrid combination with spectral denoising for extreme imaging speed-ups."
+  "rai:dataUseCases": "Training and benchmarking hyperspectral spatial super-resolution models (2x, 3x, 4x); comparison against nearest-neighbour and bicubic upsampling baselines; transfer learning to new sample types with limited training data; hybrid combination with spectral denoising for extreme imaging speed-ups.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory spectroscopic measurements. Preprocessing: Low-resolution spectra are paired with high-resolution reference spectra of the same samples for supervised super-resolution model training. Annotation: High-resolution reference spectra acquired with finer wavenumber spacing than the low-resolution counterpart.",
+  "prov:wasDerivedFrom": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EuIIZkQGtT5NgQcYO_SOzigB706Q8b0EddSLEDGUN22EbA?e=5%3axGyu4b&fromShare=true&at=9"
 }

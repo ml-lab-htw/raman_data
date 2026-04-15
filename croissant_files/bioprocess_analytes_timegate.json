@@ -45,6 +45,7 @@
     "subField": "cr:subField",
     "transform": "cr:transform",
     "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#",
     "arrayShape": "cr:arrayShape",
     "containedIn": "cr:containedIn",
     "dataBiases": "cr:dataBiases",
@@ -6529,5 +6530,8 @@
   "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
   "rai:dataLimitations": "Spectral signatures are process- and instrument-specific; calibration transfer to other setups requires additional validation. Note: No explicit license was stated by the original data providers; CC BY 4.0 has been assumed. Users should verify the applicable terms with the original authors.",
   "rai:dataSocialImpact": "Enables the development of rapid, inline bioprocess monitoring tools that can reduce waste, improve yield, and lower costs in biomanufacturing and biotechnology.",
-  "rai:dataUseCases": "Chemometric modelling, calibration transfer, multivariate regression, quantitative spectral analysis, process analytical technology (PAT). Not recommended for deployment on instruments or at conditions not covered by the training data without re-calibration."
+  "rai:dataUseCases": "Chemometric modelling, calibration transfer, multivariate regression, quantitative spectral analysis, process analytical technology (PAT). Not recommended for deployment on instruments or at conditions not covered by the training data without re-calibration.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material. Preprocessing: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication. Annotation: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "prov:wasDerivedFrom": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesTimegate"
 }

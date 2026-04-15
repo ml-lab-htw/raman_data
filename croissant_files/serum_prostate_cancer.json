@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "ComFilE for PCa",
   "description": "SERS serum metabolite spectra for classifying prostate cancer (PCa), benign prostatic hyperplasia (BPH), and healthy controls. 424 serum samples from male participants (ages 41–89) collected at Ren Ji Hospital, Shanghai Jiao Tong University. Organized as SERSomes (200 spectra per sample, 638 nm laser, quartz capillary), spanning 600–1800 cm⁻¹ (724 data points per spectrum).",
   "url": "https://figshare.com/articles/dataset/ComFilE_for_PCa/28107395",
@@ -645,5 +646,8 @@
   "rai:dataBiases": "All participants are male (biologically); dataset is specific to prostate cancer and does not generalise to other tumour types or female populations. Recruitment from two hospital systems in Shanghai and one in Ningbo/Jiading; geographic and demographic diversity is limited to eastern China. Age range 41–89 years; very young or elderly populations are not represented.",
   "rai:dataLimitations": "Diagnostic accuracy of 80.8% (internal test set) and 73% (external validation) requires further improvement before clinical deployment. Performance may differ with varying Ag NP batches, serum collection protocols, or Raman instrument configurations. External validation cohorts are also China-based; generalisability to other ethnicities and healthcare systems has not been established.",
   "rai:dataSocialImpact": "Serum SERS metabolomics for prostate cancer screening offers a minimally invasive alternative to PSA testing or tissue biopsy. Key serum biomarkers identified include uric acid, hypoxanthine, uracil, and tryptamine. Diagnostic results must be validated by qualified healthcare professionals before any clinical application.",
-  "rai:dataUseCases": "Multiclass classification (PCa vs. BPH vs. control); serum metabolic biomarker discovery; development and benchmarking of spectral deep learning models for cancer diagnostics; Gleason score prediction."
+  "rai:dataUseCases": "Multiclass classification (PCa vs. BPH vs. control); serum metabolic biomarker discovery; development and benchmarking of spectral deep learning models for cancer diagnostics; Gleason score prediction.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://figshare.com/articles/dataset/ComFilE_for_PCa/28107395"
 }

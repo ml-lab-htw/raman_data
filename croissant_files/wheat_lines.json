@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Mutant Wheat Raman Dataset",
   "description": "Raman spectra from the 7th generation of salt-stress-tolerant wheat mutant lines and their commercial cultivars. Features 785 nm excitation and tracks biochemical shifts in carotenoids and protein-related bands for agricultural phenotyping.",
   "url": "https://doi.org/10.5281/zenodo.7644521",
@@ -137,5 +138,8 @@
   "rai:dataBiases": "Dataset derived from a single wheat cultivar (Triticum aestivum L. Adana-99) and only two derived mutant lines; results may not generalise to other wheat varieties or mutagenesis strategies. Salt stress applied at only one concentration (125 mM NaCl); other salinities are not represented. Only leaf tissue was studied; root or shoot tissue responses are not captured. Spectra acquired on a custom single-site instrument at Bogazici University; instrument-specific optical characteristics (bandpass filter, fiber coupling, objective) may affect transferability to other Raman setups. Quantile elimination (0.005-0.995) and random downsampling to 6,836 spectra per class may discard informative measurements and introduce sampling bias.",
   "rai:dataLimitations": "Only one commercial cultivar and two mutant lines are represented; the classifier may not generalise to other wheat varieties, mutagen types, or stress conditions. Salt treatment studied at a single concentration (125 mM NaCl) only; intermediate or higher salinities are not covered. No integration time is reported in the source publication, which limits exact reproducibility. The balanced dataset was produced by random downsampling to 6,836 spectra per class, discarding a portion of the acquired spectra. The trained decision tree is specific to MATLAB R2021b and may require retraining for other analysis environments.",
   "rai:dataSocialImpact": "Demonstrates that Raman spectroscopy can replace time-consuming biochemical assays (antioxidant enzyme activity, chlorophyll quantification, ion analysis, qPCR gene expression) for differentiating salt-tolerant wheat mutant lines from commercial cultivars. Supports faster and lower-cost phenotyping pipelines in plant breeding programs, contributing to the development of salt-tolerant wheat varieties for food security in saline-affected agricultural regions.",
-  "rai:dataUseCases": "Classification of wheat genotypes and stress-treatment groups from leaf Raman spectra; benchmarking machine learning classifiers for agricultural plant phenotyping; development of rapid Raman-based screening tools for salt-tolerance breeding programs; spectral band assignment for protein, carotenoid, and amino-acid markers in plant tissue Raman analysis."
+  "rai:dataUseCases": "Classification of wheat genotypes and stress-treatment groups from leaf Raman spectra; benchmarking machine learning classifiers for agricultural plant phenotyping; development of rapid Raman-based screening tools for salt-tolerance breeding programs; spectral band assignment for protein, carotenoid, and amino-acid markers in plant tissue Raman analysis.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://doi.org/10.5281/zenodo.7644521"
 }

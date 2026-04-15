@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development",
   "description": "A Raman spectral dataset comprising 3,510 spectra from 32 chemical substances. This dataset includes organic solvents and reagents commonly used in API development, along with information regarding the products in the XLSX, and code to visualise and perform technical validation on the data.",
   "url": "https://springernature.figshare.com/ndownloader/articles/27931131/versions/1",
@@ -163,5 +164,8 @@
   "rai:dataBiases": "All 32 compounds are pure reference materials measured individually; mixtures and impure samples are not represented. Spectra acquired with a single instrument (Endress+Hauser Raman Rxn2, 785 nm) in a static non-contact probe setup; performance may differ for inline or immersion probe configurations. Selection of compounds focuses on solvents and reagents relevant to API development and may not cover all pharmaceutical-grade materials.",
   "rai:dataLimitations": "Dataset covers 32 compounds only; models may not generalise to untested substances. Spectra are of single pure compounds; mixture analysis requires additional data. All spectra acquired with one instrument model at 785 nm; calibration transfer to other instruments or wavelengths has not been validated.",
   "rai:dataSocialImpact": "An open-source Raman spectral library for pharmaceutical solvents and reagents supports the development of inline quality-control and process analytical technology (PAT) tools in API manufacturing, contributing to safer and more consistent pharmaceutical production.",
-  "rai:dataUseCases": "Spectral library construction; compound identification and classification; chemometric modelling for API quality control; process analytical technology (PAT); benchmarking Raman spectral analysis algorithms."
+  "rai:dataUseCases": "Spectral library construction; compound identification and classification; chemometric modelling for API quality control; process analytical technology (PAT); benchmarking Raman spectral analysis algorithms.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://springernature.figshare.com/ndownloader/articles/27931131/versions/1"
 }
