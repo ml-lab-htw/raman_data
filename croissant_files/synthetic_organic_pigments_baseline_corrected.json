@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Synthetic Organic Pigments Raman Spectral Library - Baseline Corrected",
   "description": "Baseline Corrected Raman spectral library of approximately 270 synthetic organic pigments (~300 reference spectra, nearly 400 samples total) compiled at the Royal Institute for Cultural Heritage (KIK/IRPA), Brussels. Acquired on a Renishaw inVia dispersive Raman spectrometer (785 nm, Peltier-cooled CCD 203 K, 1200 mm⁻¹ grating, 50× LWD objective, ±0.5 cm⁻¹ calibration). Pigment classes cover azo (monoazo, disazo), heterocyclic, and polycyclic types (phthalocyanine, quinacridone, perylene, anthraquinone, dioxazine, triarylcarbonium, diketopyrrole). Validated for pigment identification on four Stedelijk Museum (Amsterdam) paintings. Baseline correction applied to remove fluorescence background.",
   "url": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/ES5_J9PpBatLvbTe6VlFyIoBc6fFRli0YHl2qjnLxn6I8Q?download=1",
@@ -139,5 +140,8 @@
   "rai:dataBiases": "Reference library covers modern synthetic organic pigments used in 20th-century fine-art painting and design; historic inorganic pigments and natural colorants are excluded. Spectra acquired on a single instrument at KIK/IRPA; fluorescence and sample morphology vary across pigment classes. Class sizes are unequal, reflecting commercial availability. Tested for identification on four Stedelijk Museum paintings (Amsterdam), but broader applicability to in-situ measurements under different conditions has not been validated.",
   "rai:dataLimitations": "Measurements represent pure pigment standards; real paintings contain binders, varnishes, and mixed pigment layers that alter spectra. Access requires direct contact with KIK/IRPA or the dataset authors; not available via an open API. No explicit open license was stated for this variant; users should verify applicable terms with the original authors.",
   "rai:dataSocialImpact": "Enables non-invasive identification of modern synthetic pigments in cultural heritage objects (paintings, textiles, plastics) without sampling. Supports provenance research, forgery detection, and conservation decision-making in museums and heritage institutions.",
-  "rai:dataUseCases": "Pigment identification and classification, spectral library matching, art conservation and authentication, benchmarking of chemometric classifiers on organic colorants."
+  "rai:dataUseCases": "Pigment identification and classification, spectral library matching, art conservation and authentication, benchmarking of chemometric classifiers on organic colorants.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on solid or liquid material samples including minerals, polymers, and organic pigments. Preprocessing: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication. Annotation: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "prov:wasDerivedFrom": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/ES5_J9PpBatLvbTe6VlFyIoBc6fFRli0YHl2qjnLxn6I8Q?download=1"
 }

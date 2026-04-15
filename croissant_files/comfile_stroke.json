@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "ComFilE: SERS serum spectra for stroke classification",
   "description": "SERS serum spectra for binary stroke vs. healthy-control classification. 20 tab-separated files (10 stroke, 10 healthy control), each containing ~201 spectra across 723 wavenumber points (202.985–1999.92 cm⁻¹). ~4,020 spectra total.",
   "url": "https://figshare.com/articles/dataset/ComFilE_/28107431",
@@ -300,5 +301,8 @@
   "rai:dataBiases": "Dataset includes 65 male and 55 female participants aged 45–80; younger and older age groups are not represented. Recruitment from a single hospital (Minhang Hospital, Fudan University) limits geographic and demographic diversity. Small cohort (52 stroke, 69 controls) may affect model generalisation. Restricted to ischemic stroke; haemorrhagic stroke is not represented.",
   "rai:dataLimitations": "Small dataset (121 participants); trained models may not generalise without additional data from diverse populations. Single-site recruitment limits demographic representativeness. Serum must be processed and measured within 28 days of collection. Performance may vary with different Ag NP batches or Raman instrument configurations.",
   "rai:dataSocialImpact": "Rapid SERS-based serum metabolomics for ischemic stroke diagnosis could support time-critical clinical triage. Key serum biomarkers identified include trimethyllysine, uric acid, and hypoxanthine. Diagnostic results must be validated by qualified healthcare professionals before any clinical application.",
-  "rai:dataUseCases": "Binary classification (stroke vs. control); serum metabolic biomarker discovery; benchmarking spectral deep learning and component filtering models for neurological disease diagnostics."
+  "rai:dataUseCases": "Binary classification (stroke vs. control); serum metabolic biomarker discovery; benchmarking spectral deep learning and component filtering models for neurological disease diagnostics.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://figshare.com/articles/dataset/ComFilE_/28107431"
 }

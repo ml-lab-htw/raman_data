@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "SERS Spectra of Hair Dyes Dataset",
   "description": "SERS spectra of commercial hair dye products acquired with a portable Raman spectrometer. Each spectrum is labelled by brand, permanence (permanent/semi-permanent/temporary), and colour. Target: brand identity (classification).",
   "url": "https://doi.org/10.5281/zen  odo.18881751",
@@ -138,5 +139,8 @@
   "rai:dataBiases": "All spectra collected from blonde Caucasian hair obtained from a single anonymous donor at one hair salon; results may not generalise to other hair colors, hair types, or donors of different racial, gender, or age backgrounds. Uncolored hair exhibits no SERS signal with AuNRs (no protein detected by this substrate), making the approach specific to colored hair only. Only 4 commercial brands (Ion, Wella, Clairol, L'Oreal) and 33 colorants from a single retail outlet (Sally Beauty Supply, College Station TX) are represented; other brands and formulations are not covered. Misclassifications occurred between colorants sharing similar molecular formulations (e.g., Clairol semi-permanent black and demi-permanent brown reached only 72% TPR). Hair samples were stored for at most 1 month before analysis; the effect of longer storage, sun exposure, or washing routines on SERS signal readability has not been investigated.",
   "rai:dataLimitations": "Only 50 spectra per class limits statistical power and sensitivity to AuNR batch-to-batch variability. Results are specific to blonde Caucasian hair; hair biology (melanin content, cuticle structure) varies by donor, race, and age, and robustness across demographics has not been established. Only 33 of the many commercially available colorants are included; new market products cannot be classified without model retraining. The effect of environmental exposure (sunlight, repeated washing, chemical treatments) on SERS signal stability has not been characterised. Data were originally available upon request only, not openly released at time of publication.",
   "rai:dataSocialImpact": "Demonstrates that SERS can provide highly accurate forensic analysis of hair dye evidence, enabling identification of the brand, permanency type, and color of a colorant present on a hair sample regardless of visual appearance. Average individual colorant identification accuracy of 97%, with near-perfect brand and color-type discrimination, supports development of portable SERS-based forensic tools for rapid in-situ crime scene analysis.",
-  "rai:dataUseCases": "Forensic identification of hair colorant brand, permanency type, and color from hair SERS spectra; benchmarking PLS-DA and other multivariate classifiers for multi-label SERS-based hair forensics; development of SERS spectral libraries for hair dye identification; evaluation of AuNR-based SERS substrates for analysis of biological samples."
+  "rai:dataUseCases": "Forensic identification of hair colorant brand, permanency type, and color from hair SERS spectra; benchmarking PLS-DA and other multivariate classifiers for multi-label SERS-based hair forensics; development of SERS spectral libraries for hair dye identification; evaluation of AuNR-based SERS substrates for analysis of biological samples.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://doi.org/10.5281/zen  odo.18881751"
 }

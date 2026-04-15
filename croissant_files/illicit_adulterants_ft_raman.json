@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Dataset of Raman and SERS spectra of illicit adulterants added to dietary supplements",
   "description": "FT-Raman reference spectra (1064 nm, 50–3600 cm⁻¹, 4 cm⁻¹ resolution, 32 scans) of 11 SERS-active pharmaceutically active adulterants found in dietary supplements, acquired with a benchtop Bruker RAM II FT-IR Raman module (OPUS v7.2, 300 mW). Compounds selected from RASFF portal EU alerts. Library spectra at 1 mg/mL in ethanol; three replicates per compound. Companion to the portable SERS dataset (illicit_adulterants_sers). Target: compound identity (classification).",
   "url": "https://data.mendeley.com/datasets/y4md8znppn/1",
@@ -141,5 +142,8 @@
   "rai:dataBiases": "Library spectra represent pure analytical-grade standards dissolved in ethanol; real dietary supplement matrices contain excipients (microcrystalline cellulose, magnesium stearate, silicon dioxide, hydroxypropyl methylcellulose, titanium oxide) and plant-based extracts that can overlap with adulterant signals. The 23-compound panel covers RASFF-flagged targets but not all possible novel synthetic analogues or undeclared substances. FT-Raman at 1064 nm minimises fluorescence but differs from portable SERS; spectral transfer between instruments requires re-calibration.",
   "rai:dataLimitations": "Small spectral library (11 SERS-active reference compounds, one spectrum per compound); insufficient for training data-driven models without augmentation. Spectra represent ideal pure-compound conditions; detection performance in real DS matrices is limited by excipient interference and low analyte concentrations (LOI 0.1–5.0% w/w). Dataset does not cover SERS-inactive adulterants (AND, DMAA, DMAE, DMBA, TSIL, VAR, XAN) or structural analogues without reference standards.",
   "rai:dataSocialImpact": "Enables rapid, portable screening for undeclared pharmaceutically active adulterants in dietary supplements at customs, retail inspections, and border control without skilled operators or lengthy sample preparation. Supports EU RASFF compliance and consumer safety enforcement. Low specificity of SERS benefits detection of newly synthesised structural analogues where reference standards are unavailable.",
-  "rai:dataUseCases": "Spectral library matching for compound identification, food-fraud detection in dietary supplements, benchmarking of SERS vs. FT-Raman performance, reference spectra for adulterant screening algorithms."
+  "rai:dataUseCases": "Spectral library matching for compound identification, food-fraud detection in dietary supplements, benchmarking of SERS vs. FT-Raman performance, reference spectra for adulterant screening algorithms.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://data.mendeley.com/datasets/y4md8znppn/1"
 }

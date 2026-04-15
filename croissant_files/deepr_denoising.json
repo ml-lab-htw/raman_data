@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "DeepeR Denoising Dataset",
   "description": "Raman spectral denoising dataset from DeepeR paper. Contains noisy input spectra and corresponding denoised target spectra for training deep learning denoising models.",
   "url": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9",
@@ -137,5 +138,8 @@
   "rai:dataBiases": "All 172,312 spectral pairs originate from a single cancer cell line (MDA-MB-231 breast cancer) imaged on one confocal Raman system at 532 nm. The denoising model learns noise characteristics specific to this instrument and the 0.1 s vs. 1 s integration-time regime; generalisation to other instruments, cell types, excitation wavelengths, or noise regimes requires revalidation. The 11 cell images used for 11-fold cross-validation may not capture the full range of cellular morphological variability.",
   "rai:dataLimitations": "The 1D ResUNet learns noise characteristics specific to the acquisition instrument and the 0.1 s/1 s integration-time pairing. Performance on other spectrometers, sample types, or noise levels is not guaranteed without retraining or fine-tuning. Dataset access is via a SharePoint link provided by the authors rather than a stable versioned repository, which may affect long-term reproducibility. The 11 cell images may not represent the full biological variability of the cell line.",
   "rai:dataSocialImpact": "A 10x improvement in Raman denoising over classical methods (Savitzky-Golay, wavelet, PCA) directly enables high-throughput label-free molecular imaging of cells, potentially accelerating drug screening, cancer diagnostics, and histopathology workflows that currently require prohibitively long acquisition times.",
-  "rai:dataUseCases": "Training and benchmarking 1D deep learning denoising models for hyperspectral Raman imaging; comparison against classical spectral filters (Savitzky-Golay, wavelet, PCA); component of hybrid denoising + super-resolution pipelines for high-throughput Raman microscopy."
+  "rai:dataUseCases": "Training and benchmarking 1D deep learning denoising models for hyperspectral Raman imaging; comparison against classical spectral filters (Savitzky-Golay, wavelet, PCA); component of hybrid denoising + super-resolution pipelines for high-throughput Raman microscopy.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory spectroscopic measurements. Preprocessing: Raw noisy spectra are paired with high-SNR reference spectra of the same samples for supervised denoising model training. Annotation: Reference (clean) spectra are high-SNR acquisitions of the same samples obtained under longer integration times or reduced noise conditions.",
+  "prov:wasDerivedFrom": "https://emckclac-my.sharepoint.com/:f:/g/personal/k1919691_kcl_ac_uk/EqZaY-_FrGdImybIGuMCvb8Bo_YD1Bc9ATBxbLxdDIv0RA?e=5%3aHhLp91&fromShare=true&at=9"
 }

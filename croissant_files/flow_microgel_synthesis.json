@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis",
   "description": "This data set contains in-line Raman spectroscopy measurements and predicted microgel sizes from Dynamic Light Scattering (DLS).The Raman spectroscopy measurements were conducted inside a customized measurement cell for monitoring in a tubular flow reactor.Inside the flow reactor, the microgel synthesis based on the monomer N-Isopropylacrylamid and the crosslinker N, N' Methylenebis(acrylamide) takes place.",
   "url": "https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1",
@@ -139,5 +140,8 @@
   "rai:dataBiases": "Data originate from a single tubular glass flow reactor setup; results may not transfer directly to different reactor geometries or scales. The Gaussian Process surrogate model used in the optimization loop exhibits high variance in sparsely sampled regions, which may bias the acquisition function toward unexplored but unreliable conditions. Offline DLS reference measurements prevent fully autonomous closed-loop optimization and introduce a latency between Raman monitoring and size feedback.",
   "rai:dataLimitations": "The IHM Raman model and GP surrogate are valid only within the explored process variable ranges; extrapolation beyond the design space is unreliable. Only a single reactor configuration was studied. The dataset represents a relatively small number of experiments (approx. 70 total), limiting the density of coverage across the four-dimensional input space.",
   "rai:dataSocialImpact": "Enables data-driven optimization of colloidal microgel synthesis in continuous flow, supporting scalable production of responsive hydrogel particles for drug delivery, diagnostics, and smart material applications. Demonstrates hardware-in-the-loop Bayesian optimization as a strategy for autonomous process development in chemical engineering.",
-  "rai:dataUseCases": "Multi-objective Bayesian optimization of flow synthesis processes; GP surrogate modeling for process variable screening; inline Raman monitoring of polymerization reactions; PAT-enabled continuous manufacturing; development of hardware-in-the-loop optimization frameworks for chemical production."
+  "rai:dataUseCases": "Multi-objective Bayesian optimization of flow synthesis processes; GP surrogate modeling for process variable screening; inline Raman monitoring of polymerization reactions; PAT-enabled continuous manufacturing; development of hardware-in-the-loop optimization frameworks for chemical production.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions. Preprocessing: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication. Annotation: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "prov:wasDerivedFrom": "https://publications.rwth-aachen.de/record/959050/files/Raman_Spectroscopy_Measurements.zip?version=1"
 }

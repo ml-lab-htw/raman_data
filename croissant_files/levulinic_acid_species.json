@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
   "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
   "url": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
@@ -138,5 +139,8 @@
   "rai:dataBiases": "Spectra collected under ideal dilute mixture assumption (activity coefficients = 1) at a single instrument (Kaiser RXN2, 785 nm) and temperature (25 °C). Monoprotic system covers only two species (LA, LA⁻). Levulinic acid data is part of the extended dataset repository but not the primary focus of the source publication.",
   "rai:dataLimitations": "Detailed calibration accuracy metrics not reported in the main paper (Echtermeyer et al., 2021); refer to the dataset repository for further details. Models calibrated on NaOH titration in deionized water at 25 °C only; ideal mixture assumption not strictly valid above 0.1 mol L⁻¹. Extrapolation to other instruments or process matrices requires recalibration.",
   "rai:dataSocialImpact": "Levulinic acid is a renewable platform chemical derived from lignocellulosic biomass, with applications in biofuels, pharmaceuticals, and polymer synthesis. Inline dissociation monitoring supports optimisation of pH-dependent separation and purification processes in biorefineries.",
-  "rai:dataUseCases": "Inline monitoring of monoprotic carboxylic acid dissociation in aqueous solution; PAT in levulinic acid production from biomass; IHM and chemometric model development for biobased acid systems."
+  "rai:dataUseCases": "Inline monitoring of monoprotic carboxylic acid dissociation in aqueous solution; PAT in levulinic acid production from biomass; IHM and chemometric model development for biobased acid systems.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions. Preprocessing: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication. Annotation: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "prov:wasDerivedFrom": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip"
 }

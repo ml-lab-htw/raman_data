@@ -45,6 +45,7 @@
     "subField": "cr:subField",
     "transform": "cr:transform",
     "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#",
     "dataBiases": "cr:dataBiases",
     "dataCollection": "cr:dataCollection",
     "isEnumeration": "cr:isEnumeration",
@@ -53,7 +54,8 @@
   "alternateName": "Spectral data of mixtures containing 4 amino acids at different concentrations. ",
   "license": {
     "@type": "sc:CreativeWork",
-    "name": "Unknown"
+    "name": "Attribution 4.0 International (CC BY 4.0)",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
   },
   "distribution": [
     {
@@ -129,5 +131,8 @@
   "rai:dataBiases": "Single-laboratory, single-instrument benchmark dataset. Each amino acid measured in isolation — simultaneous multi-analyte elution not covered. Phenylalanine injected at 55 mM (lower than glycine/leucine at 100 mM), making analyte detection more challenging relative to solvent background. arXiv preprint — findings not yet peer-reviewed at time of dataset release.",
   "rai:dataLimitations": "Small benchmark dataset covering only four amino acids in single-analyte conditions. The detection challenge arises from millimolar analyte concentrations against a strong H₂O/ACE solvent background. No explicit license stated; CC BY 4.0 assumed — verify with original authors.",
   "rai:dataSocialImpact": "LC-Raman with vertical flow enables real-time, label-free detection of analytes in chromatographic separations without destructive sampling. Applications include pharmaceutical process monitoring, metabolomics, and inline quality control in biomanufacturing.",
-  "rai:dataUseCases": "Benchmarking time-resolved analyte detection algorithms, unsupervised elution peak detection, PCA/NMF/MCR-ALS dimensionality reduction, LC-Raman method development."
+  "rai:dataUseCases": "Benchmarking time-resolved analyte detection algorithms, unsupervised elution peak detection, PCA/NMF/MCR-ALS dimensionality reduction, LC-Raman method development.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions. Preprocessing: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication. Annotation: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "prov:wasDerivedFrom": "https://www.kaggle.com/datasets/sergioalejandrod/raman-spectroscopy"
 }

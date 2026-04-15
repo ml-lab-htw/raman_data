@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Head and Neck Cancer Raman Spectroscopy Dataset",
   "description": "Raman spectra of blood plasma and saliva samples from head and neck cancer patients and healthy controls. Acquired for non-invasive liquid biopsy screening. Target: cancer vs. control (binary classification).",
   "url": "https://doi.org/10.5281/zenodo.7044324",
@@ -138,5 +139,8 @@
   "rai:dataBiases": "The cohort is limited to 53 patients from a single academic medical centre (UC Davis), which may not reflect the spectral variability encountered in broader or more diverse populations. The class ratio (34 cancer vs. 19 benign) is moderately imbalanced. All measurements were made on a single custom-built confocal Raman microscope at 785 nm excitation; spectral signatures are therefore instrument- and protocol-specific and may not transfer directly to other instruments without recalibration. Both native (wet) and dried biofluid conditions were measured, but best classification performance is reported only for dried samples under a specific quadratic discriminant model.",
   "rai:dataLimitations": "Models trained on this dataset are specific to the instrument, substrate preparation, and patient population used in the original study; external validation on independent cohorts and different Raman systems is required before any clinical use. The biofluid-stitching augmentation introduces a data-fusion step whose generalisation properties are not yet established. GC-MS metabolite assignments are provided as supporting evidence but are not part of the spectral data itself.",
   "rai:dataSocialImpact": "A non-invasive, liquid-biopsy Raman approach to head-and-neck cancer screening could reduce the need for invasive biopsies and enable earlier detection, with potential benefit in resource-limited healthcare settings. The reported combined sensitivity of 96.3 % and specificity of 85.7 % are promising but require independent clinical validation before any diagnostic use. Misclassification in a cancer-screening context carries serious patient-safety implications, so the dataset and any derived models should only be used for research and must be reviewed by qualified clinicians before informing medical decisions.",
-  "rai:dataUseCases": "Development and benchmarking of Raman-based liquid-biopsy classifiers for head-and-neck cancer; multimodal biofluid fusion strategies; PLS-DA and dimensionality-reduction method comparison; spectral preprocessing evaluation; metabolomic-spectroscopic correlation studies."
+  "rai:dataUseCases": "Development and benchmarking of Raman-based liquid-biopsy classifiers for head-and-neck cancer; multimodal biofluid fusion strategies; PLS-DA and dimensionality-reduction method comparison; spectral preprocessing evaluation; metabolomic-spectroscopic correlation studies.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://doi.org/10.5281/zenodo.7044324"
 }

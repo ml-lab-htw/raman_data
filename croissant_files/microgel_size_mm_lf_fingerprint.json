@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy",
   "description": "Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: MinMax + Linear Fit, spectral range: FingerPrint. Task: predict particle diameter from Raman spectrum.",
   "url": "https://publications.rwth-aachen.de/record/959137/files/Data_RWTH-2023-05604.zip?version=1",
@@ -139,5 +140,8 @@
   "rai:dataBiases": "Offline measurements at 20 °C (microgels in swollen state) may not transfer to inline predictions at reaction temperatures (60–80 °C, collapsed state). Two distinct spectral clusters exist in the raw data attributed to different synthesis conditions. Multiple factors beyond particle size influence Raman spectra (monomer, inhibitor, surfactant concentrations). Small dataset (47 samples) limits statistical robustness and generalisability.",
   "rai:dataLimitations": "Small dataset (47 samples) is a restrictive factor; authors state findings cannot be generalised beyond the employed data sets. Samples from a single continuous flow reactor (RWTH Aachen University); generalisability to other reactor types or polymer systems not demonstrated. Offline measurements at 20 °C may not directly apply to inline process conditions at reaction temperature.",
   "rai:dataSocialImpact": "Enables data-driven polymer particle size monitoring from Raman spectroscopy, circumventing labor-intensive offline DLS measurements. Supports closed-loop control of polymerisation processes, contributing to consistent product quality in polymer manufacturing and potential application to crystallisation processes.",
-  "rai:dataUseCases": "Microgel particle size prediction from Raman spectra; benchmarking nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic data; PAT for particle size monitoring in continuous polymer synthesis."
+  "rai:dataUseCases": "Microgel particle size prediction from Raman spectra; benchmarking nonlinear manifold learning (diffusion maps, Y-shaped autoencoders) against PLS and IHM+PLS baselines; dimensionality reduction for high-dimensional spectroscopic data; PAT for particle size monitoring in continuous polymer synthesis.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions. Preprocessing: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication. Annotation: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "prov:wasDerivedFrom": "https://publications.rwth-aachen.de/record/959137/files/Data_RWTH-2023-05604.zip?version=1"
 }

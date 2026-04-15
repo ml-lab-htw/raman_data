@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Sugar Mixtures Raman Dataset (High SNR)",
   "description": "The high signal-to-noise ratio subset of the Sugar Mixtures benchmark (7,680 measurements at 0.5 s integration). Used for evaluating the noise-robustness of hyperspectral unmixing and quantification algorithms.",
   "url": "https://doi.org/10.5281/zenodo.10779223",
@@ -138,5 +139,8 @@
   "rai:dataBiases": "Dataset collected on a single custom B-Raman microspectroscopy platform; spectral characteristics are instrument-specific and may not transfer directly to other Raman systems. Only four sugar species (sucrose, fructose, maltose, glucose) are represented; models trained on this data may not generalise to chemical systems with more endmembers or different spectral properties. The volume-based concentration design (0, 30, 75, 120 µL in 375 µL total) limits coverage of arbitrary mixture compositions. Linear mixing is assumed; bilinear or nonlinear interactions are not modelled.",
   "rai:dataLimitations": "Only four sugar species at a limited set of discrete volume levels; models may not generalise to broader chemical diversity or continuously varying concentrations. Ground-truth fractional abundances are derived from volume ratios rather than independent analytical measurements such as HPLC. Linear mixing is assumed throughout; bilinear or post-nonlinear interactions are not modelled. Dataset size (1,920 spectra) is relatively small compared to imaging datasets.",
   "rai:dataSocialImpact": "Provides a rigorously characterised experimental benchmark for evaluating unsupervised and self-supervised hyperspectral unmixing algorithms in Raman spectroscopy. Improved unmixing accuracy supports label-free, nondestructive chemical characterisation in food quality control, pharmaceutical analysis, biological imaging, and environmental monitoring.",
-  "rai:dataUseCases": "Benchmarking hyperspectral unmixing algorithms for endmember extraction and fractional abundance estimation; development and evaluation of unsupervised autoencoder-based unmixing methods; paired comparison with the low-SNR variant to study the effect of signal-to-noise ratio on unmixing performance; validation of physics-constrained neural network architectures."
+  "rai:dataUseCases": "Benchmarking hyperspectral unmixing algorithms for endmember extraction and fractional abundance estimation; development and evaluation of unsupervised autoencoder-based unmixing methods; paired comparison with the low-SNR variant to study the effect of signal-to-noise ratio on unmixing performance; validation of physics-constrained neural network architectures.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions. Preprocessing: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication. Annotation: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "prov:wasDerivedFrom": "https://doi.org/10.5281/zenodo.10779223"
 }

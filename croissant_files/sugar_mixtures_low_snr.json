@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Sugar Mixtures Raman Dataset (Low SNR)",
   "description": "The low signal-to-noise ratio subset of the Sugar Mixtures benchmark (7,680 measurements at 0.5 s integration). Used for evaluating the noise-robustness of hyperspectral unmixing and quantification algorithms.",
   "url": "https://doi.org/10.5281/zenodo.10779223",
@@ -138,5 +139,8 @@
   "rai:dataBiases": "Dataset collected on a single custom B-Raman microspectroscopy platform; spectral characteristics are instrument-specific and may not transfer directly to other Raman systems. Only four sugar species (sucrose, fructose, maltose, glucose) are represented; models trained on this data may not generalise to chemical systems with more endmembers or different spectral properties. The short integration time (0.5 s) introduces substantial shot noise and baseline artefacts; conventional unmixing methods are known to degrade significantly under these conditions, which may bias benchmarking results in favour of noise-robust approaches. Linear mixing is assumed; bilinear or nonlinear interactions are not modelled.",
   "rai:dataLimitations": "Only four sugar species at a limited set of discrete volume levels; models may not generalise to broader chemical diversity or continuously varying concentrations. Ground-truth fractional abundances are derived from volume ratios rather than independent analytical measurements such as HPLC. The low SNR (0.5 s integration) causes the spectra to exhibit substantial noise, baseline variations, and cosmic spikes; this makes endmember identification challenging and increases the difficulty of the benchmark relative to the high-SNR variant. Linear mixing is assumed throughout; bilinear or post-nonlinear interactions are not modelled.",
   "rai:dataSocialImpact": "Provides a challenging low-SNR experimental benchmark for evaluating the noise robustness of unsupervised and self-supervised hyperspectral unmixing algorithms in Raman spectroscopy. Demonstrates the advantage of autoencoder-based methods over conventional approaches when data quality is limited, with relevance to rapid screening, in-line monitoring, and portable Raman applications where long integration times are impractical.",
-  "rai:dataUseCases": "Benchmarking hyperspectral unmixing algorithms under realistic low-SNR conditions; evaluation of noise robustness in endmember extraction and fractional abundance estimation; paired comparison with the high-SNR variant to study signal-to-noise effects; development and testing of denoising-aware autoencoder architectures for Raman spectroscopy."
+  "rai:dataUseCases": "Benchmarking hyperspectral unmixing algorithms under realistic low-SNR conditions; evaluation of noise robustness in endmember extraction and fractional abundance estimation; paired comparison with the high-SNR variant to study signal-to-noise effects; development and testing of denoising-aware autoencoder architectures for Raman spectroscopy.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions. Preprocessing: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication. Annotation: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "prov:wasDerivedFrom": "https://doi.org/10.5281/zenodo.10779223"
 }

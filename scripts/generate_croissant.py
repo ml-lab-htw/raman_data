@@ -86,9 +86,10 @@ _CROISSANT_CONTEXT: dict = {
     "subField": "cr:subField",
     "transform": "cr:transform",
     "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#",
 }
 
-_CROISSANT_CONFORMS_TO: str = "http://mlcommons.org/croissant/1.0"
+_CROISSANT_CONFORMS_TO: str = "http://mlcommons.org/croissant/1.1"
 
 _LICENSE_MAP: dict[str, str] = {
     "cc by 4.0": "https://creativecommons.org/licenses/by/4.0/",
@@ -555,7 +556,7 @@ def auto_rai_fields(
     info: DatasetInfo,
     license_inferred: bool,
     manual_access: bool,
-) -> dict[str, str]:
+) -> dict[str, Any]:
     at = info.application_type
     tt = info.task_type
 
@@ -723,21 +724,37 @@ def auto_rai_fields(
         ),
     }
 
-    return {
+    source_url: str = info.metadata.get("source", "") or ""
+    collection_desc = collection_type.get(at, collection_type[APPLICATION_TYPE.Unknown])
+    preprocessing_desc = preprocessing.get(tt, preprocessing[TASK_TYPE.Unknown])
+    annotation_desc = annotation.get(tt, annotation[TASK_TYPE.Unknown])
+
+    prov_generated_by = (
+        f"Data collection: {collection_desc} "
+        f"Preprocessing: {preprocessing_desc} "
+        f"Annotation: {annotation_desc}"
+    )
+
+    result: dict[str, Any] = {
         "rai:dataCollection": (
             "Raman spectra were acquired experimentally using a laser spectrometer. "
             "Each spectrum represents the scattered light intensity as a function of "
             "Raman shift (cm⁻¹)."
         ),
-        "rai:dataCollectionType": collection_type.get(at, collection_type[APPLICATION_TYPE.Unknown]),
-        "rai:dataPreprocessingProtocol": preprocessing.get(tt, preprocessing[TASK_TYPE.Unknown]),
-        "rai:dataAnnotationProtocol": annotation.get(tt, annotation[TASK_TYPE.Unknown]),
+        "rai:dataCollectionType": collection_desc,
+        "rai:dataPreprocessingProtocol": preprocessing_desc,
+        "rai:dataAnnotationProtocol": annotation_desc,
         "rai:personalSensitiveInformation": personal,
         "rai:dataBiases": biases,
         "rai:dataLimitations": limitations,
         "rai:dataSocialImpact": social_impact.get(at, social_impact[APPLICATION_TYPE.Unknown]),
         "rai:dataUseCases": use_cases.get(tt, use_cases[TASK_TYPE.Unknown]),
+        "rai:hasSyntheticData": False,
+        "prov:wasGeneratedBy": prov_generated_by,
     }
+    if source_url.startswith("http"):
+        result["prov:wasDerivedFrom"] = source_url
+    return result
 
 
 def merge_rai(auto: dict, supplement: dict | None) -> dict:
@@ -897,7 +914,10 @@ def save_rai_supplement(path: Path, supplement: dict[str, dict]) -> None:
         "#   rai:dataBiases              — known biases and their sources\n"
         "#   rai:dataLimitations         — conditions where dataset may not apply\n"
         "#   rai:dataSocialImpact        — potential societal benefits or risks\n"
-        "#   rai:dataUseCases            — recommended ML use cases\n\n"
+        "#   rai:dataUseCases            — recommended ML use cases\n"
+        "#   rai:hasSyntheticData        — boolean; set to true if dataset contains synthetic spectra\n"
+        "#   prov:wasDerivedFrom         — URI of the upstream source dataset\n"
+        "#   prov:wasGeneratedBy         — combined description of collection, preprocessing and annotation\n\n"
     )
     with path.open("w", encoding="utf-8") as fh:
         fh.write(header)

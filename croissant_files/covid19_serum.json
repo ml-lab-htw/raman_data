@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "COVID-19 in human serum using Raman spectroscopy",
   "description": "Raman spectra of blood serum from 20 subjects (10 RT-PCR/ELISA-confirmed COVID-19 patients and 10 healthy controls) collected under Ethics Committee protocol 26691419.6.0000.5492 (Universidade Anhembi Morumbi). Acquired with a Dimension P1 dispersive Raman spectrometer (Lambda Solutions), 830 nm excitation, 350 mW, 400–1800 cm⁻¹, 4 cm⁻¹ resolution, 30 s acquisition (3 s × 10 accumulations), 80 µL serum per measurement, triplicate per sample. Preprocessed with 7th-order polynomial baseline correction and area normalisation (1-norm). Published PCA-DA/PLS-DA model achieved 87% sensitivity and 100% specificity.",
   "url": "Only via E-Mail",
@@ -139,5 +140,7 @@
   "rai:dataBiases": "Small cohort (20 subjects) limits statistical power; results may not generalise beyond this Brazilian clinical population. Equal-sized COVID-19 and control groups simplify analysis but may not reflect true disease prevalence. Serum spectra are sensitive to sample handling and storage conditions not fully controlled across sites. Instrument-specific fluorescence background (830 nm excitation) and correction method (7th-order polynomial baseline) may differ from other published COVID-19 serum datasets.",
   "rai:dataLimitations": "Twenty-subject pilot study; published discriminant model achieved 87% sensitivity and 100% specificity using PCA-DA/PLS-DA (Chemoface, PC2+PC4+PC5+PC6). Performance on independent cohorts, different instruments, or other SARS-CoV-2 variants is unknown. Access requires direct contact with the authors; the dataset is not available via an open API. No explicit open license was stated; CC BY 4.0 has been assumed — users should verify terms with the original authors.",
   "rai:dataSocialImpact": "Demonstrates feasibility of rapid, low-cost COVID-19 screening from serum Raman spectra. Potential value in resource-limited settings where RT-PCR capacity is constrained. Clinical deployment requires large-scale validation and regulatory approval; findings must not be used for diagnostic decisions without qualified medical oversight.",
-  "rai:dataUseCases": "COVID-19 binary classification, serum biomarker discovery, PCA/PLS-DA benchmarking, Raman-based infectious-disease screening research."
+  "rai:dataUseCases": "COVID-19 binary classification, serum biomarker discovery, PCA/PLS-DA benchmarking, Raman-based infectious-disease screening research.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods."
 }

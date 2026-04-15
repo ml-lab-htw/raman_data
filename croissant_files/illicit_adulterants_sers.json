@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Dataset of Raman and SERS spectra of illicit adulterants added to dietary supplements",
   "description": "Portable SERS spectra (785 nm, 400–2300 cm⁻¹, 8 cm⁻¹ FWHM, 3 scans) of 11 SERS-active illicit adulterants in dietary supplements. Acquired with a Metrohm Instant SERS analyzer (MISA) using silver printed-SERS (p-SERS) substrates and Orbital Raster Scan (ORS™) technology (30 µm spot, ~2 mm raster, 100 mW, ASTM 1840 calibration). Sample prep: 10 mg/100 µL EtOH, centrifuge 806,400 RCF, 10 µL on strip, dry 15 min, triplicates. Enhancement factors 10³–10⁴. Adulteration LOI 0.1–5.0% w/w in 18 commercial dietary supplements. Developed with the Dutch Food and Consumer Product Safety Authority. Target: compound identity (classification).",
   "url": "https://data.mendeley.com/datasets/y4md8znppn/1",
@@ -140,5 +141,8 @@
   "rai:dataBiases": "Library spectra represent pure analytical-grade standards in ethanol; real dietary supplement excipients and plant-based extracts may interfere. The 11-compound panel is limited to SERS-active RASFF-flagged targets; novel analogues or SERS-inactive compounds cannot be identified from this library alone. Silver p-SERS substrates are single-use and non-reusable; SERS substrate batch variability can affect reproducibility. Gold p-SERS substrates also tested for SERS-inactive compounds.",
   "rai:dataLimitations": "Small SERS library (11 reference compounds); insufficient for data-driven ML without augmentation. LOI for adulteration detection is 0.1–5.0% w/w in commercial dietary supplements (18 commercial products tested). SERS-inactive compounds (AND, DMAA, DMAE, DMBA, TSIL, VAR, XAN) cannot be identified with this method and require the complementary FT-Raman dataset. Substrate adsorption selectivity and solubility in ethanol affect SERS activity per compound.",
   "rai:dataSocialImpact": "Enables customs inspectors and food safety officers to perform on-site screening of dietary supplements for undeclared pharmaceutical adulterants within 20 minutes, with no skilled operators required. Developed in collaboration with the Dutch Food and Consumer Product Safety Authority. Supports EU RASFF rapid alert enforcement and consumer protection from unsafe supplement adulteration.",
-  "rai:dataUseCases": "Portable SERS spectral library matching, dietary supplement food-fraud screening, adulterant identification, benchmarking of portable vs. benchtop Raman performance, detection-limit studies for pharmaceutical compound mixtures."
+  "rai:dataUseCases": "Portable SERS spectral library matching, dietary supplement food-fraud screening, adulterant identification, benchmarking of portable vs. benchtop Raman performance, detection-limit studies for pharmaceutical compound mixtures.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://data.mendeley.com/datasets/y4md8znppn/1"
 }

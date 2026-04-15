@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "ML Raman Open Dataset (MLROD)",
   "description": "500,000+ point-mapping Raman spectra of Mars-analogue geological samples acquired on a Horiba LabRAM HR Evolution (532 nm, 100 mW, 1800 l/mm grating, ~1 cm⁻¹ resolution, open-electrode CCD at −60 °C, 50× LWD NA 0.5 objective, 0.1 µm XY step, 100–1800 cm⁻¹). Samples include gabbro (Madagascar), granite, Hawaiian basalt dust, 12 pure reference minerals, and 4 binary mixtures, measured at 0% and 50% basalt dust surface coverage. No cosmic ray removal, baseline correction, or other preprocessing applied. Motivated by NASA Perseverance SuperCam mineral identification.",
   "url": "https://www.odr.io/dataset/mlrod-a-machine-learning-raman-open-dataset",
@@ -139,5 +140,8 @@
   "rai:dataBiases": "All samples measured under controlled laboratory conditions (Horiba LabRAM HR Evolution, 532 nm, 100 mW, 1800 l/mm grating). Performance on natural outcrops, in-situ planetary surfaces, or mixed-lithology samples may differ. The dataset targets Mars analogue mineralogy (silicates, carbonates, sulfates) relevant to Perseverance/SuperCam; coverage of other planetary or terrestrial mineral assemblages is limited. No cosmic ray removal, baseline correction, or other preprocessing was applied — raw spectra include instrument artefacts.",
   "rai:dataLimitations": "More than 500,000 spectra acquired from a limited set of rock types and pure mineral standards; rare or amorphous mineral phases are under-represented. No preprocessing was applied (no cosmic ray removal, no baseline subtraction), so raw spectra contain instrument artefacts. Models trained on these data are optimised for Mars analogue conditions (NASA Perseverance SuperCam context) and may require re-calibration for other instruments or geological settings. No explicit license was stated; CC BY 4.0 has been assumed.",
   "rai:dataSocialImpact": "Supports development of automated mineralogical analysis algorithms for planetary exploration (Mars, Moon) and terrestrial geoscience. Enables benchmarking of machine learning methods for spectral classification under realistic signal-to-noise and mixing conditions.",
-  "rai:dataUseCases": "Mineral identification and classification, spectral unmixing, Mars analogue mineralogy, deep learning benchmarks for geological spectroscopy, robotic planetary exploration support."
+  "rai:dataUseCases": "Mineral identification and classification, spectral unmixing, Mars analogue mineralogy, deep learning benchmarks for geological spectroscopy, robotic planetary exploration support.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on solid or liquid material samples including minerals, polymers, and organic pigments. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://www.odr.io/dataset/mlrod-a-machine-learning-raman-open-dataset"
 }

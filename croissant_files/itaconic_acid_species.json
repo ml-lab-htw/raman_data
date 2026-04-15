@@ -44,10 +44,11 @@
     "source": "cr:source",
     "subField": "cr:subField",
     "transform": "cr:transform",
-    "wd": "https://www.wikidata.org/wiki/"
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
   },
   "@type": "sc:Dataset",
-  "dct:conformsTo": "http://mlcommons.org/croissant/1.0",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species",
   "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
   "url": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip",
@@ -138,5 +139,8 @@
   "rai:dataBiases": "Three structurally similar species co-exist near the first dissociation step (pH ≈ 4.68), requiring weighted spectral subtraction to isolate individual species. Equal Raman activity assumed across species. Ionic strength varies during titration (mean ≈ 0.34 mol L⁻¹); ideal mixture assumption applied throughout. Data acquired at a single instrument (Kaiser RXN2, 785 nm) and temperature (25 °C).",
   "rai:dataLimitations": "Diprotic system with two overlapping dissociation steps; species co-existence near pH 4.68 requires careful spectral processing. Minimum calibration set of 4 samples requires samples at maximum concentration of each species. Ideal mixture assumption applied despite ionic strength ≈ 0.34 mol L⁻¹. Models calibrated at 25 °C in deionized water; not directly applicable to other matrices or temperatures.",
   "rai:dataSocialImpact": "Itaconic acid is a biobased platform chemical produced by fungal fermentation, used as a polymer and resin precursor. Accurate inline monitoring of dissociation states is directly relevant to downstream crystallisation and extraction processes, where the dissociation state governs extraction selectivity, supporting optimisation of biobased chemical production.",
-  "rai:dataUseCases": "Primary reference dataset for IHM method development and benchmarking against PLS; minimum-sample calibration strategies (as few as 4 samples); simultaneous pKa estimation and spectral calibration; inline monitoring of diprotic carboxylic acid dissociation; PAT in itaconic acid fermentation and purification."
+  "rai:dataUseCases": "Primary reference dataset for IHM method development and benchmarking against PLS; minimum-sample calibration strategies (as few as 4 samples); simultaneous pKa estimation and spectral calibration; inline monitoring of diprotic carboxylic acid dissociation; PAT in itaconic acid fermentation and purification.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions. Preprocessing: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication. Annotation: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "prov:wasDerivedFrom": "https://publications.rwth-aachen.de/record/978266/files/Data_RWTH-2024-01177.zip"
 }
