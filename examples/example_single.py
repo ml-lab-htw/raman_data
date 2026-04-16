@@ -1,6 +1,6 @@
 from collections import Counter
 from examples.utils import plot_samples
-from raman_data import raman_data
+from raman_data import raman_data, RamanDataset
 
 # dataset_name = "organic_compounds_raw"
 # dataset = raman_data(dataset_name)
@@ -11,8 +11,9 @@ datasets = raman_data(task_type=None)
 datasets = [dataset for dataset in datasets if "bioprocess_substrates" in dataset]
 
 for dataset_name in datasets:
-    dataset = raman_data(dataset_name)
+    dataset:RamanDataset = raman_data(dataset_name)
 
+    # print(f"Paper: {dataset.info.metadata['bibtex']}")
 
     # class_counts = Counter(dataset.targets)
     #
