@@ -535,7 +535,7 @@ class HuggingFaceLoader(BaseLoader):
 
             data = HuggingFaceLoader.DATASETS[dataset_name].loader(full_dataset_df)
         else:
-            data = None, None, None
+            data = None, None, None, None
 
         if data is not None:
             spectra, raman_shifts, concentrations, concentration_names = data
