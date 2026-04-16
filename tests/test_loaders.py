@@ -74,6 +74,16 @@ def test_streptococcus_thermophilus_fermentation_timegate():
     assert dataset.spectra.shape == (14, 117)
 
 
+# @pytest.mark.skip(reason="Zenodo sugar dataset requires download; run manually.")
+# @pytest.mark.skipif(os.environ.get('CI') is not None, reason="Too large for CI")
+def test_sugar_mixtures_low_snr():
+    dataset = ZenodoLoader.load_dataset("sugar_mixtures_low_snr")
+    assert dataset.target_names == ['Sucrose', 'Fructose', 'Maltose', 'Glucose']
+    assert dataset.spectra.shape[0] == dataset.targets.shape[0]  # samples match
+    assert dataset.spectra.shape[1] == len(dataset.raman_shifts)  # spectral axis matches
+    assert dataset.targets.shape[1] == 4  # 4 analyte concentrations
+
+
 @pytest.mark.skip(reason="Google Drive dataset download is slow.")
 def test_load_organic_compounds_raw(tmp_path):
     # given

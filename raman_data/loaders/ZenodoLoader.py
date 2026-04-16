@@ -105,11 +105,14 @@ class ZenodoLoader(BaseLoader):
 
         meta_data = pd.read_csv(meta_data_csv_path)
 
-        # take the last 6 columns of the meta_data dataframe
-        concentrations = meta_data.iloc[:, -6:-1]
+        # take the last 5 volume columns of the meta_data dataframe
+        volumes = meta_data.iloc[:, -6:-1]
 
-        # take their column names as target names
-        target_names = concentrations.keys().to_list()
+        # convert volumes to concentrations (fraction of total volume per sample)  and remove water
+        concentrations = volumes.div(volumes.sum(axis=1), axis=0).values[:, :-1]
+
+        # strip unit suffix from column names (e.g. "Sucrose [ul]" -> "Sucrose") and remove water
+        target_names = [col.split(" [")[0] for col in volumes.columns.tolist()][:-1]
 
         return np.array(spectra), np.array(raman_shifts), np.array(concentrations), target_names
 
