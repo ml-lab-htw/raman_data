@@ -98,7 +98,7 @@ class MendeleyLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda cache_path: MendeleyLoader._load_microplastics(cache_path),
             metadata={
-                "full_name": "Raman Spectra of Weathered Microplastics Dataset",
+                "full_name": "Weathered Microplastics Dataset",
                 "source": "https://data.mendeley.com/datasets/kpygrf9fg6",
                 "doi": "10.17632/kpygrf9fg6",
                 "paper": "https://doi.org/10.1016/j.scitotenv.2020.139990",

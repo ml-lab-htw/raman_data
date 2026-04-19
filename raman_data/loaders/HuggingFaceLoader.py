@@ -142,7 +142,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Raman Spectra of Bioprocess Analytes Anton 532",
+                "full_name": "Bioprocess Analytes Anton 532",
                 "hf_key": "chlange/RamanSpectraBioprocessAnalystesAnton532",
                 "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesAnton532",
                 "paper": "https://doi.org/10.1016/j.saa.2025.125861",
@@ -159,7 +159,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Raman Spectra of Bioprocess Analytes Anton 785",
+                "full_name": "Bioprocess Analytes Anton 785",
                 "hf_key": "chlange/RamanSpectraBioprocessAnalystesAnton785",
                 "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesAnton785",
                 "paper": "https://doi.org/10.1016/j.saa.2025.125861",
@@ -176,7 +176,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Raman Spectra of Bioprocess Analytes Kaiser",
+                "full_name": "Bioprocess Analytes Kaiser",
                 "hf_key": "chlange/RamanSpectraBioprocessAnalystesKaiser",
                 "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesKaiser",
                 "paper": "https://doi.org/10.1016/j.saa.2025.125861",
@@ -193,7 +193,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Raman Spectra of Bioprocess Analytes Metrohm",
+                "full_name": "Bioprocess Analytes Metrohm",
                 "hf_key": "chlange/RamanSpectraBioprocessAnalystesMetrohm",
                 "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesMetrohm",
                 "paper": "https://doi.org/10.1016/j.saa.2025.125861",
@@ -210,7 +210,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Raman Spectra of Bioprocess Analytes Mettler Toledo",
+                "full_name": "Bioprocess Analytes Mettler Toledo",
                 "hf_key": "chlange/RamanSpectraBioprocessAnalystesMettlerToledo",
                 "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesMettlerToledo",
                 "paper": "https://doi.org/10.1016/j.saa.2025.125861",
@@ -227,7 +227,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Raman Spectra of Bioprocess Analytes Tec5",
+                "full_name": "Bioprocess Analytes Tec5",
                 "hf_key": "chlange/RamanSpectraBioprocessAnalystesTec5",
                 "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesTec5",
                 "paper": "https://doi.org/10.1016/j.saa.2025.125861",
@@ -244,7 +244,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Raman Spectra of Bioprocess Analytes Timegate",
+                "full_name": "Bioprocess Analytes Timegate",
                 "hf_key": "chlange/RamanSpectraBioprocessAnalystesTimegate",
                 "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesTimegate",
                 "paper": "https://doi.org/10.1016/j.saa.2025.125861",
@@ -261,7 +261,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Raman Spectra of Bioprocess Analytes Tornado",
+                "full_name": "Bioprocess Analytes Tornado",
                 "hf_key": "chlange/RamanSpectraBioprocessAnalystesTornado",
                 "source": "https://huggingface.co/datasets/chlange/RamanSpectraBioprocessAnalystesTornado",
                 "paper": "https://doi.org/10.1016/j.saa.2025.125861",
@@ -278,7 +278,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Raman Spectra of E. Coli Metabolites Dig4Bio",
+                "full_name": "E. Coli Metabolites Dig4Bio",
                 "hf_key": "HTW-KI-Werkstatt/RamanSpectraEcoliMetabolitesDig4Bio",
                 "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanSpectraEcoliMetabolitesDig4Bio",
                 "paper": "https://doi.org/10.1002/bit.70006",
@@ -295,7 +295,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Raman Spectra of Bioprocess Analytes E. Coli Metabolites",
+                "full_name": "Bioprocess Analytes E. Coli Metabolites",
                 "hf_key": "HTW-KI-Werkstatt/RamanSpectraEcoliMetabolites",
                 "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanSpectraEcoliMetabolites",
                 "paper": "",
@@ -359,7 +359,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Kaiser Raman Spectra of E. coli Fermentation Supernatant",
+                "full_name": "Kaiser E. coli Fermentation Supernatant",
                 "hf_key": "chlange/kaiser_raman_ecoli_fermentation_supernatant",
                 "source": "https://huggingface.co/datasets/chlange/kaiser_raman_ecoli_fermentation_supernatant",
                 "paper": "https://doi.org/10.1002/btpr.2665",
@@ -376,7 +376,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Kaiser Raman Spectra of E. coli Fermentation",
+                "full_name": "Kaiser E. coli Fermentation",
                 "hf_key": "chlange/kaiser_raman_ecoli_fermentation",
                 "source": "https://huggingface.co/datasets/chlange/kaiser_raman_ecoli_fermentation",
                 "paper": "https://doi.org/10.1002/btpr.2665",
@@ -393,7 +393,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Time-Gated Raman Spectra of E. coli Fermentation Supernatant",
+                "full_name": "Time-Gated E. coli Fermentation Supernatant",
                 "hf_key": "chlange/tg_raman_ecoli_fermentation_supernatant",
                 "source": "https://huggingface.co/datasets/chlange/tg_raman_ecoli_fermentation_supernatant",
                 "paper": "https://doi.org/10.1002/btpr.2665",
@@ -410,7 +410,7 @@ class HuggingFaceLoader(BaseLoader):
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
-                "full_name": "Time-Gated Raman Spectra of E. coli Fermentation",
+                "full_name": "Time-Gated E. coli Fermentation",
                 "hf_key": "chlange/tg_raman_ecoli_fermentation",
                 "source": "https://huggingface.co/datasets/chlange/tg_raman_ecoli_fermentation",
                 "paper": "https://doi.org/10.1002/btpr.2665",

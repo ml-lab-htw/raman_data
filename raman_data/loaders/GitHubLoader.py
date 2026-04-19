@@ -72,7 +72,7 @@ class GitHubLoader(BaseLoader):
             license="GPL-3.0",
             loader=lambda cache_path: GitHubLoader._load_ramanbiolib(cache_path),
             metadata={
-                "full_name": "RamanBioLib — Reference Raman Spectra of Biomolecules",
+                "full_name": "RamanBioLib — Reference Biomolecules",
                 "source": "https://github.com/mteranm/ramanbiolib",
                 "paper": "https://doi.org/10.1016/j.chemolab.2025.105476",
                 "bibtex": "@article{TERAN2025105476, title = {Open Raman spectral library for biomolecule identification}, journal = {Chemometrics and Intelligent Laboratory Systems}, volume = {264}, pages = {105476}, year = {2025}, issn = {0169-7439}, doi = {https://doi.org/10.1016/j.chemolab.2025.105476}, url = {https://www.sciencedirect.com/science/article/pii/S0169743925001613}, author = {Marcelo Terán and José Javier Ruiz and Pablo Loza-Alvarez and David Masip and David Merino}, keywords = {Raman spectroscopy, Spectral library, Biomolecules, Biomedicine, Database, Open-source}}",
