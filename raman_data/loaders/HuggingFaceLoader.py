@@ -323,7 +323,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="streptococcus_thermophilus_fermentation_timegate",
             name="Time-Gated Streptococcus thermophilus Fermentations",
-            short_name="S. thermophilus Ferment. (Timegate)",
+            short_name="S. thermo. Ferment. Timegate",
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
@@ -339,7 +339,7 @@ class HuggingFaceLoader(BaseLoader):
             application_type=APPLICATION_TYPE.Biological,
             id="streptococcus_thermophilus_fermentation_kaiser",
             name="Streptococcus thermophilus Fermentations Kaiser",
-            short_name="S. thermophilus Ferment. (Kaiser)",
+            short_name="S. thermo. Ferment. Kaiser",
             license="CC BY 4.0",
             loader=lambda df: HuggingFaceLoader._load_chlange(df),
             metadata={
