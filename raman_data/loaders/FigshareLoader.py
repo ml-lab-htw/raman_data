@@ -275,14 +275,14 @@ class FigshareLoader(BaseLoader):
         targets_cache = os.path.join(dataset_cache, "targets.npy")
 
         if os.path.exists(spectra_cache) and os.path.exists(targets_cache):
-            FigshareLoader.logger.info("Loading Raman-ChEMBL-part2 from cache")
+            FigshareLoader.logger.debug("Loading Raman-ChEMBL-part2 from cache")
             return np.load(spectra_cache), raman_shifts, np.load(targets_cache), target_cols
 
         con = sqlite3.connect(db_path)
         try:
             if os.path.exists(spectra_cache):
                 # Spectra already cached — only fetch scalar target columns
-                FigshareLoader.logger.info("Extracting target columns from db")
+                FigshareLoader.logger.debug("Extracting target columns from db")
                 cols_sql = ", ".join(target_cols)
                 rows = con.execute(
                     f"SELECT {cols_sql} FROM molecule WHERE blob_data IS NOT NULL"
@@ -298,7 +298,7 @@ class FigshareLoader(BaseLoader):
         finally:
             con.close()
 
-        FigshareLoader.logger.info(f"Processing {len(rows)} molecules from Raman-ChEMBL-part2")
+        FigshareLoader.logger.debug(f"Processing {len(rows)} molecules from Raman-ChEMBL-part2")
 
         n_targets = len(target_cols)
         spectra = np.empty((len(rows), len(raman_shifts)), dtype=np.float32)

@@ -288,7 +288,7 @@ class KaggleLoader(BaseLoader):
         if not all_spectra:
             raise Exception(f"No spectra loaded for functionalization '{functionalization}'")
 
-        logger.info(
+        logger.debug(
             f"Loaded {files_loaded} cell type files for '{functionalization}' "
             f"({files_skipped} skipped)"
         )
@@ -339,10 +339,10 @@ class KaggleLoader(BaseLoader):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Kaggle)
 
-        logger.info(f"Downloading Kaggle dataset: {dataset_name}")
+        logger.debug(f"Downloading Kaggle dataset: {dataset_name}")
 
         path = dataset_download(handle=dataset_name, path=cache_path)
-        logger.info(f"Dataset downloaded to: {path}")
+        logger.debug(f"Dataset downloaded to: {path}")
 
         return path
 
@@ -378,7 +378,7 @@ class KaggleLoader(BaseLoader):
             LoaderTools.set_cache_root(cache_path, CACHE_DIR.Kaggle)
         cache_path = LoaderTools.get_cache_root(CACHE_DIR.Kaggle)
 
-        logger.info(
+        logger.debug(
             f"Loading Kaggle dataset '{dataset_name}' from "
             f"{cache_path if cache_path else 'default folder (~/.cache/kagglehub)'}"
         )

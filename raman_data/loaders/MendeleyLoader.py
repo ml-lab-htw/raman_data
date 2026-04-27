@@ -159,7 +159,7 @@ class MendeleyLoader(BaseLoader):
                 continue
             out_path = os.path.join(shared_root, file_name)
             if not os.path.exists(out_path):
-                MendeleyLoader.logger.info(f"Downloading {file_name} …")
+                MendeleyLoader.logger.debug(f"Downloading {file_name} …")
                 LoaderTools.download(
                     url=download_url,
                     out_dir_path=shared_root,
