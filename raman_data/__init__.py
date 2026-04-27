@@ -12,7 +12,6 @@ __all__ = [
 from typing import List, Optional, Union
 import logging
 
-from raman_data import RamanDataset
 from .types import RamanDataset, TASK_TYPE, APPLICATION_TYPE
 from . import datasets
 
