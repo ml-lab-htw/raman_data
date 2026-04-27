@@ -12,6 +12,7 @@ __all__ = [
 from typing import List, Optional, Union
 import logging
 
+from raman_data import RamanDataset
 from .types import RamanDataset, TASK_TYPE, APPLICATION_TYPE
 from . import datasets
 
@@ -24,7 +25,7 @@ def raman_data(
     task_type: Optional[TASK_TYPE] = None,
     application_type: Optional[APPLICATION_TYPE] = None,
     load_data: bool = True,
-) -> Union[RamanDataset, List[str]]:
+) -> list[str] | RamanDataset | None:
     """
     Main function to interact with Raman datasets.
 
@@ -47,5 +48,5 @@ def raman_data(
         logger.debug("Listing available datasets%s", f" filtered by {task_type.name}" if task_type else "")
         return datasets.list_datasets(task_type=task_type, application_type=application_type)
     else:
-        logger.info(f"Loading dataset: {dataset_name} (cache_dir={cache_dir})")
+        logger.debug(f"Loading dataset: {dataset_name} (cache_dir={cache_dir})")
         return datasets.load_dataset(dataset_name=dataset_name, cache_dir=cache_dir, load_data=load_data)
