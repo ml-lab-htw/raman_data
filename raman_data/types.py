@@ -63,9 +63,9 @@ class APPLICATION_TYPE(Enum):
         labels = {
             0: "Unknown",
             1: "Material Science",
-            2: "Biological",
-            3: "Medical",
-            4: "Chemical",
+            2: r"Biological \& Biotechnological",
+            3: r"Medical \& Clinical",
+            4: r"Chemical \& Industrial",
         }
         return labels[self.value]
 
