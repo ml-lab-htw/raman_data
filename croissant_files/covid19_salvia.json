@@ -60,7 +60,7 @@
     "infectious disease"
   ],
   "isAccessibleForFree": true,
-  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "license": "https://github.com/piazzam/Robust-SVM-Raman/issues/1",
   "citeAs": "@article{Bertazioli_2024, title={An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples}, volume={171}, ISSN={0010-4825}, url={http://dx.doi.org/10.1016/j.compbiomed.2024.108028}, DOI={10.1016/j.compbiomed.2024.108028}, journal={Computers in Biology and Medicine}, publisher={Elsevier BV}, author={Bertazioli, Dario and Piazza, Marco and Carlomagno, Cristiano and Gualerzi, Alice and Bedoni, Marzia and Messina, Enza}, year={2024}, month=mar, pages={108028}}",
   "citation": "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028.",
   "distribution": [
@@ -138,7 +138,7 @@
   "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods. Labels were assigned by domain experts or clinical diagnosis; no crowdsourced annotation was used.",
   "rai:personalSensitiveInformation": "Sensitive attributes present in the dataset — health condition (disease class labels). Spectra are derived from human biological samples; no direct patient identifiers are included in the released spectral files. Other demographic attributes (age, gender, geography) are not part of the released data.",
   "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
-  "rai:dataLimitations": "Models trained on this dataset may not transfer to different instruments, sample matrices, or patient populations without re-calibration. Note: No explicit license was stated by the original data providers; CC BY 4.0 has been assumed. Users should verify the applicable terms with the original authors.",
+  "rai:dataLimitations": "Models trained on this dataset may not transfer to different instruments, sample matrices, or patient populations without re-calibration. No explicit license was stated by the original data providers; a license clarification request has been opened at https://github.com/piazzam/Robust-SVM-Raman/issues/1. Users should verify the applicable terms with the original authors before use.",
   "rai:dataSocialImpact": "Raman spectroscopy datasets for medical diagnostics have the potential to support the development of non-invasive, low-cost screening tools with particular relevance to resource-limited healthcare settings. Results must be validated by qualified healthcare professionals before any clinical application.",
   "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control. Not recommended for direct clinical diagnosis without professional validation and regulatory approval.",
   "rai:hasSyntheticData": false,
