@@ -260,14 +260,14 @@ If you use `raman-data` in your research, please cite the RamanBench paper:
 ```bibtex
 @misc{koddenbrock2026ramanbench,
   title         = {{RamanBench}: A Large-Scale Benchmark for Machine Learning on Raman Spectroscopy},
-  author        = {Koddenbrock, Mario and Lange, Christoph and Legner, Robin and
-                   J{\"a}ger, Martin and K{\"o}gler, Martin and
-                   Cruz Bournazou, Mariano N. and Bie{\ss}mann, Felix and Rodner, Erik},
+  author        = {Koddenbrock, Mario and Lange, Christoph and Legner, Robin and Jaeger, Martin
+                   and K{\"o}gler, Martin and Cruz Bournazou, Mariano N. and Neubauer, Peter
+                   and Bie{\ss}mann, Felix and Rodner, Erik},
   year          = {2026},
-  eprint        = {XXXX.XXXXX},
+  eprint        = {2605.02003},
   archivePrefix = {arXiv},
   primaryClass  = {cs.LG},
-  url           = {https://arxiv.org/abs/XXXX.XXXXX}
+  url           = {https://arxiv.org/abs/2605.02003}
 }
 ```
 
