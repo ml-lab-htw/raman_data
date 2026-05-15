@@ -55,7 +55,7 @@ class GitHubLoader(BaseLoader):
                     "source": "https://github.com/piazzam/Robust-SVM-Raman",
                     "description": f"Raman spectra from dried saliva drops targeting {disease}'s Disease (PD) vs. healthy controls. Reveals hidden trends in proteins, lipids, and saccharides for early detection of cognitive and motor impairment.",
                     "paper": "https://doi.org/10.1016/j.compbiomed.2024.108028",
-                "bibtex": "@article{Bertazioli_2024, title={An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples}, volume={171}, ISSN={0010-4825}, url={http://dx.doi.org/10.1016/j.compbiomed.2024.108028}, DOI={10.1016/j.compbiomed.2024.108028}, journal={Computers in Biology and Medicine}, publisher={Elsevier BV}, author={Bertazioli, Dario and Piazza, Marco and Carlomagno, Cristiano and Gualerzi, Alice and Bedoni, Marzia and Messina, Enza}, year={2024}, month=mar, pages={108028}}",
+                    "bibtex": "@article{Bertazioli_2024, title={An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples}, volume={171}, ISSN={0010-4825}, url={http://dx.doi.org/10.1016/j.compbiomed.2024.108028}, DOI={10.1016/j.compbiomed.2024.108028}, journal={Computers in Biology and Medicine}, publisher={Elsevier BV}, author={Bertazioli, Dario and Piazza, Marco and Carlomagno, Cristiano and Gualerzi, Alice and Bedoni, Marzia and Messina, Enza}, year={2024}, month=mar, pages={108028}}",
                     "citation": [
                         "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028."
                     ],
@@ -153,12 +153,29 @@ class GitHubLoader(BaseLoader):
                 GitHubLoader.logger.debug(f"Attempting to download dataset {dataset_subfolder} to {shared_root}")
                 os.makedirs(shared_root, exist_ok=True)
 
+                primary_url = "https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip"
+                # Fallback: GitHub Release asset on ml-lab-htw/rb_data_fallback.
+                # Release assets are not LFS-gated, unlike `archive/refs/heads/main.zip`,
+                # which only ships LFS pointer stubs for LFS-tracked CSVs.
+                # The asset must be named Raman-Spectra-Data.zip and extract to "Raman-Spectra-Data-main/".
+                fallback_url = "https://github.com/ml-lab-htw/rb_data_fallback/releases/latest/download/Raman-Spectra-Data.zip"
+
                 if not os.path.exists(zip_file):
-                    LoaderTools.download(
-                        url="https://github.com/MIND-Lab/Raman-Spectra-Data/archive/refs/heads/main.zip",
-                        out_dir_path=shared_root,
-                        out_file_name=zip_name
-                    )
+                    try:
+                        LoaderTools.download(
+                            url=primary_url,
+                            out_dir_path=shared_root,
+                            out_file_name=zip_name,
+                        )
+                    except Exception as e:
+                        GitHubLoader.logger.warning(
+                            f"Primary MIND-Lab repo unreachable ({e}); falling back to {fallback_url}"
+                        )
+                        LoaderTools.download(
+                            url=fallback_url,
+                            out_dir_path=shared_root,
+                            out_file_name=zip_name,
+                        )
 
                 LoaderTools.extract_zip_file_content(zip_file)
 

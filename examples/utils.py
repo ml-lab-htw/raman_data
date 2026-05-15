@@ -48,6 +48,6 @@ def plot_samples(dataset:RamanDataset, num_samples:int=5):
 
     # export as pdf
 
-    os.makedirs("plots", exist_ok=True)
-    plt.savefig(f"plots/{dataset.name}.pdf", pad_inches=0, bbox_inches='tight')
+    # os.makedirs("plots", exist_ok=True)
+    # plt.savefig(f"plots/{dataset.name}.pdf", pad_inches=0, bbox_inches='tight')
     plt.show()
