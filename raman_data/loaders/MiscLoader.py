@@ -512,26 +512,53 @@ class MiscLoader(BaseLoader):
         shared_root = os.path.join(cache_root, "mlrod")
         os.makedirs(shared_root, exist_ok=True)
 
+        # Primary source (odr.io) is frequently unreachable. Try it per file, then
+        # fall back to a single Google Drive zip mirror containing all CSVs.
+        gdrive_fallback_id = "1NDlDORvkoruwKMFP6y4sAf8M3KuZ6WnS"
+
+        for filename, url in urls.items():
+            file_path = os.path.join(shared_root, filename)
+            if os.path.exists(file_path):
+                continue
+            MiscLoader.logger.debug(f"Downloading MLROD file: {filename}")
+            try:
+                downloaded_path = LoaderTools.download(url=url, out_dir_path=shared_root)
+                if downloaded_path and downloaded_path != file_path:
+                    os.rename(downloaded_path, file_path)
+            except Exception as e:
+                MiscLoader.logger.warning(f"[!] Failed to download MLROD file {filename} from primary source: {e}")
+                break
+
+        missing = [f for f in urls if not os.path.exists(os.path.join(shared_root, f))]
+        if missing:
+            MiscLoader.logger.warning(
+                f"[!] {len(missing)} MLROD file(s) missing from primary source; "
+                f"falling back to Google Drive mirror"
+            )
+            import gdown
+            zip_path = os.path.join(shared_root, "mlrod.zip")
+            gdrive_url = f"https://drive.google.com/uc?id={gdrive_fallback_id}"
+            gdown.download(gdrive_url, zip_path, quiet=False)
+            if not os.path.exists(zip_path) or not LoaderTools.is_valid_zip(zip_path):
+                raise RuntimeError(
+                    "MLROD fallback download from Google Drive failed or produced an invalid zip."
+                )
+            LoaderTools.extract_zip_file_content(zip_path)
+
         all_spectra = []
         all_labels = []
         all_raman_shifts = []
 
-        for filename, url in urls.items():
-            MiscLoader.logger.debug(f"Processing MLROD file: {filename}")
+        for filename in urls:
             file_path = os.path.join(shared_root, filename)
-
             if not os.path.exists(file_path):
-                try:
-                    downloaded_path = LoaderTools.download(url=url, out_dir_path=shared_root)
-                    if downloaded_path and downloaded_path != file_path:
-                        os.rename(downloaded_path, file_path)
-                except Exception as e:
-                    MiscLoader.logger.error(f"[!] Failed to download MLROD file {filename}: {e}")
+                # Some archives may nest the CSVs in a subfolder; search recursively.
+                matches = glob.glob(os.path.join(shared_root, "**", filename), recursive=True)
+                if matches:
+                    file_path = matches[0]
+                else:
+                    MiscLoader.logger.error(f"[!] MLROD file still missing after fallback: {filename}")
                     continue
-
-            if not os.path.exists(file_path):
-                MiscLoader.logger.error(f"[!] Failed to download MLROD {filename}, file path not found.")
-                continue
 
             try:
                 if "L_raw_granite0dust_test_015s_4084_final" in filename:

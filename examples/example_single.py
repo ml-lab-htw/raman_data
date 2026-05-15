@@ -8,7 +8,7 @@ from raman_data import raman_data, RamanDataset
 
 
 datasets = raman_data(task_type=None)
-datasets = [dataset for dataset in datasets if "alzheimer" == dataset]
+datasets = [dataset for dataset in datasets if "mlrod" == dataset]
 
 for dataset_name in datasets:
     dataset:RamanDataset = raman_data(dataset_name, cache_dir="/Users/koddenbrock/Repository/raman_data/examples/.temp")
