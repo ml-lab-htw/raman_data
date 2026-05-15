@@ -209,3 +209,5 @@ __marimo__/
 # IDE
 .idea/
 /examples/plots/
+examples/.temp/
+**/.DS_Store
