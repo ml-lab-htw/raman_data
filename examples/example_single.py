@@ -8,7 +8,7 @@ from raman_data import raman_data, RamanDataset
 
 
 datasets = raman_data(task_type=None)
-datasets = [dataset for dataset in datasets if "comfile_stroke" == dataset]
+datasets = [dataset for dataset in datasets if "chlorinated_samples" in dataset]
 
 for dataset_name in datasets:
     dataset:RamanDataset = raman_data(dataset_name, cache_dir=".temp")
