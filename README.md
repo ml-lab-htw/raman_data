@@ -6,7 +6,7 @@
 
 A unified Python library for accessing public Raman spectroscopy datasets.
 `raman-data` is the dataset layer of [RamanBench](https://github.com/ml-lab-htw/RamanBench), a large-scale benchmark for machine learning on Raman spectroscopy data.
-It provides a single API to discover, download, and load **89 datasets** — covering classification, regression, denoising, and super-resolution tasks — from diverse sources (Kaggle, HuggingFace, Zenodo, Figshare, GitHub) in a standardized, ML-ready format.
+It provides a single API to discover, download, and load <!-- DATASET_COUNT_START -->**90 datasets**<!-- DATASET_COUNT_END --> — covering classification, regression, denoising, and super-resolution tasks — from diverse sources (Kaggle, HuggingFace, Zenodo, Figshare, GitHub) in a standardized, ML-ready format.
 Of these, 75 meet the inclusion criteria of [RamanBench](https://github.com/ml-lab-htw/RamanBench) and are used for benchmarking.
 
 ## Installation
@@ -104,6 +104,7 @@ For machine learning, interpolate or pad to a common grid as needed.
 | `cancer_cell_cooh` | Biological & Biotechnological | Classification | SERS spectra of conditioned cell culture media metabolites entrapped on gold multibranched nanoparticles (AuMs, ~50 nm) functionalized with COOH. 12 sample categories from Table 1 (Erzina et al. 2020): A2058/G361 melanoma cells, HPM melanocytes, HF skin fibroblasts, ZAM tumour-associated fibroblasts |
 | `cancer_cell_nh2` | Biological & Biotechnological | Classification | SERS spectra of conditioned cell culture media metabolites entrapped on gold multibranched nanoparticles (AuMs, ~50 nm) functionalized with NH2. 12 sample categories from Table 1 (Erzina et al. 2020): A2058/G361 melanoma cells, HPM melanocytes, HF skin fibroblasts, ZAM tumour-associated fibroblasts, |
 | `chembl_molecules` | Chemical & Industrial | Regression | 140k DFT-computed Raman spectra for ChEMBL drug-like molecules. Targets: HOMO-LUMO gap, HOMO/LUMO energies, isotropic polarizability, heat capacity, dipole moment. |
+| `chlorinated_samples` | Chemical & Industrial | Classification | Binary Raman classification task: detect the presence of chloroform in a sample. 230 spectra across 2473 wavenumbers (350–3500 cm⁻¹). Class balance {0: 76, 1: 154}. Data provided by Analyze IQ Limited; predefined 3-fold splits ship with the source repository. |
 | `citric_acid_species` | Chemical & Industrial | Regression | Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling. |
 | `comfile_stroke` | Medical & Clinical | Classification | SERS serum spectra for binary stroke vs. healthy-control classification. 20 tab-separated files (10 stroke, 10 healthy control), each containing ~201 spectra across 723 wavenumber points (202.985–1999.92 cm⁻¹). ~4,020 spectra total. |
 | `covid19_salvia` | Medical & Clinical | Classification | Curated for non-invasive SARS-CoV-2 screening. Includes ~25 spectral replicates per subject from 101 patients (positive, negative symptomatic, and healthy controls) acquired from dried saliva drops using a 785 nm spectrometer. |
