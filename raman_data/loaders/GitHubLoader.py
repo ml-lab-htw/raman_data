@@ -63,6 +63,30 @@ class GitHubLoader(BaseLoader):
             )
             for disease in ["Parkinson", "Alzheimer"]
         },
+        "chlorinated_samples": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="chlorinated_samples",
+            name="Chlorinated Sample Identification",
+            short_name="Chlorinated Samples",
+            license="Authors contacted (data provided by Analyze IQ Limited)",
+            loader=lambda cache_path: GitHubLoader._load_chlorinated_samples(cache_path),
+            metadata={
+                "full_name": "Chlorinated Sample Identification (Raman)",
+                "source": "https://github.com/AaronFlanagan20/Analysis-of-Data-Synthesis-for-Raman-Spectroscopy",
+                "paper": "https://doi.org/10.1021/acs.jcim.3c00761",
+                "bibtex": "@article{Flanagan_2023, title={A Comparative Analysis of Data Synthesis Techniques to Improve Classification Accuracy of Raman Spectroscopy Data}, ISSN={1549-960X}, url={http://dx.doi.org/10.1021/acs.jcim.3c00761}, DOI={10.1021/acs.jcim.3c00761}, journal={Journal of Chemical Information and Modeling}, publisher={American Chemical Society (ACS)}, author={Flanagan, Aaron and Glavin, Frank}, year={2023}}",
+                "citation": [
+                    "Flanagan, A. and Glavin, F., 2023. A Comparative Analysis of Data Synthesis Techniques to Improve Classification Accuracy of Raman Spectroscopy Data. Journal of Chemical Information and Modeling."
+                ],
+                "description": (
+                    "Binary Raman classification task: detect the presence of chloroform in a "
+                    "sample. 230 spectra across 2473 wavenumbers (350–3500 cm⁻¹). Class balance "
+                    "{0: 76, 1: 154}. Data provided by Analyze IQ Limited; predefined 3-fold "
+                    "splits ship with the source repository."
+                ),
+            },
+        ),
         "biomolecules_reference": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.Biological,
@@ -279,6 +303,51 @@ class GitHubLoader(BaseLoader):
             raman_shifts, spectra = LoaderTools.align_raman_shifts(raman_shifts_list, spectra_list)
 
         class_names = unique_categories
+
+        return spectra, raman_shifts, targets, class_names
+
+    @staticmethod
+    def _load_chlorinated_samples(cache_path: str):
+        """Load the chlorinated-sample identification dataset.
+
+        Source: github.com/AaronFlanagan20/Analysis-of-Data-Synthesis-for-Raman-Spectroscopy
+        Single CSV with 230 spectra × 2473 wavenumbers and a trailing
+        ``classAttChloroform`` label column (binary 0/1).
+
+        Returns: spectra, raman_shifts, targets, class_names
+        """
+        csv_name = "original_chlorinated.csv"
+        csv_path = os.path.join(cache_path, csv_name)
+
+        if not os.path.exists(csv_path):
+            os.makedirs(cache_path, exist_ok=True)
+            LoaderTools.download(
+                url=(
+                    "https://raw.githubusercontent.com/AaronFlanagan20/"
+                    "Analysis-of-Data-Synthesis-for-Raman-Spectroscopy/main/"
+                    "data/chlorinated/original_chlorinated.csv"
+                ),
+                out_dir_path=cache_path,
+                out_file_name=csv_name,
+            )
+
+        df = pd.read_csv(csv_path)
+
+        label_col = "classAttChloroform"
+        if label_col not in df.columns:
+            raise FileNotFoundError(
+                f"Expected label column '{label_col}' not found in {csv_path}"
+            )
+
+        raman_shifts = np.array([float(c) for c in df.columns if c != label_col], dtype=float)
+        spectra = df.drop(columns=[label_col]).to_numpy(dtype=float)
+        targets = df[label_col].to_numpy(dtype=int)
+        class_names = ["no_chloroform", "chloroform"]
+
+        GitHubLoader.logger.debug(
+            f"Loaded chlorinated_samples: {spectra.shape[0]} spectra × {spectra.shape[1]} points, "
+            f"class counts {{0: {(targets == 0).sum()}, 1: {(targets == 1).sum()}}}"
+        )
 
         return spectra, raman_shifts, targets, class_names
 
