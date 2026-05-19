@@ -72,10 +72,14 @@ def gather_datasets() -> List[Tuple[str, str, str, str]]:
             continue
 
         for ds_name, ds_info in datasets.items():
-            # application type
+            # application type — use the pretty label, not the enum identifier,
+            # and unescape the LaTeX "\&" so it renders cleanly in Markdown.
             try:
                 at = ds_info.application_type
-                application = at.name if isinstance(at, APPLICATION_TYPE) else str(at)
+                if isinstance(at, APPLICATION_TYPE):
+                    application = at.label.replace(r"\&", "&")
+                else:
+                    application = str(at)
             except Exception:
                 application = "Unknown"
             # task type
