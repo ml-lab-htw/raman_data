@@ -248,18 +248,23 @@ Then open a pull request — we will review it and, if it meets the inclusion cr
 
 ## Releasing a New Version
 
-Releases are automated via GitHub Actions. A version tag triggers the CI pipeline: tests run first, then the package is built and published to PyPI automatically.
+Releases are automated via GitHub Actions. A `v*.*.*` git tag triggers
+tests, build, and PyPI publish.
+
+See **[RELEASING.md](RELEASING.md)** for the full step-by-step checklist
+(README regeneration, smoke tests, and common gotchas).
+
+Short version:
 
 ```bash
-# Ensure all changes are committed and pushed to main
 git checkout main && git pull
-
-# Tag and push (uses setuptools-scm for versioning)
-git tag v1.2.3
-git push origin v1.2.3
+PYTHONPATH=. python3 scripts/generate_readme_datasets.py  # refresh table
+git add -A && git commit -m "Release vX.Y.Z"
+git push origin main
+git tag vX.Y.Z && git push origin vX.Y.Z
 ```
 
-The tag must match `v*.*.*`. The [CI workflow](https://github.com/ml-lab-htw/raman_data/actions) will run tests across Python 3.10–3.13, build the package, and publish to [PyPI](https://pypi.org/project/raman-data/).
+The CI workflow runs at [github.com/ml-lab-htw/raman_data/actions](https://github.com/ml-lab-htw/raman_data/actions) and publishes to [PyPI](https://pypi.org/project/raman-data/).
 
 ## Citation
 
