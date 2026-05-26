@@ -44,8 +44,8 @@ def raman_data(
         - A list of dataset names if 'name' is None.
     """
     if dataset_name is None:
-        logger.debug("Listing available datasets%s", f" filtered by {task_type.name}" if task_type else "")
+        logger.info("Listing available datasets%s", f" filtered by {task_type.name}" if task_type else "")
         return datasets.list_datasets(task_type=task_type, application_type=application_type)
     else:
-        logger.debug(f"Loading dataset: {dataset_name} (cache_dir={cache_dir})")
+        logger.info("Loading dataset: %s (cache_dir=%s)", dataset_name, cache_dir)
         return datasets.load_dataset(dataset_name=dataset_name, cache_dir=cache_dir, load_data=load_data)
