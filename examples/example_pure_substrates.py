@@ -10,13 +10,9 @@ nonzero_counts = np.sum(dataset.targets > 0, axis=1)
 pure_idx = np.where(nonzero_counts == 1)[0]
 
 plt.figure(figsize=(10, 6))
-seen = set()
 for i in pure_idx:
     substrate_idx = int(np.argmax(dataset.targets[i]))
     name = dataset.target_names[substrate_idx]
-    if name in seen:
-        continue
-    seen.add(name)
     plt.plot(dataset.raman_shifts, dataset.spectra[i], label=name)
 
 plt.xlabel("Raman shift (cm$^{-1}$)")
