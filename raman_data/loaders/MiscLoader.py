@@ -132,7 +132,13 @@ class MiscLoader(BaseLoader):
                         'Fremout, Wim, and Steven Saverwyns. "Identification of synthetic organic pigments: the role of a comprehensive digital Raman spectral library." Journal of Raman Spectroscopy 43.11 (2012): 1536-1544.'
                     ],
                     "description": f"{process} Raman spectral library of approximately 270 synthetic organic pigments (~300 reference spectra, nearly 400 samples total) compiled at the Royal Institute for Cultural Heritage (KIK/IRPA), Brussels. Acquired on a Renishaw inVia dispersive Raman spectrometer (785 nm, Peltier-cooled CCD 203 K, 1200 mm⁻¹ grating, 50× LWD objective, ±0.5 cm⁻¹ calibration). Pigment classes cover azo (monoazo, disazo), heterocyclic, and polycyclic types (phthalocyanine, quinacridone, perylene, anthraquinone, dioxazine, triarylcarbonium, diketopyrrole). Validated for pigment identification on four Stedelijk Museum (Amsterdam) paintings. {'No baseline correction applied; raw fluorescence background retained.' if process == 'Raw' else 'Baseline correction applied to remove fluorescence background.'}",
-                }
+                },
+                # Checked (Raw variant only, via
+                # raman_bench.splitting.infer_group_ids_from_targets): no
+                # replicate structure found. Baseline Corrected variant not
+                # checked -- same underlying spectra so *likely* the same
+                # answer, but left as None (unknown) rather than assumed.
+                is_grouped=(False if process == "Raw" else None),
             )
             for process in ["Raw", "Baseline Corrected"]
         },

@@ -11,6 +11,20 @@ from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.utils import encode_labels
 from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, APPLICATION_TYPE
 
+# Per-acid is_grouped findings (see the acid_species DATASETS entries below).
+# Module-level (not a class attribute): dict/list comprehensions in a class
+# body run in their own scope that cannot see other class attributes, only
+# the enclosing module's globals -- a class attribute here would raise
+# NameError when DATASETS is built.
+_ACID_SPECIES_IS_GROUPED = {
+    "Succinic": False,
+    "Levulinic": False,
+    "Formic": False,
+    "Citric": False,
+    "Itaconic": False,
+    "Acetic": True,
+}
+
 
 class RWTHLoader(BaseLoader):
     """
@@ -44,7 +58,10 @@ class RWTHLoader(BaseLoader):
                     "Kaven, Luise F and Schweidtmann, Artur M and Keil, Jan and Israel, Jana and Wolter, Nadja and Mitsos, Alexander. Data-driven product-process optimization of N-isopropylacrylamide microgel flow-synthesis. Chemical Engineering Journal, 479, 147567, 2024, Elsevier"
                 ],
                 "description": "This data set contains in-line Raman spectroscopy measurements and predicted microgel sizes from Dynamic Light Scattering (DLS).The Raman spectroscopy measurements were conducted inside a customized measurement cell for monitoring in a tubular flow reactor.Inside the flow reactor, the microgel synthesis based on the monomer N-Isopropylacrylamid and the crosslinker N, N' Methylenebis(acrylamide) takes place.",
-            }
+            },
+            # Checked: raman_bench.splitting.infer_group_ids_from_targets finds
+            # real replicate structure (repeated measurements per condition).
+            is_grouped=True,
         ),
         "microgel_synthesis": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -62,7 +79,10 @@ class RWTHLoader(BaseLoader):
                     "Kaven, Luise F., et al. 'In-line monitoring of microgel synthesis: flow versus batch reactor.' Organic Process Research & Development 25.9 (2021): 2039-2051."
                 ],
                 "description": "This data set contains in-line Raman spectroscopy measurements inside a customized measurement cell for monitoring in a tubular flow reactor. The setup aims at monitoring the microgel synthesis in a flow reactor while aiming at a high measurement precision. The measurements include a systematic accuracy analysis, where different aspects of the flowing analyte are considered: solvent flow, flowing monomer solution, and flowing microgel solution. In addition, measurements for different calibration strategies are included. Lastly, this data set contains measurements of the microgel synthesis at varying residence times inside the tubular flow reactor.",
-            }
+            },
+            # Checked: raman_bench.splitting.infer_group_ids_from_targets finds
+            # real replicate structure (repeated measurements per condition).
+            is_grouped=True,
         ),
         **{
             f"{acid.lower()}_acid_species": DatasetInfo(
@@ -85,7 +105,12 @@ class RWTHLoader(BaseLoader):
                         "Echtermeyer, Alexander Walter Wilhelm; Marks, Caroline; Mitsos, Alexander; Viell, Jörn. Inline Raman Spectroscopy and Indirect Hard Modeling for Concentration Monitoring of Dissociated Acid Species. Applied Spectroscopy, 2021, 75(5):506–519. DOI: 10.1177/0003702820973275."
                     ],
                     "description": "Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling.",
-                }
+                },
+                # Checked per-acid with raman_bench.splitting.infer_group_ids_from_targets:
+                # only Acetic shows real replicate structure (14 groups, max size 3);
+                # the other five titration series have no row sharing an (near-)identical
+                # target-value tuple with any other row.
+                is_grouped=_ACID_SPECIES_IS_GROUPED[acid],
             )
             for acid in ["Succinic", "Levulinic", "Formic", "Citric", "Itaconic", "Acetic"] # TODO Oxalic: load scp gets None back
         },
@@ -107,7 +132,12 @@ class RWTHLoader(BaseLoader):
                         "Koronaki, E. D., Scholz, J. G. T., Modelska, M. M., Nayak, P. K., Viell, J., Mitsos, A., & Barkley, S. (2024). Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy. Small, 20(23), 2311920."
                     ],
                     "description": f"Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: {label}, spectral range: {spectral_range}. Task: predict particle diameter from Raman spectrum.",
-                }
+                },
+                # Checked: raman_bench.splitting.infer_group_ids_from_targets finds
+                # real replicate structure in all 14 pretreatment/spectral-range
+                # variants (45 groups, max size 10 -- consistent with repeated
+                # measurements per microgel sample across preprocessing variants).
+                is_grouped=True,
             )
             for short_key, file_key, label in [
                 ("raw",    "Raw",                "Raw"),

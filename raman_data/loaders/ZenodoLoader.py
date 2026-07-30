@@ -371,7 +371,11 @@ class ZenodoLoader(BaseLoader):
                     "paper": "https://doi.org/10.1073/pnas.2407439121",
                     "bibtex": "@article{Georgiev_2024, title={Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders}, volume={121}, ISSN={1091-6490}, url={http://dx.doi.org/10.1073/pnas.2407439121}, DOI={10.1073/pnas.2407439121}, number={45}, journal={Proceedings of the National Academy of Sciences}, publisher={Proceedings of the National Academy of Sciences}, author={Georgiev, Dimitar and Fernandez-Galiana, Alvaro and Vilms Pedersen, Simon and Papadopoulos, Georgios and Xie, Ruoxiao and Stevens, Molly M. and Barahona, Mauricio}, year={2024}, month=oct}",
                     "description": f"The {snr.lower()} signal-to-noise ratio subset of the Sugar Mixtures benchmark (7,680 measurements at 0.5 s integration). Used for evaluating the noise-robustness of hyperspectral unmixing and quantification algorithms."
-                }
+                },
+                # Checked: raman_bench.splitting.infer_group_ids_from_targets finds
+                # real replicate structure in both SNR subsets (repeated measurements
+                # of the same mixture composition).
+                is_grouped=True,
             )
             for snr in ["Low", "High"]
         },
@@ -408,7 +412,11 @@ class ZenodoLoader(BaseLoader):
                     "paper": "https://doi.org/10.1021/acs.analchem.9b05658",
                     "bibtex": "@article{Fornasaro_2020, title={Surface Enhanced Raman Spectroscopy for Quantitative Analysis: Results of a Large-Scale European Multi-Instrument Interlaboratory Study}, volume={92}, ISSN={1520-6882}, url={http://dx.doi.org/10.1021/acs.analchem.9b05658}, DOI={10.1021/acs.analchem.9b05658}, number={5}, journal={Analytical Chemistry}, publisher={American Chemical Society (ACS)}, author={Fornasaro, Stefano and Alsamad, Fatima and Baia, Monica and Batista de Carvalho, Luis A. E. and Beleites, Claudia and Byrne, Hugh J. and Chiado, Alessandro and Chis, Mihaela and Chisanga, Malama and Daniel, Amuthachelvi and Dybas, Jakub and Eppe, Gauthier and Falgayrac, Guillaume and Faulds, Karen and Gebavi, Hrvoje and Giorgis, Fabrizio and Goodacre, Royston and Graham, Duncan and La Manna, Pietro and Laing, Stacey and Litti, Lucio and Lyng, Fiona M. and Malek, Kamilla and Malherbe, Cedric and Marques, Maria P. M. and Meneghetti, Moreno and Mitri, Elisa and Mohacek-Grosev, Vlasta and Morasso, Carlo and Muhamadali, Howbeer and Musto, Pellegrino and Novara, Chiara and Pannico, Marianna and Penel, Guillaume and Piot, Olivier and Rindzevicius, Tomas and Rusu, Elena A. and Schmidt, Michael S. and Sergo, Valter and Sockalingum, Ganesh D. and Untereiner, Valerie and Vanna, Renzo and Wiercigroch, Ewelina and Bonifacio, Alois}, year={2020}, month=feb, pages={4053--4064}}",
                     "description": f"Quantitative SERS spectra of adenine measured using {type.lower()} {material.lower()} substrates across 15 different European laboratories. Benchmarks model reproducibility and inter-instrumental variability."
-                }
+                },
+                # Checked: raman_bench.splitting.infer_group_ids_from_targets finds
+                # real replicate structure in all four Colloidal/Solid x Gold/Silver
+                # variants (repeated concentration-series measurements).
+                is_grouped=True,
             )
             for material in ["Gold", "Silver"]
             for type in ["Colloidal", "Solid"]

@@ -97,7 +97,11 @@ class KaggleLoader(BaseLoader):
                         "smoothing. Designed to benchmark unsupervised label-free analyte detection algorithms. "
                         "Target: elution concentration profile (regression)."
                     )
-                }
+                },
+                # Checked: no row shares an (near-)identical target value with any
+                # other (raman_bench.splitting.infer_group_ids_from_targets finds
+                # no structure) for all four substrates -- no known replicate structure.
+                is_grouped=False,
             )
             for idx, substrate in enumerate(["Glycine", "Leucine", "Phenylalanine", "Tryptophan"])
         },
