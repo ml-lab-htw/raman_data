@@ -54,7 +54,31 @@ steps — just make sure you're on a clean branch off `main` first.
    `tests/test_loaders.py`, and run `pytest tests/ -k <your_dataset>` to confirm the loader
    works and returns sane shapes.
 
-7. **Sync to the RamanBench HF mirror.** This is the step that actually matters for
+7. **Run a real PLS prediction on it — before doing anything else.** Shape checks catch
+   obviously wrong arrays; they don't catch a mislabeled target column, a transposed
+   spectra matrix, a group-id column masquerading as a feature, or NaNs that only surface
+   once something actually tries to fit a model. Requires a `RamanBench` checkout with its
+   `autogluon`/`[full]` extras installed — if there isn't one already (e.g. you weren't
+   reached via `RamanBench`'s bootstrapping `dataset-agent`), bootstrap `../RamanBench` the
+   same way (clone if missing, `pip install -e .[full]`). From that checkout, for **every**
+   target index the new dataset declares:
+
+   ```
+   python scripts/run_experiment.py --dataset <name> --target-idx <i> --model PLS \
+       --seed 0 --results-dir /tmp/dataset_agent_smoketest/data \
+       --cache-dir /tmp/dataset_agent_smoketest/cache
+   ```
+
+   PLS is the right choice here — cheap, CPU-only, no HPO needed, and it exercises the
+   entire path (mirror-or-raw loading, splitting/grouping, preprocessing, fit, predict,
+   metric computation) end to end. This runs before the dataset is in the mirror, so it
+   naturally exercises your new raw loader (`RamanBenchmark._load_raman_dataset` falls back
+   to it since the mirror lookup will miss). Confirm each target actually finishes (not a
+   clean `TooFewClassesError` skip you didn't expect) and produces a sane, non-NaN
+   `metric_error` before moving on. Use a scratch `--results-dir`/`--cache-dir` (as above)
+   so this doesn't pollute real benchmark results.
+
+8. **Sync to the RamanBench HF mirror.** This is the step that actually matters for
    benchmarking — `RamanBench` reads datasets from this mirror at runtime
    (`raman_bench.benchmark.RamanBenchmark._load_from_mirror`), not by re-running the loader
    you just wrote on every benchmark call. Run `scripts/mirror_to_huggingface.py --dataset
@@ -65,10 +89,10 @@ steps — just make sure you're on a clean branch off `main` first.
    (tests, PR, eventual PyPI release) are about making the loader available to everyone
    else, not a precondition for using it yourself.
 
-8. **Regenerate auto-generated docs**: `scripts/generate_readme_datasets.py` and
+9. **Regenerate auto-generated docs**: `scripts/generate_readme_datasets.py` and
    `scripts/generate_croissant.py` for the new dataset's metadata files.
 
-9. **Test, commit, push, open a PR.** Run the full suite (`pytest tests/ -v`) and confirm
+10. **Test, commit, push, open a PR.** Run the full suite (`pytest tests/ -v`) and confirm
    it's green. Commit with a message describing the dataset (source, task type, license) —
    no `Co-Authored-By: Claude`/Anthropic trailer. Push the branch
    (`git push -u origin dataset/<short-name>`) and open a PR against `main` with
@@ -76,7 +100,7 @@ steps — just make sure you're on a clean branch off `main` first.
 
 ## After onboarding
 
-The mirror sync (step 7) already made the dataset real and usable — don't wait for
+The mirror sync (step 8) already made the dataset real and usable — don't wait for
 anything below before telling the user it's ready to benchmark. If the local `raman_data`
 isn't already an editable install of this checkout, `pip install -e .` here first so the
 new `DatasetInfo` is actually importable; then the `model-agent` in the sibling
@@ -97,6 +121,9 @@ trigger in `RamanBench`'s `pyproject.toml`.
 
 - Never fabricate metadata (license, paper citation, sample counts) — if you don't know
   it, ask.
+- Never sync a dataset to the HF mirror without first running a real PLS prediction on
+  every target it declares (step 7) and confirming a sane result — shape-only tests aren't
+  enough to catch format bugs that only bite at fit/predict time.
 - Never push to the HF mirror without showing the user a dry-run diff first and getting
   explicit confirmation.
 - Never merge your own PR, and never tag/push a release, without the user explicitly
