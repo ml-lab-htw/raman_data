@@ -350,6 +350,39 @@ class ZenodoLoader(BaseLoader):
 
         return spectra, raman_shifts, targets, list(class_names)
 
+    @staticmethod
+    def __load_19653302(
+        cache_path: str,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str], np.ndarray] | None:
+        """
+        Parse and extract data from the locust_phase_hemolymph dataset (Zenodo ID: 19653302).
+
+        Uses the "CvI" (Crowded vs. Isolated) file: resonance Raman spectra of desert
+        locust hemolymph labelled by rearing density (phase state). The `Sample` column
+        identifies which of the 200 physical animals each of the 5,000 spectra came
+        from (~25 replicate spectra per animal) -- returned as an explicit group id
+        rather than inferred, per the dataset's own real measurement metadata.
+
+        Returns a tuple of (spectra, raman_shifts, targets, class_names, group_ids).
+        """
+        data_path = os.path.join(cache_path, "19653302", "CvI_Raw.csv")
+        if not os.path.isfile(data_path):
+            raise FileNotFoundError(f"Could not find CvI_Raw.csv in {data_path}")
+
+        df = pd.read_csv(data_path)
+        wn_cols = [c for c in df.columns if is_wavenumber(c)]
+        if not wn_cols:
+            raise FileNotFoundError(f"No wavenumber columns found in {data_path}")
+
+        spectra = df[wn_cols].to_numpy(dtype=float)
+        raman_shifts = np.array([float(c) for c in wn_cols])
+
+        env = df["Env"].map({"C": "crowded", "I": "isolated"})
+        targets, class_names = encode_labels(env)
+        group_ids = pd.factorize(df["Sample"])[0]
+
+        return spectra, raman_shifts, targets, list(class_names), group_ids
+
     __BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "raman-data", "zenodo")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
@@ -480,6 +513,47 @@ class ZenodoLoader(BaseLoader):
                 ),
             },
         ),
+        "locust_phase_hemolymph": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Biological,
+            id="19653302",
+            name="Locust Phase State (Hemolymph)",
+            short_name="Locust Phase State",
+            file_typ="*.csv",
+            license="CC BY 4.0",
+            loader=lambda cache_path: ZenodoLoader.__load_19653302(cache_path),
+            metadata={
+                "full_name": "Desert Locust Density-Dependent Phase State (Resonance Raman of Hemolymph)",
+                "source": "https://doi.org/10.5281/zenodo.19653302",
+                "paper": "https://doi.org/10.5281/zenodo.19653302",
+                "bibtex": (
+                    "@dataset{Holman_2026, title={Datasets for: Prediction of density-dependent phase "
+                    "state in the Desert Locust, Schistocerca gregaria, using resonance Raman spectroscopy "
+                    "of hemolymph and machine learning}, url={https://doi.org/10.5281/zenodo.19653302}, "
+                    "DOI={10.5281/zenodo.19653302}, publisher={Zenodo}, "
+                    "author={Holman, Aidan P. and Mechti, Audélia and Miller, Andie C. and Techer, Maeva A. "
+                    "and Goff, Nicolas K. and Song, Hojun and Behmer, Spencer T. and Kurouski, Dmitry and "
+                    "Sword, Gregory A.}, year={2026}}"
+                ),
+                "citation": [
+                    "Holman, A.P., Mechti, A., Miller, A.C., Techer, M.A., Goff, N.K., Song, H., Behmer, S.T., "
+                    "Kurouski, D. and Sword, G.A., 2026. Datasets for: Prediction of density-dependent phase "
+                    "state in the Desert Locust, Schistocerca gregaria, using resonance Raman spectroscopy of "
+                    "hemolymph and machine learning. Zenodo."
+                ],
+                "description": (
+                    "Resonance Raman spectra of hemolymph from desert locust (Schistocerca gregaria) "
+                    "juveniles reared in crowded vs. isolated conditions -- the classic density-dependent "
+                    "phase polyphenism studied in locust biology. 5,000 spectra from 200 individual animals "
+                    "(~25 replicate spectra per animal). Target: rearing density/phase state, crowded vs. "
+                    "isolated (binary classification). The dataset's own `Sample` column identifies which "
+                    "animal each spectrum came from and is used as an explicit group id."
+                ),
+            },
+            # Explicit group ids from the dataset's own `Sample` column (~25 replicate
+            # spectra per of 200 physical animals) -- not inferred, a real measurement id.
+            is_grouped=True,
+        ),
     }
 
     @staticmethod
@@ -577,13 +651,18 @@ class ZenodoLoader(BaseLoader):
             data = None, None, None, None
 
         if data is not None:
-            spectra, raman_shifts, concentrations, target_names = data
+            if len(data) == 5:
+                spectra, raman_shifts, concentrations, target_names, group_ids = data
+            else:
+                spectra, raman_shifts, concentrations, target_names = data
+                group_ids = None
             return RamanDataset(
                 info=ZenodoLoader.DATASETS[dataset_name],
                 raman_shifts=raman_shifts,
                 spectra=spectra,
                 targets=concentrations,
                 target_names=target_names,
+                group_ids=group_ids,
             )
 
         return data
