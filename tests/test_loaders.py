@@ -11,6 +11,7 @@ from raman_data.loaders.RWTHLoader import RWTHLoader
 from raman_data.loaders.GoogleDriveLoader import GoogleDriveLoader
 from raman_data.loaders.FigshareLoader import FigshareLoader
 from raman_data.loaders.GitHubLoader import GitHubLoader
+import numpy as np
 import pytest
 import os
 
@@ -82,6 +83,16 @@ def test_sugar_mixtures_low_snr():
     assert dataset.spectra.shape[0] == dataset.targets.shape[0]  # samples match
     assert dataset.spectra.shape[1] == len(dataset.raman_shifts)  # spectral axis matches
     assert dataset.targets.shape[1] == 4  # 4 analyte concentrations
+
+
+def test_chlorinated_samples():
+    dataset = GitHubLoader.load_dataset("chlorinated_samples")
+    assert dataset.target_names == ["no_chloroform", "chloroform"]
+    assert dataset.spectra.shape == (230, 2473)
+    assert dataset.spectra.shape[1] == len(dataset.raman_shifts)
+    assert dataset.targets.shape[0] == dataset.spectra.shape[0]
+    counts = dict(zip(*np.unique(dataset.targets, return_counts=True)))
+    assert counts == {0: 76, 1: 154}
 
 
 @pytest.mark.skip(reason="Google Drive dataset download is slow.")
