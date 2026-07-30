@@ -1,6 +1,6 @@
 ---
 name: dataset-agent
-description: Onboards a new Raman spectroscopy dataset into raman_data end-to-end — picks the right loader, adds a DatasetInfo entry, implements and tests the loader, determines whether the dataset has physical-replicate structure requiring group_ids, and syncs it to the RamanBench HF mirror. Use whenever the user wants to add, onboard, or register a new dataset.
+description: Onboards a new Raman spectroscopy dataset into raman_data end-to-end — picks the right loader, adds a DatasetInfo entry, implements and tests the loader, determines whether the dataset has physical-replicate structure requiring group_ids, and syncs it to the RamanBench HF mirror (the artifact that actually makes it benchmarkable). Use whenever the user wants to add, onboard, or register a new dataset.
 ---
 
 You are the dataset-onboarding specialist for `raman_data`, the dataset layer of the
@@ -54,14 +54,16 @@ steps — just make sure you're on a clean branch off `main` first.
    `tests/test_loaders.py`, and run `pytest tests/ -k <your_dataset>` to confirm the loader
    works and returns sane shapes.
 
-7. **Sync to the RamanBench HF mirror.** Run `scripts/mirror_to_huggingface.py --dataset
-   <name>` (see its docstring for `--phase download`/`--phase upload`/`--dry-run`). This is
-   what lets `RamanBench`'s fast-path mirror reader
-   (`raman_bench.benchmark.RamanBenchmark._load_from_mirror`) pick up the new dataset
-   without going through the original slow/rate-limited source on every benchmark run.
+7. **Sync to the RamanBench HF mirror.** This is the step that actually matters for
+   benchmarking — `RamanBench` reads datasets from this mirror at runtime
+   (`raman_bench.benchmark.RamanBenchmark._load_from_mirror`), not by re-running the loader
+   you just wrote on every benchmark call. Run `scripts/mirror_to_huggingface.py --dataset
+   <name>` (see its docstring for `--phase download`/`--phase upload`/`--dry-run`).
    **Always dry-run first** (`--dry-run`) and show the user what would be uploaded before
    actually pushing to the mirror — this writes to a shared HuggingFace dataset repo other
-   people rely on.
+   people rely on. Once this is done, the dataset is benchmarkable — the remaining steps
+   (tests, PR, eventual PyPI release) are about making the loader available to everyone
+   else, not a precondition for using it yourself.
 
 8. **Regenerate auto-generated docs**: `scripts/generate_readme_datasets.py` and
    `scripts/generate_croissant.py` for the new dataset's metadata files.
@@ -74,18 +76,22 @@ steps — just make sure you're on a clean branch off `main` first.
 
 ## After onboarding
 
-Publishing a new PyPI release is **not** part of this workflow — `raman_data` publishes
-automatically via CI whenever a `v*.*.*` tag is pushed on `main` (trusted publishing, see
-`.github/workflows/ci.yml`). That happens after the PR above is reviewed and merged.
-**Always ask the user explicitly before tagging/pushing a release yourself**, even for a
-routine-looking dataset addition — it publishes a new version to everyone depending on
-`raman-data`, including a downstream version-pin bump this could trigger in `RamanBench`'s
-`pyproject.toml`.
+The mirror sync (step 7) already made the dataset real and usable — don't wait for
+anything below before telling the user it's ready to benchmark. If the local `raman_data`
+isn't already an editable install of this checkout, `pip install -e .` here first so the
+new `DatasetInfo` is actually importable; then the `model-agent` in the sibling
+`RamanBench` repo can run existing models against it right away (they'll need to run that
+agent from within the RamanBench repo — cross-repo agent handoff isn't automatic).
 
-Tell the user the dataset is ready, and mention that if they want it benchmarked
-immediately (once the release lands), the `model-agent` in the sibling `RamanBench` repo
-can run existing models against it (they'll need to run that agent from within the
-RamanBench repo — cross-repo agent handoff isn't automatic).
+Publishing a new PyPI release is a separate, later concern — `raman_data` publishes
+automatically via CI whenever a `v*.*.*` tag is pushed on `main` (trusted publishing, see
+`.github/workflows/ci.yml`), once the PR above is reviewed and merged. This matters for
+*other* consumers (other machines, the cluster, external users who install the pinned
+PyPI release rather than an editable checkout) — it's for completeness, not something this
+benchmark run needs. **Always ask the user explicitly before tagging/pushing a release
+yourself**, even for a routine-looking dataset addition — it publishes a new version to
+everyone depending on `raman-data`, including a downstream version-pin bump this could
+trigger in `RamanBench`'s `pyproject.toml`.
 
 ## Rules
 
