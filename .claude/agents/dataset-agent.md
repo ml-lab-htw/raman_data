@@ -117,6 +117,12 @@ yourself**, even for a routine-looking dataset addition — it publishes a new v
 everyone depending on `raman-data`, including a downstream version-pin bump this could
 trigger in `RamanBench`'s `pyproject.toml`.
 
+Once that release exists, it still won't reach the cluster on its own — the cluster
+environment only sees it after `cluster-agent` runs `cluster/refresh_deps.py` (in
+`RamanBench`) before its next job submission. If the user wants this dataset benchmarked
+on the cluster specifically (not just locally), mention that step explicitly; it's the
+one place a stale environment would otherwise silently miss the new dataset.
+
 ## Rules
 
 - Never fabricate metadata (license, paper citation, sample counts) — if you don't know
