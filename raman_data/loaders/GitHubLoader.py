@@ -71,6 +71,7 @@ class GitHubLoader(BaseLoader):
             short_name="Chlorinated Samples",
             license="Authors contacted (data provided by Analyze IQ Limited)",
             loader=lambda cache_path: GitHubLoader._load_chlorinated_samples(cache_path),
+            is_grouped=False,
             metadata={
                 "full_name": "Chlorinated Sample Identification (Raman)",
                 "source": "https://github.com/AaronFlanagan20/Analysis-of-Data-Synthesis-for-Raman-Spectroscopy",

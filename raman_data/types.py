@@ -92,6 +92,20 @@ class DatasetInfo:
         id (str): An internal id to distinguish between sub-datasets.
         loader (Callable): The function to format the dataset.
         metadata (dict[str, str]): Some non-functional information about the dataset.
+        is_grouped (bool | None): Whether spectra in this dataset have known
+            physical-replicate structure (multiple spectra measured from the
+            same physical sample) that a benchmark consuming this dataset
+            should keep together across any train/test split, to avoid
+            leaking a replicate's information across the split.
+            ``True``/``False`` reflect a real, checked finding (for
+            regression datasets, confirmed by looking for exact/near-exact
+            matches across every target value -- see
+            ``raman_bench.splitting.infer_group_ids_from_targets`` in the
+            RamanBench package for the detection method used); ``None``
+            means this hasn't been determined yet for this dataset (e.g. no
+            reliable detection signal exists for classification targets,
+            where many legitimately different samples share a label) --
+            treat ``None`` as "unknown", not as "not grouped".
     """
     id: str
     name: str
@@ -102,6 +116,7 @@ class DatasetInfo:
     file_typ: Optional[str | List[str] | None] = None
     short_name: str = ""
     license: str = "unknown"
+    is_grouped: Optional[bool] = None
 
 
 
@@ -120,17 +135,25 @@ class RamanDataset:
         info (DatasetInfo | None): DatasetInfo object containing dataset's information.
         target_names (list[str]): A list of class names for classification tasks.
         name (str): The name of the dataset.
+        group_ids (np.ndarray | None): Optional per-spectrum group identifier (e.g. the
+            physical sample/measurement a spectrum was taken from). Rows sharing a
+            group id are replicates and should never be split across train/test.
+            Only populated by loaders for datasets with known replicate structure;
+            None otherwise.
     """
     spectra: np.ndarray
     targets: np.ndarray
     raman_shifts: np.ndarray
     info: DatasetInfo | None = None
     target_names: List[str] = field(default_factory=list)
+    group_ids: Optional[np.ndarray] = None
 
     def __post_init__(self):
         self.spectra = self._to_ndarray(self.spectra, "spectra")
         self.targets = self._to_ndarray(self.targets, "targets")
         self.raman_shifts = self._to_ndarray(self.raman_shifts, "raman_shifts")
+        if self.group_ids is not None:
+            self.group_ids = self._to_ndarray(self.group_ids, "group_ids")
 
         # Normalize target_names to always be a list of strings
         if self.target_names is None:
@@ -157,6 +180,14 @@ class RamanDataset:
                 f"spectra rows ({self.spectra.shape[0]}) must match "
                 f"targets rows ({self.targets.shape[0]})"
             )
+        if self.group_ids is not None:
+            if self.group_ids.ndim != 1:
+                raise ValueError(f"group_ids must be 1D, got {self.group_ids.ndim}D")
+            if self.group_ids.shape[0] != self.spectra.shape[0]:
+                raise ValueError(
+                    f"group_ids length ({self.group_ids.shape[0]}) must match "
+                    f"spectra rows ({self.spectra.shape[0]})"
+                )
 
     @staticmethod
     def _to_ndarray(value, name: str) -> np.ndarray:
@@ -267,14 +298,22 @@ class RamanDataset:
         """
         return self.raman_shifts.max()
 
-    def to_dataframe(self, target_idx) -> pd.DataFrame:
+    def to_dataframe(self, target_idx: int = 0) -> pd.DataFrame:
         """
         Convert the dataset to a pandas DataFrame.
 
+        Args:
+            target_idx: For multi-target datasets, which target column to use as
+                the ``target`` column. Defaults to 0 (the first target); ignored
+                for single-target datasets.
+
         Returns:
-            DataFrame with spectral data, wavenumbers as columns, and targets as last column.
+            DataFrame with spectral data, wavenumbers as columns, group id (if present),
+            and target as last column.
         """
         df = pd.DataFrame(self.spectra, columns=self.raman_shifts)
+        if self.group_ids is not None:
+            df["_group_id"] = self.group_ids
         if self.targets.ndim == 1:
             df["target"] = self.targets
         else:
@@ -309,6 +348,7 @@ class RamanDataset:
                 raman_shifts=self.raman_shifts,
                 info=self.info,
                 target_names=self.target_names,
+                group_ids=self.group_ids[idx] if self.group_ids is not None else None,
             )
         else:
             return (self.spectra[idx], self.targets[idx])

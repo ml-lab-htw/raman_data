@@ -39,6 +39,29 @@ def test_list_classification_datasets():
     assert set(classification_datasets) == expected
 
 
+def test_filter_by_is_grouped():
+    """
+    Grouped and ungrouped regression datasets must be disjoint, and known
+    examples of each (checked against real data via
+    raman_bench.splitting.infer_group_ids_from_targets) must land in the
+    right bucket.
+    """
+    grouped = set(raman_data(task_type=TASK_TYPE.Regression, is_grouped=True))
+    ungrouped = set(raman_data(task_type=TASK_TYPE.Regression, is_grouped=False))
+    assert grouped.isdisjoint(ungrouped)
+
+    assert "bioprocess_analytes_metrohm" in grouped  # real replicate structure
+    assert "adenine_colloidal_gold" in grouped
+    assert "amino_acids_glycine" in ungrouped  # no replicate structure
+    assert "bioprocess_analytes_kaiser" in ungrouped
+
+    # A dataset never checked for grouping is excluded by either filter value.
+    unfiltered = set(raman_data(task_type=TASK_TYPE.Regression))
+    assert "wheat_lines" not in unfiltered  # sanity: that one's classification
+    never_checked = unfiltered - grouped - ungrouped
+    assert "synthetic_organic_pigments_baseline_corrected" in never_checked
+
+
 def test_load_dataset():
     """
     Tests loading a dataset.

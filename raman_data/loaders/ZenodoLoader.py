@@ -350,6 +350,39 @@ class ZenodoLoader(BaseLoader):
 
         return spectra, raman_shifts, targets, list(class_names)
 
+    @staticmethod
+    def __load_19653302(
+        cache_path: str,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str], np.ndarray] | None:
+        """
+        Parse and extract data from the locust_phase_hemolymph dataset (Zenodo ID: 19653302).
+
+        Uses the "CvI" (Crowded vs. Isolated) file: resonance Raman spectra of desert
+        locust hemolymph labelled by rearing density (phase state). The `Sample` column
+        identifies which of the 200 physical animals each of the 5,000 spectra came
+        from (~25 replicate spectra per animal) -- returned as an explicit group id
+        rather than inferred, per the dataset's own real measurement metadata.
+
+        Returns a tuple of (spectra, raman_shifts, targets, class_names, group_ids).
+        """
+        data_path = os.path.join(cache_path, "19653302", "CvI_Raw.csv")
+        if not os.path.isfile(data_path):
+            raise FileNotFoundError(f"Could not find CvI_Raw.csv in {data_path}")
+
+        df = pd.read_csv(data_path)
+        wn_cols = [c for c in df.columns if is_wavenumber(c)]
+        if not wn_cols:
+            raise FileNotFoundError(f"No wavenumber columns found in {data_path}")
+
+        spectra = df[wn_cols].to_numpy(dtype=float)
+        raman_shifts = np.array([float(c) for c in wn_cols])
+
+        env = df["Env"].map({"C": "crowded", "I": "isolated"})
+        targets, class_names = encode_labels(env)
+        group_ids = pd.factorize(df["Sample"])[0]
+
+        return spectra, raman_shifts, targets, list(class_names), group_ids
+
     __BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "raman-data", "zenodo")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
@@ -371,7 +404,11 @@ class ZenodoLoader(BaseLoader):
                     "paper": "https://doi.org/10.1073/pnas.2407439121",
                     "bibtex": "@article{Georgiev_2024, title={Hyperspectral unmixing for Raman spectroscopy via physics-constrained autoencoders}, volume={121}, ISSN={1091-6490}, url={http://dx.doi.org/10.1073/pnas.2407439121}, DOI={10.1073/pnas.2407439121}, number={45}, journal={Proceedings of the National Academy of Sciences}, publisher={Proceedings of the National Academy of Sciences}, author={Georgiev, Dimitar and Fernandez-Galiana, Alvaro and Vilms Pedersen, Simon and Papadopoulos, Georgios and Xie, Ruoxiao and Stevens, Molly M. and Barahona, Mauricio}, year={2024}, month=oct}",
                     "description": f"The {snr.lower()} signal-to-noise ratio subset of the Sugar Mixtures benchmark (7,680 measurements at 0.5 s integration). Used for evaluating the noise-robustness of hyperspectral unmixing and quantification algorithms."
-                }
+                },
+                # Checked: raman_bench.splitting.infer_group_ids_from_targets finds
+                # real replicate structure in both SNR subsets (repeated measurements
+                # of the same mixture composition).
+                is_grouped=True,
             )
             for snr in ["Low", "High"]
         },
@@ -408,7 +445,11 @@ class ZenodoLoader(BaseLoader):
                     "paper": "https://doi.org/10.1021/acs.analchem.9b05658",
                     "bibtex": "@article{Fornasaro_2020, title={Surface Enhanced Raman Spectroscopy for Quantitative Analysis: Results of a Large-Scale European Multi-Instrument Interlaboratory Study}, volume={92}, ISSN={1520-6882}, url={http://dx.doi.org/10.1021/acs.analchem.9b05658}, DOI={10.1021/acs.analchem.9b05658}, number={5}, journal={Analytical Chemistry}, publisher={American Chemical Society (ACS)}, author={Fornasaro, Stefano and Alsamad, Fatima and Baia, Monica and Batista de Carvalho, Luis A. E. and Beleites, Claudia and Byrne, Hugh J. and Chiado, Alessandro and Chis, Mihaela and Chisanga, Malama and Daniel, Amuthachelvi and Dybas, Jakub and Eppe, Gauthier and Falgayrac, Guillaume and Faulds, Karen and Gebavi, Hrvoje and Giorgis, Fabrizio and Goodacre, Royston and Graham, Duncan and La Manna, Pietro and Laing, Stacey and Litti, Lucio and Lyng, Fiona M. and Malek, Kamilla and Malherbe, Cedric and Marques, Maria P. M. and Meneghetti, Moreno and Mitri, Elisa and Mohacek-Grosev, Vlasta and Morasso, Carlo and Muhamadali, Howbeer and Musto, Pellegrino and Novara, Chiara and Pannico, Marianna and Penel, Guillaume and Piot, Olivier and Rindzevicius, Tomas and Rusu, Elena A. and Schmidt, Michael S. and Sergo, Valter and Sockalingum, Ganesh D. and Untereiner, Valerie and Vanna, Renzo and Wiercigroch, Ewelina and Bonifacio, Alois}, year={2020}, month=feb, pages={4053--4064}}",
                     "description": f"Quantitative SERS spectra of adenine measured using {type.lower()} {material.lower()} substrates across 15 different European laboratories. Benchmarks model reproducibility and inter-instrumental variability."
-                }
+                },
+                # Checked: raman_bench.splitting.infer_group_ids_from_targets finds
+                # real replicate structure in all four Colloidal/Solid x Gold/Silver
+                # variants (repeated concentration-series measurements).
+                is_grouped=True,
             )
             for material in ["Gold", "Silver"]
             for type in ["Colloidal", "Solid"]
@@ -471,6 +512,47 @@ class ZenodoLoader(BaseLoader):
                     "Target: cancer vs. control (binary classification)."
                 ),
             },
+        ),
+        "locust_phase_hemolymph": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Biological,
+            id="19653302",
+            name="Locust Phase State (Hemolymph)",
+            short_name="Locust Phase State",
+            file_typ="*.csv",
+            license="CC BY 4.0",
+            loader=lambda cache_path: ZenodoLoader.__load_19653302(cache_path),
+            metadata={
+                "full_name": "Desert Locust Density-Dependent Phase State (Resonance Raman of Hemolymph)",
+                "source": "https://doi.org/10.5281/zenodo.19653302",
+                "paper": "https://doi.org/10.5281/zenodo.19653302",
+                "bibtex": (
+                    "@dataset{Holman_2026, title={Datasets for: Prediction of density-dependent phase "
+                    "state in the Desert Locust, Schistocerca gregaria, using resonance Raman spectroscopy "
+                    "of hemolymph and machine learning}, url={https://doi.org/10.5281/zenodo.19653302}, "
+                    "DOI={10.5281/zenodo.19653302}, publisher={Zenodo}, "
+                    "author={Holman, Aidan P. and Mechti, Audélia and Miller, Andie C. and Techer, Maeva A. "
+                    "and Goff, Nicolas K. and Song, Hojun and Behmer, Spencer T. and Kurouski, Dmitry and "
+                    "Sword, Gregory A.}, year={2026}}"
+                ),
+                "citation": [
+                    "Holman, A.P., Mechti, A., Miller, A.C., Techer, M.A., Goff, N.K., Song, H., Behmer, S.T., "
+                    "Kurouski, D. and Sword, G.A., 2026. Datasets for: Prediction of density-dependent phase "
+                    "state in the Desert Locust, Schistocerca gregaria, using resonance Raman spectroscopy of "
+                    "hemolymph and machine learning. Zenodo."
+                ],
+                "description": (
+                    "Resonance Raman spectra of hemolymph from desert locust (Schistocerca gregaria) "
+                    "juveniles reared in crowded vs. isolated conditions -- the classic density-dependent "
+                    "phase polyphenism studied in locust biology. 5,000 spectra from 200 individual animals "
+                    "(~25 replicate spectra per animal). Target: rearing density/phase state, crowded vs. "
+                    "isolated (binary classification). The dataset's own `Sample` column identifies which "
+                    "animal each spectrum came from and is used as an explicit group id."
+                ),
+            },
+            # Explicit group ids from the dataset's own `Sample` column (~25 replicate
+            # spectra per of 200 physical animals) -- not inferred, a real measurement id.
+            is_grouped=True,
         ),
     }
 
@@ -569,13 +651,18 @@ class ZenodoLoader(BaseLoader):
             data = None, None, None, None
 
         if data is not None:
-            spectra, raman_shifts, concentrations, target_names = data
+            if len(data) == 5:
+                spectra, raman_shifts, concentrations, target_names, group_ids = data
+            else:
+                spectra, raman_shifts, concentrations, target_names = data
+                group_ids = None
             return RamanDataset(
                 info=ZenodoLoader.DATASETS[dataset_name],
                 raman_shifts=raman_shifts,
                 spectra=spectra,
                 targets=concentrations,
                 target_names=target_names,
+                group_ids=group_ids,
             )
 
         return data

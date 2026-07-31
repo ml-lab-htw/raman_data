@@ -37,6 +37,7 @@ lru_cache = LRUCache(maxsize=1)
 def list_datasets(
         task_type: Optional[TASK_TYPE] = None,
         application_type: Optional[APPLICATION_TYPE] = None,
+        is_grouped: Optional[bool] = None,
 ) -> List[str]:
     """
     Lists the available Raman spectroscopy datasets.
@@ -45,6 +46,14 @@ def list_datasets(
         task_type: If specified, filters the datasets by task type.
                    Can be 'TASK_TYPE.Classification' or 'TASK_TYPE.Regression'.
         application_type: If specified, filters the datasets by application domain.
+        is_grouped: If specified, filters by known physical-replicate structure
+                    (see `DatasetInfo.is_grouped`). `True` -> only datasets with
+                    confirmed replicate structure; `False` -> only datasets
+                    confirmed to have none. Datasets where this hasn't been
+                    checked yet (`is_grouped is None` on the DatasetInfo) are
+                    excluded by either `True` or `False` -- pass `None`
+                    (the default) to include datasets regardless of whether
+                    grouping has been checked.
 
     Returns:
         A list of available dataset names.
@@ -63,6 +72,9 @@ def list_datasets(
 
     if application_type:
         result = [(name, info) for name, info in result if info.application_type == application_type]
+
+    if is_grouped is not None:
+        result = [(name, info) for name, info in result if info.is_grouped is is_grouped]
 
     return [name for name, info in result]
 
