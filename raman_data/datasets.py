@@ -38,6 +38,7 @@ def list_datasets(
         task_type: Optional[TASK_TYPE] = None,
         application_type: Optional[APPLICATION_TYPE] = None,
         is_grouped: Optional[bool] = None,
+        has_missing_labels: Optional[bool] = None,
 ) -> List[str]:
     """
     Lists the available Raman spectroscopy datasets.
@@ -54,6 +55,15 @@ def list_datasets(
                     excluded by either `True` or `False` -- pass `None`
                     (the default) to include datasets regardless of whether
                     grouping has been checked.
+        has_missing_labels: If specified, filters by whether at least one target
+                    column has missing (NaN) values for at least one row (see
+                    `DatasetInfo.has_missing_labels`). `True` -> only datasets
+                    with confirmed missing labels (candidates for
+                    semi-supervised benchmarking); `False` -> only datasets
+                    confirmed fully labeled. Datasets where this hasn't been
+                    checked yet are excluded by either `True` or `False` --
+                    pass `None` (the default) to include datasets regardless of
+                    whether this has been checked.
 
     Returns:
         A list of available dataset names.
@@ -75,6 +85,9 @@ def list_datasets(
 
     if is_grouped is not None:
         result = [(name, info) for name, info in result if info.is_grouped is is_grouped]
+
+    if has_missing_labels is not None:
+        result = [(name, info) for name, info in result if info.has_missing_labels is has_missing_labels]
 
     return [name for name, info in result]
 

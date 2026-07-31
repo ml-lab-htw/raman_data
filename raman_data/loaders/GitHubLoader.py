@@ -39,7 +39,9 @@ class GitHubLoader(BaseLoader):
                 "citation": [
                     "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028."
                 ],
-            }
+            },
+            # Checked: no missing (NaN) label values.
+            has_missing_labels=False,
         ),
         **{
             f"{disease.lower()}": DatasetInfo(
@@ -59,7 +61,9 @@ class GitHubLoader(BaseLoader):
                     "citation": [
                         "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028."
                     ],
-                }
+                },
+                # Checked: no missing (NaN) label values for either disease.
+                has_missing_labels=False,
             )
             for disease in ["Parkinson", "Alzheimer"]
         },
@@ -72,6 +76,8 @@ class GitHubLoader(BaseLoader):
             license="Authors contacted (data provided by Analyze IQ Limited)",
             loader=lambda cache_path: GitHubLoader._load_chlorinated_samples(cache_path),
             is_grouped=False,
+            # Checked: no missing (NaN) label values.
+            has_missing_labels=False,
             metadata={
                 "full_name": "Chlorinated Sample Identification (Raman)",
                 "source": "https://github.com/AaronFlanagan20/Analysis-of-Data-Synthesis-for-Raman-Spectroscopy",

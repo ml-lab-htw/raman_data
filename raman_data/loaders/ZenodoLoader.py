@@ -409,6 +409,8 @@ class ZenodoLoader(BaseLoader):
                 # real replicate structure in both SNR subsets (repeated measurements
                 # of the same mixture composition).
                 is_grouped=True,
+                # Checked: no missing (NaN) target values in either SNR subset.
+                has_missing_labels=False,
             )
             for snr in ["Low", "High"]
         },
@@ -427,7 +429,9 @@ class ZenodoLoader(BaseLoader):
                 "paper": "https://doi.org/10.3389/fpls.2023.1116876",
                 "bibtex": "@article{Sen_2023, title={Differentiation of advanced generation mutant wheat lines: Conventional techniques versus Raman spectroscopy}, volume={14}, ISSN={1664-462X}, url={http://dx.doi.org/10.3389/fpls.2023.1116876}, DOI={10.3389/fpls.2023.1116876}, journal={Frontiers in Plant Science}, publisher={Frontiers Media SA}, author={Sen, Ayse and Kecoglu, Ibrahim and Ahmed, Muhammad and Parlatan, Ugur and Unlu, Mehmet Burcin}, year={2023}, month=feb}",
                 "description": "Raman spectra from the 7th generation of salt-stress-tolerant wheat mutant lines and their commercial cultivars. Features 785 nm excitation and tracks biochemical shifts in carotenoids and protein-related bands for agricultural phenotyping."
-            }
+            },
+            # Checked: no missing (NaN) label values.
+            has_missing_labels=False,
         ),
         **{
             f"adenine_{type.lower()}_{material.lower()}": DatasetInfo(
@@ -450,6 +454,8 @@ class ZenodoLoader(BaseLoader):
                 # real replicate structure in all four Colloidal/Solid x Gold/Silver
                 # variants (repeated concentration-series measurements).
                 is_grouped=True,
+                # Checked: no missing (NaN) target values in any of the four variants.
+                has_missing_labels=False,
             )
             for material in ["Gold", "Silver"]
             for type in ["Colloidal", "Solid"]
@@ -512,6 +518,8 @@ class ZenodoLoader(BaseLoader):
                     "Target: cancer vs. control (binary classification)."
                 ),
             },
+            # Checked: no missing (NaN) label values.
+            has_missing_labels=False,
         ),
         "locust_phase_hemolymph": DatasetInfo(
             task_type=TASK_TYPE.Classification,
@@ -553,6 +561,8 @@ class ZenodoLoader(BaseLoader):
             # Explicit group ids from the dataset's own `Sample` column (~25 replicate
             # spectra per of 200 physical animals) -- not inferred, a real measurement id.
             is_grouped=True,
+            # Checked: no missing (NaN) label values.
+            has_missing_labels=False,
         ),
     }
 

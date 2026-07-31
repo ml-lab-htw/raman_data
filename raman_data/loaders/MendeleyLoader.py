@@ -128,6 +128,8 @@ class MendeleyLoader(BaseLoader):
                     "'wea-' = field-weathered debris. Target: polymer type (classification)."
                 ),
             },
+            # Checked: no missing (NaN) label values.
+            has_missing_labels=False,
         ),
     }
 

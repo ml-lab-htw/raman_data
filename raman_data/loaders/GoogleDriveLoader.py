@@ -41,7 +41,10 @@ class GoogleDriveLoader(BaseLoader):
                         "Lafuente, B., Downs, R. T., Yang, H., & Stone, N. (2015). The power of databases: the RRUFF project. Highlights in Mineralogical Crystallography, T Armbruster and R M Danisi, Eds., Berlin, Germany, W. De Gruyter, 1–30."
                     ],
                     "description": "Comprehensive resource of raw Raman spectra for over 1,000 mineral species, representing a diverse array of crystallographic structures and chemical compositions measured under varying experimental conditions (e.g., 532 nm and 785 nm).",
-                }
+                },
+                # Checked (Raw variant only): no missing (NaN) label values.
+                # Preprocess variant not checked -- left as None, not assumed.
+                has_missing_labels=(False if processed == "Raw" else None),
             )
             for processed in ["Raw", "Preprocess"]
         },

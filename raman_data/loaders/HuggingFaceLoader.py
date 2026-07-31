@@ -49,6 +49,8 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
             is_grouped=True,
+            # Checked: 6 of 8 targets have missing (NaN) values (66-498 of 6960 rows each).
+            has_missing_labels=True,
         ),
         "ecoli_fermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -68,6 +70,8 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
             is_grouped=True,
+            # Checked: 1 of 2 targets (Glucose) has missing (NaN) values (6/379 rows).
+            has_missing_labels=True,
         ),
         "fuel_benchtop": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -87,6 +91,9 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
             is_grouped=True,
+            # Checked: 11 of 12 targets have missing (NaN) values, worst case Motor
+            # Octane Number at 157/179 (88%).
+            has_missing_labels=True,
         ),
         "fuel_handheld": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -106,6 +113,9 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
             is_grouped=True,
+            # Checked: 11 of 12 targets have missing (NaN) values (same 179 samples as
+            # fuel_benchtop), worst case Motor Octane Number at 157/179 (88%).
+            has_missing_labels=True,
         ),
         "yeast_fermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -125,6 +135,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
+            has_missing_labels=False,
         ),
         "ralstonia_fermentations": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -144,6 +155,8 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
+            # Checked: all 6 targets have missing (NaN) values (1-5 of 82 rows each).
+            has_missing_labels=True,
         ),
         "bioprocess_analytes_anton_532": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -163,6 +176,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
             is_grouped=True,
+            has_missing_labels=False,
         ),
         "bioprocess_analytes_anton_785": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -182,6 +196,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
             is_grouped=True,
+            has_missing_labels=False,
         ),
         "bioprocess_analytes_kaiser": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -201,6 +216,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
+            has_missing_labels=False,
         ),
         "bioprocess_analytes_metrohm": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -220,6 +236,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
             is_grouped=True,
+            has_missing_labels=False,
         ),
         "bioprocess_analytes_mettler_toledo": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -239,6 +256,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
             is_grouped=True,
+            has_missing_labels=False,
         ),
         "bioprocess_analytes_tec5": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -258,6 +276,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
             is_grouped=True,
+            has_missing_labels=False,
         ),
         "bioprocess_analytes_timegate": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -277,6 +296,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
+            has_missing_labels=False,
         ),
         "bioprocess_analytes_tornado": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -296,6 +316,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
             is_grouped=True,
+            has_missing_labels=False,
         ),
         "ecoli_metabolites_dig4bio": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -315,6 +336,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
             is_grouped=True,
+            has_missing_labels=False,
         ),
         "ecoli_metabolites": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -333,6 +355,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
             is_grouped=True,
+            has_missing_labels=False,
         ),
         "ht_raman_bio_catalysis_axp": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -351,6 +374,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
             is_grouped=True,
+            has_missing_labels=False,
         ),
         "streptococcus_thermophilus_fermentation_timegate": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -369,6 +393,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
+            has_missing_labels=False,
         ),
         "streptococcus_thermophilus_fermentation_kaiser": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -387,6 +412,7 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
+            has_missing_labels=False,
         ),
         "kaiser_ecoli_fermentation_supernatant": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -406,6 +432,8 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
+            # Checked: 2 of 4 targets (Glucose, Acetate) have missing (NaN) values (3-4 of 14 rows).
+            has_missing_labels=True,
         ),
         "kaiser_ecoli_fermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -425,6 +453,8 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
+            # Checked: 2 of 4 targets (Glucose, Acetate) have missing (NaN) values (3-4 of 14 rows).
+            has_missing_labels=True,
         ),
         "tg_ecoli_fermentation_supernatant": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -444,6 +474,8 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
+            # Checked: 2 of 4 targets (Glucose, Acetate) have missing (NaN) values (3-4 of 13 rows).
+            has_missing_labels=True,
         ),
         "tg_ecoli_fermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -463,6 +495,8 @@ class HuggingFaceLoader(BaseLoader):
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
+            # Checked: 2 of 4 targets (Glucose, Acetate) have missing (NaN) values (3-4 of 12 rows).
+            has_missing_labels=True,
         ),
     }
 

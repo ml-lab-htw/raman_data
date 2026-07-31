@@ -62,6 +62,27 @@ def test_filter_by_is_grouped():
     assert "synthetic_organic_pigments_baseline_corrected" in never_checked
 
 
+def test_filter_by_has_missing_labels():
+    """
+    Datasets with confirmed missing (NaN) target values and datasets confirmed
+    fully labeled must be disjoint, and known examples of each (checked
+    against real data) must land in the right bucket.
+    """
+    missing = set(raman_data(has_missing_labels=True))
+    complete = set(raman_data(has_missing_labels=False))
+    assert missing.isdisjoint(complete)
+
+    assert "fuel_benchtop" in missing  # 11 of 12 targets have NaN
+    assert "bioprocess_substrates" in missing
+    assert "chlorinated_samples" in complete
+    assert "amino_acids_glycine" in complete
+
+    # A dataset never checked is excluded by either filter value.
+    unfiltered = set(raman_data())
+    never_checked = unfiltered - missing - complete
+    assert "acetic_acid_species" in never_checked
+
+
 def test_load_dataset():
     """
     Tests loading a dataset.

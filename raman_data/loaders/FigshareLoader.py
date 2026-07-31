@@ -43,7 +43,9 @@ class FigshareLoader(BaseLoader):
                     "Flanagan, A.R., Glavin, F.G. Open-source Raman spectra of chemical compounds for active pharmaceutical ingredient development. Sci Data 12, 498 (2025)."
                 ],
                 "description": "A Raman spectral dataset comprising 3,510 spectra from 32 chemical substances. This dataset includes organic solvents and reagents commonly used in API development, along with information regarding the products in the XLSX, and code to visualise and perform technical validation on the data.",
-            }
+            },
+            # Checked: no missing (NaN) label values.
+            has_missing_labels=False,
         ),
         "serum_prostate_cancer": DatasetInfo(
             task_type=TASK_TYPE.Classification,
@@ -63,7 +65,9 @@ class FigshareLoader(BaseLoader):
                     "Xue, Bingsen (2024). ComFilE for PCa. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28107395.v1"
                 ],
                 "description": "SERS serum metabolite spectra for classifying prostate cancer (PCa), benign prostatic hyperplasia (BPH), and healthy controls. 424 serum samples from male participants (ages 41–89) collected at Ren Ji Hospital, Shanghai Jiao Tong University. Organized as SERSomes (200 spectra per sample, 638 nm laser, quartz capillary), spanning 600–1800 cm⁻¹ (724 data points per spectrum).",
-            }
+            },
+            # Checked: no missing (NaN) label values.
+            has_missing_labels=False,
         ),
         "serum_alzheimer_disease": DatasetInfo(
             task_type=TASK_TYPE.Classification,
@@ -81,7 +85,9 @@ class FigshareLoader(BaseLoader):
                     "Xue, Bingsen (2024). ComFilE for AD. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28107578.v1"
                 ],
                 "description": "SERS serum metabolite spectra for classifying Alzheimer's disease (AD), mild cognitive impairment (MCI), and healthy controls. 139 serum samples (57 male, 82 female) collected at Rui Jin Hospital, Shanghai Jiao Tong University. Organized as SERSomes (200 spectra per sample, 638 nm laser, quartz capillary), spanning 600–1800 cm⁻¹. 17 PyTorch tensor files organised by class label.",
-            }
+            },
+            # Checked: no missing (NaN) label values.
+            has_missing_labels=False,
         ),
         "comfile_stroke": DatasetInfo(
             task_type=TASK_TYPE.Classification,
@@ -106,7 +112,9 @@ class FigshareLoader(BaseLoader):
                     "20 tab-separated files (10 stroke, 10 healthy control), each containing ~201 spectra "
                     "across 723 wavenumber points (202.985–1999.92 cm⁻¹). ~4,020 spectra total."
                 ),
-            }
+            },
+            # Checked: no missing (NaN) label values.
+            has_missing_labels=False,
         ),
         "chembl_molecules": DatasetInfo(
             task_type=TASK_TYPE.Regression,

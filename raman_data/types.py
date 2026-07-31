@@ -106,6 +106,19 @@ class DatasetInfo:
             reliable detection signal exists for classification targets,
             where many legitimately different samples share a label) --
             treat ``None`` as "unknown", not as "not grouped".
+        has_missing_labels (bool | None): Whether at least one target column has
+            missing (NaN) values for at least one row -- common in multi-target
+            regression panels where not every sample was characterized for every
+            analyte (e.g. a 12-analyte fuel panel where only 22 of 179 samples
+            have a Motor Octane Number measurement). ``True``/``False`` reflect a
+            real, checked finding (confirmed by loading the dataset and checking
+            every target column for NaN); ``None`` means this hasn't been checked
+            yet -- treat ``None`` as "unknown", not as "fully labeled". A
+            benchmark consuming a dataset with ``has_missing_labels=True`` can
+            choose to drop unlabeled rows per-target (standard supervised
+            benchmarking) or keep them (semi-supervised benchmarking, e.g. via
+            pseudo-labeling) -- see ``raman_bench.splitting`` for the
+            (optional) filtering step.
     """
     id: str
     name: str
@@ -117,6 +130,7 @@ class DatasetInfo:
     short_name: str = ""
     license: str = "unknown"
     is_grouped: Optional[bool] = None
+    has_missing_labels: Optional[bool] = None
 
 
 

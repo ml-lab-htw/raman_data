@@ -69,7 +69,9 @@ class KaggleLoader(BaseLoader):
                            if position == "AGEs" else "")
                         + "Target: DM2 / healthy control classification."
                     )
-                }
+                },
+                # Checked: no missing (NaN) label values for all five positions.
+                has_missing_labels=False,
             )
             for position in ["AGEs", "Ear Lobe", "Inner Arm", "Thumbnail", "Vein"]
         },
@@ -102,6 +104,8 @@ class KaggleLoader(BaseLoader):
                 # other (raman_bench.splitting.infer_group_ids_from_targets finds
                 # no structure) for all four substrates -- no known replicate structure.
                 is_grouped=False,
+                # Checked: no missing (NaN) target values for all four substrates.
+                has_missing_labels=False,
             )
             for idx, substrate in enumerate(["Glycine", "Leucine", "Phenylalanine", "Tryptophan"])
         },
@@ -134,7 +138,9 @@ class KaggleLoader(BaseLoader):
                            else "RNA and proteins." if element == "COOH"
                            else "lipids and amino acids.")
                     )
-                }
+                },
+                # Checked: no missing (NaN) label values for all three functionalizations.
+                has_missing_labels=False,
             )
             for element in ["COOH", "NH2", "(COOH)2"]
         },

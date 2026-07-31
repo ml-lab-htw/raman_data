@@ -92,7 +92,9 @@ class MiscLoader(BaseLoader):
                     "Ho, C.-S., Jean, N., Hogan, C. A., et al. Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Nat Commun 10, 4927 (2019)."
                 ],
                 "description": "60,000 SERS spectra (2,000 per isolate across three measurement time-points) from 30 clinically relevant bacterial and yeast isolates, including an MRSA/MSSA isogenic pair. Acquired on a Horiba LabRAM HR Evolution spectrometer (633 nm, 13.17 mW, 300 l/mm grating, 1.2 cm⁻¹ dispersion, Olympus MPLAN 100× NA 0.9, ~1 µm spot) at 1 s integration time (SNR ~4.1) on gold-coated silica substrates (200 nm Au, electron beam evaporation). Published 25-layer 1D ResNet CNN (Adam, batch 10) achieved 82.2 ± 0.3% isolate accuracy, 97.0 ± 0.3% antibiotic treatment accuracy, and 99.7% treatment classification with 10 spectra in clinical validation on 50 patients (Stanford/Palo Alto VA).",
-            }
+            },
+            # Checked: no missing (NaN) label values.
+            has_missing_labels=False,
         ),
         "mlrod": DatasetInfo(
             task_type=TASK_TYPE.Classification,
@@ -111,7 +113,9 @@ class MiscLoader(BaseLoader):
                     "Wiens, R. C., et al. (2021). Convolutional neural networks as a tool for Raman spectral mineral classification under low signal, dusty Mars conditions. Earth and Space Science, 8, e2021EA002125."
                 ],
                 "description": "500,000+ point-mapping Raman spectra of Mars-analogue geological samples acquired on a Horiba LabRAM HR Evolution (532 nm, 100 mW, 1800 l/mm grating, ~1 cm⁻¹ resolution, open-electrode CCD at −60 °C, 50× LWD NA 0.5 objective, 0.1 µm XY step, 100–1800 cm⁻¹). Samples include gabbro (Madagascar), granite, Hawaiian basalt dust, 12 pure reference minerals, and 4 binary mixtures, measured at 0% and 50% basalt dust surface coverage. No cosmic ray removal, baseline correction, or other preprocessing applied. Motivated by NASA Perseverance SuperCam mineral identification.",
-            }
+            },
+            # Checked: no missing (NaN) label values.
+            has_missing_labels=False,
         ),
         **{
             f"synthetic_organic_pigments_{process.lower().replace(' ', '_')}": DatasetInfo(
@@ -139,6 +143,9 @@ class MiscLoader(BaseLoader):
                 # checked -- same underlying spectra so *likely* the same
                 # answer, but left as None (unknown) rather than assumed.
                 is_grouped=(False if process == "Raw" else None),
+                # Checked (Raw variant only): no missing (NaN) target values.
+                # Baseline Corrected not checked -- left as None, not assumed.
+                has_missing_labels=(False if process == "Raw" else None),
             )
             for process in ["Raw", "Baseline Corrected"]
         },
