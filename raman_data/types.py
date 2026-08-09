@@ -163,11 +163,22 @@ class RamanDataset:
     group_ids: Optional[np.ndarray] = None
 
     def __post_init__(self):
-        self.spectra = self._to_ndarray(self.spectra, "spectra")
-        self.targets = self._to_ndarray(self.targets, "targets")
-        self.raman_shifts = self._to_ndarray(self.raman_shifts, "raman_shifts")
+        # ``load_data=False`` builds a metadata-only dataset: the loaders pass
+        # None for the arrays. np.asarray(None) yields a 0-d array, which then
+        # fails the shape checks below, so leave the fields as None and skip
+        # validation for the ones that are absent.
+        if self.spectra is not None:
+            self.spectra = self._to_ndarray(self.spectra, "spectra")
+        if self.targets is not None:
+            self.targets = self._to_ndarray(self.targets, "targets")
+        if self.raman_shifts is not None:
+            self.raman_shifts = self._to_ndarray(self.raman_shifts, "raman_shifts")
         if self.group_ids is not None:
             self.group_ids = self._to_ndarray(self.group_ids, "group_ids")
+
+        if self.spectra is None or self.targets is None or self.raman_shifts is None:
+            # Metadata-only dataset; nothing to validate.
+            return
 
         # Normalize target_names to always be a list of strings
         if self.target_names is None:
