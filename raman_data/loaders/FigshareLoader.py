@@ -1,5 +1,6 @@
 import logging
 import os
+import re
 import sqlite3
 import zlib
 import json
@@ -66,6 +67,10 @@ class FigshareLoader(BaseLoader):
                 ],
                 "description": "SERS serum metabolite spectra for classifying prostate cancer (PCa), benign prostatic hyperplasia (BPH), and healthy controls. 424 serum samples from male participants (ages 41–89) collected at Ren Ji Hospital, Shanghai Jiao Tong University. Organized as SERSomes (200 spectra per sample, 638 nm laser, quartz capillary), spanning 600–1800 cm⁻¹ (724 data points per spectrum).",
             },
+            # Explicit group ids from the sample id in each filename (200 spectra
+            # per SERSome). 63 files carry 62 distinct samples: 1Ag125 ships both
+            # baseline-corrected and not.
+            is_grouped=True,
             # Checked: no missing (NaN) label values.
             has_missing_labels=False,
         ),
@@ -86,6 +91,9 @@ class FigshareLoader(BaseLoader):
                 ],
                 "description": "SERS serum metabolite spectra for classifying Alzheimer's disease (AD), mild cognitive impairment (MCI), and healthy controls. 139 serum samples (57 male, 82 female) collected at Rui Jin Hospital, Shanghai Jiao Tong University. Organized as SERSomes (200 spectra per sample, 638 nm laser, quartz capillary), spanning 600–1800 cm⁻¹. 17 PyTorch tensor files organised by class label.",
             },
+            # Explicit group ids from the sample id in each filename
+            # (17 files, 201 spectra per SERSome).
+            is_grouped=True,
             # Checked: no missing (NaN) label values.
             has_missing_labels=False,
         ),
@@ -113,6 +121,9 @@ class FigshareLoader(BaseLoader):
                     "across 723 wavenumber points (202.985–1999.92 cm⁻¹). ~4,020 spectra total."
                 ),
             },
+            # Explicit group ids: one .txt file per sample (20 files, ~201
+            # spectra each).
+            is_grouped=True,
             # Checked: no missing (NaN) label values.
             has_missing_labels=False,
         ),
@@ -169,9 +180,13 @@ class FigshareLoader(BaseLoader):
             result = dataset_info.loader(dataset_cache_path)
             if result is None:
                 raise FileNotFoundError(f"Could not load dataset {dataset_name}. Expected files may be missing. Please check logs for details.")
-            spectra, raman_shifts, targets, class_names = result
+            if len(result) == 5:
+                spectra, raman_shifts, targets, class_names, group_ids = result
+            else:
+                spectra, raman_shifts, targets, class_names = result
+                group_ids = None
         else:
-            spectra = raman_shifts = targets = class_names = None
+            spectra = raman_shifts = targets = class_names = group_ids = None
 
         return RamanDataset(
             info=dataset_info,
@@ -179,6 +194,7 @@ class FigshareLoader(BaseLoader):
             spectra=spectra,
             targets=targets,
             target_names=class_names,
+            group_ids=group_ids,
         )
 
     @staticmethod
@@ -355,10 +371,11 @@ class FigshareLoader(BaseLoader):
                     referer="https://figshare.com/",
                 )
 
-        spectra_list, label_list = [], []
+        spectra_list, label_list, group_list = [], [], []
         raman_shifts = None
 
-        for f in txt_files:
+        # One .txt file per sample; no sample appears twice in this deposit.
+        for group_id, f in enumerate(txt_files):
             name = f["name"]
             # filename format: "[1]T ..." (stroke) or "[2]H ..." (healthy control)
             bracket_end = name.find("]")
@@ -377,14 +394,16 @@ class FigshareLoader(BaseLoader):
             data = df.values.astype(np.float32)
             spectra_list.append(data)
             label_list.extend([class_idx] * len(data))
+            group_list.extend([group_id] * len(data))
 
         spectra = np.concatenate(spectra_list, axis=0)
         labels = np.array(label_list, dtype=np.int32)
+        group_ids = np.array(group_list, dtype=np.int32)
         class_map = FigshareLoader._COMFILE_STROKE_CLASSES
         target_names = [class_map[i] for i in sorted(class_map)]
         targets = labels - 1  # remap to 0-based
 
-        return spectra, raman_shifts, targets, target_names
+        return spectra, raman_shifts, targets, target_names, group_ids
 
     @staticmethod
     def _load_serum_alzheimer_disease(cache_path):
@@ -434,8 +453,9 @@ class FigshareLoader(BaseLoader):
                     referer="https://figshare.com/",
                 )
 
-        spectra_list, label_list = [], []
+        spectra_list, label_list, group_list = [], [], []
         raman_shifts = None
+        sample_ids: dict[str, int] = {}
 
         for f in files:
             name = f["name"]
@@ -444,6 +464,15 @@ class FigshareLoader(BaseLoader):
             if bracket_end == -1:
                 continue
             class_idx = int(name[1:bracket_end])
+
+            # One physical sample can ship as more than one file -- in the PCa
+            # deposit 1Ag125 appears both baseline-corrected and not -- so the
+            # group id comes from the sample id in the filename rather than from
+            # file order. 63 files carry 62 distinct samples.
+            sample = re.sub(r"\s*[Nn]o[Bb]ase", "", name[bracket_end + 1 :])
+            sample = sample.removesuffix(".pt").strip()
+            if sample not in sample_ids:
+                sample_ids[sample] = len(sample_ids)
 
             tensor = torch.load(
                 os.path.join(dataset_cache, name), map_location="cpu", weights_only=True
@@ -454,14 +483,16 @@ class FigshareLoader(BaseLoader):
             data = tensor.numpy().astype(np.float32)
             spectra_list.append(data)
             label_list.extend([class_idx] * len(data))
+            group_list.extend([sample_ids[sample]] * len(data))
 
             if raman_shifts is None:
                 raman_shifts = np.arange(data.shape[1], dtype=np.float32)
 
         spectra = np.concatenate(spectra_list, axis=0)
         labels = np.array(label_list, dtype=np.int32)
+        group_ids = np.array(group_list, dtype=np.int32)
         target_names = [class_map[i] for i in sorted(class_map)]
         # remap class indices to 0-based
         targets = labels - 1
 
-        return spectra, raman_shifts, targets, target_names
+        return spectra, raman_shifts, targets, target_names, group_ids
