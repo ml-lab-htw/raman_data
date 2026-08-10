@@ -40,6 +40,9 @@ class GitHubLoader(BaseLoader):
                     "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028."
                 ],
             },
+            # Explicit group ids: one directory per subject in the source
+            # repository (~25 replicate spectra per subject, 101 subjects).
+            is_grouped=True,
             # Checked: no missing (NaN) label values.
             has_missing_labels=False,
         ),
@@ -62,6 +65,9 @@ class GitHubLoader(BaseLoader):
                         "Bertazioli, D., Piazza, M., Carlomagno, C., Gualerzi, A., Bedoni, M. and Messina, E., 2024. An integrated computational pipeline for machine learning-driven diagnosis based on Raman spectra of saliva samples. Computers in Biology and Medicine, 171, p.108028."
                     ],
                 },
+                # Explicit group ids: one directory per subject in the source
+                # repository. Replicate counts vary (16-50 spectra per subject).
+                is_grouped=True,
                 # Checked: no missing (NaN) label values for either disease.
                 has_missing_labels=False,
             )
@@ -148,9 +154,13 @@ class GitHubLoader(BaseLoader):
             result = dataset_info.loader(dataset_cache_path)
             if result is None:
                 raise FileNotFoundError(f"Could not load dataset {dataset_name}. Expected files may be missing. Please check logs for details.")
-            spectra, raman_shifts, targets, class_names = result
+            if len(result) == 5:
+                spectra, raman_shifts, targets, class_names, group_ids = result
+            else:
+                spectra, raman_shifts, targets, class_names = result
+                group_ids = None
         else:
-            spectra = raman_shifts = targets = class_names = None
+            spectra = raman_shifts = targets = class_names = group_ids = None
 
         return RamanDataset(
             info=dataset_info,
@@ -158,6 +168,7 @@ class GitHubLoader(BaseLoader):
             spectra=spectra,
             targets=targets,
             target_names=class_names,
+            group_ids=group_ids,
         )
 
     @staticmethod
@@ -170,7 +181,7 @@ class GitHubLoader(BaseLoader):
                           /raman_shift.csv
                           /user_information.csv
 
-        Returns: spectra, raman_shifts, targets, class_names
+        Returns: spectra, raman_shifts, targets, class_names, group_ids
         """
         shared_root = os.path.join(os.path.dirname(cache_path), "mind_shared")
         shared_main = os.path.join(shared_root, "Raman-Spectra-Data-main")
@@ -210,11 +221,17 @@ class GitHubLoader(BaseLoader):
 
                 LoaderTools.extract_zip_file_content(zip_file)
 
-        # Iterate patient folders
+        # Iterate patient folders.
+        #
+        # Spectra, labels and group ids are collected in a single pass. The
+        # directory name is the subject id, and every spectrum under it is a
+        # replicate of the same subject -- replicate counts vary (16-50), so
+        # the grouping cannot be reconstructed downstream from row counts.
         spectra_list = []
         raman_shifts_list = []
-        targets_list = []
-        categories = []
+        categories = []          # one entry per spectrum
+        group_list = []          # one entry per spectrum
+        next_group_id = 0
 
         dataset_dir = os.path.join(shared_main, dataset_subfolder)
         for entry in sorted(os.listdir(dataset_dir)):
@@ -250,8 +267,6 @@ class GitHubLoader(BaseLoader):
             if category not in category_filter:
                 continue
 
-            categories.append(category)
-
             try:
                 spectra_df = pd.read_csv(spectra_path, header=None)
                 shifts = pd.read_csv(shifts_path, header=None).to_numpy().squeeze()
@@ -263,33 +278,17 @@ class GitHubLoader(BaseLoader):
                 row_arr = row.to_numpy(dtype=float)
                 spectra_list.append(row_arr)
                 raman_shifts_list.append(shifts)
+                categories.append(category)
+                group_list.append(next_group_id)
+            next_group_id += 1
 
         if len(spectra_list) == 0:
             raise Exception(f"[!] No spectra found in {dataset_dir}")
 
-        unique_categories = sorted(list(set(categories)))
+        unique_categories = sorted(set(categories))
         cat_to_idx = {lab: i for i, lab in enumerate(unique_categories)}
-
-        targets = []
-        for entry in sorted(os.listdir(dataset_dir)):
-            patient_dir = os.path.join(dataset_dir, entry)
-            if not os.path.isdir(patient_dir):
-                continue
-            user_info_path = os.path.join(patient_dir, "user_information.csv")
-            spectra_path = os.path.join(patient_dir, "spectra.csv")
-            if not (os.path.exists(user_info_path) and os.path.exists(spectra_path)):
-                continue
-            try:
-                ui = pd.read_csv(user_info_path)
-                cat_col = next((c for c in ui.columns if c.lower() == "category"), ui.columns[2] if len(ui.columns) >= 3 else ui.columns[0])
-                lab = str(ui[cat_col].iloc[0])
-                sf = pd.read_csv(spectra_path, header=None)
-                count = len(sf)
-                targets.extend([cat_to_idx[lab]] * count)
-            except Exception:
-                continue
-
-        targets = np.array(targets, dtype=int)
+        targets = np.array([cat_to_idx[c] for c in categories], dtype=int)
+        group_ids = np.array(group_list, dtype=int)
 
         first_rs = None
         if len(raman_shifts_list) > 0:
@@ -311,7 +310,7 @@ class GitHubLoader(BaseLoader):
 
         class_names = unique_categories
 
-        return spectra, raman_shifts, targets, class_names
+        return spectra, raman_shifts, targets, class_names, group_ids
 
     @staticmethod
     def _load_chlorinated_samples(cache_path: str):

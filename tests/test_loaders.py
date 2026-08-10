@@ -27,6 +27,14 @@ __LOADERS = [
     GitHubLoader,
 ]
 
+
+def _groups_are_label_pure(dataset):
+    """A physical sample cannot carry two labels."""
+    y = np.asarray(dataset.targets).ravel()
+    g = dataset.group_ids
+    return all(len(np.unique(y[g == i])) == 1 for i in np.unique(g))
+
+
 def test_interfacing():
     for loader in __LOADERS:
         # This includes BaseLoader's __subclasshook__ method
@@ -98,17 +106,6 @@ def test_locust_phase_hemolymph():
     assert dataset.group_ids.shape == (5000,)
     assert len(set(dataset.group_ids.tolist())) == 200
 
-
-def test_chlorinated_samples():
-    dataset = GitHubLoader.load_dataset("chlorinated_samples")
-    assert dataset.target_names == ["no_chloroform", "chloroform"]
-    assert dataset.spectra.shape == (230, 2473)
-    assert dataset.spectra.shape[1] == len(dataset.raman_shifts)
-    assert dataset.targets.shape[0] == dataset.spectra.shape[0]
-    counts = dict(zip(*np.unique(dataset.targets, return_counts=True)))
-    assert counts == {0: 76, 1: 154}
-
-
 @pytest.mark.skip(reason="Google Drive dataset download is slow.")
 def test_load_organic_compounds_raw(tmp_path):
     # given
@@ -129,4 +126,53 @@ def test_metadata_only_load():
         assert ds.info is not None, name
         assert ds.task_type is not None, name
 
+
+@pytest.mark.skip(reason="Figshare download; run manually.")
+def test_comfile_stroke_group_ids():
+    dataset = FigshareLoader.load_dataset("comfile_stroke")
+    assert dataset.spectra.shape == (4020, 724)
+    assert dataset.group_ids is not None
+    assert len(set(dataset.group_ids.tolist())) == 20
+    assert _groups_are_label_pure(dataset)
+
+
+@pytest.mark.skip(reason="Figshare download; run manually.")
+def test_serum_alzheimer_disease_group_ids():
+    dataset = FigshareLoader.load_dataset("serum_alzheimer_disease")
+    assert dataset.spectra.shape == (3417, 724)
+    assert len(set(dataset.group_ids.tolist())) == 17
+    assert _groups_are_label_pure(dataset)
+
+
+@pytest.mark.skip(reason="Figshare download (~37MB); run manually.")
+def test_serum_prostate_cancer_group_ids():
+    # 63 files but 62 distinct samples: 1Ag125 ships twice, baseline-corrected
+    # and not, so a per-file counter would place one patient in two groups.
+    dataset = FigshareLoader.load_dataset("serum_prostate_cancer")
+    assert dataset.spectra.shape == (12601, 725)
+    assert len(set(dataset.group_ids.tolist())) == 62
+    sizes = np.bincount(dataset.group_ids)
+    assert sizes.max() == 400  # the duplicated sample
+    assert _groups_are_label_pure(dataset)
+
+
+@pytest.mark.skip(reason="MIND-Lab download; run manually.")
+def test_mind_dataset_group_ids():
+    expected = {"parkinson": (1476, 60), "alzheimer": (1151, 46),
+                "covid19_salvia": (2501, 101)}
+    for name, (n_spectra, n_groups) in expected.items():
+        dataset = GitHubLoader.load_dataset(name)
+        assert dataset.spectra.shape[0] == n_spectra, name
+        assert len(set(dataset.group_ids.tolist())) == n_groups, name
+        assert _groups_are_label_pure(dataset), name
+
+
+def test_chlorinated_samples():
+    dataset = GitHubLoader.load_dataset("chlorinated_samples")
+    assert dataset.target_names == ["no_chloroform", "chloroform"]
+    assert dataset.spectra.shape == (230, 2473)
+    assert dataset.spectra.shape[1] == len(dataset.raman_shifts)
+    assert dataset.targets.shape[0] == dataset.spectra.shape[0]
+    counts = dict(zip(*np.unique(dataset.targets, return_counts=True)))
+    assert counts == {0: 76, 1: 154}
 
