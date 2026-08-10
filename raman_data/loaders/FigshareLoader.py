@@ -436,7 +436,7 @@ class FigshareLoader(BaseLoader):
 
         cache_root = LoaderTools.get_cache_root(CACHE_DIR.Figshare)
         if cache_root is None:
-            raise Exception(f"No cache root found for {cache_path}")
+            raise Exception(f"No cache root found for {cache_dir_name}")
 
         dataset_cache = os.path.join(cache_root, cache_dir_name)
         os.makedirs(dataset_cache, exist_ok=True)

@@ -2,6 +2,7 @@
 A general checkup of loader's implementation.
 """
 
+from raman_data import raman_data
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.KaggleLoader import KaggleLoader
 from raman_data.loaders.HuggingFaceLoader import HuggingFaceLoader
@@ -114,6 +115,16 @@ def test_load_organic_compounds_raw(tmp_path):
         tmp_path,
         split=f"organic_preprocess",
     )
+
+
+def test_metadata_only_load():
+    """load_data=False must not build the arrays, and must not raise."""
+    for name in ["wheat_lines", "comfile_stroke", "parkinson"]:
+        ds = raman_data(name, load_data=False)
+        assert ds.spectra is None, name
+        assert ds.targets is None, name
+        assert ds.info is not None, name
+        assert ds.task_type is not None, name
 
 
 @pytest.mark.skip(reason="Figshare download; run manually.")
