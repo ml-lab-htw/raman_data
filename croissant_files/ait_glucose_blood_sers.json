@@ -1,0 +1,145 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "AIT-brainlab Blood-SERS Glucose Calibration Dataset",
+  "description": "CAVEAT (read first): No informed consent, IRB approval, or ethics review documentation was found associated with this data as of integration (2026-08-21); the data appears to be informal/unpublished student research (the source repo's predecessor explicitly states no journal paper was produced). There is no paper, report, or DOI to cite for this dataset, which does not meet raman_data's own stated citable-reference inclusion criterion. Included at the explicit direction of the RamanBench maintainer, who intends to follow up directly with the originating lab. A paper citing data matching this description (arXiv:2608.14227, 'Attributing Preprocessing Invariance in Spectral Foundation Models') attributes it to 'AIT brainlab and MIT' -- the 'MIT' half of that attribution could not be verified and is likely erroneous: the source repo's actual copyright holder is 'Future Lab' (a named AIT x BUPT joint facility, Asian Institute of Technology x Beijing University of Posts and Telecommunications), not Massachusetts Institute of Technology, and the repo has a single GitHub contributor with no visible MIT (Massachusetts) collaboration.\n\nDATA: SERS spectra of blood samples spiked with 6 distinct known glucose concentrations (88, 95, 98, 121, 166, 168 -- units not confirmed by any source metadata; inferred to be mg/dL from research context, not verified). 785 nm excitation, 5x lens, 60 s exposure. Each spectrum has 1999 points spanning roughly -1392 to 2746 cm⁻¹ (includes an uncalibrated negative-shift region; no cropping applied here). One same-folder 'foil_...' reference/blank measurement is excluded (no concentration label). This is a best-effort, independently chosen subset of the source repo -- NOT a reproduction of the citing paper's reported 435-sample count, which could not be reconstructed from the repo's current structure or any available methodology description; 'skin' and 'pilot' (OGTT) subsets of the same repo were evaluated but not included here (skin has no discoverable label; pilot was out of scope for this pass). Target: glucose_concentration (regression). Grouped by concentration level: all replicate readings of a given spiked concentration were acquired within a single contiguous session (same spiked blood aliquot), so group-aware splitting is used to avoid replicate leakage across train/test -- note this also means only 6 distinct groups exist, an unusually small and near-degenerate group count for benchmark splitting.",
+  "url": "https://github.com/AIT-brainlab/raman-for-glucose-measurement",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Regression",
+    "SERS"
+  ],
+  "isAccessibleForFree": true,
+  "conditionsOfAccess": "Unclear. Repo root LICENSE is MIT, covering \"the Software\" (code) -- no separate license or reuse terms were found for the data files themselves. See metadata['description'] for the full provenance/consent caveat.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "ait_glucose_blood_sers_source",
+      "name": "AIT-brainlab Blood-SERS Glucose Calibration Dataset",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://github.com/AIT-brainlab/raman-for-glucose-measurement",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "9c1e96e2b48dc46dba6cddb7d04e0ff737246ed518423ba27dfeef3cae7dc947"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "ait_glucose_blood_sers_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "ait_glucose_blood_sers_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "ait_glucose_blood_sers_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "ait_glucose_blood_sers_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
+  "rai:dataCollectionType": "Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols.",
+  "rai:dataPreprocessingProtocol": "Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication.",
+  "rai:dataAnnotationProtocol": "Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "rai:personalSensitiveInformation": "Spectra are derived from human biological samples (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included, but biological measurements may constitute sensitive health-related data under applicable data-protection regulations.",
+  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
+  "rai:dataLimitations": "Models trained on this dataset may not transfer to different instruments, sample matrices, or patient populations without re-calibration.",
+  "rai:dataSocialImpact": "Raman spectroscopy datasets for medical diagnostics have the potential to support the development of non-invasive, low-cost screening tools with particular relevance to resource-limited healthcare settings. Results must be validated by qualified healthcare professionals before any clinical application.",
+  "rai:dataUseCases": "Chemometric modelling, calibration transfer, multivariate regression, quantitative spectral analysis, process analytical technology (PAT).",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication. Annotation: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "prov:wasDerivedFrom": "https://github.com/AIT-brainlab/raman-for-glucose-measurement"
+}
