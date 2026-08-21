@@ -1,5 +1,6 @@
 import logging
 import os
+import re
 from typing import Optional, List
 
 import numpy as np
@@ -120,6 +121,94 @@ class GitHubLoader(BaseLoader):
                     "classification benchmarks."
                 ),
             },
+        ),
+        # ------------------------------------------------------------------
+        # PROVENANCE / ETHICS CAVEAT -- read before using or re-mirroring
+        # this dataset. Summarized here; full detail in
+        # `_load_ait_glucose_blood_sers`'s docstring below.
+        #
+        # This dataset does NOT meet raman_data's own stated inclusion
+        # criterion of "accompanied by a citable reference (paper, report,
+        # or dataset DOI)" -- no such reference exists for the source repo.
+        # No informed-consent, IRB, or ethics-review documentation was found
+        # anywhere associated with this data (repo README, full wiki
+        # content, predecessor repo, or lab project pages) as of integration
+        # (2026-08-21), despite this being real human blood/glucose data.
+        # The source repo's own predecessor states no journal paper was
+        # ever produced from this work.
+        #
+        # Included at the explicit direction of the RamanBench maintainer
+        # (Mario Koddenbrock), who intends to follow up directly with the
+        # originating lab (AIT Brain Lab / AIT-brainlab, Asian Institute of
+        # Technology, Thailand) regarding consent/ethics documentation. Not
+        # a routine inclusion -- do not use this as a template for skipping
+        # the citable-reference or consent checks on future datasets.
+        # ------------------------------------------------------------------
+        "ait_glucose_blood_sers": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Medical,
+            id="ait_glucose_blood_sers",
+            name="AIT Blood Glucose (SERS)",
+            short_name="AIT Blood SERS",
+            license=(
+                "Unclear. Repo root LICENSE is MIT, covering \"the Software\" "
+                "(code) -- no separate license or reuse terms were found for "
+                "the data files themselves. See metadata['description'] for "
+                "the full provenance/consent caveat."
+            ),
+            loader=lambda cache_path: GitHubLoader._load_ait_glucose_blood_sers(cache_path),
+            metadata={
+                "full_name": "AIT-brainlab Blood-SERS Glucose Calibration Dataset",
+                "source": "https://github.com/AIT-brainlab/raman-for-glucose-measurement",
+                "paper": None,  # No paper, report, or DOI exists for this source (see caveat).
+                "description": (
+                    "CAVEAT (read first): No informed consent, IRB approval, or ethics "
+                    "review documentation was found associated with this data as of "
+                    "integration (2026-08-21); the data appears to be informal/unpublished "
+                    "student research (the source repo's predecessor explicitly states no "
+                    "journal paper was produced). There is no paper, report, or DOI to cite "
+                    "for this dataset, which does not meet raman_data's own stated "
+                    "citable-reference inclusion criterion. Included at the explicit "
+                    "direction of the RamanBench maintainer, who intends to follow up "
+                    "directly with the originating lab. A paper citing data matching this "
+                    "description (arXiv:2608.14227, 'Attributing Preprocessing Invariance "
+                    "in Spectral Foundation Models') attributes it to 'AIT brainlab and "
+                    "MIT' -- the 'MIT' half of that attribution could not be verified and "
+                    "is likely erroneous: the source repo's actual copyright holder is "
+                    "'Future Lab' (a named AIT x BUPT joint facility, Asian Institute of "
+                    "Technology x Beijing University of Posts and Telecommunications), "
+                    "not Massachusetts Institute of Technology, and the repo has a single "
+                    "GitHub contributor with no visible MIT (Massachusetts) collaboration."
+                    "\n\n"
+                    "DATA: SERS spectra of blood samples spiked with 6 distinct known "
+                    "glucose concentrations (88, 95, 98, 121, 166, 168 -- units not "
+                    "confirmed by any source metadata; inferred to be mg/dL from research "
+                    "context, not verified). 785 nm excitation, 5x lens, 60 s exposure. "
+                    "Each spectrum has 1999 points spanning roughly -1392 to 2746 cm⁻¹ "
+                    "(includes an uncalibrated negative-shift region; no cropping applied "
+                    "here). One same-folder 'foil_...' reference/blank measurement is "
+                    "excluded (no concentration label). This is a best-effort, independently "
+                    "chosen subset of the source repo -- NOT a reproduction of the citing "
+                    "paper's reported 435-sample count, which could not be reconstructed "
+                    "from the repo's current structure or any available methodology "
+                    "description; 'skin' and 'pilot' (OGTT) subsets of the same repo were "
+                    "evaluated but not included here (skin has no discoverable label; pilot "
+                    "was out of scope for this pass). Target: glucose_concentration "
+                    "(regression). Grouped by concentration level: all replicate readings "
+                    "of a given spiked concentration were acquired within a single "
+                    "contiguous session (same spiked blood aliquot), so group-aware "
+                    "splitting is used to avoid replicate leakage across train/test -- "
+                    "note this also means only 6 distinct groups exist, an unusually small "
+                    "and near-degenerate group count for benchmark splitting."
+                ),
+            },
+            # Checked: replicate spectra from the same spiked-concentration
+            # session share a group id (see loader docstring) -- real
+            # metadata-derived grouping, not inferred from target equality.
+            is_grouped=True,
+            # Checked: every file with a `blood-<value>` filename prefix carries
+            # a concentration value; none missing.
+            has_missing_labels=False,
         ),
     }
     logger = logging.getLogger(__name__)
@@ -412,3 +501,92 @@ class GitHubLoader(BaseLoader):
         )
 
         return spectra, raman_shifts, targets, list(class_names)
+
+    @staticmethod
+    def _load_ait_glucose_blood_sers(cache_path: str):
+        """
+        Load the AIT-brainlab blood-SERS glucose calibration dataset.
+
+        IMPORTANT: see the "ait_glucose_blood_sers" DatasetInfo entry above
+        (metadata["description"]) for the full provenance/consent/licensing
+        caveat before using or re-mirroring this dataset -- it is not a
+        routine inclusion.
+
+        Source: data/bloodSERs/5x/txt/ in
+        github.com/AIT-brainlab/raman-for-glucose-measurement. Each file is
+        one spectrum (1999 tab-separated wavenumber/intensity rows, 785 nm,
+        5x lens, 60 s exposure). Concentration is parsed from the filename
+        (``blood-<value>_...``); the same-folder ``foil_...`` blank has no
+        concentration and is excluded. Downloaded as a full repo ZIP archive,
+        matching this loader's other GitHub-zip entries.
+
+        Returns: spectra, raman_shifts, targets, target_names, group_ids
+        """
+        shared_root = os.path.join(os.path.dirname(cache_path), "ait_glucose_shared")
+        repo_main = os.path.join(shared_root, "raman-for-glucose-measurement-main")
+
+        if not (os.path.isdir(repo_main) and os.listdir(repo_main)):
+            zip_name = "raman-for-glucose-measurement.zip"
+            zip_file = os.path.join(shared_root, zip_name)
+            os.makedirs(shared_root, exist_ok=True)
+
+            if not os.path.exists(zip_file):
+                LoaderTools.download(
+                    url="https://github.com/AIT-brainlab/raman-for-glucose-measurement/archive/refs/heads/main.zip",
+                    out_dir_path=shared_root,
+                    out_file_name=zip_name,
+                )
+
+            LoaderTools.extract_zip_file_content(zip_file)
+
+        txt_dir = os.path.join(repo_main, "data", "bloodSERs", "5x", "txt")
+        if not os.path.isdir(txt_dir):
+            raise FileNotFoundError(f"Expected data/bloodSERs/5x/txt not found under {repo_main}")
+
+        # Matches e.g. "blood-166_5x_0-43_600_785 nm_60 s_1_..._01.txt".
+        # Deliberately does not match "foil_..." (no concentration prefix).
+        pattern = re.compile(r"^blood-(\d+(?:\.\d+)?)_")
+
+        spectra_list = []
+        raman_shifts_list = []
+        concentrations = []
+
+        for fname in sorted(os.listdir(txt_dir)):
+            if not fname.endswith(".txt"):
+                continue
+            match = pattern.match(fname)
+            if match is None:
+                GitHubLoader.logger.debug(f"Skipping non-blood reference file: {fname}")
+                continue
+
+            fpath = os.path.join(txt_dir, fname)
+            df = pd.read_csv(fpath, sep="\t", header=None, names=["wavenumber", "intensity"])
+            spectra_list.append(df["intensity"].to_numpy(dtype=float))
+            raman_shifts_list.append(df["wavenumber"].to_numpy(dtype=float))
+            concentrations.append(float(match.group(1)))
+
+        if len(spectra_list) == 0:
+            raise FileNotFoundError(f"No blood-*.txt spectra found in {txt_dir}")
+
+        first_rs = raman_shifts_list[0]
+        if not all(np.allclose(first_rs, rs) for rs in raman_shifts_list):
+            raise ValueError("Raman shift axes differ across bloodSERs files; expected a shared axis")
+
+        raman_shifts = np.array(first_rs, dtype=float)
+        spectra = np.stack(spectra_list)
+        targets = np.array(concentrations, dtype=float)
+        target_names = ["glucose_concentration"]
+
+        # Group by spiked-concentration session: every file sharing a
+        # concentration value is a replicate reading of the same aliquot
+        # (confirmed from filename timestamps -- see DatasetInfo caveat).
+        unique_concs = sorted(set(concentrations))
+        conc_to_group = {c: i for i, c in enumerate(unique_concs)}
+        group_ids = np.array([conc_to_group[c] for c in concentrations], dtype=int)
+
+        GitHubLoader.logger.debug(
+            f"Loaded ait_glucose_blood_sers: {spectra.shape[0]} spectra x {spectra.shape[1]} points, "
+            f"{len(unique_concs)} distinct concentration levels {unique_concs}"
+        )
+
+        return spectra, raman_shifts, targets, target_names, group_ids
