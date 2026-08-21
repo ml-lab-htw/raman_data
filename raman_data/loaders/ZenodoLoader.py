@@ -383,6 +383,59 @@ class ZenodoLoader(BaseLoader):
 
         return spectra, raman_shifts, targets, list(class_names), group_ids
 
+    @staticmethod
+    def __load_5644790(
+        cache_path: str,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str], np.ndarray] | None:
+        """
+        Parse and extract data from the cspp_serum_metabolites dataset (Zenodo ID: 5644790).
+
+        Uses the "Figure-7_all-spectra-and-metadata.csv" file only (not the other four
+        Figure-X CSVs in the same deposit, nor Spectra.zip): SERS spectra of human serum
+        on Centrifugal Silver Plasmonic Paper (CSPP), either unspiked or spiked with one
+        of two known metabolites at a single fixed concentration each (confirmed against
+        the paper, https://doi.org/10.3390/bios11110467 -- Ergothioneine 25 uM,
+        Hypoxanthine 50 uM; `conc` in this deposit is 1:1 confounded with `metabolite`,
+        so this is a 3-class identity classification, not a concentration regression).
+        The other four figures in this deposit were checked and excluded: Figure 2's
+        'processing' label is an explicit null-result comparison (paper: spectra
+        "practically the same" between processed/unprocessed), and Figures 4/5's numeric
+        targets (`Y`, `ratio`) are intra-spectrum peak-ratio metrics computed from the
+        very same spectrum row, not independent ground truth.
+
+        `rep` identifies the physical sample replicate each spectrum was measured from
+        (10 spectra per replicate) -- combined with `metabolite` into an explicit group
+        id, since a given (metabolite, rep) pair is one physical prep measured 10 times.
+
+        Returns a tuple of (spectra, raman_shifts, targets, class_names, group_ids).
+        """
+        data_path = os.path.join(cache_path, "5644790", "Figure-7_all-spectra-and-metadata.csv")
+        if not os.path.isfile(data_path):
+            raise FileNotFoundError(
+                f"Could not find Figure-7_all-spectra-and-metadata.csv in {data_path}"
+            )
+
+        df = pd.read_csv(data_path)
+        wn_cols = [c for c in df.columns if is_wavenumber(c)]
+        if not wn_cols:
+            raise FileNotFoundError(f"No wavenumber columns found in {data_path}")
+
+        spectra = df[wn_cols].to_numpy(dtype=float)
+        raman_shifts = np.array([float(c) for c in wn_cols])
+
+        label_map = {
+            "Bkg": "serum (unspiked)",
+            "Erg": "serum + ergothioneine (25 uM)",
+            "Hyp": "serum + hypoxanthine (50 uM)",
+        }
+        labels = df["metabolite"].map(label_map)
+        targets, class_names = encode_labels(labels)
+
+        group_key = df["metabolite"].astype(str) + "_" + df["rep"].astype(str)
+        group_ids = pd.factorize(group_key)[0]
+
+        return spectra, raman_shifts, targets, list(class_names), group_ids
+
     __BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "raman-data", "zenodo")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
@@ -560,6 +613,40 @@ class ZenodoLoader(BaseLoader):
             },
             # Explicit group ids from the dataset's own `Sample` column (~25 replicate
             # spectra per of 200 physical animals) -- not inferred, a real measurement id.
+            is_grouped=True,
+            # Checked: no missing (NaN) label values.
+            has_missing_labels=False,
+        ),
+        "cspp_serum_metabolites": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
+            id="5644790",
+            name="CSPP Serum Metabolites",
+            short_name="CSPP Serum Metab.",
+            file_typ="Figure-7_all-spectra-and-metadata.csv",
+            license="CC BY 4.0",
+            loader=lambda cache_path: ZenodoLoader.__load_5644790(cache_path),
+            metadata={
+                "full_name": "Label-free SERS on Centrifugal Silver Plasmonic Paper (CSPP): Serum Metabolite Spike-In",
+                "source": "https://doi.org/10.5281/zenodo.5644790",
+                "paper": "https://doi.org/10.3390/bios11110467",
+                "bibtex": "@article{Esposito_2021, title={Label-free Surface Enhanced Raman Scattering (SERS) on Centrifugal Silver Plasmonic Paper (CSPP): A Novel Methodology for Unprocessed Biofluids Sampling and Analysis}, volume={11}, ISSN={2079-6374}, url={http://dx.doi.org/10.3390/bios11110467}, DOI={10.3390/bios11110467}, number={11}, journal={Biosensors}, publisher={MDPI AG}, author={Esposito, Alessandro and Bonifacio, Alois and Sergo, Valter and Fornasaro, Stefano}, year={2021}, month=nov, pages={467}}",
+                "description": (
+                    "SERS spectra of human serum on Centrifugal Silver Plasmonic Paper (CSPP), a paper-based "
+                    "silver-nanoparticle substrate for label-free biofluid analysis, either unspiked or spiked "
+                    "with a known metabolite at a single fixed concentration (ergothioneine 25 uM or "
+                    "hypoxanthine 50 uM), 50 spectra per class (150 total). Target: metabolite identity -- "
+                    "unspiked serum vs. ergothioneine-spiked vs. hypoxanthine-spiked (3-class classification), "
+                    "matching the paper's own framing (PCA-based group separation, not absolute quantification). "
+                    "Derived from the 'Figure-7_all-spectra-and-metadata.csv' file of the Zenodo deposit, one "
+                    "of five figure-specific CSVs; the other four (substrate fabrication DoE, reproducibility, "
+                    "shelf-life, and a serum-processing null-result comparison) were evaluated and excluded as "
+                    "not providing an independent, non-derived ground-truth label suitable for benchmarking."
+                ),
+            },
+            # Checked: `rep` identifies the physical sample replicate (10 spectra per
+            # (metabolite, rep) pair) -- real replicate structure, returned as an
+            # explicit group id rather than inferred.
             is_grouped=True,
             # Checked: no missing (NaN) label values.
             has_missing_labels=False,

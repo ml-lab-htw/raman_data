@@ -221,6 +221,12 @@ class KaggleLoader(BaseLoader):
         }
 
         header = amino_acid_headers[sheet_id]
+        amino_acid_names = {
+            "1": "Glycine",
+            "2": "Leucine",
+            "3": "Phenylalanine",
+            "4": "Tryptophan",
+        }
 
         df = dataset_load(
             adapter=KaggleDatasetAdapter.PANDAS,
@@ -233,7 +239,11 @@ class KaggleLoader(BaseLoader):
         spectra = df.loc[1:, 4.5:].to_numpy(dtype=float).T
         raman_shifts = df.loc[1:, header].to_numpy(dtype=float)
         concentrations = np.array(df.columns.values[2:], dtype=float)
-        concentration_name = header[(int(sheet_id) - 1)]
+        # NOTE: previously `header[(int(sheet_id) - 1)]`, which indexed into the
+        # *string* header (e.g. "Gly, 40 mM") by character position instead of
+        # looking up the amino acid's name -- silently produced single-character
+        # target names ('G', 'e', 'e', ',' for sheet_id 1-4 respectively).
+        concentration_name = amino_acid_names[sheet_id]
 
         return spectra, raman_shifts, concentrations, concentration_name
 

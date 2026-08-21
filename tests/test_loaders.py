@@ -106,6 +106,25 @@ def test_locust_phase_hemolymph():
     assert dataset.group_ids.shape == (5000,)
     assert len(set(dataset.group_ids.tolist())) == 200
 
+def test_cspp_serum_metabolites():
+    # scoped to a single ~3MB CSV via file_typ, small enough to run in CI
+    dataset = ZenodoLoader.load_dataset("cspp_serum_metabolites")
+    assert dataset.target_names == [
+        "serum (unspiked)",
+        "serum + ergothioneine (25 uM)",
+        "serum + hypoxanthine (50 uM)",
+    ]
+    assert dataset.spectra.shape == (150, 2048)
+    assert dataset.spectra.shape[1] == len(dataset.raman_shifts)
+    counts = dict(zip(*np.unique(dataset.targets, return_counts=True)))
+    assert counts == {0: 50, 1: 50, 2: 50}
+    assert dataset.group_ids is not None
+    assert dataset.group_ids.shape == (150,)
+    assert len(set(dataset.group_ids.tolist())) == 15
+    assert _groups_are_label_pure(dataset)
+    assert not np.isnan(dataset.spectra).any()
+
+
 @pytest.mark.skip(reason="Google Drive dataset download is slow.")
 def test_load_organic_compounds_raw(tmp_path):
     # given
