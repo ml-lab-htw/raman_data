@@ -10,6 +10,11 @@ from scipy import io
 import os, h5py
 import numpy as np
 import logging
+import hashlib
+import random
+import time
+
+from filelock import FileLock
 
 from raman_data.exceptions import ChecksumError, CorruptedZipFileError
 from raman_data.types import CACHE_DIR, HASH_TYPE, DatasetInfo
@@ -97,6 +102,71 @@ class LoaderTools:
 
         return check
 
+    _RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
+    _MAX_RETRIES = 5
+    _MAX_BACKOFF_SECONDS = 30
+
+    @staticmethod
+    def _is_file_ready(path: str) -> bool:
+        """A destination file counts as "already there" if it exists and,
+        for a `.zip`, actually looks like one (see ``is_valid_zip``)."""
+        if not os.path.exists(path):
+            return False
+        return (not path.lower().endswith(".zip")) or LoaderTools.is_valid_zip(path)
+
+    @staticmethod
+    def _get_with_retry(url: str, headers: dict, timeout: int) -> requests.Response:
+        """``requests.get`` with retry/backoff for transient failures.
+
+        Handles rate-limiting (HTTP 429, respecting a server ``Retry-After``
+        header when present) and other transient 5xx/connection errors with
+        exponential backoff + jitter. Raises the underlying
+        ``requests.exceptions.RequestException`` (e.g. via
+        ``response.raise_for_status()``) once retries are exhausted.
+        """
+        last_exc: Optional[Exception] = None
+        for attempt in range(LoaderTools._MAX_RETRIES):
+            try:
+                response = requests.get(
+                    url=url, headers=headers, stream=True, allow_redirects=True, timeout=timeout,
+                )
+            except requests.exceptions.RequestException as exc:
+                last_exc = exc
+                if attempt == LoaderTools._MAX_RETRIES - 1:
+                    raise
+                delay = min(2 ** attempt, LoaderTools._MAX_BACKOFF_SECONDS) + random.uniform(0, 1)
+                LoaderTools.logger.warning(
+                    f"Request to {url} failed ({exc}); retrying in {delay:.1f}s "
+                    f"(attempt {attempt + 1}/{LoaderTools._MAX_RETRIES})."
+                )
+                time.sleep(delay)
+                continue
+
+            if response.status_code in LoaderTools._RETRYABLE_STATUS_CODES \
+                    and attempt < LoaderTools._MAX_RETRIES - 1:
+                retry_after = response.headers.get("Retry-After")
+                try:
+                    delay = float(retry_after) if retry_after is not None else None
+                except ValueError:
+                    delay = None
+                if delay is None:
+                    delay = min(2 ** attempt, LoaderTools._MAX_BACKOFF_SECONDS)
+                delay += random.uniform(0, 1)
+                LoaderTools.logger.warning(
+                    f"{url} returned HTTP {response.status_code}; retrying in {delay:.1f}s "
+                    f"(attempt {attempt + 1}/{LoaderTools._MAX_RETRIES})."
+                )
+                response.close()
+                time.sleep(delay)
+                continue
+
+            response.raise_for_status()
+            return response
+
+        # Unreachable in practice (the loop always returns or raises), but
+        # keeps type-checkers happy and gives a clear error if it ever isn't.
+        raise last_exc or RuntimeError(f"Failed to fetch {url} after {LoaderTools._MAX_RETRIES} attempts")
+
     @staticmethod
     def download(
             url: str,
@@ -131,12 +201,20 @@ class LoaderTools:
                       None if either download or hash verification fails.
         Note:
             - Downloads in chunks of 1MB (1048576 bytes) for memory efficiency
+            - Concurrent calls for the same ``(out_dir_path, url)`` are
+              serialized via a file lock (keyed on the request, acquired
+              *before* it is made) and the destination is only ever updated
+              via an atomic same-directory temp-file-then-rename, so
+              concurrent/cold-cache callers never observe a partial file nor
+              hammer the remote host with simultaneous requests for the same
+              resource (this matters most when several dataset names share
+              one upstream archive -- see e.g. ``RWTHLoader``'s
+              ``acid_species``/``microgel_size`` families).
         """
 
         # size of a download package is set to 1MB
         # so that not the entire date gets loaded in to ram an once
         CHUNK_SIZE = 1048576
-        checksum = hash_type.value() if hash_type else HASH_TYPE.md5.value()
 
         headers = {
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
@@ -148,70 +226,85 @@ class LoaderTools:
 
         os.makedirs(out_dir_path, exist_ok=True)
 
-        with requests.get(
-                url=url,
-                headers=headers,
-                stream=True,
-                allow_redirects=True,
-                timeout=60,
-        ) as response:
-            response.raise_for_status()
+        lock_key = hashlib.sha256(f"{out_dir_path}::{url}".encode()).hexdigest()[:16]
+        lock_path = os.path.join(out_dir_path, f".raman_data_{lock_key}.lock")
 
-            if out_file_name is None:
-                if "Content-Disposition" in response.headers:
-                    content_disposition = response.headers['Content-Disposition']
-                    parts = content_disposition.split(';')
-                    for part in parts:
-                        part = part.strip()
-                        if part.lower().startswith('filename='):
-                            out_file_name = part[len('filename='):].strip('"')
-                            break
+        with FileLock(lock_path, timeout=1800):
+            # A sibling process may have completed this exact download while
+            # we were waiting for the lock -- skip re-downloading if so.
+            if out_file_name is not None:
+                candidate_path = os.path.join(out_dir_path, out_file_name)
+                if LoaderTools._is_file_ready(candidate_path):
+                    return candidate_path
+
+            checksum = hash_type.value() if hash_type else HASH_TYPE.md5.value()
+            response = LoaderTools._get_with_retry(url, headers, timeout=60)
+            with response:
+                if out_file_name is None:
+                    if "Content-Disposition" in response.headers:
+                        content_disposition = response.headers['Content-Disposition']
+                        parts = content_disposition.split(';')
+                        for part in parts:
+                            part = part.strip()
+                            if part.lower().startswith('filename='):
+                                out_file_name = part[len('filename='):].strip('"')
+                                break
+                        else:
+                            out_file_name = url.split('/')[-1]
                     else:
                         out_file_name = url.split('/')[-1]
-                else:
-                    out_file_name = url.split('/')[-1]
 
-            out_file_path = os.path.join(out_dir_path, out_file_name)
+                out_file_path = os.path.join(out_dir_path, out_file_name)
 
-            # DO NOT trust existing files blindly
-            if os.path.exists(out_file_path):
-                os.remove(out_file_path)
+                # Filename was only just resolved (from headers) -- re-check
+                # now that we know the real destination path.
+                if LoaderTools._is_file_ready(out_file_path):
+                    return out_file_path
 
-            total_size = (
-                    int(response.headers.get("Content-Length", 0)) or None
-            )
+                total_size = (
+                        int(response.headers.get("Content-Length", 0)) or None
+                )
 
-            with open(out_file_path, "wb") as file:
-                with tqdm(
-                        total=total_size,
-                        unit="B",
-                        unit_scale=True,
-                        desc=f"Downloading file {out_file_name}",
-                ) as pbar:
+                # Write to a same-directory temp file, then atomically rename
+                # onto the real destination -- a reader (or a crash mid-write)
+                # never observes a partial file at out_file_path.
+                tmp_path = f"{out_file_path}.tmp{os.getpid()}"
+                try:
+                    with open(tmp_path, "wb") as file:
+                        with tqdm(
+                                total=total_size,
+                                unit="B",
+                                unit_scale=True,
+                                desc=f"Downloading file {out_file_name}",
+                        ) as pbar:
 
-                    for chunk in response.iter_content(CHUNK_SIZE):
-                        if chunk:
-                            file.write(chunk)
-                            checksum.update(chunk)
-                            pbar.update(len(chunk))
+                            for chunk in response.iter_content(CHUNK_SIZE):
+                                if chunk:
+                                    file.write(chunk)
+                                    checksum.update(chunk)
+                                    pbar.update(len(chunk))
 
-        # ZIP magic-byte validation
-        if out_file_name.lower().endswith(".zip"):
-            with open(out_file_path, "rb") as f:
-                if f.read(4) != b"PK\x03\x04":
-                    os.remove(out_file_path)
-                    raise CorruptedZipFileError(
-                        f"{out_file_path} is not a ZIP (likely HTML/JSON response)"
-                    )
+                    # ZIP magic-byte validation
+                    if out_file_name.lower().endswith(".zip"):
+                        with open(tmp_path, "rb") as f:
+                            if f.read(4) != b"PK\x03\x04":
+                                raise CorruptedZipFileError(
+                                    f"{out_file_path} is not a ZIP (likely HTML/JSON response)"
+                                )
 
-        if hash_target and checksum.hexdigest() != hash_target:
-            os.remove(out_file_path)
-            raise ChecksumError(
-                expected_checksum=hash_target,
-                actual_checksum=checksum.hexdigest()
-            )
+                    if hash_target and checksum.hexdigest() != hash_target:
+                        raise ChecksumError(
+                            expected_checksum=hash_target,
+                            actual_checksum=checksum.hexdigest()
+                        )
 
-        return out_file_path
+                    os.replace(tmp_path, out_file_path)
+                except BaseException:
+                    if os.path.exists(tmp_path):
+                        os.remove(tmp_path)
+                    raise
+
+            return out_file_path
 
     @staticmethod
     def extract_zip_file_content(
