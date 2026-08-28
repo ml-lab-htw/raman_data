@@ -4,10 +4,9 @@
 [![License](https://img.shields.io/github/license/ml-lab-htw/raman_data)](https://github.com/ml-lab-htw/raman_data/blob/main/LICENSE)
 [![Python](https://img.shields.io/pypi/pyversions/raman-data)](https://pypi.org/project/raman-data/)
 
-A unified Python library for accessing public Raman spectroscopy datasets.
-`raman-data` is the dataset layer of [RamanBench](https://github.com/ml-lab-htw/RamanBench), a large-scale benchmark for machine learning on Raman spectroscopy data.
-It provides a single API to discover, download, and load <!-- DATASET_COUNT_START -->**90 datasets**<!-- DATASET_COUNT_END --> — covering classification, regression, denoising, and super-resolution tasks — from diverse sources (Kaggle, HuggingFace, Zenodo, Figshare, GitHub) in a standardized, ML-ready format.
-Of these, 75 meet the inclusion criteria of [RamanBench](https://github.com/ml-lab-htw/RamanBench) and are used for benchmarking.
+Python access to public Raman spectroscopy datasets: one function lists them, downloads one, and loads it as arrays.
+
+`raman-data` provides the datasets for [RamanBench](https://github.com/ml-lab-htw/RamanBench), the Raman machine-learning benchmark. It currently covers <!-- DATASET_COUNT_START -->**93 datasets**<!-- DATASET_COUNT_END --> (classification, regression, denoising, and super-resolution), loaded from Kaggle, Hugging Face, Zenodo, Figshare, Mendeley, GitHub, and other public archives. A curated subset is used for the RamanBench leaderboard.
 
 ## Installation
 
@@ -72,7 +71,7 @@ For machine learning, interpolate or pad to a common grid as needed.
 ## Available Datasets
 
 <details>
-<summary>89 datasets across Material Science, Biological & Biotechnological, Medical & Clinical, and Chemical & Industrial domains (click to expand)</summary>
+<summary>93 datasets across Material Science, Biological & Biotechnological, Medical & Clinical, and Chemical & Industrial domains (click to expand)</summary>
 
 <!-- DATASETS_TABLE_START -->
 <!-- AUTO-GENERATED: START - datasets table. Do not edit manually. -->
@@ -187,8 +186,8 @@ For machine learning, interpolate or pad to a common grid as needed.
 > benchmark release. The full implementation steps below are only needed if
 > you want to add a loader yourself.
 
-We welcome contributions of new Raman datasets, especially from underrepresented domains, novel instrumentation, or larger sample sizes.
-A dataset is eligible for inclusion if it:
+New datasets are welcome, especially from application areas the benchmark covers thinly and from instruments or sample sizes not already represented.
+A dataset is eligible if it:
 
 - Contains **real, experimentally acquired** 1D Raman spectra (not synthetic or simulated)
 - Is **publicly available** without access restrictions or upon-request-only policies
