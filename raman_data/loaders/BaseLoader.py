@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 from typing import Optional, Dict
 import logging
 
-from datasets import DatasetInfo
+from raman_data.types import DatasetInfo
 
 from raman_data.types import RamanDataset
 

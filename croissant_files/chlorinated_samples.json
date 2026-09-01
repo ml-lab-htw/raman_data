@@ -49,29 +49,28 @@
   },
   "@type": "sc:Dataset",
   "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
-  "name": "RamanBioLib — Reference Biomolecules",
-  "description": "Reference Raman spectra (450–1800 cm⁻¹, 1 cm⁻¹ resolution) of ~140 pure biomolecules including amino acids, nucleotides, lipids, and sugars. Each spectrum is labelled by biomolecule name. Useful for spectral assignment and as a reference library for classification benchmarks.",
-  "url": "https://github.com/mteranm/ramanbiolib",
+  "name": "Chlorinated Sample Identification (Raman)",
+  "description": "Binary Raman classification task: detect the presence of chloroform in a sample. 230 spectra across 2473 wavenumbers (350–3500 cm⁻¹). Class balance {0: 76, 1: 154}. Data provided by Analyze IQ Limited; predefined 3-fold splits ship with the source repository.",
+  "url": "https://github.com/AaronFlanagan20/Analysis-of-Data-Synthesis-for-Raman-Spectroscopy",
   "keywords": [
     "Raman spectroscopy",
     "spectroscopy",
-    "Biological",
-    "Classification",
-    "food science",
-    "biochemistry"
+    "Chemical",
+    "Classification"
   ],
   "isAccessibleForFree": true,
   "license": "https://creativecommons.org/licenses/by/4.0/",
-  "citeAs": "@article{TERAN2025105476, title = {Open Raman spectral library for biomolecule identification}, journal = {Chemometrics and Intelligent Laboratory Systems}, volume = {264}, pages = {105476}, year = {2025}, issn = {0169-7439}, doi = {https://doi.org/10.1016/j.chemolab.2025.105476}, url = {https://www.sciencedirect.com/science/article/pii/S0169743925001613}, author = {Marcelo Terán and José Javier Ruiz and Pablo Loza-Alvarez and David Masip and David Merino}, keywords = {Raman spectroscopy, Spectral library, Biomolecules, Biomedicine, Database, Open-source}}",
+  "citeAs": "@article{Flanagan_2023, title={A Comparative Analysis of Data Synthesis Techniques to Improve Classification Accuracy of Raman Spectroscopy Data}, ISSN={1549-960X}, url={http://dx.doi.org/10.1021/acs.jcim.3c00761}, DOI={10.1021/acs.jcim.3c00761}, journal={Journal of Chemical Information and Modeling}, publisher={American Chemical Society (ACS)}, author={Flanagan, Aaron and Glavin, Frank}, year={2023}}",
+  "citation": "Flanagan, A. and Glavin, F., 2023. A Comparative Analysis of Data Synthesis Techniques to Improve Classification Accuracy of Raman Spectroscopy Data. Journal of Chemical Information and Modeling.",
   "distribution": [
     {
       "@type": "cr:FileObject",
-      "@id": "biomolecules_reference_source",
-      "name": "RamanBioLib — Reference Biomolecules",
+      "@id": "chlorinated_samples_source",
+      "name": "Chlorinated Sample Identification (Raman)",
       "description": "Source data hosted at the original repository.",
-      "contentUrl": "https://github.com/mteranm/ramanbiolib",
+      "contentUrl": "https://github.com/AaronFlanagan20/Analysis-of-Data-Synthesis-for-Raman-Spectroscopy",
       "encodingFormat": "application/octet-stream",
-      "sha256": "4bcf7f69b53b20faea35769a3f27d8452b2f9554017315b76947f27b8c3aad43"
+      "sha256": "57b16201ee17f839fa510d815de28bb249b7ede6507c8b52f9964764c099b8cd"
     }
   ],
   "recordSet": [
@@ -89,7 +88,7 @@
           "dataType": "sc:Integer",
           "source": {
             "fileObject": {
-              "@id": "biomolecules_reference_source"
+              "@id": "chlorinated_samples_source"
             }
           }
         },
@@ -101,7 +100,7 @@
           "dataType": "sc:Float",
           "source": {
             "fileObject": {
-              "@id": "biomolecules_reference_source"
+              "@id": "chlorinated_samples_source"
             }
           }
         },
@@ -113,7 +112,7 @@
           "dataType": "sc:Float",
           "source": {
             "fileObject": {
-              "@id": "biomolecules_reference_source"
+              "@id": "chlorinated_samples_source"
             }
           }
         },
@@ -125,7 +124,7 @@
           "dataType": "sc:Text",
           "source": {
             "fileObject": {
-              "@id": "biomolecules_reference_source"
+              "@id": "chlorinated_samples_source"
             }
           }
         }
@@ -133,15 +132,15 @@
     }
   ],
   "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
-  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataCollectionType": "Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions.",
   "rai:dataPreprocessingProtocol": "Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication.",
-  "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods. Labels were assigned by domain experts or clinical diagnosis; no crowdsourced annotation was used.",
+  "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods.",
   "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical, biological, or material samples without individual human identifiers.",
   "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
-  "rai:dataLimitations": "Spectral signatures are process- and instrument-specific; calibration transfer to other setups requires additional validation. Note: No explicit license was stated by the original data providers; CC BY 4.0 has been assumed. Users should verify the applicable terms with the original authors.",
-  "rai:dataSocialImpact": "Enables the development of rapid, inline bioprocess monitoring tools that can reduce waste, improve yield, and lower costs in biomanufacturing and biotechnology.",
-  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control. Not recommended for direct clinical diagnosis without professional validation and regulatory approval.",
+  "rai:dataLimitations": "Quantitative models are valid within the concentration ranges and chemical matrix of the training data; extrapolation outside these ranges is not recommended. Note: No explicit license was stated by the original data providers; CC BY 4.0 has been assumed. Users should verify the applicable terms with the original authors.",
+  "rai:dataSocialImpact": "Supports inline quality control and process analytical technology (PAT) in chemical manufacturing, contributing to safer and more efficient industrial processes.",
+  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control.",
   "rai:hasSyntheticData": false,
-  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
-  "prov:wasDerivedFrom": "https://github.com/mteranm/ramanbiolib"
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://github.com/AaronFlanagan20/Analysis-of-Data-Synthesis-for-Raman-Spectroscopy"
 }

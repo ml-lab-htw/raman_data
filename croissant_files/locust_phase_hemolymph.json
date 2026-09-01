@@ -49,29 +49,28 @@
   },
   "@type": "sc:Dataset",
   "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
-  "name": "RamanBioLib — Reference Biomolecules",
-  "description": "Reference Raman spectra (450–1800 cm⁻¹, 1 cm⁻¹ resolution) of ~140 pure biomolecules including amino acids, nucleotides, lipids, and sugars. Each spectrum is labelled by biomolecule name. Useful for spectral assignment and as a reference library for classification benchmarks.",
-  "url": "https://github.com/mteranm/ramanbiolib",
+  "name": "Desert Locust Density-Dependent Phase State (Resonance Raman of Hemolymph)",
+  "description": "Resonance Raman spectra of hemolymph from desert locust (Schistocerca gregaria) juveniles reared in crowded vs. isolated conditions -- the classic density-dependent phase polyphenism studied in locust biology. 5,000 spectra from 200 individual animals (~25 replicate spectra per animal). Target: rearing density/phase state, crowded vs. isolated (binary classification). The dataset's own `Sample` column identifies which animal each spectrum came from and is used as an explicit group id.",
+  "url": "https://doi.org/10.5281/zenodo.19653302",
   "keywords": [
     "Raman spectroscopy",
     "spectroscopy",
     "Biological",
-    "Classification",
-    "food science",
-    "biochemistry"
+    "Classification"
   ],
   "isAccessibleForFree": true,
   "license": "https://creativecommons.org/licenses/by/4.0/",
-  "citeAs": "@article{TERAN2025105476, title = {Open Raman spectral library for biomolecule identification}, journal = {Chemometrics and Intelligent Laboratory Systems}, volume = {264}, pages = {105476}, year = {2025}, issn = {0169-7439}, doi = {https://doi.org/10.1016/j.chemolab.2025.105476}, url = {https://www.sciencedirect.com/science/article/pii/S0169743925001613}, author = {Marcelo Terán and José Javier Ruiz and Pablo Loza-Alvarez and David Masip and David Merino}, keywords = {Raman spectroscopy, Spectral library, Biomolecules, Biomedicine, Database, Open-source}}",
+  "citeAs": "@dataset{Holman_2026, title={Datasets for: Prediction of density-dependent phase state in the Desert Locust, Schistocerca gregaria, using resonance Raman spectroscopy of hemolymph and machine learning}, url={https://doi.org/10.5281/zenodo.19653302}, DOI={10.5281/zenodo.19653302}, publisher={Zenodo}, author={Holman, Aidan P. and Mechti, Audélia and Miller, Andie C. and Techer, Maeva A. and Goff, Nicolas K. and Song, Hojun and Behmer, Spencer T. and Kurouski, Dmitry and Sword, Gregory A.}, year={2026}}",
+  "citation": "Holman, A.P., Mechti, A., Miller, A.C., Techer, M.A., Goff, N.K., Song, H., Behmer, S.T., Kurouski, D. and Sword, G.A., 2026. Datasets for: Prediction of density-dependent phase state in the Desert Locust, Schistocerca gregaria, using resonance Raman spectroscopy of hemolymph and machine learning. Zenodo.",
   "distribution": [
     {
       "@type": "cr:FileObject",
-      "@id": "biomolecules_reference_source",
-      "name": "RamanBioLib — Reference Biomolecules",
+      "@id": "locust_phase_hemolymph_source",
+      "name": "Desert Locust Density-Dependent Phase State (Resonance Raman of Hemolymph)",
       "description": "Source data hosted at the original repository.",
-      "contentUrl": "https://github.com/mteranm/ramanbiolib",
-      "encodingFormat": "application/octet-stream",
-      "sha256": "4bcf7f69b53b20faea35769a3f27d8452b2f9554017315b76947f27b8c3aad43"
+      "contentUrl": "https://doi.org/10.5281/zenodo.19653302",
+      "encodingFormat": "text/csv",
+      "sha256": "904fcad234f82c766ca21d4543f29c358e7c54ce86bac8814b63b660a5732ebe"
     }
   ],
   "recordSet": [
@@ -89,7 +88,7 @@
           "dataType": "sc:Integer",
           "source": {
             "fileObject": {
-              "@id": "biomolecules_reference_source"
+              "@id": "locust_phase_hemolymph_source"
             }
           }
         },
@@ -101,7 +100,7 @@
           "dataType": "sc:Float",
           "source": {
             "fileObject": {
-              "@id": "biomolecules_reference_source"
+              "@id": "locust_phase_hemolymph_source"
             }
           }
         },
@@ -113,7 +112,7 @@
           "dataType": "sc:Float",
           "source": {
             "fileObject": {
-              "@id": "biomolecules_reference_source"
+              "@id": "locust_phase_hemolymph_source"
             }
           }
         },
@@ -125,7 +124,7 @@
           "dataType": "sc:Text",
           "source": {
             "fileObject": {
-              "@id": "biomolecules_reference_source"
+              "@id": "locust_phase_hemolymph_source"
             }
           }
         }
@@ -133,15 +132,15 @@
     }
   ],
   "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
-  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataCollectionType": "Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material.",
   "rai:dataPreprocessingProtocol": "Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication.",
-  "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods. Labels were assigned by domain experts or clinical diagnosis; no crowdsourced annotation was used.",
+  "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods.",
   "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical, biological, or material samples without individual human identifiers.",
   "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
-  "rai:dataLimitations": "Spectral signatures are process- and instrument-specific; calibration transfer to other setups requires additional validation. Note: No explicit license was stated by the original data providers; CC BY 4.0 has been assumed. Users should verify the applicable terms with the original authors.",
+  "rai:dataLimitations": "Spectral signatures are process- and instrument-specific; calibration transfer to other setups requires additional validation.",
   "rai:dataSocialImpact": "Enables the development of rapid, inline bioprocess monitoring tools that can reduce waste, improve yield, and lower costs in biomanufacturing and biotechnology.",
-  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control. Not recommended for direct clinical diagnosis without professional validation and regulatory approval.",
+  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control.",
   "rai:hasSyntheticData": false,
   "prov:wasGeneratedBy": "Data collection: Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
-  "prov:wasDerivedFrom": "https://github.com/mteranm/ramanbiolib"
+  "prov:wasDerivedFrom": "https://doi.org/10.5281/zenodo.19653302"
 }
