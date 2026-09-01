@@ -430,6 +430,9 @@ class HuggingFaceLoader(BaseLoader):
                 "bibtex": "@article{Kogler_2018, title={Comparison of time-gated surface-enhanced Raman spectroscopy (TG-SERS) and classical SERS based monitoring of Escherichia coli cultivation samples}, volume={34}, ISSN={1520-6033}, url={http://dx.doi.org/10.1002/btpr.2665}, DOI={10.1002/btpr.2665}, number={6}, journal={Biotechnology Progress}, publisher={Wiley}, author={Kogler, Martin and Paul, Andrea and Anane, Emmanuel and Birkholz, Mario and Bunker, Alex and Viitala, Tapani and Maiwald, Michael and Junne, Stefan and Neubauer, Peter}, year={2018}, month=aug, pages={1533--1542}}",
                 "description": "Raman spectra collected during E. coli fermentation, measured on the supernatant using a Kaiser spectrometer.",
             },
+            # Source preprocessing (from source paper): Savitzky-Golay derivative,
+            # unit-vector normalization
+            embedded_preprocessing="Savitzky-Golay derivative (5-point, poly 2), unit-vector normalization (source-applied)",
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
             # Checked: 2 of 4 targets (Glucose, Acetate) have missing (NaN) values (3-4 of 14 rows).
@@ -451,6 +454,9 @@ class HuggingFaceLoader(BaseLoader):
                 "bibtex": "@article{Kogler_2018, title={Comparison of time-gated surface-enhanced Raman spectroscopy (TG-SERS) and classical SERS based monitoring of Escherichia coli cultivation samples}, volume={34}, ISSN={1520-6033}, url={http://dx.doi.org/10.1002/btpr.2665}, DOI={10.1002/btpr.2665}, number={6}, journal={Biotechnology Progress}, publisher={Wiley}, author={Kogler, Martin and Paul, Andrea and Anane, Emmanuel and Birkholz, Mario and Bunker, Alex and Viitala, Tapani and Maiwald, Michael and Junne, Stefan and Neubauer, Peter}, year={2018}, month=aug, pages={1533--1542}}",
                 "description": "Raman spectra collected during E. coli fermentation using a Kaiser spectrometer.",
             },
+            # Source preprocessing (from source paper): Savitzky-Golay derivative,
+            # unit-vector normalization
+            embedded_preprocessing="Savitzky-Golay derivative (5-point, poly 2), unit-vector normalization (source-applied)",
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
             # Checked: 2 of 4 targets (Glucose, Acetate) have missing (NaN) values (3-4 of 14 rows).
@@ -472,6 +478,9 @@ class HuggingFaceLoader(BaseLoader):
                 "bibtex": "@article{Kogler_2018, title={Comparison of time-gated surface-enhanced Raman spectroscopy (TG-SERS) and classical SERS based monitoring of Escherichia coli cultivation samples}, volume={34}, ISSN={1520-6033}, url={http://dx.doi.org/10.1002/btpr.2665}, DOI={10.1002/btpr.2665}, number={6}, journal={Biotechnology Progress}, publisher={Wiley}, author={Kogler, Martin and Paul, Andrea and Anane, Emmanuel and Birkholz, Mario and Bunker, Alex and Viitala, Tapani and Maiwald, Michael and Junne, Stefan and Neubauer, Peter}, year={2018}, month=aug, pages={1533--1542}}",
                 "description": "Raman spectra collected during E. coli fermentation, measured on the supernatant using Time-Gated Raman Spectroscopy.",
             },
+            # Source preprocessing (from source paper): Savitzky-Golay derivative,
+            # unit-vector normalization
+            embedded_preprocessing="Savitzky-Golay derivative (5-point, poly 2), unit-vector normalization (source-applied)",
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
             # Checked: 2 of 4 targets (Glucose, Acetate) have missing (NaN) values (3-4 of 13 rows).
@@ -493,6 +502,9 @@ class HuggingFaceLoader(BaseLoader):
                 "bibtex": "@article{Kogler_2018, title={Comparison of time-gated surface-enhanced Raman spectroscopy (TG-SERS) and classical SERS based monitoring of Escherichia coli cultivation samples}, volume={34}, ISSN={1520-6033}, url={http://dx.doi.org/10.1002/btpr.2665}, DOI={10.1002/btpr.2665}, number={6}, journal={Biotechnology Progress}, publisher={Wiley}, author={Kogler, Martin and Paul, Andrea and Anane, Emmanuel and Birkholz, Mario and Bunker, Alex and Viitala, Tapani and Maiwald, Michael and Junne, Stefan and Neubauer, Peter}, year={2018}, month=aug, pages={1533--1542}}",
                 "description": "Raman spectra collected during E. coli fermentation using Time-Gated Raman Spectroscopy.",
             },
+            # Source preprocessing (from source paper): Savitzky-Golay derivative,
+            # unit-vector normalization
+            embedded_preprocessing="Savitzky-Golay derivative (5-point, poly 2), unit-vector normalization (source-applied)",
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds no replicate structure in this dataset.
             is_grouped=False,
             # Checked: 2 of 4 targets (Glucose, Acetate) have missing (NaN) values (3-4 of 12 rows).

@@ -95,6 +95,9 @@ class MiscLoader(BaseLoader):
             },
             # Isolate-level structure: ~30 isolates with ~2,000 spectra each
             is_grouped=True,
+            # Source preprocessing (from source paper): 5th-order polynomial baseline,
+            # cropped 381.98-1792.4 cm⁻¹, min-max normalization
+            embedded_preprocessing="5th-order polynomial baseline correction, cropped 381.98–1792.4 cm⁻¹, min-max normalization (source-applied)",
             # Checked: no missing (NaN) label values.
             has_missing_labels=False,
         ),

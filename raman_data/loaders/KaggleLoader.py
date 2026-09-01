@@ -73,6 +73,8 @@ class KaggleLoader(BaseLoader):
                 # Subject-level structure: 20 participants (10 diabetic, 10 control) with multiple spectra per site
                 # (applies to ear_lobe, inner_arm, thumbnail, vein only; AGEs not audited for grouping)
                 is_grouped=(None if position == "AGEs" else True),
+                # Source preprocessing: VRA fluorescence removal, cropping, area normalization, zero-mean scaling
+                embedded_preprocessing="Vancouver Raman Algorithm (VRA) fluorescence removal, cropped 800–1800 cm⁻¹, area-normalized, zero-mean scaled (source-applied)",
                 # Checked: no missing (NaN) label values for all five positions.
                 has_missing_labels=False,
             )
@@ -103,6 +105,8 @@ class KaggleLoader(BaseLoader):
                         "Target: elution concentration profile (regression)."
                     )
                 },
+                # Source preprocessing: solvent and fluorescence removal, Savitzky-Golay smoothing
+                embedded_preprocessing="solvent/fluorescence removal, Savitzky-Golay smoothing (source-applied)",
                 # Checked: no row shares an (near-)identical target value with any
                 # other (raman_bench.splitting.infer_group_ids_from_targets finds
                 # no structure) for all four substrates -- no known replicate structure.
@@ -144,6 +148,8 @@ class KaggleLoader(BaseLoader):
                 },
                 # Condition/functionalization-level replicates: cell types, treatments, FBS concentrations
                 is_grouped=True,
+                # Source preprocessing: asymmetric least squares baseline, min-max normalization
+                embedded_preprocessing="ALSS baseline correction (λ=1e5, p=0.01), MinMax normalization (source-applied)",
                 # Checked: no missing (NaN) label values for all three functionalizations.
                 has_missing_labels=False,
             )

@@ -138,6 +138,16 @@ class RWTHLoader(BaseLoader):
                 # variants (45 groups, max size 10 -- consistent with repeated
                 # measurements per microgel sample across preprocessing variants).
                 is_grouped=True,
+                # Source preprocessing: rb (rubber band baseline) and snv (standard normal
+                # variate) and lf (linear fit) variants are re-preprocessing on top of
+                # embedded operations -- only 'raw' is truly unpreprocessed.
+                embedded_preprocessing=(
+                    None if short_key == "raw"
+                    else "Raman-bias-corrected (baseline subtracted)" if "rb" in short_key
+                    else "low-frequency variant (cropped spectral range)" if "lf" in short_key and "snv" not in short_key
+                    else "standard normal variate normalization (source-applied)" if "snv" in short_key
+                    else None
+                ),
             )
             for short_key, file_key, label in [
                 ("raw",    "Raw",                "Raw"),
