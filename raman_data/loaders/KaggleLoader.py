@@ -70,6 +70,9 @@ class KaggleLoader(BaseLoader):
                         + "Target: DM2 / healthy control classification."
                     )
                 },
+                # Subject-level structure: 20 participants (10 diabetic, 10 control) with multiple spectra per site
+                # (applies to ear_lobe, inner_arm, thumbnail, vein only; AGEs not audited for grouping)
+                is_grouped=(None if position == "AGEs" else True),
                 # Source preprocessing: VRA fluorescence removal, cropping, area normalization, zero-mean scaling
                 embedded_preprocessing="Vancouver Raman Algorithm (VRA) fluorescence removal, cropped 800–1800 cm⁻¹, area-normalized, zero-mean scaled (source-applied)",
                 # Checked: no missing (NaN) label values for all five positions.
@@ -143,6 +146,8 @@ class KaggleLoader(BaseLoader):
                            else "lipids and amino acids.")
                     )
                 },
+                # Condition/functionalization-level replicates: cell types, treatments, FBS concentrations
+                is_grouped=True,
                 # Source preprocessing: asymmetric least squares baseline, min-max normalization
                 embedded_preprocessing="ALSS baseline correction (λ=1e5, p=0.01), MinMax normalization (source-applied)",
                 # Checked: no missing (NaN) label values for all three functionalizations.

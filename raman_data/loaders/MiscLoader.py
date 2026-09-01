@@ -93,6 +93,8 @@ class MiscLoader(BaseLoader):
                 ],
                 "description": "60,000 SERS spectra (2,000 per isolate across three measurement time-points) from 30 clinically relevant bacterial and yeast isolates, including an MRSA/MSSA isogenic pair. Acquired on a Horiba LabRAM HR Evolution spectrometer (633 nm, 13.17 mW, 300 l/mm grating, 1.2 cm⁻¹ dispersion, Olympus MPLAN 100× NA 0.9, ~1 µm spot) at 1 s integration time (SNR ~4.1) on gold-coated silica substrates (200 nm Au, electron beam evaporation). Published 25-layer 1D ResNet CNN (Adam, batch 10) achieved 82.2 ± 0.3% isolate accuracy, 97.0 ± 0.3% antibiotic treatment accuracy, and 99.7% treatment classification with 10 spectra in clinical validation on 50 patients (Stanford/Palo Alto VA).",
             },
+            # Isolate-level structure: ~30 isolates with ~2,000 spectra each
+            is_grouped=True,
             # Source preprocessing (from source paper): 5th-order polynomial baseline,
             # cropped 381.98-1792.4 cm⁻¹, min-max normalization
             embedded_preprocessing="5th-order polynomial baseline correction, cropped 381.98–1792.4 cm⁻¹, min-max normalization (source-applied)",
