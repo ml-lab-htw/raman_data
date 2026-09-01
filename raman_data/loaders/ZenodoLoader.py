@@ -483,6 +483,8 @@ class ZenodoLoader(BaseLoader):
                 "bibtex": "@article{Sen_2023, title={Differentiation of advanced generation mutant wheat lines: Conventional techniques versus Raman spectroscopy}, volume={14}, ISSN={1664-462X}, url={http://dx.doi.org/10.3389/fpls.2023.1116876}, DOI={10.3389/fpls.2023.1116876}, journal={Frontiers in Plant Science}, publisher={Frontiers Media SA}, author={Sen, Ayse and Kecoglu, Ibrahim and Ahmed, Muhammad and Parlatan, Ugur and Unlu, Mehmet Burcin}, year={2023}, month=feb}",
                 "description": "Raman spectra from the 7th generation of salt-stress-tolerant wheat mutant lines and their commercial cultivars. Features 785 nm excitation and tracks biochemical shifts in carotenoids and protein-related bands for agricultural phenotyping."
             },
+            # Plant-level structure: ~60 wheat lines with 53,134 spectra total (~900 per line)
+            is_grouped=True,
             # Checked: no missing (NaN) label values.
             has_missing_labels=False,
         ),
@@ -571,6 +573,8 @@ class ZenodoLoader(BaseLoader):
                     "Target: cancer vs. control (binary classification)."
                 ),
             },
+            # Individual-level structure: ~150 individuals with 2 biofluids each (blood plasma, saliva)
+            is_grouped=True,
             # Checked: no missing (NaN) label values.
             has_missing_labels=False,
         ),

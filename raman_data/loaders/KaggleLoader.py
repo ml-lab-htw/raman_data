@@ -70,6 +70,9 @@ class KaggleLoader(BaseLoader):
                         + "Target: DM2 / healthy control classification."
                     )
                 },
+                # Subject-level structure: 20 participants (10 diabetic, 10 control) with multiple spectra per site
+                # (applies to ear_lobe, inner_arm, thumbnail, vein only; AGEs not audited for grouping)
+                is_grouped=(None if position == "AGEs" else True),
                 # Checked: no missing (NaN) label values for all five positions.
                 has_missing_labels=False,
             )
@@ -139,6 +142,8 @@ class KaggleLoader(BaseLoader):
                            else "lipids and amino acids.")
                     )
                 },
+                # Condition/functionalization-level replicates: cell types, treatments, FBS concentrations
+                is_grouped=True,
                 # Checked: no missing (NaN) label values for all three functionalizations.
                 has_missing_labels=False,
             )
