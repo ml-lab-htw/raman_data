@@ -524,7 +524,7 @@ class ZenodoLoader(BaseLoader):
             loader=lambda cache_path: ZenodoLoader.__load_18881751(cache_path),
             metadata={
                 "full_name": "SERS Spectra of Hair Dyes Dataset",
-                "source": "https://doi.org/10.5281/zen  odo.18881751",
+                "source": "https://doi.org/10.5281/zenodo.18881751",
                 "paper": "https://doi.org/10.1016/j.talanta.2022.123762",
                 "bibtex": "@article{Higgins_2023, title={Surface-enhanced Raman spectroscopy enables highly accurate identification of different brands, types and colors of hair dyes}, volume={251}, ISSN={0039-9140}, url={http://dx.doi.org/10.1016/j.talanta.2022.123762}, DOI={10.1016/j.talanta.2022.123762}, journal={Talanta}, publisher={Elsevier BV}, author={Higgins, Samantha and Kurouski, Dmitry}, year={2023}, month=jan, pages={123762}}",
                 "description": (
