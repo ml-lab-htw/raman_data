@@ -68,6 +68,24 @@ Every `raman_data(dataset_id)` call returns a `RamanDataset` object:
 If the axis differs per sample, both are returned as object arrays of 1D arrays.
 For machine learning, interpolate or pad to a common grid as needed.
 
+## Loader Capabilities: Group ID Support
+
+Some loaders can emit `group_ids` — explicit per-spectrum group identifiers for datasets with known physical-replicate structure (e.g., multiple spectra from the same sample). This prevents accidental leakage of replicate information across train/test splits in downstream benchmarking.
+
+For datasets **without** loader-built group IDs, grouping must be re-inferred downstream via target-value matching (e.g., `raman_bench.splitting.infer_group_ids_from_targets`), which is fragile for noisy or low-cardinality targets.
+
+| Loader | Emits `_group_id` | Note |
+|--------|-------------------|------|
+| **ZenodoLoader** | ✓ Yes | For datasets with explicit replicate structure in source |
+| **FigshareLoader** | ✓ Yes | SERSome/ComFilE datasets with per-sample directories |
+| **GitHubLoader** | ✓ Yes | MIND dataset with subject-level directory structure |
+| **HuggingFaceLoader** | ✗ No | Downstream re-inference only; fragile for noisy concentrations |
+| **KaggleLoader** | ✗ No | Downstream re-inference only |
+| **RWTHLoader** | ✗ No | Downstream re-inference only |
+| **GoogleDriveLoader** | ✗ No | Downstream re-inference only |
+| **MendeleyLoader** | ✗ No | Downstream re-inference only |
+| **MiscLoader** | ✗ No | Downstream re-inference only |
+
 ## Available Datasets
 
 <details>
