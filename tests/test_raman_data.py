@@ -2,6 +2,10 @@
 Some general tests of package's functionality.
 """
 
+import os
+
+import pytest
+
 from raman_data import raman_data, datasets
 from raman_data.types import TASK_TYPE
 
@@ -83,6 +87,8 @@ def test_filter_by_has_missing_labels():
     assert "acetic_acid_species" in never_checked
 
 
+@pytest.mark.skip(reason="Hits live Kaggle/HuggingFace/Zenodo sources; unreliable in CI.")
+@pytest.mark.skipif(os.environ.get("CI") is not None, reason="Live downloads too flaky for CI")
 def test_load_dataset():
     """
     Tests loading a dataset.
