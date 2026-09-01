@@ -571,6 +571,9 @@ class ZenodoLoader(BaseLoader):
                     "Target: cancer vs. control (binary classification)."
                 ),
             },
+            # Source preprocessing (from source paper): penalized least-squares baseline,
+            # smoothing, unit normalization
+            embedded_preprocessing="penalized least-squares baseline correction, smoothing, unit normalization (source-applied)",
             # Checked: no missing (NaN) label values.
             has_missing_labels=False,
         ),

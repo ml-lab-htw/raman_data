@@ -119,6 +119,17 @@ class DatasetInfo:
             benchmarking) or keep them (semi-supervised benchmarking, e.g. via
             pseudo-labeling) -- see ``raman_bench.splitting`` for the
             (optional) filtering step.
+        embedded_preprocessing (str | None): A description of preprocessing
+            operations already applied to the spectra in the source data before
+            this dataset was ingested into raman_data -- e.g. "Savitzky-Golay
+            smoothing, baseline correction". ``None`` means this hasn't been
+            documented (treat as "unknown"), not as "raw/unpreprocessed". A
+            benchmark applying preprocessing recipes to a dataset marked with
+            ``embedded_preprocessing`` will double-process the spectra (e.g.
+            baseline correction on top of already-baseline-corrected data),
+            making effect sizes non-comparable to single-pass preprocessing on
+            raw spectra. Document embedded preprocessing so downstream users can
+            account for or avoid this double-processing risk.
     """
     id: str
     name: str
@@ -131,6 +142,7 @@ class DatasetInfo:
     license: str = "unknown"
     is_grouped: Optional[bool] = None
     has_missing_labels: Optional[bool] = None
+    embedded_preprocessing: Optional[str] = None
 
 
 
