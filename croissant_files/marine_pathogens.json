@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Marine Pathogen Identification via Raman Spectroscopy (Urechis unicinctus isolates)",
+  "description": "1,138 Raman spectra (1200 points each, 600-1800 cm⁻¹) from eight bacterial/yeast strains (SX-1 through SX-8, labeled 0-7) isolated from the marine organism Urechis unicinctus, including four kinds of pathogens, per class counts of 149/150/150/102/137/150/150/150. Spectra are already 0-1 (min-max) normalized in the source CSV, per the rehosting repo's README. The source paper reports LSTM-based classification achieving isolate-level accuracy exceeding 94%, outperforming a standard CNN baseline. Rehosted (no header row, trailing integer label column, no sample/replicate IDs, no explicit wavenumber axis) as flat CSV by github.com/zshicode/Raman-Spectra-Deep-Learning, itself unlicensed -- see license note above.",
+  "url": "https://github.com/zshicode/Raman-Spectra-Deep-Learning/blob/main/multi.csv",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Biological",
+    "Classification",
+    "microbiology"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "citeAs": "@article{Yu_2021, title={Analysis of Raman Spectra by Using Deep Learning Methods in the Identification of Marine Pathogens}, volume={93}, ISSN={1520-6882}, url={http://dx.doi.org/10.1021/acs.analchem.1c00431}, DOI={10.1021/acs.analchem.1c00431}, number={32}, journal={Analytical Chemistry}, publisher={American Chemical Society (ACS)}, author={Yu, Shixiang and Li, Xin and Lu, Weilai and Li, Hanfei and Fu, Y. Vincent and Liu, Fanghua}, year={2021}, month=aug, pages={11089--11098}}",
+  "citation": "Yu, S., Li, X., Lu, W., Li, H., Fu, Y. V., & Liu, F. (2021). Analysis of Raman Spectra by Using Deep Learning Methods in the Identification of Marine Pathogens. Analytical Chemistry, 93(32), 11089-11098.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "marine_pathogens_source",
+      "name": "Marine Pathogen Identification via Raman Spectroscopy (Urechis unicinctus isolates)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://github.com/zshicode/Raman-Spectra-Deep-Learning/blob/main/multi.csv",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "27ad0dd6d0d11d57132c42d15cb2e1047a6f84b1978d75435470b85d8f469b16"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "marine_pathogens_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "marine_pathogens_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "marine_pathogens_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "marine_pathogens_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
+  "rai:dataCollectionType": "Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material.",
+  "rai:dataPreprocessingProtocol": "Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication.",
+  "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical, biological, or material samples without individual human identifiers.",
+  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
+  "rai:dataLimitations": "Spectral signatures are process- and instrument-specific; calibration transfer to other setups requires additional validation.",
+  "rai:dataSocialImpact": "Enables the development of rapid, inline bioprocess monitoring tools that can reduce waste, improve yield, and lower costs in biomanufacturing and biotechnology.",
+  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://github.com/zshicode/Raman-Spectra-Deep-Learning/blob/main/multi.csv"
+}

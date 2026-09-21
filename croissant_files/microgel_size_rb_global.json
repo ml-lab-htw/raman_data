@@ -60,7 +60,7 @@
     "polymer chemistry"
   ],
   "isAccessibleForFree": true,
-  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "license": "https://creativecommons.org/licenses/by-nc/4.0/",
   "citeAs": "@article{Koronaki_2024, title={Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy}, volume={20}, ISSN={1613-6829}, url={http://dx.doi.org/10.1002/smll.202311920}, DOI={10.1002/smll.202311920}, number={23}, journal={Small}, publisher={Wiley}, author={Koronaki, Eleni D. and Scholz, Jan G. T. and Modelska, Magdalena M. and Nayak, Prabhat K. and Viell, Jorn and Mitsos, Alexander and Barkley, Samuel}, year={2024}}",
   "citation": "Koronaki, E. D., Scholz, J. G. T., Modelska, M. M., Nayak, P. K., Viell, J., Mitsos, A., & Barkley, S. (2024). Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy. Small, 20(23), 2311920.",
   "distribution": [

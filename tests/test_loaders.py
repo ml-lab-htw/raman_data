@@ -125,6 +125,22 @@ def test_cspp_serum_metabolites():
     assert not np.isnan(dataset.spectra).any()
 
 
+def test_marine_pathogens():
+    # small (~4MB) raw-GitHub CSV download, fast and reliable enough for CI
+    dataset = MiscLoader.load_dataset("marine_pathogens")
+    assert dataset.target_names == [f"SX-{i}" for i in range(1, 9)]
+    assert dataset.spectra.shape == (1138, 1200)
+    assert dataset.spectra.shape[1] == len(dataset.raman_shifts)
+    assert dataset.raman_shifts.min() == 600.0
+    assert dataset.raman_shifts.max() == 1800.0
+    counts = dict(zip(*np.unique(dataset.targets, return_counts=True)))
+    assert counts == {0: 149, 1: 150, 2: 150, 3: 102, 4: 137, 5: 150, 6: 150, 7: 150}
+    assert not np.isnan(dataset.spectra).any()
+    assert dataset.spectra.min() >= 0.0 and dataset.spectra.max() <= 1.0
+    # No source metadata ties spectra to physical isolates/replicates.
+    assert dataset.group_ids is None
+
+
 @pytest.mark.skip(reason="Google Drive dataset download is slow.")
 def test_load_organic_compounds_raw(tmp_path):
     # given

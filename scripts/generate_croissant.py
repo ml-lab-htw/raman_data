@@ -95,6 +95,20 @@ _LICENSE_MAP: dict[str, str] = {
     "cc by 4.0": "https://creativecommons.org/licenses/by/4.0/",
     "cc-by-4.0": "https://creativecommons.org/licenses/by/4.0/",
     "cc by 4": "https://creativecommons.org/licenses/by/4.0/",
+    # NOTE: these more specific NC/NC-SA/SA variants MUST stay ordered before
+    # the plain "cc by" entry below -- the prefix-matching loop in
+    # normalise_license() checks keys in insertion order and a naive
+    # `.startswith("cc by")` would otherwise also match "CC BY-NC-SA ..."
+    # strings, silently mislabeling a non-commercial-restricted license as
+    # permissive CC BY 4.0.
+    "cc by-nc-sa 4.0": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "cc by-nc-sa": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "cc by-nc-nd 4.0": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "cc by-nc-nd": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "cc by-nc 4.0": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "cc by-nc": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "cc by-sa 4.0": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "cc by-sa": "https://creativecommons.org/licenses/by-sa/4.0/",
     "cc by": "https://creativecommons.org/licenses/by/4.0/",
     "mit": "https://opensource.org/licenses/MIT",
     "mit license": "https://opensource.org/licenses/MIT",
