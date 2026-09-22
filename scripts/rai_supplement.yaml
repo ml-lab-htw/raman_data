@@ -2192,6 +2192,39 @@ marine_pathogens:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
+marine_pathogens_binary:
+  prov:wasDerivedFrom: https://github.com/zshicode/Raman-Spectra-Deep-Learning/blob/main/bin.csv
+  prov:wasGeneratedBy: 'Data collection: Laboratory measurements on biological materials
+    including microorganisms, cell cultures, fermentation broths, and plant material.
+    Preprocessing: Spectra are provided with class labels. Any preprocessing applied
+    (baseline correction, smoothing, normalisation) is described in the source publication.
+    Annotation: Class labels assigned based on known sample identity or validated
+    analytical reference methods.'
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including
+    microorganisms, cell cultures, fermentation broths, and plant material.
+  rai:dataLimitations: Spectral signatures are process- and instrument-specific; calibration
+    transfer to other setups requires additional validation.
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring
+    tools that can reduce waste, improve yield, and lower costs in biomanufacturing
+    and biotechnology.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
 microgel_size_lf_fingerprint:
   rai:dataAnnotationProtocol: Target values are hydrodynamic diameters (nm) measured
     by Dynamic Light Scattering (DLS) via Zetasizer Ultra (Malvern Panalytical) at

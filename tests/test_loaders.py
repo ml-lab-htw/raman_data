@@ -141,6 +141,22 @@ def test_marine_pathogens():
     assert dataset.group_ids is None
 
 
+def test_marine_pathogens_binary():
+    # small (<1MB) raw-GitHub CSV download, fast and reliable enough for CI
+    dataset = MiscLoader.load_dataset("marine_pathogens_binary")
+    assert dataset.target_names == ["Acinetobacter baumannii", "Pseudomonas nitritireducens"]
+    assert dataset.spectra.shape == (261, 1200)
+    assert dataset.spectra.shape[1] == len(dataset.raman_shifts)
+    assert dataset.raman_shifts.min() == 600.0
+    assert dataset.raman_shifts.max() == 1800.0
+    counts = dict(zip(*np.unique(dataset.targets, return_counts=True)))
+    assert counts == {0: 150, 1: 111}
+    assert not np.isnan(dataset.spectra).any()
+    assert dataset.spectra.min() >= 0.0 and dataset.spectra.max() <= 1.0
+    # No source metadata ties spectra to physical isolates/replicates.
+    assert dataset.group_ids is None
+
+
 @pytest.mark.skip(reason="Google Drive dataset download is slow.")
 def test_load_organic_compounds_raw(tmp_path):
     # given
