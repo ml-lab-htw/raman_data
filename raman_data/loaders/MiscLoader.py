@@ -147,6 +147,68 @@ class MiscLoader(BaseLoader):
             # 0-7 integer column with no gaps).
             has_missing_labels=False,
         ),
+        "marine_pathogens_binary": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Biological,
+            id="marine_pathogens_binary",
+            name="Marine Pathogens (Binary: A. baumannii vs. P. nitritireducens)",
+            short_name="Marine Pathogens (Binary)",
+            # Same licensing situation as marine_pathogens: the GitHub repo
+            # rehosting this CSV has no LICENSE file of its own (license:
+            # null via GitHub API) -- the legitimizing source is the
+            # underlying paper's own Green-OA CC BY-NC-SA status. See the
+            # citation-confidence note in the description below: the
+            # attribution to this specific paper is taken as given from the
+            # rehosting repo's README, NOT independently confirmed (unlike
+            # marine_pathogens/multi.csv, whose 8-strain Urechis unicinctus
+            # description is directly and exactly matched by the paper's own
+            # abstract).
+            license="CC BY-NC-SA (paper; non-commercial)",
+            loader=lambda cache_path: MiscLoader._load_yu2021_marine_pathogens_binary(cache_path),
+            metadata={
+                "full_name": "Marine Pathogen Identification via Raman Spectroscopy (binary: A. baumannii vs. P. nitritireducens)",
+                "source": "https://github.com/zshicode/Raman-Spectra-Deep-Learning/blob/main/bin.csv",
+                "paper": "https://doi.org/10.1021/acs.analchem.1c00431",
+                "bibtex": "@article{Yu_2021, title={Analysis of Raman Spectra by Using Deep Learning Methods in the Identification of Marine Pathogens}, volume={93}, ISSN={1520-6882}, url={http://dx.doi.org/10.1021/acs.analchem.1c00431}, DOI={10.1021/acs.analchem.1c00431}, number={32}, journal={Analytical Chemistry}, publisher={American Chemical Society (ACS)}, author={Yu, Shixiang and Li, Xin and Lu, Weilai and Li, Hanfei and Fu, Y. Vincent and Liu, Fanghua}, year={2021}, month=aug, pages={11089--11098}}",
+                "citation": [
+                    "Yu, S., Li, X., Lu, W., Li, H., Fu, Y. V., & Liu, F. (2021). Analysis of Raman Spectra by Using Deep Learning Methods in the Identification of Marine Pathogens. Analytical Chemistry, 93(32), 11089-11098."
+                ],
+                # CITATION CONFIDENCE NOTE: this attribution is taken as given
+                # from the rehosting repo's README (github.com/zshicode/
+                # Raman-Spectra-Deep-Learning), which credits BOTH bin.csv and
+                # multi.csv to Yu et al. 2021. It could NOT be independently
+                # verified against the paper itself: the paper's own abstract
+                # (confirmed via Semantic Scholar) describes only the 8-strain
+                # Urechis unicinctus experiment (matching marine_pathogens/
+                # multi.csv exactly) and makes no mention of Acinetobacter
+                # baumannii or Pseudomonas nitritireducens. The paper's full
+                # text (methods/SI, where a preliminary/pilot two-class
+                # experiment might plausibly be described) could not be
+                # accessed after real attempts: ACS page paywalled, the
+                # paper's own institutional repository (ir.yic.ac.cn)
+                # unreachable, CORE.ac.uk metadata-only (no full text), no PMC
+                # deposit, no self-archived copy found on ResearchGate. No
+                # independent trace of "Pseudomonas nitritireducens" combined
+                # with Raman spectroscopy was found anywhere else either.
+                # Bottom line: this citation reflects the source repo's stated
+                # attribution, not an independently confirmed one -- treat it
+                # with correspondingly lower confidence than marine_pathogens.
+                "description": "261 Raman spectra (1200 points each, 600-1800 cm⁻¹) from two marine microbe species, Acinetobacter baumannii (label 0, 150 spectra) and Pseudomonas nitritireducens (label 1, 111 spectra), per the rehosting repo's README. Spectra are already 0-1 (min-max) normalized in the source CSV. The rehosting repo attributes this file to the same Yu et al. 2021 paper as marine_pathogens/multi.csv, but that attribution is UNVERIFIED -- the paper's own abstract only describes the 8-strain Urechis unicinctus experiment and does not mention either species named here; see the citation-confidence note above for the access attempts made. Rehosted (no header row, trailing integer label column, no sample/replicate IDs, no explicit wavenumber axis) as flat CSV by github.com/zshicode/Raman-Spectra-Deep-Learning, itself unlicensed -- see license note above.",
+            },
+            # Source-applied 0-1 (min-max) normalization per rehosting repo's README.
+            embedded_preprocessing="0-1 (min-max) normalization (source-applied)",
+            # NOT checked, same reasoning as marine_pathogens: no sample/
+            # isolate/replicate ID column in the CSV, and the paper's full
+            # text (which might describe replicate counts, IF this data is
+            # even from this paper -- see citation-confidence note above)
+            # could not be accessed. Left as None (unknown), not assumed
+            # False -- do not infer grouping from the class counts (150/111)
+            # alone.
+            is_grouped=None,
+            # Checked: no missing (NaN) label values (labels are a dense
+            # 0-1 integer column with no gaps).
+            has_missing_labels=False,
+        ),
         "mlrod": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.MaterialScience,
@@ -485,16 +547,59 @@ class MiscLoader(BaseLoader):
 
         Returns spectra, raman_shifts, targets, class_names.
         """
+        return MiscLoader._load_zshicode_raman_csv(
+            dataset_dir="marine_pathogens",
+            csv_name="multi.csv",
+            class_name_fn=lambda name: f"SX-{int(name) + 1}",
+        )
+
+    @staticmethod
+    def _load_yu2021_marine_pathogens_binary(cache_path: str):
+        """
+        Download and load the "bin.csv" flat-CSV dataset rehosted at
+        github.com/zshicode/Raman-Spectra-Deep-Learning. The rehosting
+        repo's README attributes this file to the same paper as
+        marine_pathogens/multi.csv (Yu et al. 2021, Anal. Chem. 93(32),
+        11089-11098, doi:10.1021/acs.analchem.1c00431) -- an attribution
+        taken as given, NOT independently confirmed (see the
+        citation-confidence note on this dataset's DatasetInfo entry).
+
+        Layout: 261 rows x 1201 columns, no header row. The first 1200
+        columns are Raman intensities (already 0-1 normalized per the
+        rehosting repo's README), and the final column is an integer class
+        label: 0 = Acinetobacter baumannii (150 spectra), 1 = Pseudomonas
+        nitritireducens (111 spectra).
+
+        Same 600-1800 cm^-1 / 1200-point spectral region as multi.csv per
+        the rehosting repo's README (no exact per-point calibration given
+        by the source).
+
+        Returns spectra, raman_shifts, targets, class_names.
+        """
+        class_names_map = {0: "Acinetobacter baumannii", 1: "Pseudomonas nitritireducens"}
+        return MiscLoader._load_zshicode_raman_csv(
+            dataset_dir="marine_pathogens_binary",
+            csv_name="bin.csv",
+            class_name_fn=lambda name: class_names_map.get(int(name), str(name)),
+        )
+
+    @staticmethod
+    def _load_zshicode_raman_csv(dataset_dir: str, csv_name: str, class_name_fn):
+        """
+        Shared loader for the flat, headerless CSVs (spectral intensities +
+        trailing integer label column) rehosted at
+        github.com/zshicode/Raman-Spectra-Deep-Learning -- used by both
+        marine_pathogens (multi.csv) and marine_pathogens_binary (bin.csv).
+        """
         cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
         if cache_root is None:
-            raise ValueError("Cache root for Misc loader is not set. Cannot load marine_pathogens dataset.")
+            raise ValueError(f"Cache root for Misc loader is not set. Cannot load {dataset_dir} dataset.")
 
-        shared_root = os.path.join(cache_root, "marine_pathogens")
+        shared_root = os.path.join(cache_root, dataset_dir)
         os.makedirs(shared_root, exist_ok=True)
 
-        csv_name = "multi.csv"
         csv_path = os.path.join(shared_root, csv_name)
-        dl_url = "https://raw.githubusercontent.com/zshicode/Raman-Spectra-Deep-Learning/main/multi.csv"
+        dl_url = f"https://raw.githubusercontent.com/zshicode/Raman-Spectra-Deep-Learning/main/{csv_name}"
 
         if not LoaderTools._is_file_ready(csv_path):
             LoaderTools.download(url=dl_url, out_dir_path=shared_root, out_file_name=csv_name)
@@ -502,11 +607,11 @@ class MiscLoader(BaseLoader):
         try:
             df = pd.read_csv(csv_path, header=None)
         except Exception as e:
-            raise RuntimeError(f"[!] Failed to read marine_pathogens CSV at {csv_path}: {e}")
+            raise RuntimeError(f"[!] Failed to read {dataset_dir} CSV at {csv_path}: {e}")
 
         if df.shape[1] < 2:
             raise RuntimeError(
-                f"[!] marine_pathogens CSV at {csv_path} has unexpected shape {df.shape}; expected >=2 columns "
+                f"[!] {dataset_dir} CSV at {csv_path} has unexpected shape {df.shape}; expected >=2 columns "
                 "(spectral intensities + trailing integer label)."
             )
 
@@ -519,7 +624,7 @@ class MiscLoader(BaseLoader):
         raman_shifts = np.linspace(600.0, 1800.0, n_points, dtype=float)
 
         targets, class_names = encode_labels(pd.Series(labels))
-        class_names = [f"SX-{int(name) + 1}" for name in class_names]
+        class_names = [class_name_fn(name) for name in class_names]
 
         return spectra, raman_shifts, targets.astype(int), class_names
 
