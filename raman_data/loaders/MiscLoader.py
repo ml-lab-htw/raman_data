@@ -101,6 +101,52 @@ class MiscLoader(BaseLoader):
             # Checked: no missing (NaN) label values.
             has_missing_labels=False,
         ),
+        "marine_pathogens": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Biological,
+            id="marine_pathogens",
+            name="Marine Pathogens (Urechis unicinctus)",
+            short_name="Marine Pathogens",
+            # Licensing note: the GitHub repo rehosting this CSV
+            # (zshicode/Raman-Spectra-Deep-Learning) has NO LICENSE file
+            # (confirmed via GitHub API: license: null) -- it grants no
+            # redistribution rights of its own. The legitimizing source is
+            # the underlying paper (Yu et al. 2021), which is Green Open
+            # Access (confirmed via Semantic Scholar/Unpaywall metadata,
+            # DOI 10.1021/acs.analchem.1c00431) under CC BY-NC-SA. This is a
+            # real usage restriction: NON-COMMERCIAL USE ONLY. Cite the
+            # paper, not the GitHub repo, as the license-granting source.
+            license="CC BY-NC-SA (paper; non-commercial)",
+            loader=lambda cache_path: MiscLoader._load_yu2021_marine_pathogens(cache_path),
+            metadata={
+                "full_name": "Marine Pathogen Identification via Raman Spectroscopy (Urechis unicinctus isolates)",
+                "source": "https://github.com/zshicode/Raman-Spectra-Deep-Learning/blob/main/multi.csv",
+                "paper": "https://doi.org/10.1021/acs.analchem.1c00431",
+                "bibtex": "@article{Yu_2021, title={Analysis of Raman Spectra by Using Deep Learning Methods in the Identification of Marine Pathogens}, volume={93}, ISSN={1520-6882}, url={http://dx.doi.org/10.1021/acs.analchem.1c00431}, DOI={10.1021/acs.analchem.1c00431}, number={32}, journal={Analytical Chemistry}, publisher={American Chemical Society (ACS)}, author={Yu, Shixiang and Li, Xin and Lu, Weilai and Li, Hanfei and Fu, Y. Vincent and Liu, Fanghua}, year={2021}, month=aug, pages={11089--11098}}",
+                "citation": [
+                    "Yu, S., Li, X., Lu, W., Li, H., Fu, Y. V., & Liu, F. (2021). Analysis of Raman Spectra by Using Deep Learning Methods in the Identification of Marine Pathogens. Analytical Chemistry, 93(32), 11089-11098."
+                ],
+                "description": "1,138 Raman spectra (1200 points each, 600-1800 cm⁻¹) from eight bacterial/yeast strains (SX-1 through SX-8, labeled 0-7) isolated from the marine organism Urechis unicinctus, including four kinds of pathogens, per class counts of 149/150/150/102/137/150/150/150. Spectra are already 0-1 (min-max) normalized in the source CSV, per the rehosting repo's README. The source paper reports LSTM-based classification achieving isolate-level accuracy exceeding 94%, outperforming a standard CNN baseline. Rehosted (no header row, trailing integer label column, no sample/replicate IDs, no explicit wavenumber axis) as flat CSV by github.com/zshicode/Raman-Spectra-Deep-Learning, itself unlicensed -- see license note above.",
+            },
+            # Source-applied 0-1 (min-max) normalization per rehosting repo's README
+            # ("Following Yu et al. (2021), the Raman spectra of each sample is
+            # preprocessed by 0-1 normalization").
+            embedded_preprocessing="0-1 (min-max) normalization (source-applied)",
+            # NOT checked: the rehosted CSV carries no sample/isolate/replicate ID
+            # column, and the source paper's full text (methods/SI, which might
+            # describe how many spectra were taken per physical isolate) could not
+            # be accessed -- the paywalled ACS page, the paper's own Green-OA
+            # institutional repository (ir.yic.ac.cn, unreachable from this
+            # network), CORE.ac.uk (metadata only, no full text), PMC (no
+            # deposit), and ResearchGate (no self-archived copy found) were all
+            # tried. Left as None (unknown), not assumed False, per convention --
+            # do not infer grouping from the uneven per-class spectra counts
+            # (149/150/150/102/137/150/150/150) alone.
+            is_grouped=None,
+            # Checked: no missing (NaN) label values (labels are a dense
+            # 0-7 integer column with no gaps).
+            has_missing_labels=False,
+        ),
         "mlrod": DatasetInfo(
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.MaterialScience,
@@ -416,6 +462,66 @@ class MiscLoader(BaseLoader):
         unique = sorted(list(map(str, np.unique(y))))
 
         return X.astype(float), raman_shifts, y.astype(int), unique
+
+    @staticmethod
+    def _load_yu2021_marine_pathogens(cache_path: str):
+        """
+        Download and load the "multi.csv" flat-CSV dataset rehosted at
+        github.com/zshicode/Raman-Spectra-Deep-Learning, originally from
+        Yu et al. (2021), Anal. Chem. 93(32), 11089-11098
+        (doi:10.1021/acs.analchem.1c00431).
+
+        Layout: 1138 rows x 1201 columns, no header row. The first 1200
+        columns are Raman intensities (already 0-1 normalized per the
+        rehosting repo's README), and the final column is an integer class
+        label (0-7) for one of eight strains (SX-1..SX-8) isolated from the
+        marine organism Urechis unicinctus.
+
+        The repo's README states the spectral region is 600-1800 cm^-1
+        across 1200 points -- no exact per-point wavenumber calibration is
+        given by the source, so raman_shifts is reconstructed as an evenly
+        spaced axis over that stated range (not an exact instrument
+        calibration).
+
+        Returns spectra, raman_shifts, targets, class_names.
+        """
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            raise ValueError("Cache root for Misc loader is not set. Cannot load marine_pathogens dataset.")
+
+        shared_root = os.path.join(cache_root, "marine_pathogens")
+        os.makedirs(shared_root, exist_ok=True)
+
+        csv_name = "multi.csv"
+        csv_path = os.path.join(shared_root, csv_name)
+        dl_url = "https://raw.githubusercontent.com/zshicode/Raman-Spectra-Deep-Learning/main/multi.csv"
+
+        if not LoaderTools._is_file_ready(csv_path):
+            LoaderTools.download(url=dl_url, out_dir_path=shared_root, out_file_name=csv_name)
+
+        try:
+            df = pd.read_csv(csv_path, header=None)
+        except Exception as e:
+            raise RuntimeError(f"[!] Failed to read marine_pathogens CSV at {csv_path}: {e}")
+
+        if df.shape[1] < 2:
+            raise RuntimeError(
+                f"[!] marine_pathogens CSV at {csv_path} has unexpected shape {df.shape}; expected >=2 columns "
+                "(spectral intensities + trailing integer label)."
+            )
+
+        spectra = df.iloc[:, :-1].to_numpy(dtype=float)
+        labels = df.iloc[:, -1].to_numpy()
+
+        # Source paper/rehosting repo README: 1200-point spectra spanning
+        # 600-1800 cm^-1 (no exact per-point calibration given).
+        n_points = spectra.shape[1]
+        raman_shifts = np.linspace(600.0, 1800.0, n_points, dtype=float)
+
+        targets, class_names = encode_labels(pd.Series(labels))
+        class_names = [f"SX-{int(name) + 1}" for name in class_names]
+
+        return spectra, raman_shifts, targets.astype(int), class_names
 
     @staticmethod
     def _load_covid(cache_path):
