@@ -290,14 +290,15 @@ The CI workflow runs at [github.com/ml-lab-htw/raman_data/actions](https://githu
 
 ## Citation
 
-If you use `raman-data` in your research, please cite the RamanBench paper:
+The RamanBench paper has been accepted at NeurIPS 2026. If you use `raman-data` in your research, please cite it:
 
 ```bibtex
-@article{koddenbrock2026ramanbench,
+@inproceedings{koddenbrock2026ramanbench,
   title={RamanBench: A Large-Scale Benchmark for Machine Learning on Raman Spectroscopy},
   author={Koddenbrock, Mario and Lange, Christoph and Legner, Robin and J{\"a}ger, Martin and K{\"o}gler, Martin and Bournazou, Mariano N Cruz and Neubauer, Peter and Biessmann, Felix and Rodner, Erik},
-  journal={arXiv preprint arXiv:2605.02003},
-  year={2026}
+  booktitle={Advances in Neural Information Processing Systems (NeurIPS)},
+  year={2026},
+  note={arXiv preprint arXiv:2605.02003}
 }
 ```
 
