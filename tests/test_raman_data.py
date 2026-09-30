@@ -63,7 +63,7 @@ def test_filter_by_is_grouped():
     unfiltered = set(raman_data(task_type=TASK_TYPE.Regression))
     assert "wheat_lines" not in unfiltered  # sanity: that one's classification
     never_checked = unfiltered - grouped - ungrouped
-    assert "synthetic_organic_pigments_baseline_corrected" in never_checked
+    assert "chembl_molecules" in never_checked
 
 
 def test_filter_by_has_missing_labels():
