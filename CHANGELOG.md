@@ -17,6 +17,26 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.6.5] — 2026-09-30
+
+### Fixed
+
+- `synthetic_organic_pigments_raw`/`_baseline_corrected` were registered as
+  `Regression`, but the loader already produced classification-shaped output
+  (`encode_labels()` label-encoding the per-sample pigment filename, e.g.
+  `PB12_A_785`, essentially unique per sample). Under `Regression`, those
+  integer codes were used as literal targets (just the row index in
+  practice) and the class-name list was routed into a `target_names` slot
+  meant for per-target-column names, not per-sample labels -- any benchmark
+  run against either dataset was regressing against an arbitrary sample
+  ordering, not a real quantity. Now registered as `Classification`,
+  encoding the color-family grouping (the pigment code's leading letters,
+  e.g. `PB`/`PBR`/`PY`) rather than the full per-sample code: PR=red (143),
+  PY=yellow (86), PO=orange (37), PV=violet (26), PB=blue (19), PBR=brown
+  (6), PG=green (6), PBK=black (2).
+
+---
+
 ## [1.6.4] — 2026-09-22
 
 ### Added
