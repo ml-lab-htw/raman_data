@@ -232,7 +232,7 @@ class MiscLoader(BaseLoader):
         ),
         **{
             f"synthetic_organic_pigments_{process.lower().replace(' ', '_')}": DatasetInfo(
-                task_type=TASK_TYPE.Regression,
+                task_type=TASK_TYPE.Classification,
                 application_type=APPLICATION_TYPE.MaterialScience,
                 id=f"synthetic_organic_pigments_{process.lower().replace(' ', '_')}",
                 name=f"Synthetic Organic Pigments ({process})",
@@ -858,6 +858,14 @@ class MiscLoader(BaseLoader):
 
         Returns:
             Tuple of (spectra, raman_shifts, targets, class_names) or None if loading fails.
+
+        Classification target: each filename encodes a specific pigment (e.g.
+        "PB12_A_785"), essentially unique per sample -- using that directly as the
+        label would give ~300 singleton classes, useless for any train/test split.
+        The leading letters (before the first digit) encode a coarser color-family
+        grouping shared by many pigments instead (PR=red, PY=yellow, PO=orange,
+        PV=violet, PB=blue, PBR=brown, PG=green, PBK=black) -- that's the real,
+        learnable classification target used here.
         """
         urls = {
             "baseline_corrected": "https://kikirpa-my.sharepoint.com/:u:/g/personal/wim_fremout_kikirpa_be/ES5_J9PpBatLvbTe6VlFyIoBc6fFRli0YHl2qjnLxn6I8Q?download=1",
@@ -984,7 +992,14 @@ class MiscLoader(BaseLoader):
             # Interpolate all spectra to a common wavenumber grid
             raman_shifts, spectra = LoaderTools.align_raman_shifts(raman_shifts_list, spectra_list)
 
-        encoded_targets, class_names = encode_labels(pd.Series(pigment_labels))
+        # Color-family grouping (see this method's docstring) -- the leading
+        # alphabetic run of each pigment code, e.g. "PB12_A_785" -> "PB",
+        # "PBR14_A_785" -> "PBR". A plain regex match is safe here even though
+        # "PB" is itself a prefix of "PBR"/"PBK": it greedily consumes every
+        # leading letter before the first digit, so "PBR14..." matches "PBR"
+        # in full, never truncating to "PB".
+        color_families = pd.Series(pigment_labels).str.extract(r"^([A-Za-z]+)", expand=False)
+        encoded_targets, class_names = encode_labels(color_families)
 
         MiscLoader.logger.debug(
             f"Loaded SOP library ({variant}): {spectra.shape[0]} spectra, "
