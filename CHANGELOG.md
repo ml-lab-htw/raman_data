@@ -11,6 +11,16 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Fixed
+
+### Changed
+
+---
+
+## [1.6.6] — 2026-10-15
+
+### Added
+
 - `glioma_methylation` (6 classes, LGm1-6) and `glioma_idh` (IDH-mutant vs.
   IDH-wildtype): Raman maps of 59 glioma tissue slides from 46 patients
   (Lita et al. 2024, *Neuro-Oncology*, doi:10.1093/neuonc/noae101), from the
@@ -24,8 +34,6 @@ Versions follow [Semantic Versioning](https://semver.org/).
   returns them.
 - README dataset table: the two `synthetic_organic_pigments_*` datasets show as
   Classification (the 1.6.5 fix had not regenerated it).
-
-### Changed
 
 ---
 
