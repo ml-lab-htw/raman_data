@@ -11,7 +11,19 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `glioma_methylation` (6 classes, LGm1-6) and `glioma_idh` (IDH-mutant vs.
+  IDH-wildtype): Raman maps of 59 glioma tissue slides from 46 patients
+  (Lita et al. 2024, *Neuro-Oncology*, doi:10.1093/neuonc/noae101), from the
+  authors' public Google Drive folder. 257,904 tumour spectra (the authors'
+  DBSCAN tumour maps applied), 1,738 bands from 50 to 3,400 cm⁻¹, grouped by
+  patient. Licence: none stated for the data; the paper is CC BY-NC.
+
 ### Fixed
+
+- `GoogleDriveLoader.load_dataset` now passes `group_ids` through when a loader
+  returns them.
+- README dataset table: the two `synthetic_organic_pigments_*` datasets show as
+  Classification (the 1.6.5 fix had not regenerated it).
 
 ### Changed
 
