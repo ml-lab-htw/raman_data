@@ -207,6 +207,39 @@ def test_serum_prostate_cancer_group_ids():
     assert _groups_are_label_pure(dataset)
 
 
+def test_glioma_slide_table():
+    from raman_data.loaders.GoogleDriveLoader import _GLIOMA_SLIDES
+    import re
+    assert len(_GLIOMA_SLIDES) == 59
+    patients = {}
+    for subtype, name, _ in _GLIOMA_SLIDES:
+        patients.setdefault(re.match(r"HF-(\d+)_", name).group(1), set()).add(subtype)
+    assert len(patients) == 46
+    assert all(len(s) == 1 for s in patients.values())  # one subtype per patient
+
+
+def test_glioma_unpickler_refuses_code():
+    import io
+    import pickle
+    from raman_data.loaders.GoogleDriveLoader import _NumpyOnlyUnpickler
+    with pytest.raises(pickle.UnpicklingError):
+        _NumpyOnlyUnpickler(io.BytesIO(pickle.dumps(os.getcwd))).load()
+    arrays = np.empty(2, dtype=object)
+    arrays[0], arrays[1] = np.ones((2, 2), dtype=np.int64), np.zeros((3, 1), dtype=np.int64)
+    loaded = _NumpyOnlyUnpickler(io.BytesIO(pickle.dumps(arrays))).load()
+    assert loaded[1].shape == (3, 1)
+
+
+@pytest.mark.skip(reason="Google Drive download (~3 GB); run manually.")
+def test_glioma_group_ids():
+    for name, n_classes in [("glioma_idh", 2), ("glioma_methylation", 6)]:
+        dataset = GoogleDriveLoader.load_dataset(name)
+        assert dataset.spectra.shape == (257904, 1738), name
+        assert len(dataset.target_names) == n_classes, name
+        assert len(set(dataset.group_ids.tolist())) == 46, name
+        assert _groups_are_label_pure(dataset), name
+
+
 @pytest.mark.skip(reason="MIND-Lab download; run manually.")
 def test_mind_dataset_group_ids():
     expected = {"parkinson": (1476, 60), "alzheimer": (1151, 46),
