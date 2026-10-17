@@ -11,6 +11,11 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `DataverseLoader` for datasets on Harvard Dataverse: lists files through the native API and checks each
+  download against its MD5.
+- `soft_tissue_sarcoma` (RamanSTS, Boroji et al. 2025, PLOS ONE): 286,672 ex-vivo spectra of soft tissue
+  from 7 patients, 8 tissue classes, 400-1,800 cm⁻¹. Group ids are the 18 patient x tissue files.
+
 ### Fixed
 
 ### Changed

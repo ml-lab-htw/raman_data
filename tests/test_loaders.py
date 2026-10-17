@@ -12,6 +12,7 @@ from raman_data.loaders.RWTHLoader import RWTHLoader
 from raman_data.loaders.GoogleDriveLoader import GoogleDriveLoader
 from raman_data.loaders.FigshareLoader import FigshareLoader
 from raman_data.loaders.GitHubLoader import GitHubLoader
+from raman_data.loaders.DataverseLoader import DataverseLoader
 import numpy as np
 import pytest
 import os
@@ -25,6 +26,7 @@ __LOADERS = [
     GoogleDriveLoader,
     FigshareLoader,
     GitHubLoader,
+    DataverseLoader,
 ]
 
 
@@ -238,6 +240,17 @@ def test_glioma_group_ids():
         assert len(dataset.target_names) == n_classes, name
         assert len(set(dataset.group_ids.tolist())) == 46, name
         assert _groups_are_label_pure(dataset), name
+
+
+@pytest.mark.skip(reason="Harvard Dataverse download (~2.4 GB); run manually.")
+def test_soft_tissue_sarcoma():
+    dataset = DataverseLoader.load_dataset("soft_tissue_sarcoma")
+    assert dataset.spectra.shape == (286672, 1401)
+    assert dataset.raman_shifts[0] == 400 and dataset.raman_shifts[-1] == 1800
+    assert len(dataset.target_names) == 8
+    assert len(set(dataset.group_ids.tolist())) == 18
+    assert _groups_are_label_pure(dataset)
+    assert not np.isnan(dataset.spectra).any()
 
 
 @pytest.mark.skip(reason="MIND-Lab download; run manually.")
