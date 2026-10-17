@@ -18,6 +18,9 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- README: the dataset count (said 93, the table lists 98) and the group-id table, which said
+  `GoogleDriveLoader` emits no group ids (the glioma datasets do).
+
 ### Changed
 
 ---
