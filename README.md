@@ -6,7 +6,7 @@
 
 Python access to public Raman spectroscopy datasets: one function lists them, downloads one, and loads it as arrays.
 
-`raman-data` provides the datasets for [RamanBench](https://github.com/ml-lab-htw/RamanBench), the Raman machine-learning benchmark. It currently covers <!-- DATASET_COUNT_START -->**93 datasets**<!-- DATASET_COUNT_END --> (classification, regression, denoising, and super-resolution), loaded from Kaggle, Hugging Face, Zenodo, Figshare, Mendeley, GitHub, and other public archives. A curated subset is used for the RamanBench leaderboard.
+`raman-data` provides the datasets for [RamanBench](https://github.com/ml-lab-htw/RamanBench), the Raman machine-learning benchmark. It currently covers <!-- DATASET_COUNT_START -->**98 datasets**<!-- DATASET_COUNT_END --> (classification, regression, denoising, and super-resolution), loaded from Kaggle, Hugging Face, Zenodo, Figshare, Mendeley, Harvard Dataverse, GitHub, and other public archives. A curated subset is used for the RamanBench leaderboard.
 
 ## Installation
 
@@ -82,14 +82,15 @@ For datasets **without** loader-built group IDs, grouping must be re-inferred do
 | **HuggingFaceLoader** | ✗ No | Downstream re-inference only; fragile for noisy concentrations |
 | **KaggleLoader** | ✗ No | Downstream re-inference only |
 | **RWTHLoader** | ✗ No | Downstream re-inference only |
-| **GoogleDriveLoader** | ✗ No | Downstream re-inference only |
+| **GoogleDriveLoader** | ✓ Yes | Glioma (APOLLO) datasets: patient ids from the slide names |
 | **MendeleyLoader** | ✗ No | Downstream re-inference only |
+| **DataverseLoader** | ✓ Yes | RamanSTS: one group per patient x tissue file |
 | **MiscLoader** | ✗ No | Downstream re-inference only |
 
 ## Available Datasets
 
 <details>
-<summary>93 datasets across Material Science, Biological & Biotechnological, Medical & Clinical, and Chemical & Industrial domains (click to expand)</summary>
+<summary>98 datasets across Material Science, Biological & Biotechnological, Medical & Clinical, and Chemical & Industrial domains (click to expand)</summary>
 
 <!-- DATASETS_TABLE_START -->
 <!-- AUTO-GENERATED: START - datasets table. Do not edit manually. -->
@@ -182,6 +183,7 @@ For datasets **without** loader-built group IDs, grouping must be re-inferred do
 | `rruff_mineral_raw` | Material Science | Classification | Comprehensive resource of raw Raman spectra for over 1,000 mineral species, representing a diverse array of crystallographic structures and chemical compositions measured under varying experimental conditions (e.g., 532 nm and 785 nm). |
 | `serum_alzheimer_disease` | Medical & Clinical | Classification | SERS serum metabolite spectra for classifying Alzheimer's disease (AD), mild cognitive impairment (MCI), and healthy controls. 139 serum samples (57 male, 82 female) collected at Rui Jin Hospital, Shanghai Jiao Tong University. Organized as SERSomes (200 spectra per sample, 638 nm laser, quartz capi |
 | `serum_prostate_cancer` | Medical & Clinical | Classification | SERS serum metabolite spectra for classifying prostate cancer (PCa), benign prostatic hyperplasia (BPH), and healthy controls. 424 serum samples from male participants (ages 41–89) collected at Ren Ji Hospital, Shanghai Jiao Tong University. Organized as SERSomes (200 spectra per sample, 638 nm lase |
+| `soft_tissue_sarcoma` | Medical & Clinical | Classification | 286,672 ex-vivo Raman spectra (Renishaw inVia, 633 nm, 400-1,800 cm⁻¹, 1,401 points) of surgically resected soft tissue from 7 patients, measured as 51x51 maps over 100 x 100 µm. Target: tissue type (WHO classification), 8 classes: fat, muscle and skin (normal), leiomyoma (benign), myxoid liposarcom |
 | `streptococcus_thermophilus_fermentation_kaiser` | Biological & Biotechnological | Regression | This dataset contains offline Raman spectra collected during batch cultivations of Streptococcus thermophilus. The spectra were measured using a Kaiser RXN1. The dataset includes two distinct fermentation runs conducted in shake flasks over a 24-hour period. |
 | `streptococcus_thermophilus_fermentation_timegate` | Biological & Biotechnological | Regression | This dataset contains offline Raman spectra collected during batch cultivations of Streptococcus thermophilus. Unlike conventional continuous-wave Raman, these measurements were captured using Time-Gated Raman Spectroscopy. The dataset includes two distinct fermentation runs conducted in shake flask |
 | `succinic_acid_species` | Chemical & Industrial | Regression | Raman spectra and composition data for titration experiments of various acids in aqueous solution. Includes acetic, citric, formic, itaconic, levulinic, oxalic, and succinic acids. Data for concentration monitoring and indirect hard modeling. |

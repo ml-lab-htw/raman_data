@@ -14,6 +14,7 @@ Raman spectroscopy datasets from different sources:
 - GoogleDriveLoader: Datasets hosted on Google Drive
 - FigshareLoader: Datasets hosted on Figshare
 - GitHubLoader: Datasets hosted on GitHub repositories
+- DataverseLoader: Datasets hosted on Harvard Dataverse
 - LoaderTools: Utility functions for all loaders
 - CACHE_DIR: Enumeration of cache directory types
 - TASK_TYPE: Enumeration of different task types for datasets
@@ -29,6 +30,7 @@ __all__ = [
     "FigshareLoader",
     "GitHubLoader",
     "MendeleyLoader",
+    "DataverseLoader",
     "LoaderTools",
     "CACHE_DIR",
     "TASK_TYPE",

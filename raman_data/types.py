@@ -26,6 +26,7 @@ class CACHE_DIR(Enum):
     Figshare = "FIGSHARE_CACHE"
     GitHub = "GITHUB_CACHE"
     Mendeley = "MENDELEY_CACHE"
+    Dataverse = "DATAVERSE_CACHE"
 
 
 class TASK_TYPE(Enum):
