@@ -623,3 +623,98 @@ def test_nist_ecsers_drugs():
     assert 2e5 < dataset.spectra.max() < 2.1e5
     assert not np.isnan(dataset.spectra).any()
 
+
+def test_rod_parse_cif():
+    # No network: the minimal CIF parser must handle the value forms
+    # that occur in the .rod entry files -- same-line plain and
+    # quoted values, same-line and next-line ';'-blocks (with and
+    # without inline content after the opening ';'), next-line quoted
+    # values, and loop blocks.
+    cif = """# comment line
+data_1000000
+_publ_author_name 'El Mendili, Y.'
+_chemical_name_mineral Magnetite
+_chemical_name_systematic 'Iron diiron(III) oxide'
+_chemical_formula_sum
+'C2 H2.64 Ba0.01 Ca0.02 Ce0.98 F0.14 O7.74 Sr0.98'
+_publ_section_title
+;
+Multi-line
+title text
+;
+_tag_block_inline ;first line of block
+second line of block
+;
+loop_
+_raman_spectrum.raman_shift
+_raman_spectrum.intensity
+91.5 1155
+96.3 1139
+101.1 1208
+loop_
+_raman_theoretical_spectrum.raman_shift
+_raman_theoretical_spectrum.intensity
+169.8 0.0
+200.1 12.5
+"""
+    values, loops = MiscLoader._rod_parse_cif(cif)
+    assert values["_publ_author_name"] == "El Mendili, Y."
+    assert values["_chemical_name_mineral"] == "Magnetite"
+    assert values["_chemical_name_systematic"] == "Iron diiron(III) oxide"
+    assert values["_chemical_formula_sum"] == (
+        "C2 H2.64 Ba0.01 Ca0.02 Ce0.98 F0.14 O7.74 Sr0.98"
+    )
+    assert values["_publ_section_title"] == "Multi-line\ntitle text"
+    assert values["_tag_block_inline"] == (
+        "first line of block\nsecond line of block"
+    )
+    assert len(loops) == 2
+    cols, rows = loops[0]
+    assert cols == [
+        "_raman_spectrum.raman_shift",
+        "_raman_spectrum.intensity",
+    ]
+    assert rows == ["91.5 1155", "96.3 1139", "101.1 1208"]
+    cols2, rows2 = loops[1]
+    assert cols2 == [
+        "_raman_theoretical_spectrum.raman_shift",
+        "_raman_theoretical_spectrum.intensity",
+    ]
+    assert rows2 == ["169.8 0.0", "200.1 12.5"]
+
+
+def test_rod_minerals():
+    dataset = MiscLoader.load_dataset("rod_minerals")
+    # 1,098 experimental spectra on the common 250-1,200 cm^-1 @1
+    # grid (951 points): the snapshot's 1,133 entries minus 18
+    # theoretical-only entries and the 17 experimental spectra that
+    # do not fully cover the common window; every remaining entry
+    # resolves a label, so no nameless spectra are excluded.
+    assert dataset.spectra.shape == (1098, 951)
+    assert dataset.raman_shifts[0] == pytest.approx(250.0)
+    assert dataset.raman_shifts[-1] == pytest.approx(1200.0)
+    assert len(dataset.target_names) == 432
+    # group = label: one group per mineral/phase (432 groups),
+    # label-pure.
+    g = dataset.group_ids
+    assert g is not None and g.shape == (1098,)
+    assert len(set(g.tolist())) == 432
+    assert _groups_are_label_pure(dataset)
+    # Label counts: 108 single-spectrum, 213 two-spectrum, 111
+    # three-or-more.
+    names = list(dataset.target_names)
+    counts = collections.Counter(
+        names[i] for i in np.asarray(dataset.targets).ravel().tolist()
+    )
+    assert counts["Andradite"] == 22
+    assert counts["Corundum"] == 17
+    assert counts["Anorthite"] == 15
+    assert sum(1 for c in counts.values() if c == 1) == 108
+    assert sum(1 for c in counts.values() if c == 2) == 213
+    # Raw as-deposited intensities: arbitrary units, per-entry
+    # normalization unknown; some entries have negative baseline
+    # points, maxima reach ~3.2e5.
+    assert dataset.spectra.min() < 0
+    assert 3.2e5 < dataset.spectra.max() < 3.22e5
+    assert not np.isnan(dataset.spectra).any()
+

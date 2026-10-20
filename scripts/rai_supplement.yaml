@@ -3415,6 +3415,50 @@ raman_spi:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
+rod_minerals:
+  prov:wasDerivedFrom: https://solsa.crystallography.net/rod/
+  prov:wasGeneratedBy: 'Data collection: experimental Raman spectra of minerals and related phases from
+    a frozen 2026-10-20 snapshot of the Raman Open Database (ROD, SOLSA; El Mendili et al. 2019, doi:10.1107/S1600576719004229).
+    1,133 CIF entry files from the bulk zip download; 1,098 experimental spectra loaded (18 theoretical-only
+    entries and 17 partial-window spectra excluded); resampled onto the common 250-1,200 cm^-1 @1 cm^-1
+    grid. Preprocessing: none applied by the loader; per-entry device-specific preprocessing varies by source
+    and is not documented. Annotation: labels from the _chemical_name_mineral, _chemical_name_systematic,
+    or _chemical_formula_sum CIF fields (fallback chain), covering same-line, next-line, and multi-line
+    '';''-block values.'
+  rai:dataAnnotationProtocol: 'Mineral/phase labels taken from the .rod entry files'' CIF metadata: _chemical_name_mineral
+    (IMA mineral name) with fallback to _chemical_name_systematic, then _chemical_formula_sum; unassigned
+    phases and solid solutions therefore carry systematic names or formulas. All 1,098 loaded spectra resolve
+    a label (432 distinct labels); no human annotation involved.'
+  rai:dataBiases: 'Spectra were acquired on a wide range of instruments (Thermo Nicolet Almega XR ~795,
+    DXR 154, Aramis 53, T64000 31, others) and excitation wavelengths (532 nm 483, 780 nm 408, 633 nm 102,
+    785 nm 58, 514/488/632.8 nm 47), so intensities and baseline shapes are not comparable across entries;
+    per-entry normalization is not documented. Class balance is strongly uneven: 108 labels have a single
+    spectrum, 213 have two, the most frequent (Andradite) 22. ~21% of the entries (~234 of the 1,115 experimental)
+    overlap with the public-domain RRUFF library mirrored in the rruff_mineral_* datasets, so entries shared
+    between the two databases must be kept on the same side of a split (group ids).'
+  rai:dataCollection: 'Raman Open Database (ROD, SOLSA project): community-driven open-access database of
+    Raman spectra (and XRD patterns) of minerals; contributors deposit spectra measured on various laboratory
+    instruments with 488-785 nm excitation. This loader serves a frozen 2026-10-20 snapshot (1,133 CIF entry
+    files), mirrored on the raman_data HuggingFace mirror and pinned by size and sha256.'
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 'Spectral library data with heterogeneous provenance: per-entry preprocessing (baseline,
+    normalization) varies by source and is not documented per entry; intensities are in arbitrary units
+    and include negative baseline points. Excluded from the snapshot: 18 entries with only theoretical (DFT)
+    spectra and the 17 experimental spectra that do not fully cover the common 250-1,200 cm^-1 window (no
+    extrapolation). Many mineral entries overlap with the RRUFF database (mirrored in the rruff_mineral_*
+    datasets).'
+  rai:dataPreprocessingProtocol: None applied by the loader beyond resampling onto the common 250-1,200
+    cm^-1 @1 cm^-1 grid (951 points) by linear interpolation. As-deposited intensities are in arbitrary
+    units; per-entry device-specific baseline correction / normalization varies by source and is not documented
+    per entry in the snapshot.
+  rai:dataSocialImpact: Supports automated mineral identification and phase analysis for geology, materials
+    science, and art conservation, and provides a public-domain benchmark for Raman classification models.
+  rai:dataUseCases: Multi-class mineral/phase identification (432 classes), spectral library matching, and
+    benchmarking of classification models on heterogeneous multi-instrument Raman data. Grouped k-fold CV
+    is leave-one-mineral-species-out (group = label, 432 groups).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included; all spectra originate
+    from mineral and phase samples without individual human identifiers.
 rruff_mineral_preprocess:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
     or validated analytical reference methods. Labels were assigned by domain experts

@@ -11,6 +11,25 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `rod_minerals`: experimental Raman spectra of minerals and related
+  phases from the Raman Open Database (ROD, SOLSA; El Mendili et al.
+  2019, *J. Appl. Cryst.* 52(3):618, doi:10.1107/S1600576719004229),
+  public domain (CC0). The live database grows continuously, so the
+  loader serves a frozen 2026-10-20 snapshot (bulk
+  result.php?format=zip, 1,133 CIF entry files; mirrored in the
+  raman_data HuggingFace mirror, pinned by size + sha256). 1,098
+  experimental spectra of 432 labeled mineral/phase entries,
+  resampled onto the common 250-1,200 cm^-1 @1 cm^-1 grid (951
+  points) that 98.5% of the snapshot's 1,115 experimental spectra
+  fully cover; excluded: 18 theoretical-only (DFT) entries and the
+  17 partial-window spectra. Labels use _chemical_name_mineral with
+  fallback to _chemical_name_systematic / _chemical_formula_sum, so
+  IMA mineral names, systematic names and formulas are mixed; the
+  loader's minimal CIF parser handles same-line, next-line and
+  multi-line ';'-block values. group_ids = label (432 groups):
+  grouped k-fold CV is leave-one-mineral-species-out. Many entries
+  overlap with the rruff_mineral_raw/preprocess datasets (~21% of
+  the experimental entries).
 - `nist_ecsers_drugs`: NIST EC-SERS (electrochemical surface-enhanced
   Raman) spectral library of 32 drugs of abuse and adulterant compounds
   (Ott, NIST, 2024; doi:10.18434/mds2-3502, v1.0.1, NIST public data

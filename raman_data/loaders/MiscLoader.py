@@ -636,6 +636,89 @@ class MiscLoader(BaseLoader):
                 "description)."
             ),
         ),
+        "rod_minerals": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="rod_minerals",
+            name="Raman Open Database Minerals (ROD, 2026-10-20 snapshot)",
+            short_name="ROD Minerals",
+            license="Public domain (CC0)",
+            loader=lambda cache_path: MiscLoader._load_rod_minerals(cache_path),
+            metadata={
+                "full_name": (
+                    "Raman Open Database (ROD): experimental mineral Raman "
+                    "spectra (frozen 2026-10-20 snapshot)"
+                ),
+                "source": "https://solsa.crystallography.net/rod/",
+                "paper": "https://doi.org/10.1107/S1600576719004229",
+                "bibtex": "@article{ElMendili_2019, title={Raman Open Database: first interconnected Raman--X-ray diffraction open-access resource for material identification}, volume={52}, ISSN={1600-5767}, url={http://dx.doi.org/10.1107/S1600576719004229}, DOI={10.1107/S1600576719004229}, number={3}, journal={Journal of Applied Crystallography}, publisher={International Union of Crystallography}, author={El Mendili, Yassine and Vaitkus, Antanas and Merkys, Andrius and Gra{\=z}ulis, Saulius and Chateigner, Daniel and Mathevet, Fabrice and Gascoin, St{\'e}phanie and Petit, Sebastien}, year={2019}, month=may, pages={618-625}}",
+                "citation": [
+                    "El Mendili, Y., Vaitkus, A., Merkys, A., Gra\u017culis, S., Chateigner, D., Mathevet, F., Gascoin, S., and Petit, S. (2019). Raman Open Database: first interconnected Raman--X-ray diffraction open-access resource for material identification. Journal of Applied Crystallography, 52(3), 618-625.",
+                ],
+                "description": (
+                    "Experimental Raman spectra of minerals and related "
+                    "phases from the Raman Open Database (ROD, SOLSA "
+                    "project; El Mendili et al. 2019, "
+                    "doi:10.1107/S1600576719004229), served as a frozen "
+                    "snapshot of the continuously growing live database "
+                    "(bulk result.php?format=zip download of 2026-10-20: "
+                    "1,133 CIF entry files; mirrored in the raman_data "
+                    "HuggingFace mirror repo and pinned by size and "
+                    "sha256, provenance in the snapshot MANIFEST.txt). "
+                    "1,098 spectra of 432 labeled mineral/phase "
+                    "entries, resampled onto the common 250-1,200 "
+                    "cm^-1 @1 cm^-1 grid (951 points) that 98.5% of "
+                    "the snapshot's 1,115 experimental spectra fully "
+                    "cover. Excluded from the snapshot: 18 entries "
+                    "with only theoretical (DFT) spectra and the 17 "
+                    "experimental spectra not fully covering the "
+                    "common window. Labels use _chemical_name_mineral, "
+                    "falling back to _chemical_name_systematic, then "
+                    "_chemical_formula_sum (the .rod files carry "
+                    "values on the same line, on the next line, or in "
+                    "multi-line ';'-blocks, and the loader parses all "
+                    "three forms), so the 432 labels mix IMA mineral "
+                    "names with systematic names and formulas for "
+                    "unassigned phases and solid solutions. 108 labels "
+                    "have a single spectrum and 213 have two; most "
+                    "frequent: Andradite (22), Corundum (17), "
+                    "Anorthite (15). Excitation wavelengths: 532 nm "
+                    "(483), 780 nm (408), 633 nm (102), 785 nm (58), "
+                    "514 nm (31), 488 nm (15), 632.8 nm (1); "
+                    "instruments dominated by Thermo Nicolet Almega XR "
+                    "(795) and DXR (154). Intensities are in arbitrary "
+                    "units (per-entry normalization is not documented); "
+                    "no preprocessing is applied here beyond grid "
+                    "resampling. group_ids = label: all spectra of "
+                    "one mineral/phase form one group (432 groups), "
+                    "so grouped k-fold CV is "
+                    "leave-one-mineral-species-out. "
+                    "Many entries overlap with the "
+                    "rruff_mineral_raw/preprocess datasets (~234 of the "
+                    "1,115 experimental entries, ~21%, per the 2026-10-20 "
+                    "research -- the public-domain RRUFF spectra are "
+                    "mirrored in both databases); use the group ids to "
+                    "keep the two datasets on the same side of a fold. "
+                    "License: public domain -- all ROD data have been "
+                    "placed in the public domain by the contributors."
+                ),
+            },
+            # Checked: spectra of the same mineral/phase come from the
+            # same entry family and must not be split across folds;
+            # group = label gives 432 groups.
+            is_grouped=True,
+            # Checked: all 1,098 loaded spectra carry a mineral /
+            # systematic / formula label (full CIF parse, so
+            # next-line and multi-line ';'-block values are read too).
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None applied by this loader beyond resampling onto the "
+                "common 250-1,200 cm^-1 @1 cm^-1 grid; the per-entry "
+                "device-specific preprocessing (baseline correction, "
+                "normalization) varies by source and is not documented "
+                "per entry in the snapshot."
+            ),
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -2465,4 +2548,247 @@ class MiscLoader(BaseLoader):
             encoded_targets,
             list(class_names),
             group_ids,
+        )
+
+    # ------------------------------------------------------------------
+    # Raman Open Database (ROD / SOLSA) -- frozen snapshot
+    # ------------------------------------------------------------------
+    # The live ROD (https://solsa.crystallography.net/rod/) grows
+    # continuously, so this loader serves a frozen snapshot: the bulk
+    # result.php?format=zip download of 2026-10-20 (1,133 CIF entry
+    # files), mirrored on the raman_data HuggingFace mirror and pinned
+    # by size + sha256. See croissant_files/../MANIFEST in the mirror
+    # repo for the snapshot provenance.
+    _ROD_MINERALS_SNAPSHOT_URL = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/rod_minerals/snapshot/rod_all_2026-10-20.zip"
+    )
+    _ROD_MINERALS_SNAPSHOT_ZIP = "rod_all_2026-10-20.zip"
+    _ROD_MINERALS_SNAPSHOT_SIZE = 24783194
+    _ROD_MINERALS_SNAPSHOT_SHA256 = (
+        "adc56ad40b9eefffb437c3ea3e79c9068276bafa75b682e962a578d44d4c8e48"
+    )
+    # Common analysis window (lo, hi, step) in cm^-1: 250-1,200 @1
+    # (951 points) is fully covered by 98.5% of the snapshot's
+    # experimental spectra; the spectra that do not fully cover it are
+    # excluded rather than extrapolated.
+    _ROD_MINERALS_GRID = (250.0, 1200.0, 1.0)
+
+    @staticmethod
+    def _rod_parse_cif(text: str) -> Tuple[dict, list]:
+        """
+        Minimal CIF parser for the .rod entry files.
+
+        Returns (values, loops): values maps each top-level tag to
+        its first value. The .rod files place a tag's value on the
+        same line ('plain', 'quoted' or ';'-block, with or without
+        inline content after the opening ';') or on the next line
+        (quoted single line or ';'-block); all forms are handled.
+        loops is a list of (column_tags, data_rows) pairs with the
+        rows kept as stripped strings (cells are whitespace-separated).
+        """
+        values = {}
+        loops = []
+        lines = text.splitlines()
+        i, n = 0, len(lines)
+        while i < n:
+            line = lines[i]
+            if line.startswith("loop_"):
+                i += 1
+                cols = []
+                while i < n and lines[i].startswith("_"):
+                    cols.append(lines[i].strip())
+                    i += 1
+                rows = []
+                while (
+                    i < n
+                    and lines[i].strip()
+                    and not lines[i].startswith(("loop_", "_", "data_"))
+                ):
+                    rows.append(lines[i].strip())
+                    i += 1
+                loops.append((cols, rows))
+                continue
+            if line.startswith("_"):
+                parts = line.split(None, 1)
+                if len(parts) == 2:
+                    tag, val = parts[0], parts[1].strip()
+                    if val == ";":
+                        # Multi-line ';'-block starting on the same
+                        # line.
+                        buf = []
+                        i += 1
+                        while i < n and lines[i].strip() != ";":
+                            buf.append(lines[i])
+                            i += 1
+                        val = "\n".join(buf).strip()
+                    elif val.startswith(";") and len(val) > 1:
+                        # Multi-line block whose opening ';' carries
+                        # inline content on the same line.
+                        buf = [val[1:]]
+                        i += 1
+                        while i < n and lines[i].strip() != ";":
+                            buf.append(lines[i])
+                            i += 1
+                        val = "\n".join(buf).strip()
+                    elif (
+                        len(val) >= 2
+                        and val.startswith("'")
+                        and val.endswith("'")
+                    ):
+                        val = val[1:-1]
+                    values.setdefault(tag, val)
+                    i += 1
+                    continue
+                # Bare tag: the value (if any) sits on the next
+                # non-empty line -- a quoted single line or a
+                # multi-line ';'-block (with or without inline
+                # content after the opening ';').
+                tag = line.strip()
+                j = i + 1
+                while j < n and not lines[j].strip():
+                    j += 1
+                if j < n:
+                    nx = lines[j].strip()
+                    if nx == ";":
+                        i = j + 1
+                        buf = []
+                        while i < n and lines[i].strip() != ";":
+                            buf.append(lines[i])
+                            i += 1
+                        values.setdefault(tag, "\n".join(buf).strip())
+                        continue
+                    if nx.startswith(";") and len(nx) > 1:
+                        buf = [nx[1:]]
+                        i = j + 1
+                        while i < n and lines[i].strip() != ";":
+                            buf.append(lines[i])
+                            i += 1
+                        values.setdefault(tag, "\n".join(buf).strip())
+                        continue
+                    if (
+                        len(nx) >= 2
+                        and nx.startswith("'")
+                        and nx.endswith("'")
+                    ):
+                        values.setdefault(tag, nx[1:-1])
+                        i = j
+                        continue
+            i += 1
+        return values, loops
+
+    @staticmethod
+    def _load_rod_minerals(cache_path: str):
+        """
+        Download (if needed) and load the frozen 2026-10-20 snapshot
+        of the Raman Open Database (ROD): 1,098 experimental mineral
+        Raman spectra of 432 labeled mineral/phase entries, resampled
+        onto the common 250-1,200 cm^-1 @1 cm^-1 grid (951 points).
+
+        Excluded from the snapshot's 1,133 entries: 18 entries that
+        only contain theoretical (DFT) spectra and the 17 experimental
+        spectra that do not fully cover the common window. group_ids
+        = label, so all spectra of one mineral/phase stay on one side
+        of a split.
+
+        Returns spectra, raman_shifts, targets, class_names, group_ids.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        zip_path = os.path.join(cache_path, MiscLoader._ROD_MINERALS_SNAPSHOT_ZIP)
+        if (
+            os.path.exists(zip_path)
+            and os.path.getsize(zip_path) != MiscLoader._ROD_MINERALS_SNAPSHOT_SIZE
+        ):
+            os.remove(zip_path)
+        result = LoaderTools.download(
+            url=MiscLoader._ROD_MINERALS_SNAPSHOT_URL,
+            out_dir_path=cache_path,
+            out_file_name=MiscLoader._ROD_MINERALS_SNAPSHOT_ZIP,
+            hash_target=MiscLoader._ROD_MINERALS_SNAPSHOT_SHA256,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                "[!] rod_minerals: snapshot download failed (network error "
+                "or checksum mismatch). See logs."
+            )
+        extract_root = os.path.join(cache_path, "extracted")
+        if not glob.glob(os.path.join(extract_root, "*.rod")):
+            if LoaderTools.extract_zip_file_content(zip_path, "extracted") is None:
+                raise RuntimeError(
+                    "[!] rod_minerals: could not extract the snapshot zip."
+                )
+        rod_files = sorted(glob.glob(os.path.join(extract_root, "*.rod")))
+        if len(rod_files) != 1133:
+            raise RuntimeError(
+                f"[!] rod_minerals: expected 1133 .rod files in the snapshot, "
+                f"found {len(rod_files)} (snapshot layout changed?)."
+            )
+
+        lo, hi, step = MiscLoader._ROD_MINERALS_GRID
+        grid = np.arange(lo, hi + step / 2, step)
+        spectra_list = []
+        labels = []
+        n_theoretical_only = 0
+        n_unnamed = 0
+        n_partial = 0
+        for path in rod_files:
+            with open(path, encoding="latin-1") as fh:
+                values, loops = MiscLoader._rod_parse_cif(fh.read())
+            spec = None
+            for cols, rows in loops:
+                if cols == [
+                    "_raman_spectrum.raman_shift",
+                    "_raman_spectrum.intensity",
+                ]:
+                    pts = []
+                    for r in rows:
+                        p = r.split()
+                        if len(p) >= 2:
+                            try:
+                                pts.append((float(p[0]), float(p[1])))
+                            except ValueError:
+                                pass
+                    if pts:
+                        spec = np.asarray(pts, dtype=float)
+            if spec is None:
+                # No experimental spectrum (theoretical-only entry or
+                # malformed loop).
+                n_theoretical_only += 1
+                continue
+            label = (
+                values.get("_chemical_name_mineral")
+                or values.get("_chemical_name_systematic")
+                or values.get("_chemical_formula_sum")
+                or ""
+            )
+            # Multi-line ';'-block label values may contain embedded
+            # newlines; collapse all whitespace runs to single spaces.
+            label = re.sub(r"\s+", " ", label).strip()
+            if not label:
+                n_unnamed += 1
+                continue
+            if spec[0, 0] > lo or spec[-1, 0] < hi:
+                n_partial += 1
+                continue
+            if not (np.all(np.diff(spec[:, 0]) < 0) or np.all(np.diff(spec[:, 0]) > 0)):
+                raise RuntimeError(
+                    f"[!] rod_minerals: non-monotonic wavenumber axis in "
+                    f"{os.path.basename(path)}."
+                )
+            spectra_list.append(np.interp(grid, spec[:, 0], spec[:, 1]))
+            labels.append(label)
+        if len(spectra_list) != 1098:
+            raise RuntimeError(
+                f"[!] rod_minerals: expected 1098 spectra, got "
+                f"{len(spectra_list)} (theoretical-only: {n_theoretical_only}, "
+                f"unnamed: {n_unnamed}, partial window: {n_partial})."
+            )
+        encoded_targets, class_names = encode_labels(pd.Series(labels))
+        return (
+            np.asarray(spectra_list),
+            grid,
+            encoded_targets,
+            list(class_names),
+            list(labels),
         )
