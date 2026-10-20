@@ -1812,6 +1812,89 @@ glioma_methylation:
     (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
     but biological measurements may constitute sensitive health-related data under
     applicable data-protection regulations.
+glaucoma_enigma_18m:
+  prov:wasDerivedFrom: https://doi.org/10.17632/8pwpbcrjd8.1
+  prov:wasGeneratedBy: 'Data collection: whole-blood serum Raman spectra (Horiba LabSpec6, 400-4,000 cm^-1,
+    ~2,541 points) from 23 glaucoma patients of the ENIGMA trial at the 18-month visit (Udensi, Loskutova,
+    Loughman & Byrne 2024, Mendeley Data, doi:10.17632/8pwpbcrjd8.1); filename suffixes a-d are repeat measurements
+    of the same patient within the visit (''_1'' stems are re-taken exports of the same measurement). Preprocessing:
+    none at export (per file header DeNoise, Dark correction and ICS correction are all ''Off''); the loader
+    additionally interpolates onto the common 401-3,999 cm^-1 @1 cm^-1 grid. Annotation: 11 clinical targets
+    per patient from the deposit''s 18-month sheet; the Treatment column (trial arm 1/2) is a design factor,
+    not a target.'
+  rai:dataAnnotationProtocol: Clinical target values (OCT, microperimetry, macular pigment optical density,
+    visual acuity, GAL9) at 18 months measured by the trial's ophthalmic examinations and recorded in the
+    deposit's 18-month sheet, one row per patient; every Raman session of a patient inherits that row. No
+    human labelling of spectra was involved.
+  rai:dataBiases: All 23 patients are glaucoma cases of a single treatment trial; the treatment arm (15/8)
+    is a per-patient design factor that varies within the cohort, not a class label. Sessions per patient
+    are imbalanced (4, except ET043/ET048/ET049 with 6/8/6). Spectra of one patient are highly correlated
+    (same blood, same visit), which is why group_ids = patient. Raw intensities are instrument counts; absolute
+    levels are not comparable across acquisitions.
+  rai:dataCollection: ENIGMA clinical trial (glaucoma, macular pigment carotenoids in blood serum as a measure
+    of ocular health). Whole-serum Raman spectra were recorded on a Horiba LabSpec6 dispersive Raman system;
+    the excitation wavelength is not recorded in the deposit. 100 measurement sessions (4 per patient, except
+    ET043/ET048/ET049) in the 18-month folder.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 'Single trial, single instrument, single visit: models are not validated against
+    external instruments, cohorts, or a control group. 19 sessions (ET003, ET004, ET035, ET062 and the water_a/water_b
+    reference scans) are present in the deposit but have no 18-month targets and were excluded, as was the
+    .l6s-only ET0597_a (four-digit subject id, presumably a mistyped duplicate of ET057/ET059). The companion
+    baseline visit is a separate dataset (glaucoma_enigma_baseline) from the same frozen snapshot.'
+  rai:dataPreprocessingProtocol: None beyond interpolation onto the common 401-3,999 cm^-1 @1 cm^-1 grid
+    (3,599 points). The .txt exports are raw LabSpec6 counts; the deposit applied no baseline correction
+    or normalization.
+  rai:dataSocialImpact: Supports non-invasive monitoring research of glaucoma treatment response at 18 months
+    from blood serum Raman spectra; any clinical use requires validation by qualified ophthalmic professionals.
+  rai:dataUseCases: Multi-target regression of 18-month ophthalmic endpoints from serum Raman spectra; leave-one-patient-out
+    grouped k-fold CV (23 groups). Longitudinal pairing with glaucoma_enigma_baseline for treatment-response
+    modelling.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: Spectra are derived from human blood serum of trial participants. Subject
+    identifiers are pseudonymised (ET0xx); no direct patient identifiers are included, but the accompanying
+    clinical values are health-related data under applicable data-protection regulations.
+glaucoma_enigma_baseline:
+  prov:wasDerivedFrom: https://doi.org/10.17632/8pwpbcrjd8.1
+  prov:wasGeneratedBy: 'Data collection: whole-blood serum Raman spectra (Horiba LabSpec6, 400-4,000 cm^-1,
+    ~2,541 points) from 21 glaucoma patients of the ENIGMA trial at the baseline visit (Udensi, Loskutova,
+    Loughman & Byrne 2024, Mendeley Data, doi:10.17632/8pwpbcrjd8.1); filename suffixes a-f are repeat measurements
+    of the same patient within the visit. Preprocessing: none at export (per file header DeNoise, Dark correction
+    and ICS correction are all ''Off''); the loader additionally interpolates onto the common 401-3,999
+    cm^-1 @1 cm^-1 grid. Annotation: 11 clinical targets per patient from the deposit''s baseline sheet
+    (microperimetry, OCT RNFL/GCC, macular-pigment optical densities, visual acuity, GAL9); clinical measurements
+    by the trial, not human-labelled spectra.'
+  rai:dataAnnotationProtocol: Clinical target values (OCT, microperimetry, macular pigment optical density,
+    visual acuity, GAL9) measured by the trial's ophthalmic examinations and recorded in the deposit's 'OCULAR
+    MEASUREMENTS (ENIGMA).xlsx' baseline sheet, one row per patient; every Raman session of a patient inherits
+    that row. No human labelling of spectra was involved.
+  rai:dataBiases: All 21 patients are glaucoma cases of a single treatment trial (the sheet's Glauc_yes_no
+    column is constant), so the data describe disease progression and treatment response, not glaucoma-vs-control
+    separation. Sessions per patient are imbalanced (4-9; ET015 has 9, acquired across two visit folders).
+    Spectra of one patient are highly correlated (same blood, same visit), which is why group_ids = patient.
+    Raw intensities are instrument counts; absolute levels are not comparable across acquisitions.
+  rai:dataCollection: ENIGMA clinical trial (glaucoma, macular pigment carotenoids in blood serum as a measure
+    of ocular health). Whole-serum Raman spectra were recorded on a Horiba LabSpec6 dispersive Raman system;
+    the excitation wavelength is not recorded in the deposit. 101 measurement sessions (4-9 per patient)
+    across the two baseline folders.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 'Single trial, single instrument, single visit: models are not validated against
+    external instruments, cohorts, or a control group. 18 sessions of 11 subjects present in the deposit
+    but absent from the target sheet were excluded, as were 4 unidentifiable stems, 1 corrupt export (negative
+    wavenumber axis) and 6 .l6s-only files (proprietary Horiba binary; the subject ET045 is not in the target
+    sheet). The companion 18-month visit is a separate dataset (glaucoma_enigma_18m) from the same frozen
+    snapshot.'
+  rai:dataPreprocessingProtocol: None beyond interpolation onto the common 401-3,999 cm^-1 @1 cm^-1 grid
+    (3,599 points). The .txt exports are raw LabSpec6 counts; the deposit applied no baseline correction
+    or normalization.
+  rai:dataSocialImpact: Supports non-invasive screening research for glaucoma and macular pigment status
+    from blood serum Raman spectra; any clinical use requires validation by qualified ophthalmic professionals.
+  rai:dataUseCases: Multi-target regression of ophthalmic endpoints (OCT RNFL/GCC, microperimetry, macular-pigment
+    optical density, visual acuity) from serum Raman spectra; leave-one-patient-out grouped k-fold CV (21
+    groups). Longitudinal pairing with glaucoma_enigma_18m for treatment-response modelling.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: Spectra are derived from human blood serum of trial participants. Subject
+    identifiers are pseudonymised (ET0xx); no direct patient identifiers are included, but the accompanying
+    clinical values are health-related data under applicable data-protection regulations.
 hair_dyes_sers:
   rai:dataAnnotationProtocol: Class labels assigned based on known a priori identity
     of each commercial hair colorant. Four hierarchical label sets are provided -

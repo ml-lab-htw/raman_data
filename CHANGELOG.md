@@ -11,6 +11,24 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `glaucoma_enigma_baseline` / `glaucoma_enigma_18m`: whole-serum
+  Raman spectra of 21 / 23 glaucoma patients from the ENIGMA trial
+  (Udensi, Loskutova, Loughman & Byrne 2024, Mendeley Data,
+  doi:10.17632/8pwpbcrjd8.1, CC BY 4.0) at the baseline and
+  18-month visits, respectively. Multi-target regression: 101 / 100
+  measurement sessions (filename suffixes = repeat measurements
+  within the visit) of 11 ophthalmic targets each (microperimetry,
+  OCT RNFL/GCC, macular-pigment optical density at 4 eccentricities
+  + volume, visual acuity, GAL9); group_ids = patient, so grouped
+  k-fold CV is leave-one-patient-out. Horiba LabSpec6 exports
+  (native 2,541-pt, 400.8-3,999.4 cm^-1) resampled onto the common
+  401-3,999 cm^-1 @1 cm^-1 grid (3,599 points, no extrapolation).
+  data.mendeley.com 403s non-browser clients via its WAF, so both
+  loaders read a frozen copy of the 9.5 MB deposit zip mirrored in
+  the raman_data HuggingFace mirror (size + sha256 pinned, provenance
+  in the snapshot MANIFEST.txt); sessions of subjects without targets,
+  unidentifiable stems and the 6 .l6s-only proprietary-binary files
+  are excluded.
 - `rod_minerals`: experimental Raman spectra of minerals and related
   phases from the Raman Open Database (ROD, SOLSA; El Mendili et al.
   2019, *J. Appl. Cryst.* 52(3):618, doi:10.1107/S1600576719004229),

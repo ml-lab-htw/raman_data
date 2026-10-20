@@ -11,7 +11,7 @@ import requests
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.utils import encode_labels
-from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, APPLICATION_TYPE
+from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, APPLICATION_TYPE, HASH_TYPE
 
 
 _MENDELEY_DATASET_ID = "y4md8znppn"
@@ -279,6 +279,187 @@ class MendeleyLoader(BaseLoader):
             # normalization); see the authors' protocol for the full
             # pipeline.
             embedded_preprocessing=None,
+        ),
+        "glaucoma_enigma_baseline": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Medical,
+            id="8pwpbcrjd8",
+            name="Glaucoma ENIGMA Trial: Serum Raman, Baseline (Udensi 2024)",
+            short_name="Glaucoma ENIGMA Baseline",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_enigma(
+                cache_path, "baseline"
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of macular pigment carotenoids in human "
+                    "blood serum of glaucoma patients, ENIGMA trial, "
+                    "baseline visit (Udensi, Loskutova, Loughman & Byrne "
+                    "2024)"
+                ),
+                "source": "https://data.mendeley.com/datasets/8pwpbcrjd8/1",
+                "doi": "10.17632/8pwpbcrjd8.1",
+                "bibtex": "@dataset{Udensi_2024_enigma, title={Analysis of macular pigment carotenoids in human blood serum of glaucoma patients as a measure of ocular health: A Raman spectroscopic study}, author={Udensi, Joy and Loskutova, Ekaterina and Loughman, James and Byrne, Hugh}, year={2024}, publisher={Mendeley Data}, doi={10.17632/8pwpbcrjd8.1}, url={https://doi.org/10.17632/8pwpbcrjd8.1}}",
+                "citation": [
+                    "Udensi, J., Loskutova, E., Loughman, J., and Byrne, H. "
+                    "(2024). Analysis of macular pigment carotenoids in "
+                    "human blood serum of glaucoma patients as a measure "
+                    "of ocular health: A Raman spectroscopic study. "
+                    "Mendeley Data, v1. https://doi.org/10.17632/"
+                    "8pwpbcrjd8.1",
+                ],
+                "description": (
+                    "Whole-serum Raman spectra of 21 glaucoma patients of "
+                    "the ENIGMA trial at the baseline visit (the deposit's "
+                    "two baseline folders 'whole Serum baseline_a' and "
+                    "'whole serum baseline_b'; filename suffixes a-f are "
+                    "repeat measurements of the same patient within the "
+                    "visit). 101 measurement sessions (4-9 per patient; "
+                    "ET015 has 9 across both folders). Horiba LabSpec6 "
+                    "dispersive Raman, native 2,541-point axes spanning "
+                    "400.8-3,999.4 cm^-1 (~1.42 cm^-1 spacing); the "
+                    "loader interpolates every session onto the common "
+                    "401-3,999 cm^-1 @1 cm^-1 grid (3,599 points), which "
+                    "all 246 valid session exports fully cover, so no "
+                    "extrapolation is involved. Multi-target regression: "
+                    "11 targets per patient from the deposit's 'OCULAR "
+                    "MEASUREMENTS (ENIGMA).xlsx' baseline sheet -- "
+                    "microperimetry (Microperimetry_glauc severity), "
+                    "OCT (mRNFL_6_glauc_severity, GCC_6_glauc_severity, "
+                    "GCL_6), macular-pigment optical density at 0.23/"
+                    "0.51/0.74/1.02 mm plus MP_Volume6.02, visual acuity "
+                    "(VA), and GAL9. All 21 patients are glaucoma cases "
+                    "(the sheet's Glauc_yes_no column is constant = 1, "
+                    "so it is not a target). group_ids = patient (21 "
+                    "groups): repeat measurements of one patient share "
+                    "the same target row, so grouped k-fold CV is "
+                    "leave-one-patient-out. Intensities are raw LabSpec "
+                    "counts as deposited (per file header DeNoise, Dark "
+                    "correction and ICS correction are all 'Off'); the "
+                    "excitation wavelength is not recorded in the "
+                    "deposit. Both datasets of the deposit share one "
+                    "frozen 9.5 MB Mendeley snapshot mirrored at "
+                    "HTW-KI-Werkstatt/RamanBench "
+                    "(glaucoma_enigma/snapshot/, size + sha256 pinned; "
+                    "the live Mendeley download sits behind a WAF that "
+                    "403s non-browser clients, hence the mirror). "
+                    "Excluded: 18 sessions of subjects without baseline "
+                    "targets (ET002, ET007, ET018, ET020, ET032, ET034, "
+                    "ET038, ET039, ET043, ET053, ET054), 4 "
+                    "unidentifiable stems ('1', '1_14', '1_10', "
+                    "'ET0NN'), 1 corrupt export (1.txt, negative "
+                    "wavenumber axis), and 6 .l6s-only files "
+                    "(ET045_a-e: proprietary Horiba binary, and the "
+                    "subject is not in the target sheet). The .l6s "
+                    "twins of the loaded sessions are not parsed either; "
+                    "the .txt export is the canonical text form."
+                ),
+            },
+            # Checked: repeat measurements of one patient share the
+            # target row and were acquired in the same visit; patient
+            # is the finest correlated unit (21 groups).
+            is_grouped=True,
+            # Checked: every loaded session joins a baseline target
+            # row; sessions without a subject in the workbook are
+            # excluded.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None beyond interpolation onto the common 401-3,999 "
+                "cm^-1 @1 cm^-1 grid. The .txt exports are raw LabSpec6 "
+                "counts (per file header: DeNoise, Dark correction and "
+                "ICS correction all 'Off'); no baseline correction or "
+                "normalization was applied at export."
+            ),
+        ),
+        "glaucoma_enigma_18m": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Medical,
+            id="8pwpbcrjd8",
+            name="Glaucoma ENIGMA Trial: Serum Raman, 18 Months (Udensi 2024)",
+            short_name="Glaucoma ENIGMA 18 Months",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_enigma(
+                cache_path, "18m"
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of macular pigment carotenoids in human "
+                    "blood serum of glaucoma patients, ENIGMA trial, "
+                    "18-month visit (Udensi, Loskutova, Loughman & Byrne "
+                    "2024)"
+                ),
+                "source": "https://data.mendeley.com/datasets/8pwpbcrjd8/1",
+                "doi": "10.17632/8pwpbcrjd8.1",
+                "bibtex": "@dataset{Udensi_2024_enigma, title={Analysis of macular pigment carotenoids in human blood serum of glaucoma patients as a measure of ocular health: A Raman spectroscopic study}, author={Udensi, Joy and Loskutova, Ekaterina and Loughman, James and Byrne, Hugh}, year={2024}, publisher={Mendeley Data}, doi={10.17632/8pwpbcrjd8.1}, url={https://doi.org/10.17632/8pwpbcrjd8.1}}",
+                "citation": [
+                    "Udensi, J., Loskutova, E., Loughman, J., and Byrne, H. "
+                    "(2024). Analysis of macular pigment carotenoids in "
+                    "human blood serum of glaucoma patients as a measure "
+                    "of ocular health: A Raman spectroscopic study. "
+                    "Mendeley Data, v1. https://doi.org/10.17632/"
+                    "8pwpbcrjd8.1",
+                ],
+                "description": (
+                    "Whole-serum Raman spectra of 23 glaucoma patients of "
+                    "the ENIGMA trial at the 18-month visit (the "
+                    "deposit's 'whole serum18 months' folder; filename "
+                    "suffixes a-d are repeat measurements of the same "
+                    "patient within the visit). 100 measurement sessions "
+                    "(4 per patient, except ET043/ET048/ET049 with "
+                    "6/8/6 -- the extra '_1' stems are re-taken exports "
+                    "of the same measurement). Horiba LabSpec6 "
+                    "dispersive Raman, native 2,541-point axes spanning "
+                    "400.8-3,999.4 cm^-1 (~1.42 cm^-1 spacing); the "
+                    "loader interpolates every session onto the common "
+                    "401-3,999 cm^-1 @1 cm^-1 grid (3,599 points), which "
+                    "all 246 valid session exports fully cover, so no "
+                    "extrapolation is involved. Multi-target regression: "
+                    "11 targets per patient from the deposit's 18-month "
+                    "sheet -- macular-pigment optical density at 0.23/"
+                    "0.51/0.74/1.02 mm plus MP_Volume6.02_18M, visual "
+                    "acuity (VA_18M), microperimetry "
+                    "(Microperim_Aver_18M), OCT (mRNFL_6_18M, "
+                    "GCC_6calculate_18M, GCL_6_18M) and GAL9_18M. The "
+                    "sheet's Treatment column (trial arm 1/2, 15/8 "
+                    "patients) is a design factor, not an outcome, so it "
+                    "is not a target. group_ids = patient (23 groups): "
+                    "repeat measurements of one patient share the same "
+                    "target row, so grouped k-fold CV is "
+                    "leave-one-patient-out. Intensities are raw LabSpec "
+                    "counts as deposited (per file header DeNoise, Dark "
+                    "correction and ICS correction are all 'Off'); the "
+                    "excitation wavelength is not recorded in the "
+                    "deposit. Both datasets of the deposit share one "
+                    "frozen 9.5 MB Mendeley snapshot mirrored at "
+                    "HTW-KI-Werkstatt/RamanBench "
+                    "(glaucoma_enigma/snapshot/, size + sha256 pinned; "
+                    "the live Mendeley download sits behind a WAF that "
+                    "403s non-browser clients, hence the mirror). "
+                    "Excluded: 19 sessions of subjects without 18-month "
+                    "targets (ET003, ET004, ET035, ET062 and the "
+                    "water_a/water_b reference scans) and ET0597_a "
+                    "(four-digit subject id, .l6s-only, presumably a "
+                    "mistyped duplicate of ET057/ET059, both already "
+                    "covered); the .l6s twins of the loaded sessions "
+                    "are not parsed, the .txt export is the canonical "
+                    "text form."
+                ),
+            },
+            # Checked: repeat measurements of one patient share the
+            # target row and were acquired in the same visit; patient
+            # is the finest correlated unit (23 groups).
+            is_grouped=True,
+            # Checked: every loaded session joins a 18-month target
+            # row; sessions without a subject in the workbook are
+            # excluded.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None beyond interpolation onto the common 401-3,999 "
+                "cm^-1 @1 cm^-1 grid. The .txt exports are raw LabSpec6 "
+                "counts (per file header: DeNoise, Dark correction and "
+                "ICS correction all 'Off'); no baseline correction or "
+                "normalization was applied at export."
+            ),
         ),
     }
 
@@ -800,6 +981,244 @@ class MendeleyLoader(BaseLoader):
             f"{len(class_names)} species, {len(per_group)} sessions"
         )
         return spectra, grid, targets, list(class_names), np.array(group_ids)
+
+    # ------------------------------------------------------------------
+    # glaucoma_enigma_baseline / glaucoma_enigma_18m (Mendeley 8pwpbcrjd8)
+    # ------------------------------------------------------------------
+    # Udensi et al. 2024, "Analysis of macular pigment carotenoids in
+    # human blood serum of glaucoma patients as a measure of ocular
+    # health: A Raman spectroscopic study" (Mendeley Data v1,
+    # doi:10.17632/8pwpbcrjd8.1, CC BY 4.0).
+    #
+    # The deposit is a single 9.5 MB zip with three session folders
+    # (whole Serum baseline_a, whole serum baseline_b,
+    # whole serum18 months), each holding Horiba LabSpec exports
+    # (247 .txt + 240 .l6s, the .l6s being the proprietary Horiba
+    # binary of the same measurements) plus the
+    # "OCULAR MEASUREMENTS (ENIGMA).xlsx" target workbook (baseline
+    # and 18-month sheets, one row per patient).
+    #
+    # data.mendeley.com serves downloads through a WAF that
+    # 403-blocks non-browser clients (including CI runners), so this
+    # loader reads a frozen copy of the zip mirrored on the
+    # raman_data HuggingFace mirror (see snapshot MANIFEST.txt for
+    # provenance) instead of the live Mendeley API.
+    _ENIGMA_SNAPSHOT_URL = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/glaucoma_enigma/snapshot/"
+        "Raman_and_ocular%20measuremnets.zip"
+    )
+    _ENIGMA_SNAPSHOT_ZIP = "Raman_and_ocular measuremnets.zip"
+    _ENIGMA_SNAPSHOT_SIZE = 9478954
+    _ENIGMA_SNAPSHOT_SHA256 = (
+        "2c483f6814f7b77427ed33d01e33f51153ff8b347bff0ddeff99f21448e0f454"
+    )
+
+    # Zip root directory (the authors' filename, typo included).
+    _ENIGMA_ROOT_DIR = "Raman_and_ocular measuremnets"
+    _ENIGMA_WORKBOOK = "OCULAR MEASUREMENTS (ENIGMA).xlsx"
+
+    # Every valid session export is a 2,541-point axis spanning
+    # 400.8-3,999.4 cm^-1 (~1.42 cm^-1 spacing); the common grid is
+    # a 1 cm^-1 step over the full intersection (no extrapolation).
+    _ENIGMA_GRID = np.arange(401.0, 3999.0 + 0.5, 1.0)
+    _ENIGMA_NATIVE_POINTS = 2541
+
+    # Target columns per visit (workbook column names; the loader
+    # strips stray whitespace, e.g. "GCC_6_glauc_severity " and
+    # "Microperimetry_glauc severity"). Constant design columns are
+    # not targets: Glauc_yes_no (all 21 patients are glaucoma cases)
+    # and Treatment (trial arm 1/2, a design factor, not an outcome).
+    _ENIGMA_BASELINE_TARGET_COLS = (
+        "Microperimetry_glauc severity",
+        "mRNFL_6_glauc_severity",
+        "GCC_6_glauc_severity",
+        "MP0.23_Baseline",
+        "MP0.51_Baseline",
+        "MP0.74_Baseline",
+        "MP1.02_Baseline",
+        "MP_Volume6.02",
+        "VA",
+        "GAL9",
+        "GCL_6",
+    )
+    _ENIGMA_18M_TARGET_COLS = (
+        "MP0.23_18M",
+        "MP0.51_18M",
+        "MP0.74_18M",
+        "MP1.02_18M",
+        "MP_Volume6.02_18M",
+        "GAL9_18M",
+        "VA_18M",
+        "Microperim_Aver_18M",
+        "mRNFL_6_18M",
+        "GCL_6_18M",
+        "GCC_6calculate_18M",
+    )
+
+    # Session file stems: ET<3 digits> with an optional _<a-f> repeat
+    # marker (18m also has _<a-d>1 re-taken exports). Deliberately
+    # strict: the deposit's unidentifiable stems ('1', '1_14',
+    # '1_10', 'ET0NN') and the four-digit 'ET0597' do not match.
+    _ENIGMA_STEM_RE = re.compile(r"ET(\d{3})(?:_[a-z]\d?)?$")
+
+    @staticmethod
+    def _read_enigma_txt(path: str) -> np.ndarray:
+        """
+        Read a Horiba LabSpec text export: a '#'-comment header, then
+        tab-separated (wavenumber cm^-1, intensity) rows.
+
+        Some files contain non-UTF8 bytes, hence latin-1.
+        """
+        rows = []
+        with open(path, encoding="latin-1") as fh:
+            for line in fh:
+                line = line.strip()
+                if line and not line.startswith("#"):
+                    rows.append(line)
+        return np.array(
+            [[float(v) for v in row.split("\t")] for row in rows]
+        )
+
+    @staticmethod
+    def _load_enigma(cache_path: str, visit: str):
+        """
+        Download (if needed) and load one visit of the ENIGMA trial
+        serum dataset.
+
+        visit = "baseline": 101 sessions of 21 patients (two baseline
+        visit folders), 11 baseline targets.
+        visit = "18m":       100 sessions of 23 patients (one
+        18-month folder), 11 18-month targets.
+
+        Returns spectra, raman_shifts, targets (n x 11),
+        target_names, group_ids (patient).
+        """
+        if visit not in ("baseline", "18m"):
+            raise ValueError(
+                f"Unknown ENIGMA visit {visit!r}. "
+                'Expected "baseline" or "18m".'
+            )
+        os.makedirs(cache_path, exist_ok=True)
+        zip_path = os.path.join(cache_path, MendeleyLoader._ENIGMA_SNAPSHOT_ZIP)
+        if (
+            os.path.exists(zip_path)
+            and os.path.getsize(zip_path) != MendeleyLoader._ENIGMA_SNAPSHOT_SIZE
+        ):
+            os.remove(zip_path)
+        result = LoaderTools.download(
+            url=MendeleyLoader._ENIGMA_SNAPSHOT_URL,
+            out_dir_path=cache_path,
+            out_file_name=MendeleyLoader._ENIGMA_SNAPSHOT_ZIP,
+            hash_target=MendeleyLoader._ENIGMA_SNAPSHOT_SHA256,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                "[!] glaucoma_enigma: snapshot download failed (network "
+                "error or checksum mismatch). See logs."
+            )
+        extract_root = os.path.join(cache_path, "extracted")
+        root_dir = os.path.join(extract_root, MendeleyLoader._ENIGMA_ROOT_DIR)
+        workbook = os.path.join(root_dir, MendeleyLoader._ENIGMA_WORKBOOK)
+        if not os.path.isfile(workbook):
+            if LoaderTools.extract_zip_file_content(zip_path, "extracted") is None:
+                raise RuntimeError(
+                    "[!] glaucoma_enigma: could not extract the snapshot zip."
+                )
+            if not os.path.isfile(workbook):
+                raise RuntimeError(
+                    "[!] glaucoma_enigma: snapshot layout changed (no "
+                    f"{MendeleyLoader._ENIGMA_WORKBOOK} found)."
+                )
+
+        if visit == "baseline":
+            df = pd.read_excel(workbook, sheet_name=0, header=2)
+            target_cols = list(MendeleyLoader._ENIGMA_BASELINE_TARGET_COLS)
+            folders = (
+                os.path.join(root_dir, "whole Serum baseline_a"),
+                os.path.join(root_dir, "whole serum baseline_b"),
+            )
+            n_expected, groups_expected = 101, 21
+        else:
+            df = pd.read_excel(workbook, sheet_name=1, header=1)
+            target_cols = list(MendeleyLoader._ENIGMA_18M_TARGET_COLS)
+            folders = (os.path.join(root_dir, "whole serum18 months"),)
+            n_expected, groups_expected = 100, 23
+        # The workbook has stray whitespace in some column names
+        # ("GCC_6_glauc_severity ", "Microperimetry_glauc severity").
+        df.columns = [str(c).strip() for c in df.columns]
+        missing = [c for c in target_cols if c not in df.columns]
+        if missing:
+            raise RuntimeError(
+                f"[!] glaucoma_enigma: target workbook is missing "
+                f"column(s) {missing}; has been re-specified upstream?"
+            )
+        if df[target_cols].isna().any().any():
+            raise RuntimeError(
+                "[!] glaucoma_enigma: missing target values in the "
+                "workbook."
+            )
+        targets_by_subject = {
+            str(row["Subject"]): row[target_cols].to_numpy(dtype=float)
+            for _, row in df.iterrows()
+        }
+
+        grid = MendeleyLoader._ENIGMA_GRID
+        spectra_list, targets_list, group_list = [], [], []
+        for folder in folders:
+            if not os.path.isdir(folder):
+                raise RuntimeError(
+                    f"[!] glaucoma_enigma: missing session folder {folder}."
+                )
+            for fn in sorted(os.listdir(folder)):
+                if not fn.endswith(".txt"):
+                    continue
+                m = MendeleyLoader._ENIGMA_STEM_RE.fullmatch(fn[:-4])
+                if m is None:
+                    continue  # reference / unidentifiable stems
+                subject = f"ET{m.group(1)}"
+                if subject not in targets_by_subject:
+                    continue  # subject without targets for this visit
+                arr = MendeleyLoader._read_enigma_txt(os.path.join(folder, fn))
+                x, y = arr[:, 0], arr[:, 1]
+                if (
+                    x.shape[0] != MendeleyLoader._ENIGMA_NATIVE_POINTS
+                    or not np.all(np.diff(x) > 0)
+                    or x[0] > grid[0]
+                    or x[-1] < grid[-1]
+                ):
+                    raise RuntimeError(
+                        f"[!] glaucoma_enigma: {fn} does not cover the "
+                        f"common 401-3,999 cm^-1 grid (axis "
+                        f"{x[0]:.1f}..{x[-1]:.1f})."
+                    )
+                spectra_list.append(np.interp(grid, x, y))
+                targets_list.append(targets_by_subject[subject])
+                group_list.append(subject)
+
+        if len(spectra_list) != n_expected:
+            raise RuntimeError(
+                f"[!] glaucoma_enigma ({visit}): expected {n_expected} "
+                f"sessions, got {len(spectra_list)} (snapshot layout "
+                "changed?)."
+            )
+        if len(set(group_list)) != groups_expected:
+            raise RuntimeError(
+                f"[!] glaucoma_enigma ({visit}): expected "
+                f"{groups_expected} patients, got {len(set(group_list))}."
+            )
+        spectra = np.asarray(spectra_list, dtype=float)
+        targets = np.asarray(targets_list, dtype=float)
+        if np.isnan(spectra).any() or np.isnan(targets).any():
+            raise RuntimeError("[!] glaucoma_enigma: NaN values.")
+        MendeleyLoader.logger.debug(
+            f"Loaded glaucoma_enigma ({visit}): {spectra.shape[0]} "
+            f"sessions x {spectra.shape[1]} points, "
+            f"{len(set(group_list))} patients, {targets.shape[1]} targets"
+        )
+        return spectra, grid, targets, target_cols, np.array(group_list)
+
 
     # ------------------------------------------------------------------
     # BaseLoader interface

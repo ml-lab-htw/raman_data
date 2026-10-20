@@ -718,3 +718,56 @@ def test_rod_minerals():
     assert 3.2e5 < dataset.spectra.max() < 3.22e5
     assert not np.isnan(dataset.spectra).any()
 
+
+def test_glaucoma_enigma_baseline():
+    dataset = MendeleyLoader.load_dataset("glaucoma_enigma_baseline")
+    # 101 baseline sessions of the 21 ENIGMA patients on the common
+    # 401-3,999 cm^-1 @1 grid (3,599 points); 11 targets per patient.
+    assert dataset.spectra.shape == (101, 3599)
+    assert dataset.raman_shifts[0] == pytest.approx(401.0)
+    assert dataset.raman_shifts[-1] == pytest.approx(3999.0)
+    assert dataset.targets.shape == (101, 11)
+    assert "GCC_6_glauc_severity" in dataset.target_names
+    # group = patient: 21 groups, 4-9 sessions each (ET015 has 9
+    # across the two baseline folders).
+    g = dataset.group_ids
+    assert g is not None and g.shape == (101,)
+    per_group = collections.Counter(g.tolist())
+    assert len(per_group) == 21
+    assert min(per_group.values()) == 4
+    assert max(per_group.values()) == 9
+    # Targets are per patient: all sessions of one patient share the
+    # same target row.
+    g = np.asarray(g)
+    for p in np.unique(g):
+        assert np.allclose(dataset.targets[g == p], dataset.targets[g == p][0])
+    # Raw LabSpec counts as deposited.
+    assert dataset.spectra.min() > 0
+    assert not np.isnan(dataset.spectra).any()
+    assert not np.isnan(dataset.targets).any()
+
+
+def test_glaucoma_enigma_18m():
+    dataset = MendeleyLoader.load_dataset("glaucoma_enigma_18m")
+    # 100 18-month sessions of the 23 ENIGMA patients (4 each, except
+    # ET043/ET048/ET049 with 6/8/6 incl. the '_1' re-taken exports);
+    # 11 targets per patient.
+    assert dataset.spectra.shape == (100, 3599)
+    assert dataset.raman_shifts[0] == pytest.approx(401.0)
+    assert dataset.raman_shifts[-1] == pytest.approx(3999.0)
+    assert dataset.targets.shape == (100, 11)
+    assert "GCC_6calculate_18M" in dataset.target_names
+    # group = patient: 23 groups, 4-8 sessions each.
+    g = dataset.group_ids
+    assert g is not None and g.shape == (100,)
+    per_group = collections.Counter(g.tolist())
+    assert len(per_group) == 23
+    assert min(per_group.values()) == 4
+    assert max(per_group.values()) == 8
+    g = np.asarray(g)
+    for p in np.unique(g):
+        assert np.allclose(dataset.targets[g == p], dataset.targets[g == p][0])
+    assert dataset.spectra.min() > 0
+    assert not np.isnan(dataset.spectra).any()
+    assert not np.isnan(dataset.targets).any()
+
