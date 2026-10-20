@@ -210,6 +210,76 @@ class GitHubLoader(BaseLoader):
             # a concentration value; none missing.
             has_missing_labels=False,
         ),
+        "liver_cancer_raman": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
+            id="liver_cancer_raman",
+            name="Liver Cancer vs Adjacent Tissue (Huang 2023 demo)",
+            short_name="Liver Cancer Raman",
+            license="MIT",
+            loader=lambda cache_path: GitHubLoader._load_liver_cancer_raman(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of hepatic carcinoma and adjacent "
+                    "non-tumour liver tissue (Huang et al. 2023, "
+                    "Nat. Commun. 14:48; the authors' GitHub demo data)"
+                ),
+                "source": "https://github.com/AzyroSH/CNN_liver-cancer_Raman",
+                "paper": "https://doi.org/10.1038/s41467-022-35696-2",
+                "bibtex": "@article{Huang_2023, title={Rapid, label-free histopathological diagnosis of liver cancer based on Raman spectroscopy and deep learning}, volume={14}, number={1}, pages={48}, ISSN={2041-1723}, url={http://dx.doi.org/10.1038/s41467-022-35696-2}, DOI={10.1038/s41467-022-35696-2}, journal={Nature Communications}, publisher={Springer Nature and its contributors}, author={Huang, Liping and Sun, Hongwei and Sun, Liangbin and Shi, Keqing and Chen, Yuzhe and Ren, Xueqian and Ge, Yuancai and Jiang, Danfeng and Liu, Xiaohu and Knoll, Wolfgang and Zhang, Qingwen and Wang, Yi}, year={2023}, month=jan}",
+                "citation": [
+                    "Huang, L., Sun, H., Sun, L., Shi, K., Chen, Y., Ren, X., "
+                    "Ge, Y., Jiang, D., Liu, X., Knoll, W., Zhang, Q., and "
+                    "Wang, Y. (2023). Rapid, label-free histopathological "
+                    "diagnosis of liver cancer based on Raman spectroscopy "
+                    "and deep learning. Nature Communications, 14(1), 48. "
+                    "https://doi.org/10.1038/s41467-022-35696-2",
+                ],
+                "description": (
+                    "Binary classification of hepatic carcinoma vs adjacent "
+                    "non-tumour (paracarcinoma) liver tissue from the demo "
+                    "data of Huang et al. 2023 (Nat. Commun. 14:48, "
+                    "doi:10.1038/s41467-022-35696-2). The paper's full "
+                    "database -- 120 pairs (240 tissue samples) from 120 "
+                    "liver-cancer patients (98 HCC + 22 ICC), 50 spectra "
+                    "per sample, 12,000 spectra total -- was not released; "
+                    "the authors' MIT-licensed GitHub repo "
+                    "(AzyroSH/CNN_liver-cancer_Raman, pinned at commit "
+                    "fdb3743) ships a 6,000-spectrum demo split into 4,000 "
+                    "train / 1,000 validate / 1,000 test files, balanced "
+                    "3,000 carcinoma (label 1) / 3,000 paracarcinoma "
+                    "(label 0). Confocal micro-Raman with 532 nm "
+                    "excitation (Renishaw), 500-2,000 cm^-1, 889 points "
+                    "(the paper's canonical grid); the train/validate "
+                    "demo files carry 892 data columns and are resampled "
+                    "onto the 889-point grid (the 3 extra points sit at "
+                    "the high-wavenumber end; alignment verified by "
+                    "mean-spectrum correlation). Files are label-first "
+                    "tab-separated text; intensities are raw as deposited "
+                    "(arbitrary units, negative dark-subtracted points, "
+                    "maxima ~6.2e3) and the authors' z-score "
+                    "normalization is not applied. group_ids: the "
+                    "train/validate files are ordered in label-pure "
+                    "50-spectrum blocks (one tissue sample each; verified "
+                    "against shuffled controls), giving 80 + 20 sample "
+                    "groups; the authors shuffled the test file, so its "
+                    "1,000 rows are exposed as singleton groups (no "
+                    "sample ids are in the deposit) -- 1,100 groups in "
+                    "total. The authors report ~90% accuracy with their "
+                    "1D VGG-16 CNN on this split."
+                ),
+            },
+            # Checked: the train/validate files are ordered in
+            # label-pure 50-spectrum sample blocks (within-block
+            # variance 13-17% below shuffled controls); the test file
+            # is shuffled, so its rows get singleton groups.
+            is_grouped=True,
+            # Checked: every row of every demo file carries a 0/1
+            # label in the first column; no missing values.
+            has_missing_labels=False,
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -590,3 +660,159 @@ class GitHubLoader(BaseLoader):
         )
 
         return spectra, raman_shifts, targets, target_names, group_ids
+
+    # ------------------------------------------------------------------
+    # liver_cancer_raman (GitHub AzyroSH/CNN_liver-cancer_Raman, MIT)
+    # ------------------------------------------------------------------
+    # Huang et al. 2023, "Rapid, label-free histopathological diagnosis
+    # of liver cancer based on Raman spectroscopy and deep learning"
+    # (Nat. Commun. 14:48, doi:10.1038/s41467-022-35696-2).
+    #
+    # The paper's 12,000-spectrum database (120 carcinoma + 120
+    # paracarcinoma samples, 50 spectra each, 532 nm confocal
+    # micro-Raman, 500-2,000 cm^-1) was not released; the repo ships a
+    # 6,000-spectrum demo as three label-first tab-separated files
+    # (label 1 = carcinoma, 0 = paracarcinoma). Quirk: the train and
+    # validate files carry 892 data columns while the test file
+    # carries the canonical 889; the 892-column files are resampled
+    # onto the 889-point grid (the extra 3 points are at the
+    # high-wavenumber end -- mean-spectrum correlation with the test
+    # file is 0.97 for the shared first 889 columns vs 0.93 for the
+    # shifted window).
+    _LIVER_REPO = "AzyroSH/CNN_liver-cancer_Raman"
+    # Pinned commit (repo default-branch tip at capture time).
+    _LIVER_COMMIT = "fdb3743d64763ed0a7cb7c9840c60b9150c68a74"
+    # Canonical grid: 500-2,000 cm^-1, 889 points (the paper's and the
+    # test file's grid).
+    _LIVER_N_POINTS = 889
+    _LIVER_GRID = np.arange(
+        500.0, 2000.0 + 1500.0 / (_LIVER_N_POINTS - 1) / 2,
+        1500.0 / (_LIVER_N_POINTS - 1),
+    )
+    # 50 spectra per tissue sample in the source database; the
+    # train/validate demo files are ordered in contiguous
+    # label-pure 50-row sample blocks (verified statistically against
+    # shuffled controls: within-block std 13-17% below control).
+    _LIVER_BLOCK = 50
+    # (local file name, n rows, n data columns, n label-0, n label-1,
+    #  group scheme: 'block' = 50-row sample blocks,
+    #  'singleton' = one group per row (shuffled file)).
+    _LIVER_FILES = (
+        ("demo data_Raman liver_train.txt", 4000, 892, 2000, 2000,
+         "block", "tr"),
+        ("demo data_Raman liver_validate.txt", 1000, 892, 500, 500,
+         "block", "va"),
+        ("demo data_Raman liver_test.txt", 1000, 889, 500, 500,
+         "singleton", "te"),
+    )
+
+    @staticmethod
+    def _load_liver_cancer_raman(cache_path: str):
+        """
+        Download (if needed) and load the liver cancer Raman demo
+        data: 6,000 spectra, binary carcinoma (1) vs paracarcinoma
+        (0), on the common 500-2,000 cm^-1 grid (889 points).
+
+        The three demo files of the authors' repository are
+        concatenated in the order train, validate, test. The 892-
+        column files (train, validate) are resampled onto the
+        889-point grid; the 889-column file (test) is used as is.
+
+        group_ids: 50-row sample blocks in train/validate (100
+        groups), singleton groups for the shuffled test file
+        (1,000 groups).
+
+        Returns spectra, raman_shifts, targets, class_names,
+        group_ids.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        spectra_list = []
+        labels = []
+        group_list = []
+        for (fname, n_rows, n_data_cols, n_zero, n_one,
+             scheme, prefix) in GitHubLoader._LIVER_FILES:
+            url = (
+                f"https://raw.githubusercontent.com/"
+                f"{GitHubLoader._LIVER_REPO}/{GitHubLoader._LIVER_COMMIT}/"
+                f"demo%20data/{fname.replace(' ', '%20')}"
+            )
+            result = LoaderTools.download(
+                url=url,
+                out_dir_path=cache_path,
+                out_file_name=fname,
+            )
+            if result is None:
+                raise RuntimeError(
+                    f"[!] liver_cancer_raman: download of {fname} "
+                    "failed (network error). See logs."
+                )
+            arr = np.loadtxt(os.path.join(cache_path, fname), delimiter="\t")
+            if arr.ndim != 2 or arr.shape != (n_rows, n_data_cols + 1):
+                raise RuntimeError(
+                    f"[!] liver_cancer_raman: {fname} has shape "
+                    f"{arr.shape}, expected ({n_rows}, {n_data_cols + 1})."
+                )
+            y = arr[:, 0]
+            if not set(np.unique(y).tolist()) <= {0.0, 1.0}:
+                raise RuntimeError(
+                    f"[!] liver_cancer_raman: unexpected labels in "
+                    f"{fname}: {sorted(set(np.unique(y).tolist()))}."
+                )
+            c0 = int((y == 0).sum())
+            c1 = int((y == 1).sum())
+            if (c0, c1) != (n_zero, n_one):
+                raise RuntimeError(
+                    f"[!] liver_cancer_raman: label balance in "
+                    f"{fname} is ({c0}, {c1}), expected "
+                    f"({n_zero}, {n_one})."
+                )
+            x = arr[:, 1:]
+            if np.isnan(x).any():
+                raise RuntimeError(
+                    f"[!] liver_cancer_raman: NaN values in {fname}."
+                )
+            if n_data_cols != GitHubLoader._LIVER_N_POINTS:
+                # 892-column files: native grid spans 500-2,000 cm^-1
+                # with 892 points; resample onto the canonical
+                # 889-point grid (no extrapolation -- the grid lies
+                # inside the native range).
+                native = np.arange(
+                    500.0,
+                    2000.0 + 1500.0 / (n_data_cols - 1) / 2,
+                    1500.0 / (n_data_cols - 1),
+                )
+                x = np.vstack(
+                    [
+                        np.interp(GitHubLoader._LIVER_GRID, native, row)
+                        for row in x
+                    ]
+                )
+            for i in range(n_rows):
+                spectra_list.append(x[i])
+                labels.append(int(y[i]))
+                if scheme == "block":
+                    group_list.append(
+                        f"{prefix}_{i // GitHubLoader._LIVER_BLOCK:02d}"
+                    )
+                else:
+                    group_list.append(f"{prefix}_{i:04d}")
+
+        if len(spectra_list) != 6000:
+            raise RuntimeError(
+                f"[!] liver_cancer_raman: expected 6000 spectra, got "
+                f"{len(spectra_list)}."
+            )
+        spectra = np.asarray(spectra_list, dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError(
+                "[!] liver_cancer_raman: NaN values after resampling."
+            )
+        targets = np.asarray(labels, dtype=int)
+        class_names = ["paracarcinoma", "carcinoma"]
+        group_ids = np.asarray(group_list)
+        GitHubLoader.logger.debug(
+            f"Loaded liver_cancer_raman: {spectra.shape[0]} spectra x "
+            f"{spectra.shape[1]} points, "
+            f"{len(set(group_ids.tolist()))} groups"
+        )
+        return spectra, GitHubLoader._LIVER_GRID, targets, class_names, group_ids

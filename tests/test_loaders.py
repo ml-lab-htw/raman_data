@@ -771,3 +771,32 @@ def test_glaucoma_enigma_18m():
     assert not np.isnan(dataset.spectra).any()
     assert not np.isnan(dataset.targets).any()
 
+
+def test_liver_cancer_raman():
+    dataset = GitHubLoader.load_dataset("liver_cancer_raman")
+    # The 6,000-spectrum demo of Huang et al. 2023 (4,000 train +
+    # 1,000 validate + 1,000 test files of the authors' repo), binary
+    # carcinoma vs paracarcinoma, 500-2,000 cm^-1 on the paper's
+    # canonical 889-point grid (the 892-column demo files are
+    # resampled onto it).
+    assert dataset.spectra.shape == (6000, 889)
+    assert dataset.raman_shifts[0] == pytest.approx(500.0)
+    assert dataset.raman_shifts[-1] == pytest.approx(2000.0)
+    assert dataset.target_names == ["paracarcinoma", "carcinoma"]
+    counts = dict(zip(*np.unique(dataset.targets, return_counts=True)))
+    assert counts == {0: 3000, 1: 3000}
+    # 100 sample groups of 50 (the train/validate files are ordered in
+    # label-pure 50-spectrum blocks) + 1,000 singletons from the
+    # authors' shuffled test file.
+    g = dataset.group_ids
+    assert g is not None and g.shape == (6000,)
+    per_group = collections.Counter(g.tolist())
+    assert len(per_group) == 1100
+    assert sorted(per_group.values()) == [1] * 1000 + [50] * 100
+    assert _groups_are_label_pure(dataset)
+    # Raw as-deposited intensities: arbitrary units, negative
+    # dark-subtracted points down to ~-1.1e3, maxima ~6.2e3.
+    assert dataset.spectra.min() < -1000
+    assert 6100 < dataset.spectra.max() < 6300
+    assert not np.isnan(dataset.spectra).any()
+

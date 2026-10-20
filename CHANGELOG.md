@@ -11,6 +11,20 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `liver_cancer_raman`: binary classification of hepatic carcinoma vs
+  adjacent non-tumour (paracarcinoma) liver tissue from the 6,000-
+  spectrum demo data of Huang et al. 2023, *Nat. Commun.* 14:48
+  (doi:10.1038/s41467-022-35696-2), shipped in the authors' MIT-
+  licensed GitHub repo (AzyroSH/CNN_liver-cancer_Raman, pinned at
+  commit fdb3743). The paper's full 12,000-spectrum database (120
+  pairs, 50 spectra per sample) was not released; the demo is the
+  authors' 4,000/1,000/1,000 train/validate/test split, balanced
+  3,000/3,000. Confocal micro-Raman, 532 nm, 500-2,000 cm^-1 on the
+  paper's canonical 889-point grid (the demo's 892-column
+  train/validate files are resampled onto it). The train/validate
+  files are ordered in label-pure 50-spectrum sample blocks (100
+  groups, statistically verified); the shuffled test file is exposed
+  as 1,000 singleton groups (no sample ids in the deposit).
 - `glaucoma_enigma_baseline` / `glaucoma_enigma_18m`: whole-serum
   Raman spectra of 21 / 23 glaucoma patients from the ENIGMA trial
   (Udensi, Loskutova, Loughman & Byrne 2024, Mendeley Data,

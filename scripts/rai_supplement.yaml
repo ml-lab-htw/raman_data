@@ -2307,6 +2307,49 @@ locust_phase_hemolymph:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
+liver_cancer_raman:
+  prov:wasDerivedFrom: https://doi.org/10.1038/s41467-022-35696-2
+  prov:wasGeneratedBy: 'Data collection: confocal micro-Raman spectra (532 nm excitation, Renishaw) of 6,000
+    spectra from the authors'' demo of the liver cancer database of Huang et al. 2023 (Nat. Commun. 14:48):
+    hepatic carcinoma vs adjacent non-tumour (paracarcinoma) tissue from 120 liver-cancer patients (98 HCC
+    + 22 ICC). The full 12,000-spectrum database (50 spectra per sample, 120 pairs) was not released; the
+    MIT-licensed GitHub repository ships a 6,000-spectrum demo (4,000 train / 1,000 validate / 1,000 test).
+    Preprocessing: none applied by the loader; the 892-column demo files are resampled onto the paper''s
+    889-point 500-2,000 cm^-1 grid; intensities are raw as deposited. Annotation: binary tissue-type labels
+    (1 = carcinoma, 0 = paracarcinoma) from the histopathological ground truth of the study; no spectral
+    labelling involved.'
+  rai:dataAnnotationProtocol: 'Binary label per spectrum from the study''s histopathological diagnosis:
+    hepatic carcinoma (1) vs adjacent non-tumour tissue (0), balanced 3,000/3,000 in the demo. No human
+    annotation of spectra was involved.'
+  rai:dataBiases: The demo is half of an unreleased database and a subset of one clinical cohort (120 liver-cancer
+    patients, single centre, China); the carcinoma class mixes HCC (98 patients) and ICC (22 patients) subtypes,
+    which are not labelled in the demo. Replicate spectra come from the same tissue sample (50 per sample
+    in the source database); the train/validate demo files are ordered in 50-spectrum sample blocks, but
+    the test file is shuffled and no sample ids are included, so only 100 of the 120 demo samples can be
+    recovered as groups. Raw intensities are in arbitrary units (instrument-specific, with negative dark-subtracted
+    points) and are not comparable across instruments or sites.
+  rai:dataCollection: Confocal micro-Raman measurements (532 nm laser, Renishaw system) of resected liver
+    tissue blocks, as part of a label-free histopathological diagnosis study (Huang et al. 2023, Nat. Commun.
+    14:48). 6,000 spectra from 120 carcinoma and 120 paracarcinoma samples (demo subset), 500-2,000 cm^-1.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 'Only the 6,000-spectrum demo of the 12,000-spectrum database is publicly available.
+    The demo files carry no wavenumber axis (assigned from the paper: 500-2,000 cm^-1, 889 points) and no
+    sample identifiers; the train/validate files use an 892-point grid that was resampled onto the 889-point
+    one. The authors shuffled the test file, so its 1,000 spectra are exposed as singleton groups; leave-one-sample-out
+    CV is only fully controlled for the 100 recoverable sample groups. The demo is balanced by construction,
+    which does not necessarily reflect clinical class prevalence.'
+  rai:dataPreprocessingProtocol: None beyond resampling the 892-point demo files onto the common 889-point
+    500-2,000 cm^-1 grid. Intensities are raw as deposited (arbitrary units, negative dark-subtracted points);
+    the authors' z-score normalization is applied in their training code, not in the data.
+  rai:dataSocialImpact: Supports research into rapid, label-free intraoperative diagnosis of liver cancer
+    and tumour-margin delineation; any clinical use requires validation by qualified pathologists.
+  rai:dataUseCases: Binary classification of carcinoma vs adjacent non-tumour liver tissue from Raman spectra;
+    benchmarking of 1D CNN / classical classifiers with group-aware CV (100 sample groups of 50 plus 1,000
+    singletons).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: Spectra are derived from human liver tissue of 120 liver-cancer patients.
+    The demo deposit contains no patient identifiers or clinical data, only spectra with binary tissue-type
+    labels.
 marine_pathogens:
   prov:wasDerivedFrom: https://github.com/zshicode/Raman-Spectra-Deep-Learning/blob/main/multi.csv
   prov:wasGeneratedBy: 'Data collection: Laboratory measurements on biological materials
