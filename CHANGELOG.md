@@ -11,6 +11,21 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `microplastics_training_1cm` / `_2cm` / `_4cm` / `_8cm`: microplastic
+  training set from Lei et al. 2022 (*Analytical Chemistry* 94(49),
+  17011-17019, doi:10.1021/acs.analchem.2c02451; data release
+  doi:10.5683/SP3/LSN0R0, Borealis, CC-BY 4.0). 3,720 augmented spectra
+  (of the 4,520 deposited rows — the 800 synthetic blank spectra are
+  excluded) of 14 plastic types from 186 unique measurements (108
+  supplier samples) of commercial microplastic particles on a Renishaw
+  inVia Reflex (532 nm / 2,400 l/mm or 633 nm / 1,800 l/mm). Each source
+  spectrum was augmented 20x by the authors' protocol (random noise,
+  SNR 3-15; amplitude normalization), so all rows of a supplier sample
+  are grouped under one `group_id` (`is_grouped=True`, groups
+  label-pure). The four keys hold the identical spectra pre-interpolated
+  onto 1/2/4/8 cm⁻¹ grids over 720-1,800 cm⁻¹ — a built-in
+  instrument-resolution-shift benchmark (the paper trains at 1 cm⁻¹ and
+  evaluates at 2/4/8 cm⁻¹).
 - `raman_mpi`: RaMPI — Raman Maps for Plastics Identification (same paper and
   Borealis release as `raman_spi`, doi:10.1038/s41597-026-07103-8 /
   doi:10.5683/SP3/8UQQQN, CC-BY 4.0). Per-pixel spectra from 34 Raman maps

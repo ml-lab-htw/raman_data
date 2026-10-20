@@ -327,6 +327,67 @@ class MiscLoader(BaseLoader):
             # correction, smoothing, or normalization applied.
             embedded_preprocessing=None,
         ),
+        **{
+            f"microplastics_training_{res}": DatasetInfo(
+                task_type=TASK_TYPE.Classification,
+                application_type=APPLICATION_TYPE.MaterialScience,
+                id=f"microplastics_training_{res}",
+                name=f"Microplastic Training Set ({res} cm^-1, Lei et al. 2022)",
+                short_name=f"Microplastics {res}",
+                license="CC-BY 4.0",
+                loader=lambda cache_path, r=res: MiscLoader._load_lei_microplastics(cache_path, r),
+                metadata={
+                    "full_name": f"Microplastic Training Set, {res} cm^-1 grid (Lei et al. 2022)",
+                    "source": "https://doi.org/10.5683/SP3/LSN0R0",
+                    "paper": "https://doi.org/10.1021/acs.analchem.2c02451",
+                    "bibtex": "@article{Lei_2022, title={Customizable Machine-Learning Models for Rapid Microplastic Identification Using Raman Microscopy}, volume={94}, ISSN={0003-2700}, url={http://dx.doi.org/10.1021/acs.analchem.2c02451}, DOI={10.1021/acs.analchem.2c02451}, number={49}, journal={Analytical Chemistry}, publisher={American Chemical Society}, author={Lei, Benjamin and Bissonnette, Justine R. and Hogan, Una E. and Bec, Avery E. and Feng, Xinyi and Smith, Rodney D. L.}, year={2022}, month=dec, pages={17011-17019}}",
+                    "citation": [
+                        "Lei, B., Bissonnette, J. R., Hogan, U. E., Bec, A. E., Feng, X.-Y., and Smith, R. D. L. (2022). Customizable machine-learning models for rapid microplastic identification using Raman microscopy. Analytical Chemistry, 94(49), 17011-17019."
+                    ],
+                    "description": (
+                        "3,720 augmented Raman spectra of 14 plastic types "
+                        "(of 4,520 deposited rows -- the 800 synthetically "
+                        "generated blank spectra are excluded) from 186 unique "
+                        "measurements (108 supplier samples) of commercial "
+                        "microplastic particles (spheres, pellets, fragments, "
+                        "films; 15 suppliers) on a Renishaw inVia Reflex "
+                        "(532 nm / 2,400 l/mm or 633 nm / 1,800 l/mm grating). "
+                        "The authors applied polynomial baseline subtraction "
+                        "and cosmic-ray removal, then a 20x augmentation "
+                        "protocol per source spectrum (random noise targeting "
+                        "an SNR of 3-15 on the strongest peak, amplitude "
+                        "normalization so the maximum falls in 0.3-1.0). "
+                        "Spectra span the 720-1,800 cm^-1 fingerprint window, "
+                        "pre-interpolated onto a uniform "
+                        f"{res} cm^-1 grid ({1080 // int(res[:-2]) + 1} points). "
+                        "The four sibling keys microplastics_training_1cm/2cm/"
+                        "4cm/8cm hold the identical spectra at four "
+                        "resolutions -- a built-in instrument-resolution-shift "
+                        "test (the paper trains at 1 cm^-1 and evaluates at "
+                        "2/4/8 cm^-1). group_ids = supplier sample id: all "
+                        "20-40 augmented variants of one measurement share a "
+                        "group, and the 108 groups are label-pure."
+                    ),
+                },
+                # Checked: 108 unique supplier sample ids, each carrying
+                # exactly one plastic label; all 20-40 augmented rows of a
+                # sample must stay together across splits.
+                is_grouped=True,
+                # Checked: every non-blank row carries one of the 14 plastic
+                # labels; the 800 blank rows are excluded, not NaN.
+                has_missing_labels=False,
+                embedded_preprocessing=(
+                    "Authors' pipeline (paper + deposit README): Renishaw "
+                    "WiRE 5.3 polynomial baseline subtraction and cosmic-ray "
+                    "removal; each of the 186 source spectra then augmented "
+                    "20x (random noise, strongest-peak SNR 3-15; amplitude "
+                    "normalized so the maximum falls in 0.3-1.0); window "
+                    f"truncated to 720-1800 cm^-1, pre-interpolated onto a "
+                    f"uniform {res} cm^-1 grid."
+                ),
+            )
+            for res in ("1cm", "2cm", "4cm", "8cm")
+        },
     }
     logger = logging.getLogger(__name__)
 
@@ -1295,6 +1356,114 @@ class MiscLoader(BaseLoader):
         targets, class_names = encode_labels(pd.Series(np.concatenate(label_list)))
         group_ids = np.array(group_list)
         return spectra, MiscLoader._RAMPI_COMMON_GRID.copy(), targets, list(class_names), group_ids
+
+    # Lei et al. 2022 (doi:10.1021/acs.analchem.2c02451) training files,
+    # Borealis doi:10.5683/SP3/LSN0R0. One CSV per resolution grid; MD5s
+    # from the deposit's file manifest.
+    _LEI_MPLASTICS_FILES = {
+        "1cm": (
+            "2022-03-31-20aug-1cm-720-1800-20baseline.csv",
+            "https://borealisdata.ca/api/access/datafile/406825?format=original",
+            "20fa0433fe10c77884a36b76587f0d45",
+        ),
+        "2cm": (
+            "2022-03-31-20aug-2cm-720-1800-20baseline.csv",
+            "https://borealisdata.ca/api/access/datafile/406811?format=original",
+            "99b53eb93f81f7d0803dbe9355d9e954",
+        ),
+        "4cm": (
+            "2022-03-31-20aug-4cm-720-1800-20baseline.csv",
+            "https://borealisdata.ca/api/access/datafile/406820?format=original",
+            "db25a54e27b70b0db9de119121547347",
+        ),
+        "8cm": (
+            "2022-03-31-20aug-8cm-720-1800-20baseline.csv",
+            "https://borealisdata.ca/api/access/datafile/406819?format=original",
+            "f9a0c1b44de2803300f601c35f0f4364",
+        ),
+    }
+
+    @staticmethod
+    def _load_lei_microplastics(cache_path: str, resolution: str):
+        """
+        Download and load the Lei et al. 2022 (Anal. Chem. 94(49),
+        17011-17019, doi:10.1021/acs.analchem.2c02451) microplastic
+        training CSV for one resolution grid, data release
+        doi:10.5683/SP3/LSN0R0 (Borealis, CC-BY 4.0).
+
+        File layout: one row per spectrum; columns 'plastic', 'supplier',
+        'sampleid', then one column per wavenumber (720-1800 cm^-1 at the
+        requested grid). The deposit's 4,520 rows comprise 186 unique
+        plastic measurements (x20 augmented) and 40 synthetic baseline
+        spectra (x20 augmented); the 800 'blank' rows are artificial
+        (flat-line / broad inverted parabola) and carry no measurement,
+        so they are excluded.
+
+        Returns spectra, raman_shifts, targets, class_names, group_ids
+        (group id = supplier sample id).
+        """
+        if resolution not in MiscLoader._LEI_MPLASTICS_FILES:
+            raise ValueError(f"Unknown microplastics training resolution: {resolution}")
+        file_name, url, md5 = MiscLoader._LEI_MPLASTICS_FILES[resolution]
+
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            raise ValueError("Cache root for Misc loader is not set. Cannot load microplastics training dataset.")
+
+        dataset_cache = os.path.join(cache_root, "microplastics_training")
+        os.makedirs(dataset_cache, exist_ok=True)
+
+        out_path = os.path.join(dataset_cache, file_name)
+        if not LoaderTools._is_file_ready(out_path):
+            LoaderTools.download(
+                url=url,
+                out_dir_path=dataset_cache,
+                out_file_name=file_name,
+                hash_target=md5,
+                hash_type=HASH_TYPE.md5,
+            )
+            if not LoaderTools._is_file_ready(out_path):
+                raise RuntimeError(
+                    f"[!] Download of {file_name} for microplastics_training_{resolution} "
+                    "failed (network error or checksum mismatch). See logs."
+                )
+
+        try:
+            df = pd.read_csv(out_path, low_memory=False)
+        except Exception as e:
+            raise RuntimeError(f"[!] Failed to read microplastics training CSV {file_name}: {e}")
+
+        for col in ("plastic", "supplier", "sampleid"):
+            if col not in df.columns:
+                raise RuntimeError(
+                    f"[!] microplastics_training_{resolution}: missing column '{col}' in {file_name}."
+                )
+
+        wav_cols = list(df.columns[3:])
+        if len(wav_cols) < 2:
+            raise RuntimeError(f"[!] microplastics_training_{resolution}: no wavenumber columns in {file_name}.")
+        raman_shifts = np.array([float(col) for col in wav_cols])
+        if not np.all(np.diff(raman_shifts) > 0):
+            raise RuntimeError(f"[!] microplastics_training_{resolution}: wavenumber axis is not ascending.")
+
+        spectra = df[wav_cols].to_numpy(dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError(f"[!] microplastics_training_{resolution}: missing intensity values.")
+
+        plastic = df["plastic"].astype(str).str.strip()
+        # The 800 'blank' rows are the authors' synthetic baseline spectra
+        # (20 flat-line + 20 broad inverted parabola, each x20 augmented),
+        # not measurements -- exclude them.
+        keep = plastic != "blank"
+        if len(df) != 4520 or int(keep.sum()) != 3720:
+            raise RuntimeError(
+                f"[!] microplastics_training_{resolution}: expected 4520 rows with "
+                f"3720 non-blank, got {len(df)} with {int(keep.sum())}."
+            )
+
+        targets, class_names = encode_labels(plastic[keep])
+        group_ids = df["sampleid"].astype(str).str.strip()[keep].to_numpy()
+        return spectra[keep.to_numpy()], raman_shifts, targets, list(class_names), group_ids
 
     @staticmethod
     def _load_sop_spectral_library(cache_path: str, variant: str = "baseline_corrected"):
