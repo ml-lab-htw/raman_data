@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Raman spectra of naturally aged edible oils, Data Set 1A: the 2016 LBNL campaign (Gilbraith et al., Applied Spectroscopy Practica 2025)",
+  "description": "99 Raman spectra of naturally aged (5-7 year) edible oil bottles, Data Set 1A (the 2016 LBNL campaign of Gilbraith et al. 2025): one spectrum per bottle, 100 deposited rows for the 100 purchased bottles, of which one (class 15) is an all-NaN placeholder the authors replaced with NaN to keep the matrix rectangular (excluded here). Peroxide-value regression: the primary target is the peroxide value (PV, by wet-chemical titration) of each bottle (1.5-165.4, no missing values); the oil class is also recorded in the CSV, so a classification task is derivable, but the coverage is unbalanced (class 1: 27 spectra down to single-spectrum classes) and class 4 (avocado oil) is absent while class 20 (3 spectra) has no name in the deposit's 19-entry class key. Native 1,340-point spectra over -18.1-1,974.2 cm^-1 (~1.1-2.0 cm^-1 spacing) stored as the CSV column headers (one shared axis) and used as is, so no resampling is involved; the low-wavenumber end is negative, an instrument export artifact retained as deposited. Intensities are raw counts (2.8e4-2.1e7, arbitrary units); instrument model and excitation wavelength are not recorded in the deposit. Oils are commercial bottles from grocery stores in and around Newark, Delaware (2014-2016), aged naturally for 5-7 years. The CSV is served from a frozen copy mirrored at HTW-KI-Werkstatt/RamanBench (aged_oils/, size + sha256 pinned; the live Mendeley download sits behind a WAF that 403s non-browser clients, hence the mirror).",
+  "url": "https://data.mendeley.com/datasets/ctgg7k4m5g/2",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "sameAs": "https://doi.org/10.17632/ctgg7k4m5g.2",
+  "citeAs": "@article{Gilbraith_2025, title={Classification and Peroxide Value Prediction of Naturally Aged Edible Oils Using Raman and Infrared Spectral Analysis}, volume={3}, number={2}, url={https://doi.org/10.1177/27551857251340426}, DOI={10.1177/27551857251340426}, journal={Applied Spectroscopy Practica}, publisher={SAGE Publications}, author={Gilbraith, William E. and Carter, J. Chance and Adams, Kristl and Sota-Uba, Isio and Lavine, Barry K. and Booksh, Karl S. and Ottaway, Joshua M.}, year={2025}, month=jun}",
+  "citation": "Gilbraith, W. E., Carter, J. C., Adams, K., Sota-Uba, I., Lavine, B. K., Booksh, K. S., and Ottaway, J. M. (2025). Classification and peroxide value prediction of naturally aged edible oils using Raman and infrared spectral analysis. Applied Spectroscopy Practica, 3(2), 27551857251340426. https://doi.org/10.1177/27551857251340426",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "aged_oils_raman_1a_source",
+      "name": "Raman spectra of naturally aged edible oils, Data Set 1A: the 2016 LBNL campaign (Gilbraith et al., Applied Spectroscopy Practica 2025)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://data.mendeley.com/datasets/ctgg7k4m5g/2",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "71ec24e5ead36ba265da5013986485155b0651a159859558b73e689238010362"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "aged_oils_raman_1a_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "aged_oils_raman_1a_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "aged_oils_raman_1a_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "aged_oils_raman_1a_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman measurements (one spectrum per bottle) of 100 naturally aged edible oil bottles (99 loaded), 2016 campaign; peroxide values by wet-chemical titration. Instrument model and excitation wavelength are not recorded in the deposit.",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "None in the loader. The CSV is the deposit's analysis-ready export; intensities are raw as deposited. The authors' supplemental R code applies its own preprocessing in analysis, not to the deposited data.",
+  "rai:dataAnnotationProtocol": "The per-spectrum peroxide value (wet-chemical titration) and the oil class (from the commercial product) are recorded in the deposit's CSV; no human labelling of the spectra themselves was involved.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All samples are commercial edible oils without any human identifiers.",
+  "rai:dataBiases": "Single 2016 lab campaign (LBNL) on oils naturally aged 5-7 years from one 2014-2016 purchasing window in one region (Newark, Delaware), so class and PV distributions may not represent other regions, seasons, brands or aging periods. Class coverage is unbalanced (class 1: 27 spectra down to single-spectrum classes 11, 14, 16, 18, 19) and class 4 is absent while class 20 (3 spectra) has no name in the deposit's 19-entry class key. One row is an all-NaN placeholder (excluded). The low-wavenumber end of the axis is negative (instrument export artifact, retained as deposited). 99 spectra is a small set for a 19-class classification.",
+  "rai:dataLimitations": "99 spectra; 19 oil classes with unbalanced and partly unnamed coverage (class 20 unnamed, class 4 absent); one all-NaN placeholder row excluded; negative wavenumbers at the low axis end (kept as deposited); instrument and excitation wavelength not recorded; the 2019 repeat campaign (Data Set 1B) was deposited only for NIR, so cross-year Raman generalisation with this probe is not possible.",
+  "rai:dataSocialImpact": "Supports research into shelf-life and freshness assessment of edible oils (food safety and quality); any consumer- or regulatory-facing use requires validation against independent lots, brands and aging conditions.",
+  "rai:dataUseCases": "Peroxide-value (freshness) regression from a single Raman spectrum; oil-class classification (19 classes, with the coverage caveats above). Group-aware splitting is not applicable (one spectrum per bottle).",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Raman spectra of naturally aged (5-7 year) edible oil bottles purchased from grocery stores in and around Newark, Delaware between the summer of 2014 and the spring of 2016 (Gilbraith, Carter, Adams, Sota-Uba, Lavine, Booksh & Ottaway, Applied Spectroscopy Practica 3(2) 2025, doi:10.1177/27551857251340426; Mendeley Data deposit ctgg7k4m5g v2, doi:10.17632/ctgg7k4m5g.2, CC BY 4.0). Data Set 1A is the 2016 Raman campaign (Lawrence Livermore National Laboratory), one spectrum per bottle, with the peroxide value (PV) of each bottle by wet-chemical titration. 99 spectra are loaded (the deposit's 100th row, a class-15 sample, is an all-NaN placeholder the authors used to keep the matrix rectangular and is excluded). 19 oil types per the deposit's class key; this file carries classes 1-3 and 5-20 (class 4, avocado oil, absent; class 20, 3 spectra, unnamed in the 19-entry key). Native 1,340-point axis -18.1-1,974.2 cm^-1 (CSV column headers, used as is; the low end is negative, an instrument export artifact retained as deposited); raw counts 2.8e4-2.1e7. The CSV is served from a frozen copy mirrored at HTW-KI-Werkstatt/RamanBench (aged_oils/, size + sha256 pinned) because the live Mendeley download sits behind a WAF that 403s non-browser clients.",
+  "prov:wasDerivedFrom": "https://doi.org/10.1177/27551857251340426"
+}

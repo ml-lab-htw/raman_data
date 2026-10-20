@@ -11,6 +11,29 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `aged_oils_raman_1a` + `aged_oils_raman_2`: peroxide-value
+  (freshness) regression on Raman spectra of 100 naturally aged
+  (5-7 year) edible oil bottles (Gilbraith, Carter, Adams, Sota-Uba,
+  Lavine, Booksh & Ottaway 2025, *Applied Spectroscopy Practica*
+  3(2), doi:10.1177/27551857251340426; Mendeley ctgg7k4m5g v2,
+  doi:10.17632/ctgg7k4m5g.2, CC BY 4.0). Two Raman campaigns,
+  shipped as two single-target regression keys (the two probes'
+  intensity scales differ by ~2 orders of magnitude and cannot be
+  combined): `aged_oils_raman_1a` = Data Set 1A (2016 LBNL), 99
+  spectra (100 rows minus one all-NaN placeholder row) x 1,340-pt
+  native axis -18.1-1,974.2 cm^-1, one spectrum per bottle;
+  `aged_oils_raman_2` = Data Set 2 (Univ. of Delaware), 215
+  replicate spectra of 53 bottles x 1,044-pt native axis
+  18.0-2,087.9 cm^-1 (no sample ids in the deposit, so the
+  replicate structure is not recoverable and group-aware splitting
+  is not possible). PV targets by titration (1.5-165.4 / 0.46-80.5,
+  no missing); the oil class is also in the CSV (classification
+  derivable; caveats: 19-key coverage unbalanced, class 4 absent,
+  class 20 unnamed in Data Set 1A). Native axes (CSV column
+  headers) used as is; raw intensities as deposited. The deposit's
+  ATR-FTIR Data Set 3 and its NIR/MIR files are not Raman and are
+  not loaded. Served from the frozen HF mirror (aged_oils/, size +
+  sha256 pinned; Mendeley's WAF 403s non-browser clients).
 - `sers_pesticide_produce`: 33 SERS spectra of pesticide-spiked fresh
   produce (Hegde et al. 2025, *ACS Appl. Mater. Interfaces* 17(1):
   2018-2031, doi:10.1021/acsami.4c17777; the SERSFormer2 repo). The

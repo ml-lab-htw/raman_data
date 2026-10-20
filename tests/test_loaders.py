@@ -917,3 +917,54 @@ def test_sers_pesticide_produce():
     assert not np.isnan(dataset.spectra).any()
     assert not np.isnan(dataset.targets).any()
 
+
+def test_aged_oils_raman_1a():
+    # Single ~1 MB HF-mirror download, small enough to run in CI.
+    dataset = MendeleyLoader.load_dataset("aged_oils_raman_1a")
+    # Data Set 1A (2016 LBNL campaign): one spectrum per bottle;
+    # 100 deposited rows minus one all-NaN placeholder = 99 spectra
+    # on the native 1,340-point -18.1-1,974.2 cm^-1 axis (as is).
+    assert dataset.spectra.shape == (99, 1340)
+    assert dataset.raman_shifts[0] == pytest.approx(-18.087)
+    assert dataset.raman_shifts[-1] == pytest.approx(1974.170)
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    # Single-target regression: peroxide value by titration.
+    assert dataset.targets.shape == (99,)
+    assert dataset.target_names == ["peroxide_value"]
+    pv = dataset.targets
+    assert not np.isnan(pv).any()
+    assert pv.min() == pytest.approx(1.5240, abs=0.01)
+    assert 1.0 < pv.min() and pv.max() < 170.0
+    # One spectrum per bottle: no group structure.
+    assert dataset.group_ids is None
+    # Raw counts as deposited (arbitrary units).
+    assert dataset.spectra.min() > 27000
+    assert dataset.spectra.max() < 22e6
+    assert not np.isnan(dataset.spectra).any()
+
+
+def test_aged_oils_raman_2():
+    # Single ~1.6 MB HF-mirror download, small enough to run in CI.
+    dataset = MendeleyLoader.load_dataset("aged_oils_raman_2")
+    # Data Set 2 (University of Delaware campaign): 215 replicate
+    # spectra of 53 bottles (no sample ids in the deposit) on the
+    # native 1,044-point 18.0-2,087.9 cm^-1 axis (as is).
+    assert dataset.spectra.shape == (215, 1044)
+    assert dataset.raman_shifts[0] == pytest.approx(17.983)
+    assert dataset.raman_shifts[-1] == pytest.approx(2087.858)
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    assert dataset.targets.shape == (215,)
+    assert dataset.target_names == ["peroxide_value"]
+    pv = dataset.targets
+    assert not np.isnan(pv).any()
+    assert pv.min() == pytest.approx(0.46, abs=0.01)
+    assert 0.4 < pv.min() and pv.max() < 81.0
+    # Replicates of the 53 bottles, but no per-spectrum sample ids
+    # are in the deposit, so no group structure is shipped.
+    assert dataset.group_ids is None
+    # Different probe from Data Set 1A: lower counts, some negative
+    # points.
+    assert dataset.spectra.min() < 0
+    assert dataset.spectra.max() < 42000
+    assert not np.isnan(dataset.spectra).any()
+

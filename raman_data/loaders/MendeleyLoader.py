@@ -529,6 +529,193 @@ class MendeleyLoader(BaseLoader):
                 "the data)."
             ),
         ),
+        "aged_oils_raman_1a": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="ctgg7k4m5g",
+            name="Aged Edible Oils, Raman Data Set 1A (Gilbraith 2025)",
+            short_name="Aged Oils Raman 1A",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_aged_oils_raman_1a(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of naturally aged edible oils, "
+                    "Data Set 1A: the 2016 LBNL campaign (Gilbraith "
+                    "et al., Applied Spectroscopy Practica 2025)"
+                ),
+                "source": "https://data.mendeley.com/datasets/ctgg7k4m5g/2",
+                "doi": "10.17632/ctgg7k4m5g.2",
+                "paper": "https://doi.org/10.1177/27551857251340426",
+                "bibtex": (
+                    "@article{Gilbraith_2025, title={Classification "
+                    "and Peroxide Value Prediction of Naturally Aged "
+                    "Edible Oils Using Raman and Infrared Spectral "
+                    "Analysis}, volume={3}, number={2}, "
+                    "url={https://doi.org/10.1177/27551857251340426}, "
+                    "DOI={10.1177/27551857251340426}, "
+                    "journal={Applied Spectroscopy Practica}, "
+                    "publisher={SAGE Publications}, "
+                    "author={Gilbraith, William E. and Carter, J. "
+                    "Chance and Adams, Kristl and Sota-Uba, Isio and "
+                    "Lavine, Barry K. and Booksh, Karl S. and "
+                    "Ottaway, Joshua M.}, year={2025}, month=jun}"
+                ),
+                "citation": [
+                    "Gilbraith, W. E., Carter, J. C., Adams, K., "
+                    "Sota-Uba, I., Lavine, B. K., Booksh, K. S., and "
+                    "Ottaway, J. M. (2025). Classification and "
+                    "peroxide value prediction of naturally aged "
+                    "edible oils using Raman and infrared spectral "
+                    "analysis. Applied Spectroscopy Practica, 3(2), "
+                    "27551857251340426. "
+                    "https://doi.org/10.1177/27551857251340426",
+                ],
+                "description": (
+                    "99 Raman spectra of naturally aged (5-7 year) "
+                    "edible oil bottles, Data Set 1A (the 2016 LBNL "
+                    "campaign of Gilbraith et al. 2025): one spectrum "
+                    "per bottle, 100 deposited rows for the 100 "
+                    "purchased bottles, of which one (class 15) is an "
+                    "all-NaN placeholder the authors replaced with "
+                    "NaN to keep the matrix rectangular (excluded "
+                    "here). Peroxide-value regression: the primary "
+                    "target is the peroxide value (PV, by "
+                    "wet-chemical titration) of each bottle "
+                    "(1.5-165.4, no missing values); the oil class is "
+                    "also recorded in the CSV, so a classification "
+                    "task is derivable, but the coverage is "
+                    "unbalanced (class 1: 27 spectra down to "
+                    "single-spectrum classes) and class 4 (avocado "
+                    "oil) is absent while class 20 (3 spectra) has no "
+                    "name in the deposit's 19-entry class key. "
+                    "Native 1,340-point spectra over -18.1-1,974.2 "
+                    "cm^-1 (~1.1-2.0 cm^-1 spacing) stored as the CSV "
+                    "column headers (one shared axis) and used as is, "
+                    "so no resampling is involved; the low-wavenumber "
+                    "end is negative, an instrument export artifact "
+                    "retained as deposited. Intensities are raw "
+                    "counts (2.8e4-2.1e7, arbitrary units); "
+                    "instrument model and excitation wavelength are "
+                    "not recorded in the deposit. Oils are commercial "
+                    "bottles from grocery stores in and around "
+                    "Newark, Delaware (2014-2016), aged naturally "
+                    "for 5-7 years. The CSV is served from a frozen "
+                    "copy mirrored at HTW-KI-Werkstatt/RamanBench "
+                    "(aged_oils/, size + sha256 pinned; the live "
+                    "Mendeley download sits behind a WAF that 403s "
+                    "non-browser clients, hence the mirror)."
+                ),
+            },
+            # Checked: Data Set 1A is one Raman spectrum per bottle
+            # (100 rows for the 100 purchased bottles); no replicate
+            # structure to group on.
+            is_grouped=False,
+            # Checked: every row carries a peroxide value (no NaN);
+            # the one all-NaN placeholder row (class 15) is excluded
+            # by the loader, and its PV is a valid number.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None. The CSV is the deposit's analysis-ready "
+                "export; intensities are raw as deposited. The "
+                "authors' supplemental R code applies its own "
+                "preprocessing in analysis, not to the deposited "
+                "data."
+            ),
+        ),
+        "aged_oils_raman_2": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="ctgg7k4m5g",
+            name="Aged Edible Oils, Raman Data Set 2 (Gilbraith 2025)",
+            short_name="Aged Oils Raman 2",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_aged_oils_raman_2(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of naturally aged edible oils, "
+                    "Data Set 2: the University of Delaware campaign "
+                    "(Gilbraith et al., Applied Spectroscopy "
+                    "Practica 2025)"
+                ),
+                "source": "https://data.mendeley.com/datasets/ctgg7k4m5g/2",
+                "doi": "10.17632/ctgg7k4m5g.2",
+                "paper": "https://doi.org/10.1177/27551857251340426",
+                "bibtex": (
+                    "@article{Gilbraith_2025, title={Classification "
+                    "and Peroxide Value Prediction of Naturally Aged "
+                    "Edible Oils Using Raman and Infrared Spectral "
+                    "Analysis}, volume={3}, number={2}, "
+                    "url={https://doi.org/10.1177/27551857251340426}, "
+                    "DOI={10.1177/27551857251340426}, "
+                    "journal={Applied Spectroscopy Practica}, "
+                    "publisher={SAGE Publications}, "
+                    "author={Gilbraith, William E. and Carter, J. "
+                    "Chance and Adams, Kristl and Sota-Uba, Isio and "
+                    "Lavine, Barry K. and Booksh, Karl S. and "
+                    "Ottaway, Joshua M.}, year={2025}, month=jun}"
+                ),
+                "citation": [
+                    "Gilbraith, W. E., Carter, J. C., Adams, K., "
+                    "Sota-Uba, I., Lavine, B. K., Booksh, K. S., and "
+                    "Ottaway, J. M. (2025). Classification and "
+                    "peroxide value prediction of naturally aged "
+                    "edible oils using Raman and infrared spectral "
+                    "analysis. Applied Spectroscopy Practica, 3(2), "
+                    "27551857251340426. "
+                    "https://doi.org/10.1177/27551857251340426",
+                ],
+                "description": (
+                    "215 Raman spectra of 53 naturally aged (5-7 "
+                    "year) edible oil bottles, Data Set 2 (the "
+                    "University of Delaware campaign of Gilbraith "
+                    "et al. 2025): replicate measurements of 53 of "
+                    "the deposit's 100 bottles, measured with a "
+                    "different Raman probe from Data Set 1A (lower "
+                    "counts, -5.4e3-4.2e4, arbitrary units; the two "
+                    "probes' intensity scales differ by ~2 orders of "
+                    "magnitude, so the two Raman sets are shipped as "
+                    "separate datasets). Peroxide-value regression: "
+                    "the primary target is the peroxide value (PV, "
+                    "by titration) of each spectrum (0.46-80.5, no "
+                    "missing values); the oil class is also recorded "
+                    "in the CSV (15 of the deposit's 19 classes "
+                    "present), so a classification task is "
+                    "derivable. Native 1,044-point spectra over "
+                    "18.0-2,087.9 cm^-1 (~1.5-2.7 cm^-1 spacing) "
+                    "stored as the CSV column headers (one shared "
+                    "axis) and used as is, so no resampling is "
+                    "involved. No per-spectrum sample ids are in the "
+                    "deposit, so the replicate structure of the 215 "
+                    "spectra over the 53 bottles is not recoverable: "
+                    "group-aware splitting is not possible and "
+                    "ungrouped CV may leak between replicates of the "
+                    "same bottle. The CSV is served from a frozen "
+                    "copy mirrored at HTW-KI-Werkstatt/RamanBench "
+                    "(aged_oils/, size + sha256 pinned; the live "
+                    "Mendeley download sits behind a WAF that 403s "
+                    "non-browser clients, hence the mirror)."
+                ),
+            },
+            # Checked: the deposit's CSV has no per-spectrum sample
+            # ids, so the 215-spectra-over-53-bottles replicate
+            # structure is not recoverable; is_grouped=False with
+            # the leakage risk documented.
+            is_grouped=False,
+            # Checked: all 215 rows carry a peroxide value (no NaN)
+            # and complete spectra (no NaN cells).
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None. The CSV is the deposit's analysis-ready "
+                "export; intensities are raw as deposited. The "
+                "authors' supplemental R code applies its own "
+                "preprocessing in analysis, not to the deposited "
+                "data."
+            ),
+        ),
     }
 
     logger = logging.getLogger(__name__)
@@ -1431,6 +1618,188 @@ class MendeleyLoader(BaseLoader):
             f"x {spectra.shape[1]} points, {len(class_names)} classes"
         )
         return spectra, axis, targets, class_names
+
+    # ------------------------------------------------------------------
+    # aged_oils_raman_1a / aged_oils_raman_2 (Mendeley ctgg7k4m5g)
+    # ------------------------------------------------------------------
+    # Gilbraith, Carter, Adams, Sota-Uba, Lavine, Booksh & Ottaway,
+    # "Classification and Peroxide Value Prediction of Naturally
+    # Aged Edible Oils Using Raman and Infrared Spectral Analysis"
+    # (Applied Spectroscopy Practica 3(2) 2025,
+    # doi:10.1177/27551857251340426); deposit ctgg7k4m5g v2
+    # (doi:10.17632/ctgg7k4m5g.2, CC BY 4.0).
+    #
+    # 100 naturally aged (5-7 year) edible oil bottles from grocery
+    # stores in and around Newark, Delaware (2014-2016). Two of the
+    # deposit's Raman campaigns are loaded (the 2019 Data Set 1B was
+    # deposited only for NIR):
+    #   Raman1A.csv: Data Set 1A (2016 LBNL), 100 rows, one spectrum
+    #     per bottle, 1,340-point axis -18.1-1,974.2 cm^-1, high
+    #     counts (2.8e4-2.1e7); one all-NaN placeholder row (class
+    #     15), excluded.
+    #   Raman2.csv: Data Set 2 (University of Delaware), 215 spectra
+    #     of 53 bottles (replicates; no sample ids in the deposit),
+    #     1,044-point axis 18.0-2,087.9 cm^-1, lower counts
+    #     (-5.4e3-4.2e4).
+    # Both carry a peroxide-value (PV, by titration) column, shipped
+    # as the single regression target. The two probes' intensity
+    # scales differ by ~2 orders of magnitude, so the sets stay
+    # separate. The deposit's ATR-FTIR Data Set 3 and its NIR/MIR
+    # files are not Raman and are not loaded.
+    #
+    # Served from the frozen HF mirror (aged_oils/) because the live
+    # Mendeley download sits behind a WAF that 403s non-browser
+    # clients (incl. CI runners).
+    _AGED_OILS_RAMAN1A = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/aged_oils/Raman1A.csv",
+        "Raman1A.csv",
+        1029350,
+        "8fbd92e030605a48fd84f194bd48dbdba9fcf006b2368a6d278159930459e5b9",
+    )
+    _AGED_OILS_RAMAN2 = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/aged_oils/Raman2.csv",
+        "Raman2.csv",
+        1647539,
+        "2772f4158e8f7f1c5bdfbbf639cf6b2240587ac17e0ed88be725ec01fd418fb6",
+    )
+
+    @staticmethod
+    def _download_aged_oils_csv(
+        cache_path: str, spec: Tuple[str, str, int, str]
+    ) -> str:
+        """
+        Download (if needed) one mirrored aged-oils CSV; returns the
+        local file path.
+        """
+        url, fname, size, sha = spec
+        fpath = os.path.join(cache_path, fname)
+        if os.path.exists(fpath) and os.path.getsize(fpath) != size:
+            os.remove(fpath)
+        result = LoaderTools.download(
+            url=url,
+            out_dir_path=cache_path,
+            out_file_name=fname,
+            hash_target=sha,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                f"[!] aged_oils: download of {fname} failed (network "
+                "error or checksum mismatch). See logs."
+            )
+        return fpath
+
+    @staticmethod
+    def _load_aged_oils_raman_1a(cache_path: str):
+        """
+        Download (if needed) and load the aged-edible-oils Raman
+        Data Set 1A: 99 spectra (100 deposited rows minus one
+        all-NaN placeholder) of one Raman spectrum per bottle on the
+        deposit's native 1,340-point -18.1-1,974.2 cm^-1 axis, with
+        the peroxide value (PV) as the regression target.
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        fpath = MendeleyLoader._download_aged_oils_csv(
+            cache_path, MendeleyLoader._AGED_OILS_RAMAN1A
+        )
+        df = pd.read_csv(fpath)
+        if df.shape != (100, 1342):
+            raise RuntimeError(
+                f"[!] aged_oils_raman_1a: expected a 100 x 1,342 "
+                f"CSV (Class, PeroxideValue + 1,340 wavenumbers), "
+                f"got {df.shape} (deposit changed?)."
+            )
+        axis = np.array([float(c) for c in df.columns[2:]])
+        if (
+            not np.all(np.diff(axis) > 0)
+            or not (-20.0 < axis[0] < 0.0)
+            or not (1900.0 < axis[-1] < 2000.0)
+        ):
+            raise RuntimeError(
+                "[!] aged_oils_raman_1a: unexpected wavenumber "
+                f"axis ({axis.shape[0]} points, "
+                f"{axis[0]:.3f}..{axis[-1]:.3f} cm^-1)."
+            )
+        pv = df["PeroxideValue"].to_numpy(dtype=float)
+        if np.isnan(pv).any():
+            raise RuntimeError(
+                "[!] aged_oils_raman_1a: NaN peroxide values."
+            )
+        spectra = df.iloc[:, 2:].to_numpy(dtype=float)
+        # One row (class 15) is an all-NaN placeholder (a sample the
+        # authors replaced with NaN to keep the matrix rectangular);
+        # exactly one such row must be present.
+        all_nan = np.isnan(spectra).all(axis=1)
+        if int(all_nan.sum()) != 1:
+            raise RuntimeError(
+                "[!] aged_oils_raman_1a: expected exactly one "
+                f"all-NaN placeholder row, found {int(all_nan.sum())}."
+            )
+        spectra = spectra[~all_nan]
+        pv = pv[~all_nan]
+        if np.isnan(spectra).any():
+            raise RuntimeError(
+                "[!] aged_oils_raman_1a: NaN intensity values."
+            )
+        MendeleyLoader.logger.debug(
+            f"Loaded aged_oils_raman_1a: {spectra.shape[0]} spectra "
+            f"x {spectra.shape[1]} points, PV "
+            f"{pv.min():.3f}..{pv.max():.3f}"
+        )
+        return spectra, axis, pv, ["peroxide_value"]
+
+    @staticmethod
+    def _load_aged_oils_raman_2(cache_path: str):
+        """
+        Download (if needed) and load the aged-edible-oils Raman
+        Data Set 2: 215 replicate spectra of 53 bottles on the
+        deposit's native 1,044-point 18.0-2,087.9 cm^-1 axis, with
+        the peroxide value (PV) as the regression target.
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        fpath = MendeleyLoader._download_aged_oils_csv(
+            cache_path, MendeleyLoader._AGED_OILS_RAMAN2
+        )
+        df = pd.read_csv(fpath)
+        if df.shape != (215, 1046):
+            raise RuntimeError(
+                f"[!] aged_oils_raman_2: expected a 215 x 1,046 "
+                f"CSV (Class, PeroxideValue + 1,044 wavenumbers), "
+                f"got {df.shape} (deposit changed?)."
+            )
+        axis = np.array([float(c) for c in df.columns[2:]])
+        if (
+            not np.all(np.diff(axis) > 0)
+            or not (10.0 < axis[0] < 30.0)
+            or not (2000.0 < axis[-1] < 2100.0)
+        ):
+            raise RuntimeError(
+                "[!] aged_oils_raman_2: unexpected wavenumber "
+                f"axis ({axis.shape[0]} points, "
+                f"{axis[0]:.3f}..{axis[-1]:.3f} cm^-1)."
+            )
+        pv = df["PeroxideValue"].to_numpy(dtype=float)
+        if np.isnan(pv).any():
+            raise RuntimeError(
+                "[!] aged_oils_raman_2: NaN peroxide values."
+            )
+        spectra = df.iloc[:, 2:].to_numpy(dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError(
+                "[!] aged_oils_raman_2: NaN intensity values."
+            )
+        MendeleyLoader.logger.debug(
+            f"Loaded aged_oils_raman_2: {spectra.shape[0]} spectra "
+            f"x {spectra.shape[1]} points, PV "
+            f"{pv.min():.3f}..{pv.max():.3f}"
+        )
+        return spectra, axis, pv, ["peroxide_value"]
 
     # ------------------------------------------------------------------
     # BaseLoader interface

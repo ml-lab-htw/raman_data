@@ -306,6 +306,96 @@ adenine_solid_silver:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from adenine reference solutions without individual human
     identifiers.
+aged_oils_raman_1a:
+  prov:wasDerivedFrom: https://doi.org/10.1177/27551857251340426
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of naturally aged (5-7 year) edible oil bottles purchased
+    from grocery stores in and around Newark, Delaware between the summer of 2014 and the spring of 2016
+    (Gilbraith, Carter, Adams, Sota-Uba, Lavine, Booksh & Ottaway, Applied Spectroscopy Practica 3(2) 2025,
+    doi:10.1177/27551857251340426; Mendeley Data deposit ctgg7k4m5g v2, doi:10.17632/ctgg7k4m5g.2, CC BY
+    4.0). Data Set 1A is the 2016 Raman campaign (Lawrence Livermore National Laboratory), one spectrum
+    per bottle, with the peroxide value (PV) of each bottle by wet-chemical titration. 99 spectra are loaded
+    (the deposit''s 100th row, a class-15 sample, is an all-NaN placeholder the authors used to keep the
+    matrix rectangular and is excluded). 19 oil types per the deposit''s class key; this file carries classes
+    1-3 and 5-20 (class 4, avocado oil, absent; class 20, 3 spectra, unnamed in the 19-entry key). Native
+    1,340-point axis -18.1-1,974.2 cm^-1 (CSV column headers, used as is; the low end is negative, an instrument
+    export artifact retained as deposited); raw counts 2.8e4-2.1e7. The CSV is served from a frozen copy
+    mirrored at HTW-KI-Werkstatt/RamanBench (aged_oils/, size + sha256 pinned) because the live Mendeley
+    download sits behind a WAF that 403s non-browser clients.'
+  rai:dataAnnotationProtocol: The per-spectrum peroxide value (wet-chemical titration) and the oil class
+    (from the commercial product) are recorded in the deposit's CSV; no human labelling of the spectra themselves
+    was involved.
+  rai:dataBiases: 'Single 2016 lab campaign (LBNL) on oils naturally aged 5-7 years from one 2014-2016 purchasing
+    window in one region (Newark, Delaware), so class and PV distributions may not represent other regions,
+    seasons, brands or aging periods. Class coverage is unbalanced (class 1: 27 spectra down to single-spectrum
+    classes 11, 14, 16, 18, 19) and class 4 is absent while class 20 (3 spectra) has no name in the deposit''s
+    19-entry class key. One row is an all-NaN placeholder (excluded). The low-wavenumber end of the axis
+    is negative (instrument export artifact, retained as deposited). 99 spectra is a small set for a 19-class
+    classification.'
+  rai:dataCollection: Raman measurements (one spectrum per bottle) of 100 naturally aged edible oil bottles
+    (99 loaded), 2016 campaign; peroxide values by wet-chemical titration. Instrument model and excitation
+    wavelength are not recorded in the deposit.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 99 spectra; 19 oil classes with unbalanced and partly unnamed coverage (class 20
+    unnamed, class 4 absent); one all-NaN placeholder row excluded; negative wavenumbers at the low axis
+    end (kept as deposited); instrument and excitation wavelength not recorded; the 2019 repeat campaign
+    (Data Set 1B) was deposited only for NIR, so cross-year Raman generalisation with this probe is not
+    possible.
+  rai:dataPreprocessingProtocol: None in the loader. The CSV is the deposit's analysis-ready export; intensities
+    are raw as deposited. The authors' supplemental R code applies its own preprocessing in analysis, not
+    to the deposited data.
+  rai:dataSocialImpact: Supports research into shelf-life and freshness assessment of edible oils (food
+    safety and quality); any consumer- or regulatory-facing use requires validation against independent
+    lots, brands and aging conditions.
+  rai:dataUseCases: Peroxide-value (freshness) regression from a single Raman spectrum; oil-class classification
+    (19 classes, with the coverage caveats above). Group-aware splitting is not applicable (one spectrum
+    per bottle).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are commercial
+    edible oils without any human identifiers.
+aged_oils_raman_2:
+  prov:wasDerivedFrom: https://doi.org/10.1177/27551857251340426
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of naturally aged (5-7 year) edible oil bottles purchased
+    from grocery stores in and around Newark, Delaware between the summer of 2014 and the spring of 2016
+    (Gilbraith, Carter, Adams, Sota-Uba, Lavine, Booksh & Ottaway, Applied Spectroscopy Practica 3(2) 2025,
+    doi:10.1177/27551857251340426; Mendeley Data deposit ctgg7k4m5g v2, doi:10.17632/ctgg7k4m5g.2, CC BY
+    4.0). Data Set 2 is the University of Delaware campaign: 215 replicate spectra of 53 of the deposit''s
+    100 bottles, measured with a different Raman probe from Data Set 1A (lower counts, -5.4e3-4.2e4; the
+    two probes'' intensity scales differ by ~2 orders of magnitude, so the two Raman sets are shipped as
+    separate datasets), with the peroxide value (PV) of each spectrum by titration. 15 of the deposit''s
+    19 oil classes are present. Native 1,044-point axis 18.0-2,087.9 cm^-1 (CSV column headers, used as
+    is). No per-spectrum sample ids are in the deposit, so the replicate structure of the 215 spectra over
+    the 53 bottles is not recoverable. The CSV is served from a frozen copy mirrored at HTW-KI-Werkstatt/RamanBench
+    (aged_oils/, size + sha256 pinned) because the live Mendeley download sits behind a WAF that 403s non-browser
+    clients.'
+  rai:dataAnnotationProtocol: The per-spectrum peroxide value (wet-chemical titration) and the oil class
+    (from the commercial product) are recorded in the deposit's CSV; no human labelling of the spectra themselves
+    was involved.
+  rai:dataBiases: 'Single lab campaign (University of Delaware) on oils naturally aged 5-7 years from one
+    2014-2016 purchasing window in one region (Newark, Delaware), so class and PV distributions may not
+    represent other regions, seasons, brands or aging periods. The 215 spectra are replicates of 53 bottles,
+    but no per-spectrum sample ids are in the deposit, so the replicate structure is not recoverable and
+    ungrouped cross-validation may leak between replicates of the same bottle (ungrouped splitting is the
+    only option). Class coverage: 15 of 19 classes, unbalanced. The probe''s intensity scale (-5.4e3-4.2e4)
+    differs from Data Set 1A''s (2.8e4-2.1e7), so models must not be transferred between the two datasets.'
+  rai:dataCollection: Raman measurements (replicate spectra per bottle) of 53 naturally aged edible oil
+    bottles (215 spectra), University of Delaware campaign; peroxide values by wet-chemical titration. Instrument
+    model and excitation wavelength are not recorded in the deposit.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 215 spectra over 53 bottles without recoverable sample ids (ungrouped CV may leak
+    between replicates of the same bottle); 15 of 19 oil classes present, unbalanced; instrument and excitation
+    wavelength not recorded; different Raman probe from Data Set 1A (incompatible intensity scale).
+  rai:dataPreprocessingProtocol: None in the loader. The CSV is the deposit's analysis-ready export; intensities
+    are raw as deposited. The authors' supplemental R code applies its own preprocessing in analysis, not
+    to the deposited data.
+  rai:dataSocialImpact: Supports research into shelf-life and freshness assessment of edible oils (food
+    safety and quality); any consumer- or regulatory-facing use requires validation against independent
+    lots, brands and aging conditions.
+  rai:dataUseCases: Peroxide-value (freshness) regression from a single Raman spectrum; oil-class classification
+    (15 classes present, with the coverage caveats above). Because no sample ids are available, group-aware
+    (leave-one-bottle-out) splitting is not possible.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are commercial
+    edible oils without any human identifiers.
 ait_glucose_blood_sers:
   prov:wasDerivedFrom: https://github.com/AIT-brainlab/raman-for-glucose-measurement
   prov:wasGeneratedBy: 'Data collection: Laboratory measurements on human biological
