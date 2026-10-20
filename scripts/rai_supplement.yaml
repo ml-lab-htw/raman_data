@@ -3763,6 +3763,50 @@ serum_prostate_cancer:
     measurements constitute sensitive health-related data under applicable data-protection
     regulations. Ethics approval obtained from Ren Ji Hospital, SJTU School of Medicine
     (KY2021-030).
+sers_gna_bacteria:
+  prov:wasDerivedFrom: https://doi.org/10.5281/zenodo.23426967
+  prov:wasGeneratedBy: 'Data collection: surface-enhanced Raman scattering (SERS) spectra of bacterial droplets
+    on an anisotropic gold nanorod array (Gulmus, Oncer, Karatas, Gormez, Yilmaz & Yilmaz 2026, Zenodo,
+    doi:10.5281/zenodo.23426967; the associated article is under review). 117 spectra of nine strains (3
+    each of E. coli 29922/K4/BAA-2523, P. aeruginosa 9027/10145/27853 and S. aureus 6538/25923/43300); each
+    strain was cultivated once and deposited as one 5 uL (0.5 McFarland) droplet on a single GNA substrate,
+    all 13 spectra of a strain recorded from that droplet on the same day. WITec alpha 300R confocal Raman
+    microscope, 785 nm excitation, x50 objective, 10 mW, ~3.03 s integration, 4 cm^-1 spectral resolution.
+    The loader reads the raw WITec instrument text files (counts, before any preprocessing); all 117 share
+    one 1,024-point 247.99-1,997.9 cm^-1 axis, used as is. Annotation: strain identity is known a priori
+    from the cultivation/deposit plan; no human labelling of spectra was involved. Zenodo v1.0.1 archive
+    data are byte-identical to the commit-pinned GitHub repository (1028526).'
+  rai:dataAnnotationProtocol: 'Each spectrum is labelled with the strain of its droplet: one of nine designations
+    (3 x E. coli, 3 x P. aeruginosa, 3 x S. aureus), assigned from the known cultivation/deposit order.
+    No human labelling of spectra was involved.'
+  rai:dataBiases: 'Single lab, single instrument, single substrate type and single acquisition day: all
+    13 spectra of a strain come from one droplet of one culture (strong within-strain correlation; group_ids
+    = strain, 9 groups). The strains were acquired in a fixed species-interleaved sequence, so acquisition
+    order is confounded with strain and the paper analyses the resulting order trends (drift); a model may
+    learn drift artifacts instead of biology. SERS intensity is substrate-position dependent, so absolute
+    intensities are not comparable across spots or substrates. Nine classes of 13 spectra each is a small
+    set; results may not generalise to other strains, species or SERS substrates.'
+  rai:dataCollection: SERS measurements (WITec alpha 300R, 785 nm, x50, 10 mW, ~3.03 s) of 9 x 13 spectra
+    from single-droplet deposits of nine bacterial strains on one anisotropic gold nanorod array substrate,
+    250-2,000 cm^-1 region, 1,024 points per spectrum.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 'The loader ships the raw instrument files (counts before baseline correction, smoothing
+    or normalization). The deposit''s preprocessed CSV (Data S1: OPUS rubberband + Savitzky-Golay + min-max,
+    1,215 points, with S. aureus exported on a 0-1 scale and the other species on 0-2) is not loaded. Only
+    nine strains (three per species) are covered, one droplet/substrate per strain; within-strain replicates
+    share one physical sample, so leave-strain-out is the protocol-honest split (9 groups). The associated
+    article is under review (no article DOI yet); citation is via the Zenodo record (v1.0.1, 2026-10-17).'
+  rai:dataPreprocessingProtocol: 'None in the loader: raw WITec instrument counts as exported (no baseline
+    correction, smoothing or normalization; no wavelength or position correction recorded in the deposit).'
+  rai:dataSocialImpact: Supports research into rapid, label-free identification of bacterial strains by
+    SERS (e.g. antimicrobial-resistance screening workflows); any diagnostic use requires validation across
+    strains, labs and substrates by qualified microbiologists.
+  rai:dataUseCases: 9-class strain classification (and the derivable 3-species task) from single-spot SERS
+    spectra; group-aware CV is leave-strain-out (9 groups of 13); analysis of acquisition-order drift is
+    supported by the manifest's acquisition_order column in the deposit.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All spectra originate
+    from cultured bacterial samples without individual human identifiers.
 single_cell_prokaryotes:
   prov:wasDerivedFrom: https://data.mendeley.com/datasets/8cd34fckgt/1
   prov:wasGeneratedBy: 'Data collection: Laboratory measurements on biological materials including microorganisms, cell

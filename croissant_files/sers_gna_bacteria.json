@@ -1,0 +1,148 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "SERS spectra of nine bacterial strains (E. coli, P. aeruginosa, S. aureus) on an anisotropic gold nanorod array (Gulmus et al. 2026)",
+  "description": "117 SERS spectra of nine bacterial strains (3 each of E. coli 29922/K4/BAA-2523, P. aeruginosa 9027/10145/27853 and S. aureus 6538/25923/43300) on an anisotropic gold nanorod array (Gulmus et al. 2026; the associated article is under review, so the Zenodo record v1.0.1, doi:10.5281/zenodo.23426967, is the citation; the repo's earlier v1.0.0 record is doi:10.5281/zenodo.23284998). WITec alpha 300R confocal Raman microscope, 785 nm excitation, x50 objective, 10 mW, ~3.03 s integration, 4 cm^-1 spectral resolution. Each strain was cultivated once and deposited as one 5 uL (0.5 McFarland) droplet on a single GNA substrate; all 13 spectra of a strain were recorded from that droplet on the same day, so group_ids = strain (9 groups of 13) and leave-strain-out is the paper's validation protocol (it also analyses acquisition-order trends within each strain). The loader reads the raw WITec instrument text files (counts, before any baseline correction, smoothing or normalization): all 117 share one 1,024-point 247.99-1,997.9 cm^-1 axis (non-uniform, 1.44-2.04 cm^-1 spacing), used as is. The deposit's preprocessed CSV (Data S1; OPUS 5.5 rubberband + Savitzky-Golay + min-max normalization, 1,215 points, with the S. aureus spectra exported on a 0-1 scale and the other two species on 0-2) is not loaded. Strain classification is the primary task; the 3-species task is derivable from the class-name prefixes. The repo is served as a commit-pinned archive (1028526, size + sha256 pinned; the Zenodo v1.0.1 archive's data are byte-identical).",
+  "url": "https://github.com/erkankaratas-eng/sers-gna-bacteria",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Biological",
+    "Classification",
+    "SERS",
+    "microbiology"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@dataset{Gulmus_2026_sers_gna, title={SERS spectra of nine bacterial strains on a gold nanorod array - data and analysis code}, author={Can Gulmus, Feyzanur and Oncer, Nazli and Karatas, Erkan and Gormez, Arzu and Yilmaz, Asli and Yilmaz, Mehmet}, year={2026}, publisher={Zenodo}, doi={10.5281/zenodo.23426967}, url={https://doi.org/10.5281/zenodo.23426967}}",
+  "citation": "Gulmus, F. C., Oncer, N., Karatas, E., Gormez, A., Yilmaz, A., and Yilmaz, M. (2026). SERS spectra of nine bacterial strains on a gold nanorod array - data and analysis code (v1.0.1). Zenodo. https://doi.org/10.5281/zenodo.23426967",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "sers_gna_bacteria_source",
+      "name": "SERS spectra of nine bacterial strains (E. coli, P. aeruginosa, S. aureus) on an anisotropic gold nanorod array (Gulmus et al. 2026)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://github.com/erkankaratas-eng/sers-gna-bacteria",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "38bf26231917a66ff0b4bf93231f92b44fa6d53a39352372aef91ca9437ae5ab"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "sers_gna_bacteria_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "sers_gna_bacteria_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "sers_gna_bacteria_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "sers_gna_bacteria_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "SERS measurements (WITec alpha 300R, 785 nm, x50, 10 mW, ~3.03 s) of 9 x 13 spectra from single-droplet deposits of nine bacterial strains on one anisotropic gold nanorod array substrate, 250-2,000 cm^-1 region, 1,024 points per spectrum.",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "None in the loader: raw WITec instrument counts as exported (no baseline correction, smoothing or normalization; no wavelength or position correction recorded in the deposit).",
+  "rai:dataAnnotationProtocol": "Each spectrum is labelled with the strain of its droplet: one of nine designations (3 x E. coli, 3 x P. aeruginosa, 3 x S. aureus), assigned from the known cultivation/deposit order. No human labelling of spectra was involved.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from cultured bacterial samples without individual human identifiers.",
+  "rai:dataBiases": "Single lab, single instrument, single substrate type and single acquisition day: all 13 spectra of a strain come from one droplet of one culture (strong within-strain correlation; group_ids = strain, 9 groups). The strains were acquired in a fixed species-interleaved sequence, so acquisition order is confounded with strain and the paper analyses the resulting order trends (drift); a model may learn drift artifacts instead of biology. SERS intensity is substrate-position dependent, so absolute intensities are not comparable across spots or substrates. Nine classes of 13 spectra each is a small set; results may not generalise to other strains, species or SERS substrates.",
+  "rai:dataLimitations": "The loader ships the raw instrument files (counts before baseline correction, smoothing or normalization). The deposit's preprocessed CSV (Data S1: OPUS rubberband + Savitzky-Golay + min-max, 1,215 points, with S. aureus exported on a 0-1 scale and the other species on 0-2) is not loaded. Only nine strains (three per species) are covered, one droplet/substrate per strain; within-strain replicates share one physical sample, so leave-strain-out is the protocol-honest split (9 groups). The associated article is under review (no article DOI yet); citation is via the Zenodo record (v1.0.1, 2026-10-17).",
+  "rai:dataSocialImpact": "Supports research into rapid, label-free identification of bacterial strains by SERS (e.g. antimicrobial-resistance screening workflows); any diagnostic use requires validation across strains, labs and substrates by qualified microbiologists.",
+  "rai:dataUseCases": "9-class strain classification (and the derivable 3-species task) from single-spot SERS spectra; group-aware CV is leave-strain-out (9 groups of 13); analysis of acquisition-order drift is supported by the manifest's acquisition_order column in the deposit.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: surface-enhanced Raman scattering (SERS) spectra of bacterial droplets on an anisotropic gold nanorod array (Gulmus, Oncer, Karatas, Gormez, Yilmaz & Yilmaz 2026, Zenodo, doi:10.5281/zenodo.23426967; the associated article is under review). 117 spectra of nine strains (3 each of E. coli 29922/K4/BAA-2523, P. aeruginosa 9027/10145/27853 and S. aureus 6538/25923/43300); each strain was cultivated once and deposited as one 5 uL (0.5 McFarland) droplet on a single GNA substrate, all 13 spectra of a strain recorded from that droplet on the same day. WITec alpha 300R confocal Raman microscope, 785 nm excitation, x50 objective, 10 mW, ~3.03 s integration, 4 cm^-1 spectral resolution. The loader reads the raw WITec instrument text files (counts, before any preprocessing); all 117 share one 1,024-point 247.99-1,997.9 cm^-1 axis, used as is. Annotation: strain identity is known a priori from the cultivation/deposit plan; no human labelling of spectra was involved. Zenodo v1.0.1 archive data are byte-identical to the commit-pinned GitHub repository (1028526).",
+  "prov:wasDerivedFrom": "https://doi.org/10.5281/zenodo.23426967"
+}

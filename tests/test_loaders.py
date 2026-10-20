@@ -834,3 +834,37 @@ def test_infant_formula_raman():
     assert not np.isnan(dataset.spectra).any()
     assert not np.isnan(dataset.targets).any()
 
+
+def test_sers_gna_bacteria():
+    dataset = GitHubLoader.load_dataset("sers_gna_bacteria")
+    # 117 raw SERS spectra (9 strains x 13) on a gold nanorod array
+    # (Gulmus 2026), 785 nm, native 1,024-point axis (identical in
+    # all 117 WITec instrument files, non-uniform 1.44-2.04 cm^-1
+    # spacing).
+    assert dataset.spectra.shape == (117, 1024)
+    assert dataset.raman_shifts[0] == pytest.approx(247.990908, abs=1e-3)
+    assert dataset.raman_shifts[-1] == pytest.approx(1997.905099, abs=1e-3)
+    d = np.diff(dataset.raman_shifts)
+    assert (d > 1.0).all() and (d < 2.1).all()
+    expected = {
+        "E_coli_29922", "E_coli_BAA-2523", "E_coli_K4",
+        "P_aeruginosa_10145", "P_aeruginosa_27853", "P_aeruginosa_9027",
+        "S_aureus_25923", "S_aureus_43300", "S_aureus_6538",
+    }
+    assert set(dataset.target_names) == expected
+    counts = dict(zip(*np.unique(dataset.targets, return_counts=True)))
+    assert len(counts) == 9
+    assert all(c == 13 for c in counts.values())
+    # All 13 spectra of a strain come from one droplet on one GNA
+    # substrate of one culture: group = strain (the paper's
+    # leave-strain-out validation).
+    g = dataset.group_ids
+    per_group = collections.Counter(g.tolist())
+    assert set(per_group) == expected
+    assert all(c == 13 for c in per_group.values())
+    assert _groups_are_label_pure(dataset)
+    # Raw instrument counts: strictly positive, ~4.2e3-1.45e4.
+    assert dataset.spectra.min() > 0
+    assert dataset.spectra.max() < 15000
+    assert not np.isnan(dataset.spectra).any()
+

@@ -11,6 +11,20 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `sers_gna_bacteria`: 117 raw SERS spectra (9 bacterial strains x 13;
+  3 each of E. coli, P. aeruginosa, S. aureus) on an anisotropic gold
+  nanorod array (Gulmus et al. 2026, Zenodo v1.0.1,
+  doi:10.5281/zenodo.23426967; the associated article is under review).
+  WITec alpha 300R, 785 nm, 1,024-point native axis 247.99-1,997.9
+  cm^-1 (identical in all 117 instrument files, used as is). The
+  loader reads the raw WITec instrument files (the deposit's
+  preprocessed Data S1 CSV - rubberband + Savitzky-Golay + min-max,
+  mixed 0-1/0-2 export scales - is not loaded); it serves as the
+  117-row manifest for the join. All 13 spectra of a strain come from
+  one droplet on one substrate of one culture, so group_ids = strain
+  (9 groups; leave-strain-out is the paper's protocol). Served as a
+  commit-pinned GitHub archive (size + sha256 pinned; the Zenodo
+  v1.0.1 archive's data are byte-identical).
 - `infant_formula_raman`: 373 Raman spectra of powdered infant formula
   products (Zhang 2020, Mendeley Data,
   doi:10.17632/4j8bj5vv52.2): 24 product types = 4 de-identified

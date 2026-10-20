@@ -9,7 +9,7 @@ import pandas as pd
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.utils import is_wavenumber, encode_labels
-from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, APPLICATION_TYPE
+from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, APPLICATION_TYPE, HASH_TYPE
 
 
 class GitHubLoader(BaseLoader):
@@ -278,6 +278,77 @@ class GitHubLoader(BaseLoader):
             is_grouped=True,
             # Checked: every row of every demo file carries a 0/1
             # label in the first column; no missing values.
+            has_missing_labels=False,
+        ),
+        "sers_gna_bacteria": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Biological,
+            id="sers_gna_bacteria",
+            name="SERS of Nine Bacterial Strains on a Gold Nanorod Array (Gulmus 2026)",
+            short_name="SERS GNA Bacteria",
+            license="CC BY 4.0",
+            loader=lambda cache_path: GitHubLoader._load_sers_gna_bacteria(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "SERS spectra of nine bacterial strains (E. coli, "
+                    "P. aeruginosa, S. aureus) on an anisotropic gold "
+                    "nanorod array (Gulmus et al. 2026)"
+                ),
+                "source": "https://github.com/erkankaratas-eng/sers-gna-bacteria",
+                "paper": "https://doi.org/10.5281/zenodo.23426967",
+                "bibtex": "@dataset{Gulmus_2026_sers_gna, title={SERS spectra of nine bacterial strains on a gold nanorod array - data and analysis code}, author={Can Gulmus, Feyzanur and Oncer, Nazli and Karatas, Erkan and Gormez, Arzu and Yilmaz, Asli and Yilmaz, Mehmet}, year={2026}, publisher={Zenodo}, doi={10.5281/zenodo.23426967}, url={https://doi.org/10.5281/zenodo.23426967}}",
+                "citation": [
+                    "Gulmus, F. C., Oncer, N., Karatas, E., Gormez, A., "
+                    "Yilmaz, A., and Yilmaz, M. (2026). SERS spectra of "
+                    "nine bacterial strains on a gold nanorod array - "
+                    "data and analysis code (v1.0.1). Zenodo. "
+                    "https://doi.org/10.5281/zenodo.23426967",
+                ],
+                "description": (
+                    "117 SERS spectra of nine bacterial strains (3 each "
+                    "of E. coli 29922/K4/BAA-2523, P. aeruginosa "
+                    "9027/10145/27853 and S. aureus 6538/25923/43300) "
+                    "on an anisotropic gold nanorod array (Gulmus et "
+                    "al. 2026; the associated article is under review, "
+                    "so the Zenodo record v1.0.1, "
+                    "doi:10.5281/zenodo.23426967, is the citation; the "
+                    "repo's earlier v1.0.0 record is "
+                    "doi:10.5281/zenodo.23284998). WITec alpha 300R "
+                    "confocal Raman microscope, 785 nm excitation, x50 "
+                    "objective, 10 mW, ~3.03 s integration, 4 cm^-1 "
+                    "spectral resolution. Each strain was cultivated "
+                    "once and deposited as one 5 uL (0.5 McFarland) "
+                    "droplet on a single GNA substrate; all 13 spectra "
+                    "of a strain were recorded from that droplet on the "
+                    "same day, so group_ids = strain (9 groups of 13) "
+                    "and leave-strain-out is the paper's validation "
+                    "protocol (it also analyses acquisition-order "
+                    "trends within each strain). The loader reads the "
+                    "raw WITec instrument text files (counts, before "
+                    "any baseline correction, smoothing or "
+                    "normalization): all 117 share one 1,024-point "
+                    "247.99-1,997.9 cm^-1 axis (non-uniform, "
+                    "1.44-2.04 cm^-1 spacing), used as is. The "
+                    "deposit's preprocessed CSV (Data S1; OPUS 5.5 "
+                    "rubberband + Savitzky-Golay + min-max "
+                    "normalization, 1,215 points, with the S. aureus "
+                    "spectra exported on a 0-1 scale and the other two "
+                    "species on 0-2) is not loaded. Strain "
+                    "classification is the primary task; the 3-species "
+                    "task is derivable from the class-name prefixes. "
+                    "The repo is served as a commit-pinned archive "
+                    "(1028526, size + sha256 pinned; the Zenodo v1.0.1 "
+                    "archive's data are byte-identical)."
+                ),
+            },
+            # Checked: all 13 spectra of a strain come from one droplet
+            # on one GNA substrate of one culture (same day), so the
+            # strain is the finest correlated unit (9 groups).
+            is_grouped=True,
+            # Checked: all 117 rows of the Data S1 manifest join a raw
+            # instrument file of the same strain; no missing values.
             has_missing_labels=False,
         ),
     }
@@ -816,3 +887,203 @@ class GitHubLoader(BaseLoader):
             f"{len(set(group_ids.tolist()))} groups"
         )
         return spectra, GitHubLoader._LIVER_GRID, targets, class_names, group_ids
+
+    # ------------------------------------------------------------------
+    # sers_gna_bacteria (GitHub erkankaratas-eng/sers-gna-bacteria)
+    # ------------------------------------------------------------------
+    # Gulmus et al. 2026, "SERS spectra of nine bacterial strains on a
+    # gold nanorod array - data and analysis code" (Zenodo
+    # 10.5281/zenodo.23426967, v1.0.1, CC BY 4.0; the associated
+    # article is under review, so the Zenodo record is the citation).
+    #
+    # 117 SERS spectra (9 strains x 13) of E. coli, P. aeruginosa and
+    # S. aureus on an anisotropic gold nanorod array (WITec alpha
+    # 300R, 785 nm, x50, 10 mW, ~3.03 s, 4 cm^-1). The loader reads
+    # the raw instrument text files (counts, before baseline
+    # correction, smoothing or normalization); all 117 share one
+    # 1,024-point 247.99-1,997.9 cm^-1 axis, used as is. The
+    # deposit's preprocessed CSV (Data S1: OPUS rubberband +
+    # Savitzky-Golay + min-max, 1,215 points, S. aureus exported on
+    # a 0-1 scale, the other species on 0-2) is not loaded; it
+    # serves as the authoritative 117-row manifest.
+    _GNA_BACTERIA_REPO = "erkankaratas-eng/sers-gna-bacteria"
+    # Pinned commit (repo tip at capture time; the commit the Zenodo
+    # v1.0.1 archive was cut from - its data are byte-identical).
+    _GNA_BACTERIA_COMMIT = "1028526d22d499568c4baf135b8633b7aadb90b0"
+    _GNA_BACTERIA_ZIP_URL = (
+        f"https://github.com/{_GNA_BACTERIA_REPO}/archive/"
+        f"{_GNA_BACTERIA_COMMIT}.zip"
+    )
+    _GNA_BACTERIA_ZIP = "sers-gna-bacteria.zip"
+    # codeload zips of a pinned commit are byte-reproducible (verified
+    # by double download).
+    _GNA_BACTERIA_ZIP_SIZE = 10807998
+    _GNA_BACTERIA_ZIP_SHA256 = (
+        "3ecb3febcbf7b60ae4fb3f069e0c1ecb682ff9817961906a43f6a9ff751dd0ef"
+    )
+    _GNA_BACTERIA_ROOT = f"sers-gna-bacteria-{_GNA_BACTERIA_COMMIT}"
+    _GNA_BACTERIA_N_SPECTRA = 117
+    _GNA_BACTERIA_N_SPECTRA_PER_STRAIN = 13
+    _GNA_BACTERIA_N_POINTS = 1024
+
+    @staticmethod
+    def _load_sers_gna_bacteria(cache_path: str):
+        """
+        Download (if needed) and load the SERS gold-nanorod-array
+        bacteria dataset: 117 raw spectra (9 strains x 13) on the
+        shared native 1,024-point 247.99-1,997.9 cm^-1 axis.
+
+        The deposit's Data S1 CSV provides the 117-row manifest
+        (species, strain, raw file number, acquisition order); each
+        row joins the corresponding raw WITec instrument file in
+        data/raw_spectra/<strain>/<raw_file_number>.txt. Rows are
+        emitted in the manifest's (Data S1) row order.
+
+        group_ids = strain folder name (9 groups of 13: all spectra
+        of a strain come from one droplet on one substrate of one
+        culture).
+
+        Returns spectra, raman_shifts, targets, class_names,
+        group_ids.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        zip_file = os.path.join(cache_path, GitHubLoader._GNA_BACTERIA_ZIP)
+        if (
+            os.path.exists(zip_file)
+            and os.path.getsize(zip_file)
+            != GitHubLoader._GNA_BACTERIA_ZIP_SIZE
+        ):
+            os.remove(zip_file)
+        result = LoaderTools.download(
+            url=GitHubLoader._GNA_BACTERIA_ZIP_URL,
+            out_dir_path=cache_path,
+            out_file_name=GitHubLoader._GNA_BACTERIA_ZIP,
+            hash_target=GitHubLoader._GNA_BACTERIA_ZIP_SHA256,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                "[!] sers_gna_bacteria: archive download failed "
+                "(network error or checksum mismatch). See logs."
+            )
+        repo_root = os.path.join(cache_path, GitHubLoader._GNA_BACTERIA_ROOT)
+        if not os.path.isdir(repo_root):
+            LoaderTools.extract_zip_file_content(zip_file)
+        manifest = os.path.join(
+            repo_root, "data", "sers_spectra_preprocessed.csv"
+        )
+        raw_root = os.path.join(repo_root, "data", "raw_spectra")
+        if not os.path.isfile(manifest) or not os.path.isdir(raw_root):
+            raise RuntimeError(
+                "[!] sers_gna_bacteria: the archive layout changed "
+                "(data/sers_spectra_preprocessed.csv and/or "
+                "data/raw_spectra/ missing)."
+            )
+        df = pd.read_csv(manifest)
+        if df.shape[0] != GitHubLoader._GNA_BACTERIA_N_SPECTRA:
+            raise RuntimeError(
+                "[!] sers_gna_bacteria: expected "
+                f"{GitHubLoader._GNA_BACTERIA_N_SPECTRA} manifest "
+                f"rows, got {df.shape[0]}."
+            )
+        # Join the manifest to the strain folders: each
+        # (species, strain) group must match exactly one folder by
+        # its set of raw file numbers.
+        folder_files = {
+            f: {
+                int(t[:-4])
+                for t in os.listdir(os.path.join(raw_root, f))
+                if t.endswith(".txt")
+            }
+            for f in os.listdir(raw_root)
+        }
+        folder_for = {}
+        for (species, strain), g in df.groupby(["species", "strain"]):
+            if len(g) != GitHubLoader._GNA_BACTERIA_N_SPECTRA_PER_STRAIN:
+                raise RuntimeError(
+                    "[!] sers_gna_bacteria: strain "
+                    f"{species} {strain} has {len(g)} manifest rows, "
+                    "expected "
+                    f"{GitHubLoader._GNA_BACTERIA_N_SPECTRA_PER_STRAIN}."
+                )
+            need = {int(v) for v in g["raw_file_number"]}
+            cands = [
+                f for f, s in folder_files.items() if s == need
+            ]
+            if len(cands) != 1:
+                raise RuntimeError(
+                    "[!] sers_gna_bacteria: expected exactly one "
+                    f"folder for {species} {strain}, matched "
+                    f"{cands}."
+                )
+            folder_for[(species, strain)] = cands[0]
+        if len(folder_for) != 9:
+            raise RuntimeError(
+                "[!] sers_gna_bacteria: expected 9 strains, found "
+                f"{len(folder_for)}."
+            )
+
+        axis_ref = None
+        spectra_list = []
+        targets_list = []
+        group_list = []
+        class_names = []
+        class_index = {}
+        for row in df.itertuples(index=False):
+            key = (row.species, row.strain)
+            folder = folder_for[key]
+            raw_path = os.path.join(
+                raw_root, folder, f"{int(row.raw_file_number)}.txt"
+            )
+            arr = np.loadtxt(raw_path, delimiter="\t")
+            if arr.shape != (
+                GitHubLoader._GNA_BACTERIA_N_POINTS,
+                2,
+            ) or not np.isfinite(arr).all():
+                raise RuntimeError(
+                    "[!] sers_gna_bacteria: bad raw file "
+                    f"{folder}/{int(row.raw_file_number)}.txt "
+                    f"(shape {arr.shape}, non-finite values)."
+                )
+            if axis_ref is None:
+                axis_ref = arr[:, 0]
+                if not np.all(np.diff(axis_ref) > 0):
+                    raise RuntimeError(
+                        "[!] sers_gna_bacteria: the wavenumber axis "
+                        "is not strictly increasing."
+                    )
+            elif not np.allclose(arr[:, 0], axis_ref, atol=1e-6):
+                raise RuntimeError(
+                    "[!] sers_gna_bacteria: the raw files do not "
+                    "share a common wavenumber axis."
+                )
+            if key not in class_index:
+                class_index[key] = len(class_names)
+                class_names.append(folder)
+            targets_list.append(class_index[key])
+            group_list.append(folder)
+            spectra_list.append(arr[:, 1])
+
+        if not (
+            240.0 < axis_ref[0] < 260.0
+            and 1990.0 < axis_ref[-1] < 2010.0
+        ):
+            raise RuntimeError(
+                "[!] sers_gna_bacteria: unexpected wavenumber range "
+                f"({axis_ref[0]:.3f}..{axis_ref[-1]:.3f} cm^-1)."
+            )
+        spectra = np.vstack(spectra_list)
+        targets = np.asarray(targets_list, dtype=int)
+        group_ids = np.asarray(group_list)
+        GitHubLoader.logger.debug(
+            f"Loaded sers_gna_bacteria: {spectra.shape[0]} spectra x "
+            f"{spectra.shape[1]} points, {len(class_names)} strains, "
+            f"{len(set(group_ids.tolist()))} groups"
+        )
+        return (
+            spectra,
+            axis_ref,
+            targets,
+            class_names,
+            group_ids,
+        )
