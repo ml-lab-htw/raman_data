@@ -11,6 +11,19 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `breast_cancer_subtypes`: label-free Raman spectra of ex vivo human
+  breast tissue for histological subtype classification — normal vs.
+  invasive ductal carcinoma (IDC) vs. invasive lobular carcinoma (ILC)
+  vs. ductal carcinoma in situ (DCIS) (Ezzat et al. 2026, *Scientific
+  Reports*, doi:10.1038/s41598-026-54071-5, Imperial College London;
+  data release doi:10.5281/zenodo.20042934, Zenodo, CC-BY 4.0).
+  641 spectra (177 normal, 221 DCIS, 114 IDC, 129 ILC) from 80 frozen
+  tissue samples (46 normal, 34 cancerous) on a confocal Raman
+  microscope (DXR3xi, Thermo Fisher Scientific), 785 nm excitation,
+  500–2,998 cm⁻¹ at 2 cm⁻¹. Group ids are the 80 tissue samples
+  (the paper's 71-individual mapping is not in the deposit). Deposit
+  is the authors' pipeline output minus ROI selection /
+  normalization (baseline-corrected; not z-scored; full range).
 - `stroke_urine_sers_532` / `stroke_urine_sers_633`: urine SERS spectra
   for ischemic-stroke vs. healthy-control classification (Yu et al. 2026,
   *Science Advances* 12(27):eaee3487,
