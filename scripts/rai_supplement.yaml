@@ -3005,6 +3005,40 @@ microplastics_training_8cm:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
+microplastics_training_clean:
+  prov:wasDerivedFrom: https://doi.org/10.5683/SP3/LSN0R0
+  prov:wasGeneratedBy: 'Data collection: Laboratory measurements on solid or liquid
+    material samples including minerals, polymers, and organic pigments. Preprocessing:
+    Spectra are provided with class labels. Any preprocessing applied (baseline correction,
+    smoothing, normalisation) is described in the source publication. Annotation:
+    Class labels assigned based on known sample identity or validated analytical reference
+    methods.'
+  rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
+    or validated analytical reference methods.
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may
+    not generalise to field or clinical settings. Spectral profiles are influenced
+    by instrument-specific factors (laser wavelength, detector type, optical path
+    length, integration time). Class imbalances may be present in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer.
+    Each spectrum represents the scattered light intensity as a function of Raman
+    shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on solid or liquid material samples
+    including minerals, polymers, and organic pigments.
+  rai:dataLimitations: 'Reference spectra represent ideal laboratory conditions; real-world
+    samples may show additional interference from impurities, fluorescence, or surface
+    effects.'
+  rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
+    applied (baseline correction, smoothing, normalisation) is described in the source
+    publication.
+  rai:dataSocialImpact: Facilitates non-destructive material characterisation and
+    identification with applications in geology, environmental science, art conservation,
+    and industrial quality assurance.
+  rai:dataUseCases: Spectral library matching, material identification, disease screening,
+    compound recognition, quality control.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included.
+    All spectra originate from chemical, biological, or material samples without individual
+    human identifiers.
 microplastics_weathered:
   rai:dataAnnotationProtocol: Polymer-type labels assigned by combined Raman spectroscopy
     and ATR-FTIR identification against a Raman Database of Standard Microplastics
