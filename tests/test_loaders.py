@@ -3,6 +3,7 @@ A general checkup of loader's implementation.
 """
 
 import collections
+import re
 from raman_data import raman_data
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.KaggleLoader import KaggleLoader
@@ -799,4 +800,37 @@ def test_liver_cancer_raman():
     assert dataset.spectra.min() < -1000
     assert 6100 < dataset.spectra.max() < 6300
     assert not np.isnan(dataset.spectra).any()
+
+
+def test_infant_formula_raman():
+    dataset = MendeleyLoader.load_dataset("infant_formula_raman")
+    # 373 spectra of powdered infant formula products: 24 product
+    # types = 4 de-identified brands x 3 formula stages x
+    # online/offline purchase channel (Zhang 2020, Mendeley
+    # 4j8bj5vv52 v2). Native 1,738-point axis (CSV column headers),
+    # no resampling.
+    assert dataset.spectra.shape == (373, 1738)
+    assert dataset.raman_shifts[0] == pytest.approx(50.15215)
+    assert dataset.raman_shifts[-1] == pytest.approx(3399.899)
+    assert len(dataset.target_names) == 24
+    # Class names encode brand_stage-channel, e.g. A_stage1_offline.
+    pattern = re.compile(r"^[ABNQ]_stage[123]_(online|offline)$")
+    assert all(pattern.match(n) for n in dataset.target_names)
+    assert dataset.target_names[0] == "A_stage1_offline"
+    assert dataset.target_names[1] == "A_stage1_online"
+    counts = dict(zip(*np.unique(dataset.targets, return_counts=True)))
+    assert set(counts) == set(range(24))
+    assert sum(counts.values()) == 373
+    # The two Q stage-1 types have the fewest spectra; B stage-3
+    # offline the most.
+    assert min(counts.values()) == 5
+    assert max(counts.values()) == 24
+    # No sample/bottle identifiers in the deposit: ungrouped.
+    assert dataset.group_ids is None
+    # Raw as-deposited intensities: arbitrary units, negative points
+    # down to ~-1.8e3, maxima ~1.1e4.
+    assert dataset.spectra.min() < -1800
+    assert dataset.spectra.max() > 11000
+    assert not np.isnan(dataset.spectra).any()
+    assert not np.isnan(dataset.targets).any()
 

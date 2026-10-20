@@ -2047,6 +2047,48 @@ ht_raman_bio_catalysis_axp:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
+infant_formula_raman:
+  prov:wasDerivedFrom: https://doi.org/10.17632/4j8bj5vv52.2
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of powdered infant formula products purchased through
+    online and offline channels (Zhang 2020, Mendeley Data, doi:10.17632/4j8bj5vv52.2). 373 spectra of 24
+    product types: 4 de-identified brands (A/B/N/Q) x 3 formula stages (1: 0-6 months, 2: 6-12 months, 3:
+    12-36 months) x purchase channel (online/offline), 5-24 spectra per type. Native 1,738-point spectra
+    over 50.2-3,399.9 cm^-1 (~1.93 cm^-1 spacing, ~2 cm^-1 resolution per the authors'' code report); the
+    shared axis is stored as the CSV column headers and used as is (no resampling). Preprocessing: none
+    at export; intensities are raw as deposited. Annotation: product-type labels (brand x stage x channel)
+    assigned from the purchase metadata of each bottle; no human labelling of spectra was involved. Deposit
+    v1 and v2 are identical for the data files.'
+  rai:dataAnnotationProtocol: 'Each spectrum is labelled with the product type of its bottle: one of 24
+    combinations of de-identified brand (A/B/N/Q), formula stage (1/2/3) and purchase channel (online/offline),
+    as recorded in the deposit''s labels file. No human labelling of spectra was involved.'
+  rai:dataBiases: Single study, 4 brands, 3 stages, 2 channels; brand names are de-identified by the authors,
+    so models cannot be related to specific commercial products. Classes are strongly imbalanced (5-24 spectra
+    per product type; the two Q stage-1 types have only 5 each). No per-spectrum sample or bottle identifiers
+    are included, so replicate structure (if any) is unknown and group-aware splitting is not possible.
+    Raw intensities are in arbitrary units from a single instrument; absolute levels are not comparable
+    across acquisitions.
+  rai:dataCollection: Raman spectra of powdered infant formula products (4 brands x 3 formula stages, purchased
+    online and offline). 373 spectra on a native 1,738-point axis over 50.2-3,399.9 cm^-1 (~2 cm^-1 resolution
+    per the authors' code report); the excitation wavelength is not recorded in the deposit.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: No per-spectrum sample or bottle identifiers, so replicate structure is unknown and
+    group-aware (e.g. leave-one-bottle-out) CV is not possible; k-fold CV on individual spectra may overestimate
+    performance if bottles were measured repeatedly. Brand names are de-identified (A/B/N/Q), so results
+    cannot be mapped to commercial brands. The excitation wavelength and instrument model are not recorded.
+    Single instrument, unknown acquisition settings; generalisation to other instruments requires external
+    validation.
+  rai:dataPreprocessingProtocol: None. The CSV is the authors' analysis-ready export; intensities are raw
+    as deposited (arbitrary units, including negative points down to ~-1.8e3). The authors' code report
+    applies ElasticNet/PCA in analysis, not to the deposited data.
+  rai:dataSocialImpact: Supports food-authentication and quality-control research for infant formula (brand,
+    stage and purchase-channel discrimination from Raman spectra); any consumer-facing use requires validation
+    on commercial products and instruments.
+  rai:dataUseCases: '24-class classification of product type (brand x stage x channel); derivable sub-tasks:
+    brand (4 classes), formula stage (3 classes), purchase channel (2 classes). k-fold CV on individual
+    spectra (no grouping available).'
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All spectra originate
+    from commercial product samples without individual identifiers.
 illicit_adulterants_ft_raman:
   rai:dataAnnotationProtocol: Compound identity labels assigned from known analytical-grade
     reference standards (purchased from Biosynth International and Sigma-Aldrich).

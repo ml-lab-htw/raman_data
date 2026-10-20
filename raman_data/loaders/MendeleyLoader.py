@@ -461,6 +461,74 @@ class MendeleyLoader(BaseLoader):
                 "normalization was applied at export."
             ),
         ),
+        "infant_formula_raman": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="4j8bj5vv52",
+            name="Infant Formula Products, Online vs Offline Channels (Zhang 2020)",
+            short_name="Infant Formula",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_infant_formula(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of infant formula products from "
+                    "online and offline channels (Zhang 2020)"
+                ),
+                "source": "https://data.mendeley.com/datasets/4j8bj5vv52/2",
+                "doi": "10.17632/4j8bj5vv52.2",
+                "bibtex": "@dataset{Zhang_2020_infant_formula, title={Raman spectra of infant formula products from online and offline channels}, author={Zhang, Yinsheng}, year={2020}, publisher={Mendeley Data}, doi={10.17632/4j8bj5vv52.2}, url={https://doi.org/10.17632/4j8bj5vv52.2}}",
+                "citation": [
+                    "Zhang, Y. (2020). Raman spectra of infant formula "
+                    "products from online and offline channels. "
+                    "Mendeley Data, v2. "
+                    "https://doi.org/10.17632/4j8bj5vv52.2",
+                ],
+                "description": (
+                    "373 Raman spectra of powdered infant formula "
+                    "products: 24 product types = 4 brands (A/B/N/Q, "
+                    "de-identified by the authors) x 3 formula stages "
+                    "(1: 0-6 months, 2: 6-12 months, 3: 12-36 months) "
+                    "x purchase channel (online / offline), 11-24 "
+                    "spectra per type except the two Q stage-1 types "
+                    "with 5 each. Native 1,738-point spectra over "
+                    "50.2-3,399.9 cm^-1 (~1.93 cm^-1 spacing; ~2 "
+                    "cm^-1 resolution per the authors' code report), "
+                    "stored as the CSV column headers (one shared "
+                    "axis) and used as is, so no resampling is "
+                    "involved. Intensities are raw as deposited "
+                    "(arbitrary units, negative points down to "
+                    "~-1.8e3, maxima ~1.1e4); the excitation "
+                    "wavelength is not recorded in the deposit. "
+                    "Label semantics from the deposit's labels file: "
+                    "1/2/3 are the three formula stages (periods) and "
+                    "ON LINE / OFF LINE the online / offline purchase "
+                    "channel. The deposit's tidy CSV is served from a "
+                    "frozen copy mirrored at HTW-KI-Werkstatt/"
+                    "RamanBench (infant_formula/, size + sha256 "
+                    "pinned; the live Mendeley download sits behind a "
+                    "WAF that 403s non-browser clients, hence the "
+                    "mirror); deposit v1 and v2 are identical for the "
+                    "data files. No per-spectrum sample/bottle "
+                    "identifiers are in the deposit, so group-aware "
+                    "splitting is not possible."
+                ),
+            },
+            # Checked: the deposit is a tidy CSV with a single Label
+            # column and no sample/bottle identifiers; each row is one
+            # measurement of an (unidentified) bottle.
+            is_grouped=False,
+            # Checked: all 373 rows carry one of the 24 labels and
+            # the labels file maps all 24.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None. The CSV is the authors' analysis-ready export; "
+                "intensities are raw as deposited (the authors' code "
+                "report applies ElasticNet/PCA in analysis, not to "
+                "the data)."
+            ),
+        ),
     }
 
     logger = logging.getLogger(__name__)
@@ -1219,6 +1287,150 @@ class MendeleyLoader(BaseLoader):
         )
         return spectra, grid, targets, target_cols, np.array(group_list)
 
+
+    # ------------------------------------------------------------------
+    # infant_formula_raman (Mendeley 4j8bj5vv52)
+    # ------------------------------------------------------------------
+    # Zhang 2020, "Raman spectra of infant formula products from
+    # online and offline channels" (Mendeley Data v2,
+    # doi:10.17632/4j8bj5vv52.2, CC BY 4.0).
+    #
+    # The deposit is a tidy CSV (Label column + 1,738 wavenumber
+    # columns, the native axis as column headers) plus a labels file
+    # mapping the 24 label ids to 4 de-identified brands (A/B/N/Q)
+    # x 3 formula stages (1: 0-6 months, 2: 6-12 months, 3:
+    # 12-36 months) x online/offline purchase channel. Deposit v1
+    # and v2 are identical for the data files (v2 only updates the
+    # code-report PDF).
+    #
+    # data.mendeley.com serves downloads through a WAF that
+    # 403-blocks non-browser clients (including CI runners), so this
+    # loader reads frozen copies mirrored on the raman_data
+    # HuggingFace mirror (see infant_formula/MANIFEST.txt for
+    # provenance) instead of the live Mendeley API.
+    _INFANT_FORMULA_CSV = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/infant_formula/Raman%20spectra.csv",
+        "Raman spectra.csv",
+        5928452,
+        "3c82dd1384b9e7d809ee1df5feffd8699b9c1185c79d3e898188126f8b89caa7",
+    )
+    _INFANT_FORMULA_LABELS = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/infant_formula/Raman%20spectra%20labels.txt",
+        "Raman spectra labels.txt",
+        714,
+        "ff53ed7f6fb4aa6a20bff72619abb190238d36d87f1c588f9d702455f570cd46",
+    )
+
+    # Labels file line format: "A-1-OFF LINE     0" (one leading
+    # capital brand letter, stage, channel, trailing id). The
+    # "Labels and Ids:" header, the "* ..." footnotes and the
+    # "Internal ID / Edit date" trailer do not match.
+    _INFANT_FORMULA_LABEL_RE = re.compile(
+        r"^([A-Z])-(\d)-(ON LINE|OFF LINE)\s+(\d+)$"
+    )
+
+    @staticmethod
+    def _load_infant_formula(cache_path: str):
+        """
+        Download (if needed) and load the infant formula Raman
+        dataset: 373 spectra of 24 product types (4 brands x 3
+        formula stages x online/offline purchase channel) on the
+        deposit's native 1,738-point 50.2-3,399.9 cm^-1 axis.
+
+        Returns spectra, raman_shifts, targets, class_names.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        for url, fname, size, sha in (
+            MendeleyLoader._INFANT_FORMULA_CSV,
+            MendeleyLoader._INFANT_FORMULA_LABELS,
+        ):
+            fpath = os.path.join(cache_path, fname)
+            if os.path.exists(fpath) and os.path.getsize(fpath) != size:
+                os.remove(fpath)
+            result = LoaderTools.download(
+                url=url,
+                out_dir_path=cache_path,
+                out_file_name=fname,
+                hash_target=sha,
+                hash_type=HASH_TYPE.sha256,
+            )
+            if result is None:
+                raise RuntimeError(
+                    f"[!] infant_formula_raman: download of {fname} "
+                    "failed (network error or checksum mismatch). "
+                    "See logs."
+                )
+
+        # Parse the labels file into {label_id: (brand, stage,
+        # channel)}; all 24 ids must be present.
+        label_map = {}
+        with open(
+            os.path.join(
+                cache_path, MendeleyLoader._INFANT_FORMULA_LABELS[1]
+            ),
+            encoding="latin-1",
+        ) as fh:
+            for line in fh:
+                m = MendeleyLoader._INFANT_FORMULA_LABEL_RE.match(
+                    line.strip()
+                )
+                if m:
+                    label_map[int(m.group(4))] = (
+                        m.group(1),
+                        m.group(2),
+                        m.group(3),
+                    )
+        if len(label_map) != 24 or set(label_map) != set(range(24)):
+            raise RuntimeError(
+                f"[!] infant_formula_raman: labels file parsed only "
+                f"{len(label_map)}/24 entries (deposit changed?)."
+            )
+
+        df = pd.read_csv(
+            os.path.join(cache_path, MendeleyLoader._INFANT_FORMULA_CSV[1])
+        )
+        if df.shape != (373, 1739):
+            raise RuntimeError(
+                f"[!] infant_formula_raman: expected a 373 x 1,739 "
+                f"CSV (label + 1,738 wavenumbers), got "
+                f"{df.shape} (deposit changed?)."
+            )
+        axis = np.array([float(c) for c in df.columns[1:]])
+        if (
+            not np.all(np.diff(axis) > 0)
+            or not (40.0 < axis[0] < 60.0)
+            or not (3300.0 < axis[-1] < 3500.0)
+        ):
+            raise RuntimeError(
+                "[!] infant_formula_raman: unexpected wavenumber "
+                f"axis ({axis.shape[0]} points, "
+                f"{axis[0]:.3f}..{axis[-1]:.3f} cm^-1)."
+            )
+        labels = df["Label"].to_numpy()
+        if set(np.unique(labels).tolist()) != set(range(24)):
+            raise RuntimeError(
+                "[!] infant_formula_raman: the Label column does "
+                "not cover the 24 expected product types."
+            )
+        spectra = df.iloc[:, 1:].to_numpy(dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError(
+                "[!] infant_formula_raman: NaN values in the "
+                "spectra."
+            )
+        targets = np.asarray(labels, dtype=int)
+        class_names = [
+            f"{brand}_stage{stage}_"
+            f"{'online' if channel == 'ON LINE' else 'offline'}"
+            for brand, stage, channel in (label_map[i] for i in range(24))
+        ]
+        MendeleyLoader.logger.debug(
+            f"Loaded infant_formula_raman: {spectra.shape[0]} spectra "
+            f"x {spectra.shape[1]} points, {len(class_names)} classes"
+        )
+        return spectra, axis, targets, class_names
 
     # ------------------------------------------------------------------
     # BaseLoader interface

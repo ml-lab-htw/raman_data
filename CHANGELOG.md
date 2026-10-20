@@ -11,6 +11,19 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `infant_formula_raman`: 373 Raman spectra of powdered infant formula
+  products (Zhang 2020, Mendeley Data,
+  doi:10.17632/4j8bj5vv52.2): 24 product types = 4 de-identified
+  brands (A/B/N/Q) x 3 formula stages (1: 0-6 months, 2: 6-12 months,
+  3: 12-36 months) x online/offline purchase channel, 5-24 spectra
+  per type. Native 1,738-point spectra over 50.2-3,399.9 cm^-1 (the
+  shared axis is stored as the CSV column headers and used as is; no
+  resampling). Intensities are raw as deposited; the excitation
+  wavelength is not recorded in the deposit. No sample/bottle
+  identifiers, so group-aware splitting is not possible. Served from
+  a frozen copy mirrored at HTW-KI-Werkstatt/RamanBench (size +
+  sha256 pinned; the live Mendeley download sits behind a WAF that
+  403s non-browser clients).
 - `liver_cancer_raman`: binary classification of hepatic carcinoma vs
   adjacent non-tumour (paracarcinoma) liver tissue from the 6,000-
   spectrum demo data of Huang et al. 2023, *Nat. Commun.* 14:48
