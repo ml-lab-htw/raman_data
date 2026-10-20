@@ -260,3 +260,27 @@ def test_chlorinated_samples():
     counts = dict(zip(*np.unique(dataset.targets, return_counts=True)))
     assert counts == {0: 76, 1: 154}
 
+
+def test_raman_spi_sample_stem():
+    """Trailing-letter spectrum ids map to their physical sample."""
+    from raman_data.loaders.MiscLoader import MiscLoader
+    stem = MiscLoader._raspi_sample_stem
+    assert stem("PE1a") == "PE1"
+    assert stem("PE1b") == "PE1"
+    assert stem("PET4c") == "PET4"
+    assert stem("PET5d") == "PET5"
+    assert stem("PU15") == "PU15"
+    assert stem("PVC17") == "PVC17"
+    assert stem("a") == "a"  # never strips an id down to empty
+
+
+@pytest.mark.skip(reason="Borealis download (~10 MB); run manually.")
+def test_raman_spi():
+    dataset = MiscLoader.load_dataset("raman_spi")
+    # 396 fully-labeled spectra (of 402 in the source file), uniform
+    # 225-3949 cm^-1 / 1 cm^-1 grid, 14 plastic types, 272 physical samples.
+    assert dataset.spectra.shape == (396, 3725)
+    assert len(dataset.target_names) == 14
+    assert len(set(dataset.group_ids.tolist())) == 272
+    assert _groups_are_label_pure(dataset)
+

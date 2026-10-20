@@ -11,6 +11,19 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `raman_spi`: RaSPI — Raman Spectra for Plastics Identification (Hogan et al. 2026,
+  *Scientific Data* 13:765, doi:10.1038/s41597-026-07103-8; data release
+  doi:10.5683/SP3/8UQQQN, Borealis, CC-BY 4.0). 396 fully-labeled spectra of 14
+  plastic types (of the 402 rows in the source file — 6 metadata rows lack a
+  spectrum, 4 spectra lack metadata, and PE1a/PE1b are stored twice), on a
+  uniform 225–3,949 cm⁻¹ / 1 cm⁻¹ grid, 226 spectra at 633 nm + 176 at 523 nm
+  (Renishaw inVia). Pristine commercial plastics plus environmental microplastics
+  from Great Lakes Seabin collections. The authors' pipeline (polynomial baseline
+  subtraction, truncation, 1 cm⁻¹ interpolation, 0–1 normalization) is documented
+  in `embedded_preprocessing`. 272 physical samples — the trailing letter in each
+  spectrum id (PE1a, PE1b, PET4c …) marks repeated measurements of the same
+  sample — exposed as `group_ids` (`is_grouped=True`).
+
 ### Fixed
 
 - `mlrod` is CC BY-NC (the Open Data Repository states "BY-NC"), not CC BY 4.0; source link now
