@@ -6,6 +6,7 @@ import os, requests
 import pandas as pd
 import numpy as np
 from zenodo_get import download
+from renishawWiRE import WDFReader
 
 from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE, APPLICATION_TYPE
 from raman_data.exceptions import CorruptedZipFileError
@@ -436,6 +437,146 @@ class ZenodoLoader(BaseLoader):
 
         return spectra, raman_shifts, targets, list(class_names), group_ids
 
+    # Stroke urine SERS (Zenodo ID: 19369604). Both laser variants share the
+    # same data.rar; each variant reads one of the two SERSspectra folders
+    # (deposit folder names: '532，0.5%，1s' and '632，5%，1s' -- the '632'
+    # folder is the 633 nm line, the percent is the laser power setting).
+    _STROKE_URI_RAR = "data.rar"
+    _STROKE_URI_FOLDER_PREFIX = {532: "532", 633: "632"}
+    # The native WiRE axes of both variants (slightly non-uniform, per file
+    # ~484.9-1638.5 cm^-1) are resampled row-wise onto this common 1 cm^-1 grid.
+    _STROKE_URI_GRID = np.arange(485, 1639, 1.0)
+    # Patient (map file stem) -> diagnosis for the 101 participants of the
+    # SERS cohort. Taken from the authors' final labelled tables in the same
+    # record ('results/SERSspectra/{532,633,concat}/data.csv', `label2`/
+    # `labels` columns -- identical across all three); matches the paper's
+    # cohort of 55 healthy controls and 46 patients with confirmed ischemic
+    # stroke.
+    _STROKE_URI_PATIENT_LABELS = {
+        "1": "IS", "2": "HC", "3": "HC", "4": "IS", "5": "IS", "6": "IS",
+        "7": "IS", "8": "IS", "9": "IS", "10": "IS", "11": "IS", "12": "IS",
+        "13": "IS", "14": "IS", "15": "IS", "16": "IS", "17": "IS", "18": "IS",
+        "19": "IS", "20": "IS", "21": "IS", "22": "HC", "23": "HC", "24": "HC",
+        "25": "HC", "26": "HC", "27": "HC", "28": "HC", "29": "HC", "30": "HC",
+        "31": "HC", "32": "HC", "33": "IS", "34": "IS", "35": "HC", "36": "HC",
+        "37": "HC", "38": "HC", "39": "HC", "40": "HC", "41": "HC", "42": "HC",
+        "43": "HC", "44": "HC", "45": "HC", "46": "HC", "47": "HC", "48": "HC",
+        "49": "HC", "50": "HC", "51": "HC", "52": "HC", "53": "HC", "54": "HC",
+        "55": "HC", "56": "HC", "57": "IS", "58": "IS", "59": "IS", "60": "IS",
+        "61": "IS", "62": "IS", "63": "HC", "64": "HC", "65": "HC", "66": "HC",
+        "67": "HC", "68": "HC", "69": "HC", "70": "HC", "71": "HC", "72": "HC",
+        "73": "HC", "74": "HC", "75": "HC", "76": "IS", "77": "IS", "78": "IS",
+        "79": "IS", "80": "IS", "81": "IS", "82": "IS", "83": "IS", "84": "IS",
+        "85": "IS", "86": "IS", "87": "IS", "88": "IS", "89": "IS", "90": "IS",
+        "91": "IS", "92": "IS", "93": "IS", "94": "IS", "95": "HC", "96": "HC",
+        "97": "HC", "98": "HC", "99": "HC", "100": "HC", "101": "HC",
+    }
+
+    @staticmethod
+    def __load_19369604(
+        cache_path: str,
+        laser_nm: int,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str], np.ndarray] | None:
+        """
+        Parse and extract data from the stroke urine SERS dataset (Zenodo ID: 19369604).
+
+        Urine SERS spectra for ischemic-stroke vs. healthy-control
+        classification, deposited by Yu et al. 2026 (Sci. Adv. 12:eaee3487).
+        `laser_nm` selects one of the two excitation variants (532 or 633 nm);
+        both variants are stored in the same 'data.rar' archive.
+
+        Layout of data.rar (after extraction):
+            SERSspectra/532，0.5%，1s/*.wdf   532 nm, 100 mW (0.5% power), 1 s
+            SERSspectra/632，5%，1s/*.wdf     633 nm, 35 mW (5% power), 1 s
+        Each .wdf is a Renishaw WiRE 10x10 map (100 spectra) of one
+        participant's dried urine spot; files 1..101 are the 101 participants,
+        files 31.1-34.1 are four repeated collections.
+
+        Returns a tuple of (spectra, raman_shifts, targets, class_names,
+        group_ids) with group_id = participant id (repeated collections merged
+        into the parent participant).
+        """
+        if laser_nm not in (532, 633):
+            raise ValueError(f"laser_nm must be 532 or 633, got {laser_nm}")
+
+        dataset_dir = os.path.join(cache_path, "19369604")
+        extracted_dir = os.path.join(dataset_dir, "data")
+
+        if not os.path.isdir(extracted_dir) or not os.listdir(extracted_dir):
+            rar_path = os.path.join(dataset_dir, ZenodoLoader._STROKE_URI_RAR)
+            if not os.path.isfile(rar_path):
+                raise FileNotFoundError(
+                    f"Could not find {ZenodoLoader._STROKE_URI_RAR} in {dataset_dir}"
+                )
+            if LoaderTools.extract_rar_file_content(rar_path, "data") is None:
+                raise RuntimeError(
+                    "[!] Could not extract data.rar (Zenodo 19369604): no working "
+                    "RAR extraction tool found on this system. Install bsdtar "
+                    "(libarchive; ships with macOS), unrar, unar, or 7-Zip and retry."
+                )
+
+        sers_dir = os.path.join(extracted_dir, "SERSspectra")
+        if not os.path.isdir(sers_dir):
+            raise FileNotFoundError(f"No SERSspectra/ directory found under {extracted_dir}")
+
+        prefix = ZenodoLoader._STROKE_URI_FOLDER_PREFIX[laser_nm]
+        folders = [
+            f for f in sorted(os.listdir(sers_dir))
+            if f.startswith(prefix) and os.path.isdir(os.path.join(sers_dir, f))
+        ]
+        if len(folders) != 1:
+            raise RuntimeError(
+                f"[!] stroke_urine_sers_{laser_nm}: expected exactly one SERSspectra "
+                f"folder starting with {prefix!r}, found: {folders}"
+            )
+        wdf_dir = os.path.join(sers_dir, folders[0])
+
+        wdf_files = sorted(
+            (f for f in os.listdir(wdf_dir) if f.endswith(".wdf")),
+            key=lambda f: [float(t) for t in f[:-4].split(".")],
+        )
+        stems = [f[:-4] for f in wdf_files]
+        expected_stems = {str(i) for i in range(1, 102)} | {"31.1", "32.1", "33.1", "34.1"}
+        if len(stems) != 105 or set(stems) != expected_stems:
+            raise RuntimeError(
+                f"[!] stroke_urine_sers_{laser_nm}: expected the 105 map files "
+                "1..101 plus repeat collections 31.1-34.1, got "
+                f"{len(stems)} files: {stems[:8]}..."
+            )
+
+        grid = ZenodoLoader._STROKE_URI_GRID
+        spectra_list, labels_list, groups_list = [], [], []
+        for fname in wdf_files:
+            stem = fname[:-4]
+            patient = stem.split(".")[0]
+            reader = WDFReader(os.path.join(wdf_dir, fname))
+            x = np.asarray(reader.xdata, dtype=float)
+            if x.ndim != 1 or x.shape[0] < 50:
+                raise RuntimeError(
+                    f"[!] stroke_urine_sers_{laser_nm}: {fname} has no usable wavenumber axis"
+                )
+            order = np.argsort(x)
+            sp = np.asarray(reader.spectra, dtype=float).reshape(-1, x.shape[0])
+            if sp.shape[0] != 100:
+                raise RuntimeError(
+                    f"[!] stroke_urine_sers_{laser_nm}: {fname} holds {sp.shape[0]} "
+                    "spectra, expected 100 (10x10 map)"
+                )
+            resampled = np.empty((sp.shape[0], grid.shape[0]), dtype=float)
+            for i in range(sp.shape[0]):
+                resampled[i] = np.interp(grid, x[order], sp[i][order])
+            spectra_list.append(resampled)
+            labels_list.extend([ZenodoLoader._STROKE_URI_PATIENT_LABELS[patient]] * sp.shape[0])
+            groups_list.extend([patient] * sp.shape[0])
+
+        spectra = np.concatenate(spectra_list)
+        if np.isnan(spectra).any():
+            raise RuntimeError(f"[!] stroke_urine_sers_{laser_nm}: NaN values after resampling")
+
+        targets, class_names = encode_labels(pd.Series(labels_list))
+        group_ids = np.array(groups_list, dtype=str)
+        return spectra, grid, targets, list(class_names), group_ids
+
     __BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "raman-data", "zenodo")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
@@ -658,6 +799,70 @@ class ZenodoLoader(BaseLoader):
             # Checked: no missing (NaN) label values.
             has_missing_labels=False,
         ),
+        **{
+            f"stroke_urine_sers_{nm}": DatasetInfo(
+                task_type=TASK_TYPE.Classification,
+                application_type=APPLICATION_TYPE.Medical,
+                id="19369604",
+                name=f"Stroke Urine SERS ({nm} nm, Yu et al. 2026)",
+                short_name=f"Stroke Urine SERS {nm}",
+                file_typ="data.rar",
+                license="CC-BY 4.0",
+                loader=lambda cache_path, nm=nm: ZenodoLoader.__load_19369604(cache_path, nm),
+                metadata={
+                    "full_name": f"Ischemic Stroke Urine SERS, {nm} nm laser (Yu et al. 2026)",
+                    "source": "https://doi.org/10.5281/zenodo.19369604",
+                    "paper": "https://doi.org/10.1126/sciadv.aee3487",
+                    "bibtex": (
+                        "@article{Yu_2026, title={Dual-mode analysis of ischemic stroke "
+                        "based on urine SERS spectra and carotid B-ultrasound}, volume={12}, "
+                        "ISSN={2375-2541}, url={http://dx.doi.org/10.1126/sciadv.aee3487}, "
+                        "DOI={10.1126/sciadv.aee3487}, number={27}, journal={Science Advances}, "
+                        "publisher={American Association for the Advancement of Science}, "
+                        "author={Yu, Wenrou and Chen, Zhaoxian and Liu, Yao and Du, Yan and "
+                        "Wang, Hui and Tang, Fengjie and Xie, Xin and Huang, Yingzhou}, "
+                        "year={2026}, month=Jul, pages={eaee3487}}"
+                    ),
+                    "citation": [
+                        "Yu, W., Chen, Z., Liu, Y., Du, Y., Wang, H., Tang, F., Xie, X., and "
+                        "Huang, Y. (2026). Dual-mode analysis of ischemic stroke based on urine "
+                        "SERS spectra and carotid B-ultrasound. Science Advances, 12(27), eaee3487."
+                    ],
+                    "description": (
+                        "Surface-enhanced Raman (SERS) spectra of urine from 101 participants "
+                        "(55 healthy controls, 46 patients with confirmed ischemic stroke) on "
+                        "colloidal Ag-nanoparticle SERS filter-paper chips (R6G enhancement "
+                        f"factor 1.62e6), Renishaw inVia Qontor, 50x objective, 1 s acquisition, "
+                        f"{nm} nm excitation "
+                        f"({'100 mW (0.5% power setting)' if nm == 532 else '35 mW (5% power setting)'}). "
+                        "Each participant's dried urine spot was scanned as a 10x10 map "
+                        "(100 spectra); the deposit additionally contains four repeated "
+                        "collections (files 31.1-34.1), so each variant holds 10,500 spectra "
+                        "from 105 map files (the paper's headline 10,100 counts only the 101 "
+                        "primary maps). Native WiRE axes (667-668 points at 532 nm, 1,015 points "
+                        "at 633 nm; ~485-1,638 cm^-1; slightly non-uniform) resampled row-wise "
+                        "onto a common 1 cm^-1 grid (1,154 points). group_ids = the 101 "
+                        "participants (repeat collections merged into the parent participant), "
+                        "so all spectra of one group share one class. Raw WiRE exports as "
+                        "deposited: the authors' baseline correction, smoothing, normalization, "
+                        "and outlier removal (which dropped ~8% of the map points, incl. all-zero "
+                        "scans) live in their analysis code/results, not in the deposited spectra."
+                    ),
+                },
+                # Checked: 101 participants, each with exactly one diagnosis
+                # (55 HC / 46 IS); the four repeat collections (31.1-34.1) are
+                # merged into their parent participant, so groups are label-pure.
+                is_grouped=True,
+                # Checked: all 101 patients carry a HC/IS label; no missing labels.
+                has_missing_labels=False,
+                # Raw WiRE map exports as deposited; the authors' preprocessing
+                # (baseline correction, smoothing, normalization, outlier
+                # removal) is in their analysis code (code.rar) / results
+                # (results.rar), not in the deposited spectra.
+                embedded_preprocessing=None,
+            )
+            for nm in (532, 633)
+        },
     }
 
     @staticmethod
