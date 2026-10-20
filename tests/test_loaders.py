@@ -968,3 +968,42 @@ def test_aged_oils_raman_2():
     assert dataset.spectra.max() < 42000
     assert not np.isnan(dataset.spectra).any()
 
+
+def test_olive_sunflower_mixtures():
+    # Single ~2.2 MB direct data.gouv.fr download, small enough to
+    # run in CI (static CDN, no WAF).
+    dataset = MiscLoader.load_dataset("olive_sunflower_mixtures")
+    # 605 spectra on the native 710-point 500.5-2,499.3 cm^-1 axis
+    # (2.2-3.6 cm^-1 non-uniform spacing, as is).
+    assert dataset.spectra.shape == (605, 710)
+    assert dataset.raman_shifts[0] == pytest.approx(500.48)
+    assert dataset.raman_shifts[-1] == pytest.approx(2499.305)
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    # Single-target regression: EVOO percentage of the blend.
+    assert dataset.targets.shape == (605,)
+    assert dataset.target_names == ["evoo_percent"]
+    ev = dataset.targets
+    assert not np.isnan(ev).any()
+    assert ev.min() == 0.0 and ev.max() == 100.0
+    # 26 distinct blend levels (0, 10, 15, ..., 91, 100).
+    assert len(set(ev.tolist())) == 26
+    # Group = (date, EVOO %) physical blend: 5 scans per blend
+    # (S1-S5), 10 blends re-measured once and 1 twice the same day
+    # -> 109 groups of 5/10/15 spectra.
+    assert dataset.group_ids is not None
+    assert dataset.group_ids.shape == (605,)
+    sizes = collections.Counter(dataset.group_ids.tolist())
+    assert len(sizes) == 109
+    assert set(sizes.values()) == {5, 10, 15}
+    assert sum(sizes.values()) == 605
+    # All spectra of one blend share its EVOO % target.
+    by_group = collections.defaultdict(list)
+    for i, gid in enumerate(dataset.group_ids.tolist()):
+        by_group[gid].append(ev[i])
+    for vals in by_group.values():
+        assert np.allclose(np.array(vals), vals[0])
+    # Raw counts as deposited (arbitrary units).
+    assert dataset.spectra.min() > 600
+    assert dataset.spectra.max() < 13000
+    assert not np.isnan(dataset.spectra).any()
+

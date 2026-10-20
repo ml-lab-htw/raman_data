@@ -719,6 +719,111 @@ class MiscLoader(BaseLoader):
                 "per entry in the snapshot."
             ),
         ),
+        "olive_sunflower_mixtures": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="644b79f82ef3605eb5c660aa",
+            name="Olive + Sunflower Oil Mixtures, EVOO % (Picouet 2023)",
+            short_name="Olive Sunflower Mixtures",
+            license="lov2 (Licence Ouverte)",
+            loader=lambda cache_path: MiscLoader._load_olive_sunflower_mixtures(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raman Spectra of Olive and Sunflower oil mixtures "
+                    "(Picouet 2023, data.gouv.fr / ENTREPOT Recherche)"
+                ),
+                "source": (
+                    "https://www.data.gouv.fr/datasets/spectres-raman-de-"
+                    "melanges-dhuiles-dolive-et-de-tournesol-raman-"
+                    "spectra-of-olive-and-sunflower-oil-mixtures"
+                ),
+                "doi": "10.57745/DOGT0E",
+                "bibtex": (
+                    "@dataset{picouet2023raman, title={Spectres Raman de "
+                    "mélanges d'Huiles d'Olive et de Tournesol / Raman "
+                    "Spectra of Olive and Sunflower oil mixtures}, "
+                    "author={Picouet, Pierre}, year={2023}, "
+                    "publisher={data.gouv.fr (ENTREPOT Recherche)}, "
+                    "doi={10.57745/DOGT0E}, "
+                    "url={https://doi.org/10.57745/DOGT0E}}"
+                ),
+                "citation": [
+                    "Picouet, P. (2023). Spectres Raman de mélanges "
+                    "d'Huiles d'Olive et de Tournesol / Raman Spectra "
+                    "of Olive and Sunflower oil mixtures. data.gouv.fr. "
+                    "https://doi.org/10.57745/DOGT0E",
+                ],
+                "description": (
+                    "605 Raman spectra of Extra Virgin Olive Oil "
+                    "(EVOO) / sunflower oil mixtures at 26 EVOO "
+                    "levels (0, 10, 15, 20, 21, 23, 25, 31, 35, 47, "
+                    "48, 50, 54, 57, 63, 65, 71, 74, 75, 76, 77, 81, "
+                    "83, 90, 91, 100 %; sunflower % = 100 - EVOO "
+                    "exactly), recorded on 16 acquisition dates "
+                    "(22/11/2022 - 14/02/2023) at GRAPPE, Ecole "
+                    "Superieure des Agricultures / INRAE, Angers, "
+                    "France (Picouet 2023). Instrument (per the "
+                    "deposit README): Ocean Insight QE Pro Raman "
+                    "spectrometer, 785 nm solid-state laser diode "
+                    "at 400 mW, general-purpose fiber-optic probe "
+                    "with a quartz cuvette holder (working distance "
+                    "0.5 mm), 1000 ms integration, 10 scans per "
+                    "acquisition, ~11 cm^-1 FWHM. Task: EVOO % "
+                    "regression (single target evoo_percent, "
+                    "0-100). Structure: by the deposit's design of "
+                    "experiment, each (date, EVOO%) combination is "
+                    "one physical blend measured with 5 spectra "
+                    "(S1-S5); 10 blends were re-measured once and 1 "
+                    "twice on the same day, giving 109 blend groups "
+                    "(98 x 5, 10 x 10, 1 x 15 spectra) - group-aware "
+                    "CV is leave-one-blend-out. The deposit's own "
+                    "Type column tags the spectra CALIBRATION (350) "
+                    "/ VALIDATION (165) / PREDICTION (90) (9 blends "
+                    "carry mixed tags); all 605 spectra are shipped "
+                    "- the tags are a modelling split, not a "
+                    "data-quality partition, and remain available in "
+                    "the raw CSV. Native 710-point axis "
+                    "500.48-2,499.31 cm^-1 (2.2-3.6 cm^-1 non-"
+                    "uniform spacing), read from the CSV header (the "
+                    "deposit's wavenumber cells use European decimal "
+                    "commas, e.g. 500,48 = 500.48) and used as is, "
+                    "so no resampling is involved. Intensities are "
+                    "raw counts (645-12,922, arbitrary units), no "
+                    "NaN. The EVOO is a 100% Italian cold-pressed "
+                    "extra virgin olive oil (trademark PUGET, "
+                    "acidity 0.3 %a, 14 g/100 g unsaturated fat); "
+                    "the sunflower oil is a refined Spanish oil "
+                    "(trademark FAIGES, acidity 0.2 %, 10 g/100 g "
+                    "unsaturated fat, 80 mg vitamin E). License: "
+                    "licence ouverte (lov2), France's open data "
+                    "license. The deposit's companion README PDF "
+                    "(raman-spectra-readme.pdf, 113,945 bytes, sha1 "
+                    "7f9a320bb5cd7d7683b6b756636f6b60e37e3481) "
+                    "documents the acquisition protocol; the CSV is "
+                    "served directly from the static.data.gouv.fr "
+                    "CDN (sha256 pinned; no mirror needed, the "
+                    "endpoint is reachable from CI)."
+                ),
+            },
+            # Checked: each (date, EVOO%) combination is one physical
+            # blend measured with 5 scans (S1-S5; 10 blends
+            # re-measured once and 1 twice on the same day); 109
+            # blend groups, so grouped CV never splits a blend.
+            is_grouped=True,
+            # Checked: all 605 rows carry an EVOO % value and
+            # EVOO % + sunflower % sums to exactly 100.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None. The CSV is the deposit's raw acquisition "
+                "export; intensities are raw counts as recorded (each "
+                "spectrum is one acquisition of 10 scans co-added by "
+                "the instrument, per the deposit README). No baseline "
+                "correction, normalization or resampling is applied "
+                "here."
+            ),
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -2792,3 +2897,162 @@ class MiscLoader(BaseLoader):
             list(class_names),
             list(labels),
         )
+
+    # ------------------------------------------------------------------
+    # olive_sunflower_mixtures (data.gouv.fr 644b79f82ef3605eb5c660aa)
+    # ------------------------------------------------------------------
+    # Picouet (2023), "Spectres Raman de mélanges d'Huiles d'Olive et
+    # de Tournesol / Raman Spectra of Olive and Sunflower oil
+    # mixtures" (data.gouv.fr / ENTREPOT Recherche,
+    # doi:10.57745/DOGT0E, licence ouverte lov2).
+    #
+    # 605 Raman spectra of EVOO/sunflower oil mixtures at 26 EVOO
+    # levels (0-100 %), Ocean Insight QE Pro, 785 nm / 400 mW,
+    # 1000 ms, 10 scans, 5 spectra per blend (design of experiment;
+    # per the deposit README). The deposit CSV is ';'-separated
+    # (719 fields per row: 9 metadata + 710 intensities) and the
+    # wavenumber header cells use European decimal commas
+    # ("500,48" -> 500.48 cm^-1), so the header row splits into 711
+    # comma-fields while each data row has 1 comma-field plus 710
+    # trailing empties (an Excel export quirk) - parse with
+    # split(';'), never split(','). Served directly from the
+    # static.data.gouv.fr CDN (no WAF, CI-reachable); sha256 pinned.
+    _OLIVE_SUNFLOWER_CSV = (
+        "https://static.data.gouv.fr/resources/spectres-raman-de-"
+        "melanges-dhuiles-dolive-et-de-tournesol-raman-spectra-of-"
+        "olive-and-sunflower-oil-mixtures/20230428-094746/"
+        "raman-oils-raw.csv",
+        "raman-oils-raw.csv",
+        2173967,
+        "c426967faac3005b1145385d5f8da5bfa85078084f7c5931b30a9bf9fcb11758",
+    )
+
+    @staticmethod
+    def _load_olive_sunflower_mixtures(cache_path: str):
+        """
+        Download (if needed) and load the olive/sunflower mixture
+        Raman dataset: 605 spectra of EVOO/sunflower blends at 26
+        EVOO levels (0-100 %), with the EVOO percentage as the
+        single regression target.
+
+        Returns spectra, raman_shifts, targets, target_names,
+        group_ids (group = (date, EVOO %) physical blend).
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        url, fname, size, sha = MiscLoader._OLIVE_SUNFLOWER_CSV
+        fpath = os.path.join(cache_path, fname)
+        if os.path.exists(fpath) and os.path.getsize(fpath) != size:
+            os.remove(fpath)
+        result = LoaderTools.download(
+            url=url,
+            out_dir_path=cache_path,
+            out_file_name=fname,
+            hash_target=sha,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                "[!] olive_sunflower_mixtures: CSV download failed "
+                "(network error or checksum mismatch). See logs."
+            )
+
+        with open(fpath, encoding="utf-8-sig") as fh:
+            lines = [ln for ln in fh.read().splitlines() if ln.strip()]
+        if len(lines) != 606:
+            raise RuntimeError(
+                f"[!] olive_sunflower_mixtures: expected 605 data "
+                f"rows (+ header), found {len(lines) - 1} (deposit "
+                "changed?)."
+            )
+        header = lines[0].split(";")
+        if len(header) != 719:
+            raise RuntimeError(
+                f"[!] olive_sunflower_mixtures: expected 719 "
+                f"semicolon header fields (9 meta + 710 wavenumbers), "
+                f"got {len(header)}."
+            )
+        # The wavenumber header cells use European decimal commas.
+        axis = np.array([float(h.replace(",", ".")) for h in header[9:]])
+        if (
+            not np.all(np.diff(axis) > 0)
+            or not (500.0 < axis[0] < 510.0)
+            or not (2400.0 < axis[-1] < 2500.0)
+        ):
+            raise RuntimeError(
+                "[!] olive_sunflower_mixtures: unexpected wavenumber "
+                f"axis ({axis.shape[0]} points, "
+                f"{axis[0]:.3f}..{axis[-1]:.3f} cm^-1)."
+            )
+        rows = []
+        for i, ln in enumerate(lines[1:], start=2):
+            fields = ln.split(";")
+            if len(fields) != 719:
+                raise RuntimeError(
+                    f"[!] olive_sunflower_mixtures: row {i} has "
+                    f"{len(fields)} semicolon fields (expected 719)."
+                )
+            rows.append(fields)
+        meta = np.array([f[:9] for f in rows], dtype=str)
+        spectra = np.array([f[9:] for f in rows], dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError(
+                "[!] olive_sunflower_mixtures: NaN intensity values."
+            )
+
+        def _pct(col: int) -> np.ndarray:
+            vals = meta[:, col].astype(str)
+            if not np.all(np.char.endswith(vals, "%")):
+                raise RuntimeError(
+                    f"[!] olive_sunflower_mixtures: column {col} "
+                    "cells are not percentage values."
+                )
+            out = np.array([float(v.rstrip("%")) for v in vals])
+            if np.isnan(out).any():
+                raise RuntimeError(
+                    f"[!] olive_sunflower_mixtures: unparseable "
+                    f"percentage in column {col}."
+                )
+            return out
+
+        targets = _pct(3)  # EVOO (%)
+        sunflower = _pct(4)  # Sunflower (%)
+        if not (targets.min() >= 0.0 and targets.max() <= 100.0):
+            raise RuntimeError(
+                f"[!] olive_sunflower_mixtures: EVOO % out of range "
+                f"({targets.min():g}..{targets.max():g})."
+            )
+        if not np.allclose(targets + sunflower, 100.0):
+            raise RuntimeError(
+                "[!] olive_sunflower_mixtures: EVOO % + sunflower % "
+                "does not sum to 100."
+            )
+        # Acquisition parameters are constant across the deposit
+        # (per the README: 1000 ms, 10 scans, 400 mW).
+        if (
+            set(meta[:, 5].tolist()) != {"1000"}
+            or set(meta[:, 6].tolist()) != {"10"}
+            or set(meta[:, 7].tolist()) != {"400"}
+        ):
+            raise RuntimeError(
+                "[!] olive_sunflower_mixtures: Tps/Scans/P are not "
+                "the documented constant 1000 ms / 10 / 400 mW."
+            )
+        # Group = (date, EVOO %): one physical blend measured with
+        # 5 scans (S1-S5); a few blends were re-measured the same
+        # day, so groups hold 5, 10 or 15 spectra.
+        group_ids = np.array(
+            [f"{d}_{v}" for d, v in zip(meta[:, 0], meta[:, 3])],
+            dtype=str,
+        )
+        n_groups = len(set(group_ids.tolist()))
+        if n_groups != 109:
+            raise RuntimeError(
+                f"[!] olive_sunflower_mixtures: expected 109 blend "
+                f"groups, found {n_groups}."
+            )
+        MiscLoader.logger.debug(
+            f"Loaded olive_sunflower_mixtures: {spectra.shape[0]} "
+            f"spectra x {spectra.shape[1]} points, EVOO % "
+            f"{targets.min():g}..{targets.max():g}, {n_groups} blends"
+        )
+        return spectra, axis, targets, ["evoo_percent"], group_ids

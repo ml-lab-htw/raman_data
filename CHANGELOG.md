@@ -11,6 +11,23 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `olive_sunflower_mixtures`: EVOO % regression on 605 Raman spectra
+  of Extra Virgin Olive Oil / sunflower oil mixtures at 26 EVOO
+  levels (0-100 %) (Picouet 2023, data.gouv.fr / ENTREPOT
+  Recherche, doi:10.57745/DOGT0E, licence ouverte lov2). Ocean
+  Insight QE Pro, 785 nm / 400 mW, 1000 ms, 10 scans per
+  acquisition; 16 acquisition dates (22/11/2022-14/02/2023),
+  Angers (GRAPPE/INRAE). By the deposit's design of experiment each
+  (date, EVOO %) blend was measured with 5 spectra (S1-S5); 109
+  blend groups (98 x 5, 10 x 10, 1 x 15) -> group-aware CV is
+  leave-one-blend-out. Native 710-point 500.48-2,499.31 cm^-1 axis
+  (CSV header, European decimal commas) used as is; raw counts as
+  deposited (645-12,922, no NaN). `target_names =
+  ["evoo_percent"]` (1D, single-target regression). The deposit's
+  own CALIBRATION/VALIDATION/PREDICTION tags (350/165/90, 9 mixed-
+  tag blends) remain in the raw CSV; all 605 spectra are shipped.
+  Served directly from static.data.gouv.fr (sha256 pinned; no
+  mirror needed, the endpoint is CI-reachable).
 - `aged_oils_raman_1a` + `aged_oils_raman_2`: peroxide-value
   (freshness) regression on Raman spectra of 100 naturally aged
   (5-7 year) edible oil bottles (Gilbraith, Carter, Adams, Sota-Uba,
