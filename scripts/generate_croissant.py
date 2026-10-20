@@ -115,6 +115,7 @@ _LICENSE_MAP: dict[str, str] = {
     "cc0": "https://creativecommons.org/publicdomain/zero/1.0/",
     "cc0 1.0": "https://creativecommons.org/publicdomain/zero/1.0/",
     "apache 2.0": "https://www.apache.org/licenses/LICENSE-2.0",
+    "gpl-3.0": "https://www.gnu.org/licenses/gpl-3.0.html",
 }
 
 _DEFAULT_LICENSE_URL = "https://creativecommons.org/licenses/by/4.0/"
@@ -149,29 +150,36 @@ _LOADER_NAMES: dict[type, str] = {
 # Metadata normalisation helpers
 # ---------------------------------------------------------------------------
 
+# "CC BY-NC 3.0", "BY-NC", "cc-by-sa-4.0", "CC BY-NC-SA (paper; non-commercial)", ...
+_CC_RE = re.compile(r"^(?:cc[ -]?)?by((?:-(?:nc|sa|nd))*)(?:[ -](\d\.\d))?\b")
+
+
 def normalise_license(raw: str | None) -> tuple[str | None, str | None, bool]:
     """
     Returns (license_url, conditions_of_access, license_inferred).
 
     - Valid URL  → (url, None, False)
-    - Known short form like "CC BY 4.0" → (canonical_url, None, False)
-    - Long prose → (None, raw, False)  — written as conditionsOfAccess
-    - None / empty → (_DEFAULT_LICENSE_URL, None, True)
+    - Creative Commons in any spelling, e.g. "CC BY-NC 3.0", "BY-NC" → its URL, with the stated
+      version (4.0 when none is stated)
+    - Other known short form like "MIT", "CC0 1.0" → (canonical_url, None, False)
+    - None / empty / "unknown" → (_DEFAULT_LICENSE_URL, None, True)
+    - Any other stated terms ("research use only", long prose) → (None, raw, False), written as
+      conditionsOfAccess, never replaced by an assumed licence
     """
-    if not raw:
+    if not raw or raw.strip().lower() == "unknown":
         return _DEFAULT_LICENSE_URL, None, True
     if raw.startswith("http"):
         return raw, None, False
     lower = raw.strip().lower()
     if lower in _LICENSE_MAP:
         return _LICENSE_MAP[lower], None, False
+    cc = _CC_RE.match(lower)
+    if cc:
+        return f"https://creativecommons.org/licenses/by{cc.group(1)}/{cc.group(2) or '4.0'}/", None, False
     for k, v in _LICENSE_MAP.items():
         if lower.startswith(k):
             return v, None, False
-    if len(raw) > 60:
-        return None, raw, False
-    # Unrecognised short string — fall back to default
-    return _DEFAULT_LICENSE_URL, None, True
+    return None, raw, False
 
 
 def normalise_papers(raw: str | list | None) -> list[str]:

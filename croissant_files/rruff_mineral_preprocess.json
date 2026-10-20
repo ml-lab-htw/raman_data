@@ -60,7 +60,6 @@
     "mineralogy"
   ],
   "isAccessibleForFree": true,
-  "license": "https://creativecommons.org/licenses/by/4.0/",
   "citeAs": "@inbook{Lafuente_2015, title={The power of databases: The RRUFF project}, ISBN={9783110417104}, url={http://dx.doi.org/10.1515/9783110417104-003}, DOI={10.1515/9783110417104-003}, booktitle={Highlights in Mineralogical Crystallography}, publisher={DE GRUYTER}, author={Lafuente, Barbara and Downs, R. T. and Yang, H. and Stone, N.}, year={2015}, month=nov, pages={1--30}}",
   "citation": "Lafuente, B., Downs, R. T., Yang, H., & Stone, N. (2015). The power of databases: the RRUFF project. Highlights in Mineralogical Crystallography, T Armbruster and R M Danisi, Eds., Berlin, Germany, W. De Gruyter, 1–30.",
   "distribution": [
@@ -138,10 +137,11 @@
   "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods. Labels were assigned by domain experts or clinical diagnosis; no crowdsourced annotation was used.",
   "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical, biological, or material samples without individual human identifiers.",
   "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
-  "rai:dataLimitations": "Reference spectra represent ideal laboratory conditions; real-world samples may show additional interference from impurities, fluorescence, or surface effects. Note: No explicit license was stated by the original data providers; CC BY 4.0 has been assumed. Users should verify the applicable terms with the original authors.",
+  "rai:dataLimitations": "Reference spectra represent ideal laboratory conditions; real-world samples may show additional interference from impurities, fluorescence, or surface effects.",
   "rai:dataSocialImpact": "Facilitates non-destructive material characterisation and identification with applications in geology, environmental science, art conservation, and industrial quality assurance.",
   "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control. Not recommended for direct clinical diagnosis without professional validation and regulatory approval.",
   "rai:hasSyntheticData": false,
   "prov:wasGeneratedBy": "Data collection: Laboratory measurements on solid or liquid material samples including minerals, polymers, and organic pigments. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
-  "prov:wasDerivedFrom": "https://rruff.info/"
+  "prov:wasDerivedFrom": "https://rruff.info/",
+  "conditionsOfAccess": "Free access"
 }
