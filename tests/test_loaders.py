@@ -312,6 +312,43 @@ def test_lei_microplastics():
         assert _groups_are_label_pure(dataset), res
 
 
+def test_lei_measurement_blocks():
+    # The Lei training CSV rows are laid out in 20-row blocks, one per
+    # source measurement; a sample measured twice gives a 40-row run of
+    # the same sampleid, which must split into two blocks.
+    sid = np.array(["A"] * 40 + ["B"] * 20)
+    labels = np.array(["polyethylene"] * 40 + ["polypropylene"] * 20)
+    blocks = MiscLoader._lei_measurement_blocks(sid, labels)
+    assert [(k, s, l) for k, s, l in blocks] == [
+        (0, "A", "polyethylene"), (20, "A", "polyethylene"),
+        (40, "B", "polypropylene"),
+    ]
+    # A run not a multiple of the 20-row block is corrupt.
+    with pytest.raises(RuntimeError):
+        MiscLoader._lei_measurement_blocks(
+            np.array(["A"] * 21), np.array(["polyethylene"] * 21)
+        )
+    # A sampleid run carrying mixed plastic labels is corrupt.
+    with pytest.raises(RuntimeError):
+        MiscLoader._lei_measurement_blocks(
+            np.array(["A"] * 20),
+            np.array(["polyethylene"] * 10 + ["polypropylene"] * 10),
+        )
+
+
+@pytest.mark.skip(reason="Borealis download (~59.6 MB, 1cm variant); run manually.")
+def test_lei_microplastics_clean():
+    dataset = MiscLoader.load_dataset("microplastics_training_clean")
+    # One representative per source measurement: 186 measurement blocks
+    # (the deposited rows are 20-row blocks per measurement) from 108
+    # supplier samples, on the paper's native 1 cm^-1 grid.
+    assert dataset.spectra.shape == (186, 1081)
+    assert len(dataset.target_names) == 14
+    assert len(set(dataset.group_ids.tolist())) == 108
+    assert _groups_are_label_pure(dataset)
+    assert not np.isnan(dataset.spectra).any()
+
+
 def test_stroke_urine_sers_static():
     # The embedded patient table must match the paper's cohort: 101
     # participants, 55 healthy controls, 46 ischemic-stroke patients.
@@ -400,13 +437,19 @@ def test_yeast_batch_effects():
     assert np.all(np.bincount(dataset.targets) == 75)
     assert dataset.raman_shifts[0] == 235.71758360761123
     assert dataset.raman_shifts[-1] == 3653.5482095528914
-    # 27 (plate, well) groups: 3 plates x 9 strain wells, 25 co-located
-    # site spectra each (the 10th well on each plate is an empty control,
-    # excluded).
+    # 3 plate groups (one per desiccation date), 225 spectra each -- the
+    # paper's batch unit; grouped 3-fold is leave-one-plate-out CV, its
+    # protocol. Within a plate: 9 strain wells x 25 co-located site
+    # spectra (the 10th well on each plate is an empty control, excluded).
     assert dataset.group_ids is not None
     assert dataset.group_ids.shape == (675,)
-    assert len(set(dataset.group_ids.tolist())) == 27
-    assert _groups_are_label_pure(dataset)
+    per_group = collections.Counter(dataset.group_ids.tolist())
+    assert len(per_group) == 3
+    assert sorted(per_group.values()) == [225] * 3
+    # Every plate carries all 9 strains, so leave-one-plate-out keeps all
+    # classes in training (groups are intentionally NOT label-pure).
+    for g in per_group:
+        assert len(np.unique(dataset.targets[dataset.group_ids == g])) == 9
     assert not np.isnan(dataset.spectra).any()
 
 

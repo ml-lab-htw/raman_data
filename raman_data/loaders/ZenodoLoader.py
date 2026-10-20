@@ -7,7 +7,6 @@ import os, requests
 import pandas as pd
 import numpy as np
 from zenodo_get import download
-from renishawWiRE import WDFReader
 
 from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE, APPLICATION_TYPE
 from raman_data.exceptions import CorruptedZipFileError
@@ -500,6 +499,18 @@ class ZenodoLoader(BaseLoader):
         if laser_nm not in (532, 633):
             raise ValueError(f"laser_nm must be 532 or 633, got {laser_nm}")
 
+        # Lazy import: renishawWiRE is only needed for this one dataset; a
+        # module-level import would break the whole package when the
+        # community parser is missing.
+        try:
+            from renishawWiRE import WDFReader
+        except ImportError as e:
+            raise RuntimeError(
+                "[!] The stroke urine SERS loader needs the community package "
+                "'renishawWiRE' (Renishaw WiRE .wdf parser) to be installed: "
+                "pip install renishawWiRE, then retry."
+            ) from e
+
         dataset_dir = os.path.join(cache_path, "19369604")
         extracted_dir = os.path.join(dataset_dir, "data")
 
@@ -684,8 +695,11 @@ class ZenodoLoader(BaseLoader):
         control without a strain label and is excluded.
 
         Returns a tuple of (spectra, raman_shifts, targets, class_names,
-        group_ids) with group_id = "day<day>-<well>" (the 25 co-located
-        site spectra of one desiccated well).
+        group_ids) with group_id = the desiccation plate (the date
+        subdirectory, e.g. '2025-08-06'; 225 spectra = 9 strain wells x
+        25 co-located site spectra). The plate is the paper's batch unit
+        -- leave-one-plate-out is its protocol -- so the well level is
+        deliberately not exposed as the group.
         """
         dataset_dir = os.path.join(cache_path, "19226627")
         # zenodo_get writes the file out under its API 'key', which carries
@@ -735,6 +749,7 @@ class ZenodoLoader(BaseLoader):
         raman_shifts_ref: Optional[np.ndarray] = None
         labels: List[str] = []
         group_ids: List[str] = []
+        well_ids: List[str] = []
 
         for day, (subdir, platemap_name) in ZenodoLoader._YEAST_BATCH_DAYS.items():
             platemap = pd.read_csv(os.path.join(data_dir, "august-2025-platemaps", platemap_name))
@@ -769,7 +784,14 @@ class ZenodoLoader(BaseLoader):
                     raise RuntimeError(f"[!] yeast_batch_effects: spectral axis differs in {fpath}.")
                 spectra_list.append(df["Intensity"].to_numpy(dtype=float))
                 labels.append(strain)
-                group_ids.append(f"day{day}-{well}")
+                # Group = the desiccation plate (date), not the (plate, well)
+                # cell: the paper's batch effect acts at plate level, and
+                # every plate carries all 9 strains, so grouped k-fold with
+                # the plates as groups is exactly leave-one-plate-out CV.
+                # (Well positions repeat across plates, so the integrity
+                # counter below keys on (plate, well), not the well alone.)
+                group_ids.append(subdir)
+                well_ids.append(f"{subdir}/{well}")
 
         if raman_shifts_ref is None or not spectra_list:
             raise RuntimeError("[!] yeast_batch_effects: no spectra parsed.")
@@ -782,13 +804,20 @@ class ZenodoLoader(BaseLoader):
         if np.isnan(spectra).any():
             raise RuntimeError("[!] yeast_batch_effects: missing intensity values.")
 
-        per_well = Counter(group_ids)
+        per_well = Counter(well_ids)
+        per_plate = Counter(group_ids)
         per_strain = Counter(labels)
         if len(per_well) != 27 or any(v != 25 for v in per_well.values()):
             raise RuntimeError(
-                f"[!] yeast_batch_effects: expected 27 (plate, well) groups with "
-                f"25 site spectra each, got {len(per_well)} groups "
+                f"[!] yeast_batch_effects: expected 27 (plate, well) cells with "
+                f"25 site spectra each, got {len(per_well)} cells "
                 f"(sizes {sorted(per_well.values())})."
+            )
+        if len(per_plate) != 3 or any(v != 225 for v in per_plate.values()):
+            raise RuntimeError(
+                f"[!] yeast_batch_effects: expected 3 plate groups with "
+                f"225 spectra each, got {len(per_plate)} groups "
+                f"(sizes {sorted(per_plate.values())})."
             )
         if len(per_strain) != 9 or any(v != 75 for v in per_strain.values()):
             raise RuntimeError(
@@ -1033,7 +1062,7 @@ class ZenodoLoader(BaseLoader):
                 name=f"Stroke Urine SERS ({nm} nm, Yu et al. 2026)",
                 short_name=f"Stroke Urine SERS {nm}",
                 file_typ="data.rar",
-                license="CC-BY 4.0",
+                license="CC BY 4.0",
                 loader=lambda cache_path, nm=nm: ZenodoLoader.__load_19369604(cache_path, nm),
                 metadata={
                     "full_name": f"Ischemic Stroke Urine SERS, {nm} nm laser (Yu et al. 2026)",
@@ -1096,7 +1125,7 @@ class ZenodoLoader(BaseLoader):
             name="Breast Cancer Subtypes (Ex Vivo Tissue)",
             short_name="Breast Cancer Subtypes",
             file_typ="DATASET.xlsx",
-            license="CC-BY 4.0",
+            license="CC BY 4.0",
             loader=lambda cache_path: ZenodoLoader.__load_20042934(cache_path),
             metadata={
                 "full_name": "Ex Vivo Breast Tissue Histological Subtype Classification (Ezzat et al. 2026)",
@@ -1206,9 +1235,14 @@ class ZenodoLoader(BaseLoader):
                     "(2025-08-06, 2025-08-07, 2025-08-12): 75 spectra per strain, 675 in "
                     "total (the 75 empty-well control spectra are excluded). 235.7-3,653.6 "
                     "cm^-1 at 2,048 points (non-uniform grid; the paper's analysis used a "
-                    "300-1,800 cm^-1 fingerprint region). group_ids are the 27 (plate, well) "
-                    "pairs, each holding the 25 co-located site spectra of one desiccated "
-                    "well. Spectra are raw as deposited -- no dark subtraction, baseline "
+                    "300-1,800 cm^-1 fingerprint region). group_ids are the 3 desiccation "
+                    "plates (the dates above; 225 spectra each = 9 strain wells x 25 "
+                    "co-located site spectra) -- the paper's batch unit, so a grouped "
+                    "3-fold split is exactly leave-one-plate-out CV, its protocol. The "
+                    "finer (plate, well) structure is documented here but not exposed as "
+                    "groups: well-level grouping would let spectra from the held-out "
+                    "plate's other wells into training and hide the batch effect. "
+                    "Spectra are raw as deposited -- no dark subtraction, baseline "
                     "correction, or normalization; the per-plate dark spectra are in the "
                     "archive (dark/Default.csv) for anyone replicating the authors' pipeline "
                     "(ramanspy: Whitaker-Hayes despiking, consensus dark subtraction, "
@@ -1221,8 +1255,11 @@ class ZenodoLoader(BaseLoader):
                 ),
             },
             # Checked: the 25 site spectra of one well on one plate are
-            # co-located measurements of the same desiccated smear; the
+            # co-located measurements of the same desiccated smear, and the
             # same strain on other plates is an independent preparation.
+            # Groups are the 3 plates (the batch-effect unit of the paper),
+            # not the 27 (plate, well) cells; every plate carries all 9
+            # strains, so leave-one-plate-out keeps all classes in training.
             is_grouped=True,
             # Checked: every strain spectrum carries a platemap strain label;
             # the 75 empty-well control spectra (no strain) are excluded.
