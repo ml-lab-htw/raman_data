@@ -3156,6 +3156,45 @@ nanoplastics_individual:
   rai:hasSyntheticData: false
   rai:personalSensitiveInformation: No personal or sensitive information is included. All spectra originate from chemical, biological,
     or material samples without individual human identifiers.
+nist_ecsers_drugs:
+  prov:wasDerivedFrom: https://doi.org/10.18434/mds2-3502
+  prov:wasGeneratedBy: 'Data collection: EC-SERS spectra of lab-prepared drug solutions (1-1,013 ppm)
+    and solid powders on a DropSens SPELEC silver electrode, 785 nm excitation; each deposited CSV is
+    the highest-intensity / best-resolution spectrum of one replicate acquisition. Preprocessing: modified-polynomial
+    baseline correction in DropView on the raw potential-resolved scans; values are dark-subtracted counts
+    (a.u.), not intensity-normalized; raman_data additionally interpolates the two native grids onto a
+    common 1,013-point grid. Annotation: substance labels from the deposited filenames; concentration
+    labels (11 levels) where marked; no human annotation.'
+  rai:dataAnnotationProtocol: Substance labels parsed from the deposited filenames (32 analytes); 126/131
+    spectra additionally carry a concentration label (1-1,013 ppm, 11 levels). No human annotation beyond
+    the authors' sample preparation.
+  rai:dataBiases: EC-SERS intensities depend on the silver electrode surface and electrochemical potential,
+    so spectra of the same substance vary in absolute intensity across replicates and batches. Two acquisition
+    batches (1,014-pt and 1,011-pt native grids) are mixed and interpolated onto one common grid. Per-substance
+    spectrum counts range from 1 to 13 (10 of 32 substances have fewer than 3 replicate groups), so the
+    class balance is strongly uneven. Lab-prepared solutions, not seized street material.
+  rai:dataCollection: EC-SERS (electrochemical surface-enhanced Raman spectroscopy) with 785 nm excitation
+    on a DropSens SPELEC silver electrode (Metrohm potentiostat setup), NIST. The deposit contains the
+    highest-intensity / best-resolution spectrum of each replicate as CSV; the full potential-resolved
+    .exp files (118) are in the deposit but not loaded by raman_data.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 'Forensic library-formation data, not a balanced clinical or field dataset: 32
+    substances with 1-13 spectra each (118 replicate groups; 10 substances < 3 groups), so grouped k-fold
+    CV covers only a subset. Concentration labels exist for 126/131 spectra (the 5 unlabelled: solid procaine
+    x3, pure acryl-/furanyl-fentanyl). Electrochemical SERS signal is substrate/potential-dependent; models
+    may not transfer to plain (non-enhanced) Raman or other SERS substrates.'
+  rai:dataPreprocessingProtocol: 'Authors'' pipeline: modified-polynomial baseline correction in DropView,
+    then the single best spectrum per replicate exported as CSV (Origin Pro); values are ''Counts minus
+    Dark (a.u.)'', not normalized (per-file minima slightly negative, maxima 5e4-2e5). The loader additionally
+    interpolates both native grids onto the common 1,013-point grid (36.6-2,859.1 cm^-1).'
+  rai:dataSocialImpact: Supports forensic drug screening research and ML benchmarking for fentanyl-analog
+    and adulterant identification; misuse potential is limited since the data identify controlled substances
+    rather than individuals.
+  rai:dataUseCases: Multi-class substance identification (32 classes), concentration / limit-of-detection
+    regression from the 11-level concentration series, and EC-SERS spectral library formation.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included; all spectra originate
+    from lab-prepared chemical standards.
 organic_compounds_preprocess:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
     or validated analytical reference methods. Labels were assigned by domain experts

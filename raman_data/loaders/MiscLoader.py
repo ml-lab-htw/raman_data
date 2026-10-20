@@ -533,6 +533,109 @@ class MiscLoader(BaseLoader):
             # deposit, not in the files used here.
             embedded_preprocessing=None,
         ),
+        "nist_ecsers_drugs": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="nist_ecsers_drugs",
+            name="NIST EC-SERS Drug & Adulterant Library (Ott 2024)",
+            short_name="NIST EC-SERS Drugs",
+            license="NIST public data (fair use)",
+            loader=lambda cache_path: MiscLoader._load_nist_ecsers_drugs(cache_path),
+            metadata={
+                "full_name": (
+                    "EC-SERS (Electrochemical Surface-Enhanced Raman "
+                    "Spectroscopy) Spectral Database of Drug and "
+                    "Adulterant Compounds"
+                ),
+                "source": "https://doi.org/10.18434/mds2-3502",
+                "paper": "https://doi.org/10.1016/j.forc.2024.100621",
+                "bibtex": "@dataset{ott2024ecsers, title={EC-SERS (Electrochemical Surface-Enhanced Raman Spectroscopy) Spectral Database of Drug and Adulterant Compounds}, author={Ott, Colby E.}, year={2024}, publisher={National Institute of Standards and Technology (NIST) Public Data Resource}, DOI={10.18434/mds2-3502}, url={https://doi.org/10.18434/mds2-3502}}",
+                "citation": [
+                    "Ott, C. E. (2024). EC-SERS (Electrochemical Surface-Enhanced Raman Spectroscopy) Spectral Database of Drug and Adulterant Compounds. NIST Public Data Resource. https://doi.org/10.18434/mds2-3502",
+                    "Ott, C. E., Wilcox, A., Kalb, S., McConnell, A., Sisco, E., and Arroyo, L. E. (2024). Development and evaluation of a nontargeted electrochemical surface-enhanced Raman spectroscopy (EC-SERS) screening method applied to forensic seized drug casework samples. Forensic Chemistry, 41, 100621.",
+                    "Ott, C. E., Perez-Estebanez, M., Hernandez, S., Kelly, K., Dalzell, K. A., Arcos-Martinez, M. J., Heras, A., Colina, A., and Arroyo, L. E. (2022). Forensic identification of fentanyl and its analogs by electrochemical-surface enhanced Raman spectroscopy (EC-SERS) for the screening of seized drugs of abuse. Frontiers in Analytical Science, 2, 834820.",
+                ],
+                "description": (
+                    "EC-SERS (electrochemical surface-enhanced Raman "
+                    "spectroscopy) spectral library of 32 drugs of abuse "
+                    "and adulterant compounds from the NIST Public Data "
+                    "Resource (Ott, NIST, 2024; "
+                    "doi:10.18434/mds2-3502, v1.0.1). 131 spectra, 785 nm "
+                    "excitation on a DropSens SPELEC silver electrode; "
+                    "each deposited CSV is the highest-intensity / "
+                    "best-resolution spectrum of one replicate "
+                    "acquisition. The deposit's raw potential-resolved "
+                    ".exp files (118) and combined Excel sheet are not "
+                    "loaded here. Values are 'Counts minus Dark (a.u.)' "
+                    "-- NOT normalized: every file has slightly negative "
+                    "points (dark-subtraction residuals, per-file minima "
+                    "-574..-16) and per-file maxima span 5.1e4-2.0e5, so "
+                    "expect the substrate/potential-dependent intensity "
+                    "drift typical of EC-SERS (realistic but not 'plain "
+                    "Raman'). Two acquisition batches are mixed: 96 "
+                    "files on a 1,014-point grid (32.6-2,859.1 cm^-1) "
+                    "and 35 on a 1,011-point grid (33.8-2,995.5 cm^-1), "
+                    "both non-uniformly spaced (1.95-4.18 cm^-1 steps); "
+                    "the loader interpolates all spectra onto the common "
+                    "1,013-point grid (36.6-2,859.1 cm^-1) that every "
+                    "file fully covers. 126 of the 131 spectra carry one "
+                    "of 11 concentration labels (1, 5, 10, 25, 50, 100, "
+                    "300, 333, 1,000, 1,001, 1,013 ppm) -- a built-in "
+                    "concentration / detection-limit subtask; the 5 "
+                    "unlabelled ones are solid-form procaine (3 "
+                    "replicates) and pure-powder acryl- and "
+                    "furanyl-fentanyl. Substances: alprazolam, cocaine, "
+                    "codeine, dextromethorphan, diphenhydramine, "
+                    "etizolam, etonitazene, fentanyl, heroin, "
+                    "levamisole, lidocaine, methadone, methamphetamine, "
+                    "morphine, nicotine, procaine (solid), quinine, "
+                    "sufentanil, temazepam, xylazine, 4-ANPP, "
+                    "buprenorphine, diltiazem, hydroxyzine, naltrexone, "
+                    "and six fentanyl analogs (acetyl, acryl, furanyl, "
+                    "methoxyacetyl, valeryl); the deposit's "
+                    "33-compound analyte panel also lists mitragynine, "
+                    "for which no CSV is deposited. Mostly the "
+                    "nontargeted campaign (Ott et al. 2024, "
+                    "doi:10.1016/j.forc.2024.100621); six further "
+                    "spectra (spectrum numbers 292-326: the five "
+                    "fentanyl analogs plus 4-ANPP) come from the "
+                    "targeted method campaign (Ott et al. 2022, "
+                    "doi:10.3389/frans.2022.834820). group_ids = "
+                    "(substance, concentration, replicate): 118 groups "
+                    "of 1-3 spectra (106 single-spectrum), and all 24 "
+                    "measurements without a replicate marker at one "
+                    "substance+concentration share a single group "
+                    "(possibly the same acquisition session). 10 "
+                    "substances have fewer than 3 groups, so grouped "
+                    "k-fold CV only covers a subset of the library. "
+                    "Filenames are '<Substance>[_<conc>ppm][_form_solid]"
+                    "[_nontarget][_rep<N>]_Spectrum_<n>.csv'; the "
+                    "deposit contains one 'Spectrum 293' with a space, "
+                    "one 'nontargeT' typo and one file without a target "
+                    "marker, all parsed by _nist_ecsers_parse_name."
+                ),
+            },
+            # Checked: 118 (substance, concentration, replicate) groups
+            # from all 131 filenames; the 24 measurements without a
+            # replicate marker at one substance+concentration share one
+            # group (possibly the same acquisition session), so no
+            # correlated spectra cross a fold.
+            is_grouped=True,
+            # Checked: all 131 spectra carry a substance label parsed
+            # from the filename.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "Authors' pipeline (deposit README): modified-polynomial "
+                "baseline correction in DropView on the raw "
+                "potential-resolved EC-SERS scans, then the highest-"
+                "intensity / best-resolution spectrum per replicate "
+                "exported as CSV (Origin Pro). The CSVs are dark-"
+                "subtracted counts (a.u.), NOT intensity-normalized. "
+                "This loader additionally interpolates the two native "
+                "grids onto the common 1,013-point grid (see "
+                "description)."
+            ),
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -2036,3 +2139,330 @@ class MiscLoader(BaseLoader):
         )
 
         return spectra, raman_shifts, encoded_targets, list(class_names)
+
+    # ------------------------------------------------------------------
+    # NIST EC-SERS drug & adulterant library (doi:10.18434/mds2-3502)
+    # ------------------------------------------------------------------
+    # (filename, size in bytes, sha256) for all 131 deposited CSV files,
+    # pinned from the NERD record v1.0.1 (modified 2024-08-28) of
+    # https://doi.org/10.18434/mds2-3502. The NIST Open Data API no
+    # longer serves the file list for this record, so the manifest is
+    # embedded here; the direct file URLs remain the download source.
+    _NIST_ECSERS_BASE_URL = (
+        "https://data.nist.gov/od/ds/ark:/88434/mds2-3502/"
+    )
+    _NIST_ECSERS_FILES = (
+        ("4-ANPP_5ppm_nontarget_Spectrum_326.csv", 30116, "d07d5bfec130127c115610c902d97fc9deaec1a4fda976b1f13ad1286c3b0f98"),
+        ("Acetyl_fentanyl_10ppm_nontarget_Spectrum_295.csv", 30253, "9b89eea3456912f6783407b2c1f2820466f312ceda5005528f1e6e6b6018deac"),
+        ("Acryl_fentanyl_nontarget_Spectrum_292.csv", 30455, "3163da524abbe419f7d19897fed14bf463cbf666c714649ac16f65daa82a0cd5"),
+        ("Alprazolam_100ppm_nontarget_Spectrum_6.csv", 31225, "90c8981ed4d3478749a88f58317fdba53171b569e99ba186ed63e22ddd0be661"),
+        ("Alprazolam_100ppm_nontarget_Spectrum_7.csv", 31481, "5f19c1938a58cf29e40f7feb406a5574bf5d104e10d04b1eb3bd82dbc2c0fa51"),
+        ("Alprazolam_10ppm_nontarget_rep1_Spectrum_6.csv", 31472, "2f788cde4db78b856078c6334efbf210d9e38cb1b019d098a9ac0a1b45b5ae9a"),
+        ("Alprazolam_10ppm_nontarget_rep1_Spectrum_7.csv", 31621, "356cf02ceeafabb03e6f91c30556bddeed7e11f3f80841c00ce04628c61a31d2"),
+        ("Alprazolam_10ppm_nontarget_rep2_Spectrum_6.csv", 31441, "9e04eccdc8d93b1f972ec073287bc2e7c103eced99a0a9b8dd2632e518f5aadc"),
+        ("Alprazolam_10ppm_nontarget_rep2_Spectrum_7.csv", 31567, "d523e2a8214d9a39746b417f2b1e2c81a957009a480d36d6964dfeb267cb15f2"),
+        ("Alprazolam_10ppm_nontarget_rep3_Spectrum_6.csv", 31418, "6a6fd978576d7802222f7ecfd751cb28583bcd1b78247c0a2dc7d1dd4c0ec205"),
+        ("Alprazolam_10ppm_nontarget_rep3_Spectrum_7.csv", 31612, "2c303773033beaa36a79afccc467a1056d91d21fe89fbb4fbc29147104c6969a"),
+        ("Alprazolam_333ppm_nontarget_Spectrum_6.csv", 31411, "eefdfc069600b6f7f3e035b0d1f9998b2de249d9ebdb80203e876249d73ddf4c"),
+        ("Alprazolam_333ppm_nontarget_Spectrum_7.csv", 31603, "6b040d9fae635fcf085133932f5bc5b697776347418ebf6224f57722decf0659"),
+        ("Alprazolam_5ppm_nontarget_rep1_Spectrum_7.csv", 31359, "72d22527c638a366e5cb11f980f82a99a7bdf872ec5c22d1395a228a19d8031e"),
+        ("Alprazolam_5ppm_nontarget_rep2_Spectrum_7.csv", 31316, "bab5c89fe71152061ba49ed0ddb26b0ddf573b492bbaa8f222d1611131bab4f3"),
+        ("Alprazolam_5ppm_nontarget_rep3_Spectrum_7.csv", 31508, "8577c482b7af772597fc777312f310a1218aa82c9fbe2c5f1b58538e36ff7282"),
+        ("Buprenorphine_100ppm_nontarget_Spectrum_6.csv", 31058, "fc4084f6c4d7c576b583f675d07ec3af3e5c113e96354a1b8438699200ab5a8b"),
+        ("Cocaine_1000ppm_nontarget_rep1_Spectrum_6.csv", 31330, "56d5ec068ddd4e7fa6e2074448ed21bf7533ba3c406b5c59a5aad436797faae7"),
+        ("Cocaine_1000ppm_nontarget_rep1_Spectrum_7.csv", 31332, "596ac3bbb1b7c2f2bc1b1227256119f3e1b4cd2f12a8e7f051ceb4b8852c85ed"),
+        ("Cocaine_1000ppm_nontarget_rep2_Spectrum_6.csv", 31363, "cf75244764cfb20a96a6f05939fd474bdb0828e2f33793911d415f8c02424ca2"),
+        ("Cocaine_1000ppm_nontarget_rep2_Spectrum_7.csv", 31352, "4c03c70676ab52147e3d26fdd943b581e6d126691f6262eb8b1c1ce9b0ebac70"),
+        ("Cocaine_1000ppm_nontarget_rep3_Spectrum_6.csv", 31314, "ada3ada75b26f81472f64ebff7854d4d32f6bb34c2c68f1a3b2f728afc3c4e82"),
+        ("Cocaine_1000ppm_nontarget_rep3_Spectrum_7.csv", 31314, "0bf49a6332766e3ff88fd13e300979503c64299d0c6dd36559eca49257473cde"),
+        ("Cocaine_100ppm_nontarget_rep1_Spectrum_5.csv", 31097, "f9791296931e50bf95d8f37c9eb178e9682c7c0133a83a34cb15f10872b89cca"),
+        ("Cocaine_100ppm_nontarget_rep2_Spectrum_5.csv", 31096, "14adcf3365ce99f20d0b8f53179bd2e1da823046c990607f29259becde225031"),
+        ("Cocaine_100ppm_nontarget_rep3_Spectrum_5.csv", 31141, "6b7b8abfaf178b0eb1f2f092f7a3126920129c477a41de231ae90744c2d20f1a"),
+        ("Cocaine_50ppm_nontarget_rep1_Spectrum_5.csv", 30986, "9046eb4ac83dea68dc73b5798ba25ca5c6112efb952223697b3e88b4ed74f19e"),
+        ("Cocaine_50ppm_nontarget_rep2_Spectrum_5.csv", 31036, "01798448d15c76c9510e066f6cb18d9c353f71554bb6cfd172407301eaafe771"),
+        ("Cocaine_50ppm_nontarget_rep3_Spectrum_5.csv", 31158, "ecd72152fd14642af2645b58f63f105389baa1a0626e3bd59905fa8a4da64365"),
+        ("Codeine_1000_ppm_nontarget_rep1_Spectrum_7.csv", 31237, "b11f421c53a54e8fe0004198e345249c8415792d20e7f700f3524dc132939b2a"),
+        ("Codeine_1000_ppm_nontarget_rep2_Spectrum_7.csv", 31359, "c5f77e9dd2ddabd2394d409337037f0db59ff1b935bbd905cd9bfd366f4c97af"),
+        ("Codeine_1000_ppm_nontarget_rep3_Spectrum_7.csv", 31321, "3e75321cbdf8c7362783671fc94d477d38feb1c52e476dafe772d4e2b5fdf190"),
+        ("Codeine_100ppm_nontarget_rep1_Spectrum_5.csv", 31138, "3793afe78aa544d42edb4374be8fc1c84af2a9d79c7cdf7d88739fad665d9375"),
+        ("Codeine_100ppm_nontarget_rep2_Spectrum_5.csv", 31189, "41626473df48e301296110adec583e2eff505e3f140767d604c6747bab02063c"),
+        ("Codeine_100ppm_nontarget_rep3_Spectrum_5.csv", 31240, "320da487be6639dbb6b0728bcabfecc35211606749b75c524f513df09e6e1d2e"),
+        ("Codeine_300ppm_nontarget_rep1_Spectrum_6.csv", 31311, "4829790278fa0ed48f9af2264a1bc6fc05c7836403e3b0cdb4583be5356cd9a6"),
+        ("Codeine_300ppm_nontarget_rep2_Spectrum_6.csv", 31285, "004007ce712b06bf9b061960135ff466cc07f5f5136241f3d8e68fe7fdad36b6"),
+        ("Codeine_300ppm_nontarget_rep3_Spectrum_6.csv", 31319, "a2b0b17fabe50073aae24f12f7a2680b6a3a731f94798872c6601cd0462e3ed1"),
+        ("Dextromethorphan_100ppm_nontarget_rep1_Spectrum_6.csv", 31377, "9b9ec05f577823edd5428f8abd9e2f846d07a2b6f0e4c06e93960d5d3bc7587b"),
+        ("Dextromethorphan_100ppm_nontarget_rep2_Spectrum_6.csv", 31296, "bd409e05941cf6b37b9482d6a0c6c196ac83a7f6c6a481519ba142dcb2f86604"),
+        ("Dextromethorphan_100ppm_nontarget_rep3_Spectrum_6.csv", 31365, "45385eea38b70131c7c52c61d3c0d194a4ac4caa649d2af221220411a44afdbb"),
+        ("Dextromethorphan_10ppm_nontarget_Spectrum_6.csv", 31319, "26e99520ab469b83fba5fc1949ebd3797e6c83141ee4679f4332ec172e09cf1b"),
+        ("Diltiazem_100ppm_nontarget_Spectrum_5.csv", 31357, "ccfd4da6f2ea5e9a14ac23c11e26614d4eeeb5ed871c5aef73e9dbc3f4b4a630"),
+        ("Diltiazem_10ppm_nontarget_Spectrum_5.csv", 31480, "626a910329e5b571944f1273e7471426564fad18762deac188f1c2bd9fc4b550"),
+        ("Diphenhydramine_10ppm_nontarget_rep1_Spectrum_9.csv", 31250, "bd75c9253b2cfcf0afa03eec0de2fa463dbb2b83b030bf1d56dfa33cf8ffc3aa"),
+        ("Diphenhydramine_10ppm_nontarget_rep2_Spectrum_9.csv", 31253, "71d1627165d63a7babc576da063a154cf05825672625b217efb0c0a5ba95fadb"),
+        ("Diphenhydramine_10ppm_nontarget_rep3_Spectrum_9.csv", 31330, "6ed0408904f18fd5d8bfa788603dcfc525750a4b3083c218f5332d115ae6d097"),
+        ("Diphenhydramine_1ppm_nontarget_Spectrum_5.csv", 31139, "c316d4f1a24800d31611f4cd03f07f5f36f63fe322e6f61816bfd710ec9207dd"),
+        ("Etizolam_50ppm_nontarget_rep1_Spectrum_6.csv", 31501, "4be649ff2eade589416c3a260b620da5d25dc80e34a2cbc5ea24bcbfd7d54681"),
+        ("Etizolam_50ppm_nontarget_rep2_Spectrum_6.csv", 31470, "418fecd22b747a8de78c24e2e711510c7e2de641a6df7d548d3df37298c1fd7e"),
+        ("Etizolam_50ppm_nontarget_rep3_Spectrum_6.csv", 31497, "1955094395428c5d844bdcb9ec2797cfdec48119dd456c9a9e255c652b0aa40b"),
+        ("Etonitazene_100ppm_nontarget_rep1_Spectrum_6.csv", 31520, "e5de60063f37e4e5918d5a5fcbbb359878831c71ed60a2cb34ce4be4cbd3ac6f"),
+        ("Etonitazene_100ppm_nontarget_rep2_Spectrum_6.csv", 31539, "864cf1fd82f2f98929de89401997eb654d97044c4a1f018180b673ad587b93e7"),
+        ("Etonitazene_100ppm_nontarget_rep3_Spectrum_6.csv", 31488, "1d3922c81ba9bc1f07c0bf78b165ea4007b8de5546793fb416212804c1891a42"),
+        ("Fentanyl_1000ppm_nontarget_rep1_Spectrum_6.csv", 31167, "cb15e0680fd0b2cb081a73f5c897ff21715493a10b21524aca19e6e9f6538c68"),
+        ("Fentanyl_1000ppm_nontarget_rep1_Spectrum_7.csv", 31417, "4d7538a455b05dfa3a7151dbf7cfe48344983c7fa8e872256c6668f4eb436dfb"),
+        ("Fentanyl_1000ppm_nontarget_rep2_Spectrum_6.csv", 31183, "8b8b8c0915b47e3f5fb4241b9bc507373aaaaa059cdedc90a3a66659af68a736"),
+        ("Fentanyl_1000ppm_nontarget_rep2_Spectrum_7.csv", 31384, "52d8183ae1d64365b0ae3eeab70092fc281dd97577b1677cd06b96b83cae72f4"),
+        ("Fentanyl_1000ppm_nontarget_rep3_Spectrum_6.csv", 31102, "25aa11df66fff333e09560a2934baf05d5b07574cf6fc954cb1afbb471de2018"),
+        ("Fentanyl_1000ppm_nontarget_rep3_Spectrum_7.csv", 31362, "044642b06b2f63878087b747a3c3a2d5e0587939258618e98c3e36b741d73313"),
+        ("Fentanyl_100ppm_nontarget_Spectrum_5.csv", 31447, "b19d0153976f6f4e61c7c9c1cc0db48aa40412d9dd8bbcf02b44bb197854490e"),
+        ("Fentanyl_10ppm_nontarget_Spectrum_7.csv", 31336, "6f3d9e27f52e7140da57756871a7d1776e3ea5b8888cb046a9c0c667048e2225"),
+        ("Fentanyl_1ppm_nontargeT_rep3_Spectrum_5.csv", 31116, "f016dd4597d8517fbc7c157c73a301242b5f6c32c1f3f80980792746ef477bb2"),
+        ("Fentanyl_1ppm_nontarget_rep1_Spectrum_5.csv", 31184, "c96fa6b9729c7c61782112f1c80ba7863d4245c171008b7c7446c75b3871ccf3"),
+        ("Fentanyl_1ppm_nontarget_rep2_Spectrum_5.csv", 31316, "b1991f0b0c3985167e8a368f4a2207ab0362d89e29da4d8b0802f50aeda26952"),
+        ("Fentanyl_1ppm_nontarget_rep4_Spectrum_5.csv", 31189, "ee85fbc28641022c04c1d7bfab0bb5c7319204629a8e66fa8cd205bf2f0eb301"),
+        ("Fentanyl_1ppm_nontarget_rep5_Spectrum_5.csv", 31116, "e2e17e139b1159ac0606828c69d73dd270982fc0be2e88e914ba89520130127e"),
+        ("Furanyl_fentanyl_nontarget_Spectrum_293.csv", 30442, "cc53061337f9041dc0528c6d16a54b83bcf5385d22dd8413d73c05bbfee987c8"),
+        ("Heroin_1001ppm_nontarget_rep1_Spectrum_6.csv", 31003, "0312c6c89a157d360288052ede2212ff28c29be9a517141daafa7f1e35c4871c"),
+        ("Heroin_1001ppm_nontarget_rep2_Spectrum_6.csv", 30951, "b78f68c6a02894913ea5fb36a2bce355d304372b14ba195ec243841592197938"),
+        ("Heroin_1001ppm_nontarget_rep3_Spectrum_6.csv", 31082, "14aff06269c7758f49ff66aee23829ea082a2dd0f5f15b14dfe3566387a70e53"),
+        ("Heroin_1001ppm_nontarget_rep4_Spectrum_6.csv", 31052, "58aaebc388882b8442d7f16850fd7040805c63fd2d89b24f1c4c4016b69429d8"),
+        ("Heroin_100ppm_nontarget_rep1_Spectrum_5.csv", 31071, "9b15ff5d28514f669a126b7053cddd079c9d1f1ece73b7a42eb283a996fdebcf"),
+        ("Heroin_100ppm_nontarget_rep2_Spectrum_5.csv", 31086, "39d4c1f96899e2ae6b968ae599bbf9140e3f08d64b0bf96f9441865297bebf08"),
+        ("Heroin_100ppm_nontarget_rep3_Spectrum_5.csv", 31090, "6333c493955034f8b22c6b1b7ee2c83d53e3cbeccb16fb055806407b3900e727"),
+        ("Heroin_300ppm_nontarget_rep1_Spectrum_6.csv", 31198, "b4e453eafa1383494f3aa8c11b3bf6fde284d4d8561cfeaf2352fc36ccc8d234"),
+        ("Heroin_300ppm_nontarget_rep2_Spectrum_6.csv", 31190, "2c0a89fb066dc8e728f02ac23c70020f68a078382cf046f2fe835e741f89bd53"),
+        ("Heroin_300ppm_nontarget_rep3_Spectrum_6.csv", 31159, "3e1254076610be1227660c5fcfdf93fd4d975900c83a48acdb0eb62a6b62a9aa"),
+        ("Hydroxyzine_5ppm_nontarget_Spectrum_6.csv", 31467, "e1d62110b49e003999eab37212c12a3925e3a356f1daa93af63b6569392558b5"),
+        ("Levamisole_1001_ppm_nontarget_rep1_Spectrum_6.csv", 31400, "b6f237d569caa5927081e32c359bcbc244406b6754e17ba7aaa87563b7c57c22"),
+        ("Levamisole_1001_ppm_nontarget_rep2_Spectrum_6.csv", 31452, "c16c3b894b9da61cf9c0ac8cd3a9964d2b54fc5c56344b5ac750cf1dcf81c9d7"),
+        ("Levamisole_1001_ppm_nontarget_rep3_Spectrum_6.csv", 31432, "8de60d8ec33e9c98f70e5817d05766dcf1d3f51f24edcd3040bdfce63ea59ef8"),
+        ("Levamisole_100ppm_nontarget_Spectrum_6.csv", 31564, "995952226dc400c3eb77a0ccffc0dbacd6b9f0646a9ffb829e364eadf72cea8b"),
+        ("Levamisole_10ppm_nontarget_rep1_Spectrum_6.csv", 31222, "dfaf7b01741f4d5cbd8966ba012f392f571708599b4b0d4963077daae5dcb2b1"),
+        ("Levamisole_10ppm_nontarget_rep2_Spectrum_6.csv", 31086, "17bcf23ceaec5929789718512c1db0d436b416035a4d283bc5859cf28edf632c"),
+        ("Levamisole_10ppm_nontarget_rep3_Spectrum_6.csv", 31199, "d6b5c1fa93d117e42bad3f951947be4196395c25552f014846c16c80ac5914f1"),
+        ("Lidocaine_1001_ppm_nontarget_rep1_Spectrum_6.csv", 31327, "0d7ddab73bfd3d04f8e75b968ca0fc40bceeb46cfc20f564467c995ff451e03b"),
+        ("Lidocaine_1001_ppm_nontarget_rep2_Spectrum_6.csv", 31371, "5d648186a45962438bb5c6e3efe8e36f3d364809bc7598084c8accc614eb22d3"),
+        ("Lidocaine_1001_ppm_nontarget_rep3_Spectrum_6.csv", 31428, "05af2f490b5bba111e6f83f37e8e951a533a93a5042c3701bd044eb0df0f5b5e"),
+        ("Methadone_50ppm_nontarget_rep1_Spectrum_6.csv", 31312, "f3ba1058283deecb13054d5d24f1e7450f5b761cc867133f5e5ca0d884fb7f9e"),
+        ("Methadone_50ppm_nontarget_rep2_Spectrum_6.csv", 31371, "83b245ced8f1875eab5eaa5fd85c3594c054982863205a192d448b847f75c82d"),
+        ("Methadone_50ppm_nontarget_rep3_Spectrum_6.csv", 31268, "691db6bb166b46492388c49b6433aacdfa41d055953ca37c5e2f86ac8a109fe0"),
+        ("Methamphetamine_1000ppm_nontarget_rep1_Spectrum_5.csv", 30938, "2b659e71ca77ef1f43f62f2229b89e37eab09265bddcc3ef6ae720bd462f31a9"),
+        ("Methamphetamine_1000ppm_nontarget_rep1_Spectrum_6.csv", 30854, "921eda55116482a4ea66e5403fa37301da7c4c2c3c7ac6600af66f5bbe4d71de"),
+        ("Methamphetamine_1000ppm_nontarget_rep1_Spectrum_7.csv", 30799, "3eeeb0996d3c292f7033703a93346fd92052c61b805aabb5b4c271fa7ee205f0"),
+        ("Methamphetamine_1000ppm_nontarget_rep2_Spectrum_5.csv", 30925, "d4e510e8b84872436e6ace2542077d0912604a8a89fa1e1b91ffc80e71c6ed58"),
+        ("Methamphetamine_1000ppm_nontarget_rep3_Spectrum_5.csv", 30920, "354b85224f9285a01db8f295cd695dcc8febeee8c97ae116bb2f2ef56d4fb381"),
+        ("Methoxyacetyl_fentanyl_25ppm_nontarget_Spectrum_293.csv", 30185, "0ca5bb1e7b7010e679d118e197413071087bce8ea6c8430825d8aa23df6bbd99"),
+        ("Morphine_1000_ppm_nontarget_rep1_Spectrum_7.csv", 31337, "f43fa9161f1c78776fe0f06bee3f4284f003a68636d9bb9f12f7bfb174832128"),
+        ("Morphine_1000_ppm_nontarget_rep2_Spectrum_7.csv", 31331, "5f8011850995113619785b4000724f28020cf03daf541676c468a352be84c7a4"),
+        ("Morphine_1000_ppm_nontarget_rep3_Spectrum_7.csv", 31286, "649d3071aa962ca2a03658931f25883a6cf5cb4b842176150bfc45866fa87d4c"),
+        ("Morphine_100ppm_nontarget_Spectrum_5.csv", 31068, "ad9c758058d89534907e4f357c32943296be4d0e4daf382f26904197a28facbe"),
+        ("Morphine_333ppm_nontarget_Spectrum_5.csv", 31168, "a769c3322bdb7e05f9fb01507ccedabe80cba22a9cac6b445220ef1450c3869d"),
+        ("Naltrexone_1000ppm_Spectrum_7.csv", 31247, "3d9be1afaef94fc36fe8539e32162ccbf96c7038e524adf8c297aabbcbdb2768"),
+        ("Nicotine_100ppm_nontarget_rep1_Spectrum_7.csv", 31204, "fd8161c3f7aa349f487e40b39b1d3f42869bccb51fa80ba3465b2dcf4bf8a559"),
+        ("Nicotine_100ppm_nontarget_rep2_Spectrum_7.csv", 31133, "d6ef1731452659c09f33468f245e956667e5009a06ab38a4e05e391a0ef8720b"),
+        ("Nicotine_100ppm_nontarget_rep3_Spectrum_7.csv", 31133, "928df46291916489e84a2515703a7a7c9403ff670f7ca2ff9336b6aef835b2e6"),
+        ("Npiperidinylmetonitazene_100ppm_nontarget_rep1_Spectrum_6.csv", 31321, "f90bc656fecb0ff2f22a9746541fb479cff1734224150bb15d3a659381f94d53"),
+        ("Npiperidinylmetonitazene_100ppm_nontarget_rep2_Spectrum_6.csv", 31216, "2da6096a7c331abc0011241ccad3799326f1a80089d696aa7f442ee9f9bcfc11"),
+        ("Npiperidinylmetonitazene_100ppm_nontarget_rep3_Spectrum_6.csv", 31159, "b5fb6788e430b0cc206dae9449f16aeee0472273dc862b0f336356263a6b7c7e"),
+        ("Npyrrolidinoetonitazene_100ppm_nontarget_rep1_Spectrum_6.csv", 31314, "68cf1b0355809b847c2c345e796b41aaa7ddb641175993351a7fe6d55843a52b"),
+        ("Npyrrolidinoetonitazene_100ppm_nontarget_rep2_Spectrum_6.csv", 31292, "a3151aa2ed1551c6ddf680bda2f82f1494df972dbceeb7a65f4372bfee1f96a5"),
+        ("Npyrrolidinoetonitazene_100ppm_nontarget_rep3_Spectrum_6.csv", 31302, "a5720a637b3ed8266ec48fcad05dcc4f3c040da9fa59a981134e1fd6358511ac"),
+        ("Procaine_form_solid_nontarget_rep1_Spectrum_7.csv", 20361, "32dfc81f72d7d98e0ae429d96ecada5d4e7a4f1518ea1c9989578e198367e274"),
+        ("Procaine_form_solid_nontarget_rep2_Spectrum_7.csv", 20673, "4fd3430e73e44a27f2f6c542ca054c3e4e341e23934623773786f94130cce2cc"),
+        ("Procaine_form_solid_nontarget_rep3_Spectrum_7.csv", 20656, "a23eb4de89c8b600215063bb64ea4d7456c72ba0b91a551c3469e71d37c18e95"),
+        ("Quinine_1013ppm_nontarget_rep1_Spectrum_6.csv", 31122, "c520d36644837b0927408ac2773f9d4ed61bb91671ca6d0d7ec1cd8f4eb1063b"),
+        ("Quinine_1013ppm_nontarget_rep2_Spectrum_6.csv", 31110, "bf1234b8a2e63b49f17c73696a61f8b6a22ccd9bcc49b8ab0641d079e59a1fc9"),
+        ("Quinine_1013ppm_nontarget_rep3_Spectrum_6.csv", 31042, "7ffe3788f86c5178c6748c0a293c149dde8f22fdd032e87578e4d63cc35ca5f2"),
+        ("Sufentanil_100ppm_nontarget_Spectrum_6.csv", 31419, "e916464bb54d40c4c72074e87878bab8db6810d1f50c1e14667eab32479c1494"),
+        ("Sufentanil_10ppm_nontarget_rep1_Spectrum_6.csv", 31087, "5aeda819df7c37ae6d752a16ca829d57675c7c5234bbccb5354d00ea1f331f0f"),
+        ("Sufentanil_10ppm_nontarget_rep2_Spectrum_6.csv", 31229, "77e0228eb90ad58911b57c9cafacc611399447d4365106b8111d8830860eb260"),
+        ("Sufentanil_10ppm_nontarget_rep3_Spectrum_6.csv", 31318, "980a1e8fbf365b20fe4f9e41838c55897a6cc1767897244c5c6b7e46de8c11b1"),
+        ("Sufentanil_333ppm_nontarget_Spectrum_6.csv", 31426, "7a6f5cf8d70503555f9164d365504beccb3d1b608b3142f770dc18408233d5ab"),
+        ("Temazepam_100ppm_nontarget_rep1_Spectrum_7.csv", 31194, "2953ef4e84cf55f16820c8603d5bebc9ae11e8d69e177f970673a0afb25c9760"),
+        ("Temazepam_100ppm_nontarget_rep2_Spectrum_7.csv", 31240, "810b26c8eca8ae2518a82bf26c76eb2ed3d34f538b2a27c3f5a9c4f12990803c"),
+        ("Temazepam_100ppm_nontarget_rep3_Spectrum_7.csv", 30965, "7096a0c9335093020a40856d6047662ff67b863db5c71cc36218ee77a402f578"),
+        ("Valeryl_fentanyl_25ppm_nontarget_Spectrum 293.csv", 30241, "f77fe22d40760193de549e81f780e2fee435b9fae22030f2ec79406aee9b789d"),
+        ("Xylazine_1000ppm_nontarget_rep1_Spectrum_5.csv", 31321, "7c8a3bfc965ad2170e694015d2af89c77e545186107c73a2856d4443a9c3f5cf"),
+        ("Xylazine_1000ppm_nontarget_rep2_Spectrum_5.csv", 31449, "7725c36d238eb229a7d8d4fda86f40d71fab02dccc98704649a9b987d82f15fd"),
+        ("Xylazine_1000ppm_nontarget_rep3_Spectrum_5.csv", 31436, "c13f4e4ed1d7c984b4372fdee04b5bcc1cd27e823b70c6a88f5869097e2473a0"),
+    )
+
+    @staticmethod
+    def _nist_ecsers_parse_name(filename: str) -> dict:
+        """
+        Parse a NIST EC-SERS CSV filename into its metadata parts.
+
+        Filenames follow
+        '<Substance>[_<conc>ppm][_form_solid][_nontarget|target][_rep<N>]
+        [_Spectrum <n>].csv' with three irregularities in the deposit:
+        one 'Spectrum 293' name uses a space instead of an underscore
+        (Valeryl_fentanyl), one fentanyl name carries a 'nontargeT'
+        typo, and one file (Naltrexone_1000ppm) has no target marker.
+        The suffixes may appear in the order above only; stripping is
+        therefore done from the end in reverse order.
+
+        Returns a dict with keys: substance (str), conc (int ppm or
+        None), form ('solid' or None), target ('nontarget'/'target' or
+        None), rep (int or None), spectrum (int).
+        """
+        if not filename.endswith(".csv"):
+            raise ValueError(f"nist_ecsers_drugs: not a CSV filename: {filename}")
+        n = filename[:-4]
+        m = re.search(r"[_ ]Spectrum[_ ](\d+)\s*$", n)
+        if m is None:
+            raise ValueError(f"nist_ecsers_drugs: unrecognized filename: {filename}")
+        spectrum = int(m.group(1))
+        n = n[:m.start()]
+        m = re.search(r"_rep(\d+)$", n)
+        rep = int(m.group(1)) if m else None
+        if m:
+            n = n[:m.start()]
+        m = re.search(r"_(nontarge[tT]|target)$", n)
+        target = None
+        if m:
+            target = "nontarget" if m.group(1).lower().startswith("non") else "target"
+            n = n[:m.start()]
+        form = None
+        if n.endswith("_form_solid"):
+            form = "solid"
+            n = n[: -len("_form_solid")]
+        m = re.search(r"_(\d{1,4})_?ppm$", n)
+        conc = None
+        if m:
+            conc = int(m.group(1))
+            n = n[:m.start()]
+        if not n:
+            raise ValueError(f"nist_ecsers_drugs: empty substance in {filename}")
+        return {
+            "substance": n,
+            "conc": conc,
+            "form": form,
+            "target": target,
+            "rep": rep,
+            "spectrum": spectrum,
+        }
+
+    @staticmethod
+    def _nist_ecsers_read_csv(path: str) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Read one deposited NIST EC-SERS CSV. Layout: line 1 = sample
+        name, line 2 = column titles ('Raman Shift (cm-1)' /
+        'Counts minus Dark (a.u.)'), then quoted ';'-separated
+        (wavenumber, intensity) rows with thousands separators inside
+        the quotes. The three procaine solid files end with a stray
+        Origin 'Secondary axis;' footer line, which is skipped like
+        any non-numeric line.
+
+        Returns: (wavenumber axis, intensity), both 1-D float arrays.
+        """
+        rows = []
+        with open(path, encoding="latin-1") as fh:
+            lines = fh.read().splitlines()
+        for line in lines[2:]:
+            line = line.strip()
+            if not line:
+                continue
+            cells = [c.strip().strip('"').replace(",", "") for c in line.split(";")]
+            try:
+                rows.append((float(cells[0]), float(cells[1])))
+            except (ValueError, IndexError):
+                continue
+        if not rows:
+            raise RuntimeError(f"nist_ecsers_drugs: no data rows in {path}")
+        d = np.asarray(rows, dtype=float)
+        return d[:, 0], d[:, 1]
+
+    @staticmethod
+    def _load_nist_ecsers_drugs(cache_path: str):
+        """
+        Download (if needed) and load the NIST EC-SERS drug &
+        adulterant library (doi:10.18434/mds2-3502, v1.0.1): 131
+        EC-SERS spectra of 32 substances (drugs of abuse and
+        adulterants), 785 nm excitation on a DropSens SPELEC silver
+        electrode. Each CSV is the highest-intensity / best-resolution
+        spectrum of one replicate; values are 'Counts minus Dark
+        (a.u.)' (dark-subtracted, NOT normalized).
+
+        The deposit mixes two acquisition batches with different
+        native grids (96 files: 1,014 points 32.6-2,859.1 cm^-1; 35
+        files: 1,011 points 33.8-2,995.5 cm^-1), both non-uniformly
+        spaced. All spectra are interpolated onto the common 1,013-
+        point grid (36.6-2,859.1 cm^-1) that every file fully covers,
+        so no extrapolation occurs.
+
+        Returns spectra, raman_shifts, targets, class_names, group_ids
+        (group id = substance | concentration-or-solid | replicate;
+        unmarked measurements at one substance+concentration share a
+        group).
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        for fname, size, sha256 in MiscLoader._NIST_ECSERS_FILES:
+            path = os.path.join(cache_path, fname)
+            if os.path.exists(path) and os.path.getsize(path) != size:
+                # Truncated or replaced cache entry: force re-download.
+                os.remove(path)
+            result = LoaderTools.download(
+                url=MiscLoader._NIST_ECSERS_BASE_URL + fname,
+                out_dir_path=cache_path,
+                out_file_name=fname,
+                hash_target=sha256,
+                hash_type=HASH_TYPE.sha256,
+            )
+            if result is None:
+                raise RuntimeError(
+                    f"[!] nist_ecsers_drugs: download of {fname} failed "
+                    f"(network error or checksum mismatch). See logs."
+                )
+
+        spectra_list = []
+        targets = []
+        group_ids = []
+        common_axis = None
+        for fname, size, sha256 in MiscLoader._NIST_ECSERS_FILES:
+            axis, inten = MiscLoader._nist_ecsers_read_csv(
+                os.path.join(cache_path, fname)
+            )
+            if axis.size not in (1011, 1014):
+                raise RuntimeError(
+                    f"[!] nist_ecsers_drugs: {fname} has {axis.size} points, "
+                    f"expected 1011 or 1014 (deposit layout changed?)."
+                )
+            if not np.all(np.diff(axis) > 0):
+                raise RuntimeError(
+                    f"[!] nist_ecsers_drugs: non-monotonic wavenumber axis "
+                    f"in {fname}."
+                )
+            if common_axis is None:
+                # First manifest entry is a 1,014-point batch file; drop
+                # its single point below the other batch's range (33.8
+                # cm^-1) to form the common grid.
+                common_axis = axis[1:]
+                if common_axis.size != 1013:
+                    raise RuntimeError(
+                        "[!] nist_ecsers_drugs: unexpected reference grid "
+                        f"({common_axis.size} points)."
+                    )
+            if axis[0] > common_axis[0] or axis[-1] < common_axis[-1]:
+                raise RuntimeError(
+                    f"[!] nist_ecsers_drugs: {fname} does not cover the "
+                    f"common grid {common_axis[0]:.2f}-{common_axis[-1]:.2f} "
+                    f"cm^-1."
+                )
+            spectra_list.append(np.interp(common_axis, axis, inten))
+            meta = MiscLoader._nist_ecsers_parse_name(fname)
+            targets.append(meta["substance"])
+            if meta["conc"] is not None:
+                conc = meta["conc"]
+            elif meta["form"] == "solid":
+                conc = "solid"
+            else:
+                conc = "na"
+            rep = meta["rep"] if meta["rep"] is not None else "unmarked"
+            group_ids.append(f'{meta["substance"]}|{conc}|{rep}')
+
+        encoded_targets, class_names = encode_labels(pd.Series(targets))
+        return (
+            np.asarray(spectra_list),
+            common_axis,
+            encoded_targets,
+            list(class_names),
+            group_ids,
+        )

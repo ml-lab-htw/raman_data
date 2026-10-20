@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "EC-SERS (Electrochemical Surface-Enhanced Raman Spectroscopy) Spectral Database of Drug and Adulterant Compounds",
+  "description": "EC-SERS (electrochemical surface-enhanced Raman spectroscopy) spectral library of 32 drugs of abuse and adulterant compounds from the NIST Public Data Resource (Ott, NIST, 2024; doi:10.18434/mds2-3502, v1.0.1). 131 spectra, 785 nm excitation on a DropSens SPELEC silver electrode; each deposited CSV is the highest-intensity / best-resolution spectrum of one replicate acquisition. The deposit's raw potential-resolved .exp files (118) and combined Excel sheet are not loaded here. Values are 'Counts minus Dark (a.u.)' -- NOT normalized: every file has slightly negative points (dark-subtraction residuals, per-file minima -574..-16) and per-file maxima span 5.1e4-2.0e5, so expect the substrate/potential-dependent intensity drift typical of EC-SERS (realistic but not 'plain Raman'). Two acquisition batches are mixed: 96 files on a 1,014-point grid (32.6-2,859.1 cm^-1) and 35 on a 1,011-point grid (33.8-2,995.5 cm^-1), both non-uniformly spaced (1.95-4.18 cm^-1 steps); the loader interpolates all spectra onto the common 1,013-point grid (36.6-2,859.1 cm^-1) that every file fully covers. 126 of the 131 spectra carry one of 11 concentration labels (1, 5, 10, 25, 50, 100, 300, 333, 1,000, 1,001, 1,013 ppm) -- a built-in concentration / detection-limit subtask; the 5 unlabelled ones are solid-form procaine (3 replicates) and pure-powder acryl- and furanyl-fentanyl. Substances: alprazolam, cocaine, codeine, dextromethorphan, diphenhydramine, etizolam, etonitazene, fentanyl, heroin, levamisole, lidocaine, methadone, methamphetamine, morphine, nicotine, procaine (solid), quinine, sufentanil, temazepam, xylazine, 4-ANPP, buprenorphine, diltiazem, hydroxyzine, naltrexone, and six fentanyl analogs (acetyl, acryl, furanyl, methoxyacetyl, valeryl); the deposit's 33-compound analyte panel also lists mitragynine, for which no CSV is deposited. Mostly the nontargeted campaign (Ott et al. 2024, doi:10.1016/j.forc.2024.100621); the fentanyl-analog spectra (spectrum numbers 292-326) come from the targeted method (Ott et al. 2022, doi:10.3389/frans.2022.834820). group_ids = (substance, concentration, replicate): 118 groups of 1-3 spectra (106 single-spectrum), and all 24 measurements without a replicate marker at one substance+concentration share a single group (possibly the same acquisition session). 10 substances have fewer than 3 groups, so grouped k-fold CV only covers a subset of the library. Filenames are '<Substance>[_<conc>ppm][_form_solid][_nontarget][_rep<N>]_Spectrum_<n>.csv'; the deposit contains one 'Spectrum 293' with a space, one 'nontargeT' typo and one file without a target marker, all parsed by _nist_ecsers_parse_name.",
+  "url": "https://doi.org/10.18434/mds2-3502",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Classification",
+    "SERS"
+  ],
+  "isAccessibleForFree": true,
+  "conditionsOfAccess": "NIST public data (fair use)",
+  "citeAs": "@dataset{ott2024ecsers, title={EC-SERS (Electrochemical Surface-Enhanced Raman Spectroscopy) Spectral Database of Drug and Adulterant Compounds}, author={Ott, Colby E.}, year={2024}, publisher={National Institute of Standards and Technology (NIST) Public Data Resource}, DOI={10.18434/mds2-3502}, url={https://doi.org/10.18434/mds2-3502}}",
+  "citation": "Ott, C. E. (2024). EC-SERS (Electrochemical Surface-Enhanced Raman Spectroscopy) Spectral Database of Drug and Adulterant Compounds. NIST Public Data Resource. https://doi.org/10.18434/mds2-3502; Ott, C. E., Wilcox, A., Kalb, S., McConnell, A., Sisco, E., and Arroyo, L. E. (2024). Development and evaluation of a nontargeted electrochemical surface-enhanced Raman spectroscopy (EC-SERS) screening method applied to forensic seized drug casework samples. Forensic Chemistry, 41, 100621.; Ott, C. E., Perez-Estebanez, M., Hernandez, S., Kelly, K., Dalzell, K. A., Arcos-Martinez, M. J., Heras, A., Colina, A., and Arroyo, L. E. (2022). Forensic identification of fentanyl and its analogs by electrochemical-surface enhanced Raman spectroscopy (EC-SERS) for the screening of seized drugs of abuse. Frontiers in Analytical Science, 2, 834820.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "nist_ecsers_drugs_source",
+      "name": "EC-SERS (Electrochemical Surface-Enhanced Raman Spectroscopy) Spectral Database of Drug and Adulterant Compounds",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://doi.org/10.18434/mds2-3502",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "9b39afdac8fb14b3b7b97ed246bfb8dfcae0a24a6a362908da4aea990ce449f3"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "nist_ecsers_drugs_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "nist_ecsers_drugs_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "nist_ecsers_drugs_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "nist_ecsers_drugs_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "EC-SERS (electrochemical surface-enhanced Raman spectroscopy) with 785 nm excitation on a DropSens SPELEC silver electrode (Metrohm potentiostat setup), NIST. The deposit contains the highest-intensity / best-resolution spectrum of each replicate as CSV; the full potential-resolved .exp files (118) are in the deposit but not loaded by raman_data.",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "Authors' pipeline: modified-polynomial baseline correction in DropView, then the single best spectrum per replicate exported as CSV (Origin Pro); values are 'Counts minus Dark (a.u.)', not normalized (per-file minima slightly negative, maxima 5e4-2e5). The loader additionally interpolates both native grids onto the common 1,013-point grid (36.6-2,859.1 cm^-1).",
+  "rai:dataAnnotationProtocol": "Substance labels parsed from the deposited filenames (32 analytes); 126/131 spectra additionally carry a concentration label (1-1,013 ppm, 11 levels). No human annotation beyond the authors' sample preparation.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included; all spectra originate from lab-prepared chemical standards.",
+  "rai:dataBiases": "EC-SERS intensities depend on the silver electrode surface and electrochemical potential, so spectra of the same substance vary in absolute intensity across replicates and batches. Two acquisition batches (1,014-pt and 1,011-pt native grids) are mixed and interpolated onto one common grid. Per-substance spectrum counts range from 1 to 13 (10 of 32 substances have fewer than 3 replicate groups), so the class balance is strongly uneven. Lab-prepared solutions, not seized street material.",
+  "rai:dataLimitations": "Forensic library-formation data, not a balanced clinical or field dataset: 32 substances with 1-13 spectra each (118 replicate groups; 10 substances < 3 groups), so grouped k-fold CV covers only a subset. Concentration labels exist for 126/131 spectra (the 5 unlabelled: solid procaine x3, pure acryl-/furanyl-fentanyl). Electrochemical SERS signal is substrate/potential-dependent; models may not transfer to plain (non-enhanced) Raman or other SERS substrates.",
+  "rai:dataSocialImpact": "Supports forensic drug screening research and ML benchmarking for fentanyl-analog and adulterant identification; misuse potential is limited since the data identify controlled substances rather than individuals.",
+  "rai:dataUseCases": "Multi-class substance identification (32 classes), concentration / limit-of-detection regression from the 11-level concentration series, and EC-SERS spectral library formation.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: EC-SERS spectra of lab-prepared drug solutions (1-1,013 ppm) and solid powders on a DropSens SPELEC silver electrode, 785 nm excitation; each deposited CSV is the highest-intensity / best-resolution spectrum of one replicate acquisition. Preprocessing: modified-polynomial baseline correction in DropView on the raw potential-resolved scans; values are dark-subtracted counts (a.u.), not intensity-normalized; raman_data additionally interpolates the two native grids onto a common 1,013-point grid. Annotation: substance labels from the deposited filenames; concentration labels (11 levels) where marked; no human annotation.",
+  "prov:wasDerivedFrom": "https://doi.org/10.18434/mds2-3502"
+}

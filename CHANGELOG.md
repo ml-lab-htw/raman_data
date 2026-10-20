@@ -11,6 +11,23 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `nist_ecsers_drugs`: NIST EC-SERS (electrochemical surface-enhanced
+  Raman) spectral library of 32 drugs of abuse and adulterant compounds
+  (Ott, NIST, 2024; doi:10.18434/mds2-3502, v1.0.1, NIST public data
+  under fair-use terms; nontargeted method doi:10.1016/j.forc.2024.100621,
+  targeted fentanyl-analog method doi:10.3389/frans.2022.834820). 131
+  spectra (785 nm, DropSens SPELEC silver electrode) covering fentanyl
+  + five analogs, cocaine, heroin, codeine, methadone, benzodiazepines,
+  xylazine, nitrazenes and other analytes; 126/131 at one of 11
+  concentrations (1-1,013 ppm) -- a built-in detection-limit subtask --
+  and 5 unlabelled solid/pure-form spectra. Values are dark-subtracted
+  counts (a.u.), not normalized; the two native acquisition grids
+  (1,014-pt and 1,011-pt, non-uniformly spaced) are interpolated onto
+  a common 1,013-pt grid (36.6-2,859.1 cm^-1). group_ids = (substance,
+  concentration, replicate): 118 groups, 10 substances with < 3
+  groups. The NIST Open Data API no longer serves the record's file
+  list, so the 131-file manifest (size + sha256, pinned from NERD
+  record v1.0.1) is embedded in the loader.
 - `nanoplastics_individual`: Raman spectra of 1,000 individual
   nanoplastic particles for polymer classification (Xie et al. 2023,
   *Environ. Sci. Technol.* 57(46):18203, doi:10.1021/acs.est.3c03210;

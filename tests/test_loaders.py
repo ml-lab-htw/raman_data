@@ -534,3 +534,92 @@ def test_nanoplastics_individual():
     assert not np.isnan(dataset.spectra).any()
     assert (dataset.spectra > 0).all()
 
+
+def test_nist_ecsers_filename_parser():
+    # No network: the filename parser must handle all 131 deposited
+    # names, including the three irregular ones (a space-separated
+    # 'Spectrum 293', a 'nontargeT' typo, and a file without a target
+    # marker).
+    parse = MiscLoader._nist_ecsers_parse_name
+    files = [f for f, _, _ in MiscLoader._NIST_ECSERS_FILES]
+    assert len(files) == 131
+
+    val = parse("Valeryl_fentanyl_25ppm_nontarget_Spectrum 293.csv")
+    assert val == {
+        "substance": "Valeryl_fentanyl", "conc": 25, "form": None,
+        "target": "nontarget", "rep": None, "spectrum": 293,
+    }
+    fent = parse("Fentanyl_1ppm_nontargeT_rep3_Spectrum_5.csv")
+    assert fent["substance"] == "Fentanyl"
+    assert fent["target"] == "nontarget" and fent["rep"] == 3
+    nalt = parse("Naltrexone_1000ppm_Spectrum_7.csv")
+    assert nalt["substance"] == "Naltrexone"
+    assert nalt["conc"] == 1000 and nalt["target"] is None
+    proc = parse("Procaine_form_solid_nontarget_rep1_Spectrum_7.csv")
+    assert proc["substance"] == "Procaine"
+    assert proc["form"] == "solid" and proc["conc"] is None and proc["rep"] == 1
+
+    meta = [parse(f) for f in files]
+    # 32 substances; 126/131 carry a concentration label.
+    substances = {m["substance"] for m in meta}
+    assert len(substances) == 32
+    assert sum(m["conc"] is not None for m in meta) == 126
+    assert {m["conc"] for m in meta if m["conc"] is not None} == {
+        1, 5, 10, 25, 50, 100, 300, 333, 1000, 1001, 1013,
+    }
+    # 118 (substance, concentration, replicate) groups; the 24
+    # measurements without a replicate marker share one group per
+    # substance+concentration (possibly the same acquisition session).
+    groups = {
+        (m["substance"],
+         m["conc"] if m["conc"] is not None else (m["form"] or "na"),
+         m["rep"] if m["rep"] is not None else "unmarked")
+        for m in meta
+    }
+    assert len(groups) == 118
+    assert sum(m["rep"] is None for m in meta) == 24
+
+
+@pytest.mark.skip(reason="data.nist.gov is flaky (504s/timeouts around 2026-10-19/20); run manually (131 files, ~4.1 MB, ~10 min).")
+def test_nist_ecsers_drugs():
+    dataset = MiscLoader.load_dataset("nist_ecsers_drugs")
+    assert dataset.spectra.shape == (131, 1013)
+    assert dataset.targets.shape == (131,)
+    assert len(dataset.target_names) == 32
+    # Common grid: the dominant 1,014-point batch's axis minus its
+    # single point below the other batch's range (33.8 cm^-1).
+    assert dataset.raman_shifts[0] == pytest.approx(36.594629)
+    assert dataset.raman_shifts[-1] == pytest.approx(2859.07796)
+    # Per-class spectrum counts (32 substances).
+    counts = collections.Counter(dataset.targets.tolist())
+    assert counts == {
+        dataset.target_names.index(name): n
+        for name, n in {
+            "Alprazolam": 13, "Fentanyl": 13, "Cocaine": 12,
+            "Heroin": 10, "Codeine": 9, "Levamisole": 7,
+            "Methamphetamine": 5, "Morphine": 5, "Sufentanil": 5,
+            "Dextromethorphan": 4, "Diphenhydramine": 4,
+            "Etizolam": 3, "Etonitazene": 3, "Lidocaine": 3,
+            "Methadone": 3, "Nicotine": 3,
+            "Npiperidinylmetonitazene": 3, "Npyrrolidinoetonitazene": 3,
+            "Procaine": 3, "Quinine": 3, "Temazepam": 3,
+            "Xylazine": 3, "Diltiazem": 2, "4-ANPP": 1,
+            "Acetyl_fentanyl": 1, "Acryl_fentanyl": 1,
+            "Buprenorphine": 1, "Furanyl_fentanyl": 1,
+            "Hydroxyzine": 1, "Methoxyacetyl_fentanyl": 1,
+            "Naltrexone": 1, "Valeryl_fentanyl": 1,
+        }.items()
+    }
+    # 118 (substance, concentration, replicate) groups: 106
+    # single-spectrum, 11 two-spectrum, one three-spectrum.
+    g = dataset.group_ids
+    assert g is not None and g.shape == (131,)
+    per_group = collections.Counter(g.tolist())
+    assert len(per_group) == 118
+    assert sorted(per_group.values()) == [1] * 106 + [2] * 11 + [3]
+    # Raw dark-subtracted counts (NOT normalized): every file has
+    # slightly negative points, maxima reach ~2e5.
+    assert dataset.spectra.min() < 0
+    assert 2e5 < dataset.spectra.max() < 2.1e5
+    assert not np.isnan(dataset.spectra).any()
+
