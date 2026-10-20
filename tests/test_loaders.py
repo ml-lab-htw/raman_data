@@ -335,3 +335,22 @@ def test_stroke_urine_sers():
         assert len(set(dataset.group_ids.tolist())) == 101, nm
         assert _groups_are_label_pure(dataset), nm
 
+
+def test_breast_cancer_subtypes():
+    # Scoped to a single ~11 MB xlsx via file_typ, small enough to run in CI.
+    dataset = ZenodoLoader.load_dataset("breast_cancer_subtypes")
+    # LabelEncoder class order: dcis, idc, ilc, normal
+    assert dataset.target_names == ["dcis", "idc", "ilc", "normal"]
+    assert dataset.spectra.shape == (641, 1250)
+    assert dataset.spectra.shape[1] == len(dataset.raman_shifts)
+    assert dataset.raman_shifts[0] == 500 and dataset.raman_shifts[-1] == 2998
+    counts = dict(zip(*np.unique(dataset.targets, return_counts=True)))
+    assert counts == {0: 221, 1: 114, 2: 129, 3: 177}
+    assert dataset.group_ids is not None
+    assert dataset.group_ids.shape == (641,)
+    # 80 tissue samples (the deposit's finest grouping; see dataset
+    # description for the 71-individual note).
+    assert len(set(dataset.group_ids.tolist())) == 80
+    assert _groups_are_label_pure(dataset)
+    assert not np.isnan(dataset.spectra).any()
+

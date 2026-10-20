@@ -577,6 +577,78 @@ class ZenodoLoader(BaseLoader):
         group_ids = np.array(groups_list, dtype=str)
         return spectra, grid, targets, list(class_names), group_ids
 
+    @staticmethod
+    def __load_20042934(
+        cache_path: str,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str], np.ndarray] | None:
+        """
+        Parse and extract data from the breast_cancer_subtypes dataset (Zenodo ID: 20042934).
+
+        Ex vivo breast tissue Raman spectra for histological subtype
+        classification (Ezzat et al. 2026, Sci. Rep.,
+        doi:10.1038/s41598-026-54071-5; preprint
+        doi:10.21203/rs.3.rs-7714586/v1): normal vs. IDC vs. ILC vs. DCIS.
+
+        DATASET.xlsx / Sheet1: one row per spectrum; `histopathology` is the
+        class label, `sample_id` follows SXXX_MX_RX (tissue sample /
+        measurement point / repeat), then one column per wavenumber
+        (500-2998 cm^-1 in 2 cm^-1 steps). The deposited wavenumber header
+        repeats the final two values (2996, 2998) -- pandas/Excel renamed the
+        duplicates '2996.1'/'2998.1'; only the 500..2998 step-2 columns are
+        used. One sample id (S076_M4_R1) appears twice with distinct spectra
+        (two measurements); both rows are kept.
+
+        Returns a tuple of (spectra, raman_shifts, targets, class_names,
+        group_ids) with group_id = tissue sample id.
+        """
+        data_path = os.path.join(cache_path, "20042934", "DATASET.xlsx")
+        if not os.path.isfile(data_path):
+            raise FileNotFoundError(f"Could not find DATASET.xlsx in {data_path}")
+
+        df = pd.read_excel(data_path, sheet_name="Sheet1")
+        for col in ("histopathology", "sample_id"):
+            if col not in df.columns:
+                raise RuntimeError(f"[!] breast_cancer_subtypes: missing column '{col}'.")
+
+        # Keep exactly the 500..2998 step-2 wavenumber columns (this drops the
+        # duplicated '2996.1'/'2998.1' header artifact of the deposit).
+        expected = {str(500 + 2 * i) for i in range(1250)}
+        wn_cols = [c for c in df.columns if str(c) in expected]
+        if len(wn_cols) != 1250:
+            raise RuntimeError(
+                f"[!] breast_cancer_subtypes: expected the 500-2998 cm^-1 step-2 "
+                f"wavenumber columns, found {len(wn_cols)}."
+            )
+        raman_shifts = np.array([float(c) for c in wn_cols])
+        if not np.all(np.diff(raman_shifts) == 2.0):
+            raise RuntimeError(
+                "[!] breast_cancer_subtypes: wavenumber axis is not uniform (step 2 cm^-1)."
+            )
+
+        spectra = df[wn_cols].apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError("[!] breast_cancer_subtypes: missing intensity values.")
+
+        if len(df) != 641:
+            raise RuntimeError(
+                f"[!] breast_cancer_subtypes: expected 641 spectra, got {len(df)}."
+            )
+        labels = df["histopathology"].astype(str).str.strip()
+        expected_classes = {"normal", "dcis", "idc", "ilc"}
+        if set(labels) != expected_classes:
+            raise RuntimeError(
+                f"[!] breast_cancer_subtypes: unexpected class labels: {sorted(set(labels))}."
+            )
+
+        targets, class_names = encode_labels(labels)
+        # Group by tissue sample (the SXXX prefix of sample_id SXXX_MX_RX):
+        # every measurement point and repeat on one tissue sample is the same
+        # physical specimen, so they must not be split across train/test.
+        group_ids = (
+            df["sample_id"].astype(str).str.strip().str.extract(r"^(S\d+)")[0].to_numpy()
+        )
+        return spectra, raman_shifts, targets, list(class_names), group_ids
+
     __BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "raman-data", "zenodo")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
@@ -863,6 +935,79 @@ class ZenodoLoader(BaseLoader):
             )
             for nm in (532, 633)
         },
+        "breast_cancer_subtypes": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
+            id="20042934",
+            name="Breast Cancer Subtypes (Ex Vivo Tissue)",
+            short_name="Breast Cancer Subtypes",
+            file_typ="DATASET.xlsx",
+            license="CC-BY 4.0",
+            loader=lambda cache_path: ZenodoLoader.__load_20042934(cache_path),
+            metadata={
+                "full_name": "Ex Vivo Breast Tissue Histological Subtype Classification (Ezzat et al. 2026)",
+                "source": "https://doi.org/10.5281/zenodo.20042934",
+                "paper": "https://doi.org/10.1038/s41598-026-54071-5",
+                "bibtex": (
+                    "@article{Ezzat_2026, title={Label-free classification of breast "
+                    "cancer subtypes in ex vivo human tissues using Raman spectroscopy and "
+                    "machine learning}, url={http://dx.doi.org/10.1038/s41598-026-54071-5}, "
+                    "DOI={10.1038/s41598-026-54071-5}, journal={Scientific Reports}, "
+                    "publisher={Springer Nature}, "
+                    "author={Ezzat, Ahmed and Zhu, Zhiyu and Roddan, Alfie and Silvanto, Anna "
+                    "and Hou, Yingwei and Mandal, Nilanjan and Xu, Jiacheng and Zhang, Ziqi "
+                    "and Zhou, Mengyi and Darzi, Ara and Dryden, Simon and Leff, Daniel R. "
+                    "and Thompson, Alex J.}, year={2026}, month=jun}"
+                ),
+                "citation": [
+                    "Ezzat, A., Zhu, Z., Roddan, A., Silvanto, A., Hou, Y., Mandal, N., Xu, J., "
+                    "Zhang, Z., Zhou, M., Darzi, A., Dryden, S., Leff, D. R., and Thompson, A. J. "
+                    "(2026). Label-free classification of breast cancer subtypes in ex vivo human "
+                    "tissues using Raman spectroscopy and machine learning. Scientific Reports."
+                ],
+                "description": (
+                    "Label-free Raman spectra of ex vivo human breast tissue (80 frozen tissue "
+                    "samples -- 46 normal, 34 cancerous -- from consenting donors via the Imperial "
+                    "College Healthcare Tissue Bank) for histological subtype classification: "
+                    "normal vs. invasive ductal carcinoma (idc) vs. invasive lobular carcinoma "
+                    "(ilc) vs. ductal carcinoma in situ (dcis). 641 spectra (177 normal, 221 dcis, "
+                    "114 idc, 129 ilc) on a confocal Raman microscope (DXR3xi, Thermo Fisher "
+                    "Scientific), 785 nm excitation, 500-2,998 cm^-1 at a 2 cm^-1 grid. Tumor "
+                    "samples were measured at 3-6 spatial points, normal tissue at a single "
+                    "point, with 2-3 spectra per point. group_ids are the 80 tissue sample ids "
+                    "(sample_id format SXXX_MX_RX: sample / measurement point / repeat): the "
+                    "paper reports the 80 samples derive from 71 individuals (9 donors "
+                    "contributed two samples), but the deposit carries no sample-to-individual "
+                    "mapping, so sample level is the finest available group. One sample id "
+                    "(S076_M4_R1) appears twice with distinct spectra (two measurements); both "
+                    "rows are kept as deposited. The authors' analysis used an 800-2,000 cm^-1 "
+                    "region of interest with z-score normalization (see embedded_preprocessing); "
+                    "the deposit spans the full acquired range."
+                ),
+            },
+            # Checked: all spectra of one tissue sample share its histological
+            # label (class is assigned per sample, never per spectrum). Note:
+            # per the paper, 9 of the 80 samples come from the same 71
+            # individuals, but that mapping is not in the deposit.
+            is_grouped=True,
+            # Checked: every row carries one of the four histological labels.
+            has_missing_labels=False,
+            # The deposit is the authors' pipeline output minus ROI selection
+            # and normalization: baseline-corrected (iterative 5th-order
+            # polynomial, 5% relative residual-std convergence; Savitzky-Golay
+            # smoothing, window 11, order 3) but NOT z-score normalized
+            # (row means span 46-2,771) and over the full 500-2,998 cm^-1
+            # range (the paper's 800-2,000 cm^-1 ROI not applied). ~8% of
+            # cells are negative -- baseline subtraction residuals.
+            embedded_preprocessing=(
+                "Baseline-corrected (iterative 5th-order polynomial; "
+                "Savitzky-Golay smoothing, window 11, order 3) per the "
+                "authors' pipeline; full 500-2,998 cm^-1 range, not "
+                "z-score normalized (paper additionally applied an "
+                "800-2,000 cm^-1 region of interest and z-score "
+                "normalization in its analysis)."
+            ),
+        ),
     }
 
     @staticmethod
