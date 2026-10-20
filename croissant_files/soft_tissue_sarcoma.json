@@ -50,7 +50,7 @@
   "@type": "sc:Dataset",
   "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "RamanSTS dataset, a large collection of Raman spectra of soft tissue sarcomas",
-  "description": "286,672 ex-vivo Raman spectra (Renishaw inVia, 633 nm, 400-1,800 cm⁻¹, 1,401 points) of surgically resected soft tissue from 7 patients, measured as 51x51 maps over 100 x 100 µm. Target: tissue type (WHO classification), 8 classes: fat, muscle and skin (normal), leiomyoma (benign), myxoid liposarcoma, high-grade pleomorphic liposarcoma, leiomyosarcoma and high-grade myxofibrosarcoma (malignant). Group ids are the 18 patient x tissue files; the map of each spectrum is not published.",
+  "description": "286,672 ex-vivo Raman spectra (Renishaw inVia, 633 nm, 400-1,800 cm⁻¹, 1,401 points) of surgically resected soft tissue from 7 patients, measured as 51x51 maps over 100 x 100 µm. Target: tissue type (WHO classification), 8 classes: fat, muscle and skin (normal), leiomyoma (benign), myxoid liposarcoma, high-grade pleomorphic liposarcoma, leiomyosarcoma and high-grade myxofibrosarcoma (malignant). Leiomyoma, myxoid liposarcoma, leiomyosarcoma and high-grade myxofibrosarcoma each come from a single patient, so for them grouped splits measure generalisation across regions of one specimen, not across patients. Three maps (P3 muscle, P3 pleomorphic liposarcoma, P4 myxoid liposarcoma) are partial: spectra with artefacts (tissue contamination, ink) were removed in WiRE. Group ids are the 18 patient x tissue files; the map of each spectrum is not published yet.",
   "url": "https://doi.org/10.7910/DVN/NGEZPA",
   "keywords": [
     "Raman spectroscopy",
@@ -132,16 +132,16 @@
       ]
     }
   ],
-  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
-  "rai:dataCollectionType": "Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols.",
-  "rai:dataPreprocessingProtocol": "Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication.",
-  "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods.",
-  "rai:personalSensitiveInformation": "Spectra are derived from human biological samples (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included, but biological measurements may constitute sensitive health-related data under applicable data-protection regulations.",
-  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
-  "rai:dataLimitations": "Models trained on this dataset may not transfer to different instruments, sample matrices, or patient populations without re-calibration.",
-  "rai:dataSocialImpact": "Raman spectroscopy datasets for medical diagnostics have the potential to support the development of non-invasive, low-cost screening tools with particular relevance to resource-limited healthcare settings. Results must be validated by qualified healthcare professionals before any clinical application.",
-  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control.",
+  "rai:dataCollection": "Point-mapping Raman microscopy of ex-vivo tissue: Renishaw inVia, 633 nm excitation, 51 x 51 grid over 100 x 100 µm, 0.5 s exposure per spot, 400-1,800 cm⁻¹ (1,401 points).",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Renishaw WiRE before export, in this order: fifth-order polynomial baseline correction, median filtering to remove cosmic rays, Savitzky-Golay smoothing (polynomial order 3), min-max normalisation of each spectrum to [0, 1]. Then interpolated onto a 1 cm⁻¹ grid and cropped to 400-1,800 cm⁻¹ in Python (per the dataset authors).",
+  "rai:dataAnnotationProtocol": "Each specimen was labelled by histopathology (WHO classification of soft tissue tumours); every spectrum of a map carries its specimen's label.",
+  "rai:personalSensitiveInformation": "Spectra of human tissue, labelled by diagnosis. The published metadata gives each patient's age, sex and tumour location; the spectra carry pseudonymous patient ids (P1-P7) but no direct identifiers.",
+  "rai:dataBiases": "7 patients, one hospital, one instrument. Four classes (leiomyoma, myxoid liposarcoma, leiomyosarcoma, high-grade myxofibrosarcoma) come from a single patient each, and class sizes range from 10,404 to 83,742 spectra.",
+  "rai:dataLimitations": "For the four single-patient classes, grouped splits over maps measure generalisation across regions of one specimen, not across patients. Three maps (P3 muscle, P3 pleomorphic liposarcoma, P4 myxoid liposarcoma) are partial: spectra with artefacts (tissue contamination, ink) were removed. Spectra are already baseline-corrected, smoothed and normalised, so further preprocessing must not repeat these steps. Licensed CC BY-NC 4.0 (non-commercial).",
+  "rai:dataSocialImpact": "Supports research on intraoperative margin assessment for soft tissue sarcoma surgery. Not validated for clinical use; results must be confirmed by histopathology.",
+  "rai:dataUseCases": "Tissue-type classification, tumour vs normal tissue discrimination, sarcoma subtyping.",
   "rai:hasSyntheticData": false,
-  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasGeneratedBy": "Data collection: ex-vivo Raman maps (51 x 51 points over 100 x 100 µm, 0.5 s per spot) of surgically resected soft tissue from 7 patients, Renishaw inVia, 633 nm, collected under IRB approval with written informed consent. Preprocessing: Renishaw WiRE before export, in this order: fifth-order polynomial baseline correction, median filtering to remove cosmic rays, Savitzky-Golay smoothing (polynomial order 3), min-max normalisation of each spectrum to [0, 1]. Then interpolated onto a 1 cm⁻¹ grid and cropped to 400-1,800 cm⁻¹ in Python (per the dataset authors). Annotation: histopathology-confirmed tissue type per specimen (WHO classification of soft tissue tumours).",
   "prov:wasDerivedFrom": "https://doi.org/10.7910/DVN/NGEZPA"
 }
