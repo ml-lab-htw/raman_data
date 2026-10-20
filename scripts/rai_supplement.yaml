@@ -3853,6 +3853,33 @@ tg_ecoli_fermentation_supernatant:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
+water_quality_ions:
+  prov:wasDerivedFrom: https://data.mendeley.com/datasets/cxf3zxsc3k/3
+  prov:wasGeneratedBy: 'Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures,
+    and solutions. Preprocessing: Spectra may have undergone baseline correction, smoothing,
+    normalisation, and wavenumber calibration. Exact steps are described in the accompanying
+    publication. Annotation: Ground-truth target values measured by validated reference analytical
+    methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).'
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic
+    assays, dynamic light scattering, gas chromatography, or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may not generalise to field or
+    clinical settings. Spectral profiles are influenced by instrument-specific factors (laser
+    wavelength, detector type, optical path length, integration time). Class imbalances may be present
+    in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the
+    scattered light intensity as a function of Raman shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions.
+  rai:dataLimitations: Quantitative models are valid within the concentration ranges and chemical matrix of the training
+    data; extrapolation outside these ranges is not recommended.
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber
+    calibration. Exact steps are described in the accompanying publication.
+  rai:dataSocialImpact: Supports inline quality control and process analytical technology (PAT) in chemical manufacturing,
+    contributing to safer and more efficient industrial processes.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression, quantitative spectral
+    analysis, process analytical technology (PAT).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All spectra originate from chemical, biological,
+    or material samples without individual human identifiers.
 wheat_lines:
   rai:dataAnnotationProtocol: Class labels assigned based on known genotype and treatment
     condition. Four classes are present in the dataset - commercial cultivar without

@@ -8,6 +8,7 @@ from raman_data.loaders.KaggleLoader import KaggleLoader
 from raman_data.loaders.HuggingFaceLoader import HuggingFaceLoader
 from raman_data.loaders.ZenodoLoader import ZenodoLoader
 from raman_data.loaders.MiscLoader import MiscLoader
+from raman_data.loaders.MendeleyLoader import MendeleyLoader
 from raman_data.loaders.RWTHLoader import RWTHLoader
 from raman_data.loaders.GoogleDriveLoader import GoogleDriveLoader
 from raman_data.loaders.FigshareLoader import FigshareLoader
@@ -21,6 +22,7 @@ __LOADERS = [
     HuggingFaceLoader,
     ZenodoLoader,
     MiscLoader,
+    MendeleyLoader,
     RWTHLoader,
     GoogleDriveLoader,
     FigshareLoader,
@@ -353,4 +355,30 @@ def test_breast_cancer_subtypes():
     assert len(set(dataset.group_ids.tolist())) == 80
     assert _groups_are_label_pure(dataset)
     assert not np.isnan(dataset.spectra).any()
+
+
+def test_water_quality_ions():
+    # Single ~10 MB Mendeley download (4 files), small enough to run in CI.
+    dataset = MendeleyLoader.load_dataset("water_quality_ions")
+    assert dataset.spectra.shape == (694, 1019)
+    # Multi-target regression: 3 concentration columns in mg/L.
+    assert dataset.targets.shape == (694, 3)
+    assert dataset.target_names == [
+        "Nitrate [mg/L]",
+        "Nitrite [mg/L]",
+        "Sulphate [mg/L]",
+    ]
+    assert dataset.raman_shifts[0] == 401.026
+    assert dataset.raman_shifts[-1] == 3898.75
+    # 70 prepared solutions, each measured 9-10 times.
+    assert dataset.group_ids is not None
+    assert dataset.group_ids.shape == (694,)
+    assert len(set(dataset.group_ids.tolist())) == 70
+    # 0 mg/L means the analyte is absent; each column has zeros and
+    # non-negative values, no NaNs anywhere.
+    for i in range(3):
+        assert (dataset.targets[:, i] >= 0).all()
+        assert (dataset.targets[:, i] == 0).any()
+    assert not np.isnan(dataset.spectra).any()
+    assert not np.isnan(dataset.targets).any()
 

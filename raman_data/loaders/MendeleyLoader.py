@@ -131,6 +131,62 @@ class MendeleyLoader(BaseLoader):
             # Checked: no missing (NaN) label values.
             has_missing_labels=False,
         ),
+        "water_quality_ions": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="cxf3zxsc3k",
+            name="Water Quality Ion Quantification (Nitrate/Nitrite/Sulphate)",
+            short_name="Water Quality Ions",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_water_quality_ions(cache_path),
+            metadata={
+                "full_name": (
+                    "A Dataset of Raman Spectra with Quantitative Labels of Mixtures of "
+                    "Nitrate, Nitrite and Sulphate (Luciani et al. 2026)"
+                ),
+                "source": "https://data.mendeley.com/datasets/cxf3zxsc3k/3",
+                "doi": "10.17632/cxf3zxsc3k.3",
+                "paper": "https://doi.org/10.1016/j.dib.2026.113319",
+                "bibtex": (
+                    "@article{Luciani_2026, title={A Dataset of Raman Spectra with Quantitative "
+                    "Labels of Mixtures of Nitrate, Nitrite and Sulphate}, volume={113319}, "
+                    "url={http://dx.doi.org/10.1016/j.dib.2026.113319}, DOI={10.1016/j.dib.2026.113319}, "
+                    "journal={Data in Brief}, publisher={Elsevier}, "
+                    "author={Luciani, Lorenzo and Nocera, Antonio and Raimondi, Michela and "
+                    "Sbrollini, Agnese and Morettini, Micaela and Galassi, Rossana}, year={2026}}"
+                ),
+                "citation": [
+                    "Luciani, L., Nocera, A., Raimondi, M., Sbrollini, A., Morettini, M., and Galassi, R. (2026). "
+                    "A Dataset of Raman Spectra with Quantitative Labels of Nitrate, Nitrite and Sulphate for "
+                    "Application of Artificial Intelligence to Water Quality Sensing. Mendeley Data, v3. "
+                    "https://doi.org/10.17632/cxf3zxsc3k.3"
+                ],
+                "description": (
+                    "Raw Raman spectra of aqueous solutions containing nitrate, nitrite and sulphate ions, "
+                    "for multi-analyte concentration quantification (mg/L). 694 spectra (IDs 0-693) covering "
+                    "single-analyte (289), binary (215) and ternary (190) mixtures, prepared in ultrapure "
+                    "Milli-Q water from KNO3, NaNO2 and Na2SO4 (counterions K+/Na+). 401-3,899 cm^-1 at "
+                    "1,019 points (non-uniform ~2.7-4.3 cm^-1 grid) on a Horiba iHR320 micro-Raman system "
+                    "(Olympus BXFM microscope, 50x objective, Horiba Syncerity CCD) under 532 nm excitation. "
+                    "Targets: three columns of nominal concentrations in mg/L — nitrate 122-30,667, "
+                    "nitrite 250-15,333, sulphate 253-16,907 (0 = analyte absent). group_ids identify the "
+                    "70 prepared solutions (one unique concentration combination each), each measured up to "
+                    "10 times, so replicate spectra must not be split across train/test. Lab-prepared "
+                    "standards in ultrapure water, not field matrices."
+                ),
+            },
+            # Checked: each unique (nitrate, nitrite, sulphate) combination
+            # was prepared once and measured repeatedly — 70 solutions with
+            # up to 10 spectra each (dataset README + 'Replicate number'
+            # column of the composition table).
+            is_grouped=True,
+            # Checked: no missing (NaN) target values; 0 mg/L means the
+            # analyte is absent from the sample.
+            has_missing_labels=False,
+            # Raw spectra as deposited ("694 raw Raman spectra" per the
+            # dataset README and the Data in Brief article).
+            embedded_preprocessing=None,
+        ),
     }
 
     logger = logging.getLogger(__name__)
@@ -360,6 +416,92 @@ class MendeleyLoader(BaseLoader):
         return spectra, raman_shifts, encoded_targets, list(target_names)
 
     # ------------------------------------------------------------------
+    # water_quality_ions (Mendeley cxf3zxsc3k)
+    # ------------------------------------------------------------------
+
+    # The three regression targets, in the deposited column order.
+    _WATER_QUALITY_TARGETS = ["Nitrate [mg/L]", "Nitrite [mg/L]", "Sulphate [mg/L]"]
+
+    @staticmethod
+    def _load_water_quality_ions(
+        cache_path: str,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str], np.ndarray]:
+        """
+        Download (if needed) and parse the water-quality ion quantification
+        dataset (Mendeley cxf3zxsc3k v3, Luciani et al. 2026).
+
+        694 raw Raman spectra (532 nm, Horiba iHR320 micro-Raman) of aqueous
+        nitrate/nitrite/sulphate solutions with three concentration targets
+        in mg/L. File layout (all_spectra_dataset_CSV.csv): 'Spectra ID'
+        column, 1,019 wavenumber columns (401-3,899 cm^-1, non-uniform
+        grid), then the three concentration label columns.
+
+        Returns a tuple of (spectra, raman_shifts, targets, target_names,
+        group_ids) where targets is (694, 3) and group_id identifies the
+        prepared solution (one unique concentration combination each,
+        measured up to 10 times).
+        """
+        _DATASET_ID = "cxf3zxsc3k"
+        _VERSION = 3
+
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Mendeley)
+        if cache_root is None:
+            raise ValueError("Mendeley cache root is not set.")
+
+        shared_root = os.path.join(cache_root, "water_quality_ions")
+        MendeleyLoader._download_files(shared_root, dataset_id=_DATASET_ID, version=_VERSION)
+
+        csv_path = os.path.join(shared_root, "all_spectra_dataset_CSV.csv")
+        if not os.path.isfile(csv_path):
+            raise FileNotFoundError(f"Could not find all_spectra_dataset_CSV.csv in {shared_root}")
+
+        df = pd.read_csv(csv_path)
+        id_col = "Spectra ID"
+        if id_col not in df.columns:
+            raise RuntimeError(f"[!] water_quality_ions: missing '{id_col}' column in {csv_path}")
+        label_cols = [str(c).strip() for c in df.columns[-3:]]
+        if label_cols != ["Nitrate", "Nitrite", "Sulphate"]:
+            raise RuntimeError(f"[!] water_quality_ions: unexpected label columns {label_cols}")
+
+        wn_cols = df.columns[1:-3]
+        raman_shifts = np.array([float(c) for c in wn_cols])
+        if raman_shifts.shape != (1019,):
+            raise RuntimeError(
+                f"[!] water_quality_ions: expected 1,019 wavenumber columns, "
+                f"got {raman_shifts.shape[0]}."
+            )
+        if not np.all(np.diff(raman_shifts) > 0):
+            raise RuntimeError("[!] water_quality_ions: wavenumber axis is not ascending.")
+
+        ids = df[id_col].to_numpy()
+        if len(ids) != 694 or len(set(ids.tolist())) != 694:
+            raise RuntimeError(
+                f"[!] water_quality_ions: expected 694 unique spectra IDs, "
+                f"got {len(set(ids.tolist()))} of {len(ids)}."
+            )
+
+        spectra = df[wn_cols].apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError("[!] water_quality_ions: missing intensity values.")
+        targets = df.iloc[:, -3:].to_numpy(dtype=float)
+        if np.isnan(targets).any():
+            raise RuntimeError("[!] water_quality_ions: missing target values.")
+
+        # Group id = the prepared solution: each unique (nitrate, nitrite,
+        # sulphate) combination was prepared once and measured repeatedly
+        # (70 solutions, up to 10 spectra each; see the dataset README).
+        group_ids = np.array(
+            [f"NO3_{r[0]:g}_NO2_{r[1]:g}_SO4_{r[2]:g}" for r in targets], dtype=str
+        )
+
+        MendeleyLoader.logger.debug(
+            f"Loaded water_quality_ions: {spectra.shape[0]} spectra × "
+            f"{spectra.shape[1]} points, {len(set(group_ids.tolist()))} prepared solutions"
+        )
+
+        return spectra, raman_shifts, targets, list(MendeleyLoader._WATER_QUALITY_TARGETS), group_ids
+
+    # ------------------------------------------------------------------
     # BaseLoader interface
     # ------------------------------------------------------------------
 
@@ -406,9 +548,13 @@ class MendeleyLoader(BaseLoader):
                     f"Could not load dataset '{dataset_name}'. "
                     "Expected files may be missing — check the logs for details."
                 )
-            spectra, raman_shifts, targets, class_names = result
+            if len(result) == 5:
+                spectra, raman_shifts, targets, class_names, group_ids = result
+            else:
+                spectra, raman_shifts, targets, class_names = result
+                group_ids = None
         else:
-            spectra = raman_shifts = targets = class_names = None
+            spectra = raman_shifts = targets = class_names = group_ids = None
 
         return RamanDataset(
             info=dataset_info,
@@ -416,4 +562,5 @@ class MendeleyLoader(BaseLoader):
             spectra=spectra,
             targets=targets,
             target_names=class_names,
+            group_ids=group_ids,
         )
