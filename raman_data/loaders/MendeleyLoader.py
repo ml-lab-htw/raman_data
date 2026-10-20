@@ -1,5 +1,7 @@
 import logging
 import os
+import re
+from collections import Counter
 from typing import Optional, Tuple, List
 
 import numpy as np
@@ -185,6 +187,89 @@ class MendeleyLoader(BaseLoader):
             has_missing_labels=False,
             # Raw spectra as deposited ("694 raw Raman spectra" per the
             # dataset README and the Data in Brief article).
+            embedded_preprocessing=None,
+        ),
+        "single_cell_prokaryotes": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Biological,
+            id="8cd34fckgt",
+            name="Single-Cell Prokaryotes (Bacteria + Archaea)",
+            short_name="Single-Cell Prokaryotes",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_single_cell_prokaryotes(cache_path),
+            metadata={
+                "full_name": (
+                    "Single-Cell Raman Fingerprinting of Prokaryotes "
+                    "(Kanno et al. 2021)"
+                ),
+                "source": "https://data.mendeley.com/datasets/8cd34fckgt/1",
+                "doi": "10.17632/8cd34fckgt.1",
+                "paper": "https://doi.org/10.1016/j.isci.2021.102975",
+                "bibtex": (
+                    "@article{Kanno_2021, title={Machine learning-assisted "
+                    "single-cell Raman fingerprinting for in situ and "
+                    "nondestructive classification of prokaryotes}, "
+                    "volume={24}, ISSN={2590-3425}, url={http://dx.doi.org/"
+                    "10.1016/j.isci.2021.102975}, DOI={10.1016/"
+                    "j.isci.2021.102975}, number={8}, journal={iScience}, "
+                    "publisher={Elsevier}, author={Kanno, Nanako and Kato, "
+                    "Shingo and Ohkuma, Moriya and Matsui, Motomu and "
+                    "Iwasaki, Wataru and Shigeto, Shinsuke}, year={2021}, "
+                    "month=aug, pages={102975}}"
+                ),
+                "citation": [
+                    "Shigeto, S. (2021). Machine learning-assisted single-cell "
+                    "Raman fingerprinting for in situ and nondestructive "
+                    "classification of prokaryotes. Kanno et al. Mendeley "
+                    "Data, v1. https://doi.org/10.17632/8cd34fckgt.1"
+                ],
+                "description": (
+                    "Spontaneous Raman spectra of single prokaryotic cells for "
+                    "species classification: 782 cells of 6 species -- 3 "
+                    "bacteria (Bacillus subtilis JCM 1465T, Escherichia coli "
+                    "JCM 20135, Thermus thermophilus JCM 10941T) and 3 archaea "
+                    "(Sulfolobus acidocaldarius JCM 8929T, Thermococcus "
+                    "kodakarensis JCM 12380T, Nitrososphaera viennensis JCM "
+                    "19564T) -- across three replicate acquisitions (2021), "
+                    "including 62 cells picked out of a three-species mixed "
+                    "culture (21 Bacillus_subtilis, 21 Nitrososphaera "
+                    "_viennensis, 20 Thermus_thermophilus). 632.8 nm HeNe "
+                    "excitation (3 mW at the sample point), 30 s integration "
+                    "per cell, Nikon 100x NA 1.3 oil-immersion objective, "
+                    "CCD at -70 C. Native spectra span ~671-3,070 cm^-1 at "
+                    "1,600 points (~1.48 cm^-1 spacing); every acquisition "
+                    "session has its own per-day wavenumber axis (un-corrected "
+                    "in the deposit), so the loader interpolates all spectra "
+                    "onto a common 710-3,042 cm^-1, 1 cm^-1 grid. group_ids "
+                    "are the 19 acquisition sessions (18 species x date "
+                    "directories of 40 cells + 1 mixed-culture session of 62); "
+                    "no two spectra are measurements of the same cell, so the "
+                    "session is the finest correlated unit (shared instrument "
+                    "state and culture). Spectra are raw as deposited: the "
+                    "authors' pipeline (cosmic-ray despiking, PBS subtraction, "
+                    "neon-lamp wavenumber correction, dual-region baseline "
+                    "subtraction and vector normalization per the STAR "
+                    "Protocols paper doi:10.1016/j.xpro.2022.101812) is not "
+                    "applied; the 19 per-session PBS references and 12 neon "
+                    "standards needed to replicate it are in the archive "
+                    "(excluded from this dataset)."
+                ),
+            },
+            # Checked: cells within one acquisition session share instrument
+            # state, wavenumber axis and (for the mixed culture) the same
+            # physical culture; each cell is otherwise a distinct physical
+            # specimen. Note: the mixed-culture session is multi-label by
+            # nature (one culture, three species) -- the only group that is
+            # not label-pure.
+            is_grouped=True,
+            # Checked: every cell file carries a species label via its
+            # session directory; the unlabeled reference files (PBS, neon)
+            # are excluded.
+            has_missing_labels=False,
+            # Raw spectra as deposited (no cosmic-ray removal, PBS
+            # subtraction, wavenumber correction, baseline correction, or
+            # normalization); see the authors' protocol for the full
+            # pipeline.
             embedded_preprocessing=None,
         ),
     }
@@ -500,6 +585,191 @@ class MendeleyLoader(BaseLoader):
         )
 
         return spectra, raman_shifts, targets, list(MendeleyLoader._WATER_QUALITY_TARGETS), group_ids
+
+    # ------------------------------------------------------------------
+    # single_cell_prokaryotes (Mendeley 8cd34fckgt)
+    # ------------------------------------------------------------------
+
+    # Archive layout: three replicate zips, each with one directory per
+    # (species, acquisition date) plus a PBS reference file (excluded).
+    # Directory names carry a 'Bacilus' typo (replicate 1) and a space in
+    # 'Thermus thermophilus' (replicate 1).
+    _SINGLE_CELL_ZIPS = (
+        "replicate_1_for_main_figures.zip",
+        "replicate_2_for_supplymental_replicate1.zip",
+        "replicate_3_for_supplymental_replicate2.zip",
+    )
+
+    # Normalized species-directory prefix -> canonical species name.
+    _SINGLE_CELL_SPECIES = {
+        "bacillus_subtilis": "Bacillus_subtilis",
+        "bacilus_subtilis": "Bacillus_subtilis",  # typo in the archive
+        "escherichia_coli": "Escherichia_coli",
+        "nitrososphaera_viennensis": "Nitrososphaera_viennensis",
+        "sulfolobus_acidocaldarius": "Sulfolobus_acidocaldarius",
+        "thermococcus_kodakarensis": "Thermococcus_kodakarensis",
+        "thermus_thermophilus": "Thermus_thermophilus",
+    }
+
+    # All session axes lie within [709.97, 3042.55]; the common grid is a
+    # 1 cm^-1 step over the intersection (finer than the native ~1.48 cm^-1).
+    _SINGLE_CELL_GRID = np.arange(710.0, 3043.0, 1.0)
+
+    @staticmethod
+    def _session_species(dir_name: str) -> Optional[str]:
+        """Map a session directory name to its canonical species, or None."""
+        s = dir_name.lower().replace(" ", "_")
+        if s.endswith("_in_mixture"):
+            s = s[: -len("_in_mixture")]
+        s = re.sub(r"_\d{6}$", "", s)  # acquisition date
+        s = re.sub(r"_[23]$", "", s)  # replicate marker
+        return MendeleyLoader._SINGLE_CELL_SPECIES.get(s)
+
+    @staticmethod
+    def _load_single_cell_prokaryotes(
+        cache_path: str,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str], np.ndarray] | None:
+        """
+        Download (if needed) and parse the single-cell prokaryote dataset
+        (Mendeley 8cd34fckgt v1, Kanno et al. 2021).
+
+        Single-cell Raman spectra (632.8 nm, 3 mW, 30 s/cell, Nikon 100x
+        NA 1.3) of 6 prokaryotic species — 3 bacteria and 3 archaea —
+        across three replicate acquisitions, plus cells picked out of a
+        three-species mixed culture. Each .asc is one cell: two
+        whitespace-separated columns (wavenumber, intensity), 1,600
+        points. Every acquisition session has its own (per-day) wavenumber
+        axis, so spectra are interpolated onto a common 710-3,042 cm^-1
+        1 cm^-1 grid.
+
+        Excluded (reference standards, in the archive for replicating the
+        authors' pipeline): the per-session PBS references (pbs10t.asc)
+        and the 12 neon lamp standards (neon_standards.zip).
+
+        Returns a tuple of (spectra, raman_shifts, targets, class_names,
+        group_ids) with group_id = acquisition session (species x
+        replicate x date; the three mixed-culture species share one
+        session). No two spectra are measurements of the same cell.
+        """
+        _DATASET_ID = "8cd34fckgt"
+        _VERSION = 1
+
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Mendeley)
+        if cache_root is None:
+            raise ValueError("Mendeley cache root is not set.")
+
+        shared_root = os.path.join(cache_root, "single_cell_prokaryotes")
+        MendeleyLoader._download_files(shared_root, dataset_id=_DATASET_ID, version=_VERSION)
+
+        grid = MendeleyLoader._SINGLE_CELL_GRID
+        spectra_list: List[np.ndarray] = []
+        labels: List[str] = []
+        group_ids: List[str] = []
+
+        for zip_name in MendeleyLoader._SINGLE_CELL_ZIPS:
+            zip_path = os.path.join(shared_root, zip_name)
+            if not os.path.isfile(zip_path):
+                raise FileNotFoundError(f"Could not find {zip_name} in {shared_root}")
+            zip_stem = os.path.splitext(zip_name)[0]
+            extract_dir = os.path.join(shared_root, zip_stem)
+            if not os.path.isdir(extract_dir) or not os.listdir(extract_dir):
+                if LoaderTools.extract_zip_file_content(zip_path, zip_stem) is None:
+                    raise RuntimeError(f"[!] single_cell_prokaryotes: could not extract {zip_name}.")
+            # The zip holds a root folder named like itself.
+            roots = [d for d in os.listdir(extract_dir) if os.path.isdir(os.path.join(extract_dir, d))]
+            if len(roots) != 1:
+                raise RuntimeError(
+                    f"[!] single_cell_prokaryotes: expected one root directory in {extract_dir}, found {roots}."
+                )
+            sessions_root = os.path.join(extract_dir, roots[0])
+            rep_match = re.match(r"replicate_(\d+)_", zip_name)
+            rep = rep_match.group(1) if rep_match else "?"
+
+            for dir_name in sorted(os.listdir(sessions_root)):
+                session_dir = os.path.join(sessions_root, dir_name)
+                if not os.path.isdir(session_dir):
+                    continue
+                files = sorted(os.listdir(session_dir))
+                # The 3-species mixed culture: one session directory with a
+                # subdirectory per identified species.
+                subdirs = [d for d in files if os.path.isdir(os.path.join(session_dir, d))]
+                if subdirs:
+                    if dir_name != "3species_mixed_200802":
+                        raise RuntimeError(f"[!] single_cell_prokaryotes: unexpected session {dir_name}.")
+                    group = f"rep{rep}_mixture_200802"
+                    for sub in subdirs:
+                        species = MendeleyLoader._session_species(sub)
+                        if species is None:
+                            raise RuntimeError(
+                                f"[!] single_cell_prokaryotes: unrecognized species directory {sub}."
+                            )
+                        for f in sorted(os.listdir(os.path.join(session_dir, sub))):
+                            if not re.fullmatch(r"\d+\.asc", f):
+                                continue
+                            axis, inten = np.loadtxt(os.path.join(session_dir, sub, f), unpack=True)
+                            if axis.shape != (1600,) or not np.all(np.diff(axis) > 0):
+                                raise RuntimeError(
+                                    f"[!] single_cell_prokaryotes: unexpected axis in {dir_name}/{sub}/{f}."
+                                )
+                            spectra_list.append(np.interp(grid, axis, inten))
+                            labels.append(species)
+                            group_ids.append(group)
+                    continue
+                species = MendeleyLoader._session_species(dir_name)
+                if species is None:
+                    raise RuntimeError(
+                        f"[!] single_cell_prokaryotes: unrecognized species directory {dir_name}."
+                    )
+                for f in sorted(files):
+                    if not re.fullmatch(r"\d+\.asc", f):
+                        continue  # PBS reference (pbs10t.asc)
+                    axis, inten = np.loadtxt(os.path.join(session_dir, f), unpack=True)
+                    if axis.shape != (1600,) or not np.all(np.diff(axis) > 0):
+                        raise RuntimeError(
+                            f"[!] single_cell_prokaryotes: unexpected axis in {dir_name}/{f}."
+                        )
+                    date = re.search(r"(\d{6})$", dir_name)
+                    if date is None:
+                        raise RuntimeError(
+                            f"[!] single_cell_prokaryotes: no acquisition date in directory {dir_name}."
+                        )
+                    spectra_list.append(np.interp(grid, axis, inten))
+                    labels.append(species)
+                    group_ids.append(f"rep{rep}_{species.lower()}_{date.group(1)}")
+
+        if not spectra_list:
+            raise RuntimeError("[!] single_cell_prokaryotes: no spectra parsed.")
+
+        spectra = np.asarray(spectra_list, dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError("[!] single_cell_prokaryotes: missing intensity values.")
+
+        counts = Counter(labels)
+        expected = {
+            "Bacillus_subtilis": 141,
+            "Escherichia_coli": 120,
+            "Nitrososphaera_viennensis": 141,
+            "Sulfolobus_acidocaldarius": 120,
+            "Thermococcus_kodakarensis": 120,
+            "Thermus_thermophilus": 140,
+        }
+        if dict(counts) != expected:
+            raise RuntimeError(
+                f"[!] single_cell_prokaryotes: unexpected per-species counts {dict(counts)} (expected {expected})."
+            )
+        per_group = Counter(group_ids)
+        if len(per_group) != 19 or any(v not in (40, 62) for v in per_group.values()):
+            raise RuntimeError(
+                f"[!] single_cell_prokaryotes: expected 19 sessions (18 x 40 + 1 x 62), "
+                f"got {len(per_group)} (sizes {sorted(per_group.values())})."
+            )
+
+        targets, class_names = encode_labels(labels)
+        MendeleyLoader.logger.debug(
+            f"Loaded single_cell_prokaryotes: {spectra.shape[0]} spectra x {spectra.shape[1]} points, "
+            f"{len(class_names)} species, {len(per_group)} sessions"
+        )
+        return spectra, grid, targets, list(class_names), np.array(group_ids)
 
     # ------------------------------------------------------------------
     # BaseLoader interface
