@@ -1,9 +1,10 @@
+import glob
+import json
 import logging
 import os
 import re
 import sqlite3
 import zlib
-import json
 from typing import Optional
 
 import numpy as np
@@ -146,6 +147,74 @@ class FigshareLoader(BaseLoader):
                 ],
                 "description": "140k DFT-computed Raman spectra for ChEMBL drug-like molecules. Targets: HOMO-LUMO gap, HOMO/LUMO energies, isotropic polarizability, heat capacity, dipole moment.",
             }
+        ),
+        "nanoplastics_individual": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="10.6084/m9.figshare.22682512.v2",
+            name="Individual Nanoplastics (Xie et al. 2023)",
+            short_name="Nanoplastics (Xie)",
+            license="CC BY 4.0",
+            loader=lambda cache_path: FigshareLoader._load_nanoplastics_individual(cache_path),
+            metadata={
+                "full_name": "Individual Nanoplastic Particle Raman Spectra (Xie et al. 2023)",
+                "source": "https://doi.org/10.6084/m9.figshare.22682512.v2",
+                "paper": "https://doi.org/10.1021/acs.est.3c03210",
+                "bibtex": (
+                    "@article{Xie_2023, title={Automatic Identification of "
+                    "Individual Nanoplastics by Raman Spectroscopy Based on "
+                    "Machine Learning}, volume={57}, ISSN={1520-5851}, "
+                    "url={http://dx.doi.org/10.1021/acs.est.3c03210}, "
+                    "DOI={10.1021/acs.est.3c03210}, number={46}, "
+                    "journal={Environmental Science & Technology}, "
+                    "publisher={American Chemical Society}, "
+                    "author={Xie, Lifang and Luo, Siheng and Liu, Yangyang "
+                    "and Ruan, Xuejun and Gong, Kedong and Li, Kejian and "
+                    "Ge, Qiuyue and Valev, Ventsislav Kolev and Liu, Guokun "
+                    "and Zhang, Liwu}, year={2023}, month=oct, "
+                    "pages={18203--18214}}"
+                ),
+                "citation": [
+                    "Xie, L., Luo, S., Liu, Y., Ruan, X., Gong, K., Li, K., "
+                    "Ge, Q., Valev, V. K., Liu, G., Zhang, L. (2023). "
+                    "Automatic Identification of Individual Nanoplastics by "
+                    "Raman Spectroscopy Based on Machine Learning. "
+                    "Environmental Science & Technology, 57(46), 18203-18214. "
+                    "https://doi.org/10.1021/acs.est.3c03210"
+                ],
+                "description": (
+                    "Raman spectra of 1,000 individual nanoplastic particles "
+                    "for polymer classification: 200 each of PE "
+                    "(polyethylene), PMMA (polymethyl methacrylate), PS "
+                    "(polystyrene), PTFE (polytetrafluoroethylene) and PVC "
+                    "(polyvinyl chloride) (Xie et al. 2023, Environ. Sci. "
+                    "Technol. 57(46):18203-18214, "
+                    "doi:10.1021/acs.est.3c03210). Particles (300 nm - 1 um) "
+                    "were dried onto polished aluminum sheets (95% "
+                    "reflectivity) and measured with an XploRA Plus confocal "
+                    "Raman spectrometer (HORIBA Jobin Yvon) at 532 nm "
+                    "(external-cavity diode laser, ~10 mW at the sample = 10% "
+                    "of the 100 mW output) through a x100 Olympus objective; "
+                    "500-1,799 cm^-1 at 467 points (2-3 cm^-1 grid, identical "
+                    "axis in every file). Each .txt file in the deposit is "
+                    "one particle; the deposit additionally holds 200 BLANK "
+                    "substrate spectra (aluminum background, no particle), "
+                    "which are excluded here. Spectra are raw counts as "
+                    "deposited (no blank subtraction, no normalization). The "
+                    "single-particle SNR regime makes this a harder, noisier "
+                    "identification task than any bulk microplastics set; the "
+                    "paper's pipeline (peak extraction and retention + random "
+                    "forest) reached 98.8% average accuracy."
+                ),
+            },
+            # Each spectrum is one individually measured particle -- no
+            # replicates, no acquisition session shared between files.
+            is_grouped=False,
+            # All 1,000 particles carry a label (the directory name).
+            has_missing_labels=False,
+            # Raw counts as deposited; the paper's PEER denoising + peak
+            # processing was done in their analysis, not in the deposit.
+            embedded_preprocessing=None,
         ),
     }
     logger = logging.getLogger(__name__)
@@ -341,6 +410,116 @@ class FigshareLoader(BaseLoader):
         np.save(targets_cache, targets)
 
         return spectra, raman_shifts, targets, target_cols
+
+    # nanoplastics_individual (figshare article 22682512, Xie et al. 2023)
+    _NANOPLASTICS_FILE_ID = 42320829
+    _NANOPLASTICS_ZIP = "nanoplastics_dataset.zip"
+    _NANOPLASTICS_MD5 = "ff80720562a16b82957c8d44ad5db796"
+    _NANOPLASTICS_CLASSES = ["PE", "PMMA", "PS", "PTFE", "PVC"]
+
+    @staticmethod
+    def _load_nanoplastics_individual(cache_path: str):
+        """
+        Download and load the individual nanoplastic Raman dataset
+        (figshare article 22682512, doi:10.6084/m9.figshare.22682512.v2,
+        CC BY 4.0; data for Xie et al. 2023, Environ. Sci. Technol.
+        57(46):18203, doi:10.1021/acs.est.3c03210).
+
+        The deposit is a zip of 1,200 two-column .txt files (wavenumber,
+        intensity), one file per measured particle: 200 files each for
+        PE/PMMA/PS/PTFE/PVC plus 200 BLANK substrate spectra (aluminum
+        background without particle; excluded here). All files share the
+        500-1,799 cm^-1 grid (467 points, 2-3 cm^-1 spacing).
+
+        Returns spectra (1000 x 467), raman_shifts (467,), targets (1000,),
+        and class_names.
+        """
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Figshare)
+        if cache_root is None:
+            raise Exception("No cache root found for Figshare")
+
+        dataset_cache = os.path.join(cache_root, "nanoplastics_individual")
+        os.makedirs(dataset_cache, exist_ok=True)
+
+        spectra_cache = os.path.join(dataset_cache, "spectra.npy")
+        targets_cache = os.path.join(dataset_cache, "targets.npy")
+        raman_cache = os.path.join(dataset_cache, "raman_shifts.npy")
+        if os.path.exists(spectra_cache) and os.path.exists(targets_cache) and os.path.exists(raman_cache):
+            FigshareLoader.logger.debug("Loading nanoplastics_individual from cache")
+            return (
+                np.load(spectra_cache),
+                np.load(raman_cache),
+                np.load(targets_cache),
+                list(FigshareLoader._NANOPLASTICS_CLASSES),
+            )
+
+        zip_path = os.path.join(dataset_cache, FigshareLoader._NANOPLASTICS_ZIP)
+        if not LoaderTools._is_file_ready(zip_path):
+            LoaderTools.download(
+                url=f"https://ndownloader.figshare.com/files/{FigshareLoader._NANOPLASTICS_FILE_ID}",
+                out_dir_path=dataset_cache,
+                out_file_name=FigshareLoader._NANOPLASTICS_ZIP,
+                hash_target=FigshareLoader._NANOPLASTICS_MD5,
+                hash_type=HASH_TYPE.md5,
+                referer="https://figshare.com/",
+            )
+            if not LoaderTools._is_file_ready(zip_path):
+                raise RuntimeError(
+                    "[!] Download of the nanoplastics_individual figshare file "
+                    "failed (network error or checksum mismatch). See logs."
+                )
+        if not os.path.isdir(os.path.join(dataset_cache, "extracted", "dataset")):
+            if LoaderTools.extract_zip_file_content(zip_path, "extracted") is None:
+                raise RuntimeError(
+                    "[!] nanoplastics_individual: could not extract the figshare zip."
+                )
+
+        root = os.path.join(dataset_cache, "extracted", "dataset")
+        spectra_list = []
+        label_list = []
+        raman_shifts_ref = None
+        for cls in FigshareLoader._NANOPLASTICS_CLASSES:
+            files = sorted(glob.glob(os.path.join(root, cls, "*.txt")))
+            if len(files) != 200:
+                raise RuntimeError(
+                    f"[!] nanoplastics_individual: expected 200 {cls} spectra, found {len(files)}."
+                )
+            for fp in files:
+                arr = np.loadtxt(fp)
+                if arr.shape != (467, 2):
+                    raise RuntimeError(
+                        f"[!] nanoplastics_individual: {os.path.basename(fp)} has shape "
+                        f"{arr.shape}, expected (467, 2)."
+                    )
+                if raman_shifts_ref is None:
+                    raman_shifts_ref = arr[:, 0].astype(np.float32)
+                elif not np.allclose(arr[:, 0], raman_shifts_ref):
+                    raise RuntimeError(
+                        f"[!] nanoplastics_individual: wavenumber axis differs in {os.path.basename(fp)}."
+                    )
+                spectra_list.append(arr[:, 1].astype(np.float32))
+                label_list.append(cls)
+
+        if raman_shifts_ref is None:
+            raise RuntimeError("[!] nanoplastics_individual: no spectra parsed.")
+        if len(raman_shifts_ref) != 467 or raman_shifts_ref[0] != 500.0 or raman_shifts_ref[-1] != 1799.0:
+            raise RuntimeError(
+                f"[!] nanoplastics_individual: expected the 500-1,799 cm^-1 grid (467 points), "
+                f"got {len(raman_shifts_ref)} points ({raman_shifts_ref[0]}-{raman_shifts_ref[-1]})."
+            )
+
+        spectra = np.vstack(spectra_list)
+        if np.isnan(spectra).any() or (spectra < 0).any():
+            raise RuntimeError(
+                "[!] nanoplastics_individual: missing or negative intensity values."
+            )
+
+        encoded_targets, class_names = encode_labels(np.array(label_list))
+        np.save(spectra_cache, spectra)
+        np.save(raman_cache, raman_shifts_ref)
+        np.save(targets_cache, encoded_targets)
+
+        return spectra, raman_shifts_ref, encoded_targets, list(class_names)
 
     _COMFILE_STROKE_CLASSES = {1: "Stroke", 2: "Control"}
 
