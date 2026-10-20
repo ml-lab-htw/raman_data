@@ -308,3 +308,30 @@ def test_lei_microplastics():
         assert len(set(dataset.group_ids.tolist())) == 108, res
         assert _groups_are_label_pure(dataset), res
 
+
+def test_stroke_urine_sers_static():
+    # The embedded patient table must match the paper's cohort: 101
+    # participants, 55 healthy controls, 46 ischemic-stroke patients.
+    labels = ZenodoLoader._STROKE_URI_PATIENT_LABELS
+    assert set(labels) == {str(i) for i in range(1, 102)}
+    vals = list(labels.values())
+    assert vals.count("HC") == 55
+    assert vals.count("IS") == 46
+    # Common resampling grid: 485-1,638 cm^-1 at 1 cm^-1.
+    grid = ZenodoLoader._STROKE_URI_GRID
+    assert grid.shape == (1154,)
+    assert grid[0] == 485 and grid[-1] == 1638
+    assert (np.diff(grid) == 1.0).all()
+
+
+@pytest.mark.skip(reason="Zenodo download (128 MB RAR) and a RAR extraction tool (bsdtar/unrar/unar/7z) required; run manually.")
+def test_stroke_urine_sers():
+    for nm in (532, 633):
+        dataset = ZenodoLoader.load_dataset(f"stroke_urine_sers_{nm}")
+        # 105 map files (101 participants + 4 repeat collections 31.1-34.1)
+        # x 100 spectra per 10x10 map, resampled onto the common grid.
+        assert dataset.spectra.shape == (10500, 1154), nm
+        assert dataset.target_names == ["HC", "IS"], nm
+        assert len(set(dataset.group_ids.tolist())) == 101, nm
+        assert _groups_are_label_pure(dataset), nm
+

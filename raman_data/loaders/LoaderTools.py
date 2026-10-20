@@ -4,7 +4,7 @@ General functions and enums meant to be used while loading certain dataset.
 from typing import Optional, List, Dict, Tuple
 
 from tqdm import tqdm
-import requests, zipfile
+import requests, zipfile, shutil, subprocess
 
 from scipy import io
 import os, h5py
@@ -358,6 +358,85 @@ class LoaderTools:
                     pbar.update(1)
 
         return out_dir
+
+
+    # RAR (v5) cannot be decompressed with Python's standard library, so
+    # extraction is delegated to an external archive tool. The candidates are
+    # tried in this order:
+    #   bsdtar : libarchive >= 3.4 reads RAR5; ships with macOS and with the
+    #            GitHub Actions ubuntu image
+    #   unrar  : RARLab tool (e.g. 'apt install unrar-free')
+    #   unar   : The Unarchiver CLI (e.g. 'brew install unar')
+    #   7z/7za : 7-Zip / p7zip ('apt install p7zip-full')
+    _RAR_EXTRACTORS = (
+        ("bsdtar", ["bsdtar", "-xf", "{archive}", "-C", "{dest}"]),
+        ("unrar", ["unrar", "x", "-y", "{archive}", "{dest}/"]),
+        ("unar", ["unar", "-force-quiet", "-o", "{dest}", "{archive}"]),
+        ("7z", ["7z", "x", "-y", "-o{dest}", "{archive}"]),
+        ("7za", ["7za", "x", "-y", "-o{dest}", "{archive}"]),
+    )
+
+    @staticmethod
+    def extract_rar_file_content(
+        rar_file_path: str,
+        unzip_target_subdir: Optional[str] = '',
+        force_overwrite: Optional[bool] = False
+    ) -> str | None:
+        """
+        Extracts all files and subfiles from a `.rar` archive using an
+        external tool (bsdtar, unrar, unar, or 7z).
+        The extracted files are saved in the same directory
+        as the `.rar` file by default or in a subdirectory of the file's
+        location if specified.
+
+        Args:
+            rar_file_path (str): Path to the `.rar` file to extract.
+            unzip_target_subdir (str, optional): The name of the subdirectory
+                                                 extracted files should be stored in.
+            force_overwrite (bool, optional): Re-extract even if the target
+                                              directory already contains files.
+
+        Returns:
+            str|None: If successful the path of the output directory, else None.
+        """
+        if not os.path.isfile(rar_file_path):
+            LoaderTools.logger.error(f"There's no .rar file stored at {rar_file_path}")
+            return None
+
+        # RAR magic: 'Rar!\x1a\x07' + version byte (0x00 = RAR4, 0x01 = RAR5)
+        with open(rar_file_path, "rb") as fh:
+            magic = fh.read(7)
+        if magic[:6] != b"Rar!\x1a\x07":
+            LoaderTools.logger.error(
+                f"The file at {rar_file_path} does not look like a RAR archive "
+                "(incomplete download?)"
+            )
+            return None
+
+        out_dir = os.path.join(os.path.dirname(rar_file_path), unzip_target_subdir)
+        if os.path.isdir(out_dir) and os.listdir(out_dir) and not force_overwrite:
+            return out_dir
+        os.makedirs(out_dir, exist_ok=True)
+
+        errors = []
+        for tool, template in LoaderTools._RAR_EXTRACTORS:
+            if shutil.which(tool) is None:
+                continue
+            cmd = [part.format(archive=rar_file_path, dest=out_dir) for part in template]
+            try:
+                proc = subprocess.run(cmd, capture_output=True, text=True)
+            except OSError as e:
+                errors.append(f"{tool}: {e}")
+                continue
+            if proc.returncode == 0:
+                return out_dir
+            errors.append(f"{tool}: exit {proc.returncode} {proc.stderr.strip()[:200]}")
+
+        LoaderTools.logger.error(
+            f"Could not extract {rar_file_path}: no working RAR extraction tool "
+            f"found on this system. Tried: {errors or 'none of bsdtar/unrar/unar/7z/7za on PATH'}"
+        )
+        return None
 
 
     @staticmethod

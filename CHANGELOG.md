@@ -11,6 +11,23 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `stroke_urine_sers_532` / `stroke_urine_sers_633`: urine SERS spectra
+  for ischemic-stroke vs. healthy-control classification (Yu et al. 2026,
+  *Science Advances* 12(27):eaee3487,
+  doi:10.1126/sciadv.aee3487; data release
+  doi:10.5281/zenodo.19369604, Zenodo, CC-BY 4.0). 10,500 spectra per
+  excitation variant (101 participants — 55 healthy controls, 46 patients
+  with confirmed ischemic stroke — scanned as 10×10 maps of 100 spectra
+  each, plus 4 repeated collections) on Ag-nanoparticle SERS filter-paper
+  chips, Renishaw inVia Qontor, 532 nm (100 mW) or 633 nm (35 mW).
+  Native WiRE axes resampled row-wise onto a common 485–1,638 cm⁻¹ /
+  1 cm⁻¹ grid (1,154 points). Group ids are
+  the 101 participants (repeat collections merged into the parent
+  participant), so groups are label-pure. Raw WiRE exports as deposited;
+  the authors' baseline correction / outlier removal live in their
+  analysis code and results archives, not in the deposited spectra.
+  Requires a RAR extraction tool (bsdtar/unrar/unar/7z) and the
+  `renishawWiRE` package (new dependency).
 - `microplastics_training_1cm` / `_2cm` / `_4cm` / `_8cm`: microplastic
   training set from Lei et al. 2022 (*Analytical Chemistry* 94(49),
   17011-17019, doi:10.1021/acs.analchem.2c02451; data release
