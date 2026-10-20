@@ -3996,6 +3996,35 @@ yeast_batch_effects:
   rai:hasSyntheticData: false
   rai:personalSensitiveInformation: No personal or sensitive information is included. All spectra originate from chemical, biological,
     or material samples without individual human identifiers.
+yeast_bioreactor_fermentation:
+  prov:wasDerivedFrom: https://doi.org/10.4121/4fbcf35e-1954-48a4-a2a3-693e19c753e7
+  prov:wasGeneratedBy: 'Data collection: Laboratory measurements on biological materials including microorganisms, cell
+    cultures, fermentation broths, and plant material. Preprocessing: Spectra may have undergone
+    baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described
+    in the accompanying publication. Annotation: Ground-truth target values measured by validated
+    reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,
+    or DFT computation).'
+  rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic
+    assays, dynamic light scattering, gas chromatography, or DFT computation).
+  rai:dataBiases: Data were acquired under controlled laboratory conditions and may not generalise to field or
+    clinical settings. Spectral profiles are influenced by instrument-specific factors (laser
+    wavelength, detector type, optical path length, integration time). Class imbalances may be present
+    in classification datasets.
+  rai:dataCollection: Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the
+    scattered light intensity as a function of Raman shift (cm⁻¹).
+  rai:dataCollectionType: Laboratory measurements on biological materials including microorganisms, cell cultures,
+    fermentation broths, and plant material.
+  rai:dataLimitations: Spectral signatures are process- and instrument-specific; calibration transfer to other setups
+    requires additional validation.
+  rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber
+    calibration. Exact steps are described in the accompanying publication.
+  rai:dataSocialImpact: Enables the development of rapid, inline bioprocess monitoring tools that can reduce waste, improve
+    yield, and lower costs in biomanufacturing and biotechnology.
+  rai:dataUseCases: Chemometric modelling, calibration transfer, multivariate regression, quantitative spectral
+    analysis, process analytical technology (PAT).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All spectra originate from chemical, biological,
+    or material samples without individual human identifiers.
 yeast_fermentation:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,

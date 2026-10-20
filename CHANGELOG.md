@@ -11,6 +11,17 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `yeast_bioreactor_fermentation`: inline Raman monitoring of
+  *S. cerevisiae* batch and fed-batch bioreactor fermentations for
+  3-target regression (Klaverdijk et al. 2025, *Analytical and
+  Bioanalytical Chemistry*, doi:10.1007/s00216-025-05768-5; data release
+  doi:10.4121/4fbcf35e-1954-48a4-a2a3-693e19c753e7, 4TU.ResearchData, CC
+  BY 4.0). 65 single 60-s in-line measurements (Kaiser RXN2, 785 nm,
+  bIO-Optic immersion probe) from 5 fermentations — 3 calibration
+  batches (B1–B3), 1 validation batch (B4), 1 fed-batch transfer test
+  (FB); targets are glucose/ethanol (mM, HPLC) and biomass (g/L), with
+  5 failed glucose references as NaN. 100–3,425 cm⁻¹ at 1 cm⁻¹
+  (3,326 points). Group ids are the 5 fermentations.
 - `single_cell_prokaryotes`: spontaneous Raman spectra of single
   prokaryotic cells for species classification (Kanno et al. 2021,
   *iScience*, doi:10.1016/j.isci.2021.102975; data release

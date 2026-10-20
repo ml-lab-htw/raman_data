@@ -451,3 +451,25 @@ def test_single_cell_prokaryotes():
     assert len(np.unique(dataset.targets[g == mix])) == 3
     assert not np.isnan(dataset.spectra).any()
 
+
+def test_yeast_bioreactor_fermentation():
+    # Single 15.5 MB 4TU.ResearchData download, small enough to run in CI
+    # (~10 s fresh).
+    dataset = MiscLoader.load_dataset("yeast_bioreactor_fermentation")
+    assert dataset.spectra.shape == (65, 3326)
+    assert dataset.targets.shape == (65, 3)
+    assert dataset.target_names == ["Glucose [mM]", "Ethanol [mM]", "Biomass [g/L]"]
+    assert dataset.raman_shifts[0] == 100.0
+    assert dataset.raman_shifts[-1] == 3425.0
+    # 5 fermentations: 3 calibration batches (B1-B3), 1 validation batch
+    # (B4), 1 fed-batch transfer test (FB).
+    g = dataset.group_ids
+    assert g is not None and g.shape == (65,)
+    assert collections.Counter(g.tolist()) == {
+        "B1": 12, "B2": 13, "B3": 13, "B4": 13, "FB": 14,
+    }
+    # 5 failed HPLC glucose references (NaN); the other targets complete.
+    assert int(np.isnan(dataset.targets[:, 0]).sum()) == 5
+    assert not np.isnan(dataset.targets[:, 1:]).any()
+    assert not np.isnan(dataset.spectra).any()
+
