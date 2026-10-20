@@ -1,0 +1,146 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Yeast Strain Classification with Plate Batch Effects (Cheveralls et al. 2026)",
+  "description": "Spontaneous Raman spectra of desiccated yeast cells for strain classification under strong plate-level batch effects: 9 strains -- 3 Saccharomyces cerevisiae (BY4741 WT, YNL141/ADA1, YGL058/UBE2A) and 6 Schizosaccharomyces pombe (SP286 WT, ED666 WT, PDF1/PPT1, RAD6/UBE2A, DEA2/ADA1, ARSG) -- grown to OD600 of 5, pelleted, washed, smeared onto a stainless-steel plate stamped with a 96-well layout and desiccated for ~3 h. 785 nm excitation, Wasatch Photonics WP-785X-F13-R-IL fiber probe (93 mW at the sample plane), 5 s integration with 10 averages, 5x5 position grid per well, across 3 independent end-to-end replicate plates (2025-08-06, 2025-08-07, 2025-08-12): 75 spectra per strain, 675 in total (the 75 empty-well control spectra are excluded). 235.7-3,653.6 cm^-1 at 2,048 points (non-uniform grid; the paper's analysis used a 300-1,800 cm^-1 fingerprint region). group_ids are the 27 (plate, well) pairs, each holding the 25 co-located site spectra of one desiccated well. Spectra are raw as deposited -- no dark subtraction, baseline correction, or normalization; the per-plate dark spectra are in the archive (dark/Default.csv) for anyone replicating the authors' pipeline (ramanspy: Whitaker-Hayes despiking, consensus dark subtraction, low-intensity QC at mean < 1000, Savitzky-Golay, ModPoly order 5, AUC normalization, per-well outlier QC; leaves 24-33 spectra per strain). The paper shows standard 5-fold CV overestimates strain accuracy (median MCC 0.79) while leave-one-plate-out CV exposes the batch effect (median MCC 0.32), making this a purpose-built probe of group-aware cross-validation.",
+  "url": "https://doi.org/10.5281/zenodo.19226627",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Biological",
+    "Classification"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://opensource.org/licenses/MIT",
+  "citeAs": "@article{Cheveralls_2026, title={Leave-one-batch-out cross-validation reveals strong batch effects in Raman spectroscopy of yeast cultures}, url={http://dx.doi.org/10.57844/arcadia-xdmk-yq0w}, DOI={10.57844/arcadia-xdmk-yq0w}, journal={The Stacks}, publisher={Arcadia Science}, author={Cheveralls, Keith and Mets, David G. and Kolb, Ilya}, year={2026}, month=mar}",
+  "citation": "Cheveralls, K., Mets, D. G., and Kolb, I. (2026). Leave-one-batch-out cross-validation reveals strong batch effects in Raman spectroscopy of yeast cultures. The Stacks. https://doi.org/10.57844/arcadia-xdmk-yq0w",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "yeast_batch_effects_source",
+      "name": "Yeast Strain Classification with Plate Batch Effects (Cheveralls et al. 2026)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://doi.org/10.5281/zenodo.19226627",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "c2f4dea840fa2bc9a8b38bba0cbd6b1ef5fd1f86a4b173c5019377c344fc1455"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "yeast_batch_effects_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "yeast_batch_effects_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "yeast_batch_effects_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "yeast_batch_effects_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
+  "rai:dataCollectionType": "Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material.",
+  "rai:dataPreprocessingProtocol": "Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication.",
+  "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical, biological, or material samples without individual human identifiers.",
+  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
+  "rai:dataLimitations": "Spectral signatures are process- and instrument-specific; calibration transfer to other setups requires additional validation.",
+  "rai:dataSocialImpact": "Enables the development of rapid, inline bioprocess monitoring tools that can reduce waste, improve yield, and lower costs in biomanufacturing and biotechnology.",
+  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://doi.org/10.5281/zenodo.19226627"
+}
