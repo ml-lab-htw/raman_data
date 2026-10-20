@@ -21,6 +21,9 @@ Versions follow [Semantic Versioning](https://semver.org/).
   `conditionsOfAccess`; only datasets with no licence at all still get the assumed CC BY 4.0. Fixed in
   21 Croissant files: `mlrod`, the 14 `microgel_size_*` (CC BY-NC 3.0), `biomolecules_reference`
   (GPL-3.0), `rruff_mineral_*`, `synthetic_organic_pigments_*` and `chlorinated_samples`.
+- Stale "CC BY 4.0 has been assumed" notes removed from 24 datasets whose licence is stated (CC BY 4.0,
+  MIT). `alzheimer`, `parkinson` and `covid19_salvia` now keep their licence-clarification note on
+  regeneration. The note stays only where no licence is known (`covid19_serum`, `organic_compounds_*`).
 
 ### Changed
 
