@@ -215,11 +215,12 @@ class MiscLoader(BaseLoader):
             id="mlrod",
             name="ML Raman Open Dataset (MLROD)",
             short_name="MLROD",
-            license="BY-NC",
+            # ODR states "License: BY-NC", without a version.
+            license="CC BY-NC",
             loader=lambda cache_path: MiscLoader._load_mlrod(cache_path),
             metadata={
                 "full_name": "ML Raman Open Dataset (MLROD)",
-                "source": "https://www.odr.io/dataset/mlrod-a-machine-learning-raman-open-dataset",
+                "source": "https://odr.io/MLROD",
                 "paper": "https://doi.org/10.1029/2021EA002125",
                 "bibtex": "@article{Berlanga_2022, title={Convolutional Neural Networks as a Tool for Raman Spectral Mineral Classification Under Low Signal, Dusty Mars Conditions}, volume={9}, ISSN={2333-5084}, url={http://dx.doi.org/10.1029/2021EA002125}, DOI={10.1029/2021EA002125}, number={10}, journal={Earth and Space Science}, publisher={American Geophysical Union (AGU)}, author={Berlanga, Genesis and Williams, Quentin and Temiquel, Nathan}, year={2022}, month=oct}",
                 "citation": [

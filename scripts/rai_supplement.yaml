@@ -576,9 +576,7 @@ biomolecules_reference:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
     applied (baseline correction, smoothing, normalisation) is described in the source
     publication.
@@ -1058,9 +1056,7 @@ chlorinated_samples:
     compounds, mixtures, and solutions.
   rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
     and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
+    not recommended.'
   rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
     applied (baseline correction, smoothing, normalisation) is described in the source
     publication.
@@ -2948,8 +2944,9 @@ mlrod:
     No preprocessing was applied (no cosmic ray removal, no baseline subtraction),
     so raw spectra contain instrument artefacts. Models trained on these data are
     optimised for Mars analogue conditions (NASA Perseverance SuperCam context) and
-    may require re-calibration for other instruments or geological settings. No explicit
-    license was stated; CC BY 4.0 has been assumed.
+    may require re-calibration for other instruments or geological settings. Licensed
+    for non-commercial use only; the Open Data Repository states "BY-NC" (CC BY-NC,
+    no version given).
   rai:dataPreprocessingProtocol: Spectra provided as raw Raman intensities without
     cosmic ray removal, baseline correction, smoothing, or normalisation. Labels encode
     mineral class and basalt dust coverage fraction.
@@ -3129,9 +3126,7 @@ rruff_mineral_preprocess:
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Reference spectra represent ideal laboratory conditions; real-world
     samples may show additional interference from impurities, fluorescence, or surface
-    effects. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
+    effects.'
   rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
     applied (baseline correction, smoothing, normalisation) is described in the source
     publication.
@@ -3158,9 +3153,7 @@ rruff_mineral_raw:
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Reference spectra represent ideal laboratory conditions; real-world
     samples may show additional interference from impurities, fluorescence, or surface
-    effects. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
+    effects.'
   rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
     applied (baseline correction, smoothing, normalisation) is described in the source
     publication.
