@@ -2,6 +2,7 @@ import glob
 import logging
 import os
 import re
+from collections import Counter
 from io import StringIO
 from typing import Optional, Tuple
 
@@ -388,6 +389,84 @@ class MiscLoader(BaseLoader):
             )
             for res in ("1cm", "2cm", "4cm", "8cm")
         },
+        "yeast_bioreactor_fermentation": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Biological,
+            id="10.4121/4fbcf35e-1954-48a4-a2a3-693e19c753e7",
+            name="Yeast Bioreactor Fermentation (Klaverdijk et al. 2025)",
+            short_name="Yeast Bioreactor",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MiscLoader._load_yeast_bioreactor_fermentation(cache_path),
+            metadata={
+                "full_name": (
+                    "Raman Monitoring of S. cerevisiae Bioreactor "
+                    "Fermentations (Klaverdijk et al. 2025)"
+                ),
+                "source": "https://doi.org/10.4121/4fbcf35e-1954-48a4-a2a3-693e19c753e7",
+                "paper": "https://doi.org/10.1007/s00216-025-05768-5",
+                "bibtex": (
+                    "@article{Klaverdijk_2025, title={Single compound data "
+                    "supplementation to enhance transferability of "
+                    "fermentation specific Raman spectroscopy models}, "
+                    "volume={417}, ISSN={1618-2841}, url={http://dx.doi.org/"
+                    "10.1007/s00216-025-05768-5}, DOI={10.1007/"
+                    "s00216-025-05768-5}, number={9}, journal={Analytical "
+                    "and Bioanalytical Chemistry}, publisher={Springer "
+                    "Science and Business Media LLC}, author={Klaverdijk, "
+                    "Maarten and Ottens, Marcel and Klijn, Marieke E.}, "
+                    "year={2025}, month=feb, pages={1873}}"
+                ),
+                "citation": [
+                    "Klaverdijk, M., Ottens, M., and Klijn, M. E. (2025). "
+                    "Single compound data supplementation to enhance "
+                    "transferability of fermentation specific Raman "
+                    "spectroscopy models. Analytical and Bioanalytical "
+                    "Chemistry, 417(9), 1873. "
+                    "https://doi.org/10.1007/s00216-025-05768-5"
+                ],
+                "description": (
+                    "Inline Raman monitoring of S. cerevisiae batch and "
+                    "fed-batch bioreactor fermentations for 3-target "
+                    "regression of process variables (Glucose [mM], "
+                    "Ethanol [mM], Biomass [g/L]): 65 in-line measurements "
+                    "from 5 fermentations -- 3 batch cultivations used as "
+                    "the paper's calibration set (B1: 12, B2: 13, B3: 13 "
+                    "samples), 1 unseen batch cultivation for validation "
+                    "(B4: 13), and 1 fed-batch cultivation for transfer "
+                    "testing (FB: 14). Kaiser Raman RXN2 analyzer with a "
+                    "785 nm laser and a fiber-optic bIO-Optic immersion "
+                    "probe mounted through the bioreactor head plate; each "
+                    "measurement is a single 60 s acquisition (the deposit "
+                    "also holds 2/4/6/8/10-min stackings of the same 60 s "
+                    "blocks, which are excluded here; the paper calibrated "
+                    "all models on the 1-min spectra). 100-3,425 cm^-1 at "
+                    "1 cm^-1 (3,326 points; one common grid for all "
+                    "samples). group_ids are the 5 fermentations (B1, B2, "
+                    "B3, B4, FB): samples of one cultivation are strongly "
+                    "correlated time points of the same process and must "
+                    "not be split across train/test (leave-one-batch-out "
+                    "is the paper's validation protocol). 5 glucose "
+                    "reference values (HPLC) failed in the base set and "
+                    "are NaN; all other 190 target values are complete. "
+                    "Spectra are raw instrument output as deposited (strong "
+                    "fluorescence background, no baseline correction or "
+                    "normalization). The same 4TU deposit's other chapters "
+                    "hold single-compound, synthetic, and augmented spectra "
+                    "for transfer-learning studies."
+                ),
+            },
+            # Checked: samples within one fermentation (B1..B4, FB) are
+            # time points of the same cultivation -- strongly correlated,
+            # so a batch must stay on one side of a split.
+            is_grouped=True,
+            # Checked: 5 glucose values are NaN (failed HPLC reference,
+            # marked in the deposit); the other 2 targets are complete.
+            has_missing_labels=True,
+            # Raw spectra as deposited (Chapter 2 base/validation/test);
+            # the AirPLS-processed variants live in Chapter 3 of the
+            # deposit, not in the files used here.
+            embedded_preprocessing=None,
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -1464,6 +1543,151 @@ class MiscLoader(BaseLoader):
         targets, class_names = encode_labels(plastic[keep])
         group_ids = df["sampleid"].astype(str).str.strip()[keep].to_numpy()
         return spectra[keep.to_numpy()], raman_shifts, targets, list(class_names), group_ids
+
+    # yeast_bioreactor_fermentation (4TU.ResearchData, Klaverdijk et al. 2025)
+    _YEAST_BIOREACTOR_ZIP = "Chapter 2.zip"
+    _YEAST_BIOREACTOR_MD5 = "cd5b3b78afe641320974193129d0bc27"
+    _YEAST_BIOREACTOR_URL = (
+        "https://data.4tu.nl/file/4fbcf35e-1954-48a4-a2a3-693e19c753e7/"
+        "892f9b68-04d7-441c-8da8-07a01002b215"
+    )
+    # (reference prefix, folder, expected batch -> expected sample count)
+    _YEAST_BIOREACTOR_PARTS = {
+        "Base": ("Base dataset", {"B1": 12, "B2": 13, "B3": 13}),
+        "Validation": ("Validation dataset", {"B4": 13}),
+        "Test": ("Test dataset", {"FB": 14}),
+    }
+    _YEAST_BIOREACTOR_TARGETS = ["Glucose [mM]", "Ethanol [mM]", "Biomass [g/L]"]
+
+    @staticmethod
+    def _load_yeast_bioreactor_fermentation(cache_path: str):
+        """
+        Download and load the yeast bioreactor fermentation dataset
+        (4TU.ResearchData doi:10.4121/4fbcf35e-1954-48a4-a2a3-693e19c753e7,
+        CC BY 4.0, data for the Klaverdijk et al. 2025 ABAC paper,
+        doi:10.1007/s00216-025-05768-5).
+
+        Uses the Chapter 2 base/validation/test datasets: per part, one
+        '..._references.xlsx' (Sample, Glucose [mM], Ethanol [mM],
+        Biomass [g/L]; 5 failed HPLC glucose values are empty) and one
+        '..._spectra_1m.xlsx' (single 60 s acquisition per sample; the
+        2m-10m files are stackings of the same 60 s blocks). Sample
+        names are like 'B1 S1 ' (trailing space); the batch prefix is the
+        group id. All files share the 100-3,425 cm^-1 / 1 cm^-1 header.
+
+        Returns spectra, raman_shifts, targets (65 x 3, NaN where a
+        reference value is missing), target_names, group_ids.
+        """
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            raise ValueError("Cache root for Misc loader is not set. Cannot load yeast_bioreactor_fermentation dataset.")
+
+        dataset_cache = os.path.join(cache_root, "yeast_bioreactor_fermentation")
+        os.makedirs(dataset_cache, exist_ok=True)
+
+        zip_path = os.path.join(dataset_cache, MiscLoader._YEAST_BIOREACTOR_ZIP)
+        if not LoaderTools._is_file_ready(zip_path):
+            LoaderTools.download(
+                url=MiscLoader._YEAST_BIOREACTOR_URL,
+                out_dir_path=dataset_cache,
+                out_file_name=MiscLoader._YEAST_BIOREACTOR_ZIP,
+                hash_target=MiscLoader._YEAST_BIOREACTOR_MD5,
+                hash_type=HASH_TYPE.md5,
+            )
+            if not LoaderTools._is_file_ready(zip_path):
+                raise RuntimeError(
+                    "[!] Download of Chapter 2.zip for yeast_bioreactor_fermentation "
+                    "failed (network error or checksum mismatch). See logs."
+                )
+        if not os.path.isdir(os.path.join(dataset_cache, "Chapter 2", "Chapter 2")):
+            if LoaderTools.extract_zip_file_content(zip_path, "Chapter 2") is None:
+                raise RuntimeError(
+                    "[!] yeast_bioreactor_fermentation: could not extract Chapter 2.zip."
+                )
+        ch2_root = os.path.join(dataset_cache, "Chapter 2", "Chapter 2")
+
+        spectra_list = []
+        raman_shifts_ref = None
+        targets_list = []
+        group_ids = []
+        for prefix, (folder, expected_batches) in MiscLoader._YEAST_BIOREACTOR_PARTS.items():
+            ref = pd.read_excel(os.path.join(ch2_root, folder, f"{prefix}_dataset_references.xlsx"))
+            sp = pd.read_excel(os.path.join(ch2_root, folder, f"{prefix}_dataset_spectra_1m.xlsx"))
+            if len(ref.columns) < 4:
+                raise RuntimeError(
+                    f"[!] yeast_bioreactor_fermentation: unexpected reference columns for {prefix}."
+                )
+            ref_cols = ["Sample"] + MiscLoader._YEAST_BIOREACTOR_TARGETS
+            for col in ref_cols:
+                if col not in ref.columns:
+                    raise RuntimeError(
+                        f"[!] yeast_bioreactor_fermentation: missing column '{col}' in {prefix} references."
+                    )
+            ref = ref[ref_cols].copy()
+            ref["Sample"] = ref["Sample"].astype(str).str.strip()
+            if not ref["Sample"].is_unique:
+                raise RuntimeError(f"[!] yeast_bioreactor_fermentation: duplicate samples in {prefix} references.")
+
+            label_col = sp.columns[0]
+            sp = sp.copy()
+            sp["Sample"] = sp[label_col].astype(str).str.strip()
+            if not sp["Sample"].is_unique or set(sp["Sample"]) != set(ref["Sample"]):
+                raise RuntimeError(
+                    f"[!] yeast_bioreactor_fermentation: spectra/reference sample mismatch for {prefix}."
+                )
+            ref = ref.set_index("Sample").loc[sp["Sample"].to_list()].reset_index()
+
+            wn_cols = [c for c in sp.columns if c != label_col]
+            try:
+                wn = np.array([float(c) for c in wn_cols])
+            except (TypeError, ValueError) as e:
+                raise RuntimeError(f"[!] yeast_bioreactor_fermentation: non-numeric wavenumber header in {prefix} spectra: {e}")
+            if raman_shifts_ref is None:
+                raman_shifts_ref = wn
+            elif wn.shape != raman_shifts_ref.shape or not np.allclose(wn, raman_shifts_ref):
+                raise RuntimeError(f"[!] yeast_bioreactor_fermentation: wavenumber header differs in {prefix} spectra.")
+
+            spectra_list.append(sp[wn_cols].to_numpy(dtype=float))
+            targets_list.append(ref[MiscLoader._YEAST_BIOREACTOR_TARGETS].to_numpy(dtype=float))
+            for sample in sp["Sample"]:
+                batch = sample.split()[0]
+                if batch not in expected_batches:
+                    raise RuntimeError(
+                        f"[!] yeast_bioreactor_fermentation: unexpected batch '{batch}' in {prefix}."
+                    )
+                group_ids.append(batch)
+
+        if raman_shifts_ref is None:
+            raise RuntimeError("[!] yeast_bioreactor_fermentation: no spectra parsed.")
+        if len(raman_shifts_ref) != 3326 or raman_shifts_ref[0] != 100 or raman_shifts_ref[-1] != 3425:
+            raise RuntimeError(
+                f"[!] yeast_bioreactor_fermentation: expected the 100-3,425 cm^-1 grid, got "
+                f"{len(raman_shifts_ref)} points ({raman_shifts_ref[0]}-{raman_shifts_ref[-1]})."
+            )
+
+        spectra = np.vstack(spectra_list)
+        targets = np.vstack(targets_list)
+        group_ids = np.array(group_ids)
+
+        if len(spectra) != 65:
+            raise RuntimeError(f"[!] yeast_bioreactor_fermentation: expected 65 samples, got {len(spectra)}.")
+        if np.isnan(spectra).any() or (spectra < 0).any():
+            raise RuntimeError("[!] yeast_bioreactor_fermentation: missing or negative intensity values.")
+        batch_counts = Counter(group_ids.tolist())
+        expected_counts = {}
+        for _, counts in MiscLoader._YEAST_BIOREACTOR_PARTS.values():
+            expected_counts.update(counts)
+        if dict(batch_counts) != expected_counts:
+            raise RuntimeError(
+                f"[!] yeast_bioreactor_fermentation: unexpected per-batch counts {dict(batch_counts)} (expected {expected_counts})."
+            )
+        n_nan = int(np.isnan(targets).sum())
+        if n_nan != 5 or np.isnan(targets[:, 1:]).any():
+            raise RuntimeError(
+                f"[!] yeast_bioreactor_fermentation: expected 5 missing glucose values (in column 0), got {n_nan} NaNs total."
+            )
+
+        return spectra, raman_shifts_ref, targets, list(MiscLoader._YEAST_BIOREACTOR_TARGETS), group_ids
 
     @staticmethod
     def _load_sop_spectral_library(cache_path: str, variant: str = "baseline_corrected"):
