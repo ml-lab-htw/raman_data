@@ -20,6 +20,17 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 - README: the dataset count (said 93, the table lists 98) and the group-id table, which said
   `GoogleDriveLoader` emits no group ids (the glioma datasets do).
+- `mlrod` is CC BY-NC (the Open Data Repository states "BY-NC"), not CC BY 4.0; source link now
+  https://odr.io/MLROD.
+- Croissant licences: `generate_croissant.py` turned every licence string it did not recognise into
+  CC BY 4.0, and every CC BY-NC 3.0 into 4.0. It now reads the Creative Commons variant and version,
+  maps GPL-3.0, and keeps other stated terms ("research use only", "Free access", ...) as
+  `conditionsOfAccess`; only datasets with no licence at all still get the assumed CC BY 4.0. Fixed in
+  21 Croissant files: `mlrod`, the 14 `microgel_size_*` (CC BY-NC 3.0), `biomolecules_reference`
+  (GPL-3.0), `rruff_mineral_*`, `synthetic_organic_pigments_*` and `chlorinated_samples`.
+- Stale "CC BY 4.0 has been assumed" notes removed from 24 datasets whose licence is stated (CC BY 4.0,
+  MIT). `alzheimer`, `parkinson` and `covid19_salvia` now keep their licence-clarification note on
+  regeneration. The note stays only where no licence is known (`covid19_serum`, `organic_compounds_*`).
 
 ### Changed
 

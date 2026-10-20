@@ -356,9 +356,11 @@ alzheimer:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    instruments, sample matrices, or patient populations without re-calibration. No
+    explicit license was stated by the original data providers; a license
+    clarification request has been opened at
+    https://github.com/piazzam/Robust-SVM-Raman/issues/1. Users should verify the
+    applicable terms with the original authors before use.'
   rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
     applied (baseline correction, smoothing, normalisation) is described in the source
     publication.
@@ -544,8 +546,7 @@ bacteria_identification:
     is validated for MRSA/MSSA identification (89.1 ± 0.1% accuracy) and antibiotic
     treatment classification (97.0 ± 0.3% with a single spectrum; 99.7% with 10 spectra).
     Transfer to instruments with different excitation wavelengths or substrate chemistries
-    requires re-calibration. No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed.
+    requires re-calibration.
   rai:dataPreprocessingProtocol: Spectra are provided as raw SERS intensities. Labels
     encode isolate identity and antibiotic treatment status. The published CNN model
     uses a 25-layer 1D ResNet trained with Adam optimiser (betas 0.5/0.999), batch
@@ -576,9 +577,7 @@ biomolecules_reference:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
     applied (baseline correction, smoothing, normalisation) is described in the source
     publication.
@@ -605,9 +604,7 @@ bioprocess_analytes_anton_532:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -635,9 +632,7 @@ bioprocess_analytes_anton_785:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -665,9 +660,7 @@ bioprocess_analytes_kaiser:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -695,9 +688,7 @@ bioprocess_analytes_metrohm:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -725,9 +716,7 @@ bioprocess_analytes_mettler_toledo:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -755,9 +744,7 @@ bioprocess_analytes_tec5:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -785,9 +772,7 @@ bioprocess_analytes_timegate:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -815,9 +800,7 @@ bioprocess_analytes_tornado:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -845,9 +828,7 @@ bioprocess_substrates:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -1058,9 +1039,7 @@ chlorinated_samples:
     compounds, mixtures, and solutions.
   rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
     and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
+    not recommended.'
   rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
     applied (baseline correction, smoothing, normalisation) is described in the source
     publication.
@@ -1163,9 +1142,11 @@ covid19_salvia:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    instruments, sample matrices, or patient populations without re-calibration. No
+    explicit license was stated by the original data providers; a license
+    clarification request has been opened at
+    https://github.com/piazzam/Robust-SVM-Raman/issues/1. Users should verify the
+    applicable terms with the original authors before use.'
   rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
     applied (baseline correction, smoothing, normalisation) is described in the source
     publication.
@@ -1521,9 +1502,7 @@ ecoli_fermentation:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -1551,9 +1530,7 @@ ecoli_metabolites:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -1581,9 +1558,7 @@ ecoli_metabolites_dig4bio:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -1694,9 +1669,7 @@ fuel_benchtop:
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
     and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
+    not recommended.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -1725,9 +1698,7 @@ fuel_handheld:
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Quantitative models are valid within the concentration ranges
     and chemical matrix of the training data; extrapolation outside these ranges is
-    not recommended. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
+    not recommended.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -1949,9 +1920,7 @@ ht_raman_bio_catalysis_axp:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -2112,9 +2081,7 @@ kaiser_ecoli_fermentation:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -2142,9 +2109,7 @@ kaiser_ecoli_fermentation_supernatant:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -2948,8 +2913,9 @@ mlrod:
     No preprocessing was applied (no cosmic ray removal, no baseline subtraction),
     so raw spectra contain instrument artefacts. Models trained on these data are
     optimised for Mars analogue conditions (NASA Perseverance SuperCam context) and
-    may require re-calibration for other instruments or geological settings. No explicit
-    license was stated; CC BY 4.0 has been assumed.
+    may require re-calibration for other instruments or geological settings. Licensed
+    for non-commercial use only; the Open Data Repository states "BY-NC" (CC BY-NC,
+    no version given).
   rai:dataPreprocessingProtocol: Spectra provided as raw Raman intensities without
     cosmic ray removal, baseline correction, smoothing, or normalisation. Labels encode
     mineral class and basalt dust coverage fraction.
@@ -3034,9 +3000,11 @@ parkinson:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Models trained on this dataset may not transfer to different
-    instruments, sample matrices, or patient populations without re-calibration. Note:
-    No explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    instruments, sample matrices, or patient populations without re-calibration. No
+    explicit license was stated by the original data providers; a license
+    clarification request has been opened at
+    https://github.com/piazzam/Robust-SVM-Raman/issues/1. Users should verify the
+    applicable terms with the original authors before use.'
   rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
     applied (baseline correction, smoothing, normalisation) is described in the source
     publication.
@@ -3099,9 +3067,7 @@ ralstonia_fermentations:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -3129,9 +3095,7 @@ rruff_mineral_preprocess:
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Reference spectra represent ideal laboratory conditions; real-world
     samples may show additional interference from impurities, fluorescence, or surface
-    effects. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
+    effects.'
   rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
     applied (baseline correction, smoothing, normalisation) is described in the source
     publication.
@@ -3158,9 +3122,7 @@ rruff_mineral_raw:
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Reference spectra represent ideal laboratory conditions; real-world
     samples may show additional interference from impurities, fluorescence, or surface
-    effects. Note: No explicit license was stated by the original data providers;
-    CC BY 4.0 has been assumed. Users should verify the applicable terms with the
-    original authors.'
+    effects.'
   rai:dataPreprocessingProtocol: Spectra are provided with class labels. Any preprocessing
     applied (baseline correction, smoothing, normalisation) is described in the source
     publication.
@@ -3304,9 +3266,7 @@ streptococcus_thermophilus_fermentation_kaiser:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -3334,9 +3294,7 @@ streptococcus_thermophilus_fermentation_timegate:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -3594,9 +3552,7 @@ tg_ecoli_fermentation:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -3624,9 +3580,7 @@ tg_ecoli_fermentation_supernatant:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
@@ -3716,9 +3670,7 @@ yeast_fermentation:
     shift (cm⁻¹).
   rai:dataCollectionType: Direct measurement
   rai:dataLimitations: 'Spectral signatures are process- and instrument-specific;
-    calibration transfer to other setups requires additional validation. Note: No
-    explicit license was stated by the original data providers; CC BY 4.0 has been
-    assumed. Users should verify the applicable terms with the original authors.'
+    calibration transfer to other setups requires additional validation.'
   rai:dataPreprocessingProtocol: Spectra may have undergone baseline correction, smoothing,
     normalisation, and wavenumber calibration. Exact steps are described in the accompanying
     publication.
