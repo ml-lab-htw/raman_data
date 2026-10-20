@@ -39,6 +39,7 @@ from raman_data.loaders.GoogleDriveLoader import GoogleDriveLoader
 from raman_data.loaders.FigshareLoader import FigshareLoader
 from raman_data.loaders.GitHubLoader import GitHubLoader
 from raman_data.loaders.MendeleyLoader import MendeleyLoader
+from raman_data.loaders.DataverseLoader import DataverseLoader
 from raman_data.loaders.MiscLoader import MiscLoader
 from raman_data.types import DatasetInfo, TASK_TYPE, APPLICATION_TYPE
 
@@ -131,6 +132,7 @@ _LOADERS: list[type] = [
     FigshareLoader,
     GitHubLoader,
     MendeleyLoader,
+    DataverseLoader,
     MiscLoader,
 ]
 
@@ -143,6 +145,7 @@ _LOADER_NAMES: dict[type, str] = {
     FigshareLoader: "Figshare",
     GitHubLoader: "GitHub",
     MendeleyLoader: "Mendeley",
+    DataverseLoader: "Dataverse",
     MiscLoader: "Misc",
 }
 

@@ -3217,6 +3217,46 @@ serum_prostate_cancer:
     measurements constitute sensitive health-related data under applicable data-protection
     regulations. Ethics approval obtained from Ren Ji Hospital, SJTU School of Medicine
     (KY2021-030).
+soft_tissue_sarcoma:
+  prov:wasDerivedFrom: https://doi.org/10.7910/DVN/NGEZPA
+  prov:wasGeneratedBy: 'Data collection: ex-vivo Raman maps (51 x 51 points over 100
+    x 100 µm, 0.5 s per spot) of surgically resected soft tissue from 7 patients,
+    Renishaw inVia, 633 nm, collected under IRB approval with written informed consent.
+    Preprocessing: Renishaw WiRE before export, in this order: fifth-order polynomial
+    baseline correction, median filtering to remove cosmic rays, Savitzky-Golay smoothing
+    (polynomial order 3), min-max normalisation of each spectrum to [0, 1]. Then interpolated
+    onto a 1 cm⁻¹ grid and cropped to 400-1,800 cm⁻¹ in Python (per the dataset authors).
+    Annotation: histopathology-confirmed tissue type per specimen (WHO classification
+    of soft tissue tumours).'
+  rai:dataAnnotationProtocol: Each specimen was labelled by histopathology (WHO classification
+    of soft tissue tumours); every spectrum of a map carries its specimen's label.
+  rai:dataBiases: 7 patients, one hospital, one instrument. Four classes (leiomyoma,
+    myxoid liposarcoma, leiomyosarcoma, high-grade myxofibrosarcoma) come from a single
+    patient each, and class sizes range from 10,404 to 83,742 spectra.
+  rai:dataCollection: 'Point-mapping Raman microscopy of ex-vivo tissue: Renishaw
+    inVia, 633 nm excitation, 51 x 51 grid over 100 x 100 µm, 0.5 s exposure per spot,
+    400-1,800 cm⁻¹ (1,401 points).'
+  rai:dataCollectionType: Direct measurement
+  rai:dataLimitations: 'For the four single-patient classes, grouped splits over maps
+    measure generalisation across regions of one specimen, not across patients. Three
+    maps (P3 muscle, P3 pleomorphic liposarcoma, P4 myxoid liposarcoma) are partial:
+    spectra with artefacts (tissue contamination, ink) were removed. Spectra are already
+    baseline-corrected, smoothed and normalised, so further preprocessing must not
+    repeat these steps. Licensed CC BY-NC 4.0 (non-commercial).'
+  rai:dataPreprocessingProtocol: 'Renishaw WiRE before export, in this order: fifth-order
+    polynomial baseline correction, median filtering to remove cosmic rays, Savitzky-Golay
+    smoothing (polynomial order 3), min-max normalisation of each spectrum to [0,
+    1]. Then interpolated onto a 1 cm⁻¹ grid and cropped to 400-1,800 cm⁻¹ in Python
+    (per the dataset authors).'
+  rai:dataSocialImpact: Supports research on intraoperative margin assessment for
+    soft tissue sarcoma surgery. Not validated for clinical use; results must be confirmed
+    by histopathology.
+  rai:dataUseCases: Tissue-type classification, tumour vs normal tissue discrimination,
+    sarcoma subtyping.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: Spectra of human tissue, labelled by diagnosis.
+    The published metadata gives each patient's age, sex and tumour location; the
+    spectra carry pseudonymous patient ids (P1-P7) but no direct identifiers.
 streptococcus_thermophilus_fermentation_kaiser:
   rai:dataAnnotationProtocol: Ground-truth target values measured by validated reference
     analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography,

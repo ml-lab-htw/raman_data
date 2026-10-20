@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "RamanSTS dataset, a large collection of Raman spectra of soft tissue sarcomas",
+  "description": "286,672 ex-vivo Raman spectra (Renishaw inVia, 633 nm, 400-1,800 cm⁻¹, 1,401 points) of surgically resected soft tissue from 7 patients, measured as 51x51 maps over 100 x 100 µm. Target: tissue type (WHO classification), 8 classes: fat, muscle and skin (normal), leiomyoma (benign), myxoid liposarcoma, high-grade pleomorphic liposarcoma, leiomyosarcoma and high-grade myxofibrosarcoma (malignant). Leiomyoma, myxoid liposarcoma, leiomyosarcoma and high-grade myxofibrosarcoma each come from a single patient, so for them grouped splits measure generalisation across regions of one specimen, not across patients. Three maps (P3 muscle, P3 pleomorphic liposarcoma, P4 myxoid liposarcoma) are partial: spectra with artefacts (tissue contamination, ink) were removed in WiRE. Group ids are the 18 patient x tissue files; the map of each spectrum is not published yet.",
+  "url": "https://doi.org/10.7910/DVN/NGEZPA",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Classification"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+  "sameAs": "https://doi.org/10.7910/DVN/NGEZPA",
+  "citeAs": "@article{Boroji_2025, title={Ex-vivo Raman spectroscopy and AI-based classification of soft tissue sarcomas}, volume={20}, ISSN={1932-6203}, url={http://dx.doi.org/10.1371/journal.pone.0330618}, DOI={10.1371/journal.pone.0330618}, number={9}, journal={PLOS ONE}, publisher={Public Library of Science (PLoS)}, author={Boroji, Maede and Danesh, Vahid and Barrera, Doris and Lee, Eric and Arauz, Paul G. and others}, year={2025}, pages={e0330618}}",
+  "citation": "Boroji M, Danesh V, Barrera D, Lee E, Arauz PG, et al. (2025) Ex-Vivo Raman Spectroscopy and AI-Based Classification of Soft Tissue Sarcomas. PLOS ONE 20(9): e0330618. https://doi.org/10.1371/journal.pone.0330618",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "soft_tissue_sarcoma_source",
+      "name": "RamanSTS dataset, a large collection of Raman spectra of soft tissue sarcomas",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://doi.org/10.7910/DVN/NGEZPA",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "b87ae0e30273aa1a0b2f85a509f6962310c55f4808c02b37e8f12672edc0979b"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "soft_tissue_sarcoma_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "soft_tissue_sarcoma_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "soft_tissue_sarcoma_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "soft_tissue_sarcoma_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Point-mapping Raman microscopy of ex-vivo tissue: Renishaw inVia, 633 nm excitation, 51 x 51 grid over 100 x 100 µm, 0.5 s exposure per spot, 400-1,800 cm⁻¹ (1,401 points).",
+  "rai:dataCollectionType": "Direct measurement",
+  "rai:dataPreprocessingProtocol": "Renishaw WiRE before export, in this order: fifth-order polynomial baseline correction, median filtering to remove cosmic rays, Savitzky-Golay smoothing (polynomial order 3), min-max normalisation of each spectrum to [0, 1]. Then interpolated onto a 1 cm⁻¹ grid and cropped to 400-1,800 cm⁻¹ in Python (per the dataset authors).",
+  "rai:dataAnnotationProtocol": "Each specimen was labelled by histopathology (WHO classification of soft tissue tumours); every spectrum of a map carries its specimen's label.",
+  "rai:personalSensitiveInformation": "Spectra of human tissue, labelled by diagnosis. The published metadata gives each patient's age, sex and tumour location; the spectra carry pseudonymous patient ids (P1-P7) but no direct identifiers.",
+  "rai:dataBiases": "7 patients, one hospital, one instrument. Four classes (leiomyoma, myxoid liposarcoma, leiomyosarcoma, high-grade myxofibrosarcoma) come from a single patient each, and class sizes range from 10,404 to 83,742 spectra.",
+  "rai:dataLimitations": "For the four single-patient classes, grouped splits over maps measure generalisation across regions of one specimen, not across patients. Three maps (P3 muscle, P3 pleomorphic liposarcoma, P4 myxoid liposarcoma) are partial: spectra with artefacts (tissue contamination, ink) were removed. Spectra are already baseline-corrected, smoothed and normalised, so further preprocessing must not repeat these steps. Licensed CC BY-NC 4.0 (non-commercial).",
+  "rai:dataSocialImpact": "Supports research on intraoperative margin assessment for soft tissue sarcoma surgery. Not validated for clinical use; results must be confirmed by histopathology.",
+  "rai:dataUseCases": "Tissue-type classification, tumour vs normal tissue discrimination, sarcoma subtyping.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: ex-vivo Raman maps (51 x 51 points over 100 x 100 µm, 0.5 s per spot) of surgically resected soft tissue from 7 patients, Renishaw inVia, 633 nm, collected under IRB approval with written informed consent. Preprocessing: Renishaw WiRE before export, in this order: fifth-order polynomial baseline correction, median filtering to remove cosmic rays, Savitzky-Golay smoothing (polynomial order 3), min-max normalisation of each spectrum to [0, 1]. Then interpolated onto a 1 cm⁻¹ grid and cropped to 400-1,800 cm⁻¹ in Python (per the dataset authors). Annotation: histopathology-confirmed tissue type per specimen (WHO classification of soft tissue tumours).",
+  "prov:wasDerivedFrom": "https://doi.org/10.7910/DVN/NGEZPA"
+}
