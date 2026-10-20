@@ -11,6 +11,16 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `yeast_batch_effects`: spontaneous Raman spectra of desiccated yeast
+  cells for strain classification under strong plate-level batch effects
+  (Cheveralls et al. 2026, *The Stacks*, doi:10.57844/arcadia-xdmk-yq0w;
+  data release doi:10.5281/zenodo.19226627, Zenodo, MIT). 9 strains — 3
+  *S. cerevisiae* (BY4741, YNL141, YGL058) and 6 *S. pombe* (SP286,
+  ED666, PDF1, RAD6, DEA2, ARSG) — 75 spectra each (675 total; empty-well
+  controls excluded), 235.7–3,653.6 cm⁻¹ at 2,048 points, 785 nm, Wasatch
+  WP-785X-F13-R-IL probe, 3 replicate plates. Group ids are the 27
+  (plate, well) pairs of 25 co-located site spectra; the paper's
+  leave-one-plate-out CV is the intended evaluation protocol.
 - `water_quality_ions`: raw Raman spectra of aqueous nitrate/nitrite/
   sulphate solutions for multi-analyte concentration quantification
   (Luciani et al. 2026, *Data in Brief*, doi:10.1016/j.dib.2026.113319;

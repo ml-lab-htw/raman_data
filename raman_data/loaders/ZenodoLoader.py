@@ -1,4 +1,5 @@
 import glob
+from collections import Counter
 from typing import Optional, Tuple, List
 import logging
 
@@ -649,6 +650,159 @@ class ZenodoLoader(BaseLoader):
         )
         return spectra, raman_shifts, targets, list(class_names), group_ids
 
+    # yeast_batch_effects (Zenodo 19226627, Cheveralls et al. 2026)
+    _YEAST_BATCH_ZIP = "raman-batch-effects-yeast-v1.0.zip"
+    _YEAST_BATCH_REPO_PREFIX = "Arcadia-Science-raman-batch-effects-yeast-"
+    # day -> (spectra subdirectory, platemap file name)
+    _YEAST_BATCH_DAYS = {
+        1: ("2025-08-06", "08-06_yeast-mutants.csv"),
+        2: ("2025-08-07", "08-07_yeast-mutants.csv"),
+        3: ("2025-08-12", "08-12_yeast-mutants.csv"),
+    }
+
+    @staticmethod
+    def __load_19226627(
+        cache_path: str,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str], np.ndarray] | None:
+        """
+        Parse and extract data from the yeast_batch_effects dataset
+        (Zenodo ID: 19226627).
+
+        Raman spectra of 9 yeast strains (3 S. cerevisiae, 6 S. pombe)
+        desiccated onto three replicate plates, used to expose plate-level
+        batch effects (Cheveralls et al. 2026,
+        doi:10.57844/arcadia-xdmk-yq0w).
+
+        The Zenodo file is a GitHub repo snapshot with a nested data.zip:
+            august-2025-platemaps/<day>_yeast-mutants.csv  well -> strain
+            august-2025-spectra/<date>/yeast_mut/<well>-Site_<n>.csv
+                5x5 grid of site spectra per well (2,048 points; axis in
+                the 'Pixel' column, 'Intensity' for the signal)
+            august-2025-spectra/<date>/dark/Default.csv    per-plate dark
+        Platemap well ids are zero-padded ('D08'); file names are not
+        ('D8'). Each plate's 10th well (E12, E12, C12) is an empty-well
+        control without a strain label and is excluded.
+
+        Returns a tuple of (spectra, raman_shifts, targets, class_names,
+        group_ids) with group_id = "day<day>-<well>" (the 25 co-located
+        site spectra of one desiccated well).
+        """
+        dataset_dir = os.path.join(cache_path, "19226627")
+        # zenodo_get writes the file out under its API 'key', which carries
+        # an 'Arcadia-Science/' directory prefix for this record.
+        zip_path = os.path.join(dataset_dir, "Arcadia-Science", ZenodoLoader._YEAST_BATCH_ZIP)
+        if not os.path.isfile(zip_path):
+            zip_path = os.path.join(dataset_dir, ZenodoLoader._YEAST_BATCH_ZIP)
+        if not os.path.isfile(zip_path):
+            raise FileNotFoundError(
+                f"Could not find {ZenodoLoader._YEAST_BATCH_ZIP} in {dataset_dir}"
+            )
+        # The outer zip is extracted next to it, into a 'repo' subdirectory.
+        repo_root = os.path.join(os.path.dirname(zip_path), "repo")
+
+        data_dir = next(
+            (
+                d
+                for d in glob.glob(
+                    os.path.join(repo_root, f"{ZenodoLoader._YEAST_BATCH_REPO_PREFIX}*", "data")
+                )
+                if os.path.isdir(d)
+            ),
+            None,
+        )
+        if data_dir is None:
+            if LoaderTools.extract_zip_file_content(zip_path, "repo") is None:
+                raise RuntimeError(
+                    "[!] yeast_batch_effects: could not extract the repo archive."
+                )
+            repo_dirs = [
+                d
+                for d in glob.glob(os.path.join(repo_root, f"{ZenodoLoader._YEAST_BATCH_REPO_PREFIX}*"))
+                if os.path.isdir(d)
+            ]
+            if len(repo_dirs) != 1:
+                raise RuntimeError(
+                    f"[!] yeast_batch_effects: expected exactly one repo directory, found {repo_dirs}."
+                )
+            inner_zip = os.path.join(repo_dirs[0], "data.zip")
+            if not os.path.isfile(inner_zip):
+                raise FileNotFoundError(f"Could not find data.zip in {repo_dirs[0]}")
+            if LoaderTools.extract_zip_file_content(inner_zip, "data") is None:
+                raise RuntimeError("[!] yeast_batch_effects: could not extract data.zip.")
+            data_dir = os.path.join(repo_dirs[0], "data")
+
+        spectra_list: List[np.ndarray] = []
+        raman_shifts_ref: Optional[np.ndarray] = None
+        labels: List[str] = []
+        group_ids: List[str] = []
+
+        for day, (subdir, platemap_name) in ZenodoLoader._YEAST_BATCH_DAYS.items():
+            platemap = pd.read_csv(os.path.join(data_dir, "august-2025-platemaps", platemap_name))
+            for col in ("well_id", "strain"):
+                if col not in platemap.columns:
+                    raise RuntimeError(
+                        f"[!] yeast_batch_effects: missing column '{col}' in {platemap_name}."
+                    )
+            # Platemap well ids are zero-padded ('D08'); file names are not ('D8').
+            well_to_strain = {
+                f"{w[0]}{int(w[1:])}": s for w, s in zip(platemap["well_id"], platemap["strain"])
+            }
+            site_dir = os.path.join(data_dir, "august-2025-spectra", subdir, "yeast_mut")
+            files = sorted(glob.glob(os.path.join(site_dir, "*.csv")))
+            if not files:
+                raise FileNotFoundError(f"[!] yeast_batch_effects: no site spectra in {site_dir}.")
+            for fpath in files:
+                well = os.path.basename(fpath).split("-")[0]
+                strain = well_to_strain.get(well)
+                if strain is None:
+                    continue  # empty-well control
+                df = pd.read_csv(fpath).dropna()
+                axis_col = "Pixel" if "Pixel" in df.columns else "Wavenumber"
+                if axis_col not in df.columns or "Intensity" not in df.columns:
+                    raise RuntimeError(
+                        f"[!] yeast_batch_effects: unexpected columns in {fpath}: {list(df.columns)}."
+                    )
+                axis = df[axis_col].to_numpy(dtype=float)
+                if raman_shifts_ref is None:
+                    raman_shifts_ref = axis
+                elif axis.shape != raman_shifts_ref.shape or not np.allclose(axis, raman_shifts_ref):
+                    raise RuntimeError(f"[!] yeast_batch_effects: spectral axis differs in {fpath}.")
+                spectra_list.append(df["Intensity"].to_numpy(dtype=float))
+                labels.append(strain)
+                group_ids.append(f"day{day}-{well}")
+
+        if raman_shifts_ref is None or not spectra_list:
+            raise RuntimeError("[!] yeast_batch_effects: no spectra parsed.")
+        if raman_shifts_ref.shape != (2048,):
+            raise RuntimeError(
+                f"[!] yeast_batch_effects: expected 2,048 spectral points, got {raman_shifts_ref.shape[0]}."
+            )
+
+        spectra = np.asarray(spectra_list, dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError("[!] yeast_batch_effects: missing intensity values.")
+
+        per_well = Counter(group_ids)
+        per_strain = Counter(labels)
+        if len(per_well) != 27 or any(v != 25 for v in per_well.values()):
+            raise RuntimeError(
+                f"[!] yeast_batch_effects: expected 27 (plate, well) groups with "
+                f"25 site spectra each, got {len(per_well)} groups "
+                f"(sizes {sorted(per_well.values())})."
+            )
+        if len(per_strain) != 9 or any(v != 75 for v in per_strain.values()):
+            raise RuntimeError(
+                f"[!] yeast_batch_effects: expected 9 strains with 75 spectra each, "
+                f"got {len(per_strain)} strains (sizes {sorted(per_strain.values())})."
+            )
+
+        targets, class_names = encode_labels(labels)
+        ZenodoLoader.logger.debug(
+            f"Loaded yeast_batch_effects: {spectra.shape[0]} spectra x {spectra.shape[1]} points, "
+            f"{len(class_names)} strains, {len(per_well)} (plate, well) groups"
+        )
+        return spectra, raman_shifts_ref, targets, list(class_names), np.array(group_ids)
+
     __BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "raman-data", "zenodo")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
@@ -1007,6 +1161,76 @@ class ZenodoLoader(BaseLoader):
                 "800-2,000 cm^-1 region of interest and z-score "
                 "normalization in its analysis)."
             ),
+        ),
+        "yeast_batch_effects": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Biological,
+            id="19226627",
+            name="Yeast Strain Classification with Batch Effects (Cheveralls et al. 2026)",
+            short_name="Yeast Batch Effects",
+            file_typ="*/raman-batch-effects-yeast-v1.0.zip",
+            license="MIT",
+            loader=lambda cache_path: ZenodoLoader.__load_19226627(cache_path),
+            metadata={
+                "full_name": (
+                    "Yeast Strain Classification with Plate Batch Effects "
+                    "(Cheveralls et al. 2026)"
+                ),
+                "source": "https://doi.org/10.5281/zenodo.19226627",
+                "paper": "https://doi.org/10.57844/arcadia-xdmk-yq0w",
+                "bibtex": (
+                    "@article{Cheveralls_2026, title={Leave-one-batch-out "
+                    "cross-validation reveals strong batch effects in Raman "
+                    "spectroscopy of yeast cultures}, url={http://dx.doi.org/"
+                    "10.57844/arcadia-xdmk-yq0w}, DOI={10.57844/"
+                    "arcadia-xdmk-yq0w}, journal={The Stacks}, publisher="
+                    "{Arcadia Science}, author={Cheveralls, Keith and Mets, "
+                    "David G. and Kolb, Ilya}, year={2026}, month=mar}"
+                ),
+                "citation": [
+                    "Cheveralls, K., Mets, D. G., and Kolb, I. (2026). "
+                    "Leave-one-batch-out cross-validation reveals strong batch "
+                    "effects in Raman spectroscopy of yeast cultures. The Stacks. "
+                    "https://doi.org/10.57844/arcadia-xdmk-yq0w"
+                ],
+                "description": (
+                    "Spontaneous Raman spectra of desiccated yeast cells for strain "
+                    "classification under strong plate-level batch effects: 9 strains -- "
+                    "3 Saccharomyces cerevisiae (BY4741 WT, YNL141/ADA1, YGL058/UBE2A) and "
+                    "6 Schizosaccharomyces pombe (SP286 WT, ED666 WT, PDF1/PPT1, RAD6/UBE2A, "
+                    "DEA2/ADA1, ARSG) -- grown to OD600 of 5, pelleted, washed, smeared onto "
+                    "a stainless-steel plate stamped with a 96-well layout and desiccated for "
+                    "~3 h. 785 nm excitation, Wasatch Photonics WP-785X-F13-R-IL fiber probe "
+                    "(93 mW at the sample plane), 5 s integration with 10 averages, 5x5 "
+                    "position grid per well, across 3 independent end-to-end replicate plates "
+                    "(2025-08-06, 2025-08-07, 2025-08-12): 75 spectra per strain, 675 in "
+                    "total (the 75 empty-well control spectra are excluded). 235.7-3,653.6 "
+                    "cm^-1 at 2,048 points (non-uniform grid; the paper's analysis used a "
+                    "300-1,800 cm^-1 fingerprint region). group_ids are the 27 (plate, well) "
+                    "pairs, each holding the 25 co-located site spectra of one desiccated "
+                    "well. Spectra are raw as deposited -- no dark subtraction, baseline "
+                    "correction, or normalization; the per-plate dark spectra are in the "
+                    "archive (dark/Default.csv) for anyone replicating the authors' pipeline "
+                    "(ramanspy: Whitaker-Hayes despiking, consensus dark subtraction, "
+                    "low-intensity QC at mean < 1000, Savitzky-Golay, ModPoly order 5, AUC "
+                    "normalization, per-well outlier QC; leaves 24-33 spectra per strain). "
+                    "The paper shows standard 5-fold CV overestimates strain accuracy (median "
+                    "MCC 0.79) while leave-one-plate-out CV exposes the batch effect (median "
+                    "MCC 0.32), making this a purpose-built probe of group-aware "
+                    "cross-validation."
+                ),
+            },
+            # Checked: the 25 site spectra of one well on one plate are
+            # co-located measurements of the same desiccated smear; the
+            # same strain on other plates is an independent preparation.
+            is_grouped=True,
+            # Checked: every strain spectrum carries a platemap strain label;
+            # the 75 empty-well control spectra (no strain) are excluded.
+            has_missing_labels=False,
+            # Raw spectra as deposited (Pixel/Intensity exports of the
+            # Wasatch probe); all of the authors' processing lives in their
+            # analysis code, not in the deposited files.
+            embedded_preprocessing=None,
         ),
     }
 

@@ -383,3 +383,28 @@ def test_water_quality_ions():
     assert not np.isnan(dataset.spectra).any()
     assert not np.isnan(dataset.targets).any()
 
+
+def test_yeast_batch_effects():
+    # Single 19.7 MB Zenodo download (GitHub repo snapshot), small enough
+    # to run in CI (~25 s fresh).
+    dataset = ZenodoLoader.load_dataset("yeast_batch_effects")
+    assert dataset.spectra.shape == (675, 2048)
+    assert dataset.targets.shape == (675,)
+    # 9 strains -- 3 S. cerevisiae (BY4741, YNL141, YGL058) and 6
+    # S. pombe (SP286, ED666, PDF1, RAD6, DEA2, ARSG) -- 75 spectra each.
+    assert dataset.target_names == [
+        "ARSG", "BY4741", "DEA2", "ED666", "PDF1", "RAD6",
+        "SP286", "YGL058", "YNL141",
+    ]
+    assert np.all(np.bincount(dataset.targets) == 75)
+    assert dataset.raman_shifts[0] == 235.71758360761123
+    assert dataset.raman_shifts[-1] == 3653.5482095528914
+    # 27 (plate, well) groups: 3 plates x 9 strain wells, 25 co-located
+    # site spectra each (the 10th well on each plate is an empty control,
+    # excluded).
+    assert dataset.group_ids is not None
+    assert dataset.group_ids.shape == (675,)
+    assert len(set(dataset.group_ids.tolist())) == 27
+    assert _groups_are_label_pure(dataset)
+    assert not np.isnan(dataset.spectra).any()
+
