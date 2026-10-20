@@ -1,6 +1,7 @@
 import glob
 import logging
 import os
+import re
 from io import StringIO
 from typing import Optional, Tuple
 
@@ -11,7 +12,7 @@ from scipy.io import loadmat
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.utils import encode_labels
-from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, APPLICATION_TYPE
+from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, APPLICATION_TYPE, HASH_TYPE
 
 
 class MiscLoader(BaseLoader):
@@ -263,6 +264,38 @@ class MiscLoader(BaseLoader):
             )
             for process in ["Raw", "Baseline Corrected"]
         },
+        "raman_spi": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="raman_spi",
+            name="RaSPI: Raman Spectra for Plastics Identification",
+            short_name="RaSPI Plastics",
+            license="CC-BY 4.0",
+            loader=lambda cache_path: MiscLoader._load_raman_spi(cache_path),
+            metadata={
+                "full_name": "Raman Spectra for Plastics Identification (RaSPI)",
+                "source": "https://doi.org/10.5683/SP3/8UQQQN",
+                "paper": "https://doi.org/10.1038/s41597-026-07103-8",
+                "bibtex": "@article{Hogan_2026, title={Raman spectra for plastics identification (RaSPI) and Raman maps for plastics identification (RaMPI) datasets}, volume={13}, ISSN={2052-4463}, url={http://dx.doi.org/10.1038/s41597-026-07103-8}, DOI={10.1038/s41597-026-07103-8}, number={1}, journal={Scientific Data}, publisher={Springer Nature}, author={Hogan, Una E. and Voss, H. Ben and Lei, Benjamin and Bec, Avery E. and Feng, Xinyi and Smith, Rodney}, year={2026}, month=mar, pages={765}}",
+                "citation": [
+                    "Hogan, Úna E., Voss, H. Ben., Lei, Benjamin, Bec, Avery E., Feng, Xinyi, Smith, Rodney (2026). Raman spectra for plastics identification (RaSPI) and Raman maps for plastics identification (RaMPI) datasets. Scientific Data, 13, 765."
+                ],
+                "description": "Baseline-corrected Raman spectra of 14 plastic types (polyethylene, polypropylene, PTFE, polystyrene, nylon, silicone, PMMA, POM, polyester, polyurethane, PVC, PET, polycarbonate, ABS) acquired on a Renishaw inVia Raman microscope: 226 spectra at 633 nm (1800 l/mm grating) and 176 at 523 nm (2400 l/mm grating). The deposited RaSPI_processed.csv is uniformly gridded at 1 cm^-1 over 225-3949 cm^-1 (3725 points), polynomial-baseline-subtracted and 0-1 normalized. Samples mix pristine commercial/retail plastics with environmental microplastics (bottle caps, bags, fragments) from Pollution Probe Great Lakes Seabin collections. The deposit's spectra file holds 402 rows, but 6 metadata rows lack a spectrum, 4 spectra lack metadata, and PE1a/PE1b are stored twice, leaving a fully-labeled usable set of 396 spectra from 272 physical samples (159 measured once, 104 twice, 9 three to four times). Each spectrum ID is '<plastic><number>' plus a trailing letter (PE1a, PE1b, PET4c...) marking repeated measurements of the same physical sample; the loader exposes those sample ids as group_ids. The raw (unprocessed) spectra are available in the same deposit as RaSPI_raw.csv.",
+            },
+            # Checked: the trailing-letter sample ids in RaSPI_metadata.csv
+            # denote repeated measurements of the same physical plastic
+            # sample (deposit README 2.2), so spectra sharing a sample stem
+            # are physical replicates and must not be split across folds.
+            is_grouped=True,
+            # Checked: after the inner join of spectra and metadata, every
+            # row has a plastic type.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "Authors' pipeline (deposit README 4.2): polynomial baseline "
+                "subtraction, truncation to 225-3950 cm^-1, interpolation "
+                "onto a uniform 1 cm^-1 grid, per-spectrum 0-1 normalization."
+            ),
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -380,9 +413,13 @@ class MiscLoader(BaseLoader):
             result = dataset_info.loader(dataset_cache_path)
             if result is None:
                 raise FileNotFoundError(f"Could not load dataset {dataset_name}. Expected files may be missing. Please check logs for details.")
-            spectra, raman_shifts, targets, class_names = result
+            if len(result) == 5:
+                spectra, raman_shifts, targets, class_names, group_ids = result
+            else:
+                spectra, raman_shifts, targets, class_names = result
+                group_ids = None
         else:
-            spectra = raman_shifts = targets = class_names = None
+            spectra = raman_shifts = targets = class_names = group_ids = None
 
         return RamanDataset(
             info=dataset_info,
@@ -390,6 +427,7 @@ class MiscLoader(BaseLoader):
             spectra=spectra,
             targets=targets,
             target_names=class_names,
+            group_ids=group_ids,
         )
 
     @staticmethod
@@ -840,6 +878,120 @@ class MiscLoader(BaseLoader):
         encoded_targets, class_names = encode_labels(pd.Series(all_labels))
 
         return spectra_aligned, raman_shifts, encoded_targets, list(class_names)
+
+    # Stable direct file URLs for the RaSPI deposit on Borealis
+    # (University of Waterloo DataVerse), doi:10.5683/SP3/8UQQQN --
+    # "api/access/datafile/<id>?format=original" addresses are immutable
+    # within Borealis. MD5s are the values from the deposit's own file
+    # manifest.
+    _RASPI_BOREALIS_FILES = {
+        "RaSPI_processed.csv": (
+            "https://borealisdata.ca/api/access/datafile/1018848?format=original",
+            "7796a8c14fd1a61144bd39a03c97b4f1",
+        ),
+        "RaSPI_metadata.csv": (
+            "https://borealisdata.ca/api/access/datafile/1018849?format=original",
+            "e35bbc21e33d8300b116add918caaf5b",
+        ),
+    }
+
+    @staticmethod
+    def _raspi_sample_stem(spectrum_id: str) -> str:
+        """Map a RaSPI spectrum id to its physical sample id.
+
+        The source names each plastic sample '<type><number>' and appends a
+        trailing lowercase letter for each additional spectrum taken of the
+        same sample (PE1a/PE1b are the two spectra of sample PE1; PET4c is
+        the third measurement of sample PET4). Stripping the trailing letter
+        yields the sample; ids without a letter map to themselves.
+        """
+        sid = str(spectrum_id).strip()
+        stem = re.sub(r"[a-z]$", "", sid)
+        return stem if stem else sid
+
+    @staticmethod
+    def _load_raman_spi(cache_path: str):
+        """
+        Download and load RaSPI (Hogan et al. 2026, Sci. Data 13:765,
+        doi:10.1038/s41597-026-07103-8), data release doi:10.5683/SP3/8UQQQN.
+
+        Files (Borealis / University of Waterloo DataVerse, CC-BY 4.0):
+          RaSPI_processed.csv  402 x 3726 wide CSV, row 0 = spectrum id,
+                               columns = intensities on a uniform
+                               225-3949 cm^-1 / 1 cm^-1 grid (baseline
+                               subtracted, 0-1 normalized by the authors)
+          RaSPI_metadata.csv   one row per spectrum: Spectra ID, Colour,
+                               Origin, Additional Information, Plastic
+                               Type, Laser (nm), Diffraction Grating
+
+        The two files disagree slightly: the metadata lists 6 spectra
+        (PET6a-d, PVC17, PVC18) that are absent from the spectra file, the
+        spectra file holds 4 ids (PET5c, PET5d, PU15, PU16) that the
+        metadata does not label, and PE1a/PE1b are stored twice in the
+        spectra file. The loader deduplicates and inner-joins on the
+        spectrum id, yielding the 396 fully-labeled spectra.
+
+        Returns spectra, raman_shifts, targets, class_names, group_ids
+        (group id = physical sample, see _raspi_sample_stem).
+        """
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            raise ValueError("Cache root for Misc loader is not set. Cannot load raman_spi dataset.")
+
+        dataset_cache = os.path.join(cache_root, "raman_spi")
+        os.makedirs(dataset_cache, exist_ok=True)
+
+        for file_name, (url, md5) in MiscLoader._RASPI_BOREALIS_FILES.items():
+            out_path = os.path.join(dataset_cache, file_name)
+            if not LoaderTools._is_file_ready(out_path):
+                LoaderTools.download(
+                    url=url,
+                    out_dir_path=dataset_cache,
+                    out_file_name=file_name,
+                    hash_target=md5,
+                    hash_type=HASH_TYPE.md5,
+                )
+                if not LoaderTools._is_file_ready(out_path):
+                    raise RuntimeError(
+                        f"[!] Download of {file_name} for raman_spi failed "
+                        "(network error or checksum mismatch). See logs."
+                    )
+
+        try:
+            processed = pd.read_csv(
+                os.path.join(dataset_cache, "RaSPI_processed.csv"), low_memory=False
+            )
+            metadata = pd.read_csv(os.path.join(dataset_cache, "RaSPI_metadata.csv"))
+        except Exception as e:
+            raise RuntimeError(f"[!] Failed to read raman_spi CSVs in {dataset_cache}: {e}")
+
+        id_col = processed.columns[0]
+        wav_cols = list(processed.columns[1:])
+        if len(wav_cols) < 2:
+            raise RuntimeError(
+                f"[!] raman_spi RaSPI_processed.csv has unexpected shape {processed.shape}; "
+                "expected an id column plus one column per wavenumber."
+            )
+
+        # PE1a/PE1b are stored twice in the source file; keep the first copy.
+        processed = processed.drop_duplicates(subset=[id_col], keep="first")
+        merged = processed.merge(metadata, left_on=id_col, right_on="Spectra ID", how="inner")
+        if merged.empty:
+            raise RuntimeError("[!] raman_spi: no overlap between RaSPI_processed.csv and RaSPI_metadata.csv ids.")
+
+        # The wavenumber axis lives in the column headers (one column per
+        # point on a uniform 225-3949 cm^-1 grid).
+        raman_shifts = np.array([float(col) for col in wav_cols])
+        # Guard: the processed file is supposed to be on an ascending grid.
+        if not np.all(np.diff(raman_shifts) > 0):
+            raise RuntimeError("[!] raman_spi: RaSPI_processed.csv wavenumber axis is not ascending.")
+
+        spectra = merged[wav_cols].to_numpy(dtype=float)
+        plastic_types = merged["Plastic Type"]
+        group_ids = merged["Spectra ID"].map(MiscLoader._raspi_sample_stem).to_numpy()
+
+        targets, class_names = encode_labels(plastic_types)
+        return spectra, raman_shifts, targets, list(class_names), group_ids
 
     @staticmethod
     def _load_sop_spectral_library(cache_path: str, variant: str = "baseline_corrected"):
