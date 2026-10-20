@@ -284,3 +284,15 @@ def test_raman_spi():
     assert len(set(dataset.group_ids.tolist())) == 272
     assert _groups_are_label_pure(dataset)
 
+
+@pytest.mark.skip(reason="Borealis download (~530 MB); run manually.")
+def test_rampi():
+    dataset = MiscLoader.load_dataset("raman_mpi")
+    # 16,598 of the 33,119 deposited pixel spectra carry one of the 14
+    # plastic labels ('blank' pixels excluded); resampled onto the common
+    # 710-1,827 cm^-1 / 1 cm^-1 grid; 34 maps as groups. NOTE: groups are
+    # NOT label-pure -- mixed-material maps contain several classes.
+    assert dataset.spectra.shape == (16598, 1118)
+    assert len(dataset.target_names) == 14
+    assert len(set(dataset.group_ids.tolist())) == 34
+

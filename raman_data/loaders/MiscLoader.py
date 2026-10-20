@@ -296,6 +296,37 @@ class MiscLoader(BaseLoader):
                 "onto a uniform 1 cm^-1 grid, per-spectrum 0-1 normalization."
             ),
         ),
+        "raman_mpi": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="raman_mpi",
+            name="RaMPI: Raman Maps for Plastics Identification",
+            short_name="RaMPI Maps",
+            license="CC-BY 4.0",
+            loader=lambda cache_path: MiscLoader._load_rampi(cache_path),
+            metadata={
+                "full_name": "Raman Maps for Plastics Identification (RaMPI)",
+                "source": "https://doi.org/10.5683/SP3/8UQQQN",
+                "paper": "https://doi.org/10.1038/s41597-026-07103-8",
+                "bibtex": "@article{Hogan_2026, title={Raman spectra for plastics identification (RaSPI) and Raman maps for plastics identification (RaMPI) datasets}, volume={13}, ISSN={2052-4463}, url={http://dx.doi.org/10.1038/s41597-026-07103-8}, DOI={10.1038/s41597-026-07103-8}, number={1}, journal={Scientific Data}, publisher={Springer Nature}, author={Hogan, Una E. and Voss, H. Ben and Lei, Benjamin and Bec, Avery E. and Feng, Xinyi and Smith, Rodney}, year={2026}, month=mar, pages={765}}",
+                "citation": [
+                    "Hogan, Úna E., Voss, H. Ben., Lei, Benjamin, Bec, Avery E., Feng, Xinyi, Smith, Rodney (2026). Raman spectra for plastics identification (RaSPI) and Raman maps for plastics identification (RaMPI) datasets. Scientific Data, 13, 765."
+                ],
+                "description": "Per-pixel Raman spectra from 34 maps (30 pristine two-material blend maps plus 4 environmental maps of Great Lakes Seabin microplastic samples) acquired on a Renishaw inVia at 633 nm (1800 l/mm grating). Each of the 33,119 pixel spectra was manually assigned by the authors to one of 14 plastic types or 'blank'; this dataset holds the 16,598 plastic-assigned pixels. The native per-map axes (1,017 points, ~710-1,827 cm^-1, non-uniform spacing) are linearly resampled onto a common 1 cm^-1 grid (710-1,827 cm^-1, 1,118 points). Spectra are raw as exported from Renishaw WiRE -- no baseline correction or normalization. group_ids = map: pixels within one map are spatially correlated and must not be split across train/test. The companion 1D point-spectra dataset is raman_spi.",
+            },
+            # Checked: each Assig file is one Raman map; pixels within a map
+            # are spatially adjacent measurements and highly correlated
+            # (shared background, crosstalk), so maps are kept together.
+            # Note: groups are NOT label-pure -- a mixed-material map contains
+            # several plastic classes by design.
+            is_grouped=True,
+            # Checked: every kept row carries one of the 14 plastic labels
+            # ('blank' pixels are excluded, not NaN).
+            has_missing_labels=False,
+            # Raw map spectra as exported from Renishaw WiRE; no baseline
+            # correction, smoothing, or normalization applied.
+            embedded_preprocessing=None,
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -992,6 +1023,278 @@ class MiscLoader(BaseLoader):
 
         targets, class_names = encode_labels(plastic_types)
         return spectra, raman_shifts, targets, list(class_names), group_ids
+
+    # RaMPI map files, same Borealis deposit as raman_spi
+    # (doi:10.5683/SP3/8UQQQN). One file per Raman map; MD5s from the
+    # deposit's file manifest.
+    _RAMPI_BOREALIS_FILES = {
+        "Assig_PC_1.csv": (
+            "https://borealisdata.ca/api/access/datafile/969473?format=original",
+            "e88aa4240a6349f321b8f524f41c5208",
+        ),
+        "Assig_PC_2.csv": (
+            "https://borealisdata.ca/api/access/datafile/969527?format=original",
+            "7d05ecdc542b30f02589b563939f349a",
+        ),
+        "Assig_PE.csv": (
+            "https://borealisdata.ca/api/access/datafile/969519?format=original",
+            "bc2edd0bde62e9aedcdcefe426f15d7b",
+        ),
+        "Assig_PET.csv": (
+            "https://borealisdata.ca/api/access/datafile/969485?format=original",
+            "3d2bdd0ba3b295c6bb76866416af60d0",
+        ),
+        "Assig_PMMA_PC.csv": (
+            "https://borealisdata.ca/api/access/datafile/969489?format=original",
+            "64d9ac1e4655b1e91cb75988cb1952b1",
+        ),
+        "Assig_PMMA_PET.csv": (
+            "https://borealisdata.ca/api/access/datafile/969472?format=original",
+            "583a632eb62308fa9667c9d83cfd9bb3",
+        ),
+        "Assig_PMMA_PET_PE_ABS.csv": (
+            "https://borealisdata.ca/api/access/datafile/969535?format=original",
+            "3b81f317fa81876bc751a3f23c892044",
+        ),
+        "Assig_PMMA_PTFE_PE.csv": (
+            "https://borealisdata.ca/api/access/datafile/969495?format=original",
+            "d25be8efb26dfb4a75ab28a99ab84da3",
+        ),
+        "Assig_POM.csv": (
+            "https://borealisdata.ca/api/access/datafile/969520?format=original",
+            "760a3270fcffad16e2212101fab10090",
+        ),
+        "Assig_POM_ABS.csv": (
+            "https://borealisdata.ca/api/access/datafile/969516?format=original",
+            "3906438af7333fef378dd225626a9003",
+        ),
+        "Assig_PP.csv": (
+            "https://borealisdata.ca/api/access/datafile/969496?format=original",
+            "71f0b77723cdd83dfe5b771afa1e0ef9",
+        ),
+        "Assig_PS.csv": (
+            "https://borealisdata.ca/api/access/datafile/969492?format=original",
+            "15333ea9102c1c34fa3fd50d371ccb18",
+        ),
+        "Assig_PS_ABS.csv": (
+            "https://borealisdata.ca/api/access/datafile/969502?format=original",
+            "ae5869c967b6f5737a0d6fad462a97e8",
+        ),
+        "Assig_PS_PE_PEs_2.csv": (
+            "https://borealisdata.ca/api/access/datafile/969522?format=original",
+            "752cac0ad8efc7e2d31e2eec8e8660e6",
+        ),
+        "Assig_PS_PTFE_POM_PMMA.csv": (
+            "https://borealisdata.ca/api/access/datafile/969480?format=original",
+            "e56ea675c255d7ccd60a91fa3062cf24",
+        ),
+        "Assig_PTFE.csv": (
+            "https://borealisdata.ca/api/access/datafile/969504?format=original",
+            "407d58d2f2482ae8377a33c6fc63b6d9",
+        ),
+        "Assig_PU.csv": (
+            "https://borealisdata.ca/api/access/datafile/969534?format=original",
+            "e1ee57bd86a15656b3bb5762bb429249",
+        ),
+        "Assig_PVC-PU-POM.csv": (
+            "https://borealisdata.ca/api/access/datafile/969488?format=original",
+            "1e50552adb6fc1451106881e9ba0b713",
+        ),
+        "Assig_PVC_1.csv": (
+            "https://borealisdata.ca/api/access/datafile/969479?format=original",
+            "7ff6d4c7f862f694351ef43efa6ea295",
+        ),
+        "Assig_PVC_2.csv": (
+            "https://borealisdata.ca/api/access/datafile/969538?format=original",
+            "3b46c819d7b955b911e240434d17942f",
+        ),
+        "Assig_PVC_ABS_PEs.csv": (
+            "https://borealisdata.ca/api/access/datafile/969494?format=original",
+            "e40442070d4dbee658add07db3a5d75c",
+        ),
+        "Assig_PVC_PET.csv": (
+            "https://borealisdata.ca/api/access/datafile/969493?format=original",
+            "abe6e310c5d28c8de95d9051e96b9e6b",
+        ),
+        "Assig_Map_PS_PE_PEs_1.csv": (
+            "https://borealisdata.ca/api/access/datafile/969518?format=original",
+            "f372bd6ec804eec9696ef120626ddfb7",
+        ),
+        "Assig_Silicone.csv": (
+            "https://borealisdata.ca/api/access/datafile/969498?format=original",
+            "703413ed9753b7db45d836271cd7084f",
+        ),
+        "Assig_Silicone_ABS.csv": (
+            "https://borealisdata.ca/api/access/datafile/969477?format=original",
+            "1c1bc726be57b465eebcf92c482b1f51",
+        ),
+        "Assig_Env_POM_PP_PE.csv": (
+            "https://borealisdata.ca/api/access/datafile/969500?format=original",
+            "457ad86d3ea380bf2b20786957364f73",
+        ),
+        "Assig_Env_PP_PE_1.csv": (
+            "https://borealisdata.ca/api/access/datafile/969503?format=original",
+            "0100b4f0905837e14e66a1e8c8634aed",
+        ),
+        "Assig_Env_PP_PE_2.csv": (
+            "https://borealisdata.ca/api/access/datafile/969481?format=original",
+            "c60d955986804cd8f3a92c5e29f77c1a",
+        ),
+        "Assig_Env_PP_PTFE.csv": (
+            "https://borealisdata.ca/api/access/datafile/969510?format=original",
+            "4c0b428ee99d0ad261c4c1195de3f929",
+        ),
+        "Assig_Nylon.csv": (
+            "https://borealisdata.ca/api/access/datafile/969523?format=original",
+            "afb6dd78507aff8103a02b227762887c",
+        ),
+        "Assig_Nylon_ABS_PMMA.csv": (
+            "https://borealisdata.ca/api/access/datafile/969483?format=original",
+            "09f29eaa80f8b22cc274bd529d548239",
+        ),
+        "Assig_Nylon_PEs_PS.csv": (
+            "https://borealisdata.ca/api/access/datafile/969513?format=original",
+            "ebccc8479edf0a1f3ef8c40a3f2e11ff",
+        ),
+        "Assig_Nylon_POM.csv": (
+            "https://borealisdata.ca/api/access/datafile/969525?format=original",
+            "b9a4782a500957393d976820fa6f4381",
+        ),
+        "Assig_Nylon_PTFE_POM.csv": (
+            "https://borealisdata.ca/api/access/datafile/969491?format=original",
+            "8655f68a7c3e92824c4108f309a55156",
+        ),
+    }
+
+    # The 34 per-map axes are non-uniform (1,017 points each, descending,
+    # ~709.9-1827.2 cm^-1). All of them cover 710-1827 cm^-1, so this
+    # integer 1 cm^-1 grid (1,118 points) is a pure interpolation for every
+    # map -- consistent with the 1 cm^-1 grid of the companion raman_spi.
+    _RAMPI_COMMON_GRID = np.arange(710.0, 1828.0, 1.0)
+
+    # The manual per-pixel assignments in the deposit; 'blank' marks
+    # unassigned background pixels and is excluded from this dataset.
+    _RAMPI_PLASTIC_LABELS = frozenset({
+        "acrylonitrile butadiene styrene",
+        "nylon",
+        "poly (methyl methacrylate)",
+        "polycarbonate",
+        "polyester",
+        "polyethylene",
+        "polyethylene terephthalate",
+        "polyoxymethylene",
+        "polypropylene",
+        "polystyrene",
+        "polytetrafluoroethylene",
+        "polyurethane",
+        "polyvinyl chloride",
+        "silicone",
+    })
+
+    @staticmethod
+    def _rampi_map_name(file_name: str) -> str:
+        """'Assig_PVC-PU-POM.csv' -> 'PVC-PU-POM' (one map per file)."""
+        return file_name[len("Assig_"):-len(".csv")]
+
+    @staticmethod
+    def _load_rampi(cache_path: str):
+        """
+        Download and load RaMPI (Hogan et al. 2026, Sci. Data 13:765,
+        doi:10.1038/s41597-026-07103-8), data release doi:10.5683/SP3/8UQQQN.
+
+        Files: the deposit's 34 'Assig_*.csv' files, one per Raman map
+        (30 pristine two-material blend maps + 4 environmental Great Lakes
+        Seabin maps), 633 nm / 1800 l/mm grating. Each file's first row is
+        the map's wavenumber axis ('assignment', w1, w2, ... -- descending,
+        1,017 points); every following row is one pixel spectrum
+        ('<label>', i1, i2, ...) with a manual plastic-type assignment or
+        'blank'.
+
+        The 33,119 pixel spectra are resampled from their per-map native
+        axes onto the common 710-1,827 cm^-1 / 1 cm^-1 grid and the 16,598
+        plastic-labeled pixels are kept ('blank' pixels have no class).
+
+        Returns spectra, raman_shifts, targets, class_names, group_ids
+        (group id = map name).
+        """
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            raise ValueError("Cache root for Misc loader is not set. Cannot load raman_mpi dataset.")
+
+        dataset_cache = os.path.join(cache_root, "raman_mpi")
+        os.makedirs(dataset_cache, exist_ok=True)
+
+        for file_name, (url, md5) in MiscLoader._RAMPI_BOREALIS_FILES.items():
+            out_path = os.path.join(dataset_cache, file_name)
+            if not LoaderTools._is_file_ready(out_path):
+                LoaderTools.download(
+                    url=url,
+                    out_dir_path=dataset_cache,
+                    out_file_name=file_name,
+                    hash_target=md5,
+                    hash_type=HASH_TYPE.md5,
+                )
+                if not LoaderTools._is_file_ready(out_path):
+                    raise RuntimeError(
+                        f"[!] Download of {file_name} for raman_mpi failed "
+                        "(network error or checksum mismatch). See logs."
+                    )
+
+        spectra_list = []
+        label_list = []
+        group_list = []
+        n_total = 0
+
+        for file_name in sorted(MiscLoader._RAMPI_BOREALIS_FILES):
+            try:
+                df = pd.read_csv(os.path.join(dataset_cache, file_name), low_memory=False)
+            except Exception as e:
+                raise RuntimeError(f"[!] Failed to read raman_mpi map file {file_name}: {e}")
+
+            wav_cols = list(df.columns[1:])
+            if len(wav_cols) < 2:
+                raise RuntimeError(f"[!] raman_mpi {file_name} has no wavenumber columns.")
+
+            axis = np.array([float(col) for col in wav_cols])
+            # The source axes are descending; flip to ascending for interp.
+            if axis[0] > axis[-1]:
+                axis = axis[::-1]
+                intensities = df[wav_cols].to_numpy(dtype=float)[:, ::-1]
+            else:
+                intensities = df[wav_cols].to_numpy(dtype=float)
+            if not np.all(np.diff(axis) > 0):
+                raise RuntimeError(f"[!] raman_mpi {file_name}: wavenumber axis is not monotonic.")
+            if np.isnan(intensities).any():
+                raise RuntimeError(f"[!] raman_mpi {file_name}: missing intensity values.")
+
+            # Pure interpolation: the common grid lies inside every map axis.
+            # (np.interp only takes 1-D fp, so resample row by row.)
+            grid = MiscLoader._RAMPI_COMMON_GRID
+            resampled = np.empty((intensities.shape[0], grid.size), dtype=float)
+            for i in range(intensities.shape[0]):
+                resampled[i] = np.interp(grid, axis, intensities[i])
+
+            labels = df[df.columns[0]].astype(str).str.strip().to_numpy()
+            keep = np.isin(labels, list(MiscLoader._RAMPI_PLASTIC_LABELS))
+            n_blank = int((labels == "blank").sum())
+            unknown = np.unique(labels[~keep & (labels != "blank")])
+            if unknown.size:
+                raise RuntimeError(f"[!] raman_mpi {file_name}: unexpected labels {unknown.tolist()}.")
+            n_total += len(labels)
+
+            spectra_list.append(resampled[keep])
+            label_list.append(labels[keep])
+            group_list.extend([MiscLoader._rampi_map_name(file_name)] * int(keep.sum()))
+
+        if n_total != 33119:
+            raise RuntimeError(f"[!] raman_mpi: expected 33119 pixel spectra across 34 maps, got {n_total}.")
+        if not label_list:
+            raise RuntimeError("[!] raman_mpi: no plastic-labeled pixels found.")
+
+        spectra = np.concatenate(spectra_list, axis=0)
+        targets, class_names = encode_labels(pd.Series(np.concatenate(label_list)))
+        group_ids = np.array(group_list)
+        return spectra, MiscLoader._RAMPI_COMMON_GRID.copy(), targets, list(class_names), group_ids
 
     @staticmethod
     def _load_sop_spectral_library(cache_path: str, variant: str = "baseline_corrected"):
