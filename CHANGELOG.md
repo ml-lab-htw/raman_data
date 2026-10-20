@@ -11,6 +11,17 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `nanoplastics_individual`: Raman spectra of 1,000 individual
+  nanoplastic particles for polymer classification (Xie et al. 2023,
+  *Environ. Sci. Technol.* 57(46):18203, doi:10.1021/acs.est.3c03210;
+  data release doi:10.6084/m9.figshare.22682512.v2, figshare, CC BY
+  4.0). 200 particles each of PE/PTFE/PS/PMMA/PVC (300 nm–1 um)
+  measured on polished aluminum sheets (95% reflectivity) with an
+  XploRA Plus confocal Raman spectrometer (532 nm, ~10 mW at the
+  sample, x100 objective); 500–1,799 cm⁻¹ at 467 points, one .txt per
+  particle. Raw counts as deposited; the deposit's 200 BLANK substrate
+  spectra are excluded. First single-particle (SNR-limited)
+  identification set in the benchmark.
 - `yeast_bioreactor_fermentation`: inline Raman monitoring of
   *S. cerevisiae* batch and fed-batch bioreactor fermentations for
   3-target regression (Klaverdijk et al. 2025, *Analytical and

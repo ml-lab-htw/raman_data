@@ -1,0 +1,146 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Individual Nanoplastic Particle Raman Spectra (Xie et al. 2023)",
+  "description": "Raman spectra of 1,000 individual nanoplastic particles for polymer classification: 200 each of PE (polyethylene), PMMA (polymethyl methacrylate), PS (polystyrene), PTFE (polytetrafluoroethylene) and PVC (polyvinyl chloride) (Xie et al. 2023, Environ. Sci. Technol. 57(46):18203-18214, doi:10.1021/acs.est.3c03210). Particles (300 nm - 1 um) were dried onto polished aluminum sheets (95% reflectivity) and measured with an XploRA Plus confocal Raman spectrometer (HORIBA Jobin Yvon) at 532 nm (external-cavity diode laser, ~10 mW at the sample = 10% of the 100 mW output) through a x100 Olympus objective; 500-1,799 cm^-1 at 467 points (2-3 cm^-1 grid, identical axis in every file). Each .txt file in the deposit is one particle; the deposit additionally holds 200 BLANK substrate spectra (aluminum background, no particle), which are excluded here. Spectra are raw counts as deposited (no blank subtraction, no normalization). The single-particle SNR regime makes this a harder, noisier identification task than any bulk microplastics set; the paper's pipeline (peak extraction and retention + random forest) reached 98.8% average accuracy.",
+  "url": "https://doi.org/10.6084/m9.figshare.22682512.v2",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "MaterialScience",
+    "Classification"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Xie_2023, title={Automatic Identification of Individual Nanoplastics by Raman Spectroscopy Based on Machine Learning}, volume={57}, ISSN={1520-5851}, url={http://dx.doi.org/10.1021/acs.est.3c03210}, DOI={10.1021/acs.est.3c03210}, number={46}, journal={Environmental Science & Technology}, publisher={American Chemical Society}, author={Xie, Lifang and Luo, Siheng and Liu, Yangyang and Ruan, Xuejun and Gong, Kedong and Li, Kejian and Ge, Qiuyue and Valev, Ventsislav Kolev and Liu, Guokun and Zhang, Liwu}, year={2023}, month=oct, pages={18203--18214}}",
+  "citation": "Xie, L., Luo, S., Liu, Y., Ruan, X., Gong, K., Li, K., Ge, Q., Valev, V. K., Liu, G., Zhang, L. (2023). Automatic Identification of Individual Nanoplastics by Raman Spectroscopy Based on Machine Learning. Environmental Science & Technology, 57(46), 18203-18214. https://doi.org/10.1021/acs.est.3c03210",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "nanoplastics_individual_source",
+      "name": "Individual Nanoplastic Particle Raman Spectra (Xie et al. 2023)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://doi.org/10.6084/m9.figshare.22682512.v2",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "5efdad3e7e72f3c36b84d84693b0eaac8e7a83f878d01f8b21016d687012631c"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "nanoplastics_individual_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "nanoplastics_individual_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "nanoplastics_individual_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "nanoplastics_individual_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
+  "rai:dataCollectionType": "Laboratory measurements on solid or liquid material samples including minerals, polymers, and organic pigments.",
+  "rai:dataPreprocessingProtocol": "Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication.",
+  "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical, biological, or material samples without individual human identifiers.",
+  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
+  "rai:dataLimitations": "Reference spectra represent ideal laboratory conditions; real-world samples may show additional interference from impurities, fluorescence, or surface effects.",
+  "rai:dataSocialImpact": "Facilitates non-destructive material characterisation and identification with applications in geology, environmental science, art conservation, and industrial quality assurance.",
+  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on solid or liquid material samples including minerals, polymers, and organic pigments. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://doi.org/10.6084/m9.figshare.22682512.v2"
+}

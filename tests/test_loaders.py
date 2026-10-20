@@ -473,3 +473,21 @@ def test_yeast_bioreactor_fermentation():
     assert not np.isnan(dataset.targets[:, 1:]).any()
     assert not np.isnan(dataset.spectra).any()
 
+
+def test_nanoplastics_individual():
+    # Single 2 MB figshare download, small enough to run in CI.
+    dataset = FigshareLoader.load_dataset("nanoplastics_individual")
+    assert dataset.spectra.shape == (1000, 467)
+    assert dataset.targets.shape == (1000,)
+    assert dataset.target_names == ["PE", "PMMA", "PS", "PTFE", "PVC"]
+    assert len(dataset.raman_shifts) == 467
+    assert dataset.raman_shifts[0] == 500.0
+    assert dataset.raman_shifts[-1] == 1799.0
+    # 200 individual particles per polymer.
+    for i, name in enumerate(dataset.target_names):
+        assert int((dataset.targets == i).sum()) == 200, name
+    # One spectrum per particle -- no grouping structure.
+    assert dataset.group_ids is None
+    assert not np.isnan(dataset.spectra).any()
+    assert (dataset.spectra > 0).all()
+
