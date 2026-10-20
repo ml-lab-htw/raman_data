@@ -71,15 +71,24 @@ class DataverseLoader(BaseLoader):
                     "of surgically resected soft tissue from 7 patients, measured as 51x51 maps over 100 x 100 µm. "
                     "Target: tissue type (WHO classification), 8 classes: fat, muscle and skin (normal), leiomyoma "
                     "(benign), myxoid liposarcoma, high-grade pleomorphic liposarcoma, leiomyosarcoma and high-grade "
-                    "myxofibrosarcoma (malignant). Group ids are the 18 patient x tissue files; the map of each "
-                    "spectrum is not published."
+                    "myxofibrosarcoma (malignant). Leiomyoma, myxoid liposarcoma, leiomyosarcoma and high-grade "
+                    "myxofibrosarcoma each come from a single patient, so for them grouped splits measure "
+                    "generalisation across regions of one specimen, not across patients. Three maps (P3 muscle, "
+                    "P3 pleomorphic liposarcoma, P4 myxoid liposarcoma) are partial: spectra with artefacts (tissue "
+                    "contamination, ink) were removed in WiRE. Group ids are the 18 patient x tissue files; the map "
+                    "of each spectrum is not published yet."
                 ),
             },
             # One group per patient x tissue file, the finest unit the data identifies. Four classes
             # (LEM, MLS, LEI, HMS) come from a single file each.
             is_grouped=True,
             has_missing_labels=False,
-            embedded_preprocessing="min-max normalized to [0, 1] per spectrum (source-applied)",
+            embedded_preprocessing=(
+                "fifth-order polynomial baseline correction, median-filter cosmic-ray removal, Savitzky-Golay "
+                "smoothing (polynomial order 3) and min-max normalization to [0, 1] per spectrum in Renishaw WiRE, "
+                "then interpolation to a 1 cm\u207b\u00b9 grid and cropping to 400-1,800 cm\u207b\u00b9 "
+                "(source-applied, per the authors)"
+            ),
         ),
     }
     logger = logging.getLogger(__name__)
