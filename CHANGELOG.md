@@ -11,6 +11,15 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `water_quality_ions`: raw Raman spectra of aqueous nitrate/nitrite/
+  sulphate solutions for multi-analyte concentration quantification
+  (Luciani et al. 2026, *Data in Brief*, doi:10.1016/j.dib.2026.113319;
+  data release doi:10.17632/cxf3zxsc3k.3, Mendeley Data, CC BY 4.0).
+  694 spectra (401–3,898 cm⁻¹, 1,019 points, 532 nm, Horiba iHR320)
+  covering single (289), binary (215) and ternary (190) mixtures in
+  ultrapure water; 3-target regression (mg/L) — nitrate 122–30,667,
+  nitrite 250–15,333, sulphate 253–16,907 (0 = analyte absent).
+  Group ids are the 70 prepared solutions (each measured 9–10 times).
 - `breast_cancer_subtypes`: label-free Raman spectra of ex vivo human
   breast tissue for histological subtype classification — normal vs.
   invasive ductal carcinoma (IDC) vs. invasive lobular carcinoma (ILC)
