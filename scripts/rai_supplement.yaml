@@ -3807,6 +3807,57 @@ sers_gna_bacteria:
   rai:hasSyntheticData: false
   rai:personalSensitiveInformation: No personal or sensitive information is included. All spectra originate
     from cultured bacterial samples without individual human identifiers.
+sers_pesticide_produce:
+  prov:wasDerivedFrom: https://doi.org/10.1021/acsami.4c17777
+  prov:wasGeneratedBy: 'Data collection: surface-enhanced Raman scattering (SERS) spectra of pesticide-spiked
+    fresh produce (spinach and strawberry) from the SERSFormer2 repository (Hegde, Hajikhani, Snyder, Cheng
+    & Lin 2025, ACS Appl. Mater. Interfaces 17(1):2018-2031, doi:10.1021/acsami.4c17777). 33 spectra covering
+    a pruned subset of the paper''s 10+ mixture panel: a spinach control (No_pest_present, 3 spectra), a
+    spinach carbophenothion+oxamyl 50:50 mixture (5 concentration levels x 3) and a strawberry carbophenothion+phosmet
+    50:50 mixture (5 levels x 3). Each CSV is a 1,556-point native-axis export over ~500-2,000 cm^-1; the
+    loader resamples every spectrum onto the common 501-1,999 cm^-1 @1 cm^-1 grid (1,499 points), which
+    all files fully cover (no extrapolation). Annotation: the per-pesticide concentration (ppm) is derived
+    from the folder structure (mixture name + concentration directory, halved for the 50:50 ratio) following
+    the authors'' Dataset.py; no human labelling of spectra was involved. The repository is GPL-3.0 licensed
+    and served as a commit-pinned archive (bee22a7, size + sha256 pinned).'
+  rai:dataAnnotationProtocol: Each spectrum's target is the per-pesticide concentration in ppm for the pesticides
+    in its mixture folder (0 for absent pesticides and for the control), derived from the deposit's folder
+    names (mixture + concentration level, halved for the 50:50 mixing ratio) as the authors' code does;
+    no human labelling of spectra was involved.
+  rai:dataBiases: 'Single lab, single instrument, single substrate: all 33 spectra come from one SERS campaign
+    on fresh produce, so results may not generalise to other instruments, substrates or produce batches.
+    The public deposit is a pruned subset only 3 of the paper''s 5 pesticides (carbophenothion, oxamyl,
+    phosmet; coumaphos and thiabendazole are absent) and only 2 mixture types, so the full 10+ mixture panel
+    is not represented. The three spectra of each condition are replicates of the same spiked sample (group_ids
+    = condition), so ungrouped k-fold CV would leak. SERS intensity varies with substrate spot and analyte
+    concentration, so absolute levels are in arbitrary units. The set is small (33 spectra), so estimates
+    have high variance.'
+  rai:dataCollection: 'SERS measurements of pesticide-spiked fresh produce: 33 spectra over a spinach control,
+    a spinach carbophenothion+oxamyl mixture and a strawberry carbophenothion+phosmet mixture, each at 5
+    concentration levels (3 replicates per level) plus the control. Native 1,556-point spectra over ~500-2,000
+    cm^-1; excitation wavelength and instrument are not recorded in the repository.'
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Only 33 spectra (3 of the paper's 5 pesticides, 2 mixture types), a pruned demo subset
+    of the full 10+ mixture panel; the paper's models were trained on data not fully released. Replicates
+    within a condition share one spiked sample, so group-aware (leave-one-condition-out) CV is the honest
+    split (11 groups of 3). Excitation wavelength and instrument model are not recorded in the repository.
+    The multi-label presence task is only derivable (concentration > 0) because the concentration target
+    is shipped; the two absent pesticides (coumaphos, thiabendazole) are not representable. The repository
+    is GPL-3.0 (copyleft) with no separate data licence statement.
+  rai:dataPreprocessingProtocol: None in the loader beyond resampling onto the common 501-1,999 cm^-1 @1
+    cm^-1 grid. The CSVs store raw instrument intensities (arbitrary units, negative baseline-subtracted
+    points); the authors' log1p/thresholding/Hann-window convolution (Dataset.py) is model-side preprocessing
+    and is not applied.
+  rai:dataSocialImpact: Supports research into rapid, label-free detection and quantification of pesticide
+    residues on fresh produce (food safety); any regulatory or consumer-facing use requires validation across
+    produce, pesticides, lots and instruments.
+  rai:dataUseCases: Multi-output regression of per-pesticide concentration (ppm) for carbophenothion, oxamyl
+    and phosmet from a single SERS spectrum; the multi-label presence task is derivable (pesticide present
+    iff concentration > 0; the control is the all-zero row). Group-aware CV is leave-one-condition-out (11
+    groups of 3).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All spectra originate
+    from agricultural produce samples without any individual human identifiers.
 single_cell_prokaryotes:
   prov:wasDerivedFrom: https://data.mendeley.com/datasets/8cd34fckgt/1
   prov:wasGeneratedBy: 'Data collection: Laboratory measurements on biological materials including microorganisms, cell

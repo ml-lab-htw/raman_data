@@ -868,3 +868,52 @@ def test_sers_gna_bacteria():
     assert dataset.spectra.max() < 15000
     assert not np.isnan(dataset.spectra).any()
 
+
+def test_sers_pesticide_produce():
+    dataset = GitHubLoader.load_dataset("sers_pesticide_produce")
+    # 33 SERS spectra of pesticide-spiked fresh produce (Hegde 2025,
+    # SERSFormer2): a spinach control, a spinach carbophenothion+oxamyl
+    # 50:50 mixture and a strawberry carbophenothion+phosmet 50:50
+    # mixture, 3 replicate spectra per condition. Common 501-1,999
+    # cm^-1 @1 grid (1,499 points).
+    assert dataset.spectra.shape == (33, 1499)
+    assert dataset.raman_shifts[0] == pytest.approx(501.0)
+    assert dataset.raman_shifts[-1] == pytest.approx(1999.0)
+    assert np.allclose(np.diff(dataset.raman_shifts), 1.0)
+    # Multi-output regression: per-pesticide concentration (ppm) for
+    # the three pesticides present in the public deposit.
+    assert dataset.targets.shape == (33, 3)
+    assert list(dataset.target_names) == [
+        "carbophenothion", "oxamyl", "phosmet"
+    ]
+    # 11 conditions (produce x mixture x concentration level), 3
+    # replicate spectra each.
+    g = np.asarray(dataset.group_ids)
+    assert g.shape == (33,)
+    per_group = collections.Counter(g.tolist())
+    assert len(per_group) == 11
+    assert all(c == 3 for c in per_group.values())
+    # All spectra of a condition share the same target row.
+    for c in np.unique(g):
+        assert np.allclose(dataset.targets[g == c], dataset.targets[g == c][0])
+    # The 50:50 folders halve the nominal level, so the per-pesticide
+    # levels are 0.25/0.5/1.0/2.5/5.0 ppm (0 = absent).
+    t = dataset.targets
+    levels = {0.25, 0.5, 1.0, 2.5, 5.0}
+    for j in range(3):
+        nz = t[:, j][t[:, j] > 0]
+        assert set(np.round(nz, 3)) == levels
+    # carbophenothion is in both mixtures (30), oxamyl spinach only
+    # (15), phosmet strawberry only (15).
+    assert int((t[:, 0] > 0).sum()) == 30
+    assert int((t[:, 1] > 0).sum()) == 15
+    assert int((t[:, 2] > 0).sum()) == 15
+    # The spinach control is the all-zero row.
+    assert int((t.sum(axis=1) == 0).sum()) == 3
+    # Raw as-deposited intensities: arbitrary units, negative
+    # baseline-subtracted points down to ~-17, maxima ~7.8e3.
+    assert dataset.spectra.min() < 0
+    assert dataset.spectra.max() < 8000
+    assert not np.isnan(dataset.spectra).any()
+    assert not np.isnan(dataset.targets).any()
+

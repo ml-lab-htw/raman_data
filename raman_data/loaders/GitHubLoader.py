@@ -351,6 +351,98 @@ class GitHubLoader(BaseLoader):
             # instrument file of the same strain; no missing values.
             has_missing_labels=False,
         ),
+        "sers_pesticide_produce": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="sers_pesticide_produce",
+            name="SERS Pesticide Mixtures in Fresh Produce (Hegde 2025)",
+            short_name="SERS Pesticide Produce",
+            license="GPL-3.0",
+            loader=lambda cache_path: GitHubLoader._load_sers_pesticide_produce(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "SERS spectra of pesticide mixtures in spinach and "
+                    "strawberry (Hegde et al. 2025, ACS Appl. Mater. "
+                    "Interfaces; the SERSFormer2 repository)"
+                ),
+                "source": "https://github.com/jianlin-cheng/SERSFormer2",
+                "paper": "https://doi.org/10.1021/acsami.4c17777",
+                "bibtex": "@article{Hegde_2025, title={Leveraging SERS and Transformer Models for Simultaneous Detection of Multiple Pesticides in Fresh Produce}, volume={17}, number={1}, pages={2018--2031}, url={https://doi.org/10.1021/acsami.4c17777}, DOI={10.1021/acsami.4c17777}, journal={ACS Applied Materials \\& Interfaces}, author={Hegde, Akshata and Hajikhani, Mehdi and Snyder, John and Cheng, Jianlin and Lin, Mengshi}, year={2025}, month=jan}",
+                "citation": [
+                    "Hegde, A., Hajikhani, M., Snyder, J., Cheng, J., and "
+                    "Lin, M. (2025). Leveraging SERS and transformer "
+                    "models for simultaneous detection of multiple "
+                    "pesticides in fresh produce. ACS Applied Materials "
+                    "& Interfaces, 17(1), 2018-2031. "
+                    "https://doi.org/10.1021/acsami.4c17777",
+                ],
+                "description": (
+                    "33 SERS spectra of pesticide-spiked fresh produce "
+                    "from the SERSFormer2 repository (Hegde et al. "
+                    "2025, ACS Appl. Mater. Interfaces 17(1):2018-2031, "
+                    "doi:10.1021/acsami.4c17777; the repo's README "
+                    "cites 2024, the journal issue is 2025-01). The "
+                    "public deposit is a pruned subset of the paper's "
+                    "10+ mixture panel: a spinach control "
+                    "(No_pest_present, 3 spectra), a spinach "
+                    "carbophenothion+oxamyl 50:50 mixture (5 "
+                    "concentration levels x 3) and a strawberry "
+                    "carbophenothion+phosmet 50:50 mixture (5 levels "
+                    "x 3). Multi-output regression: the per-pesticide "
+                    "concentration in ppm for the three pesticides "
+                    "present in the deposit (carbophenothion, oxamyl, "
+                    "phosmet); the 50:50 folders halve the nominal "
+                    "level, so the per-pesticide levels are "
+                    "0.25/0.5/1.0/2.5/5.0 ppm (0 = absent). The "
+                    "paper's multi-label presence task is derivable "
+                    "(a pesticide is present iff its concentration > "
+                    "0; the control is the all-zero row). The other "
+                    "two members of the paper's 5-pesticide panel "
+                    "(coumaphos, thiabendazole) have no spectra in the "
+                    "public deposit, so they are not shipped as "
+                    "degenerate (constant-zero) targets. Native axes "
+                    "are 1,556 points over ~500-2,000 cm^-1 with three "
+                    "slightly different batch grids; the loader "
+                    "resamples every spectrum onto the common "
+                    "501-1,999 cm^-1 @1 cm^-1 grid (1,499 points), "
+                    "which all 33 files fully cover (no "
+                    "extrapolation). Intensities are raw as deposited "
+                    "(arbitrary units, negative baseline-subtracted "
+                    "points down to ~-17, maxima ~7.8e3); the "
+                    "authors' log1p/threshold/Hann-convolution "
+                    "(Dataset.py) is model-side preprocessing, not "
+                    "applied here. group_ids = condition (produce x "
+                    "mixture x concentration level, 11 groups of 3: "
+                    "the three spectra of a condition are replicate "
+                    "SERS measurements, so grouped CV is "
+                    "leave-one-condition-out). The repository is "
+                    "GPL-3.0 licensed (code and data shipped "
+                    "together, no separate data licence stated); the "
+                    "data are served as a commit-pinned archive "
+                    "(bee22a7, size + sha256 pinned)."
+                ),
+            },
+            # Checked: the three spectra of each (produce, mixture,
+            # concentration) condition are replicate measurements of
+            # the same spiked sample; condition is the correlated
+            # unit (11 groups of 3).
+            is_grouped=True,
+            # Checked: every file carries a full target row (all three
+            # pesticide concentrations defined, 0 for absent); no
+            # missing values.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None beyond resampling onto the common 501-1,999 "
+                "cm^-1 @1 cm^-1 grid (1,499 points). The CSVs store "
+                "raw instrument intensities (arbitrary units, "
+                "negative baseline-subtracted points); the authors' "
+                "log1p/thresholding/Hann-window convolution "
+                "(Dataset.py) is model-side preprocessing and is not "
+                "applied."
+            ),
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -1085,5 +1177,187 @@ class GitHubLoader(BaseLoader):
             axis_ref,
             targets,
             class_names,
+            group_ids,
+        )
+
+    # ------------------------------------------------------------------
+    # sers_pesticide_produce (GitHub jianlin-cheng/SERSFormer2, GPL-3.0)
+    # ------------------------------------------------------------------
+    # Hegde et al. 2025, "Leveraging SERS and Transformer Models for
+    # Simultaneous Detection of Multiple Pesticides in Fresh Produce"
+    # (ACS Appl. Mater. Interfaces 17(1):2018-2031,
+    # doi:10.1021/acsami.4c17777).
+    #
+    # The public repository is a pruned subset of the paper's 10+
+    # mixture panel: 33 SERS spectra of pesticide-spiked fresh produce
+    # (a spinach control, a spinach carbophenothion+oxamyl 50:50
+    # mixture, and a strawberry carbophenothion+phosmet 50:50 mixture),
+    # 3 replicate spectra per (produce, mixture, concentration)
+    # condition. Each CSV is a 1,556-point native-axis export
+    # (wavenumber index column + one intensity column). The loader
+    # resamples every spectrum onto the common 501-1,999 cm^-1 @1 grid
+    # (1,499 points) and reports the per-pesticide concentration (ppm)
+    # for the three pesticides present in the deposit as a multi-output
+    # regression target; the paper's multi-label presence task is
+    # derivable (a pesticide is present iff its concentration > 0).
+    _SFP2_REPO = "jianlin-cheng/SERSFormer2"
+    _SFP2_COMMIT = "bee22a7067acc5108b0477c694d5dd3a792dd569"
+    _SFP2_ZIP_URL = (
+        f"https://github.com/{_SFP2_REPO}/archive/{_SFP2_COMMIT}.zip"
+    )
+    _SFP2_ZIP = "sersformer2.zip"
+    _SFP2_ZIP_SIZE = 4019521
+    _SFP2_ZIP_SHA256 = (
+        "0a40e986a73a89b495633dea5e27f339ccfb3040979591a2b4310a029157e0bc"
+    )
+    _SFP2_ROOT = f"SERSFormer2-{_SFP2_COMMIT}"
+    _SFP2_DATA_DIR = "Spinach_Strawbery"
+    # Common grid: 501-1,999 cm^-1 @1 cm^-1 (1,499 points); every
+    # native axis (1,556 pts, ~500-2,000 cm^-1) fully covers it, so
+    # no extrapolation is involved.
+    _SFP2_GRID = np.arange(501.0, 1999.0 + 0.5, 1.0)
+    # The three pesticides present in the public deposit (the paper's
+    # other two panel members, coumaphos and thiabendazole, have no
+    # spectra here, so they are not shipped as degenerate targets).
+    _SFP2_TARGETS = ("carbophenothion", "oxamyl", "phosmet")
+    _SFP2_N_SPECTRA = 33
+    _SFP2_N_GROUPS = 11
+    _SFP2_NATIVE_POINTS = 1556
+
+    @staticmethod
+    def _load_sers_pesticide_produce(cache_path: str):
+        """
+        Download (if needed) and load the SERSFormer2 pesticide
+        dataset: 33 SERS spectra of pesticide-spiked fresh produce on
+        the common 501-1,999 cm^-1 @1 cm^-1 grid (1,499 points), with
+        a 3-column regression target (per-pesticide concentration in
+        ppm for carbophenothion, oxamyl and phosmet).
+
+        group_ids = condition (produce x mixture x concentration
+        level; 11 groups of 3 replicate spectra).
+
+        Returns spectra, raman_shifts, targets, target_names,
+        group_ids.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        zip_file = os.path.join(cache_path, GitHubLoader._SFP2_ZIP)
+        if (
+            os.path.exists(zip_file)
+            and os.path.getsize(zip_file) != GitHubLoader._SFP2_ZIP_SIZE
+        ):
+            os.remove(zip_file)
+        result = LoaderTools.download(
+            url=GitHubLoader._SFP2_ZIP_URL,
+            out_dir_path=cache_path,
+            out_file_name=GitHubLoader._SFP2_ZIP,
+            hash_target=GitHubLoader._SFP2_ZIP_SHA256,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                "[!] sers_pesticide_produce: archive download failed "
+                "(network error or checksum mismatch). See logs."
+            )
+        repo_root = os.path.join(cache_path, GitHubLoader._SFP2_ROOT)
+        if not os.path.isdir(repo_root):
+            LoaderTools.extract_zip_file_content(zip_file)
+        data_root = os.path.join(repo_root, GitHubLoader._SFP2_DATA_DIR)
+        if not os.path.isdir(data_root):
+            raise RuntimeError(
+                "[!] sers_pesticide_produce: the archive layout "
+                f"changed (no {GitHubLoader._SFP2_DATA_DIR}/ folder)."
+            )
+
+        files = []
+        for _dp, _dn, fn in os.walk(data_root):
+            for f in fn:
+                if f.upper().endswith(".CSV"):
+                    files.append(os.path.join(_dp, f))
+        if len(files) != GitHubLoader._SFP2_N_SPECTRA:
+            raise RuntimeError(
+                f"[!] sers_pesticide_produce: expected "
+                f"{GitHubLoader._SFP2_N_SPECTRA} spectra, found "
+                f"{len(files)} (archive layout changed?)."
+            )
+
+        grid = GitHubLoader._SFP2_GRID
+        spectra_list = []
+        targets_list = []
+        group_list = []
+        for f in sorted(files):
+            parts = os.path.dirname(
+                os.path.relpath(f, data_root)
+            ).split(os.sep)
+            produce = parts[0]
+            ratio = parts[1]
+            if parts[2] == "No_pest_present":
+                # control: produce/ratio/No_pest_present/No_pest_present
+                mixture = "No_pest_present"
+                conc_tag = "control"
+                conc = 0.0
+                present = []
+            else:
+                mixture = parts[2]
+                conc_dir = parts[3]
+                conc_tag = conc_dir
+                conc = float(
+                    re.findall(r"[-+]?\d*\.\d+|\d+", conc_dir)[0]
+                ) * (float(ratio.split("_")[0]) / 100.0)
+                present = mixture.split("_")
+            df = pd.read_csv(f, header=None, index_col=0)
+            x = df.index.to_numpy(dtype=float)
+            y = df.iloc[:, 0].to_numpy(dtype=float)
+            if (
+                x.shape[0] != GitHubLoader._SFP2_NATIVE_POINTS
+                or not np.all(np.diff(x) > 0)
+                or x[0] > grid[0]
+                or x[-1] < grid[-1]
+            ):
+                raise RuntimeError(
+                    f"[!] sers_pesticide_produce: {f} does not carry "
+                    f"a {GitHubLoader._SFP2_NATIVE_POINTS}-point axis "
+                    "covering the 501-1,999 cm^-1 grid "
+                    f"({x[0]:.1f}..{x[-1]:.1f})."
+                )
+            if np.isnan(y).any():
+                raise RuntimeError(
+                    f"[!] sers_pesticide_produce: NaN values in {f}."
+                )
+            spectra_list.append(np.interp(grid, x, y))
+            targets_list.append(
+                np.array(
+                    [
+                        conc if p in present else 0.0
+                        for p in GitHubLoader._SFP2_TARGETS
+                    ],
+                    dtype=float,
+                )
+            )
+            group_list.append(f"{produce}_{mixture}_{conc_tag}")
+
+        if len(set(group_list)) != GitHubLoader._SFP2_N_GROUPS:
+            raise RuntimeError(
+                "[!] sers_pesticide_produce: expected "
+                f"{GitHubLoader._SFP2_N_GROUPS} conditions, found "
+                f"{len(set(group_list))}."
+            )
+        spectra = np.asarray(spectra_list, dtype=float)
+        targets = np.asarray(targets_list, dtype=float)
+        group_ids = np.asarray(group_list)
+        if np.isnan(spectra).any() or np.isnan(targets).any():
+            raise RuntimeError(
+                "[!] sers_pesticide_produce: NaN values."
+            )
+        GitHubLoader.logger.debug(
+            f"Loaded sers_pesticide_produce: {spectra.shape[0]} "
+            f"spectra x {spectra.shape[1]} points, "
+            f"{targets.shape[1]} targets, "
+            f"{len(set(group_ids.tolist()))} conditions"
+        )
+        return (
+            spectra,
+            grid,
+            targets,
+            list(GitHubLoader._SFP2_TARGETS),
             group_ids,
         )

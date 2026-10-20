@@ -11,6 +11,25 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `sers_pesticide_produce`: 33 SERS spectra of pesticide-spiked fresh
+  produce (Hegde et al. 2025, *ACS Appl. Mater. Interfaces* 17(1):
+  2018-2031, doi:10.1021/acsami.4c17777; the SERSFormer2 repo). The
+  public deposit is a pruned subset of the paper's 10+ mixture panel:
+  a spinach control, a spinach carbophenothion+oxamyl 50:50 mixture
+  and a strawberry carbophenothion+phosmet 50:50 mixture (5
+  concentration levels x 3 replicates each). Multi-output regression
+  on the per-pesticide concentration (ppm) for the three pesticides
+  present in the deposit (carbophenothion, oxamyl, phosmet; levels
+  0.25/0.5/1.0/2.5/5.0 ppm after halving the 50:50 nominal level, 0 =
+  absent); the paper's multi-label presence task is derivable (conc >
+  0). The other two panel members (coumaphos, thiabendazole) have no
+  spectra in the deposit, so they are not shipped as degenerate
+  targets. Native 1,556-pt axes (~500-2,000 cm^-1, three batch grids)
+  resampled onto a common 501-1,999 cm^-1 @1 grid (1,499 pts, no
+  extrapolation); raw intensities as deposited (the authors'
+  log1p/threshold/Hann steps are model-side). group_ids = condition
+  (produce x mixture x level; 11 groups of 3). GPL-3.0 repo, served as
+  a commit-pinned archive (size + sha256 pinned).
 - `sers_gna_bacteria`: 117 raw SERS spectra (9 bacterial strains x 13;
   3 each of E. coli, P. aeruginosa, S. aureus) on an anisotropic gold
   nanorod array (Gulmus et al. 2026, Zenodo v1.0.1,

@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "SERS spectra of pesticide mixtures in spinach and strawberry (Hegde et al. 2025, ACS Appl. Mater. Interfaces; the SERSFormer2 repository)",
+  "description": "33 SERS spectra of pesticide-spiked fresh produce from the SERSFormer2 repository (Hegde et al. 2025, ACS Appl. Mater. Interfaces 17(1):2018-2031, doi:10.1021/acsami.4c17777; the repo's README cites 2024, the journal issue is 2025-01). The public deposit is a pruned subset of the paper's 10+ mixture panel: a spinach control (No_pest_present, 3 spectra), a spinach carbophenothion+oxamyl 50:50 mixture (5 concentration levels x 3) and a strawberry carbophenothion+phosmet 50:50 mixture (5 levels x 3). Multi-output regression: the per-pesticide concentration in ppm for the three pesticides present in the deposit (carbophenothion, oxamyl, phosmet); the 50:50 folders halve the nominal level, so the per-pesticide levels are 0.25/0.5/1.0/2.5/5.0 ppm (0 = absent). The paper's multi-label presence task is derivable (a pesticide is present iff its concentration > 0; the control is the all-zero row). The other two members of the paper's 5-pesticide panel (coumaphos, thiabendazole) have no spectra in the public deposit, so they are not shipped as degenerate (constant-zero) targets. Native axes are 1,556 points over ~500-2,000 cm^-1 with three slightly different batch grids; the loader resamples every spectrum onto the common 501-1,999 cm^-1 @1 cm^-1 grid (1,499 points), which all 33 files fully cover (no extrapolation). Intensities are raw as deposited (arbitrary units, negative baseline-subtracted points down to ~-17, maxima ~7.8e3); the authors' log1p/threshold/Hann-convolution (Dataset.py) is model-side preprocessing, not applied here. group_ids = condition (produce x mixture x concentration level, 11 groups of 3: the three spectra of a condition are replicate SERS measurements, so grouped CV is leave-one-condition-out). The repository is GPL-3.0 licensed (code and data shipped together, no separate data licence stated); the data are served as a commit-pinned archive (bee22a7, size + sha256 pinned).",
+  "url": "https://github.com/jianlin-cheng/SERSFormer2",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression",
+    "SERS"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+  "citeAs": "@article{Hegde_2025, title={Leveraging SERS and Transformer Models for Simultaneous Detection of Multiple Pesticides in Fresh Produce}, volume={17}, number={1}, pages={2018--2031}, url={https://doi.org/10.1021/acsami.4c17777}, DOI={10.1021/acsami.4c17777}, journal={ACS Applied Materials \\& Interfaces}, author={Hegde, Akshata and Hajikhani, Mehdi and Snyder, John and Cheng, Jianlin and Lin, Mengshi}, year={2025}, month=jan}",
+  "citation": "Hegde, A., Hajikhani, M., Snyder, J., Cheng, J., and Lin, M. (2025). Leveraging SERS and transformer models for simultaneous detection of multiple pesticides in fresh produce. ACS Applied Materials & Interfaces, 17(1), 2018-2031. https://doi.org/10.1021/acsami.4c17777",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "sers_pesticide_produce_source",
+      "name": "SERS spectra of pesticide mixtures in spinach and strawberry (Hegde et al. 2025, ACS Appl. Mater. Interfaces; the SERSFormer2 repository)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://github.com/jianlin-cheng/SERSFormer2",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "f7807b41c73e7f7ee9edab882f78f48374aa60384eb51d7c44c871aa4fcb36ca"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "sers_pesticide_produce_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "sers_pesticide_produce_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "sers_pesticide_produce_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "sers_pesticide_produce_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "SERS measurements of pesticide-spiked fresh produce: 33 spectra over a spinach control, a spinach carbophenothion+oxamyl mixture and a strawberry carbophenothion+phosmet mixture, each at 5 concentration levels (3 replicates per level) plus the control. Native 1,556-point spectra over ~500-2,000 cm^-1; excitation wavelength and instrument are not recorded in the repository.",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "None in the loader beyond resampling onto the common 501-1,999 cm^-1 @1 cm^-1 grid. The CSVs store raw instrument intensities (arbitrary units, negative baseline-subtracted points); the authors' log1p/thresholding/Hann-window convolution (Dataset.py) is model-side preprocessing and is not applied.",
+  "rai:dataAnnotationProtocol": "Each spectrum's target is the per-pesticide concentration in ppm for the pesticides in its mixture folder (0 for absent pesticides and for the control), derived from the deposit's folder names (mixture + concentration level, halved for the 50:50 mixing ratio) as the authors' code does; no human labelling of spectra was involved.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from agricultural produce samples without any individual human identifiers.",
+  "rai:dataBiases": "Single lab, single instrument, single substrate: all 33 spectra come from one SERS campaign on fresh produce, so results may not generalise to other instruments, substrates or produce batches. The public deposit is a pruned subset only 3 of the paper's 5 pesticides (carbophenothion, oxamyl, phosmet; coumaphos and thiabendazole are absent) and only 2 mixture types, so the full 10+ mixture panel is not represented. The three spectra of each condition are replicates of the same spiked sample (group_ids = condition), so ungrouped k-fold CV would leak. SERS intensity varies with substrate spot and analyte concentration, so absolute levels are in arbitrary units. The set is small (33 spectra), so estimates have high variance.",
+  "rai:dataLimitations": "Only 33 spectra (3 of the paper's 5 pesticides, 2 mixture types), a pruned demo subset of the full 10+ mixture panel; the paper's models were trained on data not fully released. Replicates within a condition share one spiked sample, so group-aware (leave-one-condition-out) CV is the honest split (11 groups of 3). Excitation wavelength and instrument model are not recorded in the repository. The multi-label presence task is only derivable (concentration > 0) because the concentration target is shipped; the two absent pesticides (coumaphos, thiabendazole) are not representable. The repository is GPL-3.0 (copyleft) with no separate data licence statement.",
+  "rai:dataSocialImpact": "Supports research into rapid, label-free detection and quantification of pesticide residues on fresh produce (food safety); any regulatory or consumer-facing use requires validation across produce, pesticides, lots and instruments.",
+  "rai:dataUseCases": "Multi-output regression of per-pesticide concentration (ppm) for carbophenothion, oxamyl and phosmet from a single SERS spectrum; the multi-label presence task is derivable (pesticide present iff concentration > 0; the control is the all-zero row). Group-aware CV is leave-one-condition-out (11 groups of 3).",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: surface-enhanced Raman scattering (SERS) spectra of pesticide-spiked fresh produce (spinach and strawberry) from the SERSFormer2 repository (Hegde, Hajikhani, Snyder, Cheng & Lin 2025, ACS Appl. Mater. Interfaces 17(1):2018-2031, doi:10.1021/acsami.4c17777). 33 spectra covering a pruned subset of the paper's 10+ mixture panel: a spinach control (No_pest_present, 3 spectra), a spinach carbophenothion+oxamyl 50:50 mixture (5 concentration levels x 3) and a strawberry carbophenothion+phosmet 50:50 mixture (5 levels x 3). Each CSV is a 1,556-point native-axis export over ~500-2,000 cm^-1; the loader resamples every spectrum onto the common 501-1,999 cm^-1 @1 cm^-1 grid (1,499 points), which all files fully cover (no extrapolation). Annotation: the per-pesticide concentration (ppm) is derived from the folder structure (mixture name + concentration directory, halved for the 50:50 ratio) following the authors' Dataset.py; no human labelling of spectra was involved. The repository is GPL-3.0 licensed and served as a commit-pinned archive (bee22a7, size + sha256 pinned).",
+  "prov:wasDerivedFrom": "https://doi.org/10.1021/acsami.4c17777"
+}
