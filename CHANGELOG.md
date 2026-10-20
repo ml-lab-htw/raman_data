@@ -43,7 +43,10 @@ Versions follow [Semantic Versioning](https://semver.org/).
   3 mW, 30 s/cell, Nikon 100× NA 1.3. Per-session wavenumber axes are
   interpolated onto a common 710–3,042 cm⁻¹ / 1 cm⁻¹ grid (2,333
   points). Group ids are the 19 acquisition sessions (18 × 40 + 1 mixed
-  culture × 62).
+  culture × 62). In the mixed-culture session the cells were selected
+  by phase-contrast morphology (ground-truth labels, confirmed post
+  hoc by the authors' six-class RF model at 98.4% agreement — not
+  classifier output).
 - `yeast_batch_effects`: spontaneous Raman spectra of desiccated yeast
   cells for strain classification under strong plate-level batch effects
   (Cheveralls et al. 2026, *The Stacks*, doi:10.57844/arcadia-xdmk-yq0w;
@@ -51,9 +54,10 @@ Versions follow [Semantic Versioning](https://semver.org/).
   *S. cerevisiae* (BY4741, YNL141, YGL058) and 6 *S. pombe* (SP286,
   ED666, PDF1, RAD6, DEA2, ARSG) — 75 spectra each (675 total; empty-well
   controls excluded), 235.7–3,653.6 cm⁻¹ at 2,048 points, 785 nm, Wasatch
-  WP-785X-F13-R-IL probe, 3 replicate plates. Group ids are the 27
-  (plate, well) pairs of 25 co-located site spectra; the paper's
-  leave-one-plate-out CV is the intended evaluation protocol.
+  WP-785X-F13-R-IL probe, 3 replicate plates. Group ids are the 3
+  desiccation plates (225 spectra each = 9 strain wells × 25 co-located
+  site spectra) — the paper's batch unit, so a grouped 3-fold split is
+  exactly its leave-one-plate-out CV protocol.
 - `water_quality_ions`: raw Raman spectra of aqueous nitrate/nitrite/
   sulphate solutions for multi-analyte concentration quantification
   (Luciani et al. 2026, *Data in Brief*, doi:10.1016/j.dib.2026.113319;
@@ -108,6 +112,15 @@ Versions follow [Semantic Versioning](https://semver.org/).
   onto 1/2/4/8 cm⁻¹ grids over 720-1,800 cm⁻¹ — a built-in
   instrument-resolution-shift benchmark (the paper trains at 1 cm⁻¹ and
   evaluates at 2/4/8 cm⁻¹).
+- `microplastics_training_clean`: the un-augmented core of the same Lei
+  et al. 2022 training set — one representative spectrum per source
+  measurement: 186 measurements of 14 plastic types from 108 supplier
+  samples (78 samples measured twice), each reduced to the row-wise
+  mean of its 20 augmented variants (averaging cancels the random
+  noise of the augmentation; absolute amplitude is arbitrary, as for
+  all deposited variants). 720–1,800 cm⁻¹ on the paper's native
+  1 cm⁻¹ training grid (1,081 points). Group ids are the 108 supplier
+  sample ids (label-pure).
 - `raman_mpi`: RaMPI — Raman Maps for Plastics Identification (same paper and
   Borealis release as `raman_spi`, doi:10.1038/s41597-026-07103-8 /
   doi:10.5683/SP3/8UQQQN, CC-BY 4.0). Per-pixel spectra from 34 Raman maps
@@ -118,7 +131,10 @@ Versions follow [Semantic Versioning](https://semver.org/).
   onto a common 710–1,827 cm⁻¹ / 1 cm⁻¹ grid. Raw spectra as exported from
   Renishaw WiRE (no preprocessing). Group ids are the 34 maps — pixels within
   a map are spatially correlated, but note the groups are *not* label-pure
-  (mixed-material maps contain several classes by design).
+  (mixed-material maps contain several classes by design). Maps per
+  class: PE 8, POM 7, ABS/PMMA/PS/PTFE 6, nylon/PP/PVC 5,
+  polyester/PET 4, PC 3, polyurethane 2, silicone 2 — the last two
+  fall below the 3-maps-per-class minimum for grouped 3-fold CV.
 - `raman_spi`: RaSPI — Raman Spectra for Plastics Identification (Hogan et al. 2026,
   *Scientific Data* 13:765, doi:10.1038/s41597-026-07103-8; data release
   doi:10.5683/SP3/8UQQQN, Borealis, CC-BY 4.0). 396 fully-labeled spectra of 14
@@ -130,7 +146,47 @@ Versions follow [Semantic Versioning](https://semver.org/).
   subtraction, truncation, 1 cm⁻¹ interpolation, 0–1 normalization) is documented
   in `embedded_preprocessing`. 272 physical samples — the trailing letter in each
   spectrum id (PE1a, PE1b, PET4c …) marks repeated measurements of the same
-  sample — exposed as `group_ids` (`is_grouped=True`).
+  sample — exposed as `group_ids` (`is_grouped=True`). Same lab and
+  much of the authorship as the Lei et al. 2022
+  `microplastics_training_*` keys (Smith group, U. Waterloo).
+
+### Changed
+
+- `microplastics_training_*` descriptions now lead with the
+  augmentation fact: the effective sample size is 186 measured spectra
+  (108 supplier samples), not 3,720 rows.
+- `yeast_batch_effects` group ids are now the 3 desiccation plates
+  (225 spectra each) instead of the 27 (plate, well) cells: the plate
+  is the paper's batch unit, so grouped 3-fold CV is exactly the
+  paper's leave-one-plate-out protocol (the finer well-level structure
+  is documented in the description).
+- `raman_mpi` description now records the maps per class (polyurethane
+  and silicone appear in only 2 maps each — below the
+  3-maps-per-class minimum for grouped 3-fold CV).
+- `single_cell_prokaryotes` description now documents how the 62
+  mixed-culture cells were labeled: phase-contrast morphology
+  selection (ground truth), confirmed post hoc by the authors' six-class
+  RF model at 98.4% agreement.
+- `raman_spi` and `microplastics_training_*` descriptions note the
+  shared lab and authorship (Smith group, U. Waterloo).
+- License spelling normalized to `CC BY 4.0` (`raman_spi`, `raman_mpi`,
+  `microplastics_training_*`, `stroke_urine_sers_*`,
+  `breast_cancer_subtypes`).
+
+### Fixed
+
+- `import raman_data` no longer fails when the optional `renishawWiRE`
+  package is missing: the import is now lazy, inside the
+  stroke-urine-SERS loader, which raises an informative
+  "install renishawWiRE" error instead.
+- `LoaderTools.extract_rar_file_content` no longer silently skips
+  extraction with the default target: the "already extracted" fast path
+  always saw the archive itself (or sibling archives) in the directory.
+  The default is now a dedicated `<archive name>_extracted`
+  subdirectory.
+- Mendeley Data loaders now fall back to their local cache (with a
+  warning) when the file-listing API is unreachable (e.g. the WAF 403
+  on datacenter IPs) instead of failing on fully cached datasets.
 
 ### Fixed
 

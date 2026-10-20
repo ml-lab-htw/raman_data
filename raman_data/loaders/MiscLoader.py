@@ -271,7 +271,7 @@ class MiscLoader(BaseLoader):
             id="raman_spi",
             name="RaSPI: Raman Spectra for Plastics Identification",
             short_name="RaSPI Plastics",
-            license="CC-BY 4.0",
+            license="CC BY 4.0",
             loader=lambda cache_path: MiscLoader._load_raman_spi(cache_path),
             metadata={
                 "full_name": "Raman Spectra for Plastics Identification (RaSPI)",
@@ -281,7 +281,7 @@ class MiscLoader(BaseLoader):
                 "citation": [
                     "Hogan, Úna E., Voss, H. Ben., Lei, Benjamin, Bec, Avery E., Feng, Xinyi, Smith, Rodney (2026). Raman spectra for plastics identification (RaSPI) and Raman maps for plastics identification (RaMPI) datasets. Scientific Data, 13, 765."
                 ],
-                "description": "Baseline-corrected Raman spectra of 14 plastic types (polyethylene, polypropylene, PTFE, polystyrene, nylon, silicone, PMMA, POM, polyester, polyurethane, PVC, PET, polycarbonate, ABS) acquired on a Renishaw inVia Raman microscope: 226 spectra at 633 nm (1800 l/mm grating) and 176 at 523 nm (2400 l/mm grating). The deposited RaSPI_processed.csv is uniformly gridded at 1 cm^-1 over 225-3949 cm^-1 (3725 points), polynomial-baseline-subtracted and 0-1 normalized. Samples mix pristine commercial/retail plastics with environmental microplastics (bottle caps, bags, fragments) from Pollution Probe Great Lakes Seabin collections. The deposit's spectra file holds 402 rows, but 6 metadata rows lack a spectrum, 4 spectra lack metadata, and PE1a/PE1b are stored twice, leaving a fully-labeled usable set of 396 spectra from 272 physical samples (159 measured once, 104 twice, 9 three to four times). Each spectrum ID is '<plastic><number>' plus a trailing letter (PE1a, PE1b, PET4c...) marking repeated measurements of the same physical sample; the loader exposes those sample ids as group_ids. The raw (unprocessed) spectra are available in the same deposit as RaSPI_raw.csv.",
+                "description": "Baseline-corrected Raman spectra of 14 plastic types (polyethylene, polypropylene, PTFE, polystyrene, nylon, silicone, PMMA, POM, polyester, polyurethane, PVC, PET, polycarbonate, ABS) acquired on a Renishaw inVia Raman microscope: 226 spectra at 633 nm (1800 l/mm grating) and 176 at 523 nm (2400 l/mm grating). The deposited RaSPI_processed.csv is uniformly gridded at 1 cm^-1 over 225-3949 cm^-1 (3725 points), polynomial-baseline-subtracted and 0-1 normalized. Samples mix pristine commercial/retail plastics with environmental microplastics (bottle caps, bags, fragments) from Pollution Probe Great Lakes Seabin collections. The deposit's spectra file holds 402 rows, but 6 metadata rows lack a spectrum, 4 spectra lack metadata, and PE1a/PE1b are stored twice, leaving a fully-labeled usable set of 396 spectra from 272 physical samples (159 measured once, 104 twice, 9 three to four times). Each spectrum ID is '<plastic><number>' plus a trailing letter (PE1a, PE1b, PET4c...) marking repeated measurements of the same physical sample; the loader exposes those sample ids as group_ids. The raw (unprocessed) spectra are available in the same deposit as RaSPI_raw.csv. Same lab and much of the authorship as Lei et al. 2022 (the microplastics_training_* keys; Smith group, U. Waterloo -- Hogan and Lei co-authored both papers): the commercial-pristine subsets may draw on the same lab collection, though the deposits carry no shared sample ids.",
             },
             # Checked: the trailing-letter sample ids in RaSPI_metadata.csv
             # denote repeated measurements of the same physical plastic
@@ -303,7 +303,7 @@ class MiscLoader(BaseLoader):
             id="raman_mpi",
             name="RaMPI: Raman Maps for Plastics Identification",
             short_name="RaMPI Maps",
-            license="CC-BY 4.0",
+            license="CC BY 4.0",
             loader=lambda cache_path: MiscLoader._load_rampi(cache_path),
             metadata={
                 "full_name": "Raman Maps for Plastics Identification (RaMPI)",
@@ -313,7 +313,7 @@ class MiscLoader(BaseLoader):
                 "citation": [
                     "Hogan, Úna E., Voss, H. Ben., Lei, Benjamin, Bec, Avery E., Feng, Xinyi, Smith, Rodney (2026). Raman spectra for plastics identification (RaSPI) and Raman maps for plastics identification (RaMPI) datasets. Scientific Data, 13, 765."
                 ],
-                "description": "Per-pixel Raman spectra from 34 maps (30 pristine two-material blend maps plus 4 environmental maps of Great Lakes Seabin microplastic samples) acquired on a Renishaw inVia at 633 nm (1800 l/mm grating). Each of the 33,119 pixel spectra was manually assigned by the authors to one of 14 plastic types or 'blank'; this dataset holds the 16,598 plastic-assigned pixels. The native per-map axes (1,017 points, ~710-1,827 cm^-1, non-uniform spacing) are linearly resampled onto a common 1 cm^-1 grid (710-1,827 cm^-1, 1,118 points). Spectra are raw as exported from Renishaw WiRE -- no baseline correction or normalization. group_ids = map: pixels within one map are spatially correlated and must not be split across train/test. The companion 1D point-spectra dataset is raman_spi.",
+                "description": "Per-pixel Raman spectra from 34 maps (30 pristine two-material blend maps plus 4 environmental maps of Great Lakes Seabin microplastic samples) acquired on a Renishaw inVia at 633 nm (1800 l/mm grating). Each of the 33,119 pixel spectra was manually assigned by the authors to one of 14 plastic types or 'blank'; this dataset holds the 16,598 plastic-assigned pixels. The native per-map axes (1,017 points, ~710-1,827 cm^-1, non-uniform spacing) are linearly resampled onto a common 1 cm^-1 grid (710-1,827 cm^-1, 1,118 points). Spectra are raw as exported from Renishaw WiRE -- no baseline correction or normalization. Maps per class: polyethylene 8, polyoxymethylene 7, ABS/PMMA/PS/PTFE 6, nylon/PP/PVC 5, polyester/PET 4, polycarbonate 3, polyurethane 2, silicone 2 -- the last two fall below 3 maps and cannot be split into grouped 3-fold CV by map. group_ids = map: pixels within one map are spatially correlated and must not be split across train/test. The companion 1D point-spectra dataset is raman_spi.",
             },
             # Checked: each Assig file is one Raman map; pixels within a map
             # are spatially adjacent measurements and highly correlated
@@ -335,7 +335,7 @@ class MiscLoader(BaseLoader):
                 id=f"microplastics_training_{res}",
                 name=f"Microplastic Training Set ({res} cm^-1, Lei et al. 2022)",
                 short_name=f"Microplastics {res}",
-                license="CC-BY 4.0",
+                license="CC BY 4.0",
                 loader=lambda cache_path, r=res: MiscLoader._load_lei_microplastics(cache_path, r),
                 metadata={
                     "full_name": f"Microplastic Training Set, {res} cm^-1 grid (Lei et al. 2022)",
@@ -346,18 +346,26 @@ class MiscLoader(BaseLoader):
                         "Lei, B., Bissonnette, J. R., Hogan, U. E., Bec, A. E., Feng, X.-Y., and Smith, R. D. L. (2022). Customizable machine-learning models for rapid microplastic identification using Raman microscopy. Analytical Chemistry, 94(49), 17011-17019."
                     ],
                     "description": (
-                        "3,720 augmented Raman spectra of 14 plastic types "
-                        "(of 4,520 deposited rows -- the 800 synthetically "
-                        "generated blank spectra are excluded) from 186 unique "
-                        "measurements (108 supplier samples) of commercial "
-                        "microplastic particles (spheres, pellets, fragments, "
-                        "films; 15 suppliers) on a Renishaw inVia Reflex "
-                        "(532 nm / 2,400 l/mm or 633 nm / 1,800 l/mm grating). "
+                        "AUGMENTED dataset -- the effective sample size is "
+                        "186 measured spectra (108 supplier samples), not "
+                        "3,720: every deposited row is a synthetic variant, "
+                        "not the measured spectrum. The 3,720 non-blank rows "
+                        "(of 4,520 deposited -- the 800 synthetically "
+                        "generated blank spectra are excluded) are 20 "
+                        "noise/scaling variants of each of 186 measurements "
+                        "of 14 plastic types of commercial microplastic "
+                        "particles (spheres, pellets, fragments, films; 15 "
+                        "suppliers) on a Renishaw inVia Reflex (532 nm / "
+                        "2,400 l/mm or 633 nm / 1,800 l/mm grating). "
                         "The authors applied polynomial baseline subtraction "
                         "and cosmic-ray removal, then a 20x augmentation "
                         "protocol per source spectrum (random noise targeting "
                         "an SNR of 3-15 on the strongest peak, amplitude "
                         "normalization so the maximum falls in 0.3-1.0). "
+                        "microplastics_training_clean holds one representative "
+                        "per measurement (186 spectra, 1 cm^-1 grid). Same "
+                        "lab and much of the authorship as raman_spi/raman_mpi "
+                        "(Smith group, U. Waterloo). "
                         "Spectra span the 720-1,800 cm^-1 fingerprint window, "
                         "pre-interpolated onto a uniform "
                         f"{res} cm^-1 grid ({1080 // int(res[:-2]) + 1} points). "
@@ -389,6 +397,64 @@ class MiscLoader(BaseLoader):
             )
             for res in ("1cm", "2cm", "4cm", "8cm")
         },
+        "microplastics_training_clean": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="microplastics_training_clean",
+            name="Microplastic Training Set, 186 Measurements (Lei et al. 2022)",
+            short_name="Microplastics Clean",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MiscLoader._load_lei_microplastics_clean(cache_path),
+            metadata={
+                "full_name": "Microplastic Training Set, one spectrum per measurement (Lei et al. 2022)",
+                "source": "https://doi.org/10.5683/SP3/LSN0R0",
+                "paper": "https://doi.org/10.1021/acs.analchem.2c02451",
+                "bibtex": "@article{Lei_2022, title={Customizable Machine-Learning Models for Rapid Microplastic Identification Using Raman Microscopy}, volume={94}, ISSN={0003-2700}, url={http://dx.doi.org/10.1021/acs.analchem.2c02451}, DOI={10.1021/acs.analchem.2c02451}, number={49}, journal={Analytical Chemistry}, publisher={American Chemical Society}, author={Lei, Benjamin and Bissonnette, Justine R. and Hogan, Una E. and Bec, Avery E. and Feng, Xinyi and Smith, Rodney D. L.}, year={2022}, month=dec, pages={17011-17019}}",
+                "citation": [
+                    "Lei, B., Bissonnette, J. R., Hogan, U. E., Bec, A. E., Feng, X.-Y., and Smith, R. D. L. (2022). Customizable machine-learning models for rapid microplastic identification using Raman microscopy. Analytical Chemistry, 94(49), 17011-17019."
+                ],
+                "description": (
+                    "The un-augmented core of the Lei et al. 2022 "
+                    "microplastic training set: one representative spectrum "
+                    "per source measurement -- 186 measurements of 14 "
+                    "plastic types from 108 supplier samples (78 samples "
+                    "measured twice) of commercial microplastic particles "
+                    "(spheres, pellets, fragments, films; 15 suppliers) on "
+                    "a Renishaw inVia Reflex (532 nm / 2,400 l/mm or "
+                    "633 nm / 1,800 l/mm grating). Each representative is "
+                    "the row-wise mean of the 20 augmented variants the "
+                    "authors deposited per measurement: averaging cancels "
+                    "the augmentation's random noise (strongest-peak SNR "
+                    "3-15) and leaves the measured spectral shape (the "
+                    "absolute amplitude is arbitrary, as for all variants "
+                    "of this deposit -- none of the deposited rows is the "
+                    "raw measurement). 720-1,800 cm^-1 fingerprint window, "
+                    "pre-interpolated onto the paper's native 1 cm^-1 "
+                    "training grid (1,081 points). group_ids = supplier "
+                    "sample id (label-pure; the two measurements of a "
+                    "re-measured sample share a group). The augmented full "
+                    "sets at four resolutions are "
+                    "microplastics_training_1cm/2cm/4cm/8cm. Same lab and "
+                    "much of the authorship as raman_spi/raman_mpi (Smith "
+                    "group, U. Waterloo)."
+                ),
+            },
+            # Checked: the deposited rows are laid out in 20-row blocks,
+            # one per measurement (non-blank sampleid runs of 20 or 40
+            # rows); 186 blocks and 108 supplier sample ids are asserted
+            # at load time.
+            is_grouped=True,
+            # Checked: every block carries exactly one plastic label.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "Authors' pipeline (paper + deposit README): Renishaw "
+                "WiRE 5.3 polynomial baseline subtraction and cosmic-ray "
+                "removal; window truncated to 720-1800 cm^-1, "
+                "pre-interpolated onto a uniform 1 cm^-1 grid. This key "
+                "additionally reduces each measurement to the row-wise "
+                "mean of its 20 augmented variants (see description)."
+            ),
+        ),
         "yeast_bioreactor_fermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             application_type=APPLICATION_TYPE.Biological,
@@ -1463,6 +1529,52 @@ class MiscLoader(BaseLoader):
     }
 
     @staticmethod
+    def _lei_read_csv(dataset_cache: str, resolution: str) -> Tuple[pd.DataFrame, np.ndarray]:
+        """
+        Download (if not already cached) and read one Lei et al. 2022
+        microplastic training CSV (see _load_lei_microplastics).
+
+        Returns (df, raman_shifts): one row per spectrum, first three
+        columns 'plastic', 'supplier', 'sampleid', then one column per
+        wavenumber.
+        """
+        if resolution not in MiscLoader._LEI_MPLASTICS_FILES:
+            raise ValueError(f"Unknown microplastics training resolution: {resolution}")
+        file_name, url, md5 = MiscLoader._LEI_MPLASTICS_FILES[resolution]
+
+        out_path = os.path.join(dataset_cache, file_name)
+        if not LoaderTools._is_file_ready(out_path):
+            LoaderTools.download(
+                url=url,
+                out_dir_path=dataset_cache,
+                out_file_name=file_name,
+                hash_target=md5,
+                hash_type=HASH_TYPE.md5,
+            )
+            if not LoaderTools._is_file_ready(out_path):
+                raise RuntimeError(
+                    f"[!] Download of {file_name} for microplastics_training "
+                    "failed (network error or checksum mismatch). See logs."
+                )
+
+        try:
+            df = pd.read_csv(out_path, low_memory=False)
+        except Exception as e:
+            raise RuntimeError(f"[!] Failed to read microplastics training CSV {file_name}: {e}")
+
+        for col in ("plastic", "supplier", "sampleid"):
+            if col not in df.columns:
+                raise RuntimeError(f"[!] Lei microplastics {file_name}: missing column '{col}'.")
+
+        wav_cols = list(df.columns[3:])
+        if len(wav_cols) < 2:
+            raise RuntimeError(f"[!] Lei microplastics {file_name}: no wavenumber columns.")
+        raman_shifts = np.array([float(col) for col in wav_cols])
+        if not np.all(np.diff(raman_shifts) > 0):
+            raise RuntimeError(f"[!] Lei microplastics {file_name}: wavenumber axis is not ascending.")
+        return df, raman_shifts
+
+    @staticmethod
     def _load_lei_microplastics(cache_path: str, resolution: str):
         """
         Download and load the Lei et al. 2022 (Anal. Chem. 94(49),
@@ -1481,10 +1593,6 @@ class MiscLoader(BaseLoader):
         Returns spectra, raman_shifts, targets, class_names, group_ids
         (group id = supplier sample id).
         """
-        if resolution not in MiscLoader._LEI_MPLASTICS_FILES:
-            raise ValueError(f"Unknown microplastics training resolution: {resolution}")
-        file_name, url, md5 = MiscLoader._LEI_MPLASTICS_FILES[resolution]
-
         cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
         if cache_root is None:
             raise ValueError("Cache root for Misc loader is not set. Cannot load microplastics training dataset.")
@@ -1492,38 +1600,7 @@ class MiscLoader(BaseLoader):
         dataset_cache = os.path.join(cache_root, "microplastics_training")
         os.makedirs(dataset_cache, exist_ok=True)
 
-        out_path = os.path.join(dataset_cache, file_name)
-        if not LoaderTools._is_file_ready(out_path):
-            LoaderTools.download(
-                url=url,
-                out_dir_path=dataset_cache,
-                out_file_name=file_name,
-                hash_target=md5,
-                hash_type=HASH_TYPE.md5,
-            )
-            if not LoaderTools._is_file_ready(out_path):
-                raise RuntimeError(
-                    f"[!] Download of {file_name} for microplastics_training_{resolution} "
-                    "failed (network error or checksum mismatch). See logs."
-                )
-
-        try:
-            df = pd.read_csv(out_path, low_memory=False)
-        except Exception as e:
-            raise RuntimeError(f"[!] Failed to read microplastics training CSV {file_name}: {e}")
-
-        for col in ("plastic", "supplier", "sampleid"):
-            if col not in df.columns:
-                raise RuntimeError(
-                    f"[!] microplastics_training_{resolution}: missing column '{col}' in {file_name}."
-                )
-
-        wav_cols = list(df.columns[3:])
-        if len(wav_cols) < 2:
-            raise RuntimeError(f"[!] microplastics_training_{resolution}: no wavenumber columns in {file_name}.")
-        raman_shifts = np.array([float(col) for col in wav_cols])
-        if not np.all(np.diff(raman_shifts) > 0):
-            raise RuntimeError(f"[!] microplastics_training_{resolution}: wavenumber axis is not ascending.")
+        df, raman_shifts = MiscLoader._lei_read_csv(dataset_cache, resolution)
 
         spectra = df[wav_cols].to_numpy(dtype=float)
         if np.isnan(spectra).any():
@@ -1543,6 +1620,108 @@ class MiscLoader(BaseLoader):
         targets, class_names = encode_labels(plastic[keep])
         group_ids = df["sampleid"].astype(str).str.strip()[keep].to_numpy()
         return spectra[keep.to_numpy()], raman_shifts, targets, list(class_names), group_ids
+
+    @staticmethod
+    def _lei_measurement_blocks(sid, labels):
+        """
+        Group the non-blank rows of a Lei et al. 2022 training CSV into
+        20-row measurement blocks.
+
+        The deposited rows are laid out in 20-row blocks, one block per
+        source measurement (the 20 augmented variants of that spectrum);
+        a sample measured twice contributes two consecutive 20-row blocks
+        under the same 'sampleid' (a 40-row run).
+
+        Args:
+            sid: array of 'sampleid' strings, one per kept row.
+            labels: array of plastic labels, one per kept row.
+
+        Returns a list of (start_row, sampleid, plastic_label), one per
+        20-row block, in row order.
+        """
+        blocks = []
+        i, n = 0, len(sid)
+        while i < n:
+            j = i
+            while j < n and sid[j] == sid[i]:
+                j += 1
+            if (j - i) % 20 != 0:
+                raise RuntimeError(
+                    f"[!] Lei microplastics: sampleid run of {j - i} rows "
+                    f"at row {i} is not a multiple of the 20-row block."
+                )
+            if len(np.unique(labels[i:j])) != 1:
+                raise RuntimeError(
+                    f"[!] Lei microplastics: sampleid run at row {i} carries "
+                    "mixed plastic labels."
+                )
+            for k in range(i, j, 20):
+                blocks.append((k, sid[k], labels[k]))
+            i = j
+        return blocks
+
+    @staticmethod
+    def _load_lei_microplastics_clean(cache_path: str):
+        """
+        Load microplastics_training_clean: the un-augmented core of the
+        Lei et al. 2022 training set, one representative spectrum per
+        source measurement on the paper's native 1 cm^-1 grid.
+
+        Each representative is the row-wise mean of the 20 augmented
+        variants the authors deposited per measurement: averaging
+        cancels the augmentation's random noise (strongest-peak SNR
+        3-15) and leaves the measured spectral shape (absolute amplitude
+        is arbitrary, as for all variants of this deposit).
+
+        Returns spectra (186 x 1081), raman_shifts (1081,), targets
+        (186,), class_names, group_ids (supplier sample id; 108).
+        """
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            raise ValueError("Cache root for Misc loader is not set. Cannot load microplastics training dataset.")
+
+        dataset_cache = os.path.join(cache_root, "microplastics_training")
+        os.makedirs(dataset_cache, exist_ok=True)
+
+        df, raman_shifts = MiscLoader._lei_read_csv(dataset_cache, "1cm")
+
+        plastic = df["plastic"].astype(str).str.strip()
+        keep = plastic != "blank"
+        if len(df) != 4520 or int(keep.sum()) != 3720:
+            raise RuntimeError(
+                f"[!] microplastics_training_clean: expected 4520 rows with "
+                f"3720 non-blank, got {len(df)} with {int(keep.sum())}."
+            )
+
+        X = df[list(df.columns[3:])].to_numpy(dtype=float)[keep.to_numpy()]
+        sid = df["sampleid"].astype(str).str.strip().to_numpy()[keep.to_numpy()]
+        labels = plastic.to_numpy()[keep.to_numpy()]
+
+        # 20-row blocks, one per source measurement (see
+        # _lei_measurement_blocks); the representative is the row-wise
+        # mean of the block's 20 augmented variants.
+        blocks = MiscLoader._lei_measurement_blocks(sid, labels)
+        reps = [X[k:k + 20].mean(axis=0) for k, _, _ in blocks]
+        groups = [s for _, s, _ in blocks]
+        block_labels = [l for _, _, l in blocks]
+
+        if len(reps) != 186:
+            raise RuntimeError(
+                f"[!] microplastics_training_clean: expected 186 measurement "
+                f"blocks, got {len(reps)}."
+            )
+        if len(set(groups)) != 108:
+            raise RuntimeError(
+                f"[!] microplastics_training_clean: expected 108 supplier "
+                f"sample ids, got {len(set(groups))}."
+            )
+
+        spectra = np.vstack(reps)
+        if np.isnan(spectra).any():
+            raise RuntimeError("[!] microplastics_training_clean: missing intensity values.")
+
+        targets, class_names = encode_labels(np.array(block_labels))
+        return spectra, raman_shifts, targets, list(class_names), np.array(groups)
 
     # yeast_bioreactor_fermentation (4TU.ResearchData, Klaverdijk et al. 2025)
     _YEAST_BIOREACTOR_ZIP = "Chapter 2.zip"

@@ -392,13 +392,24 @@ class LoaderTools:
         Args:
             rar_file_path (str): Path to the `.rar` file to extract.
             unzip_target_subdir (str, optional): The name of the subdirectory
-                                                 extracted files should be stored in.
+                extracted files should be stored in. When omitted, a
+                dedicated '<archive name>_extracted' subdirectory next to the
+                archive is used: unlike the zip extractor, RAR contents
+                cannot be listed without a working extractor, so
+                'already extracted' can only be told from a dedicated
+                directory (the archive's own directory always contains the
+                archive itself, which would defeat the fast-path check
+                below).
             force_overwrite (bool, optional): Re-extract even if the target
                                               directory already contains files.
 
         Returns:
             str|None: If successful the path of the output directory, else None.
         """
+        if not unzip_target_subdir:
+            unzip_target_subdir = (
+                os.path.splitext(os.path.basename(rar_file_path))[0] + "_extracted"
+            )
         if not os.path.isfile(rar_file_path):
             LoaderTools.logger.error(f"There's no .rar file stored at {rar_file_path}")
             return None

@@ -233,7 +233,15 @@ class MendeleyLoader(BaseLoader):
                     "19564T) -- across three replicate acquisitions (2021), "
                     "including 62 cells picked out of a three-species mixed "
                     "culture (21 Bacillus_subtilis, 21 Nitrososphaera "
-                    "_viennensis, 20 Thermus_thermophilus). 632.8 nm HeNe "
+                    "_viennensis, 20 Thermus_thermophilus); each mixed-culture "
+                    "cell was selected by phase-contrast morphology (rod-shaped "
+                    "B. subtilis, long-rod T. thermophilus, tiny irregular "
+                    "spherical N. viennensis -- the paper's Fig. 3A), and the "
+                    "morphology-based labels were confirmed post hoc by the "
+                    "authors' six-class RF model (98.4% agreement; the only "
+                    "misassignments were N. viennensis cells predicted as S. "
+                    "acidocaldarius) -- the labels are ground-truth selections, "
+                    "not classifier output. 632.8 nm HeNe "
                     "excitation (3 mW at the sample point), 30 s integration "
                     "per cell, Nikon 100x NA 1.3 oil-immersion objective, "
                     "CCD at -70 C. Native spectra span ~671-3,070 cm^-1 at "
@@ -290,10 +298,32 @@ class MendeleyLoader(BaseLoader):
 
     @staticmethod
     def _download_files(shared_root: str, dataset_id: str = _MENDELEY_DATASET_ID, version: int = _MENDELEY_VERSION) -> None:
-        """Download all dataset files into *shared_root* if not already cached."""
+        """Download all dataset files into *shared_root* if not already cached.
+
+        If the file-listing API is unreachable (e.g. the Mendeley WAF
+        403-blocks datacenter IPs such as CI runners) but the cache already
+        holds files, fall back to the cache instead of failing; genuinely
+        missing files then surface as specific load errors.
+        """
         os.makedirs(shared_root, exist_ok=True)
 
-        files = MendeleyLoader._fetch_file_listing(dataset_id=dataset_id, version=version)
+        try:
+            files = MendeleyLoader._fetch_file_listing(dataset_id=dataset_id, version=version)
+        except requests.RequestException as e:
+            cached = sorted(
+                f
+                for f in os.listdir(shared_root)
+                if os.path.isfile(os.path.join(shared_root, f)) and not f.startswith(".")
+            )
+            if cached:
+                MendeleyLoader.logger.warning(
+                    f"Mendeley file-listing API for {dataset_id} is unreachable "
+                    f"({getattr(e.response, 'status_code', None) or e}); falling "
+                    f"back to the {len(cached)} cached file(s) in {shared_root}. "
+                    "Missing files will surface as load errors."
+                )
+                return
+            raise
         for f in files:
             file_name = f.get("filename") or f.get("name")
             download_url = f.get("download_url") or f.get("content_details", {}).get("download_url")
