@@ -16,6 +16,11 @@ _DATAVERSE_SERVER = "https://dataverse.harvard.edu"
 # RamanSTS (Boroji et al. 2025): one .npy per patient and tissue, <TISSUE>/P<patient>_<TISSUE>.npy inside
 # RamanSTS_part1.zip / RamanSTS_part2.zip; each holds whole or partial 51x51 maps of 1,401-point spectra.
 _STS_DOI = "10.7910/DVN/NGEZPA"
+# Pinned dataset version: a revision (e.g. the planned map ids) is picked up only by bumping this,
+# and the cache is per version so a bump downloads the new files.
+_STS_VERSION = "1.1"
+_STS_N_SPECTRA = 286_672
+_STS_FILES = ("RamanSTS_part1.zip", "RamanSTS_part2.zip")
 _STS_TISSUES = {
     "FAT": "Fat",
     "MSC": "Muscle",
@@ -75,7 +80,7 @@ class DataverseLoader(BaseLoader):
                     "myxofibrosarcoma each come from a single patient, so for them grouped splits measure "
                     "generalisation across regions of one specimen, not across patients. Three maps (P3 muscle, "
                     "P3 pleomorphic liposarcoma, P4 myxoid liposarcoma) are partial: spectra with artefacts (tissue "
-                    "contamination, ink) were removed in WiRE. Group ids are the 18 patient x tissue files; the map "
+                    "contamination, ink) were removed in WiRE. Group ids are the 18 patient x tissue files (e.g. \"P3_PLS\"); the map "
                     "of each spectrum is not published yet."
                 ),
             },
@@ -98,7 +103,14 @@ class DataverseLoader(BaseLoader):
             dataset_name: str,
             cache_path: Optional[str] = None
     ) -> Optional[str]:
-        raise NotImplementedError("Use load_dataset; the Dataverse loader downloads on load")
+        if not LoaderTools.is_dataset_available(dataset_name, DataverseLoader.DATASETS):
+            raise FileNotFoundError(f"Dataset {dataset_name} is not available")
+        if cache_path is not None:
+            LoaderTools.set_cache_root(cache_path, CACHE_DIR.Dataverse)
+        dataset_cache_path = os.path.join(LoaderTools.get_cache_root(CACHE_DIR.Dataverse), dataset_name)
+        out_dir = os.path.join(dataset_cache_path, f"v{_STS_VERSION}")
+        DataverseLoader._download_files(_STS_DOI, _STS_VERSION, out_dir, list(_STS_FILES))
+        return out_dir
 
     @staticmethod
     def load_dataset(
@@ -138,27 +150,28 @@ class DataverseLoader(BaseLoader):
     # ------------------------------------------------------------------
 
     @staticmethod
-    def _fetch_file_listing(doi: str) -> List[dict]:
-        """The ``dataFile`` entries of the latest published version of dataset *doi*."""
+    def _fetch_file_listing(doi: str, version: str) -> List[dict]:
+        """The ``dataFile`` entries of version *version* of dataset *doi*."""
         response = requests.get(
-            f"{_DATAVERSE_SERVER}/api/datasets/:persistentId/",
+            f"{_DATAVERSE_SERVER}/api/datasets/:persistentId/versions/{version}",
             params={"persistentId": f"doi:{doi}"},
             # Harvard Dataverse answers 403 to the default python-requests user agent.
             headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36", "Accept": "application/json"},
             timeout=30,
         )
         response.raise_for_status()
-        return [f["dataFile"] for f in response.json()["data"]["latestVersion"]["files"]]
+        return [f["dataFile"] for f in response.json()["data"]["files"]]
 
     @staticmethod
-    def _download_files(doi: str, out_dir: str, names: List[str]) -> dict:
-        """Download the files *names* of dataset *doi* into *out_dir* (MD5-checked); returns name -> path."""
+    def _download_files(doi: str, version: str, out_dir: str, names: List[str]) -> dict:
+        """Download the files *names* of version *version* of dataset *doi* into *out_dir* (MD5-checked);
+        returns name -> path."""
         os.makedirs(out_dir, exist_ok=True)
         paths = {name: os.path.join(out_dir, name) for name in names}
         missing = [name for name, path in paths.items() if not os.path.exists(path)]
         if not missing:
             return paths
-        listing = {f["filename"]: f for f in DataverseLoader._fetch_file_listing(doi)}
+        listing = {f["filename"]: f for f in DataverseLoader._fetch_file_listing(doi, version)}
         for name in missing:
             if name not in listing:
                 raise FileNotFoundError(f"{name} is not in Dataverse dataset doi:{doi}")
@@ -182,7 +195,8 @@ class DataverseLoader(BaseLoader):
     @staticmethod
     def _load_ramansts(cache_path: str):
         """Tissue-type spectra of RamanSTS with patient x tissue groups (Boroji et al. 2025)."""
-        paths = DataverseLoader._download_files(_STS_DOI, cache_path, ["RamanSTS_part1.zip", "RamanSTS_part2.zip"])
+        paths = DataverseLoader._download_files(_STS_DOI, _STS_VERSION, os.path.join(cache_path, f"v{_STS_VERSION}"),
+                                                list(_STS_FILES))
 
         # Read the arrays straight from the archives (no 3 GB extraction), without pickle.
         members = []
@@ -193,7 +207,7 @@ class DataverseLoader(BaseLoader):
 
         tissues = list(_STS_TISSUES)
         spectra, targets, groups = [], [], []
-        for group, (zip_path, member) in enumerate(members):
+        for zip_path, member in members:
             patient, tissue = os.path.splitext(os.path.basename(member))[0].split("_")
             if tissue not in _STS_TISSUES or os.path.dirname(member) != tissue:
                 raise ValueError(f"unexpected RamanSTS file {member}")
@@ -201,16 +215,16 @@ class DataverseLoader(BaseLoader):
                 block = np.lib.format.read_array(fh, allow_pickle=False).astype(np.float32)
             spectra.append(block)
             targets += [tissues.index(tissue)] * len(block)
-            groups += [group] * len(block)
+            groups += [f"{patient}_{tissue}"] * len(block)
 
         spectra = np.concatenate(spectra, axis=0)
-        raman_shifts = np.linspace(400, 1800, spectra.shape[1], dtype=np.float32)
-        if spectra.shape[1] != 1401:
-            raise ValueError(f"expected 1,401 points per spectrum, got {spectra.shape[1]}")
+        if spectra.shape != (_STS_N_SPECTRA, 1401):
+            raise ValueError(f"expected {_STS_N_SPECTRA} spectra of 1,401 points, got {spectra.shape}")
+        raman_shifts = np.linspace(400, 1800, 1401, dtype=np.float32)
         return (
             spectra,
             raman_shifts,
             np.array(targets, dtype=np.int32),
             [_STS_TISSUES[t] for t in tissues],
-            np.array(groups, dtype=np.int32),
+            np.array(groups),
         )
