@@ -1,0 +1,148 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Single-Cell Raman Fingerprinting of Prokaryotes (Kanno et al. 2021)",
+  "description": "Spontaneous Raman spectra of single prokaryotic cells for species classification: 782 cells of 6 species -- 3 bacteria (Bacillus subtilis JCM 1465T, Escherichia coli JCM 20135, Thermus thermophilus JCM 10941T) and 3 archaea (Sulfolobus acidocaldarius JCM 8929T, Thermococcus kodakarensis JCM 12380T, Nitrososphaera viennensis JCM 19564T) -- across three replicate acquisitions (2021), including 62 cells picked out of a three-species mixed culture (21 Bacillus_subtilis, 21 Nitrososphaera _viennensis, 20 Thermus_thermophilus). 632.8 nm HeNe excitation (3 mW at the sample point), 30 s integration per cell, Nikon 100x NA 1.3 oil-immersion objective, CCD at -70 C. Native spectra span ~671-3,070 cm^-1 at 1,600 points (~1.48 cm^-1 spacing); every acquisition session has its own per-day wavenumber axis (un-corrected in the deposit), so the loader interpolates all spectra onto a common 710-3,042 cm^-1, 1 cm^-1 grid. group_ids are the 19 acquisition sessions (18 species x date directories of 40 cells + 1 mixed-culture session of 62); no two spectra are measurements of the same cell, so the session is the finest correlated unit (shared instrument state and culture). Spectra are raw as deposited: the authors' pipeline (cosmic-ray despiking, PBS subtraction, neon-lamp wavenumber correction, dual-region baseline subtraction and vector normalization per the STAR Protocols paper doi:10.1016/j.xpro.2022.101812) is not applied; the 19 per-session PBS references and 12 neon standards needed to replicate it are in the archive (excluded from this dataset).",
+  "url": "https://data.mendeley.com/datasets/8cd34fckgt/1",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Biological",
+    "Classification",
+    "microbiology"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "sameAs": "https://doi.org/10.17632/8cd34fckgt.1",
+  "citeAs": "@article{Kanno_2021, title={Machine learning-assisted single-cell Raman fingerprinting for in situ and nondestructive classification of prokaryotes}, volume={24}, ISSN={2590-3425}, url={http://dx.doi.org/10.1016/j.isci.2021.102975}, DOI={10.1016/j.isci.2021.102975}, number={8}, journal={iScience}, publisher={Elsevier}, author={Kanno, Nanako and Kato, Shingo and Ohkuma, Moriya and Matsui, Motomu and Iwasaki, Wataru and Shigeto, Shinsuke}, year={2021}, month=aug, pages={102975}}",
+  "citation": "Shigeto, S. (2021). Machine learning-assisted single-cell Raman fingerprinting for in situ and nondestructive classification of prokaryotes. Kanno et al. Mendeley Data, v1. https://doi.org/10.17632/8cd34fckgt.1",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "single_cell_prokaryotes_source",
+      "name": "Single-Cell Raman Fingerprinting of Prokaryotes (Kanno et al. 2021)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://data.mendeley.com/datasets/8cd34fckgt/1",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "7feb07fb270eede2e598b7835de2a939bd35a02133742c71affb0c7edbd80909"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "single_cell_prokaryotes_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "single_cell_prokaryotes_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "single_cell_prokaryotes_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "single_cell_prokaryotes_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
+  "rai:dataCollectionType": "Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material.",
+  "rai:dataPreprocessingProtocol": "Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication.",
+  "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical, biological, or material samples without individual human identifiers.",
+  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
+  "rai:dataLimitations": "Spectral signatures are process- and instrument-specific; calibration transfer to other setups requires additional validation.",
+  "rai:dataSocialImpact": "Enables the development of rapid, inline bioprocess monitoring tools that can reduce waste, improve yield, and lower costs in biomanufacturing and biotechnology.",
+  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://data.mendeley.com/datasets/8cd34fckgt/1"
+}

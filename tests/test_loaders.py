@@ -2,6 +2,7 @@
 A general checkup of loader's implementation.
 """
 
+import collections
 from raman_data import raman_data
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.KaggleLoader import KaggleLoader
@@ -406,5 +407,47 @@ def test_yeast_batch_effects():
     assert dataset.group_ids.shape == (675,)
     assert len(set(dataset.group_ids.tolist())) == 27
     assert _groups_are_label_pure(dataset)
+    assert not np.isnan(dataset.spectra).any()
+
+
+@pytest.mark.skip(reason="Mendeley Data returns HTTP 403 for GitHub-hosted CI runners; run manually (~10 MB, ~10 s).")
+def test_single_cell_prokaryotes():
+    dataset = MendeleyLoader.load_dataset("single_cell_prokaryotes")
+    assert dataset.spectra.shape == (782, 2333)
+    assert dataset.targets.shape == (782,)
+    # 6 species (3 bacteria + 3 archaea); per-species counts include the
+    # mixed-culture cells (21 Bacillus, 21 Nitrososphaera, 20 Thermus).
+    assert dataset.target_names == [
+        "Bacillus_subtilis", "Escherichia_coli", "Nitrososphaera_viennensis",
+        "Sulfolobus_acidocaldarius", "Thermococcus_kodakarensis",
+        "Thermus_thermophilus",
+    ]
+    counts = collections.Counter(dataset.targets.tolist())
+    assert counts == {
+        dataset.target_names.index("Bacillus_subtilis"): 141,
+        dataset.target_names.index("Escherichia_coli"): 120,
+        dataset.target_names.index("Nitrososphaera_viennensis"): 141,
+        dataset.target_names.index("Sulfolobus_acidocaldarius"): 120,
+        dataset.target_names.index("Thermococcus_kodakarensis"): 120,
+        dataset.target_names.index("Thermus_thermophilus"): 140,
+    }
+    # Common grid: 710-3,042 cm^-1 at 1 cm^-1 (per-session axes are
+    # interpolated onto it).
+    assert dataset.raman_shifts[0] == 710.0
+    assert dataset.raman_shifts[-1] == 3042.0
+    # 19 acquisition sessions: 18 species x date directories of 40 cells
+    # (label-pure) + 1 mixed-culture session of 62 (multi-label by nature:
+    # one culture, three species).
+    g = dataset.group_ids
+    assert g is not None and g.shape == (782,)
+    per_group = collections.Counter(g.tolist())
+    assert len(per_group) == 19
+    assert sorted(per_group.values()) == [40] * 18 + [62]
+    for name, n in per_group.items():
+        if n == 40:
+            assert len(np.unique(dataset.targets[g == name])) == 1
+    mix = [name for name, n in per_group.items() if n == 62][0]
+    assert "mixture" in mix
+    assert len(np.unique(dataset.targets[g == mix])) == 3
     assert not np.isnan(dataset.spectra).any()
 

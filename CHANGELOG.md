@@ -11,6 +11,17 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `single_cell_prokaryotes`: spontaneous Raman spectra of single
+  prokaryotic cells for species classification (Kanno et al. 2021,
+  *iScience*, doi:10.1016/j.isci.2021.102975; data release
+  doi:10.17632/8cd34fckgt.1, Mendeley Data, CC BY 4.0). 782 single cells
+  of 6 species — 3 bacteria (B. subtilis, E. coli, T. thermophilus) and
+  3 archaea (S. acidocaldarius, T. kodakarensis, N. viennensis) — across
+  3 replicate acquisitions incl. a 3-species mixed culture; 632.8 nm,
+  3 mW, 30 s/cell, Nikon 100× NA 1.3. Per-session wavenumber axes are
+  interpolated onto a common 710–3,042 cm⁻¹ / 1 cm⁻¹ grid (2,333
+  points). Group ids are the 19 acquisition sessions (18 × 40 + 1 mixed
+  culture × 62).
 - `yeast_batch_effects`: spontaneous Raman spectra of desiccated yeast
   cells for strain classification under strong plate-level batch effects
   (Cheveralls et al. 2026, *The Stacks*, doi:10.57844/arcadia-xdmk-yq0w;
