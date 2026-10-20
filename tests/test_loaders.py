@@ -357,8 +357,9 @@ def test_breast_cancer_subtypes():
     assert not np.isnan(dataset.spectra).any()
 
 
+@pytest.mark.skip(reason="Mendeley Data returns HTTP 403 for GitHub-hosted CI runners; run manually (~10 MB, ~9 s).")
 def test_water_quality_ions():
-    # Single ~10 MB Mendeley download (4 files), small enough to run in CI.
+    # Single ~10 MB Mendeley download (4 files).
     dataset = MendeleyLoader.load_dataset("water_quality_ions")
     assert dataset.spectra.shape == (694, 1019)
     # Multi-target regression: 3 concentration columns in mg/L.
