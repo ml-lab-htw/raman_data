@@ -11,6 +11,17 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `raman_mpi`: RaMPI — Raman Maps for Plastics Identification (same paper and
+  Borealis release as `raman_spi`, doi:10.1038/s41597-026-07103-8 /
+  doi:10.5683/SP3/8UQQQN, CC-BY 4.0). Per-pixel spectra from 34 Raman maps
+  (30 pristine two-material blends + 4 Great Lakes Seabin environmental maps),
+  633 nm / 1,800 l/mm. The 16,598 of 33,119 pixels the authors manually
+  assigned to one of 14 plastic types (the 16,521 `blank` pixels are
+  excluded), resampled from each map's native 1,017-point non-uniform axis
+  onto a common 710–1,827 cm⁻¹ / 1 cm⁻¹ grid. Raw spectra as exported from
+  Renishaw WiRE (no preprocessing). Group ids are the 34 maps — pixels within
+  a map are spatially correlated, but note the groups are *not* label-pure
+  (mixed-material maps contain several classes by design).
 - `raman_spi`: RaSPI — Raman Spectra for Plastics Identification (Hogan et al. 2026,
   *Scientific Data* 13:765, doi:10.1038/s41597-026-07103-8; data release
   doi:10.5683/SP3/8UQQQN, Borealis, CC-BY 4.0). 396 fully-labeled spectra of 14
