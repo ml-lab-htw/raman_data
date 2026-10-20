@@ -296,3 +296,15 @@ def test_rampi():
     assert len(dataset.target_names) == 14
     assert len(set(dataset.group_ids.tolist())) == 34
 
+
+@pytest.mark.skip(reason="Borealis downloads (~110 MB across 4 variants); run manually.")
+def test_lei_microplastics():
+    for res, n_points in [("1cm", 1081), ("2cm", 541), ("4cm", 271), ("8cm", 136)]:
+        dataset = MiscLoader.load_dataset(f"microplastics_training_{res}")
+        # 3,720 of the 4,520 deposited rows (800 synthetic blanks excluded);
+        # 14 plastic types; 108 supplier sample ids, each label-pure.
+        assert dataset.spectra.shape == (3720, n_points), res
+        assert len(dataset.target_names) == 14, res
+        assert len(set(dataset.group_ids.tolist())) == 108, res
+        assert _groups_are_label_pure(dataset), res
+
