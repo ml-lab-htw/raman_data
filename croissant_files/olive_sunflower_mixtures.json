@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Raman Spectra of Olive and Sunflower oil mixtures (Picouet 2023, data.gouv.fr / ENTREPOT Recherche)",
+  "description": "605 Raman spectra of Extra Virgin Olive Oil (EVOO) / sunflower oil mixtures at 26 EVOO levels (0, 10, 15, 20, 21, 23, 25, 31, 35, 47, 48, 50, 54, 57, 63, 65, 71, 74, 75, 76, 77, 81, 83, 90, 91, 100 %; sunflower % = 100 - EVOO exactly), recorded on 16 acquisition dates (22/11/2022 - 14/02/2023) at GRAPPE, Ecole Superieure des Agricultures / INRAE, Angers, France (Picouet 2023). Instrument (per the deposit README): Ocean Insight QE Pro Raman spectrometer, 785 nm solid-state laser diode at 400 mW, general-purpose fiber-optic probe with a quartz cuvette holder (working distance 0.5 mm), 1000 ms integration, 10 scans per acquisition, ~11 cm^-1 FWHM. Task: EVOO % regression (single target evoo_percent, 0-100). Structure: by the deposit's design of experiment, each (date, EVOO%) combination is one physical blend measured with 5 spectra (S1-S5); 10 blends were re-measured once and 1 twice on the same day, giving 109 blend groups (98 x 5, 10 x 10, 1 x 15 spectra) - group-aware CV is leave-one-blend-out. The deposit's own Type column tags the spectra CALIBRATION (350) / VALIDATION (165) / PREDICTION (90) (9 blends carry mixed tags); all 605 spectra are shipped - the tags are a modelling split, not a data-quality partition, and remain available in the raw CSV. Native 710-point axis 500.48-2,499.31 cm^-1 (2.2-3.6 cm^-1 non-uniform spacing), read from the CSV header (the deposit's wavenumber cells use European decimal commas, e.g. 500,48 = 500.48) and used as is, so no resampling is involved. Intensities are raw counts (645-12,922, arbitrary units), no NaN. The EVOO is a 100% Italian cold-pressed extra virgin olive oil (trademark PUGET, acidity 0.3 %a, 14 g/100 g unsaturated fat); the sunflower oil is a refined Spanish oil (trademark FAIGES, acidity 0.2 %, 10 g/100 g unsaturated fat, 80 mg vitamin E). License: licence ouverte (lov2), France's open data license. The deposit's companion README PDF (raman-spectra-readme.pdf, 113,945 bytes, sha1 7f9a320bb5cd7d7683b6b756636f6b60e37e3481) documents the acquisition protocol; the CSV is served directly from the static.data.gouv.fr CDN (sha256 pinned; no mirror needed, the endpoint is reachable from CI).",
+  "url": "https://www.data.gouv.fr/datasets/spectres-raman-de-melanges-dhuiles-dolive-et-de-tournesol-raman-spectra-of-olive-and-sunflower-oil-mixtures",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression"
+  ],
+  "isAccessibleForFree": true,
+  "conditionsOfAccess": "lov2 (Licence Ouverte)",
+  "sameAs": "https://doi.org/10.57745/DOGT0E",
+  "citeAs": "@dataset{picouet2023raman, title={Spectres Raman de mélanges d'Huiles d'Olive et de Tournesol / Raman Spectra of Olive and Sunflower oil mixtures}, author={Picouet, Pierre}, year={2023}, publisher={data.gouv.fr (ENTREPOT Recherche)}, doi={10.57745/DOGT0E}, url={https://doi.org/10.57745/DOGT0E}}",
+  "citation": "Picouet, P. (2023). Spectres Raman de mélanges d'Huiles d'Olive et de Tournesol / Raman Spectra of Olive and Sunflower oil mixtures. data.gouv.fr. https://doi.org/10.57745/DOGT0E",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "olive_sunflower_mixtures_source",
+      "name": "Raman Spectra of Olive and Sunflower oil mixtures (Picouet 2023, data.gouv.fr / ENTREPOT Recherche)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://www.data.gouv.fr/datasets/spectres-raman-de-melanges-dhuiles-dolive-et-de-tournesol-raman-spectra-of-olive-and-sunflower-oil-mixtures",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "163780e658f23f8d448eda6bd92af326e038563a37c2f47723f02883c24ea144"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "olive_sunflower_mixtures_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "olive_sunflower_mixtures_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "olive_sunflower_mixtures_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "olive_sunflower_mixtures_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman measurements of 109 EVOO/sunflower blends (5 spectra per blend by design of experiment, 605 spectra in total), 22/11/2022-14/02/2023, GRAPPE/INRAE Angers; Ocean Insight QE Pro, 785 nm, 400 mW, 1000 ms, 10 scans per acquisition (per the deposit README).",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "None in the loader. The CSV is the raw acquisition export; intensities are raw counts as deposited (10 scans co-added per acquisition by the instrument). The authors applied PLS modelling to this data (per the README); no preprocessing of the deposited data is described.",
+  "rai:dataAnnotationProtocol": "The EVOO % / sunflower % of each blend is recorded per spectrum (the blend ratio is known from preparation); the Type column marks the authors' own modelling split (CALIBRATION 350 / VALIDATION 165 / PREDICTION 90; 9 blends carry mixed tags). No human labelling of spectra was involved.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All samples are commercial food oils without any human identifiers.",
+  "rai:dataBiases": "Single instrument, single lab (GRAPPE/INRAE Angers), single oil-lot pair (PUGET EVOO + FAIGES sunflower) and 16 acquisition dates within ~3 months, so results may not transfer to other instruments, oil lots, brands or seasons. EVOO-level coverage is unbalanced (85 spectra at 0%, 90 at 100%, 80 at 50%, 55 at 25%, 45 at 75%, down to 5 spectra for many intermediate levels); 10 blends have 10 spectra and 1 has 15 (same-day re-measurements), so group sizes are uneven. Intensities are raw counts in arbitrary units (no normalization), so the intensity scale is instrument-specific.",
+  "rai:dataLimitations": "Single instrument/lab and single oil-lot pair; unbalanced EVOO-level coverage (5-90 spectra per level); group sizes 5/10/15 (re-measured blends); the deposit's Type column is the authors' modelling split (350/165/90) with 9 mixed-tag blends, so it must not be treated as a strict train/test partition; raw counts in arbitrary units; non-uniform wavenumber axis (2.2-3.6 cm^-1 spacing).",
+  "rai:dataSocialImpact": "Supports research on food authentication and quality (quantifying EVOO in oil mixtures, adulteration detection); any consumer- or regulatory-facing use requires validation against independent oil lots, brands, instruments and seasons.",
+  "rai:dataUseCases": "EVOO % regression from a single Raman spectrum (e.g. PLS or ML calibration) with leave-one-blend-out (group-aware) CV; the deposit's CALIBRATION/VALIDATION/PREDICTION tags can be used as the authors' reference split, with the mixed-tag caveat on 9 blends.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Raman spectra of 605 EVOO/sunflower oil mixtures (Picouet, GRAPPE, Ecole Superieure des Agricultures / INRAE, Angers, France, 2023; data.gouv.fr dataset 644b79f82ef3605eb5c660aa, doi:10.57745/DOGT0E, licence ouverte lov2). 26 EVOO levels (0-100%) across 16 acquisition dates (22/11/2022-14/02/2023); by the deposit's design of experiment 5 spectra (S1-S5) were recorded with each mixture, giving 109 physical blends ((date, EVOO%) groups: 98 x 5, 10 x 10, 1 x 15 spectra; 10 blends were re-measured once and 1 twice on the same day). Instrument (per the deposit README): Ocean Insight QE Pro Raman spectrometer, 785 nm solid-state laser diode at 400 mW, fiber-optic probe with quartz cuvette holder, 1000 ms integration, 10 scans per acquisition, ~11 cm^-1 FWHM. EVOO is a 100% Italian cold-pressed extra virgin olive oil (trademark PUGET, acidity 0.3 %a); the sunflower oil is a refined Spanish oil (trademark FAIGES, acidity 0.2%). Native 710-point axis 500.48-2,499.31 cm^-1 (CSV header, European decimal commas, used as is); raw counts 645-12,922. The CSV is served directly from static.data.gouv.fr (sha256 pinned).",
+  "prov:wasDerivedFrom": "https://doi.org/10.57745/DOGT0E"
+}

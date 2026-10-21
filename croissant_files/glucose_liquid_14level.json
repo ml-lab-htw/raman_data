@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Raman spectra of pure glucose liquid at 14 glucose levels (5 samples each, 70 spectra) from a Raman spectrometer at Vietnam National University, Hanoi (Ngo 2024, Mendeley Data doi:10.17632/yk75sxk6p5.1)",
+  "description": "The deposit's 'dense' 14-level set: 70 raw Raman spectra of pure glucose liquid (5 samples x 14 glucose levels; Ngo Quang Tri, Vietnam National University, Hanoi; Mendeley Data doi:10.17632/yk75sxk6p5.1, v1, 2024-02-29, CC BY 4.0, no related publication). Task: classification by the deposit's level-designation labels - M50, M52, M54, M55, M56, M58, M60, M62, M64, M65, M66, M68, M70, M75 (14 classes, 5 spectra each). The labels clearly encode a monotonic glucose-concentration ladder (the mean spectrum changes monotonically across levels), but the unit convention is not documented in the deposit, so no numeric-concentration regression target is exposed. IMPORTANT: the deposit contains NO wavenumber calibration - the data CSVs are bare intensity rows (2,030 columns each) without an axis, and no instrument model, excitation or spectral range is recorded anywhere in the deposit - so the exposed axis is the 0-based column index (detector pixel order, 0..2,029) and the spectral direction is undetermined. Spectra are raw as deposited (arbitrary units, -439..48,131 across the 70 rows, a few negative baseline points); no baseline correction, normalization or resampling applied. The five samples per level are treated as independent (the deposit does not document their preparation), so is_grouped=False. Served from frozen copies mirrored at HTW-KI-Werkstatt/RamanBench (glucose_liquid/): Mendeley Data 403-blocks non-browser clients (including CI). The companion 'spare' 10-level set (50 spectra, 2,048 columns, levels 05M..150M) is the glucose_liquid_10level key.",
+  "url": "https://data.mendeley.com/datasets/yk75sxk6p5/1",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Classification"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "sameAs": "https://doi.org/10.17632/yk75sxk6p5.1",
+  "citeAs": "@dataset{ngo2024glucose, title={Raman Scattering gathering from pure glucose liquid: 14-labels and 10-labels datasets}, author={Ngo Quang, Tri}, year={2024}, publisher={Mendeley Data}, doi={10.17632/yk75sxk6p5.1}, url={https://doi.org/10.17632/yk75sxk6p5.1}}",
+  "citation": "Ngo Quang, Tri (2024). Raman Scattering gathering from pure glucose liquid: 14-labels and 10-labels datasets. Mendeley Data, v1. https://doi.org/10.17632/yk75sxk6p5.1",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "glucose_liquid_14level_source",
+      "name": "Raman spectra of pure glucose liquid at 14 glucose levels (5 samples each, 70 spectra) from a Raman spectrometer at Vietnam National University, Hanoi (Ngo 2024, Mendeley Data doi:10.17632/yk75sxk6p5.1)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://data.mendeley.com/datasets/yk75sxk6p5/1",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "58c883c06480c3c45cb2e039e8c9ff73e0bc522bee356df8344863829776fde0"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "glucose_liquid_14level_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "glucose_liquid_14level_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "glucose_liquid_14level_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "glucose_liquid_14level_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman measurements of pure glucose liquid at 14 fixed glucose levels (5 samples per level) on a large-size Raman spectrometer at Vietnam National University, Hanoi; raw spectra as exported, 2,030 detector columns per spectrum.",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "No preprocessing was applied by the authors (raw spectra as deposited). The raman_data loader only reads the bare intensity CSV, joins it row-wise with the deposit's label file (verified: 5 spectra per level, consistent label names), and exposes the 0-based column index as the axis; no baseline correction, smoothing or normalization is applied.",
+  "rai:dataAnnotationProtocol": "Labels are the deposit's own level-designation strings from the label file's 'Label name' column (M50, M52, M54, M55, M56, M58, M60, M62, M64, M65, M66, M68, M70, M75; 5 spectra per level); no re-labelling was performed for this benchmark. The levels clearly encode a monotonic glucose-concentration ladder, but the unit convention is not documented in the deposit.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All samples are pure glucose liquid at defined levels.",
+  "rai:dataBiases": "The spectra carry NO wavenumber calibration (bare intensity rows; no instrument model, excitation or spectral range recorded), so any Raman-shift-dependent analysis is impossible; the exposed axis is the 0-based column (detector pixel) index and the spectral direction is undetermined. The five samples per level may be repeat measurements of the same solution (correlated) or independent preparations - the deposit does not say; either way level == class here. Raw counts with negative baseline points (-439 minimum); absolute intensity scales are instrument-specific.",
+  "rai:dataLimitations": "No wavenumber calibration in the deposit (axis is an uncalibrated detector-pixel index); spectral direction undetermined; the level-designation labels have an undocumented unit convention, so no numeric concentration target is exposed; small balanced design (14 classes x 5 spectra); raw counts with negative baseline points (-439..48,131); no instrument parameters recorded.",
+  "rai:dataSocialImpact": "Supports non-invasive glucose monitoring research (Raman-based glucose level discrimination). No personal or medical data; pure glucose liquid samples.",
+  "rai:dataUseCases": "Classification of 14 glucose level designations from raw Raman spectra (5 replicates per level); preprocessing and model-robustness benchmarks (the uncalibrated axis makes this a shape-based classification task); the 10-level companion set is the glucose_liquid_10level key.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Raman spectra of pure glucose liquid at fixed glucose levels, recorded on a large-size Raman spectrometer at Vietnam National University, Hanoi (Ngo Quang Tri; Mendeley Data doi:10.17632/yk75sxk6p5.1, v1, 2024-02-29, CC BY 4.0, no related publication; deposit: https://data.mendeley.com/datasets/yk75sxk6p5/1). This raman_data key loads the deposit's 14-level ('dense') set: Fourteenlabels_RamanData.csv (769,775 bytes) + Fourteenlabels_labels.csv (530 bytes), frozen copies mirrored at HTW-KI-Werkstatt/RamanBench (glucose_liquid/, MANIFEST.txt for provenance) because Mendeley Data 403-blocks non-browser clients (including CI); both files pinned at Mendeley's own sha256. 70 raw spectra (5 samples x 14 glucose levels) x 2,030 detector columns.",
+  "prov:wasDerivedFrom": "https://data.mendeley.com/datasets/yk75sxk6p5/1"
+}

@@ -1,0 +1,146 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Raman spectra of binary mixtures of the anhydrous (NAn) and monohydrate-A (NHa) forms of niclosamide: NHa %w/w quantification (Valmala et al. 2019, Talanta 199, 679-688)",
+  "description": "Raman spectra of 57 binary mixtures of the anhydrous (NAn) and metastable monohydrate-A (NHa) forms of the anthelmintic drug niclosamide, from the supplementary workbook of Valmala et al. 2019 (Talanta 199, 679-688, doi:10.1016/j.talanta.2019.03.027; Mendeley Data doi:10.17632/mv686f9r66.1, CC BY-NC 3.0; the workbook's other sheets cover NIR and MIR and are not loaded). Task: single-target regression - the Y variable is 'Concentration of NHa (%w/w)' (0-100). Levels: the calibration block has 6 spectra each at 0, 10, 30, 50, 70, 90 and 100 %, plus the authors' validation block (20% x3 and 50% x3 'Accuracy', 80% x3 'Accuracy' + 80% x6 'Precision') - 9 distinct levels, 57 spectra total. The sheet's remaining blocks are not loaded: a ball-milling time course (Y = milling time 5/60/180 min, 9 spectra) and four spectra labelled by NHa:NHb ratio ('NHa: NHb (9:1)' x2, '(1:9)' x2, non-numeric Y) - they quantify NHa under processing or in the presence of the NHb monohydrate, a different experimental design. Niclosamide crystallizes into three solvated forms: NAn (anhydrous) and two monohydrates (NHa, NHb); NAn converts to NHa during high-energy milling in the presence of water, which is why NHa quantification matters. Raman region: 195 points, 1,051.093-1,799.338 cm^-1 (~3.857 cm^-1 spacing; stored descending in the workbook, flipped to ascending by the loader). The six spectra per level are the study's replicates; their preparation protocol is not documented in the SI, so is_grouped=False. Served from a frozen copy of the SI workbook 'SI- spectal Raw data.xlsx' (10,569,495 B, sha256 9d81a8d9...14ec) mirrored at HTW-KI-Werkstatt/RamanBench (niclosamide/): Mendeley Data 403-blocks non-browser clients (including CI).",
+  "url": "https://data.mendeley.com/datasets/mv686f9r66/1",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by-nc/3.0/",
+  "citeAs": "@article{valmala2019niclosamide, title={Quantification of niclosamide polymorphic forms - a comparative study by Raman, NIR and MIR using chemometric techniques}, author={Bhavana, Valmala and Chavan, Rahul B. and Mannava, M.K. Chaitanya and Nangia, Ashwini and Shastri, Nalini R.}, journal={Talanta}, volume={199}, pages={679--688}, year={2019}, doi={10.1016/j.talanta.2019.03.027}}",
+  "citation": "Bhavana, V., Chavan, R. B., Mannava, M. K. C., Nangia, A., and Shastri, N. R. (2019). Quantification of niclosamide polymorphic forms - a comparative study by Raman, NIR and MIR using chemometric techniques. Talanta, 199, 679-688. https://doi.org/10.1016/j.talanta.2019.03.027 (data: https://doi.org/10.17632/mv686f9r66.1)",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "niclosamide_polymorph_binary_source",
+      "name": "Raman spectra of binary mixtures of the anhydrous (NAn) and monohydrate-A (NHa) forms of niclosamide: NHa %w/w quantification (Valmala et al. 2019, Talanta 199, 679-688)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://data.mendeley.com/datasets/mv686f9r66/1",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "8e06dff59c264622f680f9807a31b79f82c877734e80341751f5088d52394cc1"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "niclosamide_polymorph_binary_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "niclosamide_polymorph_binary_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "niclosamide_polymorph_binary_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "niclosamide_polymorph_binary_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman measurements of binary NAn+NHa niclosamide form mixtures at nine NHa levels (0-100 %w/w); the workbook also records the authors' ball-milling time course and NHa-in-presence-of-NHb spectra (not loaded here).",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "The loader only flips the workbook's descending wavenumber axis to ascending; no baseline correction, normalization, smoothing or resampling is applied. Intensities are as deposited (arbitrary units). The authors' PLSR modeling was done in the paper, not on the deposited data.",
+  "rai:dataAnnotationProtocol": "Labels are the nominal NHa %w/w of each mixture as printed in column A of the workbook (the study's calibration levels); no human labelling was performed for this benchmark. The six spectra per level are the study's replicates; whether they are independent preparations or repeated measurements of one mixture is not documented in the SI.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All samples are pharmaceutical solid forms of niclosamide.",
+  "rai:dataBiases": "Single lab/instrument protocol; the level design is uneven (6 replicates at calibration levels, 3-6 at validation levels; 20 % and 80 % exist only as validation rows); the spectra are the authors' calibration and validation samples, so any model trained on them is optimised for the study's mixture design and Raman window (1,051-1,800 cm^-1, a cropped region, not the full spectrum). The CC BY-NC 3.0 license restricts commercial use.",
+  "rai:dataLimitations": "Cropped Raman window (1,051-1,800 cm^-1 only); uneven replicate counts per level (3-9); the authors' own calibration/validation split is not encoded per row (all 57 rows are pooled); the replicate preparation protocol is undocumented (is_grouped=False); the ball-milling time-course and ratio-labelled blocks are excluded (different Y semantics); intensities in arbitrary units (0.0018-10.05); CC BY-NC 3.0 (non-commercial).",
+  "rai:dataSocialImpact": "Supports pharmaceutical solid-form analysis: quantifying pseudopolymorphic conversion (anhydrous to monohydrate A) of niclosamide, a drug repurposed for cancer, during wet processing; no human or medical data.",
+  "rai:dataUseCases": "Single-target regression: predict the NHa (monohydrate-A) %w/w fraction of a binary NAn+NHa niclosamide mixture from its Raman spectrum in the 1,051-1,800 cm^-1 window; note the 9-level design and the authors' calibration / validation composition.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Raman spectra of niclosamide form mixtures recorded for the study 'Quantification of niclosamide polymorphic forms - a comparative study by Raman, NIR and MIR using chemometric techniques' (Bhavana Valmala, Rahul B. Chavan, M.K. Chaitanya Mannava, Ashwini Nangia, Nalini R. Shastri 2019, Talanta 199, 679-688, https://doi.org/10.1016/j.talanta.2019.03.027); deposited on Mendeley Data (Nalini Shastri, 2019-03-09, https://doi.org/10.17632/mv686f9r66.1, CC BY-NC 3.0) as the supplementary workbook 'SI- spectal Raw data.xlsx' (10,569,495 bytes, sha256 pinned). Niclosamide (anthelmintic drug) crystallizes into three solvated forms: the anhydrous form (NAn) and two monohydrates (NHa, NHb); NAn converts to the metastable monohydrate NHa during high-energy milling in the presence of water, which motivates quantifying the NHa fraction. Each Raman sheet of the workbook: row 4 carries the 195-point wavenumber axis (1,799.338-1,051.093 cm^-1, stored DESCENDING, ~3.857 cm^-1 spacing; flipped to ascending by the raman_data loader), then one spectrum per row with the Y label in column A ('Concentration of NHa (%w/w)'). This raman_data key loads the concentration-regression rows (calibration block: six spectra per level; plus the authors' validation block); the trailing blocks whose Y column means something else are not loaded. Mendeley Data 403-blocks non-browser clients (including CI), so the key reads a frozen copy of the workbook mirrored at HTW-KI-Werkstatt/RamanBench (niclosamide/). Sheet used: 'Raman binary' (binary NAn+NHa mixtures; 57 spectra: 42 calibration at 0/10/30/50/70/90/100 % NHa x6 plus 15 validation rows 20%x3, 50%x3, 80%x3 'Accuracy' and 80%x6 'Precision').",
+  "prov:wasDerivedFrom": "https://data.mendeley.com/datasets/mv686f9r66/1"
+}

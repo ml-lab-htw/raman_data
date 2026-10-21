@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Raman spectra of hepatic carcinoma and adjacent non-tumour liver tissue (Huang et al. 2023, Nat. Commun. 14:48; the authors' GitHub demo data)",
+  "description": "Binary classification of hepatic carcinoma vs adjacent non-tumour (paracarcinoma) liver tissue from the demo data of Huang et al. 2023 (Nat. Commun. 14:48, doi:10.1038/s41467-022-35696-2). The paper's full database -- 120 pairs (240 tissue samples) from 120 liver-cancer patients (98 HCC + 22 ICC), 50 spectra per sample, 12,000 spectra total -- was not released; the authors' MIT-licensed GitHub repo (AzyroSH/CNN_liver-cancer_Raman, pinned at commit fdb3743) ships a 6,000-spectrum demo split into 4,000 train / 1,000 validate / 1,000 test files, balanced 3,000 carcinoma (label 1) / 3,000 paracarcinoma (label 0). Confocal micro-Raman with 532 nm excitation (Renishaw), 500-2,000 cm^-1, 889 points (the paper's canonical grid); the train/validate demo files carry 892 data columns and are resampled onto the 889-point grid (the 3 extra points sit at the high-wavenumber end; alignment verified by mean-spectrum correlation). Files are label-first tab-separated text; intensities are raw as deposited (arbitrary units, negative dark-subtracted points, maxima ~6.2e3) and the authors' z-score normalization is not applied. group_ids: the train/validate files are ordered in label-pure 50-spectrum blocks (one tissue sample each; verified against shuffled controls), giving 80 + 20 sample groups; the authors shuffled the test file, so its 1,000 rows are exposed as singleton groups (no sample ids are in the deposit) -- 1,100 groups in total. The authors report ~90% accuracy with their 1D VGG-16 CNN on this split.",
+  "url": "https://github.com/AzyroSH/CNN_liver-cancer_Raman",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Classification",
+    "oncology"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://opensource.org/licenses/MIT",
+  "citeAs": "@article{Huang_2023, title={Rapid, label-free histopathological diagnosis of liver cancer based on Raman spectroscopy and deep learning}, volume={14}, number={1}, pages={48}, ISSN={2041-1723}, url={http://dx.doi.org/10.1038/s41467-022-35696-2}, DOI={10.1038/s41467-022-35696-2}, journal={Nature Communications}, publisher={Springer Nature and its contributors}, author={Huang, Liping and Sun, Hongwei and Sun, Liangbin and Shi, Keqing and Chen, Yuzhe and Ren, Xueqian and Ge, Yuancai and Jiang, Danfeng and Liu, Xiaohu and Knoll, Wolfgang and Zhang, Qingwen and Wang, Yi}, year={2023}, month=jan}",
+  "citation": "Huang, L., Sun, H., Sun, L., Shi, K., Chen, Y., Ren, X., Ge, Y., Jiang, D., Liu, X., Knoll, W., Zhang, Q., and Wang, Y. (2023). Rapid, label-free histopathological diagnosis of liver cancer based on Raman spectroscopy and deep learning. Nature Communications, 14(1), 48. https://doi.org/10.1038/s41467-022-35696-2",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "liver_cancer_raman_source",
+      "name": "Raman spectra of hepatic carcinoma and adjacent non-tumour liver tissue (Huang et al. 2023, Nat. Commun. 14:48; the authors' GitHub demo data)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://github.com/AzyroSH/CNN_liver-cancer_Raman",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "ac79d59b6669978ae5968fad43a9f9a9fb0107a84109384036604c3d9e3ab14d"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "liver_cancer_raman_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "liver_cancer_raman_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "liver_cancer_raman_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "liver_cancer_raman_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Confocal micro-Raman measurements (532 nm laser, Renishaw system) of resected liver tissue blocks, as part of a label-free histopathological diagnosis study (Huang et al. 2023, Nat. Commun. 14:48). 6,000 spectra from 120 carcinoma and 120 paracarcinoma samples (demo subset), 500-2,000 cm^-1.",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "None beyond resampling the 892-point demo files onto the common 889-point 500-2,000 cm^-1 grid. Intensities are raw as deposited (arbitrary units, negative dark-subtracted points); the authors' z-score normalization is applied in their training code, not in the data.",
+  "rai:dataAnnotationProtocol": "Binary label per spectrum from the study's histopathological diagnosis: hepatic carcinoma (1) vs adjacent non-tumour tissue (0), balanced 3,000/3,000 in the demo. No human annotation of spectra was involved.",
+  "rai:personalSensitiveInformation": "Spectra are derived from human liver tissue of 120 liver-cancer patients. The demo deposit contains no patient identifiers or clinical data, only spectra with binary tissue-type labels.",
+  "rai:dataBiases": "The demo is half of an unreleased database and a subset of one clinical cohort (120 liver-cancer patients, single centre, China); the carcinoma class mixes HCC (98 patients) and ICC (22 patients) subtypes, which are not labelled in the demo. Replicate spectra come from the same tissue sample (50 per sample in the source database); the train/validate demo files are ordered in 50-spectrum sample blocks, but the test file is shuffled and no sample ids are included, so only 100 of the 120 demo samples can be recovered as groups. Raw intensities are in arbitrary units (instrument-specific, with negative dark-subtracted points) and are not comparable across instruments or sites.",
+  "rai:dataLimitations": "Only the 6,000-spectrum demo of the 12,000-spectrum database is publicly available. The demo files carry no wavenumber axis (assigned from the paper: 500-2,000 cm^-1, 889 points) and no sample identifiers; the train/validate files use an 892-point grid that was resampled onto the 889-point one. The authors shuffled the test file, so its 1,000 spectra are exposed as singleton groups; leave-one-sample-out CV is only fully controlled for the 100 recoverable sample groups. The demo is balanced by construction, which does not necessarily reflect clinical class prevalence.",
+  "rai:dataSocialImpact": "Supports research into rapid, label-free intraoperative diagnosis of liver cancer and tumour-margin delineation; any clinical use requires validation by qualified pathologists.",
+  "rai:dataUseCases": "Binary classification of carcinoma vs adjacent non-tumour liver tissue from Raman spectra; benchmarking of 1D CNN / classical classifiers with group-aware CV (100 sample groups of 50 plus 1,000 singletons).",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: confocal micro-Raman spectra (532 nm excitation, Renishaw) of 6,000 spectra from the authors' demo of the liver cancer database of Huang et al. 2023 (Nat. Commun. 14:48): hepatic carcinoma vs adjacent non-tumour (paracarcinoma) tissue from 120 liver-cancer patients (98 HCC + 22 ICC). The full 12,000-spectrum database (50 spectra per sample, 120 pairs) was not released; the MIT-licensed GitHub repository ships a 6,000-spectrum demo (4,000 train / 1,000 validate / 1,000 test). Preprocessing: none applied by the loader; the 892-column demo files are resampled onto the paper's 889-point 500-2,000 cm^-1 grid; intensities are raw as deposited. Annotation: binary tissue-type labels (1 = carcinoma, 0 = paracarcinoma) from the histopathological ground truth of the study; no spectral labelling involved.",
+  "prov:wasDerivedFrom": "https://doi.org/10.1038/s41467-022-35696-2"
+}

@@ -11,7 +11,7 @@ import requests
 from raman_data.loaders.BaseLoader import BaseLoader
 from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.utils import encode_labels
-from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, APPLICATION_TYPE
+from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, APPLICATION_TYPE, HASH_TYPE
 
 
 _MENDELEY_DATASET_ID = "y4md8znppn"
@@ -279,6 +279,1119 @@ class MendeleyLoader(BaseLoader):
             # normalization); see the authors' protocol for the full
             # pipeline.
             embedded_preprocessing=None,
+        ),
+        "glaucoma_enigma_baseline": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Medical,
+            id="8pwpbcrjd8",
+            name="Glaucoma ENIGMA Trial: Serum Raman, Baseline (Udensi 2024)",
+            short_name="Glaucoma ENIGMA Baseline",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_enigma(
+                cache_path, "baseline"
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of macular pigment carotenoids in human "
+                    "blood serum of glaucoma patients, ENIGMA trial, "
+                    "baseline visit (Udensi, Loskutova, Loughman & Byrne "
+                    "2024)"
+                ),
+                "source": "https://data.mendeley.com/datasets/8pwpbcrjd8/1",
+                "doi": "10.17632/8pwpbcrjd8.1",
+                "bibtex": "@dataset{Udensi_2024_enigma, title={Analysis of macular pigment carotenoids in human blood serum of glaucoma patients as a measure of ocular health: A Raman spectroscopic study}, author={Udensi, Joy and Loskutova, Ekaterina and Loughman, James and Byrne, Hugh}, year={2024}, publisher={Mendeley Data}, doi={10.17632/8pwpbcrjd8.1}, url={https://doi.org/10.17632/8pwpbcrjd8.1}}",
+                "citation": [
+                    "Udensi, J., Loskutova, E., Loughman, J., and Byrne, H. "
+                    "(2024). Analysis of macular pigment carotenoids in "
+                    "human blood serum of glaucoma patients as a measure "
+                    "of ocular health: A Raman spectroscopic study. "
+                    "Mendeley Data, v1. https://doi.org/10.17632/"
+                    "8pwpbcrjd8.1",
+                ],
+                "description": (
+                    "Whole-serum Raman spectra of 21 glaucoma patients of "
+                    "the ENIGMA trial at the baseline visit (the deposit's "
+                    "two baseline folders 'whole Serum baseline_a' and "
+                    "'whole serum baseline_b'; filename suffixes a-f are "
+                    "repeat measurements of the same patient within the "
+                    "visit). 101 measurement sessions (4-9 per patient; "
+                    "ET015 has 9 across both folders). Horiba LabSpec6 "
+                    "dispersive Raman, native 2,541-point axes spanning "
+                    "400.8-3,999.4 cm^-1 (~1.42 cm^-1 spacing); the "
+                    "loader interpolates every session onto the common "
+                    "401-3,999 cm^-1 @1 cm^-1 grid (3,599 points), which "
+                    "all 246 valid session exports fully cover, so no "
+                    "extrapolation is involved. Multi-target regression: "
+                    "11 targets per patient from the deposit's 'OCULAR "
+                    "MEASUREMENTS (ENIGMA).xlsx' baseline sheet -- "
+                    "microperimetry (Microperimetry_glauc severity), "
+                    "OCT (mRNFL_6_glauc_severity, GCC_6_glauc_severity, "
+                    "GCL_6), macular-pigment optical density at 0.23/"
+                    "0.51/0.74/1.02 mm plus MP_Volume6.02, visual acuity "
+                    "(VA), and GAL9. All 21 patients are glaucoma cases "
+                    "(the sheet's Glauc_yes_no column is constant = 1, "
+                    "so it is not a target). group_ids = patient (21 "
+                    "groups): repeat measurements of one patient share "
+                    "the same target row, so grouped k-fold CV is "
+                    "leave-one-patient-out. Intensities are raw LabSpec "
+                    "counts as deposited (per file header DeNoise, Dark "
+                    "correction and ICS correction are all 'Off'); the "
+                    "excitation wavelength is not recorded in the "
+                    "deposit. Both datasets of the deposit share one "
+                    "frozen 9.5 MB Mendeley snapshot mirrored at "
+                    "HTW-KI-Werkstatt/RamanBench "
+                    "(glaucoma_enigma/snapshot/, size + sha256 pinned; "
+                    "the live Mendeley download sits behind a WAF that "
+                    "403s non-browser clients, hence the mirror). "
+                    "Excluded: 18 sessions of subjects without baseline "
+                    "targets (ET002, ET007, ET018, ET020, ET032, ET034, "
+                    "ET038, ET039, ET043, ET053, ET054), 4 "
+                    "unidentifiable stems ('1', '1_14', '1_10', "
+                    "'ET0NN'), 1 corrupt export (1.txt, negative "
+                    "wavenumber axis), and 6 .l6s-only files "
+                    "(ET045_a-e: proprietary Horiba binary, and the "
+                    "subject is not in the target sheet). The .l6s "
+                    "twins of the loaded sessions are not parsed either; "
+                    "the .txt export is the canonical text form."
+                ),
+            },
+            # Checked: repeat measurements of one patient share the
+            # target row and were acquired in the same visit; patient
+            # is the finest correlated unit (21 groups).
+            is_grouped=True,
+            # Checked: every loaded session joins a baseline target
+            # row; sessions without a subject in the workbook are
+            # excluded.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None beyond interpolation onto the common 401-3,999 "
+                "cm^-1 @1 cm^-1 grid. The .txt exports are raw LabSpec6 "
+                "counts (per file header: DeNoise, Dark correction and "
+                "ICS correction all 'Off'); no baseline correction or "
+                "normalization was applied at export."
+            ),
+        ),
+        "glaucoma_enigma_18m": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Medical,
+            id="8pwpbcrjd8",
+            name="Glaucoma ENIGMA Trial: Serum Raman, 18 Months (Udensi 2024)",
+            short_name="Glaucoma ENIGMA 18 Months",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_enigma(
+                cache_path, "18m"
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of macular pigment carotenoids in human "
+                    "blood serum of glaucoma patients, ENIGMA trial, "
+                    "18-month visit (Udensi, Loskutova, Loughman & Byrne "
+                    "2024)"
+                ),
+                "source": "https://data.mendeley.com/datasets/8pwpbcrjd8/1",
+                "doi": "10.17632/8pwpbcrjd8.1",
+                "bibtex": "@dataset{Udensi_2024_enigma, title={Analysis of macular pigment carotenoids in human blood serum of glaucoma patients as a measure of ocular health: A Raman spectroscopic study}, author={Udensi, Joy and Loskutova, Ekaterina and Loughman, James and Byrne, Hugh}, year={2024}, publisher={Mendeley Data}, doi={10.17632/8pwpbcrjd8.1}, url={https://doi.org/10.17632/8pwpbcrjd8.1}}",
+                "citation": [
+                    "Udensi, J., Loskutova, E., Loughman, J., and Byrne, H. "
+                    "(2024). Analysis of macular pigment carotenoids in "
+                    "human blood serum of glaucoma patients as a measure "
+                    "of ocular health: A Raman spectroscopic study. "
+                    "Mendeley Data, v1. https://doi.org/10.17632/"
+                    "8pwpbcrjd8.1",
+                ],
+                "description": (
+                    "Whole-serum Raman spectra of 23 glaucoma patients of "
+                    "the ENIGMA trial at the 18-month visit (the "
+                    "deposit's 'whole serum18 months' folder; filename "
+                    "suffixes a-d are repeat measurements of the same "
+                    "patient within the visit). 100 measurement sessions "
+                    "(4 per patient, except ET043/ET048/ET049 with "
+                    "6/8/6 -- the extra '_1' stems are re-taken exports "
+                    "of the same measurement). Horiba LabSpec6 "
+                    "dispersive Raman, native 2,541-point axes spanning "
+                    "400.8-3,999.4 cm^-1 (~1.42 cm^-1 spacing); the "
+                    "loader interpolates every session onto the common "
+                    "401-3,999 cm^-1 @1 cm^-1 grid (3,599 points), which "
+                    "all 246 valid session exports fully cover, so no "
+                    "extrapolation is involved. Multi-target regression: "
+                    "11 targets per patient from the deposit's 18-month "
+                    "sheet -- macular-pigment optical density at 0.23/"
+                    "0.51/0.74/1.02 mm plus MP_Volume6.02_18M, visual "
+                    "acuity (VA_18M), microperimetry "
+                    "(Microperim_Aver_18M), OCT (mRNFL_6_18M, "
+                    "GCC_6calculate_18M, GCL_6_18M) and GAL9_18M. The "
+                    "sheet's Treatment column (trial arm 1/2, 15/8 "
+                    "patients) is a design factor, not an outcome, so it "
+                    "is not a target. group_ids = patient (23 groups): "
+                    "repeat measurements of one patient share the same "
+                    "target row, so grouped k-fold CV is "
+                    "leave-one-patient-out. Intensities are raw LabSpec "
+                    "counts as deposited (per file header DeNoise, Dark "
+                    "correction and ICS correction are all 'Off'); the "
+                    "excitation wavelength is not recorded in the "
+                    "deposit. Both datasets of the deposit share one "
+                    "frozen 9.5 MB Mendeley snapshot mirrored at "
+                    "HTW-KI-Werkstatt/RamanBench "
+                    "(glaucoma_enigma/snapshot/, size + sha256 pinned; "
+                    "the live Mendeley download sits behind a WAF that "
+                    "403s non-browser clients, hence the mirror). "
+                    "Excluded: 19 sessions of subjects without 18-month "
+                    "targets (ET003, ET004, ET035, ET062 and the "
+                    "water_a/water_b reference scans) and ET0597_a "
+                    "(four-digit subject id, .l6s-only, presumably a "
+                    "mistyped duplicate of ET057/ET059, both already "
+                    "covered); the .l6s twins of the loaded sessions "
+                    "are not parsed, the .txt export is the canonical "
+                    "text form."
+                ),
+            },
+            # Checked: repeat measurements of one patient share the
+            # target row and were acquired in the same visit; patient
+            # is the finest correlated unit (23 groups).
+            is_grouped=True,
+            # Checked: every loaded session joins a 18-month target
+            # row; sessions without a subject in the workbook are
+            # excluded.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None beyond interpolation onto the common 401-3,999 "
+                "cm^-1 @1 cm^-1 grid. The .txt exports are raw LabSpec6 "
+                "counts (per file header: DeNoise, Dark correction and "
+                "ICS correction all 'Off'); no baseline correction or "
+                "normalization was applied at export."
+            ),
+        ),
+        "infant_formula_raman": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="4j8bj5vv52",
+            name="Infant Formula Products, Online vs Offline Channels (Zhang 2020)",
+            short_name="Infant Formula",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_infant_formula(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of infant formula products from "
+                    "online and offline channels (Zhang 2020)"
+                ),
+                "source": "https://data.mendeley.com/datasets/4j8bj5vv52/2",
+                "doi": "10.17632/4j8bj5vv52.2",
+                "bibtex": "@dataset{Zhang_2020_infant_formula, title={Raman spectra of infant formula products from online and offline channels}, author={Zhang, Yinsheng}, year={2020}, publisher={Mendeley Data}, doi={10.17632/4j8bj5vv52.2}, url={https://doi.org/10.17632/4j8bj5vv52.2}}",
+                "citation": [
+                    "Zhang, Y. (2020). Raman spectra of infant formula "
+                    "products from online and offline channels. "
+                    "Mendeley Data, v2. "
+                    "https://doi.org/10.17632/4j8bj5vv52.2",
+                ],
+                "description": (
+                    "373 Raman spectra of powdered infant formula "
+                    "products: 24 product types = 4 brands (A/B/N/Q, "
+                    "de-identified by the authors) x 3 formula stages "
+                    "(1: 0-6 months, 2: 6-12 months, 3: 12-36 months) "
+                    "x purchase channel (online / offline), 11-24 "
+                    "spectra per type except the two Q stage-1 types "
+                    "with 5 each. Native 1,738-point spectra over "
+                    "50.2-3,399.9 cm^-1 (~1.93 cm^-1 spacing; ~2 "
+                    "cm^-1 resolution per the authors' code report), "
+                    "stored as the CSV column headers (one shared "
+                    "axis) and used as is, so no resampling is "
+                    "involved. Intensities are raw as deposited "
+                    "(arbitrary units, negative points down to "
+                    "~-1.8e3, maxima ~1.1e4); the excitation "
+                    "wavelength is not recorded in the deposit. "
+                    "Label semantics from the deposit's labels file: "
+                    "1/2/3 are the three formula stages (periods) and "
+                    "ON LINE / OFF LINE the online / offline purchase "
+                    "channel. The deposit's tidy CSV is served from a "
+                    "frozen copy mirrored at HTW-KI-Werkstatt/"
+                    "RamanBench (infant_formula/, size + sha256 "
+                    "pinned; the live Mendeley download sits behind a "
+                    "WAF that 403s non-browser clients, hence the "
+                    "mirror); deposit v1 and v2 are identical for the "
+                    "data files. No per-spectrum sample/bottle "
+                    "identifiers are in the deposit, so group-aware "
+                    "splitting is not possible."
+                ),
+            },
+            # Checked: the deposit is a tidy CSV with a single Label
+            # column and no sample/bottle identifiers; each row is one
+            # measurement of an (unidentified) bottle.
+            is_grouped=False,
+            # Checked: all 373 rows carry one of the 24 labels and
+            # the labels file maps all 24.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None. The CSV is the authors' analysis-ready export; "
+                "intensities are raw as deposited (the authors' code "
+                "report applies ElasticNet/PCA in analysis, not to "
+                "the data)."
+            ),
+        ),
+        "aged_oils_raman_1a": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="ctgg7k4m5g",
+            name="Aged Edible Oils, Raman Data Set 1A (Gilbraith 2025)",
+            short_name="Aged Oils Raman 1A",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_aged_oils_raman_1a(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of naturally aged edible oils, "
+                    "Data Set 1A: the 2016 LBNL campaign (Gilbraith "
+                    "et al., Applied Spectroscopy Practica 2025)"
+                ),
+                "source": "https://data.mendeley.com/datasets/ctgg7k4m5g/2",
+                "doi": "10.17632/ctgg7k4m5g.2",
+                "paper": "https://doi.org/10.1177/27551857251340426",
+                "bibtex": (
+                    "@article{Gilbraith_2025, title={Classification "
+                    "and Peroxide Value Prediction of Naturally Aged "
+                    "Edible Oils Using Raman and Infrared Spectral "
+                    "Analysis}, volume={3}, number={2}, "
+                    "url={https://doi.org/10.1177/27551857251340426}, "
+                    "DOI={10.1177/27551857251340426}, "
+                    "journal={Applied Spectroscopy Practica}, "
+                    "publisher={SAGE Publications}, "
+                    "author={Gilbraith, William E. and Carter, J. "
+                    "Chance and Adams, Kristl and Sota-Uba, Isio and "
+                    "Lavine, Barry K. and Booksh, Karl S. and "
+                    "Ottaway, Joshua M.}, year={2025}, month=jun}"
+                ),
+                "citation": [
+                    "Gilbraith, W. E., Carter, J. C., Adams, K., "
+                    "Sota-Uba, I., Lavine, B. K., Booksh, K. S., and "
+                    "Ottaway, J. M. (2025). Classification and "
+                    "peroxide value prediction of naturally aged "
+                    "edible oils using Raman and infrared spectral "
+                    "analysis. Applied Spectroscopy Practica, 3(2), "
+                    "27551857251340426. "
+                    "https://doi.org/10.1177/27551857251340426",
+                ],
+                "description": (
+                    "99 Raman spectra of naturally aged (5-7 year) "
+                    "edible oil bottles, Data Set 1A (the 2016 LBNL "
+                    "campaign of Gilbraith et al. 2025): one spectrum "
+                    "per bottle, 100 deposited rows for the 100 "
+                    "purchased bottles, of which one (class 15) is an "
+                    "all-NaN placeholder the authors replaced with "
+                    "NaN to keep the matrix rectangular (excluded "
+                    "here). Peroxide-value regression: the primary "
+                    "target is the peroxide value (PV, by "
+                    "wet-chemical titration) of each bottle "
+                    "(1.5-165.4, no missing values); the oil class is "
+                    "also recorded in the CSV, so a classification "
+                    "task is derivable, but the coverage is "
+                    "unbalanced (class 1: 27 spectra down to "
+                    "single-spectrum classes) and class 4 (avocado "
+                    "oil) is absent while class 20 (3 spectra) has no "
+                    "name in the deposit's 19-entry class key. "
+                    "Native 1,340-point spectra over -18.1-1,974.2 "
+                    "cm^-1 (~1.1-2.0 cm^-1 spacing) stored as the CSV "
+                    "column headers (one shared axis) and used as is, "
+                    "so no resampling is involved; the low-wavenumber "
+                    "end is negative, an instrument export artifact "
+                    "retained as deposited. Intensities are raw "
+                    "counts (2.8e4-2.1e7, arbitrary units); "
+                    "instrument model and excitation wavelength are "
+                    "not recorded in the deposit. Oils are commercial "
+                    "bottles from grocery stores in and around "
+                    "Newark, Delaware (2014-2016), aged naturally "
+                    "for 5-7 years. The CSV is served from a frozen "
+                    "copy mirrored at HTW-KI-Werkstatt/RamanBench "
+                    "(aged_oils/, size + sha256 pinned; the live "
+                    "Mendeley download sits behind a WAF that 403s "
+                    "non-browser clients, hence the mirror)."
+                ),
+            },
+            # Checked: Data Set 1A is one Raman spectrum per bottle
+            # (100 rows for the 100 purchased bottles); no replicate
+            # structure to group on.
+            is_grouped=False,
+            # Checked: every row carries a peroxide value (no NaN);
+            # the one all-NaN placeholder row (class 15) is excluded
+            # by the loader, and its PV is a valid number.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None. The CSV is the deposit's analysis-ready "
+                "export; intensities are raw as deposited. The "
+                "authors' supplemental R code applies its own "
+                "preprocessing in analysis, not to the deposited "
+                "data."
+            ),
+        ),
+        "aged_oils_raman_2": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="ctgg7k4m5g",
+            name="Aged Edible Oils, Raman Data Set 2 (Gilbraith 2025)",
+            short_name="Aged Oils Raman 2",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_aged_oils_raman_2(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of naturally aged edible oils, "
+                    "Data Set 2: the University of Delaware campaign "
+                    "(Gilbraith et al., Applied Spectroscopy "
+                    "Practica 2025)"
+                ),
+                "source": "https://data.mendeley.com/datasets/ctgg7k4m5g/2",
+                "doi": "10.17632/ctgg7k4m5g.2",
+                "paper": "https://doi.org/10.1177/27551857251340426",
+                "bibtex": (
+                    "@article{Gilbraith_2025, title={Classification "
+                    "and Peroxide Value Prediction of Naturally Aged "
+                    "Edible Oils Using Raman and Infrared Spectral "
+                    "Analysis}, volume={3}, number={2}, "
+                    "url={https://doi.org/10.1177/27551857251340426}, "
+                    "DOI={10.1177/27551857251340426}, "
+                    "journal={Applied Spectroscopy Practica}, "
+                    "publisher={SAGE Publications}, "
+                    "author={Gilbraith, William E. and Carter, J. "
+                    "Chance and Adams, Kristl and Sota-Uba, Isio and "
+                    "Lavine, Barry K. and Booksh, Karl S. and "
+                    "Ottaway, Joshua M.}, year={2025}, month=jun}"
+                ),
+                "citation": [
+                    "Gilbraith, W. E., Carter, J. C., Adams, K., "
+                    "Sota-Uba, I., Lavine, B. K., Booksh, K. S., and "
+                    "Ottaway, J. M. (2025). Classification and "
+                    "peroxide value prediction of naturally aged "
+                    "edible oils using Raman and infrared spectral "
+                    "analysis. Applied Spectroscopy Practica, 3(2), "
+                    "27551857251340426. "
+                    "https://doi.org/10.1177/27551857251340426",
+                ],
+                "description": (
+                    "215 Raman spectra of 53 naturally aged (5-7 "
+                    "year) edible oil bottles, Data Set 2 (the "
+                    "University of Delaware campaign of Gilbraith "
+                    "et al. 2025): replicate measurements of 53 of "
+                    "the deposit's 100 bottles, measured with a "
+                    "different Raman probe from Data Set 1A (lower "
+                    "counts, -5.4e3-4.2e4, arbitrary units; the two "
+                    "probes' intensity scales differ by ~2 orders of "
+                    "magnitude, so the two Raman sets are shipped as "
+                    "separate datasets). Peroxide-value regression: "
+                    "the primary target is the peroxide value (PV, "
+                    "by titration) of each spectrum (0.46-80.5, no "
+                    "missing values); the oil class is also recorded "
+                    "in the CSV (15 of the deposit's 19 classes "
+                    "present), so a classification task is "
+                    "derivable. Native 1,044-point spectra over "
+                    "18.0-2,087.9 cm^-1 (~1.5-2.7 cm^-1 spacing) "
+                    "stored as the CSV column headers (one shared "
+                    "axis) and used as is, so no resampling is "
+                    "involved. No per-spectrum sample ids are in the "
+                    "deposit, so the replicate structure of the 215 "
+                    "spectra over the 53 bottles is not recoverable: "
+                    "group-aware splitting is not possible and "
+                    "ungrouped CV may leak between replicates of the "
+                    "same bottle. The CSV is served from a frozen "
+                    "copy mirrored at HTW-KI-Werkstatt/RamanBench "
+                    "(aged_oils/, size + sha256 pinned; the live "
+                    "Mendeley download sits behind a WAF that 403s "
+                    "non-browser clients, hence the mirror)."
+                ),
+            },
+            # Checked: the deposit's CSV has no per-spectrum sample
+            # ids, so the 215-spectra-over-53-bottles replicate
+            # structure is not recoverable; is_grouped=False with
+            # the leakage risk documented.
+            is_grouped=False,
+            # Checked: all 215 rows carry a peroxide value (no NaN)
+            # and complete spectra (no NaN cells).
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None. The CSV is the deposit's analysis-ready "
+                "export; intensities are raw as deposited. The "
+                "authors' supplemental R code applies its own "
+                "preprocessing in analysis, not to the deposited "
+                "data."
+            ),
+        ),
+        "cwa_tep": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="jtk7rv77td",
+            name="CWA Simulant TEP Concentration (Zhong 2026)",
+            short_name="CWA TEP",
+            license="CC BY-NC 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_cwa_tep(cache_path),
+            metadata={
+                "full_name": (
+                    "Raw Raman spectra of TEP (triethyl phosphate) "
+                    "concentration series (Zhong 2026, Mendeley Data)"
+                ),
+                "source": "https://data.mendeley.com/datasets/jtk7rv77td",
+                "doi": "10.17632/jtk7rv77td.1",
+                "bibtex": (
+                    "@dataset{zhong2026cwa, title={Raw Raman spectral "
+                    "datasets of TEP, DIMP, and DMMP with a linear "
+                    "simulated dataset}, author={Zhong, Fanghui}, "
+                    "year={2026}, publisher={Mendeley Data}, "
+                    "doi={10.17632/jtk7rv77td.1}, "
+                    "url={https://doi.org/10.17632/jtk7rv77td.1}}"
+                ),
+                "citation": [
+                    "Zhong, F. (2026). Raw Raman spectral datasets of "
+                    "TEP, DIMP, and DMMP with a linear simulated "
+                    "dataset. Mendeley Data. "
+                    "https://doi.org/10.17632/jtk7rv77td.1",
+                ],
+                "description": (
+                    "683 raw 1064 nm FT-Raman spectra (per the "
+                    "deposit page) of triethyl phosphate (TEP, an "
+                    "organophosphorus chemical-warfare-agent "
+                    "simulant) solutions at 11 concentration levels "
+                    "(0.005, 0.01, 0.02, 0.04, 0.06, 0.08, 0.1, "
+                    "0.25, 0.5, 0.75, 1.0, i.e. 0.5 %-100 %; 1.0 = "
+                    "pure compound), collected by the Aerospace "
+                    "Information Research Institute (Beijing) as "
+                    "part of the LOD-calculation study "
+                    "'Prediction-space LOD calculation for "
+                    "nonlinear machine-learning Raman calibration: "
+                    "validation using RBF-SVR' (Zhong 2026; the "
+                    "manuscript is cited by title in the deposit and "
+                    "was not indexed in Crossref/OpenAlex at "
+                    "capture time). Task: concentration regression "
+                    "(single target tep_concentration, fractional "
+                    "concentration 0.005-1.0). Native 512-point "
+                    "axis 36.84-2,546.1 cm^-1 (3.4-7.4 cm^-1 "
+                    "non-uniform spacing), read from the xlsx column "
+                    "headers and used as is, so no resampling is "
+                    "involved. Intensities are raw 16-bit counts "
+                    "(11,017-65,535); 7 of the 96 pure-compound "
+                    "(1.0) spectra show detector saturation at the "
+                    "65,535 ceiling. The xlsx also carries a Number "
+                    "column (global spectrum index, one gap at 319) "
+                    "that provides no grouping information, so "
+                    "group-aware splitting is not available "
+                    "(is_grouped=False); 9 spectra are exact "
+                    "duplicates of other rows (repeat acquisitions, "
+                    "kept as deposited). The deposit's companion "
+                    "file Linear_simulated_dataset.xlsx is a "
+                    "simulated (not measured) near-linear PLSR "
+                    "validation set and is not loaded. Served from "
+                    "a frozen copy mirrored at HTW-KI-Werkstatt/"
+                    "RamanBench (cwa_simulants/, size + sha256 "
+                    "pinned; the live Mendeley download sits behind "
+                    "a WAF that 403s non-browser clients, hence the "
+                    "mirror). License: CC BY-NC 4.0 (non-commercial "
+                    "use only)."
+                ),
+            },
+            # Checked: the Number column is a global spectrum index
+            # with no per-sample grouping (one gap at 319);
+            # is_grouped=False.
+            is_grouped=False,
+            # Checked: all 683 rows carry a concentration label
+            # (no NaN).
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None. The deposit's README states the spectra are "
+                "raw (no Savitzky-Golay smoothing or "
+                "standardization); the authors' preprocessing was "
+                "applied in analysis, not to the deposited data."
+            ),
+        ),
+        "cwa_dimp": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="jtk7rv77td",
+            name="CWA Simulant DIMP Concentration (Zhong 2026)",
+            short_name="CWA DIMP",
+            license="CC BY-NC 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_cwa_dimp(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raw Raman spectra of DIMP (diisopropyl "
+                    "methylphosphonate) concentration series (Zhong "
+                    "2026, Mendeley Data)"
+                ),
+                "source": "https://data.mendeley.com/datasets/jtk7rv77td",
+                "doi": "10.17632/jtk7rv77td.1",
+                "bibtex": (
+                    "@dataset{zhong2026cwa, title={Raw Raman spectral "
+                    "datasets of TEP, DIMP, and DMMP with a linear "
+                    "simulated dataset}, author={Zhong, Fanghui}, "
+                    "year={2026}, publisher={Mendeley Data}, "
+                    "doi={10.17632/jtk7rv77td.1}, "
+                    "url={https://doi.org/10.17632/jtk7rv77td.1}}"
+                ),
+                "citation": [
+                    "Zhong, F. (2026). Raw Raman spectral datasets of "
+                    "TEP, DIMP, and DMMP with a linear simulated "
+                    "dataset. Mendeley Data. "
+                    "https://doi.org/10.17632/jtk7rv77td.1",
+                ],
+                "description": (
+                    "723 raw 1064 nm FT-Raman spectra (per the "
+                    "deposit page) of diisopropyl methylphosphonate "
+                    "(DIMP, an organophosphorus "
+                    "chemical-warfare-agent simulant) solutions at "
+                    "11 concentration levels (0.005, 0.01, 0.02, "
+                    "0.04, 0.06, 0.08, 0.1, 0.25, 0.5, 0.75, 1.0, "
+                    "i.e. 0.5 %-100 %; 1.0 = pure compound), "
+                    "collected by the Aerospace Information "
+                    "Research Institute (Beijing) as part of the "
+                    "LOD-calculation study 'Prediction-space LOD "
+                    "calculation for nonlinear machine-learning "
+                    "Raman calibration: validation using RBF-SVR' "
+                    "(Zhong 2026; the manuscript is cited by title "
+                    "in the deposit and was not indexed in "
+                    "Crossref/OpenAlex at capture time). Task: "
+                    "concentration regression (single target "
+                    "dimp_concentration, fractional concentration "
+                    "0.005-1.0). Native 512-point axis "
+                    "36.84-2,546.1 cm^-1 (3.4-7.4 cm^-1 non-uniform "
+                    "spacing), read from the xlsx column headers "
+                    "and used as is, so no resampling is involved. "
+                    "Intensities are raw 16-bit counts "
+                    "(14,721-65,535); 8 of the 39 pure-compound "
+                    "(1.0) spectra show detector saturation at the "
+                    "65,535 ceiling. The xlsx also carries a Number "
+                    "column (global spectrum index, complete 1-723) "
+                    "that provides no grouping information, so "
+                    "group-aware splitting is not available "
+                    "(is_grouped=False); 6 spectra are exact "
+                    "duplicates of other rows (repeat acquisitions, "
+                    "kept as deposited). The deposit's companion "
+                    "file Linear_simulated_dataset.xlsx is a "
+                    "simulated (not measured) near-linear PLSR "
+                    "validation set and is not loaded. Served from "
+                    "a frozen copy mirrored at HTW-KI-Werkstatt/"
+                    "RamanBench (cwa_simulants/, size + sha256 "
+                    "pinned; the live Mendeley download sits behind "
+                    "a WAF that 403s non-browser clients, hence the "
+                    "mirror). License: CC BY-NC 4.0 (non-commercial "
+                    "use only)."
+                ),
+            },
+            # Checked: the Number column is a global spectrum index
+            # (complete 1-723) with no per-sample grouping;
+            # is_grouped=False.
+            is_grouped=False,
+            # Checked: all 723 rows carry a concentration label
+            # (no NaN).
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None. The deposit's README states the spectra are "
+                "raw (no Savitzky-Golay smoothing or "
+                "standardization); the authors' preprocessing was "
+                "applied in analysis, not to the deposited data."
+            ),
+        ),
+        "cwa_dmmp": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="jtk7rv77td",
+            name="CWA Simulant DMMP Concentration (Zhong 2026)",
+            short_name="CWA DMMP",
+            license="CC BY-NC 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_cwa_dmmp(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raw Raman spectra of DMMP (dimethyl "
+                    "methylphosphonate) concentration series "
+                    "(Zhong 2026, Mendeley Data)"
+                ),
+                "source": "https://data.mendeley.com/datasets/jtk7rv77td",
+                "doi": "10.17632/jtk7rv77td.1",
+                "bibtex": (
+                    "@dataset{zhong2026cwa, title={Raw Raman spectral "
+                    "datasets of TEP, DIMP, and DMMP with a linear "
+                    "simulated dataset}, author={Zhong, Fanghui}, "
+                    "year={2026}, publisher={Mendeley Data}, "
+                    "doi={10.17632/jtk7rv77td.1}, "
+                    "url={https://doi.org/10.17632/jtk7rv77td.1}}"
+                ),
+                "citation": [
+                    "Zhong, F. (2026). Raw Raman spectral datasets of "
+                    "TEP, DIMP, and DMMP with a linear simulated "
+                    "dataset. Mendeley Data. "
+                    "https://doi.org/10.17632/jtk7rv77td.1",
+                ],
+                "description": (
+                    "717 raw 1064 nm FT-Raman spectra (per the "
+                    "deposit page) of dimethyl methylphosphonate "
+                    "(DMMP, an organophosphorus "
+                    "chemical-warfare-agent simulant) solutions at "
+                    "11 concentration levels (0.005, 0.01, 0.02, "
+                    "0.04, 0.06, 0.08, 0.1, 0.25, 0.5, 0.75, 1.0, "
+                    "i.e. 0.5 %-100 %; 1.0 = pure compound), "
+                    "collected by the Aerospace Information "
+                    "Research Institute (Beijing) as part of the "
+                    "LOD-calculation study 'Prediction-space LOD "
+                    "calculation for nonlinear machine-learning "
+                    "Raman calibration: validation using RBF-SVR' "
+                    "(Zhong 2026; the manuscript is cited by title "
+                    "in the deposit and was not indexed in "
+                    "Crossref/OpenAlex at capture time). Task: "
+                    "concentration regression (single target "
+                    "dmmp_concentration, fractional concentration "
+                    "0.005-1.0). Native 512-point axis "
+                    "36.84-2,546.1 cm^-1 (3.4-7.4 cm^-1 non-uniform "
+                    "spacing), read from the xlsx column headers "
+                    "and used as is, so no resampling is involved. "
+                    "Intensities are raw 16-bit counts "
+                    "(13,606-65,535); the detector saturates at "
+                    "the 65,535 ceiling for all 198 spectra of the "
+                    "0.1, 0.75 and 1.0 levels (88, 58 and 52 "
+                    "spectra), so those levels are partially "
+                    "unreliable. The xlsx data live in sheet "
+                    "'Sheet2' (this file has no 'Sheet1'; the "
+                    "loader picks the first non-empty sheet) and "
+                    "carry a Number column (global spectrum index, "
+                    "one gap at 710) that provides no grouping "
+                    "information, so group-aware splitting is not "
+                    "available (is_grouped=False); 6 spectra are "
+                    "exact duplicates of other rows (repeat "
+                    "acquisitions, kept as deposited). The "
+                    "deposit's companion file "
+                    "Linear_simulated_dataset.xlsx is a simulated "
+                    "(not measured) near-linear PLSR validation set "
+                    "and is not loaded. Served from a frozen copy "
+                    "mirrored at HTW-KI-Werkstatt/RamanBench "
+                    "(cwa_simulants/, size + sha256 pinned; the "
+                    "live Mendeley download sits behind a WAF that "
+                    "403s non-browser clients, hence the mirror). "
+                    "License: CC BY-NC 4.0 (non-commercial use "
+                    "only)."
+                ),
+            },
+            # Checked: the Number column is a global spectrum index
+            # with no per-sample grouping (one gap at 710);
+            # is_grouped=False.
+            is_grouped=False,
+            # Checked: all 717 rows carry a concentration label
+            # (no NaN).
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None. The deposit's README states the spectra are "
+                "raw (no Savitzky-Golay smoothing or "
+                "standardization); the authors' preprocessing was "
+                "applied in analysis, not to the deposited data."
+            ),
+        ),
+        "niclosamide_polymorph_binary": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="niclosamide_polymorph_binary",
+            name=(
+                "Niclosamide Polymorph Quantification in Binary "
+                "Mixtures, Raman (Valmala 2019)"
+            ),
+            short_name="Niclosamide Polymorph Binary",
+            license="CC BY-NC 3.0",
+            loader=lambda cache_path: MendeleyLoader._load_niclosamide_polymorph_binary(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of binary mixtures of the "
+                    "anhydrous (NAn) and monohydrate-A (NHa) forms "
+                    "of niclosamide: NHa %w/w quantification "
+                    "(Valmala et al. 2019, Talanta 199, 679-688)"
+                ),
+                "source": "https://data.mendeley.com/datasets/mv686f9r66/1",
+                "paper": "https://doi.org/10.1016/j.talanta.2019.03.027",
+                "bibtex": (
+                    "@article{valmala2019niclosamide, "
+                    "title={Quantification of niclosamide "
+                    "polymorphic forms - a comparative study by "
+                    "Raman, NIR and MIR using chemometric "
+                    "techniques}, author={Bhavana, Valmala and "
+                    "Chavan, Rahul B. and Mannava, M.K. Chaitanya "
+                    "and Nangia, Ashwini and Shastri, Nalini R.}, "
+                    "journal={Talanta}, volume={199}, "
+                    "pages={679--688}, year={2019}, "
+                    "doi={10.1016/j.talanta.2019.03.027}}"
+                ),
+                "citation": [
+                    "Bhavana, V., Chavan, R. B., Mannava, M. K. C., "
+                    "Nangia, A., and Shastri, N. R. (2019). "
+                    "Quantification of niclosamide polymorphic "
+                    "forms - a comparative study by Raman, NIR and "
+                    "MIR using chemometric techniques. Talanta, "
+                    "199, 679-688. "
+                    "https://doi.org/10.1016/j.talanta.2019.03.027 "
+                    "(data: https://doi.org/10.17632/mv686f9r66.1)",
+                ],
+                "description": (
+                    "Raman spectra of 57 binary mixtures of the "
+                    "anhydrous (NAn) and metastable monohydrate-A "
+                    "(NHa) forms of the anthelmintic drug "
+                    "niclosamide, from the supplementary workbook "
+                    "of Valmala et al. 2019 (Talanta 199, 679-688, "
+                    "doi:10.1016/j.talanta.2019.03.027; Mendeley "
+                    "Data doi:10.17632/mv686f9r66.1, CC BY-NC 3.0; "
+                    "the workbook's other sheets cover NIR and MIR "
+                    "and are not loaded). Task: single-target "
+                    "regression - the Y variable is 'Concentration "
+                    "of NHa (%w/w)' (0-100). Levels: the "
+                    "calibration block has 6 spectra each at 0, "
+                    "10, 30, 50, 70, 90 and 100 %, plus the "
+                    "authors' validation block (20% x3 and 50% x3 "
+                    "'Accuracy', 80% x3 'Accuracy' + 80% x6 "
+                    "'Precision') - 9 distinct levels, 57 spectra "
+                    "total. The sheet's remaining blocks are not "
+                    "loaded: a ball-milling time course (Y = "
+                    "milling time 5/60/180 min, 9 spectra) and "
+                    "four spectra labelled by NHa:NHb ratio "
+                    "('NHa: NHb (9:1)' x2, '(1:9)' x2, non-numeric "
+                    "Y) - they quantify NHa under processing or in "
+                    "the presence of the NHb monohydrate, a "
+                    "different experimental design. Niclosamide "
+                    "crystallizes into three solvated forms: NAn "
+                    "(anhydrous) and two monohydrates (NHa, NHb); "
+                    "NAn converts to NHa during high-energy milling "
+                    "in the presence of water, which is why NHa "
+                    "quantification matters. Raman region: 195 "
+                    "points, 1,051.093-1,799.338 cm^-1 (~3.857 "
+                    "cm^-1 spacing; stored descending in the "
+                    "workbook, flipped to ascending by the "
+                    "loader). The six spectra per level are the "
+                    "study's replicates; their preparation "
+                    "protocol is not documented in the SI, so "
+                    "is_grouped=False. Served from a frozen copy "
+                    "of the SI workbook 'SI- spectal Raw data.xlsx' "
+                    "(10,569,495 B, sha256 9d81a8d9...14ec) "
+                    "mirrored at HTW-KI-Werkstatt/RamanBench "
+                    "(niclosamide/): Mendeley Data 403-blocks "
+                    "non-browser clients (including CI)."
+                ),
+            },
+            # Checked: the six spectra per level are the study's
+            # replicates, but the SI does not document whether they
+            # are independent preparations, so no group-aware
+            # splitting is applied.
+            is_grouped=False,
+            # Checked: all 57 concentration rows carry a numeric
+            # NHa %w/w label and a full 195-point spectrum.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "The loader only flips the workbook's descending "
+                "wavenumber axis (1,799.338-1,051.093 cm^-1) to "
+                "ascending. No baseline correction, normalization "
+                "or resampling is applied; intensities are as "
+                "deposited (arbitrary units, 0.0018-10.05 across "
+                "the 57 spectra). The authors' PLSR modeling was "
+                "done in the paper, not on the deposited data."
+            ),
+        ),
+        "niclosamide_polymorph_mcm": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="niclosamide_polymorph_mcm",
+            name=(
+                "Niclosamide Polymorph Quantification in "
+                "Multicomponent Mixtures, Raman (Valmala 2019)"
+            ),
+            short_name="Niclosamide Polymorph MCM",
+            license="CC BY-NC 3.0",
+            loader=lambda cache_path: MendeleyLoader._load_niclosamide_polymorph_mcm(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of multicomponent mixtures of "
+                    "niclosamide forms: NHa %w/w quantification "
+                    "(Valmala et al. 2019, Talanta 199, 679-688)"
+                ),
+                "source": "https://data.mendeley.com/datasets/mv686f9r66/1",
+                "paper": "https://doi.org/10.1016/j.talanta.2019.03.027",
+                "bibtex": (
+                    "@article{valmala2019niclosamide, "
+                    "title={Quantification of niclosamide "
+                    "polymorphic forms - a comparative study by "
+                    "Raman, NIR and MIR using chemometric "
+                    "techniques}, author={Bhavana, Valmala and "
+                    "Chavan, Rahul B. and Mannava, M.K. Chaitanya "
+                    "and Nangia, Ashwini and Shastri, Nalini R.}, "
+                    "journal={Talanta}, volume={199}, "
+                    "pages={679--688}, year={2019}, "
+                    "doi={10.1016/j.talanta.2019.03.027}}"
+                ),
+                "citation": [
+                    "Bhavana, V., Chavan, R. B., Mannava, M. K. C., "
+                    "Nangia, A., and Shastri, N. R. (2019). "
+                    "Quantification of niclosamide polymorphic "
+                    "forms - a comparative study by Raman, NIR and "
+                    "MIR using chemometric techniques. Talanta, "
+                    "199, 679-688. "
+                    "https://doi.org/10.1016/j.talanta.2019.03.027 "
+                    "(data: https://doi.org/10.17632/mv686f9r66.1)",
+                ],
+                "description": (
+                    "Raman spectra of 57 multicomponent mixtures "
+                    "(MCM; sheet title 'Raman-multicomponent "
+                    "mixtures of niclosamide hydrates') from the "
+                    "supplementary workbook of Valmala et al. 2019 "
+                    "(Talanta 199, 679-688, "
+                    "doi:10.1016/j.talanta.2019.03.027; Mendeley "
+                    "Data doi:10.17632/mv686f9r66.1, CC BY-NC 3.0; "
+                    "the workbook's other sheets cover NIR and MIR "
+                    "and are not loaded). Task: single-target "
+                    "regression - the Y variable is 'Concentration "
+                    "of NHa (%w/w)', where NHa is the metastable "
+                    "monohydrate-A form of the anthelmintic drug "
+                    "niclosamide (the other forms: NAn anhydrous, "
+                    "NHb monohydrate B). Levels: the calibration "
+                    "block has 6 spectra each at 0, 6, 18, 30, 42, "
+                    "54 and 60 %, plus the authors' validation "
+                    "block (12% x3, 30% x3, 48% x3 'Accuracy', 48% "
+                    "x6 'Precision') - 9 distinct levels, 57 "
+                    "spectra total. The NHa level tops out at 60 "
+                    "%: the remaining mixture components (the "
+                    "multicomponent formulation studied for wet "
+                    "granulation) are not identified in the SI "
+                    "file. The sheet's remaining block is not "
+                    "loaded: a wet-granulation time course (Y = "
+                    "granulation time 0/15/60 min, 9 spectra). "
+                    "Raman region: 195 points, 1,051.093-1,799.338 "
+                    "cm^-1 (~3.857 cm^-1 spacing, identical to the "
+                    "binary sheet; stored descending in the "
+                    "workbook, flipped to ascending by the "
+                    "loader). The six spectra per level are the "
+                    "study's replicates; their preparation "
+                    "protocol is not documented in the SI, so "
+                    "is_grouped=False. Served from a frozen copy "
+                    "of the SI workbook 'SI- spectal Raw data.xlsx' "
+                    "(10,569,495 B, sha256 9d81a8d9...14ec) "
+                    "mirrored at HTW-KI-Werkstatt/RamanBench "
+                    "(niclosamide/): Mendeley Data 403-blocks "
+                    "non-browser clients (including CI)."
+                ),
+            },
+            # Checked: the six spectra per level are the study's
+            # replicates, but the SI does not document whether they
+            # are independent preparations, so no group-aware
+            # splitting is applied.
+            is_grouped=False,
+            # Checked: all 57 concentration rows carry a numeric
+            # NHa %w/w label and a full 195-point spectrum.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "The loader only flips the workbook's descending "
+                "wavenumber axis (1,799.338-1,051.093 cm^-1) to "
+                "ascending. No baseline correction, normalization "
+                "or resampling is applied; intensities are as "
+                "deposited (arbitrary units, 0.0023-5.71 across "
+                "the 57 spectra). The authors' PLSR modeling was "
+                "done in the paper, not on the deposited data."
+            ),
+        ),
+        "glucose_liquid_14level": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
+            id="yk75sxk6p5",
+            name=(
+                "Pure Glucose Liquid Raman, 14-Level Set "
+                "(Ngo 2024)"
+            ),
+            short_name="Glucose Liquid 14-Level",
+            license="CC BY 4.0",
+            loader=lambda cache_path: (
+                MendeleyLoader._load_glucose_liquid_14level(cache_path)
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of pure glucose liquid at 14 "
+                    "glucose levels (5 samples each, 70 spectra) "
+                    "from a Raman spectrometer at Vietnam "
+                    "National University, Hanoi (Ngo 2024, "
+                    "Mendeley Data doi:10.17632/yk75sxk6p5.1)"
+                ),
+                "source": "https://data.mendeley.com/datasets/yk75sxk6p5/1",
+                "doi": "10.17632/yk75sxk6p5.1",
+                "bibtex": (
+                    "@dataset{ngo2024glucose, title={Raman "
+                    "Scattering gathering from pure glucose "
+                    "liquid: 14-labels and 10-labels datasets}, "
+                    "author={Ngo Quang, Tri}, year={2024}, "
+                    "publisher={Mendeley Data}, "
+                    "doi={10.17632/yk75sxk6p5.1}, "
+                    "url={https://doi.org/10.17632/yk75sxk6p5.1}}"
+                ),
+                "citation": [
+                    "Ngo Quang, Tri (2024). Raman Scattering "
+                    "gathering from pure glucose liquid: "
+                    "14-labels and 10-labels datasets. Mendeley "
+                    "Data, v1. "
+                    "https://doi.org/10.17632/yk75sxk6p5.1",
+                ],
+                "description": (
+                    "The deposit's 'dense' 14-level set: 70 raw "
+                    "Raman spectra of pure glucose liquid "
+                    "(5 samples x 14 glucose levels; Ngo Quang "
+                    "Tri, Vietnam National University, Hanoi; "
+                    "Mendeley Data doi:10.17632/yk75sxk6p5.1, "
+                    "v1, 2024-02-29, CC BY 4.0, no related "
+                    "publication). Task: classification by the "
+                    "deposit's level-designation labels - M50, "
+                    "M52, M54, M55, M56, M58, M60, M62, M64, "
+                    "M65, M66, M68, M70, M75 (14 classes, 5 "
+                    "spectra each). The labels clearly encode a "
+                    "monotonic glucose-concentration ladder "
+                    "(the mean spectrum changes monotonically "
+                    "across levels), but the unit convention is "
+                    "not documented in the deposit, so no "
+                    "numeric-concentration regression target is "
+                    "exposed. IMPORTANT: the deposit contains NO "
+                    "wavenumber calibration - the data CSVs are "
+                    "bare intensity rows (2,030 columns each) "
+                    "without an axis, and no instrument model, "
+                    "excitation or spectral range is recorded "
+                    "anywhere in the deposit - so the exposed "
+                    "axis is the 0-based column index (detector "
+                    "pixel order, 0..2,029) and the spectral "
+                    "direction is undetermined. Spectra are raw "
+                    "as deposited (arbitrary units, -439..48,131 "
+                    "across the 70 rows, a few negative baseline "
+                    "points); no baseline correction, "
+                    "normalization or resampling applied. The "
+                    "five samples per level are treated as "
+                    "independent (the deposit does not document "
+                    "their preparation), so is_grouped=False. "
+                    "Served from frozen copies mirrored at "
+                    "HTW-KI-Werkstatt/RamanBench "
+                    "(glucose_liquid/): Mendeley Data "
+                    "403-blocks non-browser clients (including "
+                    "CI). The companion 'spare' 10-level set "
+                    "(50 spectra, 2,048 columns, levels "
+                    "05M..150M) is the glucose_liquid_10level "
+                    "key."
+                ),
+            },
+            # Checked: the deposit documents 5 samples per level;
+            # it does not state whether they are independent
+            # preparations, so no group-aware splitting is
+            # applied (level == class here anyway).
+            is_grouped=False,
+            # Checked: all 70 label rows carry a level code and
+            # a consistent label name.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None: raw spectra as deposited (arbitrary "
+                "units). The loader only reads the bare "
+                "intensity CSV and joins it row-wise with the "
+                "deposit's label file; the 'raman_shifts' axis "
+                "is the 0-based column index (detector pixel "
+                "order) because the deposit carries no "
+                "wavenumber calibration."
+            ),
+        ),
+        "glucose_liquid_10level": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
+            id="yk75sxk6p5",
+            name=(
+                "Pure Glucose Liquid Raman, 10-Level Set "
+                "(Ngo 2024)"
+            ),
+            short_name="Glucose Liquid 10-Level",
+            license="CC BY 4.0",
+            loader=lambda cache_path: (
+                MendeleyLoader._load_glucose_liquid_10level(cache_path)
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of pure glucose liquid at 10 "
+                    "glucose levels (5 samples each, 50 spectra) "
+                    "from a Raman spectrometer at Vietnam "
+                    "National University, Hanoi (Ngo 2024, "
+                    "Mendeley Data doi:10.17632/yk75sxk6p5.1)"
+                ),
+                "source": "https://data.mendeley.com/datasets/yk75sxk6p5/1",
+                "doi": "10.17632/yk75sxk6p5.1",
+                "bibtex": (
+                    "@dataset{ngo2024glucose, title={Raman "
+                    "Scattering gathering from pure glucose "
+                    "liquid: 14-labels and 10-labels datasets}, "
+                    "author={Ngo Quang, Tri}, year={2024}, "
+                    "publisher={Mendeley Data}, "
+                    "doi={10.17632/yk75sxk6p5.1}, "
+                    "url={https://doi.org/10.17632/yk75sxk6p5.1}}"
+                ),
+                "citation": [
+                    "Ngo Quang, Tri (2024). Raman Scattering "
+                    "gathering from pure glucose liquid: "
+                    "14-labels and 10-labels datasets. Mendeley "
+                    "Data, v1. "
+                    "https://doi.org/10.17632/yk75sxk6p5.1",
+                ],
+                "description": (
+                    "The deposit's 'spare' 10-level set: 50 raw "
+                    "Raman spectra of pure glucose liquid "
+                    "(5 samples x 10 glucose levels; Ngo Quang "
+                    "Tri, Vietnam National University, Hanoi; "
+                    "Mendeley Data doi:10.17632/yk75sxk6p5.1, "
+                    "v1, 2024-02-29, CC BY 4.0, no related "
+                    "publication). Task: classification by the "
+                    "deposit's level-designation labels - 05M, "
+                    "10mM, 20mM, 55M, 60M, 65M, 70M, 75M, 125M, "
+                    "150M (10 classes, 5 spectra each; the "
+                    "deposit's 'M'/'mM' annotation is "
+                    "inconsistent within the file). The labels "
+                    "clearly encode a monotonic "
+                    "glucose-concentration ladder (the mean "
+                    "spectrum changes monotonically across "
+                    "levels), but the unit convention is not "
+                    "documented in the deposit, so no "
+                    "numeric-concentration regression target is "
+                    "exposed. IMPORTANT: the deposit contains NO "
+                    "wavenumber calibration - the data CSVs are "
+                    "bare intensity rows (2,048 columns each) "
+                    "without an axis, and no instrument model, "
+                    "excitation or spectral range is recorded "
+                    "anywhere in the deposit - so the exposed "
+                    "axis is the 0-based column index (detector "
+                    "pixel order, 0..2,047) and the spectral "
+                    "direction is undetermined. Spectra are raw "
+                    "as deposited (arbitrary units, "
+                    "-118..63,705 across the 50 rows, a few "
+                    "negative baseline points); no baseline "
+                    "correction, normalization or resampling "
+                    "applied. The five samples per level are "
+                    "treated as independent (the deposit does "
+                    "not document their preparation), so "
+                    "is_grouped=False. Served from frozen copies "
+                    "mirrored at HTW-KI-Werkstatt/RamanBench "
+                    "(glucose_liquid/): Mendeley Data "
+                    "403-blocks non-browser clients (including "
+                    "CI). The companion 14-level set (70 "
+                    "spectra, 2,030 columns, levels M50..M75) "
+                    "is the glucose_liquid_14level key."
+                ),
+            },
+            # Checked: the deposit documents 5 samples per level;
+            # it does not state whether they are independent
+            # preparations, so no group-aware splitting is
+            # applied (level == class here anyway).
+            is_grouped=False,
+            # Checked: all 50 label rows carry a level code and
+            # a consistent label name.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None: raw spectra as deposited (arbitrary "
+                "units). The loader only reads the bare "
+                "intensity CSV and joins it row-wise with the "
+                "deposit's label file; the 'raman_shifts' axis "
+                "is the 0-based column index (detector pixel "
+                "order) because the deposit carries no "
+                "wavenumber calibration."
+            ),
         ),
     }
 
@@ -802,6 +1915,994 @@ class MendeleyLoader(BaseLoader):
         return spectra, grid, targets, list(class_names), np.array(group_ids)
 
     # ------------------------------------------------------------------
+    # glaucoma_enigma_baseline / glaucoma_enigma_18m (Mendeley 8pwpbcrjd8)
+    # ------------------------------------------------------------------
+    # Udensi et al. 2024, "Analysis of macular pigment carotenoids in
+    # human blood serum of glaucoma patients as a measure of ocular
+    # health: A Raman spectroscopic study" (Mendeley Data v1,
+    # doi:10.17632/8pwpbcrjd8.1, CC BY 4.0).
+    #
+    # The deposit is a single 9.5 MB zip with three session folders
+    # (whole Serum baseline_a, whole serum baseline_b,
+    # whole serum18 months), each holding Horiba LabSpec exports
+    # (247 .txt + 240 .l6s, the .l6s being the proprietary Horiba
+    # binary of the same measurements) plus the
+    # "OCULAR MEASUREMENTS (ENIGMA).xlsx" target workbook (baseline
+    # and 18-month sheets, one row per patient).
+    #
+    # data.mendeley.com serves downloads through a WAF that
+    # 403-blocks non-browser clients (including CI runners), so this
+    # loader reads a frozen copy of the zip mirrored on the
+    # raman_data HuggingFace mirror (see snapshot MANIFEST.txt for
+    # provenance) instead of the live Mendeley API.
+    _ENIGMA_SNAPSHOT_URL = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/glaucoma_enigma/snapshot/"
+        "Raman_and_ocular%20measuremnets.zip"
+    )
+    _ENIGMA_SNAPSHOT_ZIP = "Raman_and_ocular measuremnets.zip"
+    _ENIGMA_SNAPSHOT_SIZE = 9478954
+    _ENIGMA_SNAPSHOT_SHA256 = (
+        "2c483f6814f7b77427ed33d01e33f51153ff8b347bff0ddeff99f21448e0f454"
+    )
+
+    # Zip root directory (the authors' filename, typo included).
+    _ENIGMA_ROOT_DIR = "Raman_and_ocular measuremnets"
+    _ENIGMA_WORKBOOK = "OCULAR MEASUREMENTS (ENIGMA).xlsx"
+
+    # Every valid session export is a 2,541-point axis spanning
+    # 400.8-3,999.4 cm^-1 (~1.42 cm^-1 spacing); the common grid is
+    # a 1 cm^-1 step over the full intersection (no extrapolation).
+    _ENIGMA_GRID = np.arange(401.0, 3999.0 + 0.5, 1.0)
+    _ENIGMA_NATIVE_POINTS = 2541
+
+    # Target columns per visit (workbook column names; the loader
+    # strips stray whitespace, e.g. "GCC_6_glauc_severity " and
+    # "Microperimetry_glauc severity"). Constant design columns are
+    # not targets: Glauc_yes_no (all 21 patients are glaucoma cases)
+    # and Treatment (trial arm 1/2, a design factor, not an outcome).
+    _ENIGMA_BASELINE_TARGET_COLS = (
+        "Microperimetry_glauc severity",
+        "mRNFL_6_glauc_severity",
+        "GCC_6_glauc_severity",
+        "MP0.23_Baseline",
+        "MP0.51_Baseline",
+        "MP0.74_Baseline",
+        "MP1.02_Baseline",
+        "MP_Volume6.02",
+        "VA",
+        "GAL9",
+        "GCL_6",
+    )
+    _ENIGMA_18M_TARGET_COLS = (
+        "MP0.23_18M",
+        "MP0.51_18M",
+        "MP0.74_18M",
+        "MP1.02_18M",
+        "MP_Volume6.02_18M",
+        "GAL9_18M",
+        "VA_18M",
+        "Microperim_Aver_18M",
+        "mRNFL_6_18M",
+        "GCL_6_18M",
+        "GCC_6calculate_18M",
+    )
+
+    # Session file stems: ET<3 digits> with an optional _<a-f> repeat
+    # marker (18m also has _<a-d>1 re-taken exports). Deliberately
+    # strict: the deposit's unidentifiable stems ('1', '1_14',
+    # '1_10', 'ET0NN') and the four-digit 'ET0597' do not match.
+    _ENIGMA_STEM_RE = re.compile(r"ET(\d{3})(?:_[a-z]\d?)?$")
+
+    @staticmethod
+    def _read_enigma_txt(path: str) -> np.ndarray:
+        """
+        Read a Horiba LabSpec text export: a '#'-comment header, then
+        tab-separated (wavenumber cm^-1, intensity) rows.
+
+        Some files contain non-UTF8 bytes, hence latin-1.
+        """
+        rows = []
+        with open(path, encoding="latin-1") as fh:
+            for line in fh:
+                line = line.strip()
+                if line and not line.startswith("#"):
+                    rows.append(line)
+        return np.array(
+            [[float(v) for v in row.split("\t")] for row in rows]
+        )
+
+    @staticmethod
+    def _load_enigma(cache_path: str, visit: str):
+        """
+        Download (if needed) and load one visit of the ENIGMA trial
+        serum dataset.
+
+        visit = "baseline": 101 sessions of 21 patients (two baseline
+        visit folders), 11 baseline targets.
+        visit = "18m":       100 sessions of 23 patients (one
+        18-month folder), 11 18-month targets.
+
+        Returns spectra, raman_shifts, targets (n x 11),
+        target_names, group_ids (patient).
+        """
+        if visit not in ("baseline", "18m"):
+            raise ValueError(
+                f"Unknown ENIGMA visit {visit!r}. "
+                'Expected "baseline" or "18m".'
+            )
+        os.makedirs(cache_path, exist_ok=True)
+        zip_path = os.path.join(cache_path, MendeleyLoader._ENIGMA_SNAPSHOT_ZIP)
+        if (
+            os.path.exists(zip_path)
+            and os.path.getsize(zip_path) != MendeleyLoader._ENIGMA_SNAPSHOT_SIZE
+        ):
+            os.remove(zip_path)
+        result = LoaderTools.download(
+            url=MendeleyLoader._ENIGMA_SNAPSHOT_URL,
+            out_dir_path=cache_path,
+            out_file_name=MendeleyLoader._ENIGMA_SNAPSHOT_ZIP,
+            hash_target=MendeleyLoader._ENIGMA_SNAPSHOT_SHA256,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                "[!] glaucoma_enigma: snapshot download failed (network "
+                "error or checksum mismatch). See logs."
+            )
+        extract_root = os.path.join(cache_path, "extracted")
+        root_dir = os.path.join(extract_root, MendeleyLoader._ENIGMA_ROOT_DIR)
+        workbook = os.path.join(root_dir, MendeleyLoader._ENIGMA_WORKBOOK)
+        if not os.path.isfile(workbook):
+            if LoaderTools.extract_zip_file_content(zip_path, "extracted") is None:
+                raise RuntimeError(
+                    "[!] glaucoma_enigma: could not extract the snapshot zip."
+                )
+            if not os.path.isfile(workbook):
+                raise RuntimeError(
+                    "[!] glaucoma_enigma: snapshot layout changed (no "
+                    f"{MendeleyLoader._ENIGMA_WORKBOOK} found)."
+                )
+
+        if visit == "baseline":
+            df = pd.read_excel(workbook, sheet_name=0, header=2)
+            target_cols = list(MendeleyLoader._ENIGMA_BASELINE_TARGET_COLS)
+            folders = (
+                os.path.join(root_dir, "whole Serum baseline_a"),
+                os.path.join(root_dir, "whole serum baseline_b"),
+            )
+            n_expected, groups_expected = 101, 21
+        else:
+            df = pd.read_excel(workbook, sheet_name=1, header=1)
+            target_cols = list(MendeleyLoader._ENIGMA_18M_TARGET_COLS)
+            folders = (os.path.join(root_dir, "whole serum18 months"),)
+            n_expected, groups_expected = 100, 23
+        # The workbook has stray whitespace in some column names
+        # ("GCC_6_glauc_severity ", "Microperimetry_glauc severity").
+        df.columns = [str(c).strip() for c in df.columns]
+        missing = [c for c in target_cols if c not in df.columns]
+        if missing:
+            raise RuntimeError(
+                f"[!] glaucoma_enigma: target workbook is missing "
+                f"column(s) {missing}; has been re-specified upstream?"
+            )
+        if df[target_cols].isna().any().any():
+            raise RuntimeError(
+                "[!] glaucoma_enigma: missing target values in the "
+                "workbook."
+            )
+        targets_by_subject = {
+            str(row["Subject"]): row[target_cols].to_numpy(dtype=float)
+            for _, row in df.iterrows()
+        }
+
+        grid = MendeleyLoader._ENIGMA_GRID
+        spectra_list, targets_list, group_list = [], [], []
+        for folder in folders:
+            if not os.path.isdir(folder):
+                raise RuntimeError(
+                    f"[!] glaucoma_enigma: missing session folder {folder}."
+                )
+            for fn in sorted(os.listdir(folder)):
+                if not fn.endswith(".txt"):
+                    continue
+                m = MendeleyLoader._ENIGMA_STEM_RE.fullmatch(fn[:-4])
+                if m is None:
+                    continue  # reference / unidentifiable stems
+                subject = f"ET{m.group(1)}"
+                if subject not in targets_by_subject:
+                    continue  # subject without targets for this visit
+                arr = MendeleyLoader._read_enigma_txt(os.path.join(folder, fn))
+                x, y = arr[:, 0], arr[:, 1]
+                if (
+                    x.shape[0] != MendeleyLoader._ENIGMA_NATIVE_POINTS
+                    or not np.all(np.diff(x) > 0)
+                    or x[0] > grid[0]
+                    or x[-1] < grid[-1]
+                ):
+                    raise RuntimeError(
+                        f"[!] glaucoma_enigma: {fn} does not cover the "
+                        f"common 401-3,999 cm^-1 grid (axis "
+                        f"{x[0]:.1f}..{x[-1]:.1f})."
+                    )
+                spectra_list.append(np.interp(grid, x, y))
+                targets_list.append(targets_by_subject[subject])
+                group_list.append(subject)
+
+        if len(spectra_list) != n_expected:
+            raise RuntimeError(
+                f"[!] glaucoma_enigma ({visit}): expected {n_expected} "
+                f"sessions, got {len(spectra_list)} (snapshot layout "
+                "changed?)."
+            )
+        if len(set(group_list)) != groups_expected:
+            raise RuntimeError(
+                f"[!] glaucoma_enigma ({visit}): expected "
+                f"{groups_expected} patients, got {len(set(group_list))}."
+            )
+        spectra = np.asarray(spectra_list, dtype=float)
+        targets = np.asarray(targets_list, dtype=float)
+        if np.isnan(spectra).any() or np.isnan(targets).any():
+            raise RuntimeError("[!] glaucoma_enigma: NaN values.")
+        MendeleyLoader.logger.debug(
+            f"Loaded glaucoma_enigma ({visit}): {spectra.shape[0]} "
+            f"sessions x {spectra.shape[1]} points, "
+            f"{len(set(group_list))} patients, {targets.shape[1]} targets"
+        )
+        return spectra, grid, targets, target_cols, np.array(group_list)
+
+
+    # ------------------------------------------------------------------
+    # infant_formula_raman (Mendeley 4j8bj5vv52)
+    # ------------------------------------------------------------------
+    # Zhang 2020, "Raman spectra of infant formula products from
+    # online and offline channels" (Mendeley Data v2,
+    # doi:10.17632/4j8bj5vv52.2, CC BY 4.0).
+    #
+    # The deposit is a tidy CSV (Label column + 1,738 wavenumber
+    # columns, the native axis as column headers) plus a labels file
+    # mapping the 24 label ids to 4 de-identified brands (A/B/N/Q)
+    # x 3 formula stages (1: 0-6 months, 2: 6-12 months, 3:
+    # 12-36 months) x online/offline purchase channel. Deposit v1
+    # and v2 are identical for the data files (v2 only updates the
+    # code-report PDF).
+    #
+    # data.mendeley.com serves downloads through a WAF that
+    # 403-blocks non-browser clients (including CI runners), so this
+    # loader reads frozen copies mirrored on the raman_data
+    # HuggingFace mirror (see infant_formula/MANIFEST.txt for
+    # provenance) instead of the live Mendeley API.
+    _INFANT_FORMULA_CSV = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/infant_formula/Raman%20spectra.csv",
+        "Raman spectra.csv",
+        5928452,
+        "3c82dd1384b9e7d809ee1df5feffd8699b9c1185c79d3e898188126f8b89caa7",
+    )
+    _INFANT_FORMULA_LABELS = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/infant_formula/Raman%20spectra%20labels.txt",
+        "Raman spectra labels.txt",
+        714,
+        "ff53ed7f6fb4aa6a20bff72619abb190238d36d87f1c588f9d702455f570cd46",
+    )
+
+    # Labels file line format: "A-1-OFF LINE     0" (one leading
+    # capital brand letter, stage, channel, trailing id). The
+    # "Labels and Ids:" header, the "* ..." footnotes and the
+    # "Internal ID / Edit date" trailer do not match.
+    _INFANT_FORMULA_LABEL_RE = re.compile(
+        r"^([A-Z])-(\d)-(ON LINE|OFF LINE)\s+(\d+)$"
+    )
+
+    @staticmethod
+    def _load_infant_formula(cache_path: str):
+        """
+        Download (if needed) and load the infant formula Raman
+        dataset: 373 spectra of 24 product types (4 brands x 3
+        formula stages x online/offline purchase channel) on the
+        deposit's native 1,738-point 50.2-3,399.9 cm^-1 axis.
+
+        Returns spectra, raman_shifts, targets, class_names.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        for url, fname, size, sha in (
+            MendeleyLoader._INFANT_FORMULA_CSV,
+            MendeleyLoader._INFANT_FORMULA_LABELS,
+        ):
+            fpath = os.path.join(cache_path, fname)
+            if os.path.exists(fpath) and os.path.getsize(fpath) != size:
+                os.remove(fpath)
+            result = LoaderTools.download(
+                url=url,
+                out_dir_path=cache_path,
+                out_file_name=fname,
+                hash_target=sha,
+                hash_type=HASH_TYPE.sha256,
+            )
+            if result is None:
+                raise RuntimeError(
+                    f"[!] infant_formula_raman: download of {fname} "
+                    "failed (network error or checksum mismatch). "
+                    "See logs."
+                )
+
+        # Parse the labels file into {label_id: (brand, stage,
+        # channel)}; all 24 ids must be present.
+        label_map = {}
+        with open(
+            os.path.join(
+                cache_path, MendeleyLoader._INFANT_FORMULA_LABELS[1]
+            ),
+            encoding="latin-1",
+        ) as fh:
+            for line in fh:
+                m = MendeleyLoader._INFANT_FORMULA_LABEL_RE.match(
+                    line.strip()
+                )
+                if m:
+                    label_map[int(m.group(4))] = (
+                        m.group(1),
+                        m.group(2),
+                        m.group(3),
+                    )
+        if len(label_map) != 24 or set(label_map) != set(range(24)):
+            raise RuntimeError(
+                f"[!] infant_formula_raman: labels file parsed only "
+                f"{len(label_map)}/24 entries (deposit changed?)."
+            )
+
+        df = pd.read_csv(
+            os.path.join(cache_path, MendeleyLoader._INFANT_FORMULA_CSV[1])
+        )
+        if df.shape != (373, 1739):
+            raise RuntimeError(
+                f"[!] infant_formula_raman: expected a 373 x 1,739 "
+                f"CSV (label + 1,738 wavenumbers), got "
+                f"{df.shape} (deposit changed?)."
+            )
+        axis = np.array([float(c) for c in df.columns[1:]])
+        if (
+            not np.all(np.diff(axis) > 0)
+            or not (40.0 < axis[0] < 60.0)
+            or not (3300.0 < axis[-1] < 3500.0)
+        ):
+            raise RuntimeError(
+                "[!] infant_formula_raman: unexpected wavenumber "
+                f"axis ({axis.shape[0]} points, "
+                f"{axis[0]:.3f}..{axis[-1]:.3f} cm^-1)."
+            )
+        labels = df["Label"].to_numpy()
+        if set(np.unique(labels).tolist()) != set(range(24)):
+            raise RuntimeError(
+                "[!] infant_formula_raman: the Label column does "
+                "not cover the 24 expected product types."
+            )
+        spectra = df.iloc[:, 1:].to_numpy(dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError(
+                "[!] infant_formula_raman: NaN values in the "
+                "spectra."
+            )
+        targets = np.asarray(labels, dtype=int)
+        class_names = [
+            f"{brand}_stage{stage}_"
+            f"{'online' if channel == 'ON LINE' else 'offline'}"
+            for brand, stage, channel in (label_map[i] for i in range(24))
+        ]
+        MendeleyLoader.logger.debug(
+            f"Loaded infant_formula_raman: {spectra.shape[0]} spectra "
+            f"x {spectra.shape[1]} points, {len(class_names)} classes"
+        )
+        return spectra, axis, targets, class_names
+
+    # ------------------------------------------------------------------
+    # aged_oils_raman_1a / aged_oils_raman_2 (Mendeley ctgg7k4m5g)
+    # ------------------------------------------------------------------
+    # Gilbraith, Carter, Adams, Sota-Uba, Lavine, Booksh & Ottaway,
+    # "Classification and Peroxide Value Prediction of Naturally
+    # Aged Edible Oils Using Raman and Infrared Spectral Analysis"
+    # (Applied Spectroscopy Practica 3(2) 2025,
+    # doi:10.1177/27551857251340426); deposit ctgg7k4m5g v2
+    # (doi:10.17632/ctgg7k4m5g.2, CC BY 4.0).
+    #
+    # 100 naturally aged (5-7 year) edible oil bottles from grocery
+    # stores in and around Newark, Delaware (2014-2016). Two of the
+    # deposit's Raman campaigns are loaded (the 2019 Data Set 1B was
+    # deposited only for NIR):
+    #   Raman1A.csv: Data Set 1A (2016 LBNL), 100 rows, one spectrum
+    #     per bottle, 1,340-point axis -18.1-1,974.2 cm^-1, high
+    #     counts (2.8e4-2.1e7); one all-NaN placeholder row (class
+    #     15), excluded.
+    #   Raman2.csv: Data Set 2 (University of Delaware), 215 spectra
+    #     of 53 bottles (replicates; no sample ids in the deposit),
+    #     1,044-point axis 18.0-2,087.9 cm^-1, lower counts
+    #     (-5.4e3-4.2e4).
+    # Both carry a peroxide-value (PV, by titration) column, shipped
+    # as the single regression target. The two probes' intensity
+    # scales differ by ~2 orders of magnitude, so the sets stay
+    # separate. The deposit's ATR-FTIR Data Set 3 and its NIR/MIR
+    # files are not Raman and are not loaded.
+    #
+    # Served from the frozen HF mirror (aged_oils/) because the live
+    # Mendeley download sits behind a WAF that 403s non-browser
+    # clients (incl. CI runners).
+    _AGED_OILS_RAMAN1A = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/aged_oils/Raman1A.csv",
+        "Raman1A.csv",
+        1029350,
+        "8fbd92e030605a48fd84f194bd48dbdba9fcf006b2368a6d278159930459e5b9",
+    )
+    _AGED_OILS_RAMAN2 = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/aged_oils/Raman2.csv",
+        "Raman2.csv",
+        1647539,
+        "2772f4158e8f7f1c5bdfbbf639cf6b2240587ac17e0ed88be725ec01fd418fb6",
+    )
+
+    @staticmethod
+    def _download_aged_oils_csv(
+        cache_path: str, spec: Tuple[str, str, int, str]
+    ) -> str:
+        """
+        Download (if needed) one mirrored aged-oils CSV; returns the
+        local file path.
+        """
+        url, fname, size, sha = spec
+        fpath = os.path.join(cache_path, fname)
+        if os.path.exists(fpath) and os.path.getsize(fpath) != size:
+            os.remove(fpath)
+        result = LoaderTools.download(
+            url=url,
+            out_dir_path=cache_path,
+            out_file_name=fname,
+            hash_target=sha,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                f"[!] aged_oils: download of {fname} failed (network "
+                "error or checksum mismatch). See logs."
+            )
+        return fpath
+
+    @staticmethod
+    def _load_aged_oils_raman_1a(cache_path: str):
+        """
+        Download (if needed) and load the aged-edible-oils Raman
+        Data Set 1A: 99 spectra (100 deposited rows minus one
+        all-NaN placeholder) of one Raman spectrum per bottle on the
+        deposit's native 1,340-point -18.1-1,974.2 cm^-1 axis, with
+        the peroxide value (PV) as the regression target.
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        fpath = MendeleyLoader._download_aged_oils_csv(
+            cache_path, MendeleyLoader._AGED_OILS_RAMAN1A
+        )
+        df = pd.read_csv(fpath)
+        if df.shape != (100, 1342):
+            raise RuntimeError(
+                f"[!] aged_oils_raman_1a: expected a 100 x 1,342 "
+                f"CSV (Class, PeroxideValue + 1,340 wavenumbers), "
+                f"got {df.shape} (deposit changed?)."
+            )
+        axis = np.array([float(c) for c in df.columns[2:]])
+        if (
+            not np.all(np.diff(axis) > 0)
+            or not (-20.0 < axis[0] < 0.0)
+            or not (1900.0 < axis[-1] < 2000.0)
+        ):
+            raise RuntimeError(
+                "[!] aged_oils_raman_1a: unexpected wavenumber "
+                f"axis ({axis.shape[0]} points, "
+                f"{axis[0]:.3f}..{axis[-1]:.3f} cm^-1)."
+            )
+        pv = df["PeroxideValue"].to_numpy(dtype=float)
+        if np.isnan(pv).any():
+            raise RuntimeError(
+                "[!] aged_oils_raman_1a: NaN peroxide values."
+            )
+        spectra = df.iloc[:, 2:].to_numpy(dtype=float)
+        # One row (class 15) is an all-NaN placeholder (a sample the
+        # authors replaced with NaN to keep the matrix rectangular);
+        # exactly one such row must be present.
+        all_nan = np.isnan(spectra).all(axis=1)
+        if int(all_nan.sum()) != 1:
+            raise RuntimeError(
+                "[!] aged_oils_raman_1a: expected exactly one "
+                f"all-NaN placeholder row, found {int(all_nan.sum())}."
+            )
+        spectra = spectra[~all_nan]
+        pv = pv[~all_nan]
+        if np.isnan(spectra).any():
+            raise RuntimeError(
+                "[!] aged_oils_raman_1a: NaN intensity values."
+            )
+        MendeleyLoader.logger.debug(
+            f"Loaded aged_oils_raman_1a: {spectra.shape[0]} spectra "
+            f"x {spectra.shape[1]} points, PV "
+            f"{pv.min():.3f}..{pv.max():.3f}"
+        )
+        return spectra, axis, pv, ["peroxide_value"]
+
+    @staticmethod
+    def _load_aged_oils_raman_2(cache_path: str):
+        """
+        Download (if needed) and load the aged-edible-oils Raman
+        Data Set 2: 215 replicate spectra of 53 bottles on the
+        deposit's native 1,044-point 18.0-2,087.9 cm^-1 axis, with
+        the peroxide value (PV) as the regression target.
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        fpath = MendeleyLoader._download_aged_oils_csv(
+            cache_path, MendeleyLoader._AGED_OILS_RAMAN2
+        )
+        df = pd.read_csv(fpath)
+        if df.shape != (215, 1046):
+            raise RuntimeError(
+                f"[!] aged_oils_raman_2: expected a 215 x 1,046 "
+                f"CSV (Class, PeroxideValue + 1,044 wavenumbers), "
+                f"got {df.shape} (deposit changed?)."
+            )
+        axis = np.array([float(c) for c in df.columns[2:]])
+        if (
+            not np.all(np.diff(axis) > 0)
+            or not (10.0 < axis[0] < 30.0)
+            or not (2000.0 < axis[-1] < 2100.0)
+        ):
+            raise RuntimeError(
+                "[!] aged_oils_raman_2: unexpected wavenumber "
+                f"axis ({axis.shape[0]} points, "
+                f"{axis[0]:.3f}..{axis[-1]:.3f} cm^-1)."
+            )
+        pv = df["PeroxideValue"].to_numpy(dtype=float)
+        if np.isnan(pv).any():
+            raise RuntimeError(
+                "[!] aged_oils_raman_2: NaN peroxide values."
+            )
+        spectra = df.iloc[:, 2:].to_numpy(dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError(
+                "[!] aged_oils_raman_2: NaN intensity values."
+            )
+        MendeleyLoader.logger.debug(
+            f"Loaded aged_oils_raman_2: {spectra.shape[0]} spectra "
+            f"x {spectra.shape[1]} points, PV "
+            f"{pv.min():.3f}..{pv.max():.3f}"
+        )
+        return spectra, axis, pv, ["peroxide_value"]
+
+    # ------------------------------------------------------------------
+    # cwa_tep / cwa_dimp / cwa_dmmp (Mendeley jtk7rv77td)
+    # ------------------------------------------------------------------
+    # Zhong (2026), "Raw Raman spectral datasets of TEP, DIMP, and
+    # DMMP with a linear simulated dataset" (Aerospace Information
+    # Research Institute, Beijing; Mendeley Data deposit
+    # jtk7rv77td v1, doi:10.17632/jtk7rv77td.1, CC BY-NC 4.0).
+    #
+    # Raw 1064 nm FT-Raman concentration series of three
+    # organophosphorus chemical-warfare-agent simulants:
+    #   TEP  = triethyl phosphate
+    #   DIMP = diisopropyl methylphosphonate
+    #   DMMP = dimethyl methylphosphonate
+    # Each xlsx holds one compound: Concentration, Number (global
+    # spectrum index), then 512 wavenumber columns (36.844..
+    # 2546.084 cm^-1, non-uniform 3.4-7.4 cm^-1 spacing, numeric
+    # headers) in cm^-1. 11 concentration levels: 0.005, 0.01,
+    # 0.02, 0.04, 0.06, 0.08, 0.1, 0.25, 0.5, 0.75, 1.0 (fractional,
+    # 1.0 = pure compound; the README calls them "percentages" and
+    # 1.0 "100%"). Raw 16-bit counts (ceiling 65,535); several
+    # high-concentration spectra are detector-saturated. Row
+    # counts: TEP 683 (Sheet1, Number gap at 319), DIMP 723
+    # (Sheet1, complete), DMMP 717 (Sheet2 -- no Sheet1!, Number
+    # gap at 710). No group structure (Number is not a sample id);
+    # a few exact-duplicate rows (repeat acquisitions) are kept as
+    # deposited. The deposit's Linear_simulated_dataset.xlsx is a
+    # simulated (not measured) near-linear PLSR validation set and
+    # is not loaded (mirrored for provenance).
+    #
+    # Served from the frozen HF mirror (cwa_simulants/) because the
+    # live Mendeley download sits behind a WAF that 403s non-browser
+    # clients (incl. CI runners).
+    _CWA_TEP = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/cwa_simulants/TEP_raw_Raman_spectra.xlsx",
+        "TEP_raw_Raman_spectra.xlsx",
+        2283347,
+        "75d8d50999a5c94f2fd5efdceba7bcb962f4df502eaeb75248f94dd79b11dfb1",
+    )
+    _CWA_DIMP = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/cwa_simulants/DIMP_raw_Raman_spectra.xlsx",
+        "DIMP_raw_Raman_spectra.xlsx",
+        2422235,
+        "c16828a353db66119bdb3dac0d518ec53c122d3023eccb8998995f8c6a81179c",
+    )
+    _CWA_DMMP = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/cwa_simulants/DMMP_raw_Raman_spectra.xlsx",
+        "DMMP_raw_Raman_spectra.xlsx",
+        2408514,
+        "c110bc5814655d0b8d15cd87956c11c88c318b7159aa436463c2d9244de6e26f",
+    )
+
+    @staticmethod
+    def _download_cwa_xlsx(
+        cache_path: str, spec: Tuple[str, str, int, str]
+    ) -> str:
+        """
+        Download (if needed) one mirrored CWA-simulant xlsx; returns
+        the local file path.
+        """
+        url, fname, size, sha = spec
+        fpath = os.path.join(cache_path, fname)
+        if os.path.exists(fpath) and os.path.getsize(fpath) != size:
+            os.remove(fpath)
+        result = LoaderTools.download(
+            url=url,
+            out_dir_path=cache_path,
+            out_file_name=fname,
+            hash_target=sha,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                f"[!] cwa: download of {fname} failed (network "
+                "error or checksum mismatch). See logs."
+            )
+        return fpath
+
+    @staticmethod
+    def _parse_cwa_raw_xlsx(
+        fpath: str, key: str, n_rows: int
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """
+        Parse one of the deposit's raw Raman xlsx files (all three
+        share the layout: Concentration, Number, 512 wavenumber
+        columns). Returns spectra, raman_shifts, concentration
+        targets. The data sheet is the first non-empty sheet
+        (TEP/DIMP use 'Sheet1', DMMP uses 'Sheet2').
+        """
+        xl = pd.ExcelFile(fpath)
+        sheet = None
+        for s in xl.sheet_names:
+            if xl.parse(s, nrows=0).shape[1] > 0:
+                sheet = s
+                break
+        if sheet is None:
+            raise RuntimeError(
+                f"[!] {key}: no non-empty sheet in the xlsx."
+            )
+        df = xl.parse(sheet)
+        if df.shape[0] != n_rows or df.shape[1] != 514:
+            raise RuntimeError(
+                f"[!] {key}: expected {n_rows} rows x 514 columns "
+                f"(Concentration, Number, 512 wavenumbers), got "
+                f"{df.shape} (deposit changed?)."
+            )
+        axis = np.array([float(c) for c in df.columns[2:]])
+        if (
+            not np.all(np.diff(axis) > 0)
+            or not (30.0 < axis[0] < 50.0)
+            or not (2500.0 < axis[-1] < 2600.0)
+        ):
+            raise RuntimeError(
+                f"[!] {key}: unexpected wavenumber axis "
+                f"({axis.shape[0]} points, "
+                f"{axis[0]:.3f}..{axis[-1]:.3f} cm^-1)."
+            )
+        conc = df.iloc[:, 0].to_numpy(dtype=float)
+        if np.isnan(conc).any():
+            raise RuntimeError(f"[!] {key}: NaN concentration labels.")
+        spectra = df.iloc[:, 2:].to_numpy(dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError(f"[!] {key}: NaN intensity values.")
+        if spectra.max() > 65535.0:
+            raise RuntimeError(
+                f"[!] {key}: intensities above the 16-bit ceiling "
+                f"(max {spectra.max():g})."
+            )
+        return spectra, axis, conc
+
+    @staticmethod
+    def _load_cwa_tep(cache_path: str):
+        """
+        Download (if needed) and load the CWA-simulant TEP Raman
+        dataset: 683 raw 1064 nm FT-Raman spectra of triethyl
+        phosphate solutions at 11 concentration levels (0.005-1.0 =
+        0.5 %-100 %), on the deposit's native 512-point
+        36.84-2,546.1 cm^-1 axis, with the concentration as the
+        regression target.
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        fpath = MendeleyLoader._download_cwa_xlsx(
+            cache_path, MendeleyLoader._CWA_TEP
+        )
+        spectra, axis, conc = MendeleyLoader._parse_cwa_raw_xlsx(
+            fpath, "cwa_tep", 683
+        )
+        MendeleyLoader.logger.debug(
+            f"Loaded cwa_tep: {spectra.shape[0]} spectra x "
+            f"{spectra.shape[1]} points, concentration "
+            f"{conc.min():g}..{conc.max():g}"
+        )
+        return spectra, axis, conc, ["tep_concentration"]
+
+    @staticmethod
+    def _load_cwa_dimp(cache_path: str):
+        """
+        Download (if needed) and load the CWA-simulant DIMP Raman
+        dataset: 723 raw 1064 nm FT-Raman spectra of diisopropyl
+        methylphosphonate solutions at 11 concentration levels
+        (0.005-1.0 = 0.5 %-100 %), on the deposit's native
+        512-point 36.84-2,546.1 cm^-1 axis, with the concentration
+        as the regression target.
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        fpath = MendeleyLoader._download_cwa_xlsx(
+            cache_path, MendeleyLoader._CWA_DIMP
+        )
+        spectra, axis, conc = MendeleyLoader._parse_cwa_raw_xlsx(
+            fpath, "cwa_dimp", 723
+        )
+        MendeleyLoader.logger.debug(
+            f"Loaded cwa_dimp: {spectra.shape[0]} spectra x "
+            f"{spectra.shape[1]} points, concentration "
+            f"{conc.min():g}..{conc.max():g}"
+        )
+        return spectra, axis, conc, ["dimp_concentration"]
+
+    @staticmethod
+    def _load_cwa_dmmp(cache_path: str):
+        """
+        Download (if needed) and load the CWA-simulant DMMP Raman
+        dataset: 717 raw 1064 nm FT-Raman spectra of dimethyl
+        methylphosphonate solutions at 11 concentration levels
+        (0.005-1.0 = 0.5 %-100 %), on the deposit's native
+        512-point 36.84-2,546.1 cm^-1 axis, with the concentration
+        as the regression target. The data live in sheet 'Sheet2'
+        (this file has no 'Sheet1').
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        fpath = MendeleyLoader._download_cwa_xlsx(
+            cache_path, MendeleyLoader._CWA_DMMP
+        )
+        spectra, axis, conc = MendeleyLoader._parse_cwa_raw_xlsx(
+            fpath, "cwa_dmmp", 717
+        )
+        MendeleyLoader.logger.debug(
+            f"Loaded cwa_dmmp: {spectra.shape[0]} spectra x "
+            f"{spectra.shape[1]} points, concentration "
+            f"{conc.min():g}..{conc.max():g}"
+        )
+        return spectra, axis, conc, ["dmmp_concentration"]
+
+    # ------------------------------------------------------------------
+    # niclosamide_polymorph_binary / niclosamide_polymorph_mcm
+    # (Mendeley Data mv686f9r66, CC BY-NC 3.0)
+    # ------------------------------------------------------------------
+    # Bhavana Valmala, Rahul B. Chavan, M.K. Chaitanya Mannava,
+    # Ashwini Nangia & Nalini R. Shastri (2019), "Quantification of
+    # niclosamide polymorphic forms - a comparative study by Raman,
+    # NIR and MIR using chemometric techniques", Talanta 199,
+    # 679-688, doi:10.1016/j.talanta.2019.03.027. Data:
+    # https://doi.org/10.17632/mv686f9r66.1 (Nalini Shastri,
+    # 2019-03-09).
+    #
+    # Niclosamide crystallizes into three solvated forms: the
+    # anhydrous form (NAn) and two monohydrates (NHa, NHb). The SI
+    # workbook's 'Raman binary' sheet holds binary NAn+NHa
+    # mixtures (Y = NHa %w/w, levels 0..100) and 'Raman MCM'
+    # multicomponent mixtures (Y = NHa %w/w, levels 0..60).
+    # Sheet layout: row 1 title, row 2 'Calibration data', row 3
+    # 'Y variable' / 'X variable (Wavenumber cm-1)', row 4 =
+    # 'Concentration of NHa (%w/w)' + the 195-point wavenumber
+    # axis (1,799.338-1,051.093 cm^-1, stored DESCENDING, ~3.857
+    # cm^-1 spacing; flipped to ascending), rows 5+ = one spectrum
+    # per row (col A label + 195 intensities). After the
+    # calibration block each sheet carries the authors'
+    # 'Validation Data' block (Accuracy + Precision, still NHa
+    # %w/w) and then a block whose Y column means something else
+    # (ball-milling time in the binary sheet, wet-granulation time
+    # in MCM; plus ratio-labelled spectra in the binary sheet) -
+    # those rows are not loaded. The two sheets' axes are
+    # identical. Mendeley 403-blocks non-browser clients
+    # (including CI), so the loader reads a frozen copy of the
+    # xlsx mirrored on the HF mirror (original filename, typo
+    # included).
+    _NICLOSAMIDE_XLSX_URL = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/niclosamide/SI-%20spectal%20Raw%20data.xlsx"
+    )
+    _NICLOSAMIDE_XLSX = "SI- spectal Raw data.xlsx"
+    _NICLOSAMIDE_XLSX_SIZE = 10569495
+    _NICLOSAMIDE_XLSX_SHA256 = (
+        "9d81a8d9d082deb8b98aadc3f6622b2dd4a7524086ff5b796226f27cad2314ec"
+    )
+    _NICLOSAMIDE_N_POINTS = 195
+
+    @staticmethod
+    def _download_niclosamide_xlsx(cache_path: str) -> str:
+        """
+        Download (if needed) the mirrored niclosamide SI workbook;
+        returns the local file path.
+        """
+        fpath = os.path.join(cache_path, MendeleyLoader._NICLOSAMIDE_XLSX)
+        if (
+            os.path.exists(fpath)
+            and os.path.getsize(fpath)
+            != MendeleyLoader._NICLOSAMIDE_XLSX_SIZE
+        ):
+            os.remove(fpath)
+        result = LoaderTools.download(
+            url=MendeleyLoader._NICLOSAMIDE_XLSX_URL,
+            out_dir_path=cache_path,
+            out_file_name=MendeleyLoader._NICLOSAMIDE_XLSX,
+            hash_target=MendeleyLoader._NICLOSAMIDE_XLSX_SHA256,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                "[!] niclosamide: download of the SI workbook "
+                "failed (network error or checksum mismatch). See "
+                "logs."
+            )
+        return fpath
+
+    @staticmethod
+    def _parse_niclosamide_raman_sheet(
+        fpath: str, sheet_name: str, key: str
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """
+        Parse one Raman sheet of the niclosamide SI workbook
+        ('Raman binary' / 'Raman MCM'). Returns the
+        concentration-regression rows (col A = NHa %w/w) as
+        spectra, raman_shifts (ascending), targets.
+
+        Row selection: after the header, a row is loaded iff its
+        col A label is numeric and no 'Ball milling' /
+        'Wet granulation' section marker has been seen yet (those
+        trailing blocks use Y = process time or ratio labels, not
+        NHa %w/w).
+        """
+        try:
+            import openpyxl
+        except ImportError as e:
+            raise RuntimeError(
+                "[!] The niclosamide loader needs 'openpyxl' "
+                "(pip install openpyxl) to be installed."
+            ) from e
+
+        wb = openpyxl.load_workbook(fpath, read_only=True, data_only=True)
+        try:
+            ws = wb[sheet_name]
+            rows = list(ws.iter_rows(values_only=True))
+        finally:
+            wb.close()
+
+        # Row 4 (index 3): 'Concentration of NHa (%w/w)' + axis.
+        axis_desc = [
+            float(v) for v in rows[3][1 : 1 + MendeleyLoader._NICLOSAMIDE_N_POINTS]
+            if v is not None
+        ]
+        if len(axis_desc) != MendeleyLoader._NICLOSAMIDE_N_POINTS:
+            raise RuntimeError(
+                f"[!] {key}: the workbook layout changed ({sheet_name}: "
+                f"{len(axis_desc)} wavenumber points instead of "
+                f"{MendeleyLoader._NICLOSAMIDE_N_POINTS})."
+            )
+        if not all(b < a for a, b in zip(axis_desc, axis_desc[1:])):
+            raise RuntimeError(
+                f"[!] {key}: the {sheet_name} wavenumber axis is no "
+                "longer strictly descending as expected."
+            )
+        axis = np.asarray(axis_desc[::-1], dtype=float)
+
+        spectra_list = []
+        targets_list = []
+        stop = False
+        for row in rows[4:]:
+            label = row[0]
+            if isinstance(label, str) and (
+                "Ball milling" in label or "Wet granulation" in label
+            ):
+                stop = True
+            if stop:
+                continue
+            if not isinstance(label, (int, float)):
+                continue
+            vals = [float(v) for v in row[1:] if v is not None]
+            if len(vals) != MendeleyLoader._NICLOSAMIDE_N_POINTS:
+                raise RuntimeError(
+                    f"[!] {key}: {sheet_name} row with label "
+                    f"{label!r} has {len(vals)} points (layout "
+                    "changed?)."
+                )
+            arr = np.asarray(vals, dtype=float)
+            if not np.isfinite(arr).all():
+                raise RuntimeError(
+                    f"[!] {key}: {sheet_name} row with label "
+                    f"{label!r} contains non-finite values."
+                )
+            spectra_list.append(arr)
+            targets_list.append(float(label))
+
+        spectra = np.asarray(spectra_list, dtype=float)
+        targets = np.asarray(targets_list, dtype=float)
+        return spectra, axis, targets
+
+    @staticmethod
+    def _load_niclosamide_polymorph_binary(cache_path: str):
+        """
+        Download (if needed) and load the 57 binary NAn+NHa
+        niclosamide mixture spectra (Y = NHa %w/w) on the native
+        195-point 1,051.093-1,799.338 cm^-1 axis (flipped to
+        ascending).
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        fpath = MendeleyLoader._download_niclosamide_xlsx(cache_path)
+        spectra, axis, conc = MendeleyLoader._parse_niclosamide_raman_sheet(
+            fpath, "Raman binary", "niclosamide_polymorph_binary"
+        )
+        levels = Counter(int(round(c)) for c in conc)
+        expected = {0: 6, 10: 6, 20: 3, 30: 6, 50: 9, 70: 6, 80: 9, 90: 6, 100: 6}
+        if levels != expected:
+            raise RuntimeError(
+                f"[!] niclosamide_polymorph_binary: unexpected NHa "
+                f"level census {dict(sorted(levels.items()))} "
+                f"(expected {expected}); the workbook layout "
+                "changed."
+            )
+        MendeleyLoader.logger.debug(
+            f"Loaded niclosamide_polymorph_binary: "
+            f"{spectra.shape[0]} spectra x {spectra.shape[1]} "
+            f"points, NHa %w/w {conc.min():g}..{conc.max():g}"
+        )
+        return spectra, axis, conc, ["nh_a_percent_w_w"]
+
+    @staticmethod
+    def _load_niclosamide_polymorph_mcm(cache_path: str):
+        """
+        Download (if needed) and load the 57 multicomponent
+        mixture niclosamide spectra (Y = NHa %w/w) on the native
+        195-point 1,051.093-1,799.338 cm^-1 axis (flipped to
+        ascending).
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        fpath = MendeleyLoader._download_niclosamide_xlsx(cache_path)
+        spectra, axis, conc = MendeleyLoader._parse_niclosamide_raman_sheet(
+            fpath, "Raman MCM", "niclosamide_polymorph_mcm"
+        )
+        levels = Counter(int(round(c)) for c in conc)
+        expected = {0: 6, 6: 6, 12: 3, 18: 6, 30: 9, 42: 6, 48: 9, 54: 6, 60: 6}
+        if levels != expected:
+            raise RuntimeError(
+                f"[!] niclosamide_polymorph_mcm: unexpected NHa "
+                f"level census {dict(sorted(levels.items()))} "
+                f"(expected {expected}); the workbook layout "
+                "changed."
+            )
+        MendeleyLoader.logger.debug(
+            f"Loaded niclosamide_polymorph_mcm: "
+            f"{spectra.shape[0]} spectra x {spectra.shape[1]} "
+            f"points, NHa %w/w {conc.min():g}..{conc.max():g}"
+        )
+        return spectra, axis, conc, ["nh_a_percent_w_w"]
+    # ------------------------------------------------------------------
     # BaseLoader interface
     # ------------------------------------------------------------------
 
@@ -863,4 +2964,232 @@ class MendeleyLoader(BaseLoader):
             targets=targets,
             target_names=class_names,
             group_ids=group_ids,
+        )
+    # ------------------------------------------------------------------
+    # glucose_liquid_14level / glucose_liquid_10level
+    # (Ngo Quang Tri 2024, Mendeley Data yk75sxk6p5)
+    # ------------------------------------------------------------------
+    # "Raman Scattering gathering from pure glucose liquid:
+    # 14-labels and 10-labels datasets" (Ngo Quang Tri, Vietnam
+    # National University, Hanoi; Mendeley Data
+    # doi:10.17632/yk75sxk6p5.1, v1, 2024-02-29, CC BY 4.0, no
+    # related publication). The deposit holds four CSVs: the
+    # 'dense' 14-level set (70 spectra x 2,030 columns, 5
+    # samples per level) and the 'spare' 10-level set (50
+    # spectra x 2,048 columns, 5 samples per level); each data
+    # row is one raw spectrum, and the matching label file
+    # provides a level code (0..13 / 0..9) plus a
+    # level-designation string per row (M50..M75 / 05M..150M).
+    #
+    # IMPORTANT: the deposit contains no wavenumber calibration
+    # (no axis row/column in the data CSVs, no instrument
+    # parameters, no related paper), so the loader exposes the
+    # 0-based column index (detector pixel order) as the
+    # 'raman_shifts' axis; the spectral direction is not
+    # determined by the deposit. The level-designation labels
+    # clearly encode a monotonic glucose-concentration ladder,
+    # but the unit convention is not documented ('M' and 'mM'
+    # are mixed within the same file), so the task is
+    # classification by the deposited label strings, not
+    # regression on a numeric concentration.
+    #
+    # data.mendeley.com serves downloads through a WAF that
+    # 403-blocks non-browser clients (including CI runners), so
+    # the loader reads frozen copies mirrored at
+    # HTW-KI-Werkstatt/RamanBench (glucose_liquid/, see the
+    # mirror's MANIFEST.txt for provenance) with Mendeley's own
+    # sha256 hashes as pins.
+    _GLUCOSE_MIR = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/"
+        "RamanBench/resolve/main/glucose_liquid/"
+    )
+    _GLUCOSE_14_DATA = (
+        "Fourteenlabels_RamanData.csv",
+        769775,
+        "663595467f41648904c340adff4d6deb55e2ce445d46a76cdf82d703cd574119",
+    )
+    _GLUCOSE_14_LABELS = (
+        "Fourteenlabels_labels.csv",
+        530,
+        "9aaa50f505352d24a76ed24ff20cb894d72d6e357c6982894dcd1fc6179f67cf",
+    )
+    _GLUCOSE_10_DATA = (
+        "Tenlabels_RamanData.csv",
+        562631,
+        "e758c2ab74fa61ee0e7bb0e9c3392fdbd94096c31b1111e652e712d34146b2c6",
+    )
+    _GLUCOSE_10_LABELS = (
+        "Tenlabels_labels.csv",
+        390,
+        "5aba09ea4f1e220b992bca442cc86e7798b2a946f559e1effae13d3f5724a697",
+    )
+    # Deposited level code -> level-designation label (verified
+    # against the pinned label files; 5 spectra per level).
+    _GLUCOSE_14_LEVEL_MAP = {
+        0: "M50", 1: "M52", 2: "M54", 3: "M55", 4: "M56", 5: "M58",
+        6: "M60", 7: "M62", 8: "M64", 9: "M65", 10: "M66", 11: "M68",
+        12: "M70", 13: "M75",
+    }
+    _GLUCOSE_10_LEVEL_MAP = {
+        0: "05M", 1: "10mM", 2: "20mM", 3: "55M", 4: "60M", 5: "65M",
+        6: "70M", 7: "75M", 8: "125M", 9: "150M",
+    }
+
+    @staticmethod
+    def _download_glucose_file(
+        cache_path: str,
+        key: str,
+        fname: str,
+        size: int,
+        sha: str,
+    ) -> str:
+        """
+        Download (if needed) one pinned glucose-liquid file from
+        the HF mirror; returns the local file path.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        fpath = os.path.join(cache_path, fname)
+        if os.path.exists(fpath) and os.path.getsize(fpath) != size:
+            os.remove(fpath)
+        result = LoaderTools.download(
+            url=MendeleyLoader._GLUCOSE_MIR + fname,
+            out_dir_path=cache_path,
+            out_file_name=fname,
+            hash_target=sha,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                f"[!] {key}: mirror download of {fname} failed "
+                "(network error or checksum mismatch). See logs."
+            )
+        return fpath
+
+    @staticmethod
+    def _load_glucose_liquid(
+        cache_path: str,
+        key: str,
+        data_file: Tuple[str, int, str],
+        labels_file: Tuple[str, int, str],
+        level_map: dict,
+        n_spectra: int,
+        n_pixels: int,
+    ):
+        """
+        Download (if needed) and load one half of the
+        glucose-liquid deposit: n_spectra raw Raman rows
+        (n_pixels uncalibrated detector columns each) classified
+        by the deposit's level-designation labels.
+
+        Returns spectra, raman_shifts, targets, class_names.
+        """
+        data_path = MendeleyLoader._download_glucose_file(
+            cache_path, key, *data_file
+        )
+        labels_path = MendeleyLoader._download_glucose_file(
+            cache_path, key, *labels_file
+        )
+        spectra = np.loadtxt(data_path, delimiter=",", ndmin=2)
+        if spectra.shape != (n_spectra, n_pixels):
+            raise RuntimeError(
+                f"[!] {key}: expected {n_spectra} x {n_pixels} "
+                f"data rows, got {spectra.shape}."
+            )
+        if not np.isfinite(spectra).all():
+            raise RuntimeError(
+                f"[!] {key}: data file contains non-finite "
+                "values."
+            )
+        with open(labels_path, encoding="utf-8-sig") as fh:
+            lines = [ln.strip() for ln in fh if ln.strip()]
+        header = [v.strip() for v in lines[0].split(",")]
+        if header != ["has_DM2", "Label name"]:
+            raise RuntimeError(
+                f"[!] {key}: label file header changed "
+                f"({header})."
+            )
+        rows = [ln.split(",") for ln in lines[1 : 1 + n_spectra]]
+        if len(rows) != n_spectra:
+            raise RuntimeError(
+                f"[!] {key}: expected {n_spectra} label rows, "
+                f"got {len(rows)}."
+            )
+        names = []
+        seen = {}
+        for i, row in enumerate(rows):
+            if len(row) != 2:
+                raise RuntimeError(
+                    f"[!] {key}: label row {i} has "
+                    f"{len(row)} fields."
+                )
+            code = int(row[0].strip())
+            name = row[1].strip()
+            expected = level_map.get(code)
+            if expected is None:
+                raise RuntimeError(
+                    f"[!] {key}: unexpected level code {code} "
+                    f"at row {i}."
+                )
+            # 5 spectra per level, in level order.
+            if i // 5 != code:
+                raise RuntimeError(
+                    f"[!] {key}: row {i} breaks the "
+                    "5-spectra-per-level layout (code "
+                    f"{code})."
+                )
+            if seen.setdefault(code, name) != name:
+                raise RuntimeError(
+                    f"[!] {key}: level {code} carries "
+                    "inconsistent label names."
+                )
+            if name != expected:
+                raise RuntimeError(
+                    f"[!] {key}: level {code} label changed "
+                    f"({name!r}, expected {expected!r})."
+                )
+            names.append(name)
+        if set(seen) != set(level_map):
+            raise RuntimeError(
+                f"[!] {key}: level census changed (codes "
+                f"{sorted(seen)})."
+            )
+        # The deposit carries no wavenumber calibration; expose
+        # the 0-based column index (detector pixel order).
+        axis = np.arange(n_pixels, dtype=float)
+        encoded_targets, class_names = encode_labels(
+            pd.Series(names)
+        )
+        MendeleyLoader.logger.debug(
+            f"Loaded {key}: {n_spectra} spectra x {n_pixels} "
+            f"points, {len(level_map)} level labels"
+        )
+        return (
+            spectra,
+            axis,
+            encoded_targets,
+            list(class_names),
+        )
+
+    @staticmethod
+    def _load_glucose_liquid_14level(cache_path: str):
+        return MendeleyLoader._load_glucose_liquid(
+            cache_path,
+            "glucose_liquid_14level",
+            MendeleyLoader._GLUCOSE_14_DATA,
+            MendeleyLoader._GLUCOSE_14_LABELS,
+            MendeleyLoader._GLUCOSE_14_LEVEL_MAP,
+            70,
+            2030,
+        )
+
+    @staticmethod
+    def _load_glucose_liquid_10level(cache_path: str):
+        return MendeleyLoader._load_glucose_liquid(
+            cache_path,
+            "glucose_liquid_10level",
+            MendeleyLoader._GLUCOSE_10_DATA,
+            MendeleyLoader._GLUCOSE_10_LABELS,
+            MendeleyLoader._GLUCOSE_10_LEVEL_MAP,
+            50,
+            2048,
         )

@@ -1,0 +1,146 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "IBM uRaman-Dataset: peak-normalized Raman reference spectra of three MOF compounds (HKUST-1, Mg-MOF74, ZIF-8)",
+  "description": "Peak-normalized Raman reference spectra of the three MOF compounds listed in the deposit's README: HKUST-1 (Basolite C300, Sigma-Aldrich), Mg-MOF74 and ZIF-8 (Basolite Z1200, Sigma-Aldrich), measured with a WITec UHTS300S Raman system (DU970_BVF detector, 63x objective, 100 accumulations x 0.5 s). The acquisition conditions differ per compound (recorded in each folder's Experiment_Information.txt): HKUST-1 531.970 nm at 1 mW (2023-02-14), Mg-MOF74 632.810 nm at 1 mW (2023-03-01), ZIF-8 531.970 nm at 2 mW (2023-04-27); the Mg-MOF74 export is labelled '(Sub BG) (Norm)' (background-subtracted) and carries 989 negative points. All three spectra are peak-normalized (max = 1.0) as deposited, so the relative peak structure is comparable across the different excitation wavelengths and powers. The two native grids (1,806 points 0-3,997.65 cm^-1 for HKUST-1/ZIF-8, 2,768 points 0-3,998.38 cm^-1 for Mg-MOF74) are resampled with linear interpolation onto the common 0-3,997 cm^-1 @1 cm^-1 grid (3,998 points). This is a reference set: one stitched spectrum per class (3 classes), so no cross-validation-based classification is possible - the key is intended for spectral matching, few-shot and augmentation use. is_grouped=False (one spectrum per sample). The repo is served as a commit-pinned codeload archive (commit 47e712d326fb0458ee8218ab73a2cfc269dcdfab, 2023-06-19, 819,336 bytes, size + sha256 pinned); no indexed parent paper exists, so the repository itself is the citation (maintainer: Matheus Esteves Ferreira, IBM).",
+  "url": "https://github.com/IBM/uRaman-Dataset",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "MaterialScience",
+    "Classification"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://cdla.io/sharing-1-0/",
+  "citeAs": "@dataset{ferreira2023uraman, title={uRaman-Dataset: Raman spectroscopy spectra of Metal Organic Framework (MOF) compounds}, author={Ferreira, Matheus Esteves}, year={2023}, publisher={GitHub, IBM}, url={https://github.com/IBM/uRaman-Dataset}, note={commit 47e712d326fb0458ee8218ab73a2cfc269dcdfab, license CDLA-Sharing-1.0}}",
+  "citation": "Ferreira, M. E. (2023). uRaman-Dataset: Raman spectroscopy spectra of Metal Organic Framework (MOF) compounds (commit 47e712d3). GitHub (IBM). https://github.com/IBM/uRaman-Dataset",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "uraman_mofs_source",
+      "name": "IBM uRaman-Dataset: peak-normalized Raman reference spectra of three MOF compounds (HKUST-1, Mg-MOF74, ZIF-8)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://github.com/IBM/uRaman-Dataset",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "bb4e2765f0d69e9f030bef62b047871c674f970a8e37fc32748951e2b0d4f372"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "uraman_mofs_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "uraman_mofs_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "uraman_mofs_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "uraman_mofs_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Stitched Raman measurements of three MOF compounds (HKUST-1, Mg-MOF74, ZIF-8); WITec UHTS300S, 531.970/632.810 nm excitation, 1-2 mW, 100 accumulations x 0.5 s, 63x objective, measured 2023-02-14 to 2023-04-27.",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "Peak normalization to max = 1.0 as deposited; the Mg-MOF74 export is additionally background-subtracted (labelled '(Sub BG) (Norm)', 989 negative points). The loader linearly interpolates the two native grids (1,806- and 2,768-point) onto the common 0-3,997 cm^-1 @1 cm^-1 grid (3,998 points); no baseline correction, smoothing or other preprocessing is applied.",
+  "rai:dataAnnotationProtocol": "The sample identity of each spectrum is the MOF compound itself (HKUST-1, Mg-MOF74, ZIF-8), as named in the deposit's folders and README; the labels are derived from the deposit, not re-curated for this benchmark.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All samples are inorganic MOF compounds.",
+  "rai:dataBiases": "Single facility (IBM), but the three compounds were measured under different conditions (532 nm at 1 mW for HKUST-1, 633 nm at 1 mW for Mg-MOF74, 532 nm at 2 mW for ZIF-8) - Raman intensities depend on excitation wavelength and power, and the Mg-MOF74 export is background-subtracted (989 negative points) while the other two are not, so cross-compound intensity comparisons are confounded. One stitched spectrum per compound, so there is no replicate structure and no within-class variance.",
+  "rai:dataLimitations": "One stitched spectrum per compound (3 samples) - a reference set, not a CV-learnable classification; mixed excitation wavelengths (532/633 nm) and powers (1-2 mW); inconsistent per-file background subtraction; peak normalization to 1.0 removes absolute intensity information; the CDLA-Sharing-1.0 license is share-alike (commercial use allowed, derivative works must carry the same license).",
+  "rai:dataSocialImpact": "Materials-science reference data for MOF compounds (HKUST-1, Mg-MOF-74, ZIF-8 - candidate gas-sensing and CO2-capture materials); no human or medical use.",
+  "rai:dataUseCases": "Reference spectra for spectral matching and few-shot / augmentation use; single-compound characterization; not suitable for CV-based classification (one spectrum per class).",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: stitched Raman reference spectra of the three MOF compounds listed in the deposit's README (HKUST-1 = Basolite C300, Sigma-Aldrich; Mg-MOF74; ZIF-8 = Basolite Z1200, Sigma-Aldrich), measured with a WITec UHTS300S Raman system (DU970_BVF detector, 63x objective, 100 accumulations x 0.5 s). Acquisition conditions differ per compound (recorded in each folder's Experiment_Information.txt): HKUST-1 531.970 nm at 1 mW (2023-02-14), Mg-MOF74 632.810 nm at 1 mW (2023-03-01), ZIF-8 531.970 nm at 2 mW (2023-04-27); the Mg-MOF74 export is labelled '(Sub BG) (Norm)' (background-subtracted) and carries 989 negative points. Part of IBM's uRaman-Dataset (commit 47e712d326fb0458ee8218ab73a2cfc269dcdfab, 2023-06-19, CDLA-Sharing-1.0, maintainer Matheus Esteves Ferreira); no indexed parent paper exists, so the repository is the citation. All spectra are peak-normalized (max = 1.0) as deposited. This raman_data key resamples the two native grids (1,806 points for HKUST-1/ZIF-8, 2,768 for Mg-MOF74) onto the common 0-3,997 cm^-1 @1 cm^-1 grid (3,998 points).",
+  "prov:wasDerivedFrom": "https://github.com/IBM/uRaman-Dataset"
+}

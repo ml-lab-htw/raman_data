@@ -112,6 +112,7 @@ _LICENSE_MAP: dict[str, str] = {
     "cc by": "https://creativecommons.org/licenses/by/4.0/",
     "mit": "https://opensource.org/licenses/MIT",
     "mit license": "https://opensource.org/licenses/MIT",
+    "cdla-sharing-1.0": "https://cdla.io/sharing-1-0/",
     "cc0": "https://creativecommons.org/publicdomain/zero/1.0/",
     "cc0 1.0": "https://creativecommons.org/publicdomain/zero/1.0/",
     "apache 2.0": "https://www.apache.org/licenses/LICENSE-2.0",

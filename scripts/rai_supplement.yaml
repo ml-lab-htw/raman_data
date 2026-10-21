@@ -306,6 +306,96 @@ adenine_solid_silver:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from adenine reference solutions without individual human
     identifiers.
+aged_oils_raman_1a:
+  prov:wasDerivedFrom: https://doi.org/10.1177/27551857251340426
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of naturally aged (5-7 year) edible oil bottles purchased
+    from grocery stores in and around Newark, Delaware between the summer of 2014 and the spring of 2016
+    (Gilbraith, Carter, Adams, Sota-Uba, Lavine, Booksh & Ottaway, Applied Spectroscopy Practica 3(2) 2025,
+    doi:10.1177/27551857251340426; Mendeley Data deposit ctgg7k4m5g v2, doi:10.17632/ctgg7k4m5g.2, CC BY
+    4.0). Data Set 1A is the 2016 Raman campaign (Lawrence Livermore National Laboratory), one spectrum
+    per bottle, with the peroxide value (PV) of each bottle by wet-chemical titration. 99 spectra are loaded
+    (the deposit''s 100th row, a class-15 sample, is an all-NaN placeholder the authors used to keep the
+    matrix rectangular and is excluded). 19 oil types per the deposit''s class key; this file carries classes
+    1-3 and 5-20 (class 4, avocado oil, absent; class 20, 3 spectra, unnamed in the 19-entry key). Native
+    1,340-point axis -18.1-1,974.2 cm^-1 (CSV column headers, used as is; the low end is negative, an instrument
+    export artifact retained as deposited); raw counts 2.8e4-2.1e7. The CSV is served from a frozen copy
+    mirrored at HTW-KI-Werkstatt/RamanBench (aged_oils/, size + sha256 pinned) because the live Mendeley
+    download sits behind a WAF that 403s non-browser clients.'
+  rai:dataAnnotationProtocol: The per-spectrum peroxide value (wet-chemical titration) and the oil class
+    (from the commercial product) are recorded in the deposit's CSV; no human labelling of the spectra themselves
+    was involved.
+  rai:dataBiases: 'Single 2016 lab campaign (LBNL) on oils naturally aged 5-7 years from one 2014-2016 purchasing
+    window in one region (Newark, Delaware), so class and PV distributions may not represent other regions,
+    seasons, brands or aging periods. Class coverage is unbalanced (class 1: 27 spectra down to single-spectrum
+    classes 11, 14, 16, 18, 19) and class 4 is absent while class 20 (3 spectra) has no name in the deposit''s
+    19-entry class key. One row is an all-NaN placeholder (excluded). The low-wavenumber end of the axis
+    is negative (instrument export artifact, retained as deposited). 99 spectra is a small set for a 19-class
+    classification.'
+  rai:dataCollection: Raman measurements (one spectrum per bottle) of 100 naturally aged edible oil bottles
+    (99 loaded), 2016 campaign; peroxide values by wet-chemical titration. Instrument model and excitation
+    wavelength are not recorded in the deposit.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 99 spectra; 19 oil classes with unbalanced and partly unnamed coverage (class 20
+    unnamed, class 4 absent); one all-NaN placeholder row excluded; negative wavenumbers at the low axis
+    end (kept as deposited); instrument and excitation wavelength not recorded; the 2019 repeat campaign
+    (Data Set 1B) was deposited only for NIR, so cross-year Raman generalisation with this probe is not
+    possible.
+  rai:dataPreprocessingProtocol: None in the loader. The CSV is the deposit's analysis-ready export; intensities
+    are raw as deposited. The authors' supplemental R code applies its own preprocessing in analysis, not
+    to the deposited data.
+  rai:dataSocialImpact: Supports research into shelf-life and freshness assessment of edible oils (food
+    safety and quality); any consumer- or regulatory-facing use requires validation against independent
+    lots, brands and aging conditions.
+  rai:dataUseCases: Peroxide-value (freshness) regression from a single Raman spectrum; oil-class classification
+    (19 classes, with the coverage caveats above). Group-aware splitting is not applicable (one spectrum
+    per bottle).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are commercial
+    edible oils without any human identifiers.
+aged_oils_raman_2:
+  prov:wasDerivedFrom: https://doi.org/10.1177/27551857251340426
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of naturally aged (5-7 year) edible oil bottles purchased
+    from grocery stores in and around Newark, Delaware between the summer of 2014 and the spring of 2016
+    (Gilbraith, Carter, Adams, Sota-Uba, Lavine, Booksh & Ottaway, Applied Spectroscopy Practica 3(2) 2025,
+    doi:10.1177/27551857251340426; Mendeley Data deposit ctgg7k4m5g v2, doi:10.17632/ctgg7k4m5g.2, CC BY
+    4.0). Data Set 2 is the University of Delaware campaign: 215 replicate spectra of 53 of the deposit''s
+    100 bottles, measured with a different Raman probe from Data Set 1A (lower counts, -5.4e3-4.2e4; the
+    two probes'' intensity scales differ by ~2 orders of magnitude, so the two Raman sets are shipped as
+    separate datasets), with the peroxide value (PV) of each spectrum by titration. 15 of the deposit''s
+    19 oil classes are present. Native 1,044-point axis 18.0-2,087.9 cm^-1 (CSV column headers, used as
+    is). No per-spectrum sample ids are in the deposit, so the replicate structure of the 215 spectra over
+    the 53 bottles is not recoverable. The CSV is served from a frozen copy mirrored at HTW-KI-Werkstatt/RamanBench
+    (aged_oils/, size + sha256 pinned) because the live Mendeley download sits behind a WAF that 403s non-browser
+    clients.'
+  rai:dataAnnotationProtocol: The per-spectrum peroxide value (wet-chemical titration) and the oil class
+    (from the commercial product) are recorded in the deposit's CSV; no human labelling of the spectra themselves
+    was involved.
+  rai:dataBiases: 'Single lab campaign (University of Delaware) on oils naturally aged 5-7 years from one
+    2014-2016 purchasing window in one region (Newark, Delaware), so class and PV distributions may not
+    represent other regions, seasons, brands or aging periods. The 215 spectra are replicates of 53 bottles,
+    but no per-spectrum sample ids are in the deposit, so the replicate structure is not recoverable and
+    ungrouped cross-validation may leak between replicates of the same bottle (ungrouped splitting is the
+    only option). Class coverage: 15 of 19 classes, unbalanced. The probe''s intensity scale (-5.4e3-4.2e4)
+    differs from Data Set 1A''s (2.8e4-2.1e7), so models must not be transferred between the two datasets.'
+  rai:dataCollection: Raman measurements (replicate spectra per bottle) of 53 naturally aged edible oil
+    bottles (215 spectra), University of Delaware campaign; peroxide values by wet-chemical titration. Instrument
+    model and excitation wavelength are not recorded in the deposit.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 215 spectra over 53 bottles without recoverable sample ids (ungrouped CV may leak
+    between replicates of the same bottle); 15 of 19 oil classes present, unbalanced; instrument and excitation
+    wavelength not recorded; different Raman probe from Data Set 1A (incompatible intensity scale).
+  rai:dataPreprocessingProtocol: None in the loader. The CSV is the deposit's analysis-ready export; intensities
+    are raw as deposited. The authors' supplemental R code applies its own preprocessing in analysis, not
+    to the deposited data.
+  rai:dataSocialImpact: Supports research into shelf-life and freshness assessment of edible oils (food
+    safety and quality); any consumer- or regulatory-facing use requires validation against independent
+    lots, brands and aging conditions.
+  rai:dataUseCases: Peroxide-value (freshness) regression from a single Raman spectrum; oil-class classification
+    (15 classes present, with the coverage caveats above). Because no sample ids are available, group-aware
+    (leave-one-bottle-out) splitting is not possible.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are commercial
+    edible oils without any human identifiers.
 ait_glucose_blood_sers:
   prov:wasDerivedFrom: https://github.com/AIT-brainlab/raman-for-glucose-measurement
   prov:wasGeneratedBy: 'Data collection: Laboratory measurements on human biological
@@ -1267,6 +1357,131 @@ cspp_serum_metabolites:
     (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
     but biological measurements may constitute sensitive health-related data under
     applicable data-protection regulations.
+cwa_dimp:
+  prov:wasDerivedFrom: https://doi.org/10.17632/jtk7rv77td.1
+  prov:wasGeneratedBy: 'Data collection: 1064 nm FT-Raman spectra (per the deposit page) of 723 DIMP solution
+    spectra at 11 concentration levels (0.005-1.0, i.e. 0.5%-100%; 1.0 = pure compound) (diisopropyl methylphosphonate,
+    an organophosphorus chemical-warfare-agent simulant; Aerospace Information Research Institute, Beijing,
+    2026; Mendeley Data deposit jtk7rv77td v1, doi:10.17632/jtk7rv77td.1, CC BY-NC 4.0). Part of the LOD-calculation
+    study ''Prediction-space LOD calculation for nonlinear machine-learning Raman calibration: validation
+    using RBF-SVR''. Native 512-point axis 36.84-2,546.1 cm^-1 (xlsx column headers, used as is); raw 16-bit
+    counts 14,721-65,535. 8 of the 39 pure-compound (1.0) spectra are detector-saturated at the 65,535 ceiling.
+    The xlsx is served from a frozen copy mirrored at HTW-KI-Werkstatt/RamanBench (cwa_simulants/, size
+    + sha256 pinned) because the live Mendeley download sits behind a WAF that 403s non-browser clients.'
+  rai:dataAnnotationProtocol: The concentration label is recorded per spectrum (the solution is prepared
+    at a known level; 11 levels from 0.005 to 1.0, i.e. 0.5%-100%); the Number column is a global spectrum
+    index, not a sample id. No human labelling of spectra was involved.
+  rai:dataBiases: Single instrument (1064 nm FT-Raman) and single lab (Aerospace Information Research Institute,
+    Beijing); one measurement campaign, so results may not transfer to other instruments or matrices. Level
+    coverage is uneven (39-82 spectra per level, only 39 at the pure-compound level). 8 of the 39 pure-compound
+    spectra are detector-saturated (peaks at the 65,535 16-bit ceiling), so the top level is partially clipped.
+    A few spectra are exact duplicates of other rows (repeat acquisitions, kept as deposited). No group/sample
+    structure is available (the Number column is a global index), so group-aware splitting is not possible.
+  rai:dataCollection: 1064 nm FT-Raman measurements of 723 DIMP solution spectra at 11 concentration levels
+    (per the Mendeley deposit page); the instrument and measurement conditions are documented in the associated
+    manuscript, which was not indexed in Crossref/OpenAlex at capture time.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Single instrument/lab and single campaign; uneven level coverage (39-82 spectra,
+    only 39 at the pure-compound level); 8 of 39 pure-compound spectra detector-saturated at the 65,535
+    16-bit ceiling; raw counts (no normalization); non-uniform wavenumber axis (3.4-7.4 cm^-1 spacing);
+    no group structure available; the associated manuscript is not yet indexed, so the measurement protocol
+    is only partially documented.
+  rai:dataPreprocessingProtocol: None in the loader. The deposited xlsx is the raw acquisition export (no
+    Savitzky-Golay smoothing or standardization, per the deposit README); the authors' preprocessing was
+    applied in analysis (RBF-SVR calibration and LOD calculation), not to the deposited data.
+  rai:dataSocialImpact: Supports defence/security-related research on Raman calibration and limit-of-detection
+    (LOD) estimation for organophosphorus chemical-warfare-agent simulants; no human or medical use. Results
+    are instrument- and matrix-specific; any operational application requires independent verification.
+  rai:dataUseCases: Concentration regression from a single Raman spectrum (RBF-SVR or other nonlinear calibration;
+    the authors' PLSR/RBF-SVR LOD-calculation workflow is reproducible from this data); note the detector
+    saturation at the pure-compound level.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are chemical
+    reference solutions without any human identifiers.
+cwa_dmmp:
+  prov:wasDerivedFrom: https://doi.org/10.17632/jtk7rv77td.1
+  prov:wasGeneratedBy: 'Data collection: 1064 nm FT-Raman spectra (per the deposit page) of 717 DMMP solution
+    spectra at 11 concentration levels (0.005-1.0, i.e. 0.5%-100%; 1.0 = pure compound) (dimethyl methylphosphonate,
+    an organophosphorus chemical-warfare-agent simulant; Aerospace Information Research Institute, Beijing,
+    2026; Mendeley Data deposit jtk7rv77td v1, doi:10.17632/jtk7rv77td.1, CC BY-NC 4.0). Part of the LOD-calculation
+    study ''Prediction-space LOD calculation for nonlinear machine-learning Raman calibration: validation
+    using RBF-SVR''. Native 512-point axis 36.84-2,546.1 cm^-1 (xlsx column headers, used as is); raw 16-bit
+    counts 13,606-65,535. 198 spectra (all 88 at the 0.1 level, all 58 at 0.75 and all 52 at 1.0) are detector-saturated
+    at the 65,535 ceiling. The xlsx is served from a frozen copy mirrored at HTW-KI-Werkstatt/RamanBench
+    (cwa_simulants/, size + sha256 pinned) because the live Mendeley download sits behind a WAF that 403s
+    non-browser clients.'
+  rai:dataAnnotationProtocol: The concentration label is recorded per spectrum (the solution is prepared
+    at a known level; 11 levels from 0.005 to 1.0, i.e. 0.5%-100%); the Number column is a global spectrum
+    index, not a sample id. No human labelling of spectra was involved.
+  rai:dataBiases: Single instrument (1064 nm FT-Raman) and single lab (Aerospace Information Research Institute,
+    Beijing); one measurement campaign, so results may not transfer to other instruments or matrices. Level
+    coverage is uneven (46-123 spectra per level). 198 of 717 spectra are detector-saturated (peaks at the
+    65,535 16-bit ceiling) - ALL 88 spectra at the 0.1 level, all 58 at 0.75 and all 52 at 1.0 - so those
+    levels are partially unreliable. A few spectra are exact duplicates of other rows (repeat acquisitions,
+    kept as deposited). No group/sample structure is available (the Number column is a global index with
+    one gap), so group-aware splitting is not possible.
+  rai:dataCollection: 1064 nm FT-Raman measurements of 717 DMMP solution spectra at 11 concentration levels
+    (per the Mendeley deposit page); the instrument and measurement conditions are documented in the associated
+    manuscript, which was not indexed in Crossref/OpenAlex at capture time.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Single instrument/lab and single campaign; uneven level coverage (46-123 spectra);
+    heavy detector saturation (all 88 + 58 + 52 spectra of the 0.1, 0.75 and 1.0 levels clipped at the 65,535
+    16-bit ceiling); raw counts (no normalization); non-uniform wavenumber axis (3.4-7.4 cm^-1 spacing);
+    no group structure available; the associated manuscript is not yet indexed, so the measurement protocol
+    is only partially documented.
+  rai:dataPreprocessingProtocol: None in the loader. The deposited xlsx is the raw acquisition export (no
+    Savitzky-Golay smoothing or standardization, per the deposit README); the authors' preprocessing was
+    applied in analysis (RBF-SVR calibration and LOD calculation), not to the deposited data.
+  rai:dataSocialImpact: Supports defence/security-related research on Raman calibration and limit-of-detection
+    (LOD) estimation for organophosphorus chemical-warfare-agent simulants; no human or medical use. Results
+    are instrument- and matrix-specific; any operational application requires independent verification.
+  rai:dataUseCases: Concentration regression from a single Raman spectrum (RBF-SVR or other nonlinear calibration;
+    the authors' PLSR/RBF-SVR LOD-calculation workflow is reproducible from this data); note the heavy detector
+    saturation at the 0.1, 0.75 and 1.0 levels - those levels should be used with care in calibration.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are chemical
+    reference solutions without any human identifiers.
+cwa_tep:
+  prov:wasDerivedFrom: https://doi.org/10.17632/jtk7rv77td.1
+  prov:wasGeneratedBy: 'Data collection: 1064 nm FT-Raman spectra (per the deposit page) of 683 TEP solution
+    spectra at 11 concentration levels (0.005-1.0, i.e. 0.5%-100%; 1.0 = pure compound) (triethyl phosphate,
+    an organophosphorus chemical-warfare-agent simulant; Aerospace Information Research Institute, Beijing,
+    2026; Mendeley Data deposit jtk7rv77td v1, doi:10.17632/jtk7rv77td.1, CC BY-NC 4.0). Part of the LOD-calculation
+    study ''Prediction-space LOD calculation for nonlinear machine-learning Raman calibration: validation
+    using RBF-SVR''. Native 512-point axis 36.84-2,546.1 cm^-1 (xlsx column headers, used as is); raw 16-bit
+    counts 11,017-65,535. 7 of the 96 pure-compound (1.0) spectra are detector-saturated at the 65,535 ceiling.
+    The xlsx is served from a frozen copy mirrored at HTW-KI-Werkstatt/RamanBench (cwa_simulants/, size
+    + sha256 pinned) because the live Mendeley download sits behind a WAF that 403s non-browser clients.'
+  rai:dataAnnotationProtocol: The concentration label is recorded per spectrum (the solution is prepared
+    at a known level; 11 levels from 0.005 to 1.0, i.e. 0.5%-100%); the Number column is a global spectrum
+    index, not a sample id. No human labelling of spectra was involved.
+  rai:dataBiases: Single instrument (1064 nm FT-Raman) and single lab (Aerospace Information Research Institute,
+    Beijing); one measurement campaign, so results may not transfer to other instruments or matrices. Level
+    coverage is uneven (44-96 spectra per level, 96 at the pure-compound level). 7 of the 96 pure-compound
+    spectra are detector-saturated (peaks at the 65,535 16-bit ceiling), so the top level is partially clipped.
+    A few spectra are exact duplicates of other rows (repeat acquisitions, kept as deposited). No group/sample
+    structure is available (the Number column is a global index with one gap), so group-aware splitting
+    is not possible.
+  rai:dataCollection: 1064 nm FT-Raman measurements of 683 TEP solution spectra at 11 concentration levels
+    (per the Mendeley deposit page); the instrument and measurement conditions are documented in the associated
+    manuscript, which was not indexed in Crossref/OpenAlex at capture time.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Single instrument/lab and single campaign; uneven level coverage (44-96 spectra);
+    7 of 96 pure-compound spectra detector-saturated at the 65,535 16-bit ceiling; raw counts (no normalization);
+    non-uniform wavenumber axis (3.4-7.4 cm^-1 spacing); no group structure available; the associated manuscript
+    is not yet indexed, so the measurement protocol is only partially documented.
+  rai:dataPreprocessingProtocol: None in the loader. The deposited xlsx is the raw acquisition export (no
+    Savitzky-Golay smoothing or standardization, per the deposit README); the authors' preprocessing was
+    applied in analysis (RBF-SVR calibration and LOD calculation), not to the deposited data.
+  rai:dataSocialImpact: Supports defence/security-related research on Raman calibration and limit-of-detection
+    (LOD) estimation for organophosphorus chemical-warfare-agent simulants; no human or medical use. Results
+    are instrument- and matrix-specific; any operational application requires independent verification.
+  rai:dataUseCases: Concentration regression from a single Raman spectrum (RBF-SVR or other nonlinear calibration;
+    the authors' PLSR/RBF-SVR LOD-calculation workflow is reproducible from this data); note the detector
+    saturation at the pure-compound level.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are chemical
+    reference solutions without any human identifiers.
 deepr_denoising:
   rai:dataAnnotationProtocol: Each low-SNR spectrum (0.1 s integration time) is paired
     pixel-by-pixel with the corresponding high-SNR spectrum (1 s integration time)
@@ -1812,6 +2027,170 @@ glioma_methylation:
     (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included,
     but biological measurements may constitute sensitive health-related data under
     applicable data-protection regulations.
+glaucoma_enigma_18m:
+  prov:wasDerivedFrom: https://doi.org/10.17632/8pwpbcrjd8.1
+  prov:wasGeneratedBy: 'Data collection: whole-blood serum Raman spectra (Horiba LabSpec6, 400-4,000 cm^-1,
+    ~2,541 points) from 23 glaucoma patients of the ENIGMA trial at the 18-month visit (Udensi, Loskutova,
+    Loughman & Byrne 2024, Mendeley Data, doi:10.17632/8pwpbcrjd8.1); filename suffixes a-d are repeat measurements
+    of the same patient within the visit (''_1'' stems are re-taken exports of the same measurement). Preprocessing:
+    none at export (per file header DeNoise, Dark correction and ICS correction are all ''Off''); the loader
+    additionally interpolates onto the common 401-3,999 cm^-1 @1 cm^-1 grid. Annotation: 11 clinical targets
+    per patient from the deposit''s 18-month sheet; the Treatment column (trial arm 1/2) is a design factor,
+    not a target.'
+  rai:dataAnnotationProtocol: Clinical target values (OCT, microperimetry, macular pigment optical density,
+    visual acuity, GAL9) at 18 months measured by the trial's ophthalmic examinations and recorded in the
+    deposit's 18-month sheet, one row per patient; every Raman session of a patient inherits that row. No
+    human labelling of spectra was involved.
+  rai:dataBiases: All 23 patients are glaucoma cases of a single treatment trial; the treatment arm (15/8)
+    is a per-patient design factor that varies within the cohort, not a class label. Sessions per patient
+    are imbalanced (4, except ET043/ET048/ET049 with 6/8/6). Spectra of one patient are highly correlated
+    (same blood, same visit), which is why group_ids = patient. Raw intensities are instrument counts; absolute
+    levels are not comparable across acquisitions.
+  rai:dataCollection: ENIGMA clinical trial (glaucoma, macular pigment carotenoids in blood serum as a measure
+    of ocular health). Whole-serum Raman spectra were recorded on a Horiba LabSpec6 dispersive Raman system;
+    the excitation wavelength is not recorded in the deposit. 100 measurement sessions (4 per patient, except
+    ET043/ET048/ET049) in the 18-month folder.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 'Single trial, single instrument, single visit: models are not validated against
+    external instruments, cohorts, or a control group. 19 sessions (ET003, ET004, ET035, ET062 and the water_a/water_b
+    reference scans) are present in the deposit but have no 18-month targets and were excluded, as was the
+    .l6s-only ET0597_a (four-digit subject id, presumably a mistyped duplicate of ET057/ET059). The companion
+    baseline visit is a separate dataset (glaucoma_enigma_baseline) from the same frozen snapshot.'
+  rai:dataPreprocessingProtocol: None beyond interpolation onto the common 401-3,999 cm^-1 @1 cm^-1 grid
+    (3,599 points). The .txt exports are raw LabSpec6 counts; the deposit applied no baseline correction
+    or normalization.
+  rai:dataSocialImpact: Supports non-invasive monitoring research of glaucoma treatment response at 18 months
+    from blood serum Raman spectra; any clinical use requires validation by qualified ophthalmic professionals.
+  rai:dataUseCases: Multi-target regression of 18-month ophthalmic endpoints from serum Raman spectra; leave-one-patient-out
+    grouped k-fold CV (23 groups). Longitudinal pairing with glaucoma_enigma_baseline for treatment-response
+    modelling.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: Spectra are derived from human blood serum of trial participants. Subject
+    identifiers are pseudonymised (ET0xx); no direct patient identifiers are included, but the accompanying
+    clinical values are health-related data under applicable data-protection regulations.
+glaucoma_enigma_baseline:
+  prov:wasDerivedFrom: https://doi.org/10.17632/8pwpbcrjd8.1
+  prov:wasGeneratedBy: 'Data collection: whole-blood serum Raman spectra (Horiba LabSpec6, 400-4,000 cm^-1,
+    ~2,541 points) from 21 glaucoma patients of the ENIGMA trial at the baseline visit (Udensi, Loskutova,
+    Loughman & Byrne 2024, Mendeley Data, doi:10.17632/8pwpbcrjd8.1); filename suffixes a-f are repeat measurements
+    of the same patient within the visit. Preprocessing: none at export (per file header DeNoise, Dark correction
+    and ICS correction are all ''Off''); the loader additionally interpolates onto the common 401-3,999
+    cm^-1 @1 cm^-1 grid. Annotation: 11 clinical targets per patient from the deposit''s baseline sheet
+    (microperimetry, OCT RNFL/GCC, macular-pigment optical densities, visual acuity, GAL9); clinical measurements
+    by the trial, not human-labelled spectra.'
+  rai:dataAnnotationProtocol: Clinical target values (OCT, microperimetry, macular pigment optical density,
+    visual acuity, GAL9) measured by the trial's ophthalmic examinations and recorded in the deposit's 'OCULAR
+    MEASUREMENTS (ENIGMA).xlsx' baseline sheet, one row per patient; every Raman session of a patient inherits
+    that row. No human labelling of spectra was involved.
+  rai:dataBiases: All 21 patients are glaucoma cases of a single treatment trial (the sheet's Glauc_yes_no
+    column is constant), so the data describe disease progression and treatment response, not glaucoma-vs-control
+    separation. Sessions per patient are imbalanced (4-9; ET015 has 9, acquired across two visit folders).
+    Spectra of one patient are highly correlated (same blood, same visit), which is why group_ids = patient.
+    Raw intensities are instrument counts; absolute levels are not comparable across acquisitions.
+  rai:dataCollection: ENIGMA clinical trial (glaucoma, macular pigment carotenoids in blood serum as a measure
+    of ocular health). Whole-serum Raman spectra were recorded on a Horiba LabSpec6 dispersive Raman system;
+    the excitation wavelength is not recorded in the deposit. 101 measurement sessions (4-9 per patient)
+    across the two baseline folders.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 'Single trial, single instrument, single visit: models are not validated against
+    external instruments, cohorts, or a control group. 18 sessions of 11 subjects present in the deposit
+    but absent from the target sheet were excluded, as were 4 unidentifiable stems, 1 corrupt export (negative
+    wavenumber axis) and 6 .l6s-only files (proprietary Horiba binary; the subject ET045 is not in the target
+    sheet). The companion 18-month visit is a separate dataset (glaucoma_enigma_18m) from the same frozen
+    snapshot.'
+  rai:dataPreprocessingProtocol: None beyond interpolation onto the common 401-3,999 cm^-1 @1 cm^-1 grid
+    (3,599 points). The .txt exports are raw LabSpec6 counts; the deposit applied no baseline correction
+    or normalization.
+  rai:dataSocialImpact: Supports non-invasive screening research for glaucoma and macular pigment status
+    from blood serum Raman spectra; any clinical use requires validation by qualified ophthalmic professionals.
+  rai:dataUseCases: Multi-target regression of ophthalmic endpoints (OCT RNFL/GCC, microperimetry, macular-pigment
+    optical density, visual acuity) from serum Raman spectra; leave-one-patient-out grouped k-fold CV (21
+    groups). Longitudinal pairing with glaucoma_enigma_18m for treatment-response modelling.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: Spectra are derived from human blood serum of trial participants. Subject
+    identifiers are pseudonymised (ET0xx); no direct patient identifiers are included, but the accompanying
+    clinical values are health-related data under applicable data-protection regulations.
+glucose_liquid_10level:
+  prov:wasDerivedFrom: https://data.mendeley.com/datasets/yk75sxk6p5/1
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of pure glucose liquid at fixed glucose levels, recorded
+    on a large-size Raman spectrometer at Vietnam National University, Hanoi (Ngo Quang Tri; Mendeley Data
+    doi:10.17632/yk75sxk6p5.1, v1, 2024-02-29, CC BY 4.0, no related publication; deposit: https://data.mendeley.com/datasets/yk75sxk6p5/1).
+    This raman_data key loads the deposit''s 10-level (''spare'') set: Tenlabels_RamanData.csv (562,631
+    bytes) + Tenlabels_labels.csv (390 bytes), frozen copies mirrored at HTW-KI-Werkstatt/RamanBench (glucose_liquid/,
+    MANIFEST.txt for provenance) because Mendeley Data 403-blocks non-browser clients (including CI); both
+    files pinned at Mendeley''s own sha256. 50 raw spectra (5 samples x 10 glucose levels) x 2,048 detector
+    columns.'
+  rai:dataAnnotationProtocol: Labels are the deposit's own level-designation strings from the label file's
+    'Label name' column (05M, 10mM, 20mM, 55M, 60M, 65M, 70M, 75M, 125M, 150M; 5 spectra per level; the
+    deposit's 'M'/'mM' annotation is inconsistent within the file); no re-labelling was performed for this
+    benchmark. The levels clearly encode a monotonic glucose-concentration ladder, but the unit convention
+    is not documented in the deposit.
+  rai:dataBiases: The spectra carry NO wavenumber calibration (bare intensity rows; no instrument model,
+    excitation or spectral range recorded), so any Raman-shift-dependent analysis is impossible; the exposed
+    axis is the 0-based column (detector pixel) index and the spectral direction is undetermined. The five
+    samples per level may be repeat measurements of the same solution (correlated) or independent preparations
+    - the deposit does not say; either way level == class here. Raw counts with negative baseline points
+    (-118 minimum); absolute intensity scales are instrument-specific.
+  rai:dataCollection: Raman measurements of pure glucose liquid at 10 fixed glucose levels (5 samples per
+    level) on a large-size Raman spectrometer at Vietnam National University, Hanoi; raw spectra as exported,
+    2,048 detector columns per spectrum.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: No wavenumber calibration in the deposit (axis is an uncalibrated detector-pixel
+    index); spectral direction undetermined; the level-designation labels have an undocumented unit convention,
+    so no numeric concentration target is exposed; small balanced design (10 classes x 5 spectra); raw counts
+    with negative baseline points (-118..63,705); no instrument parameters recorded.
+  rai:dataPreprocessingProtocol: 'No preprocessing was applied by the authors (raw spectra as deposited).
+    The raman_data loader only reads the bare intensity CSV, joins it row-wise with the deposit''s label
+    file (verified: 5 spectra per level, consistent label names), and exposes the 0-based column index as
+    the axis; no baseline correction, smoothing or normalization is applied.'
+  rai:dataSocialImpact: Supports non-invasive glucose monitoring research (Raman-based glucose level discrimination).
+    No personal or medical data; pure glucose liquid samples.
+  rai:dataUseCases: Classification of 10 glucose level designations from raw Raman spectra (5 replicates
+    per level); preprocessing and model-robustness benchmarks (the uncalibrated axis makes this a shape-based
+    classification task); the 14-level companion set is the glucose_liquid_14level key.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are pure
+    glucose liquid at defined levels.
+glucose_liquid_14level:
+  prov:wasDerivedFrom: https://data.mendeley.com/datasets/yk75sxk6p5/1
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of pure glucose liquid at fixed glucose levels, recorded
+    on a large-size Raman spectrometer at Vietnam National University, Hanoi (Ngo Quang Tri; Mendeley Data
+    doi:10.17632/yk75sxk6p5.1, v1, 2024-02-29, CC BY 4.0, no related publication; deposit: https://data.mendeley.com/datasets/yk75sxk6p5/1).
+    This raman_data key loads the deposit''s 14-level (''dense'') set: Fourteenlabels_RamanData.csv (769,775
+    bytes) + Fourteenlabels_labels.csv (530 bytes), frozen copies mirrored at HTW-KI-Werkstatt/RamanBench
+    (glucose_liquid/, MANIFEST.txt for provenance) because Mendeley Data 403-blocks non-browser clients
+    (including CI); both files pinned at Mendeley''s own sha256. 70 raw spectra (5 samples x 14 glucose
+    levels) x 2,030 detector columns.'
+  rai:dataAnnotationProtocol: Labels are the deposit's own level-designation strings from the label file's
+    'Label name' column (M50, M52, M54, M55, M56, M58, M60, M62, M64, M65, M66, M68, M70, M75; 5 spectra
+    per level); no re-labelling was performed for this benchmark. The levels clearly encode a monotonic
+    glucose-concentration ladder, but the unit convention is not documented in the deposit.
+  rai:dataBiases: The spectra carry NO wavenumber calibration (bare intensity rows; no instrument model,
+    excitation or spectral range recorded), so any Raman-shift-dependent analysis is impossible; the exposed
+    axis is the 0-based column (detector pixel) index and the spectral direction is undetermined. The five
+    samples per level may be repeat measurements of the same solution (correlated) or independent preparations
+    - the deposit does not say; either way level == class here. Raw counts with negative baseline points
+    (-439 minimum); absolute intensity scales are instrument-specific.
+  rai:dataCollection: Raman measurements of pure glucose liquid at 14 fixed glucose levels (5 samples per
+    level) on a large-size Raman spectrometer at Vietnam National University, Hanoi; raw spectra as exported,
+    2,030 detector columns per spectrum.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: No wavenumber calibration in the deposit (axis is an uncalibrated detector-pixel
+    index); spectral direction undetermined; the level-designation labels have an undocumented unit convention,
+    so no numeric concentration target is exposed; small balanced design (14 classes x 5 spectra); raw counts
+    with negative baseline points (-439..48,131); no instrument parameters recorded.
+  rai:dataPreprocessingProtocol: 'No preprocessing was applied by the authors (raw spectra as deposited).
+    The raman_data loader only reads the bare intensity CSV, joins it row-wise with the deposit''s label
+    file (verified: 5 spectra per level, consistent label names), and exposes the 0-based column index as
+    the axis; no baseline correction, smoothing or normalization is applied.'
+  rai:dataSocialImpact: Supports non-invasive glucose monitoring research (Raman-based glucose level discrimination).
+    No personal or medical data; pure glucose liquid samples.
+  rai:dataUseCases: Classification of 14 glucose level designations from raw Raman spectra (5 replicates
+    per level); preprocessing and model-robustness benchmarks (the uncalibrated axis makes this a shape-based
+    classification task); the 10-level companion set is the glucose_liquid_10level key.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are pure
+    glucose liquid at defined levels.
 hair_dyes_sers:
   rai:dataAnnotationProtocol: Class labels assigned based on known a priori identity
     of each commercial hair colorant. Four hierarchical label sets are provided -
@@ -1964,6 +2343,102 @@ ht_raman_bio_catalysis_axp:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
+infant_formula_raman:
+  prov:wasDerivedFrom: https://doi.org/10.17632/4j8bj5vv52.2
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of powdered infant formula products purchased through
+    online and offline channels (Zhang 2020, Mendeley Data, doi:10.17632/4j8bj5vv52.2). 373 spectra of 24
+    product types: 4 de-identified brands (A/B/N/Q) x 3 formula stages (1: 0-6 months, 2: 6-12 months, 3:
+    12-36 months) x purchase channel (online/offline), 5-24 spectra per type. Native 1,738-point spectra
+    over 50.2-3,399.9 cm^-1 (~1.93 cm^-1 spacing, ~2 cm^-1 resolution per the authors'' code report); the
+    shared axis is stored as the CSV column headers and used as is (no resampling). Preprocessing: none
+    at export; intensities are raw as deposited. Annotation: product-type labels (brand x stage x channel)
+    assigned from the purchase metadata of each bottle; no human labelling of spectra was involved. Deposit
+    v1 and v2 are identical for the data files.'
+  rai:dataAnnotationProtocol: 'Each spectrum is labelled with the product type of its bottle: one of 24
+    combinations of de-identified brand (A/B/N/Q), formula stage (1/2/3) and purchase channel (online/offline),
+    as recorded in the deposit''s labels file. No human labelling of spectra was involved.'
+  rai:dataBiases: Single study, 4 brands, 3 stages, 2 channels; brand names are de-identified by the authors,
+    so models cannot be related to specific commercial products. Classes are strongly imbalanced (5-24 spectra
+    per product type; the two Q stage-1 types have only 5 each). No per-spectrum sample or bottle identifiers
+    are included, so replicate structure (if any) is unknown and group-aware splitting is not possible.
+    Raw intensities are in arbitrary units from a single instrument; absolute levels are not comparable
+    across acquisitions.
+  rai:dataCollection: Raman spectra of powdered infant formula products (4 brands x 3 formula stages, purchased
+    online and offline). 373 spectra on a native 1,738-point axis over 50.2-3,399.9 cm^-1 (~2 cm^-1 resolution
+    per the authors' code report); the excitation wavelength is not recorded in the deposit.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: No per-spectrum sample or bottle identifiers, so replicate structure is unknown and
+    group-aware (e.g. leave-one-bottle-out) CV is not possible; k-fold CV on individual spectra may overestimate
+    performance if bottles were measured repeatedly. Brand names are de-identified (A/B/N/Q), so results
+    cannot be mapped to commercial brands. The excitation wavelength and instrument model are not recorded.
+    Single instrument, unknown acquisition settings; generalisation to other instruments requires external
+    validation.
+  rai:dataPreprocessingProtocol: None. The CSV is the authors' analysis-ready export; intensities are raw
+    as deposited (arbitrary units, including negative points down to ~-1.8e3). The authors' code report
+    applies ElasticNet/PCA in analysis, not to the deposited data.
+  rai:dataSocialImpact: Supports food-authentication and quality-control research for infant formula (brand,
+    stage and purchase-channel discrimination from Raman spectra); any consumer-facing use requires validation
+    on commercial products and instruments.
+  rai:dataUseCases: '24-class classification of product type (brand x stage x channel); derivable sub-tasks:
+    brand (4 classes), formula stage (3 classes), purchase channel (2 classes). k-fold CV on individual
+    spectra (no grouping available).'
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All spectra originate
+    from commercial product samples without individual identifiers.
+infra_art_raman:
+  prov:wasDerivedFrom: https://doi.org/10.1145/3593427
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of 186 art-related reference materials (pigments,
+    resins, gums and binders, glass flakes and glitter, dyes) acquired 2022-03-30 to 2025-06-06 with a Renishaw
+    WP 785 ER Raman spectrometer (785.078 nm excitation; per-measurement integration time 0.1-10 s, scan
+    averaging and ROI recorded in each file''s metadata block), at the National Institute for Research and
+    Development in Optoelectronics (INOE 2000), Bucharest, Romania. The spectra form part of the INFRA-ART
+    Spectral Library, a FAIR open-access resource for heritage science (Cortea et al. 2023, doi:10.1145/3593427;
+    FAIRsharing doi:10.25504/FAIRsharing.091c24; CC BY-NC 4.0). Native 1666-point axis 160.07-3,215.39 cm^-1
+    (common to all files); intensities are the dark-subtracted ''Processed'' column in arbitrary units.
+    This raman_data key reads a frozen 2026-10-21 snapshot (the 186 original ENLIGHTEN CSV exports + a per-file
+    manifest with sha256, size + sha256 pinned) mirrored at HTW-KI-Werkstatt/RamanBench (infra_art/), because
+    the live site endpoint (infra-art.eu, behind Cloudflare) requires full browser request headers and the
+    library is still growing.'
+  rai:dataAnnotationProtocol: 'Each sample is a reference material with a documented identity: name, alternative
+    names, chemical formula, source and material class (12 classes) are recorded in the library; the class
+    assignments were made by the library''s curators (INOE 2000) as part of building the library, not for
+    this benchmark. No human labelling of the spectra themselves was involved. Five material names are shared
+    by two different samples (different sources/lots); sample-level identifiers are preserved in the snapshot
+    manifest.'
+  rai:dataBiases: Single instrument (Renishaw WP 785 ER, 785 nm), single lab and one measurement-protocol
+    family, so results may not transfer to other instruments or excitation wavelengths. Class balance is
+    skewed (61-1 spectra per class; smallest class 'Other mixtures' has a single spectrum). Per-sample integration
+    time varies from 0.1 to 10 s, so absolute intensity scales are not comparable across spectra (the transferable
+    signal is relative peak structure). 'Mixed pigments' (3), 'Other mixtures' (1) and 'Unclassified materials'
+    (3) are coarse or undefined categories. The snapshot reflects the library as of 2026-10-21 (186 of 1,209
+    samples carried a Raman spectrum at that time).
+  rai:dataCollection: Raman measurements of 186 art-related reference materials (pigments, resins/balsams/wax,
+    glues/gums/binders, dyes and effect materials) acquired 2022-03-30 to 2025-06-06 at INOE 2000, Bucharest;
+    Renishaw WP 785 ER, 785.078 nm excitation, per-measurement parameters (integration time, scan averaging,
+    ROI) recorded in each file.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Single instrument/lab and protocol family; skewed class balance (61...1 spectra per
+    class); three coarse or undefined material classes (Mixed pigments 3, Unclassified materials 3, Other
+    mixtures 1); one spectrum per physical sample (no replicates, so no group-aware splitting); absolute
+    intensities not comparable across samples (integration time 0.1-10 s); non-uniform wavenumber axis (~2.2-2.6
+    cm^-1 steps); a few intensity points are slightly negative (dark subtraction); frozen 2026-10-21 snapshot
+    of a still-growing library; the CC BY-NC 4.0 license restricts commercial use.
+  rai:dataPreprocessingProtocol: 'Dark subtraction is applied by the instrument (Processed = Raw - Dark
+    columns); the export records ''Raman Intensity Corrected: FALSE'' and no baseline correction. The loader
+    applies no baseline correction, normalization or resampling; the native 1666-point axis is used as is.
+    Both ENLIGHTEN CSV header variants (7 columns including Raw/Dark/Reference in 122 files; 4 columns in
+    64) are parsed header-driven.'
+  rai:dataSocialImpact: 'Supports heritage science: identification of art-related materials (pigments, binders,
+    resins) for conservation, authentication and education; no human or medical use. Results are tied to
+    a single 785 nm instrument, and any identification of real heritage samples requires validation against
+    independent measurements.'
+  rai:dataUseCases: Material-class classification from a single Raman spectrum (12 classes); the library
+    also serves as a spectral matching reference for unknown heritage materials (per-sample names/formulas
+    in the manifest); note the single-spectrum-per-class tail (1-5 spectra) and the coarse classes when
+    evaluating models.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are inorganic
+    and organic art materials (pigments, resins, glues, binders, dyes) without any human identifiers.
 illicit_adulterants_ft_raman:
   rai:dataAnnotationProtocol: Compound identity labels assigned from known analytical-grade
     reference standards (purchased from Biosynth International and Sigma-Aldrich).
@@ -2224,6 +2699,49 @@ locust_phase_hemolymph:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
+liver_cancer_raman:
+  prov:wasDerivedFrom: https://doi.org/10.1038/s41467-022-35696-2
+  prov:wasGeneratedBy: 'Data collection: confocal micro-Raman spectra (532 nm excitation, Renishaw) of 6,000
+    spectra from the authors'' demo of the liver cancer database of Huang et al. 2023 (Nat. Commun. 14:48):
+    hepatic carcinoma vs adjacent non-tumour (paracarcinoma) tissue from 120 liver-cancer patients (98 HCC
+    + 22 ICC). The full 12,000-spectrum database (50 spectra per sample, 120 pairs) was not released; the
+    MIT-licensed GitHub repository ships a 6,000-spectrum demo (4,000 train / 1,000 validate / 1,000 test).
+    Preprocessing: none applied by the loader; the 892-column demo files are resampled onto the paper''s
+    889-point 500-2,000 cm^-1 grid; intensities are raw as deposited. Annotation: binary tissue-type labels
+    (1 = carcinoma, 0 = paracarcinoma) from the histopathological ground truth of the study; no spectral
+    labelling involved.'
+  rai:dataAnnotationProtocol: 'Binary label per spectrum from the study''s histopathological diagnosis:
+    hepatic carcinoma (1) vs adjacent non-tumour tissue (0), balanced 3,000/3,000 in the demo. No human
+    annotation of spectra was involved.'
+  rai:dataBiases: The demo is half of an unreleased database and a subset of one clinical cohort (120 liver-cancer
+    patients, single centre, China); the carcinoma class mixes HCC (98 patients) and ICC (22 patients) subtypes,
+    which are not labelled in the demo. Replicate spectra come from the same tissue sample (50 per sample
+    in the source database); the train/validate demo files are ordered in 50-spectrum sample blocks, but
+    the test file is shuffled and no sample ids are included, so only 100 of the 120 demo samples can be
+    recovered as groups. Raw intensities are in arbitrary units (instrument-specific, with negative dark-subtracted
+    points) and are not comparable across instruments or sites.
+  rai:dataCollection: Confocal micro-Raman measurements (532 nm laser, Renishaw system) of resected liver
+    tissue blocks, as part of a label-free histopathological diagnosis study (Huang et al. 2023, Nat. Commun.
+    14:48). 6,000 spectra from 120 carcinoma and 120 paracarcinoma samples (demo subset), 500-2,000 cm^-1.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 'Only the 6,000-spectrum demo of the 12,000-spectrum database is publicly available.
+    The demo files carry no wavenumber axis (assigned from the paper: 500-2,000 cm^-1, 889 points) and no
+    sample identifiers; the train/validate files use an 892-point grid that was resampled onto the 889-point
+    one. The authors shuffled the test file, so its 1,000 spectra are exposed as singleton groups; leave-one-sample-out
+    CV is only fully controlled for the 100 recoverable sample groups. The demo is balanced by construction,
+    which does not necessarily reflect clinical class prevalence.'
+  rai:dataPreprocessingProtocol: None beyond resampling the 892-point demo files onto the common 889-point
+    500-2,000 cm^-1 grid. Intensities are raw as deposited (arbitrary units, negative dark-subtracted points);
+    the authors' z-score normalization is applied in their training code, not in the data.
+  rai:dataSocialImpact: Supports research into rapid, label-free intraoperative diagnosis of liver cancer
+    and tumour-margin delineation; any clinical use requires validation by qualified pathologists.
+  rai:dataUseCases: Binary classification of carcinoma vs adjacent non-tumour liver tissue from Raman spectra;
+    benchmarking of 1D CNN / classical classifiers with group-aware CV (100 sample groups of 50 plus 1,000
+    singletons).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: Spectra are derived from human liver tissue of 120 liver-cancer patients.
+    The demo deposit contains no patient identifiers or clinical data, only spectra with binary tissue-type
+    labels.
 marine_pathogens:
   prov:wasDerivedFrom: https://github.com/zshicode/Raman-Spectra-Deep-Learning/blob/main/multi.csv
   prov:wasGeneratedBy: 'Data collection: Laboratory measurements on biological materials
@@ -3156,6 +3674,244 @@ nanoplastics_individual:
   rai:hasSyntheticData: false
   rai:personalSensitiveInformation: No personal or sensitive information is included. All spectra originate from chemical, biological,
     or material samples without individual human identifiers.
+niclosamide_polymorph_binary:
+  prov:wasDerivedFrom: https://data.mendeley.com/datasets/mv686f9r66/1
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of niclosamide form mixtures recorded for the study
+    ''Quantification of niclosamide polymorphic forms - a comparative study by Raman, NIR and MIR using
+    chemometric techniques'' (Bhavana Valmala, Rahul B. Chavan, M.K. Chaitanya Mannava, Ashwini Nangia,
+    Nalini R. Shastri 2019, Talanta 199, 679-688, https://doi.org/10.1016/j.talanta.2019.03.027); deposited
+    on Mendeley Data (Nalini Shastri, 2019-03-09, https://doi.org/10.17632/mv686f9r66.1, CC BY-NC 3.0) as
+    the supplementary workbook ''SI- spectal Raw data.xlsx'' (10,569,495 bytes, sha256 pinned). Niclosamide
+    (anthelmintic drug) crystallizes into three solvated forms: the anhydrous form (NAn) and two monohydrates
+    (NHa, NHb); NAn converts to the metastable monohydrate NHa during high-energy milling in the presence
+    of water, which motivates quantifying the NHa fraction. Each Raman sheet of the workbook: row 4 carries
+    the 195-point wavenumber axis (1,799.338-1,051.093 cm^-1, stored DESCENDING, ~3.857 cm^-1 spacing; flipped
+    to ascending by the raman_data loader), then one spectrum per row with the Y label in column A (''Concentration
+    of NHa (%w/w)''). This raman_data key loads the concentration-regression rows (calibration block: six
+    spectra per level; plus the authors'' validation block); the trailing blocks whose Y column means something
+    else are not loaded. Mendeley Data 403-blocks non-browser clients (including CI), so the key reads a
+    frozen copy of the workbook mirrored at HTW-KI-Werkstatt/RamanBench (niclosamide/). Sheet used: ''Raman
+    binary'' (binary NAn+NHa mixtures; 57 spectra: 42 calibration at 0/10/30/50/70/90/100 % NHa x6 plus
+    15 validation rows 20%x3, 50%x3, 80%x3 ''Accuracy'' and 80%x6 ''Precision'').'
+  rai:dataAnnotationProtocol: Labels are the nominal NHa %w/w of each mixture as printed in column A of
+    the workbook (the study's calibration levels); no human labelling was performed for this benchmark.
+    The six spectra per level are the study's replicates; whether they are independent preparations or repeated
+    measurements of one mixture is not documented in the SI.
+  rai:dataBiases: Single lab/instrument protocol; the level design is uneven (6 replicates at calibration
+    levels, 3-6 at validation levels; 20 % and 80 % exist only as validation rows); the spectra are the
+    authors' calibration and validation samples, so any model trained on them is optimised for the study's
+    mixture design and Raman window (1,051-1,800 cm^-1, a cropped region, not the full spectrum). The CC
+    BY-NC 3.0 license restricts commercial use.
+  rai:dataCollection: Raman measurements of binary NAn+NHa niclosamide form mixtures at nine NHa levels
+    (0-100 %w/w); the workbook also records the authors' ball-milling time course and NHa-in-presence-of-NHb
+    spectra (not loaded here).
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Cropped Raman window (1,051-1,800 cm^-1 only); uneven replicate counts per level
+    (3-9); the authors' own calibration/validation split is not encoded per row (all 57 rows are pooled);
+    the replicate preparation protocol is undocumented (is_grouped=False); the ball-milling time-course
+    and ratio-labelled blocks are excluded (different Y semantics); intensities in arbitrary units (0.0018-10.05);
+    CC BY-NC 3.0 (non-commercial).
+  rai:dataPreprocessingProtocol: The loader only flips the workbook's descending wavenumber axis to ascending;
+    no baseline correction, normalization, smoothing or resampling is applied. Intensities are as deposited
+    (arbitrary units). The authors' PLSR modeling was done in the paper, not on the deposited data.
+  rai:dataSocialImpact: 'Supports pharmaceutical solid-form analysis: quantifying pseudopolymorphic conversion
+    (anhydrous to monohydrate A) of niclosamide, a drug repurposed for cancer, during wet processing; no
+    human or medical data.'
+  rai:dataUseCases: 'Single-target regression: predict the NHa (monohydrate-A) %w/w fraction of a binary
+    NAn+NHa niclosamide mixture from its Raman spectrum in the 1,051-1,800 cm^-1 window; note the 9-level
+    design and the authors'' calibration / validation composition.'
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are pharmaceutical
+    solid forms of niclosamide.
+niclosamide_polymorph_mcm:
+  prov:wasDerivedFrom: https://data.mendeley.com/datasets/mv686f9r66/1
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of niclosamide form mixtures recorded for the study
+    ''Quantification of niclosamide polymorphic forms - a comparative study by Raman, NIR and MIR using
+    chemometric techniques'' (Bhavana Valmala, Rahul B. Chavan, M.K. Chaitanya Mannava, Ashwini Nangia,
+    Nalini R. Shastri 2019, Talanta 199, 679-688, https://doi.org/10.1016/j.talanta.2019.03.027); deposited
+    on Mendeley Data (Nalini Shastri, 2019-03-09, https://doi.org/10.17632/mv686f9r66.1, CC BY-NC 3.0) as
+    the supplementary workbook ''SI- spectal Raw data.xlsx'' (10,569,495 bytes, sha256 pinned). Niclosamide
+    (anthelmintic drug) crystallizes into three solvated forms: the anhydrous form (NAn) and two monohydrates
+    (NHa, NHb); NAn converts to the metastable monohydrate NHa during high-energy milling in the presence
+    of water, which motivates quantifying the NHa fraction. Each Raman sheet of the workbook: row 4 carries
+    the 195-point wavenumber axis (1,799.338-1,051.093 cm^-1, stored DESCENDING, ~3.857 cm^-1 spacing; flipped
+    to ascending by the raman_data loader), then one spectrum per row with the Y label in column A (''Concentration
+    of NHa (%w/w)''). This raman_data key loads the concentration-regression rows (calibration block: six
+    spectra per level; plus the authors'' validation block); the trailing blocks whose Y column means something
+    else are not loaded. Mendeley Data 403-blocks non-browser clients (including CI), so the key reads a
+    frozen copy of the workbook mirrored at HTW-KI-Werkstatt/RamanBench (niclosamide/). Sheet used: ''Raman
+    MCM'' (multicomponent mixtures of niclosamide hydrates; 57 spectra: 42 calibration at 0/6/18/30/42/54/60
+    % NHa x6 plus 15 validation rows 12%x3, 30%x3, 48%x3 ''Accuracy'' and 48%x6 ''Precision''). The NHa
+    level tops out at 60 %; the remaining mixture components (the multicomponent formulation studied for
+    wet granulation) are not identified in the SI file.'
+  rai:dataAnnotationProtocol: Labels are the nominal NHa %w/w of each mixture as printed in column A of
+    the workbook (the study's calibration levels); no human labelling was performed for this benchmark.
+    The six spectra per level are the study's replicates; whether they are independent preparations or repeated
+    measurements of one mixture is not documented in the SI.
+  rai:dataBiases: Single lab/instrument protocol; the level design is uneven (6 replicates at calibration
+    levels, 3-6 at validation levels); the spectra are the authors' calibration and validation samples,
+    so any model trained on them is optimised for the study's mixture design and Raman window (1,051-1,800
+    cm^-1, a cropped region, not the full spectrum). The composition of the multicomponent matrix beyond
+    the NHa/NAn forms is undocumented, which limits transfer to other formulations. The CC BY-NC 3.0 license
+    restricts commercial use.
+  rai:dataCollection: Raman measurements of multicomponent niclosamide form mixtures at nine NHa levels
+    (0-60 %w/w); the workbook also records the authors' wet-granulation time course (not loaded here).
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Cropped Raman window (1,051-1,800 cm^-1 only); uneven replicate counts per level
+    (3-9); the multicomponent matrix beyond NHa/NAn is not identified in the SI (NHa level capped at 60
+    %); the authors' own calibration/validation split is not encoded per row (all 57 rows are pooled); the
+    replicate preparation protocol is undocumented (is_grouped=False); the wet-granulation time-course block
+    is excluded (different Y semantics); intensities in arbitrary units (0.0023-5.71); CC BY-NC 3.0 (non-commercial).
+  rai:dataPreprocessingProtocol: The loader only flips the workbook's descending wavenumber axis to ascending;
+    no baseline correction, normalization, smoothing or resampling is applied. Intensities are as deposited
+    (arbitrary units). The authors' PLSR modeling was done in the paper, not on the deposited data.
+  rai:dataSocialImpact: 'Supports pharmaceutical solid-form analysis: quantifying the NHa (monohydrate-A)
+    fraction of niclosamide in multicomponent (formulation-relevant) mixtures, e.g. after wet granulation;
+    no human or medical data.'
+  rai:dataUseCases: 'Single-target regression: predict the NHa (monohydrate-A) %w/w fraction of a multicomponent
+    niclosamide mixture from its Raman spectrum in the 1,051-1,800 cm^-1 window; note the 9-level design
+    (0-60 %) and the undocumented remaining matrix components.'
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are pharmaceutical
+    solid forms of niclosamide in mixtures.
+nist_ecsers_drugs:
+  prov:wasDerivedFrom: https://doi.org/10.18434/mds2-3502
+  prov:wasGeneratedBy: 'Data collection: EC-SERS spectra of lab-prepared drug solutions (1-1,013 ppm)
+    and solid powders on a DropSens SPELEC silver electrode, 785 nm excitation; each deposited CSV is
+    the highest-intensity / best-resolution spectrum of one replicate acquisition. Preprocessing: modified-polynomial
+    baseline correction in DropView on the raw potential-resolved scans; values are dark-subtracted counts
+    (a.u.), not intensity-normalized; raman_data additionally interpolates the two native grids onto a
+    common 1,013-point grid. Annotation: substance labels from the deposited filenames; concentration
+    labels (11 levels) where marked; no human annotation.'
+  rai:dataAnnotationProtocol: Substance labels parsed from the deposited filenames (32 analytes); 126/131
+    spectra additionally carry a concentration label (1-1,013 ppm, 11 levels). No human annotation beyond
+    the authors' sample preparation.
+  rai:dataBiases: EC-SERS intensities depend on the silver electrode surface and electrochemical potential,
+    so spectra of the same substance vary in absolute intensity across replicates and batches. Two acquisition
+    batches (1,014-pt and 1,011-pt native grids) are mixed and interpolated onto one common grid. Per-substance
+    spectrum counts range from 1 to 13 (10 of 32 substances have fewer than 3 replicate groups), so the
+    class balance is strongly uneven. Lab-prepared solutions, not seized street material.
+  rai:dataCollection: EC-SERS (electrochemical surface-enhanced Raman spectroscopy) with 785 nm excitation
+    on a DropSens SPELEC silver electrode (Metrohm potentiostat setup), NIST. The deposit contains the
+    highest-intensity / best-resolution spectrum of each replicate as CSV; the full potential-resolved
+    .exp files (118) are in the deposit but not loaded by raman_data.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 'Forensic library-formation data, not a balanced clinical or field dataset: 32
+    substances with 1-13 spectra each (118 replicate groups; 10 substances < 3 groups), so grouped k-fold
+    CV covers only a subset. Concentration labels exist for 126/131 spectra (the 5 unlabelled: solid procaine
+    x3, pure acryl-/furanyl-fentanyl). Electrochemical SERS signal is substrate/potential-dependent; models
+    may not transfer to plain (non-enhanced) Raman or other SERS substrates.'
+  rai:dataPreprocessingProtocol: 'Authors'' pipeline: modified-polynomial baseline correction in DropView,
+    then the single best spectrum per replicate exported as CSV (Origin Pro); values are ''Counts minus
+    Dark (a.u.)'', not normalized (per-file minima slightly negative, maxima 5e4-2e5). The loader additionally
+    interpolates both native grids onto the common 1,013-point grid (36.6-2,859.1 cm^-1).'
+  rai:dataSocialImpact: Supports forensic drug screening research and ML benchmarking for fentanyl-analog
+    and adulterant identification; misuse potential is limited since the data identify controlled substances
+    rather than individuals.
+  rai:dataUseCases: Multi-class substance identification (32 classes), concentration / limit-of-detection
+    regression from the 11-level concentration series, and EC-SERS spectral library formation.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included; all spectra originate
+    from lab-prepared chemical standards.
+ocean_polymers:
+  prov:wasDerivedFrom: https://osf.io/7cqv4/
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of ocean polymer specimens for the reference library
+    ''A Raman spectral reference library of potential anthropogenic and biological ocean polymers'' (Emily
+    A. Miller, Kevan M. Yamahara, Chris French, Neil E. Spingarn, James M. Birch, Kyle S. Van Houtan 2022,
+    Scientific Data 9, 780, https://doi.org/10.1038/s41597-022-01883-5, open access CC BY 4.0; data deposited
+    at https://osf.io/7cqv4/, public OSF node 7cqv4, no child components). The library covers 40 pristine
+    anthropogenic polymers newly sourced from manufacturers, 22 weathered anthropogenic polymers from used
+    consumer, beachcast, agricultural and fishery sources, and 17 biological polymers representing diverse
+    marine taxa, trophic levels and tissues. License note: The OSF project page sets no explicit license;
+    the open-access parent paper (Scientific Data, CC BY 4.0) publishes the data records in its Data Records
+    section, which is the license applied here. This raman_data key pivots the deposit''s post-processed
+    file Data2_processed.csv (19,921,069 bytes, size + sha256 pinned, downloaded directly from OSF''s stable
+    file URL): 79 spectra (61 PLAS-coded + 18 BIOL-coded particles, one per specimen) on the authors'' uniform
+    3,201-point 200-3,400 cm^-1 @1 cm^-1 grid, peak-normalized (max = 1.0, min = 0) as deposited, labelled
+    by the deposit''s poly_lab column (59 classes). The 18 BIOL-coded specimens are the 17 biological materials
+    of the paper plus a charcoal reference (carbonaceous, not a polymer).'
+  rai:dataAnnotationProtocol: Labels are the deposit's own poly_lab assignments (polymer codes such as PETE/PP/PS/HDPE
+    for the anthropogenic specimens; tissue or material names such as bone, chitin, cellulose, keratin for
+    the biological ones; a few descriptive strings for weathered items such as 'beachcast white foam sheet'
+    or 'strawberry container'); no re-labelling was performed for this benchmark.
+  rai:dataBiases: 'Reference-library design: 47 of the 59 poly_lab classes are singleton entries (one spectrum),
+    so the key supports spectral matching and few-shot use more than large-scale CV classification; only
+    12 classes have replicates (bone x4, PETE x4, PP x4, PS x3, chitin x3, cellulose x3, HDPE x2, myofibrillar
+    protein x2, PA x2, PE x2, calcium carbonate x2). Spectra are peak-normalized 0-1, removing absolute
+    intensity information; the spectra mix pristine, weathered and biological specimens, and the weathered
+    items carry only coarse descriptive labels.'
+  rai:dataCollection: Raman measurements of 79 ocean polymer specimens (61 anthropogenic polymer particles,
+    18 biological material specimens) recorded for the reference library; the authors' post-processed grid
+    (200-3,400 cm^-1 @1 cm^-1, 3,201 points) and peak normalization are as deposited.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Most classes are single-spectrum references (47 of 59); peak normalization removes
+    absolute intensity information; the 200-3,400 cm^-1 window excludes the low-wavenumber region below
+    200 cm^-1; weathered specimens carry coarse descriptive labels rather than polymer codes; one charcoal
+    specimen is coded as biological (BIOL) although it is carbonaceous, not a polymer; the OSF project sets
+    no explicit license (the open-access paper's CC BY 4.0 is applied).
+  rai:dataPreprocessingProtocol: 'Applied by the authors as deposited: resampling onto the uniform 200-3,400
+    cm^-1 @1 cm^-1 grid (3,201 points) and peak normalization to max = 1.0 (min = 0). The raman_data loader
+    only pivots the long-format CSV (one row per spectrum-wavenumber point) into wide spectra; no baseline
+    correction, smoothing or further normalization is applied.'
+  rai:dataSocialImpact: 'Supports marine plastic pollution research: identifying the material of marine
+    debris (plastic vs biological) where visual techniques are not diagnostic; environmental monitoring
+    use, no human or medical data.'
+  rai:dataUseCases: Reference spectra for polymer identification of ocean debris (spectral matching, few-shot
+    / augmentation); plastic-vs-biological discrimination (61 vs 18 spectra, derivable from the labels);
+    limited as a large-scale CV classification benchmark because most classes are singletons.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are polymer
+    specimens and biological marine materials (bones, chitin, tissues, etc.).
+ocean_polymers_raw:
+  prov:wasDerivedFrom: https://osf.io/7cqv4/
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of ocean polymer specimens for the reference library
+    ''A Raman spectral reference library of potential anthropogenic and biological ocean polymers'' (Emily
+    A. Miller, Kevan M. Yamahara, Chris French, Neil E. Spingarn, James M. Birch, Kyle S. Van Houtan 2022,
+    Scientific Data 9, 780, https://doi.org/10.1038/s41597-022-01883-5, open access CC BY 4.0; data deposited
+    at https://osf.io/7cqv4/, public OSF node 7cqv4, no child components). The library covers 40 pristine
+    anthropogenic polymers newly sourced from manufacturers, 22 weathered anthropogenic polymers from used
+    consumer, beachcast, agricultural and fishery sources, and 17 biological polymers representing diverse
+    marine taxa, trophic levels and tissues. License note: The OSF project page sets no explicit license;
+    the open-access parent paper (Scientific Data, CC BY 4.0) publishes the data records in its Data Records
+    section, which is the license applied here. This raman_data key loads the deposit''s raw file Data1_raw_csv.zip
+    (1,452,113 bytes, size + sha256 pinned, downloaded directly from OSF''s stable file URL): 87 Thermo/Nicolet
+    Omnic measurement files of 49 specimen codes - the unprocessed counterpart of the ocean_polymers key.
+    33 of the 87 files are byte-identical copies of another file under an instrument-run prefix, so the
+    loader keeps 54 distinct spectra: 41 at 532 nm (3,467 points, 76.55-3,418.58 cm^-1) and 13 at 780 nm (2,700 points, 200.49-3,699.66
+    cm^-1); raw counts, no normalization; the wavenumber axis is stored descending in each file (flipped
+    to ascending by the loader). Every spectrum is linearly interpolated onto the common 201-3,418 cm^-1
+    @1 cm^-1 grid (3,218 points; intersection of the two native axes). 36 specimen codes were measured at
+    532 nm only, 8 at 780 nm only and 5 at both (is_grouped=True, group_id = specimen code).'
+  rai:dataAnnotationProtocol: 'Labels are derived from the specimen codes in the deposit''s filenames: PLAS-coded
+    specimens -> anthropogenic polymer (41 spectra), BIOL-coded specimens -> biological material (13 spectra);
+    no re-labelling was performed for this benchmark.'
+  rai:dataBiases: 'Small and imbalanced class sizes (41 vs 13); the absolute intensity scale differs per
+    excitation wavelength (532 nm: -511..29,382 counts; 780 nm: -123..1,104 counts), so a model can in principle
+    exploit the excitation signature; the 8 specimens measured at 780 nm only are 5 biological and 3 anthropogenic,
+    partially confounding excitation with class. Only 49 of the 79 library specimens have raw files deposited;
+    the 532 nm and 780 nm spectra of the 5 specimens measured at both are correlated, hence the
+    specimen-level grouping.'
+  rai:dataCollection: Raw Raman measurements (532 nm and 780 nm excitation) of 49 ocean polymer specimens
+    recorded for the reference library; Omnic exports with a descending wavenumber axis and raw counts.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Raw counts without normalization; non-comparable absolute scales across excitation
+    wavelengths; partial excitation-vs-class confound (8 of 49 specimens measured at 780 nm only); imbalanced
+    classes (41 vs 13); the two spectra of a specimen measured at both wavelengths are correlated (grouping provided); the 3,218-point
+    common window truncates each native axis (532 nm loses 76.55-201 cm^-1, 780 nm loses 3,418.58-3,699.66
+    cm^-1); the OSF project sets no explicit license (the open-access paper's CC BY 4.0 is applied).
+  rai:dataPreprocessingProtocol: No preprocessing was applied by the authors (raw Omnic counts). The raman_data
+    loader only skips the two header rows, flips the descending wavenumber axis to ascending, and linearly
+    interpolates onto the common 201-3,418 cm^-1 @1 cm^-1 grid (3,218 points); no baseline correction, smoothing
+    or normalization is applied.
+  rai:dataSocialImpact: 'Supports marine plastic pollution research: anthropogenic-vs-biological discrimination
+    of marine debris on raw (unprocessed) spectra, including the 780 nm excitation set; environmental monitoring
+    use, no human or medical data.'
+  rai:dataUseCases: Binary classification (anthropogenic polymer vs biological material) on raw Raman spectra
+    with group-aware splitting on specimen code; robustness studies across excitation wavelengths (532 vs
+    780 nm); preprocessing and domain-adaptation benchmarks (raw vs the post-processed ocean_polymers key).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are polymer
+    specimens and biological marine materials (bones, chitin, tissues, etc.).
 organic_compounds_preprocess:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
     or validated analytical reference methods. Labels were assigned by domain experts
@@ -3214,6 +3970,49 @@ organic_compounds_raw:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
+olive_sunflower_mixtures:
+  prov:wasDerivedFrom: https://doi.org/10.57745/DOGT0E
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of 605 EVOO/sunflower oil mixtures (Picouet, GRAPPE,
+    Ecole Superieure des Agricultures / INRAE, Angers, France, 2023; data.gouv.fr dataset 644b79f82ef3605eb5c660aa,
+    doi:10.57745/DOGT0E, licence ouverte lov2). 26 EVOO levels (0-100%) across 16 acquisition dates (22/11/2022-14/02/2023);
+    by the deposit''s design of experiment 5 spectra (S1-S5) were recorded with each mixture, giving 109
+    physical blends ((date, EVOO%) groups: 98 x 5, 10 x 10, 1 x 15 spectra; 10 blends were re-measured once
+    and 1 twice on the same day). Instrument (per the deposit README): Ocean Insight QE Pro Raman spectrometer,
+    785 nm solid-state laser diode at 400 mW, fiber-optic probe with quartz cuvette holder, 1000 ms integration,
+    10 scans per acquisition, ~11 cm^-1 FWHM. EVOO is a 100% Italian cold-pressed extra virgin olive oil
+    (trademark PUGET, acidity 0.3 %a); the sunflower oil is a refined Spanish oil (trademark FAIGES, acidity
+    0.2%). Native 710-point axis 500.48-2,499.31 cm^-1 (CSV header, European decimal commas, used as is);
+    raw counts 645-12,922. The CSV is served directly from static.data.gouv.fr (sha256 pinned).'
+  rai:dataAnnotationProtocol: The EVOO % / sunflower % of each blend is recorded per spectrum (the blend
+    ratio is known from preparation); the Type column marks the authors' own modelling split (CALIBRATION
+    350 / VALIDATION 165 / PREDICTION 90; 9 blends carry mixed tags). No human labelling of spectra was
+    involved.
+  rai:dataBiases: Single instrument, single lab (GRAPPE/INRAE Angers), single oil-lot pair (PUGET EVOO +
+    FAIGES sunflower) and 16 acquisition dates within ~3 months, so results may not transfer to other instruments,
+    oil lots, brands or seasons. EVOO-level coverage is unbalanced (85 spectra at 0%, 90 at 100%, 80 at
+    50%, 55 at 25%, 45 at 75%, down to 5 spectra for many intermediate levels); 10 blends have 10 spectra
+    and 1 has 15 (same-day re-measurements), so group sizes are uneven. Intensities are raw counts in arbitrary
+    units (no normalization), so the intensity scale is instrument-specific.
+  rai:dataCollection: Raman measurements of 109 EVOO/sunflower blends (5 spectra per blend by design of
+    experiment, 605 spectra in total), 22/11/2022-14/02/2023, GRAPPE/INRAE Angers; Ocean Insight QE Pro,
+    785 nm, 400 mW, 1000 ms, 10 scans per acquisition (per the deposit README).
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Single instrument/lab and single oil-lot pair; unbalanced EVOO-level coverage (5-90
+    spectra per level); group sizes 5/10/15 (re-measured blends); the deposit's Type column is the authors'
+    modelling split (350/165/90) with 9 mixed-tag blends, so it must not be treated as a strict train/test
+    partition; raw counts in arbitrary units; non-uniform wavenumber axis (2.2-3.6 cm^-1 spacing).
+  rai:dataPreprocessingProtocol: None in the loader. The CSV is the raw acquisition export; intensities
+    are raw counts as deposited (10 scans co-added per acquisition by the instrument). The authors applied
+    PLS modelling to this data (per the README); no preprocessing of the deposited data is described.
+  rai:dataSocialImpact: Supports research on food authentication and quality (quantifying EVOO in oil mixtures,
+    adulteration detection); any consumer- or regulatory-facing use requires validation against independent
+    oil lots, brands, instruments and seasons.
+  rai:dataUseCases: EVOO % regression from a single Raman spectrum (e.g. PLS or ML calibration) with leave-one-blend-out
+    (group-aware) CV; the deposit's CALIBRATION/VALIDATION/PREDICTION tags can be used as the authors' reference
+    split, with the mixed-tag caveat on 9 blends.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are commercial
+    food oils without any human identifiers.
 parkinson:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
     or validated analytical reference methods. Labels were assigned by domain experts
@@ -3376,6 +4175,51 @@ raman_spi:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
+rod_minerals:
+  prov:wasDerivedFrom: https://solsa.crystallography.net/rod/
+  prov:wasGeneratedBy: 'Data collection: experimental Raman spectra of minerals and related phases from
+    a frozen 2026-10-20 snapshot of the Raman Open Database (ROD, SOLSA; El Mendili et al. 2019, doi:10.1107/S1600576719004229).
+    1,133 CIF entry files from the bulk zip download; 1,098 experimental spectra loaded (18 theoretical-only
+    entries and 17 partial-window spectra excluded); resampled onto the common 250-1,200 cm^-1 @1 cm^-1
+    grid. Preprocessing: none applied by the loader; per-entry device-specific preprocessing varies by source
+    and is not documented. Annotation: labels from the _chemical_name_mineral, _chemical_name_systematic,
+    or _chemical_formula_sum CIF fields (fallback chain), covering same-line, next-line, and multi-line
+    '';''-block values.'
+  rai:dataAnnotationProtocol: 'Mineral/phase labels taken from the .rod entry files'' CIF metadata: _chemical_name_mineral
+    (IMA mineral name) with fallback to _chemical_name_systematic, then _chemical_formula_sum; unassigned
+    phases and solid solutions therefore carry systematic names or formulas. All 1,098 loaded spectra resolve
+    a label (432 distinct labels); no human annotation involved.'
+  rai:dataBiases: 'Spectra were acquired on a wide range of instruments (Thermo Nicolet Almega XR ~795,
+    DXR 154, Aramis 53, T64000 31, others) and excitation wavelengths (532 nm 483, 780 nm 408, 633 nm 102,
+    785 nm 58, 514/488/632.8 nm 47), so intensities and baseline shapes are not comparable across entries;
+    per-entry normalization is not documented. Class balance is strongly uneven: 108 labels have a single
+    spectrum, 213 have two, the most frequent (Andradite) 22. ~21% of the entries (~234 of the 1,115 experimental)
+    overlap with the public-domain RRUFF library mirrored in the rruff_mineral_* datasets, so de-duplicate
+    before training on one and testing on the other. Two pairs of entries carry byte-identical spectra
+    under different labels (Bismutite/Corundum, Corundum/Shcherbianite), as deposited.'
+  rai:dataCollection: 'Raman Open Database (ROD, SOLSA project): community-driven open-access database of
+    Raman spectra (and XRD patterns) of minerals; contributors deposit spectra measured on various laboratory
+    instruments with 488-785 nm excitation. This loader serves a frozen 2026-10-20 snapshot (1,133 CIF entry
+    files), mirrored on the raman_data HuggingFace mirror and pinned by size and sha256.'
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 'Spectral library data with heterogeneous provenance: per-entry preprocessing (baseline,
+    normalization) varies by source and is not documented per entry; intensities are in arbitrary units
+    and include negative baseline points. Excluded from the snapshot: 18 entries with only theoretical (DFT)
+    spectra and the 17 experimental spectra that do not fully cover the common 250-1,200 cm^-1 window (no
+    extrapolation). Many mineral entries overlap with the RRUFF database (mirrored in the rruff_mineral_*
+    datasets).'
+  rai:dataPreprocessingProtocol: None applied by the loader beyond resampling onto the common 250-1,200
+    cm^-1 @1 cm^-1 grid (951 points) by linear interpolation. As-deposited intensities are in arbitrary
+    units; per-entry device-specific baseline correction / normalization varies by source and is not documented
+    per entry in the snapshot.
+  rai:dataSocialImpact: Supports automated mineral identification and phase analysis for geology, materials
+    science, and art conservation, and provides a public-domain benchmark for Raman classification models.
+  rai:dataUseCases: Multi-class mineral/phase identification (432 classes), spectral library matching, and
+    benchmarking of classification models on heterogeneous multi-instrument Raman data. No groups (one
+    spectrum per ROD entry; grouping by label would leave every test class unseen in training).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included; all spectra originate
+    from mineral and phase samples without individual human identifiers.
 rruff_mineral_preprocess:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
     or validated analytical reference methods. Labels were assigned by domain experts
@@ -3512,6 +4356,102 @@ serum_prostate_cancer:
     measurements constitute sensitive health-related data under applicable data-protection
     regulations. Ethics approval obtained from Ren Ji Hospital, SJTU School of Medicine
     (KY2021-030).
+sers_gna_bacteria:
+  prov:wasDerivedFrom: https://doi.org/10.5281/zenodo.23426967
+  prov:wasGeneratedBy: 'Data collection: surface-enhanced Raman scattering (SERS) spectra of bacterial droplets
+    on an anisotropic gold nanorod array (Gulmus, Oncer, Karatas, Gormez, Yilmaz & Yilmaz 2026, Zenodo,
+    doi:10.5281/zenodo.23426967; the associated article is under review). 117 spectra of nine strains (3
+    each of E. coli 29922/K4/BAA-2523, P. aeruginosa 9027/10145/27853 and S. aureus 6538/25923/43300); each
+    strain was cultivated once and deposited as one 5 uL (0.5 McFarland) droplet on a single GNA substrate,
+    all 13 spectra of a strain recorded from that droplet on the same day. WITec alpha 300R confocal Raman
+    microscope, 785 nm excitation, x50 objective, 10 mW, ~3.03 s integration, 4 cm^-1 spectral resolution.
+    The loader reads the raw WITec instrument text files (counts, before any preprocessing); all 117 share
+    one 1,024-point 247.99-1,997.9 cm^-1 axis, used as is. Annotation: strain identity is known a priori
+    from the cultivation/deposit plan; no human labelling of spectra was involved. Zenodo v1.0.1 archive
+    data are byte-identical to the commit-pinned GitHub repository (1028526).'
+  rai:dataAnnotationProtocol: 'Each spectrum is labelled with the species of its droplet (E. coli, P. aeruginosa,
+    S. aureus; 39 spectra each) and grouped by strain (three per species), assigned from the known cultivation/deposit order.
+    No human labelling of spectra was involved.'
+  rai:dataBiases: 'Single lab, single instrument, single substrate type and single acquisition day: all
+    13 spectra of a strain come from one droplet of one culture (strong within-strain correlation; group_ids
+    = strain, 9 groups). The strains were acquired in a fixed species-interleaved sequence, so acquisition
+    order is confounded with strain and the paper analyses the resulting order trends (drift); a model may
+    learn drift artifacts instead of biology. SERS intensity is substrate-position dependent, so absolute
+    intensities are not comparable across spots or substrates. Nine classes of 13 spectra each is a small
+    set; results may not generalise to other strains, species or SERS substrates.'
+  rai:dataCollection: SERS measurements (WITec alpha 300R, 785 nm, x50, 10 mW, ~3.03 s) of 9 x 13 spectra
+    from single-droplet deposits of nine bacterial strains on one anisotropic gold nanorod array substrate,
+    250-2,000 cm^-1 region, 1,024 points per spectrum.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: 'The loader ships the raw instrument files (counts before baseline correction, smoothing
+    or normalization). The deposit''s preprocessed CSV (Data S1: OPUS rubberband + Savitzky-Golay + min-max,
+    1,215 points, with S. aureus exported on a 0-1 scale and the other species on 0-2) is not loaded. Only
+    nine strains (three per species) are covered, one droplet/substrate per strain; within-strain replicates
+    share one physical sample, so leave-strain-out is the protocol-honest split (9 groups). The associated
+    article is under review (no article DOI yet); citation is via the Zenodo record (v1.0.1, 2026-10-17).'
+  rai:dataPreprocessingProtocol: 'None in the loader: raw WITec instrument counts as exported (no baseline
+    correction, smoothing or normalization; no wavelength or position correction recorded in the deposit).'
+  rai:dataSocialImpact: Supports research into rapid, label-free identification of bacterial strains by
+    SERS (e.g. antimicrobial-resistance screening workflows); any diagnostic use requires validation across
+    strains, labs and substrates by qualified microbiologists.
+  rai:dataUseCases: 3-class species classification from single-spot SERS spectra of unseen strains;
+    group-aware CV is leave-strain-out (9 groups of 13). Strain is not a label (each strain is a single
+    droplet, so strain identity cannot be separated from the droplet); analysis of acquisition-order drift is
+    supported by the manifest's acquisition_order column in the deposit.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All spectra originate
+    from cultured bacterial samples without individual human identifiers.
+sers_pesticide_produce:
+  prov:wasDerivedFrom: https://doi.org/10.1021/acsami.4c17777
+  prov:wasGeneratedBy: 'Data collection: surface-enhanced Raman scattering (SERS) spectra of pesticide-spiked
+    fresh produce (spinach and strawberry) from the SERSFormer2 repository (Hegde, Hajikhani, Snyder, Cheng
+    & Lin 2025, ACS Appl. Mater. Interfaces 17(1):2018-2031, doi:10.1021/acsami.4c17777). 33 spectra covering
+    a pruned subset of the paper''s 10+ mixture panel: a spinach control (No_pest_present, 3 spectra), a
+    spinach carbophenothion+oxamyl 50:50 mixture (5 concentration levels x 3) and a strawberry carbophenothion+phosmet
+    50:50 mixture (5 levels x 3). Each CSV is a 1,556-point native-axis export over ~500-2,000 cm^-1; the
+    loader resamples every spectrum onto the common 501-1,999 cm^-1 @1 cm^-1 grid (1,499 points), which
+    all files fully cover (no extrapolation). Annotation: the per-pesticide concentration (ppm) is derived
+    from the folder structure (mixture name + concentration directory, halved for the 50:50 ratio) following
+    the authors'' Dataset.py; no human labelling of spectra was involved. The repository is GPL-3.0 licensed
+    and served as a commit-pinned archive (bee22a7, size + sha256 pinned).'
+  rai:dataAnnotationProtocol: Each spectrum's target is the per-pesticide concentration in ppm for the pesticides
+    in its mixture folder (0 for absent pesticides and for the control), derived from the deposit's folder
+    names (mixture + concentration level, halved for the 50:50 mixing ratio) as the authors' code does;
+    no human labelling of spectra was involved.
+  rai:dataBiases: 'Single lab, single instrument, single substrate: all 33 spectra come from one SERS campaign
+    on fresh produce, so results may not generalise to other instruments, substrates or produce batches.
+    The public deposit is a pruned subset only 3 of the paper''s 5 pesticides (carbophenothion, oxamyl,
+    phosmet; coumaphos and thiabendazole are absent) and only 2 mixture types, so the full 10+ mixture panel
+    is not represented. The three spectra of each condition are replicates of the same spiked sample (group_ids
+    = condition), so ungrouped k-fold CV would leak. SERS intensity varies with substrate spot and analyte
+    concentration, so absolute levels are in arbitrary units. The set is small (33 spectra), so estimates
+    have high variance.'
+  rai:dataCollection: 'SERS measurements of pesticide-spiked fresh produce: 33 spectra over a spinach control,
+    a spinach carbophenothion+oxamyl mixture and a strawberry carbophenothion+phosmet mixture, each at 5
+    concentration levels (3 replicates per level) plus the control. Native 1,556-point spectra over ~500-2,000
+    cm^-1; excitation wavelength and instrument are not recorded in the repository.'
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Only 33 spectra (3 of the paper's 5 pesticides, 2 mixture types), a pruned demo subset
+    of the full 10+ mixture panel; the paper's models were trained on data not fully released. Replicates
+    within a condition share one spiked sample, so group-aware (leave-one-condition-out) CV is the honest
+    split (11 groups of 3). Excitation wavelength and instrument model are not recorded in the repository.
+    The multi-label presence task is only derivable (concentration > 0) because the concentration target
+    is shipped; the two absent pesticides (coumaphos, thiabendazole) are not representable. The repository
+    is GPL-3.0 (copyleft) with no separate data licence statement.
+  rai:dataPreprocessingProtocol: None in the loader beyond resampling onto the common 501-1,999 cm^-1 @1
+    cm^-1 grid. The CSVs store raw instrument intensities (arbitrary units, negative baseline-subtracted
+    points); the authors' log1p/thresholding/Hann-window convolution (Dataset.py) is model-side preprocessing
+    and is not applied.
+  rai:dataSocialImpact: Supports research into rapid, label-free detection and quantification of pesticide
+    residues on fresh produce (food safety); any regulatory or consumer-facing use requires validation across
+    produce, pesticides, lots and instruments.
+  rai:dataUseCases: Multi-output regression of per-pesticide concentration (ppm) for carbophenothion, oxamyl
+    and phosmet from a single SERS spectrum; the multi-label presence task is derivable (pesticide present
+    iff concentration > 0; the control is the all-zero row). Group-aware CV is leave-one-condition-out (11
+    groups of 3).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All spectra originate
+    from agricultural produce samples without any individual human identifiers.
 single_cell_prokaryotes:
   prov:wasDerivedFrom: https://data.mendeley.com/datasets/8cd34fckgt/1
   prov:wasGeneratedBy: 'Data collection: Laboratory measurements on biological materials including microorganisms, cell
@@ -3941,6 +4881,176 @@ tg_ecoli_fermentation_supernatant:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
+turmeric_lead_chromate:
+  prov:wasDerivedFrom: https://doi.org/10.5281/zenodo.6014148
+  prov:wasGeneratedBy: 'Data collection: FT-Raman spectra (200 mW laser power) of turmeric powder laced
+    with lead chromate for rapid adulteration detection, part of WP3 (Task 3.1) of the EU-China-Safe project
+    (H2020 grant 727864) (Sara W. Erasmus, Lisanne van Hasselt, Linda M. Ebbinge, Saskia M. van Ruth, Wageningen
+    University & Research; publication: https://doi.org/10.1016/j.foodcont.2020.107714, Food Control 121,
+    107714, 2021; data deposited at https://doi.org/10.5281/zenodo.6014148, Zenodo v1.1, 2022-02-08, CC
+    BY 4.0). This raman_data key loads the workbook''s ''Raw spectra region 3601-200'' sheet: 70 triplicate-averaged
+    spectra of 10 turmeric samples (Samples 1, 2, 4, 8, 9, 10, 12, 13, 14, 15), each at one of seven lead-chromate
+    levels (0, 0.001, 0.005, 0.01, 0.025, 0.05, 0.1 w/w fraction = 0, 0.1, 0.5, 1.0, 2.5, 5.0, 10.0 % w/w),
+    on the native 1,765-point 199.5076-3,601.383 cm^-1 axis (stored descending, flipped to ascending by
+    the loader).'
+  rai:dataAnnotationProtocol: Targets are the deposit's own lead-chromate lacing levels recorded in the
+    sheet's 'Concentration (w/w%)' column (the column actually holds the w/w fraction; the percentages are
+    stated in the sheet's info line). Labels were prepared gravimetrically by the authors; no re-labelling
+    was performed for this benchmark.
+  rai:dataBiases: Only 10 of the 15 turmeric samples carry laced spectra (Samples 3, 5, 6, 7, 11 appear
+    only in the deposit's authentic-samples sheet); the seven levels of one sample share the same base powder
+    (grouped here); spectra are raw, unnormalized intensities (0.0014-0.324) with a strong sample-to-sample
+    matrix variation, so generalization across turmeric batches is limited; the 0-level (authentic) rows
+    are a separate measurement run from the deposit's authentic-samples sheet (verified not identical),
+    which is not loaded.
+  rai:dataCollection: FT-Raman measurements (200 mW laser power) of turmeric powder laced with lead chromate,
+    triplicates averaged per sample and level, recorded as part of the EU-China-Safe food-authenticity work
+    underlying the 2021 Food Control publication.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Small dataset (70 spectra, 10 samples x 7 levels); raw unnormalized intensities (0.0014-0.324)
+    with strong batch-to-batch variation; the wavenumber range is 199.5-3,601.4 cm^-1 (FT-Raman region,
+    no fingerprint region below 200 cm^-1); the deposit's .txt file claims a 'CC BY-SA' license while the
+    machine-readable Zenodo record states CC BY 4.0 (the record's license is used here); the workbook's
+    authentic-samples, vial-reference and exploratory 'Trial' sheets are not loaded.
+  rai:dataPreprocessingProtocol: Triplicate averaging was applied by the authors as deposited (each deposited
+    spectrum is the average of three measurements). No baseline correction, normalization or resampling
+    was applied by the authors. The raman_data loader only flips the workbook's descending wavenumber axis
+    (3,601.383-199.5076 cm^-1) to ascending.
+  rai:dataSocialImpact: 'Supports food-authenticity research: rapid detection of lead-chromate adulteration
+    in turmeric (a documented public-health concern). No personal or medical data; purely chemical/food
+    samples.'
+  rai:dataUseCases: Regression of the lead-chromate w/w fraction from FT-Raman spectra of turmeric; a coarse
+    authentic-vs-adulterated binary task is derivable (0 vs >0; 10 vs 60 spectra); group-aware CV on the
+    10 sample groups to test batch generalization.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are turmeric
+    powder (with defined lead-chromate loadings).
+uraman_mof74_1000_2000:
+  prov:wasDerivedFrom: https://github.com/IBM/uRaman-Dataset
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of six MOF-74 metal-series samples (Mg-MOF74, Zn-MOF74,
+    Zn75Mg25-MOF74 and the gold-coated Au@Mg-MOF74, Au@Zn-MOF74, Au@Zn75Mg25-MOF74) measured in the nominal
+    1,000-2,000 cm^-1 window with a WITec Alpha 300 RAS micro-Raman system (532 nm excitation, 1 mW, 1800
+    g/mm grating, 200-400 accumulations x 0.5 s); the samples were provided by Prof. Carlos Basilio Pinheiro''s
+    group (per the deposit''s About.md). Part of IBM''s uRaman-Dataset (commit 47e712d326fb0458ee8218ab73a2cfc269dcdfab,
+    2023-06-19, CDLA-Sharing-1.0, maintainer Matheus Esteves Ferreira); no indexed parent paper exists,
+    so the repository is the citation. All spectra are peak-normalized (max = 1.0) as deposited. This raman_data
+    key resamples the six native 1,600-point grids onto the common 970-1,887 cm^-1 @1 cm^-1 grid (918 points;
+    the intersection of the six native axes: five files span 969.006-1,980.60 cm^-1, Au@Mg-MOF74 spans 860.797-1,887.76
+    cm^-1, off the nominal window).'
+  rai:dataAnnotationProtocol: 'Sample identities are given by the deposit''s file and folder names (MOF-74
+    metal-series composition: Me = Mg, Zn, Zn75Mg25; Au@ = gold-coated variant); the labels are derived
+    from the deposit''s filenames, not re-curated for this benchmark. Note: the 1,000-2,000 cm^-1 file of
+    Au@Zn75Mg25-MOF74 is spelled with a double dash in the deposit (''Au@Zn75Mg25--MOF74.csv''); the label
+    is normalized to a single dash (matching the 70-3,000 cm^-1 file).'
+  rai:dataBiases: 'Single facility (IBM) and single instrument (WITec Alpha 300 RAS, 532 nm, 1 mW). One
+    stitched spectrum per sample, so there is no replicate structure and no within-class variance. The common
+    window (970-1,887 cm^-1) is narrower than the nominal 1,000-2,000 cm^-1 acquisition window: every spectrum
+    is truncated outside the common window (the five nominal-window files lose 1,888-1,980.60 cm^-1, Au@Mg-MOF74
+    loses 860.797-969 cm^-1), and the spectra are not directly comparable to the same materials measured
+    in the other windows or at other excitation wavelengths (see the uraman_mofs and uraman_mof74_70_3000
+    keys).'
+  rai:dataCollection: Raman measurements of six MOF-74 metal-series samples in the nominal 1,000-2,000 cm^-1
+    window; WITec Alpha 300 RAS, 532 nm at 1 mW, 1800 g/mm grating, 200-400 accumulations x 0.5 s; samples
+    provided by Prof. Carlos Basilio Pinheiro's group.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: One stitched spectrum per sample (6 samples) - a reference set, not a CV-learnable
+    classification; single instrument/facility; every spectrum is truncated outside the common 970-1,887
+    cm^-1 window; peak normalization to 1.0 removes absolute intensity information; the excitation/power
+    differs from the deposit's top-level set (532 nm at 1 mW here vs 532/633 nm at 1-2 mW there); the CDLA-Sharing-1.0
+    license is share-alike (commercial use allowed, derivative works must carry the same license).
+  rai:dataPreprocessingProtocol: Peak normalization to max = 1.0 as deposited; the WITec exports of this
+    window carry no background subtraction (all intensities >= 0). The loader linearly interpolates the
+    native 1,600-point grids onto the common 970-1,887 cm^-1 @1 cm^-1 grid (918 points); no baseline correction,
+    smoothing or other preprocessing is applied.
+  rai:dataSocialImpact: Materials-science reference data for the MOF-74 metal series (candidate gas-sensing
+    and CO2-capture materials); no human or medical use.
+  rai:dataUseCases: Reference spectra for spectral matching and few-shot / augmentation use; metal-series
+    comparison (Mg vs Zn vs Zn75Mg25, gold-coated vs uncoated) on a common 1,000-2,000 cm^-1-style window;
+    not suitable for CV-based classification (one spectrum per class).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are inorganic
+    MOF-74 metal-series materials.
+uraman_mof74_70_3000:
+  prov:wasDerivedFrom: https://github.com/IBM/uRaman-Dataset
+  prov:wasGeneratedBy: 'Data collection: stitched Raman spectra of five MOF-74 metal-series samples (Mg-MOF74,
+    Zn-MOF74, Zn75Mg25-MOF74, Au@Zn-MOF74, Au@Zn75Mg25-MOF74) measured in the nominal 70-3,000 cm^-1 window
+    (native axis 0-2,999.35 cm^-1, 5,266 points) with a WITec Alpha 300 RAS micro-Raman system (532 nm excitation,
+    1 mW, 1800 g/mm grating, 100 accumulations x 0.5 s); the samples were provided by Prof. Carlos Basilio
+    Pinheiro''s group (per the deposit''s About.md). Au@Mg-MOF74 has no stitched spectrum (''No spectral
+    stitching is available for Au@Mg-MOF74 due to a high luminescence background'', per the deposit). Part
+    of IBM''s uRaman-Dataset (commit 47e712d326fb0458ee8218ab73a2cfc269dcdfab, 2023-06-19, CDLA-Sharing-1.0,
+    maintainer Matheus Esteves Ferreira); no indexed parent paper exists, so the repository is the citation.
+    All spectra are peak-normalized (max = 1.0) as deposited. This raman_data key resamples the native grids
+    onto the common 0-2,999 cm^-1 @1 cm^-1 grid (3,000 points).'
+  rai:dataAnnotationProtocol: 'Sample identities are given by the deposit''s file and folder names (MOF-74
+    metal-series composition: Me = Mg, Zn, Zn75Mg25; Au@ = gold-coated variant); the labels are derived
+    from the deposit''s filenames, not re-curated for this benchmark. Au@Mg-MOF74 is absent from this window
+    because no stitched spectrum was recorded for it.'
+  rai:dataBiases: Single facility (IBM) and single instrument (WITec Alpha 300 RAS, 532 nm, 1 mW). One stitched
+    spectrum per sample, so there is no replicate structure and no within-class variance. The sample set
+    differs from the 1,000-2,000 cm^-1 window (no Au@Mg-MOF74), so the two keys cannot be joined into a
+    single per-material comparison; spectra are not comparable to the top-level compounds measured at 532/633
+    nm (see uraman_mofs).
+  rai:dataCollection: Stitched Raman measurements of five MOF-74 metal-series samples in the nominal 70-3,000
+    cm^-1 window; WITec Alpha 300 RAS, 532 nm at 1 mW, 1800 g/mm grating, 100 accumulations x 0.5 s; samples
+    provided by Prof. Carlos Basilio Pinheiro's group.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: One stitched spectrum per sample (5 samples) - a reference set, not a CV-learnable
+    classification; single instrument/facility; Au@Mg-MOF74 is missing (high luminescence background prevented
+    stitching); peak normalization to 1.0 removes absolute intensity information; the CDLA-Sharing-1.0 license
+    is share-alike (commercial use allowed, derivative works must carry the same license).
+  rai:dataPreprocessingProtocol: Peak normalization to max = 1.0 as deposited; the WITec exports of this
+    window carry no background subtraction (all intensities >= 0). The loader linearly interpolates the
+    native 5,266-point 0-2,999.35 cm^-1 grids onto the common 0-2,999 cm^-1 @1 cm^-1 grid (3,000 points);
+    no baseline correction, smoothing or other preprocessing is applied.
+  rai:dataSocialImpact: Materials-science reference data for the MOF-74 metal series (candidate gas-sensing
+    and CO2-capture materials); no human or medical use.
+  rai:dataUseCases: Reference spectra for spectral matching and few-shot / augmentation use; full-window
+    (0-3,000 cm^-1) metal-series comparison for the five available samples; not suitable for CV-based classification
+    (one spectrum per class).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are inorganic
+    MOF-74 metal-series materials.
+uraman_mofs:
+  prov:wasDerivedFrom: https://github.com/IBM/uRaman-Dataset
+  prov:wasGeneratedBy: 'Data collection: stitched Raman reference spectra of the three MOF compounds listed
+    in the deposit''s README (HKUST-1 = Basolite C300, Sigma-Aldrich; Mg-MOF74; ZIF-8 = Basolite Z1200,
+    Sigma-Aldrich), measured with a WITec UHTS300S Raman system (DU970_BVF detector, 63x objective, 100
+    accumulations x 0.5 s). Acquisition conditions differ per compound (recorded in each folder''s Experiment_Information.txt):
+    HKUST-1 531.970 nm at 1 mW (2023-02-14), Mg-MOF74 632.810 nm at 1 mW (2023-03-01), ZIF-8 531.970 nm
+    at 2 mW (2023-04-27); the Mg-MOF74 export is labelled ''(Sub BG) (Norm)'' (background-subtracted) and
+    carries 989 negative points. Part of IBM''s uRaman-Dataset (commit 47e712d326fb0458ee8218ab73a2cfc269dcdfab,
+    2023-06-19, CDLA-Sharing-1.0, maintainer Matheus Esteves Ferreira); no indexed parent paper exists,
+    so the repository is the citation. All spectra are peak-normalized (max = 1.0) as deposited. This raman_data
+    key resamples the two native grids (1,806 points for HKUST-1/ZIF-8, 2,768 for Mg-MOF74) onto the common
+    0-3,997 cm^-1 @1 cm^-1 grid (3,998 points).'
+  rai:dataAnnotationProtocol: The sample identity of each spectrum is the MOF compound itself (HKUST-1,
+    Mg-MOF74, ZIF-8), as named in the deposit's folders and README; the labels are derived from the deposit,
+    not re-curated for this benchmark.
+  rai:dataBiases: Single facility (IBM), but the three compounds were measured under different conditions
+    (532 nm at 1 mW for HKUST-1, 633 nm at 1 mW for Mg-MOF74, 532 nm at 2 mW for ZIF-8) - Raman intensities
+    depend on excitation wavelength and power, and the Mg-MOF74 export is background-subtracted (989 negative
+    points) while the other two are not, so cross-compound intensity comparisons are confounded. One stitched
+    spectrum per compound, so there is no replicate structure and no within-class variance.
+  rai:dataCollection: Stitched Raman measurements of three MOF compounds (HKUST-1, Mg-MOF74, ZIF-8); WITec
+    UHTS300S, 531.970/632.810 nm excitation, 1-2 mW, 100 accumulations x 0.5 s, 63x objective, measured
+    2023-02-14 to 2023-04-27.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: One stitched spectrum per compound (3 samples) - a reference set, not a CV-learnable
+    classification; mixed excitation wavelengths (532/633 nm) and powers (1-2 mW); inconsistent per-file
+    background subtraction; peak normalization to 1.0 removes absolute intensity information; the CDLA-Sharing-1.0
+    license is share-alike (commercial use allowed, derivative works must carry the same license).
+  rai:dataPreprocessingProtocol: Peak normalization to max = 1.0 as deposited; the Mg-MOF74 export is additionally
+    background-subtracted (labelled '(Sub BG) (Norm)', 989 negative points). The loader linearly interpolates
+    the two native grids (1,806- and 2,768-point) onto the common 0-3,997 cm^-1 @1 cm^-1 grid (3,998 points);
+    no baseline correction, smoothing or other preprocessing is applied.
+  rai:dataSocialImpact: Materials-science reference data for MOF compounds (HKUST-1, Mg-MOF-74, ZIF-8 -
+    candidate gas-sensing and CO2-capture materials); no human or medical use.
+  rai:dataUseCases: Reference spectra for spectral matching and few-shot / augmentation use; single-compound
+    characterization; not suitable for CV-based classification (one spectrum per class).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are inorganic
+    MOF compounds.
 water_quality_ions:
   prov:wasDerivedFrom: https://data.mendeley.com/datasets/cxf3zxsc3k/3
   prov:wasGeneratedBy: 'Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures,
