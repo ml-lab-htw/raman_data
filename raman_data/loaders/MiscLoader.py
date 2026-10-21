@@ -281,7 +281,7 @@ class MiscLoader(BaseLoader):
                 "citation": [
                     "Hogan, Úna E., Voss, H. Ben., Lei, Benjamin, Bec, Avery E., Feng, Xinyi, Smith, Rodney (2026). Raman spectra for plastics identification (RaSPI) and Raman maps for plastics identification (RaMPI) datasets. Scientific Data, 13, 765."
                 ],
-                "description": "Baseline-corrected Raman spectra of 14 plastic types (polyethylene, polypropylene, PTFE, polystyrene, nylon, silicone, PMMA, POM, polyester, polyurethane, PVC, PET, polycarbonate, ABS) acquired on a Renishaw inVia Raman microscope: 226 spectra at 633 nm (1800 l/mm grating) and 176 at 523 nm (2400 l/mm grating). The deposited RaSPI_processed.csv is uniformly gridded at 1 cm^-1 over 225-3949 cm^-1 (3725 points), polynomial-baseline-subtracted and 0-1 normalized. Samples mix pristine commercial/retail plastics with environmental microplastics (bottle caps, bags, fragments) from Pollution Probe Great Lakes Seabin collections. The deposit's spectra file holds 402 rows, but 6 metadata rows lack a spectrum, 4 spectra lack metadata, and PE1a/PE1b are stored twice, leaving a fully-labeled usable set of 396 spectra from 272 physical samples (159 measured once, 104 twice, 9 three to four times). Each spectrum ID is '<plastic><number>' plus a trailing letter (PE1a, PE1b, PET4c...) marking repeated measurements of the same physical sample; the loader exposes those sample ids as group_ids. The raw (unprocessed) spectra are available in the same deposit as RaSPI_raw.csv. Same lab and much of the authorship as Lei et al. 2022 (the microplastics_training_* keys; Smith group, U. Waterloo -- Hogan and Lei co-authored both papers): the commercial-pristine subsets may draw on the same lab collection, though the deposits carry no shared sample ids.",
+                "description": "Baseline-corrected Raman spectra of 14 plastic types (polyethylene, polypropylene, PTFE, polystyrene, nylon, silicone, PMMA, POM, polyester, polyurethane, PVC, PET, polycarbonate, ABS) acquired on a Renishaw inVia Raman microscope: 226 spectra at 633 nm (1800 l/mm grating) and 176 at 532 nm (2400 l/mm grating). The deposited RaSPI_processed.csv is uniformly gridded at 1 cm^-1 over 225-3949 cm^-1 (3725 points), polynomial-baseline-subtracted and 0-1 normalized. Samples mix pristine commercial/retail plastics with environmental microplastics (bottle caps, bags, fragments) from Pollution Probe Great Lakes Seabin collections. The deposit's spectra file holds 402 rows, but 6 metadata rows lack a spectrum, 4 spectra lack metadata, and PE1a/PE1b are stored twice, leaving a fully-labeled usable set of 396 spectra from 272 physical samples (159 measured once, 104 twice, 9 three to four times). Each spectrum ID is '<plastic><number>' plus a trailing letter (PE1a, PE1b, PET4c...) marking repeated measurements of the same physical sample; the loader exposes those sample ids as group_ids. The raw (unprocessed) spectra are available in the same deposit as RaSPI_raw.csv. Same lab and much of the authorship as Lei et al. 2022 (the microplastics_training_* keys; Smith group, U. Waterloo -- Hogan and Lei co-authored both papers): the commercial-pristine subsets may draw on the same lab collection, though the deposits carry no shared sample ids.",
             },
             # Checked: the trailing-letter sample ids in RaSPI_metadata.csv
             # denote repeated measurements of the same physical plastic
@@ -1785,7 +1785,7 @@ class MiscLoader(BaseLoader):
         Download and load RaSPI (Hogan et al. 2026, Sci. Data 13:765,
         doi:10.1038/s41597-026-07103-8), data release doi:10.5683/SP3/8UQQQN.
 
-        Files (Borealis / University of Waterloo DataVerse, CC-BY 4.0):
+        Files (Borealis / University of Waterloo DataVerse, CC BY 4.0):
           RaSPI_processed.csv  402 x 3726 wide CSV, row 0 = spectrum id,
                                columns = intensities on a uniform
                                225-3949 cm^-1 / 1 cm^-1 grid (baseline
@@ -1857,8 +1857,21 @@ class MiscLoader(BaseLoader):
             raise RuntimeError("[!] raman_spi: RaSPI_processed.csv wavenumber axis is not ascending.")
 
         spectra = merged[wav_cols].to_numpy(dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError("[!] raman_spi: missing intensity values.")
         plastic_types = merged["Plastic Type"]
         group_ids = merged["Spectra ID"].map(MiscLoader._raspi_sample_stem).to_numpy()
+
+        # Integrity pin: the deposit's fully-labeled usable set is 396
+        # spectra from 272 physical samples across 14 plastic types.
+        n_samples = len(np.unique(group_ids))
+        n_classes = len(np.unique(plastic_types))
+        if spectra.shape != (396, len(raman_shifts)) or n_classes != 14 or n_samples != 272:
+            raise RuntimeError(
+                f"[!] raman_spi: expected 396 x {len(raman_shifts)} spectra with "
+                f"14 classes / 272 physical samples, got {spectra.shape} with "
+                f"{n_classes} classes / {n_samples} samples."
+            )
 
         targets, class_names = encode_labels(plastic_types)
         return spectra, raman_shifts, targets, list(class_names), group_ids
@@ -2131,6 +2144,10 @@ class MiscLoader(BaseLoader):
             raise RuntimeError("[!] raman_mpi: no plastic-labeled pixels found.")
 
         spectra = np.concatenate(spectra_list, axis=0)
+        # The 33,119 total above pins the deposit; this pins what is
+        # actually returned (blank pixels excluded).
+        if spectra.shape[0] != 16598:
+            raise RuntimeError(f"[!] raman_mpi: expected 16598 plastic-labeled pixels, got {spectra.shape[0]}.")
         targets, class_names = encode_labels(pd.Series(np.concatenate(label_list)))
         group_ids = np.array(group_list)
         return spectra, MiscLoader._RAMPI_COMMON_GRID.copy(), targets, list(class_names), group_ids
@@ -2213,7 +2230,7 @@ class MiscLoader(BaseLoader):
         Download and load the Lei et al. 2022 (Anal. Chem. 94(49),
         17011-17019, doi:10.1021/acs.analchem.2c02451) microplastic
         training CSV for one resolution grid, data release
-        doi:10.5683/SP3/LSN0R0 (Borealis, CC-BY 4.0).
+        doi:10.5683/SP3/LSN0R0 (Borealis, CC BY 4.0).
 
         File layout: one row per spectrum; columns 'plastic', 'supplier',
         'sampleid', then one column per wavenumber (720-1800 cm^-1 at the
@@ -2252,6 +2269,13 @@ class MiscLoader(BaseLoader):
 
         targets, class_names = encode_labels(plastic[keep])
         group_ids = df["sampleid"].astype(str).str.strip()[keep].to_numpy()
+        # Integrity pin (the clean-key loader pins its derived counts
+        # too): 108 supplier samples across 14 plastic classes.
+        if len(np.unique(group_ids)) != 108 or len(class_names) != 14:
+            raise RuntimeError(
+                f"[!] microplastics_training_{resolution}: expected 108 supplier sample "
+                f"ids / 14 plastic classes, got {len(np.unique(group_ids))} / {len(class_names)}."
+            )
         return spectra[keep.to_numpy()], raman_shifts, targets, list(class_names), group_ids
 
     @staticmethod
