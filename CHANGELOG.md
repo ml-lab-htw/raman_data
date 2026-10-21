@@ -11,6 +11,22 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `ocean_polymers` + `ocean_polymers_raw`: two views of the
+  open-access Raman reference library of Miller et al. 2022
+  (*Scientific Data* 9, 780, doi:10.1038/s41597-022-01883-5;
+  OSF osf.io/7cqv4, CC BY 4.0 via the open-access paper - the
+  OSF project itself sets no license): (1) `ocean_polymers`
+  - the 79 post-processed spectra (61 anthropogenic + 18
+  biological specimens) on the authors' uniform 200-3,400
+  cm^-1 @1 grid (3,201 pts), peak-normalized 0-1, classified
+  by the deposit's poly_lab label (59 classes, 47 singletons);
+  (2) `ocean_polymers_raw` - the 87 raw Omnic measurement
+  files (74 x 532 nm + 13 x 780 nm) of 49 specimen codes,
+  resampled onto the common 201-3,418 cm^-1 @1 grid (3,218
+  pts), anthropogenic (69) vs biological (18) classification,
+  is_grouped=True with specimen-code groups (repeat
+  measurements). Direct OSF download with size + sha256
+  pinning (no mirror: OSF is CI-reachable).
 - `niclosamide_polymorph_binary` + `niclosamide_polymorph_mcm`:
   NHa (monohydrate-A) %w/w fraction regression on 57 + 57 Raman
   spectra from the SI of Bhavana, Chavan, Mannava, Nangia &

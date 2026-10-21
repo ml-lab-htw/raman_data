@@ -939,6 +939,227 @@ class MiscLoader(BaseLoader):
                 "not comparable across spectra."
             ),
         ),
+        "ocean_polymers": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="ocean_polymers",
+            name=(
+                "Raman Reference Library of Potential "
+                "Anthropogenic and Biological Ocean Polymers "
+                "(Miller 2022)"
+            ),
+            short_name="Ocean Polymers",
+            license="CC BY 4.0",
+            loader=lambda cache_path: MiscLoader._load_miller_ocean_polymers(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Post-processed Raman reference library of 79 "
+                    "ocean polymer specimens (61 anthropogenic "
+                    "polymers + 18 biological materials), "
+                    "200-3,400 cm^-1 (Miller et al. 2022, "
+                    "Scientific Data 9:780)"
+                ),
+                "source": "https://osf.io/7cqv4/",
+                "paper": "https://doi.org/10.1038/s41597-022-01883-5",
+                "bibtex": (
+                    "@article{miller2022ocean, "
+                    "title={A Raman spectral reference library of "
+                    "potential anthropogenic and biological ocean "
+                    "polymers}, "
+                    "author={Miller, Emily A. and Yamahara, Kevan M. "
+                    "and French, Chris and Spingarn, Neil E. and "
+                    "Birch, James M. and Van Houtan, Kyle S.}, "
+                    "journal={Scientific Data}, volume={9}, "
+                    "pages={780}, year={2022}, "
+                    "doi={10.1038/s41597-022-01883-5}}"
+                ),
+                "citation": [
+                    "Miller, E. A., Yamahara, K. M., French, C., "
+                    "Spingarn, N. E., Birch, J. M., and Van Houtan, "
+                    "K. S. (2022). A Raman spectral reference "
+                    "library of potential anthropogenic and "
+                    "biological ocean polymers. Scientific Data, "
+                    "9, 780. "
+                    "https://doi.org/10.1038/s41597-022-01883-5 "
+                    "(data: https://osf.io/7cqv4/)",
+                ],
+                "description": (
+                    "Post-processed Raman spectra of 79 ocean "
+                    "polymer specimens from the open-access "
+                    "reference library of Miller et al. 2022 "
+                    "(Scientific Data 9, 780, "
+                    "doi:10.1038/s41597-022-01883-5; data: OSF "
+                    "project https://osf.io/7cqv4/). The library "
+                    "covers (a) 40 pristine anthropogenic "
+                    "polymers newly sourced from manufacturers, "
+                    "(b) 22 weathered anthropogenic polymers from "
+                    "used consumer, beachcast, agricultural and "
+                    "fishery sources, and (c) 17 biological "
+                    "polymers representing diverse marine taxa, "
+                    "trophic levels and tissues; the deposit "
+                    "holds 18 BIOL-coded specimens (the 17 "
+                    "biological materials plus a charcoal "
+                    "reference, which is carbonaceous, not a "
+                    "polymer). The 79 spectra (61 PLAS-coded + "
+                    "18 BIOL-coded particles, one per specimen) "
+                    "carry the authors' uniform 3,201-point "
+                    "200-3,400 cm^-1 @1 cm^-1 grid and are "
+                    "peak-normalized (max = 1.0, min = 0) as "
+                    "deposited. The deposit's long-format CSV "
+                    "(Data2_processed.csv, one row per "
+                    "spectrum-wavenumber point) is pivoted here; "
+                    "no further preprocessing is applied. Task: "
+                    "classification by the deposit's poly_lab "
+                    "label - 59 classes, of which 12 have "
+                    "replicates (bone x4, PETE x4, PP x4, PS x3, "
+                    "chitin x3, cellulose x3, HDPE x2, "
+                    "myofibrillar protein x2, PA x2, PE x2, "
+                    "calcium carbonate x2) and 47 are singleton "
+                    "reference entries, so most classes are "
+                    "single-spectrum references; the coarse "
+                    "plastic-vs-biological split (61 vs 18) is "
+                    "derivable from the labels. is_grouped=False "
+                    "(one spectrum per specimen). The deposit's "
+                    "raw measurement files (87 spectra, "
+                    "532/780 nm excitation, repeat measurements) "
+                    "are served separately as the "
+                    "ocean_polymers_raw key. License note: the "
+                    "OSF project page sets no explicit license; "
+                    "the open-access parent paper (CC BY 4.0) "
+                    "publishes these data records in its Data "
+                    "Records section, which is the license used "
+                    "here."
+                ),
+            },
+            # Checked: one post-processed spectrum per specimen
+            # (79 IDs, 79 particles); no replicate structure.
+            is_grouped=False,
+            # Checked: every ID block in the pinned CSV carries a
+            # complete, finite 3,201-point spectrum and a label.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "Peak normalization to max = 1.0 (min = 0) applied "
+                "by the authors as deposited; the post-processed "
+                "grid is a uniform 200-3,400 cm^-1 @1 cm^-1 axis "
+                "(3,201 points). The loader only pivots the "
+                "long-format CSV into wide spectra; no baseline "
+                "correction, resampling or further normalization "
+                "is applied."
+            ),
+        ),
+        "ocean_polymers_raw": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="ocean_polymers_raw",
+            name=(
+                "Ocean Polymers Raw Measurements, 532/780 nm "
+                "(Miller 2022)"
+            ),
+            short_name="Ocean Polymers Raw",
+            license="CC BY 4.0",
+            loader=lambda cache_path: (
+                MiscLoader._load_miller_ocean_polymers_raw(cache_path)
+            ),
+            metadata={
+                "full_name": (
+                    "Raw Raman measurement files (87 spectra, "
+                    "532/780 nm excitation) of 49 ocean polymer "
+                    "specimens (Miller et al. 2022, Scientific "
+                    "Data 9:780)"
+                ),
+                "source": "https://osf.io/7cqv4/",
+                "paper": "https://doi.org/10.1038/s41597-022-01883-5",
+                "bibtex": (
+                    "@article{miller2022ocean, "
+                    "title={A Raman spectral reference library of "
+                    "potential anthropogenic and biological ocean "
+                    "polymers}, "
+                    "author={Miller, Emily A. and Yamahara, Kevan M. "
+                    "and French, Chris and Spingarn, Neil E. and "
+                    "Birch, James M. and Van Houtan, Kyle S.}, "
+                    "journal={Scientific Data}, volume={9}, "
+                    "pages={780}, year={2022}, "
+                    "doi={10.1038/s41597-022-01883-5}}"
+                ),
+                "citation": [
+                    "Miller, E. A., Yamahara, K. M., French, C., "
+                    "Spingarn, N. E., Birch, J. M., and Van Houtan, "
+                    "K. S. (2022). A Raman spectral reference "
+                    "library of potential anthropogenic and "
+                    "biological ocean polymers. Scientific Data, "
+                    "9, 780. "
+                    "https://doi.org/10.1038/s41597-022-01883-5 "
+                    "(data: https://osf.io/7cqv4/)",
+                ],
+                "description": (
+                    "The 87 raw Raman measurement files of the "
+                    "49-specimen subset of the Miller et al. "
+                    "2022 ocean-polymer library (Scientific Data "
+                    "9, 780, doi:10.1038/s41597-022-01883-5; "
+                    "deposit https://osf.io/7cqv4/, license note "
+                    "as in ocean_polymers) - the unprocessed "
+                    "counterpart of the ocean_polymers key. The "
+                    "files of Data1_raw_csv.zip are Thermo/"
+                    "Nicolet Omnic exports (line 1 'Created As "
+                    "Omnic File,<CODE>', line 2 'Raman Shift / "
+                    "cm-1,INT', data rows in DESCENDING "
+                    "wavenumber order - flipped to ascending by "
+                    "the loader). Two excitation wavelengths are "
+                    "present: 74 files at 532 nm (3,467 points, "
+                    "76.55-3,418.58 cm^-1) and 13 files at 780 "
+                    "nm (2,700 points, 200.49-3,699.66 cm^-1); "
+                    "every spectrum is linearly interpolated "
+                    "onto the common 201-3,418 cm^-1 @1 cm^-1 "
+                    "grid (3,218 points; the intersection of the "
+                    "two native axes). Repeat structure: 49 "
+                    "specimen codes with 1 (x16), 2 (x28; a "
+                    "repeated 532 nm measurement) or 3 (x5; a "
+                    "repeated 532 nm measurement plus one 780 nm "
+                    "measurement) files -> is_grouped=True with "
+                    "group_id = specimen code, so group-aware "
+                    "splits keep a specimen's repeats together. "
+                    "Task: classification of anthropogenic "
+                    "polymers (PLAS-coded, 69 spectra) vs "
+                    "biological materials (BIOL-coded, 18 "
+                    "spectra) - the paper's central "
+                    "identification question. Intensities are "
+                    "raw counts with no normalization: absolute "
+                    "scales differ per excitation (532 nm: "
+                    "-511..29,382; 780 nm: -123..1,104), and the "
+                    "8 specimens measured at 780 nm only are 5 "
+                    "BIOL and 3 PLAS, so excitation and class "
+                    "are partially confounded. The raw axis "
+                    "extends beyond the common window at both "
+                    "ends (truncation as in the ocean_polymers "
+                    "key's 200-3,400 cm^-1 grid). Downloaded "
+                    "directly from OSF's stable file URL (size + "
+                    "sha256 pinned); no mirror required."
+                ),
+            },
+            # Checked: 28 specimen codes have a repeated 532 nm
+            # measurement and 5 have a repeated 532 nm + one 780
+            # nm measurement; group_id = specimen code keeps the
+            # repeats together in a group-aware split.
+            is_grouped=True,
+            # Checked: all 87 files carry a complete, finite
+            # spectrum and a parseable PLAS/BIOL specimen code.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "Raw Omnic counts, no normalization applied by "
+                "the authors. The loader only (1) skips the two "
+                "header rows, (2) flips the descending "
+                "wavenumber axis to ascending, and (3) linearly "
+                "interpolates onto the common 201-3,418 cm^-1 "
+                "@1 cm^-1 grid (3,218 points; intersection of "
+                "the 532 nm native axis 76.55-3,418.58 and the "
+                "780 nm native axis 200.49-3,699.66 cm^-1). "
+                "Absolute intensity scales are not comparable "
+                "across excitation wavelengths (532 nm: "
+                "-511..29,382; 780 nm: -123..1,104)."
+            ),
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -3354,4 +3575,332 @@ class MiscLoader(BaseLoader):
             axis,
             encoded_targets,
             list(class_names),
+        )
+
+    # ------------------------------------------------------------------
+    # ocean_polymers / ocean_polymers_raw
+    # (Miller et al. 2022, Scientific Data 9:780, OSF osf.io/7cqv4)
+    # ------------------------------------------------------------------
+    # "A Raman spectral reference library of potential
+    # anthropogenic and biological ocean polymers" (Miller,
+    # Yamahara, French, Spingarn, Birch & Van Houtan 2022,
+    # Scientific Data 9, 780, doi:10.1038/s41597-022-01883-5,
+    # open access CC BY 4.0). The OSF project itself sets no
+    # explicit license; the open-access parent paper publishes
+    # the data records (Data Records section) under CC BY 4.0,
+    # which is the license used here.
+    #
+    # The public OSF node 7cqv4 (no child components) holds
+    # exactly two files:
+    #   Data2_processed.csv (19,921,069 B) - the
+    #     post-processed reference library in long format, one
+    #     row per (spectrum, wavenumber); columns ID, SAMPLE,
+    #     INTENSITY, WAVE, PARTICLE, poly_lab. 79 spectra (61
+    #     PLAS-coded + 18 BIOL-coded particles, one per
+    #     specimen), each a uniform 3,201-point 200-3,400 cm^-1
+    #     @1 grid, peak-normalized 0-1. poly_lab = 59 labels
+    #     (12 multi-member, 47 singletons).
+    #   Data1_raw_csv.zip (1,452,113 B) - 87 raw Omnic
+    #     measurement files of 49 specimen codes: 74 x 532 nm
+    #     (3,467 pts, 76.55-3,418.58 cm^-1) + 13 x 780 nm
+    #     (2,700 pts, 200.49-3,699.66 cm^-1); raw counts, axis
+    #     stored descending. 28 specimen codes have a repeated
+    #     532 nm measurement, 5 have a repeated 532 nm
+    #     measurement plus one 780 nm measurement.
+    #
+    # OSF serves the files from stable URLs that 302-redirect
+    # to a short-lived signed object-storage URL; no browser
+    # headers are required (CI-reachable), so both keys
+    # download directly with size + sha256 pinning - no mirror.
+    _MILLER_DATA2_URL = (
+        "https://files.osf.io/v1/resources/7cqv4/providers/"
+        "osfstorage/61cffbeace4dbc0c5dc73a40"
+    )
+    _MILLER_DATA2 = "Data2_processed.csv"
+    _MILLER_DATA2_SIZE = 19921069
+    _MILLER_DATA2_SHA256 = (
+        "4d063b8bf95d87ba3936aa65c0dbc2968ffba4e27e0debb7dae17a16840af6d0"
+    )
+    _MILLER_DATA1_URL = (
+        "https://files.osf.io/v1/resources/7cqv4/providers/"
+        "osfstorage/61cfff382962ce0c76b00abc"
+    )
+    _MILLER_DATA1 = "Data1_raw_csv.zip"
+    _MILLER_DATA1_SIZE = 1452113
+    _MILLER_DATA1_SHA256 = (
+        "033cc6fa9243c72591ab67f8cf2204d982e04e8ae920b5a2e343e45e0308c54d"
+    )
+    _MILLER_DATA1_ROOT = "Data1_raw_csv"
+    _MILLER_DATA1_N_FILES = 87
+    _MILLER_DATA2_N_SPECTRA = 79
+    _MILLER_DATA2_N_POINTS = 3201
+    _MILLER_DATA2_N_CLASSES = 59
+
+    @staticmethod
+    def _download_miller_osf_file(
+        cache_path: str,
+        url: str,
+        fname: str,
+        size: int,
+        sha: str,
+        key: str,
+    ) -> str:
+        """
+        Download (if needed) one pinned OSF file of the Miller
+        2022 ocean-polymer deposit; returns the local file path.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        fpath = os.path.join(cache_path, fname)
+        if os.path.exists(fpath) and os.path.getsize(fpath) != size:
+            os.remove(fpath)
+        result = LoaderTools.download(
+            url=url,
+            out_dir_path=cache_path,
+            out_file_name=fname,
+            hash_target=sha,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                f"[!] {key}: OSF download of {fname} failed "
+                "(network error or checksum mismatch). See logs."
+            )
+        return fpath
+
+    @staticmethod
+    def _load_miller_ocean_polymers(cache_path: str):
+        """
+        Load the 79 post-processed reference spectra (poly_lab
+        classification, 59 classes) on the authors' uniform
+        3,201-point 200-3,400 cm^-1 @1 cm^-1 grid.
+
+        Returns spectra, raman_shifts, targets, class_names.
+        """
+        fpath = MiscLoader._download_miller_osf_file(
+            cache_path,
+            MiscLoader._MILLER_DATA2_URL,
+            MiscLoader._MILLER_DATA2,
+            MiscLoader._MILLER_DATA2_SIZE,
+            MiscLoader._MILLER_DATA2_SHA256,
+            "ocean_polymers",
+        )
+        df = pd.read_csv(fpath)
+        expected_cols = {
+            "ID", "SAMPLE", "INTENSITY", "WAVE", "PARTICLE",
+            "poly_lab",
+        }
+        if not expected_cols.issubset(df.columns):
+            raise RuntimeError(
+                "[!] ocean_polymers: Data2_processed.csv columns "
+                f"changed ({list(df.columns)})."
+            )
+        if df[["INTENSITY", "WAVE"]].isna().any().any():
+            raise RuntimeError(
+                "[!] ocean_polymers: Data2_processed.csv "
+                "contains missing values."
+            )
+        # One row per (spectrum, wavenumber) point; group by ID,
+        # preserving first appearance (deterministic; the file
+        # is sha256-pinned).
+        groups = df.groupby("ID", sort=False)
+        if len(groups) != MiscLoader._MILLER_DATA2_N_SPECTRA:
+            raise RuntimeError(
+                "[!] ocean_polymers: expected "
+                f"{MiscLoader._MILLER_DATA2_N_SPECTRA} spectra, "
+                f"found {len(groups)}."
+            )
+        spectra_list = []
+        labels = []
+        axis = None
+        for sid, block in groups:
+            if (
+                block["PARTICLE"].nunique() != 1
+                or block["poly_lab"].nunique() != 1
+            ):
+                raise RuntimeError(
+                    f"[!] ocean_polymers: ID {sid!r} maps to more "
+                    "than one particle or label."
+                )
+            wave = block["WAVE"].to_numpy(dtype=float)
+            inten = block["INTENSITY"].to_numpy(dtype=float)
+            if axis is None:
+                axis = wave
+                if (
+                    len(wave)
+                    != MiscLoader._MILLER_DATA2_N_POINTS
+                    or wave[0] != 200.0
+                    or wave[-1] != 3400.0
+                    or not np.all(np.diff(wave) > 0)
+                ):
+                    raise RuntimeError(
+                        "[!] ocean_polymers: the common "
+                        "3,201-point 200-3,400 cm^-1 axis is no "
+                        "longer present."
+                    )
+            elif not np.array_equal(wave, axis):
+                raise RuntimeError(
+                    f"[!] ocean_polymers: ID {sid!r} carries a "
+                    "different wavenumber axis."
+                )
+            if not np.isfinite(inten).all():
+                raise RuntimeError(
+                    f"[!] ocean_polymers: ID {sid!r} has "
+                    "non-finite intensities."
+                )
+            spectra_list.append(inten)
+            labels.append(block["poly_lab"].iat[0])
+        spectra = np.asarray(spectra_list, dtype=float)
+        encoded_targets, class_names = encode_labels(
+            pd.Series(labels)
+        )
+        if len(set(class_names)) != MiscLoader._MILLER_DATA2_N_CLASSES:
+            raise RuntimeError(
+                f"[!] ocean_polymers: expected "
+                f"{MiscLoader._MILLER_DATA2_N_CLASSES} poly_lab "
+                f"classes, found {len(set(class_names))}."
+            )
+        MiscLoader.logger.debug(
+            f"Loaded ocean_polymers: {spectra.shape[0]} spectra "
+            f"x {spectra.shape[1]} points, "
+            f"{len(set(class_names))} poly_lab classes"
+        )
+        return (
+            spectra,
+            axis,
+            encoded_targets,
+            list(class_names),
+        )
+
+    @staticmethod
+    def _load_miller_ocean_polymers_raw(cache_path: str):
+        """
+        Load the 87 raw Omnic measurement spectra of the 49
+        specimen codes (anthropogenic vs biological
+        classification, group_id = specimen code), each
+        resampled onto the common 201-3,418 cm^-1 @1 cm^-1
+        grid (3,218 points).
+
+        Returns spectra, raman_shifts, targets, class_names,
+        group_ids.
+        """
+        import zipfile
+
+        zpath = MiscLoader._download_miller_osf_file(
+            cache_path,
+            MiscLoader._MILLER_DATA1_URL,
+            MiscLoader._MILLER_DATA1,
+            MiscLoader._MILLER_DATA1_SIZE,
+            MiscLoader._MILLER_DATA1_SHA256,
+            "ocean_polymers_raw",
+        )
+        grid = np.arange(201.0, 3419.0)  # 201..3418 @1 = 3,218
+        with zipfile.ZipFile(zpath) as zf:
+            names = sorted(
+                n
+                for n in zf.namelist()
+                if n.startswith(MiscLoader._MILLER_DATA1_ROOT + "/")
+                and n.endswith(".csv")
+            )
+            if len(names) != MiscLoader._MILLER_DATA1_N_FILES:
+                raise RuntimeError(
+                    "[!] ocean_polymers_raw: expected "
+                    f"{MiscLoader._MILLER_DATA1_N_FILES} CSVs in "
+                    f"{MiscLoader._MILLER_DATA1_ROOT}/, found "
+                    f"{len(names)}."
+                )
+            entries = []
+            for name in names:
+                fname = name.rsplit("/", 1)[-1]
+                m = re.search(r"((?:PLAS|BIOL) \d+) (\d+) nm", fname)
+                if not m:
+                    raise RuntimeError(
+                        "[!] ocean_polymers_raw: cannot parse a "
+                        f"specimen code from {fname!r}."
+                    )
+                code, ex = m.group(1), int(m.group(2))
+                if ex not in (532, 780):
+                    raise RuntimeError(
+                        "[!] ocean_polymers_raw: unexpected "
+                        f"excitation wavelength {ex} in {fname!r}."
+                    )
+                text = zf.read(name).decode("utf-8-sig", "replace")
+                # deterministic row order: specimen code,
+                # excitation, filename
+                entries.append(((code, ex, fname), code, ex, text))
+        entries.sort(key=lambda e: e[0])
+
+        spectra_list = []
+        labels = []
+        group_ids = []
+        for _, code, ex, text in entries:
+            # line 1: 'Created As Omnic File,<CODE>'
+            # line 2: 'Raman Shift / cm-1,INT'
+            pts = []
+            for ln in text.splitlines()[2:]:
+                if not ln.strip():
+                    continue
+                a, b = ln.split(",", 1)
+                pts.append((float(a), float(b)))
+            arr = np.asarray(pts, dtype=float)
+            n_native = 3467 if ex == 532 else 2700
+            if arr.shape[0] != n_native:
+                raise RuntimeError(
+                    f"[!] ocean_polymers_raw: {code} ({ex} nm) "
+                    f"has {arr.shape[0]} points (expected "
+                    f"{n_native})."
+                )
+            x, y = arr[:, 0], arr[:, 1]
+            if not (np.isfinite(x).all() and np.isfinite(y).all()):
+                raise RuntimeError(
+                    f"[!] ocean_polymers_raw: {code} ({ex} nm) "
+                    "contains non-finite values."
+                )
+            if not np.all(np.diff(x) < 0):
+                raise RuntimeError(
+                    f"[!] ocean_polymers_raw: {code} ({ex} nm) "
+                    "wavenumber axis is not strictly descending "
+                    "as expected."
+                )
+            # the common grid must lie inside the native range
+            if x[0] < grid[-1] or x[-1] > grid[0]:
+                raise RuntimeError(
+                    f"[!] ocean_polymers_raw: {code} ({ex} nm) "
+                    f"does not cover the common grid (native "
+                    f"{x[-1]:.2f}..{x[0]:.2f} cm^-1 vs "
+                    f"{grid[0]:.0f}..{grid[-1]:.0f} expected)."
+                )
+            # flip the descending axis to ascending, then
+            # interpolate onto the common grid
+            spectra_list.append(np.interp(grid, x[::-1], y[::-1]))
+            labels.append(
+                "anthropogenic" if code.startswith("PLAS")
+                else "biological"
+            )
+            group_ids.append(code)
+        spectra = np.asarray(spectra_list, dtype=float)
+        encoded_targets, class_names = encode_labels(
+            pd.Series(labels)
+        )
+        census = Counter(labels)
+        if (
+            spectra.shape != (87, grid.size)
+            or census != {"anthropogenic": 69, "biological": 18}
+            or len(set(group_ids)) != 49
+        ):
+            raise RuntimeError(
+                f"[!] ocean_polymers_raw: unexpected census "
+                f"(shape {spectra.shape}, labels "
+                f"{dict(census)}, {len(set(group_ids))} groups)."
+            )
+        MiscLoader.logger.debug(
+            f"Loaded ocean_polymers_raw: {spectra.shape[0]} "
+            f"spectra x {spectra.shape[1]} points, "
+            f"{len(set(group_ids))} specimen groups"
+        )
+        return (
+            spectra,
+            grid,
+            encoded_targets,
+            list(class_names),
+            group_ids,
         )

@@ -1208,3 +1208,60 @@ def test_niclosamide_polymorph_mcm():
     assert dataset.spectra.max() < 5.8
     assert not np.isnan(dataset.spectra).any()
 
+
+def test_ocean_polymers():
+    dataset = MiscLoader.load_dataset("ocean_polymers")
+    # 79 post-processed reference spectra (61 PLAS + 18 BIOL
+    # particles) on the authors' uniform 200-3,400 cm^-1 @1
+    # cm^-1 grid; peak-normalized 0-1 as deposited.
+    assert dataset.spectra.shape == (79, 3201)
+    assert dataset.raman_shifts[0] == pytest.approx(200.0)
+    assert dataset.raman_shifts[-1] == pytest.approx(3400.0)
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    # poly_lab classification: 59 classes (12 multi-member, 47
+    # singleton reference entries).
+    assert dataset.targets.shape == (79,)
+    assert dataset.group_ids is None
+    assert len(set(dataset.targets.tolist())) == 59
+    assert len(dataset.target_names) == 59
+    sizes = sorted(collections.Counter(dataset.targets.tolist()).values(),
+                   reverse=True)
+    assert sizes == [4, 4, 4, 3, 3, 3, 2, 2, 2, 2, 2, 1] + [1] * 47
+    # Peak-normalized as deposited.
+    assert dataset.spectra.min() == 0.0
+    assert dataset.spectra.max() == 1.0
+    assert not np.isnan(dataset.spectra).any()
+
+
+def test_ocean_polymers_raw():
+    dataset = MiscLoader.load_dataset("ocean_polymers_raw")
+    # 87 raw Omnic measurements of 49 specimen codes (74 x 532
+    # nm + 13 x 780 nm), resampled onto the common 201-3,418
+    # cm^-1 @1 cm^-1 grid (intersection of the two native
+    # axes).
+    assert dataset.spectra.shape == (87, 3218)
+    assert dataset.raman_shifts[0] == pytest.approx(201.0)
+    assert dataset.raman_shifts[-1] == pytest.approx(3418.0)
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    # Anthropogenic (PLAS, 69) vs biological (BIOL, 18);
+    # group_id = specimen code (repeat measurements stay
+    # together: 16 single, 28 double, 5 triple).
+    assert dataset.targets.shape == (87,)
+    assert dataset.group_ids is not None
+    sizes = collections.Counter(dataset.targets.tolist())
+    assert len(dataset.target_names) == 2
+    assert max(sizes.values()) == 69
+    assert min(sizes.values()) == 18
+    assert len(set(dataset.group_ids.tolist())) == 49
+    group_sizes = sorted(
+        collections.Counter(dataset.group_ids.tolist()).values()
+    )
+    assert group_sizes.count(1) == 16
+    assert group_sizes.count(2) == 28
+    assert group_sizes.count(3) == 5
+    # Raw counts (no normalization); the 532 nm set is the
+    # dominant scale, a few baseline points dip below zero.
+    assert dataset.spectra.min() < -100
+    assert dataset.spectra.max() > 20000
+    assert not np.isnan(dataset.spectra).any()
+

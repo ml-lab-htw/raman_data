@@ -3732,6 +3732,105 @@ nist_ecsers_drugs:
   rai:hasSyntheticData: false
   rai:personalSensitiveInformation: No personal or sensitive information is included; all spectra originate
     from lab-prepared chemical standards.
+ocean_polymers:
+  prov:wasDerivedFrom: https://osf.io/7cqv4/
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of ocean polymer specimens for the reference library
+    ''A Raman spectral reference library of potential anthropogenic and biological ocean polymers'' (Emily
+    A. Miller, Kevan M. Yamahara, Chris French, Neil E. Spingarn, James M. Birch, Kyle S. Van Houtan 2022,
+    Scientific Data 9, 780, https://doi.org/10.1038/s41597-022-01883-5, open access CC BY 4.0; data deposited
+    at https://osf.io/7cqv4/, public OSF node 7cqv4, no child components). The library covers 40 pristine
+    anthropogenic polymers newly sourced from manufacturers, 22 weathered anthropogenic polymers from used
+    consumer, beachcast, agricultural and fishery sources, and 17 biological polymers representing diverse
+    marine taxa, trophic levels and tissues. License note: The OSF project page sets no explicit license;
+    the open-access parent paper (Scientific Data, CC BY 4.0) publishes the data records in its Data Records
+    section, which is the license applied here. This raman_data key pivots the deposit''s post-processed
+    file Data2_processed.csv (19,921,069 bytes, size + sha256 pinned, downloaded directly from OSF''s stable
+    file URL): 79 spectra (61 PLAS-coded + 18 BIOL-coded particles, one per specimen) on the authors'' uniform
+    3,201-point 200-3,400 cm^-1 @1 cm^-1 grid, peak-normalized (max = 1.0, min = 0) as deposited, labelled
+    by the deposit''s poly_lab column (59 classes). The 18 BIOL-coded specimens are the 17 biological materials
+    of the paper plus a charcoal reference (carbonaceous, not a polymer).'
+  rai:dataAnnotationProtocol: Labels are the deposit's own poly_lab assignments (polymer codes such as PETE/PP/PS/HDPE
+    for the anthropogenic specimens; tissue or material names such as bone, chitin, cellulose, keratin for
+    the biological ones; a few descriptive strings for weathered items such as 'beachcast white foam sheet'
+    or 'strawberry container'); no re-labelling was performed for this benchmark.
+  rai:dataBiases: 'Reference-library design: 47 of the 59 poly_lab classes are singleton entries (one spectrum),
+    so the key supports spectral matching and few-shot use more than large-scale CV classification; only
+    12 classes have replicates (bone x4, PETE x4, PP x4, PS x3, chitin x3, cellulose x3, HDPE x2, myofibrillar
+    protein x2, PA x2, PE x2, calcium carbonate x2). Spectra are peak-normalized 0-1, removing absolute
+    intensity information; the spectra mix pristine, weathered and biological specimens, and the weathered
+    items carry only coarse descriptive labels.'
+  rai:dataCollection: Raman measurements of 79 ocean polymer specimens (61 anthropogenic polymer particles,
+    18 biological material specimens) recorded for the reference library; the authors' post-processed grid
+    (200-3,400 cm^-1 @1 cm^-1, 3,201 points) and peak normalization are as deposited.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Most classes are single-spectrum references (47 of 59); peak normalization removes
+    absolute intensity information; the 200-3,400 cm^-1 window excludes the low-wavenumber region below
+    200 cm^-1; weathered specimens carry coarse descriptive labels rather than polymer codes; one charcoal
+    specimen is coded as biological (BIOL) although it is carbonaceous, not a polymer; the OSF project sets
+    no explicit license (the open-access paper's CC BY 4.0 is applied).
+  rai:dataPreprocessingProtocol: 'Applied by the authors as deposited: resampling onto the uniform 200-3,400
+    cm^-1 @1 cm^-1 grid (3,201 points) and peak normalization to max = 1.0 (min = 0). The raman_data loader
+    only pivots the long-format CSV (one row per spectrum-wavenumber point) into wide spectra; no baseline
+    correction, smoothing or further normalization is applied.'
+  rai:dataSocialImpact: 'Supports marine plastic pollution research: identifying the material of marine
+    debris (plastic vs biological) where visual techniques are not diagnostic; environmental monitoring
+    use, no human or medical data.'
+  rai:dataUseCases: Reference spectra for polymer identification of ocean debris (spectral matching, few-shot
+    / augmentation); plastic-vs-biological discrimination (61 vs 18 spectra, derivable from the labels);
+    limited as a large-scale CV classification benchmark because most classes are singletons.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are polymer
+    specimens and biological marine materials (bones, chitin, tissues, etc.).
+ocean_polymers_raw:
+  prov:wasDerivedFrom: https://osf.io/7cqv4/
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of ocean polymer specimens for the reference library
+    ''A Raman spectral reference library of potential anthropogenic and biological ocean polymers'' (Emily
+    A. Miller, Kevan M. Yamahara, Chris French, Neil E. Spingarn, James M. Birch, Kyle S. Van Houtan 2022,
+    Scientific Data 9, 780, https://doi.org/10.1038/s41597-022-01883-5, open access CC BY 4.0; data deposited
+    at https://osf.io/7cqv4/, public OSF node 7cqv4, no child components). The library covers 40 pristine
+    anthropogenic polymers newly sourced from manufacturers, 22 weathered anthropogenic polymers from used
+    consumer, beachcast, agricultural and fishery sources, and 17 biological polymers representing diverse
+    marine taxa, trophic levels and tissues. License note: The OSF project page sets no explicit license;
+    the open-access parent paper (Scientific Data, CC BY 4.0) publishes the data records in its Data Records
+    section, which is the license applied here. This raman_data key loads the deposit''s raw file Data1_raw_csv.zip
+    (1,452,113 bytes, size + sha256 pinned, downloaded directly from OSF''s stable file URL): 87 Thermo/Nicolet
+    Omnic measurement files of 49 specimen codes - the unprocessed counterpart of the ocean_polymers key.
+    74 files at 532 nm (3,467 points, 76.55-3,418.58 cm^-1) and 13 files at 780 nm (2,700 points, 200.49-3,699.66
+    cm^-1); raw counts, no normalization; the wavenumber axis is stored descending in each file (flipped
+    to ascending by the loader). Every spectrum is linearly interpolated onto the common 201-3,418 cm^-1
+    @1 cm^-1 grid (3,218 points; intersection of the two native axes). Repeat structure: 16 specimen codes
+    have 1 file, 28 have a repeated 532 nm measurement, and 5 have a repeated 532 nm measurement plus one
+    780 nm measurement (is_grouped=True, group_id = specimen code).'
+  rai:dataAnnotationProtocol: 'Labels are derived from the specimen codes in the deposit''s filenames: PLAS-coded
+    specimens -> anthropogenic polymer (69 spectra), BIOL-coded specimens -> biological material (18 spectra);
+    no re-labelling was performed for this benchmark.'
+  rai:dataBiases: 'Small and imbalanced class sizes (69 vs 18); the absolute intensity scale differs per
+    excitation wavelength (532 nm: -511..29,382 counts; 780 nm: -123..1,104 counts), so a model can in principle
+    exploit the excitation signature; the 8 specimens measured at 780 nm only are 5 biological and 3 anthropogenic,
+    partially confounding excitation with class. Only 49 of the 79 library specimens have raw files deposited;
+    spectra of the same specimen (repeated 532 nm measurements) are correlated, hence the specimen-level
+    grouping.'
+  rai:dataCollection: Raw Raman measurements (532 nm and 780 nm excitation) of 49 ocean polymer specimens
+    recorded for the reference library; Omnic exports with a descending wavenumber axis and raw counts.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Raw counts without normalization; non-comparable absolute scales across excitation
+    wavelengths; partial excitation-vs-class confound (8 of 49 specimens measured at 780 nm only); imbalanced
+    classes (69 vs 18); repeat measurements per specimen are correlated (grouping provided); the 3,218-point
+    common window truncates each native axis (532 nm loses 76.55-201 cm^-1, 780 nm loses 3,418.58-3,699.66
+    cm^-1); the OSF project sets no explicit license (the open-access paper's CC BY 4.0 is applied).
+  rai:dataPreprocessingProtocol: No preprocessing was applied by the authors (raw Omnic counts). The raman_data
+    loader only skips the two header rows, flips the descending wavenumber axis to ascending, and linearly
+    interpolates onto the common 201-3,418 cm^-1 @1 cm^-1 grid (3,218 points); no baseline correction, smoothing
+    or normalization is applied.
+  rai:dataSocialImpact: 'Supports marine plastic pollution research: anthropogenic-vs-biological discrimination
+    of marine debris on raw (unprocessed) spectra, including the 780 nm excitation set; environmental monitoring
+    use, no human or medical data.'
+  rai:dataUseCases: Binary classification (anthropogenic polymer vs biological material) on raw Raman spectra
+    with group-aware splitting on specimen code; robustness studies across excitation wavelengths (532 vs
+    780 nm); preprocessing and domain-adaptation benchmarks (raw vs the post-processed ocean_polymers key).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are polymer
+    specimens and biological marine materials (bones, chitin, tissues, etc.).
 organic_compounds_preprocess:
   rai:dataAnnotationProtocol: Class labels assigned based on known sample identity
     or validated analytical reference methods. Labels were assigned by domain experts
