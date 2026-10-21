@@ -832,6 +832,122 @@ class ZenodoLoader(BaseLoader):
         )
         return spectra, raman_shifts_ref, targets, list(class_names), np.array(group_ids)
 
+    @staticmethod
+    def __load_6014148(cache_path: str):
+        """
+        Parse and extract data from the turmeric lead-chromate
+        FT-Raman dataset (Zenodo ID: 6014148): 70
+        triplicate-averaged spectra of 10 turmeric samples, each
+        laced with one of seven lead-chromate levels
+        (0-0.1 w/w fraction), on the native 1,765-point
+        199.5076-3,601.383 cm^-1 axis (flipped to ascending).
+
+        Args:
+            cache_path: The base path where the dataset files are
+                cached.
+
+        Returns:
+            A tuple of (spectra, raman_shifts, targets,
+            target_names, group_ids) arrays, or None if parsing
+            fails.
+        """
+        try:
+            import openpyxl
+        except ImportError as e:
+            raise RuntimeError(
+                "[!] The turmeric_lead_chromate loader needs "
+                "'openpyxl' (pip install openpyxl) to be "
+                "installed."
+            ) from e
+
+        data_dir = os.path.join(cache_path, "6014148")
+        candidates = glob.glob(os.path.join(data_dir, "*.xlsx"))
+        if not candidates:
+            raise FileNotFoundError(
+                f"Could not find the turmeric xlsx in {data_dir}"
+            )
+        data_path = candidates[0]
+
+        wb = openpyxl.load_workbook(
+            data_path, read_only=True, data_only=True
+        )
+        try:
+            ws = wb["Raw spectra region 3601-200"]
+            rows = list(ws.iter_rows(values_only=True))
+        finally:
+            wb.close()
+
+        # Row 3 (index 2): 'Sample', 'Concentration (w/w%)'
+        # (actually the w/w fraction), then the wavenumber axis.
+        axis_desc = [float(v) for v in rows[2][2:] if v is not None]
+        if (
+            len(axis_desc) != 1765
+            or not all(b < a for a, b in zip(axis_desc, axis_desc[1:]))
+        ):
+            raise RuntimeError(
+                "[!] turmeric_lead_chromate: the workbook layout "
+                "changed (axis no longer a strictly descending "
+                "1,765-point 3,601.383-199.5076 cm^-1 axis)."
+            )
+        # The source axis is descending; flip to ascending.
+        raman_shifts = np.asarray(axis_desc[::-1], dtype=float)
+
+        spectra_list = []
+        targets_list = []
+        groups_list = []
+        for row in rows[3:]:
+            if row[0] is None:
+                continue
+            sample = str(row[0]).strip()
+            concentration = float(row[1])
+            vals = [float(v) for v in row[2:] if v is not None]
+            if len(vals) != 1765:
+                raise RuntimeError(
+                    f"[!] turmeric_lead_chromate: row for "
+                    f"{sample!r} carries {len(vals)} points "
+                    "(workbook layout changed?)."
+                )
+            arr = np.asarray(vals, dtype=float)
+            if not np.isfinite(arr).all():
+                raise RuntimeError(
+                    f"[!] turmeric_lead_chromate: row for "
+                    f"{sample!r} contains non-finite values."
+                )
+            spectra_list.append(arr)
+            targets_list.append(concentration)
+            groups_list.append(sample)
+
+        spectra = np.asarray(spectra_list, dtype=float)
+        targets = np.asarray(targets_list, dtype=float)
+
+        expected_levels = {0.0, 0.001, 0.005, 0.01, 0.025, 0.05, 0.1}
+        per_sample = Counter(groups_list)
+        if (
+            spectra.shape != (70, 1765)
+            or set(targets.tolist()) != expected_levels
+            or len(per_sample) != 10
+            or any(v != 7 for v in per_sample.values())
+        ):
+            raise RuntimeError(
+                "[!] turmeric_lead_chromate: unexpected census "
+                f"(shape {spectra.shape}, levels "
+                f"{sorted(set(targets.tolist()))}, per-sample "
+                f"sizes {sorted(per_sample.values())})."
+            )
+        ZenodoLoader.logger.debug(
+            f"Loaded turmeric_lead_chromate: "
+            f"{spectra.shape[0]} spectra x {spectra.shape[1]} "
+            f"points, {len(per_sample)} samples, "
+            f"lead-chromate w/w fraction {targets.min():g}..{targets.max():g}"
+        )
+        return (
+            spectra,
+            raman_shifts,
+            targets,
+            ["lead_chromate_w_w_fraction"],
+            np.asarray(groups_list),
+        )
+
     __BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "raman-data", "zenodo")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
@@ -1268,6 +1384,112 @@ class ZenodoLoader(BaseLoader):
             # Wasatch probe); all of the authors' processing lives in their
             # analysis code, not in the deposited files.
             embedded_preprocessing=None,
+        ),
+        "turmeric_lead_chromate": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="6014148",
+            name=(
+                "Turmeric Lead-Chromate Adulteration, FT-Raman "
+                "(Erasmus 2021)"
+            ),
+            short_name="Turmeric Lead Chromate",
+            file_typ="*.xlsx",
+            license="CC BY 4.0",
+            loader=lambda cache_path: ZenodoLoader.__load_6014148(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "FT-Raman spectra of turmeric powder laced "
+                    "with lead chromate (0-10 % w/w) for rapid "
+                    "adulteration detection (Erasmus et al. 2021, "
+                    "Food Control 121, 107714)"
+                ),
+                "source": "https://doi.org/10.5281/zenodo.6014148",
+                "paper": "https://doi.org/10.1016/j.foodcont.2020.107714",
+                "bibtex": (
+                    "@article{erasmus2021turmeric, title={Real or "
+                    "fake yellow in the vibrant colour craze: "
+                    "Rapid detection of lead chromate in "
+                    "turmeric}, author={Erasmus, Sara W. and van "
+                    "Hasselt, Lisanne and Ebbinge, Linda M. and "
+                    "van Ruth, Saskia M.}, journal={Food Control}, "
+                    "volume={121}, pages={107714}, year={2021}, "
+                    "doi={10.1016/j.foodcont.2020.107714}}"
+                ),
+                "citation": [
+                    "Erasmus, S. W., van Hasselt, L., Ebbinge, L. "
+                    "M., and van Ruth, S. M. (2021). Real or fake "
+                    "yellow in the vibrant colour craze: Rapid "
+                    "detection of lead chromate in turmeric. Food "
+                    "Control, 121, 107714. "
+                    "https://doi.org/10.1016/j.foodcont.2020.107714 "
+                    "(data: https://doi.org/10.5281/zenodo.6014148)",
+                ],
+                "description": (
+                    "70 triplicate-averaged FT-Raman spectra of 10 "
+                    "turmeric powder samples (Samples 1, 2, 4, 8, "
+                    "9, 10, 12, 13, 14 and 15), each laced with one "
+                    "of seven lead-chromate levels, recorded at 200 "
+                    "mW laser power, from the data underlying "
+                    "Erasmus et al. 2021 (Food Control 121, 107714, "
+                    "doi:10.1016/j.foodcont.2020.107714; Zenodo "
+                    "v1.1, 2022-02-08, CC BY 4.0, Wageningen "
+                    "University & Research, EU-China-Safe H2020 "
+                    "grant 727864). Task: single-target regression "
+                    "on the lead-chromate w/w FRACTION - the "
+                    "sheet's 'Concentration (w/w%)' column holds "
+                    "0, 0.001, 0.005, 0.01, 0.025, 0.05 and 0.1, "
+                    "i.e. 0, 0.1, 0.5, 1.0, 2.5, 5.0 and 10.0 % "
+                    "w/w (the percentages stated in the sheet's "
+                    "info line; the column header is a "
+                    "misnomer). Native FT-Raman axis: 1,765 points "
+                    "199.5076-3,601.383 cm^-1 (stored descending, "
+                    "flipped to ascending by the loader), no "
+                    "resampling. is_grouped=True with group_id = "
+                    "sample: the seven laced levels of one sample "
+                    "are prepared from the same base powder. "
+                    "Intensities are raw as deposited "
+                    "(triplicate-averaged, no normalization; range "
+                    "0.0014-0.324). A coarse authentic-vs-adulterated "
+                    "binary task is derivable from the targets (0 "
+                    "vs >0; 10 vs 60 spectra). The workbook's five "
+                    "other sheets are not loaded: 'Raw spectra "
+                    "region 1750-200' (the same 70 spectra sliced "
+                    "to the 1,750-200 cm^-1 sub-region - a strict, "
+                    "cell-identical subset of this key's axis, "
+                    "available by axis slicing), 'Raw spectra "
+                    "authentic samples' (15 pure turmeric spectra "
+                    "on a different 1,851-point axis down to 33.7 "
+                    "cm^-1, a separate measurement run verified not "
+                    "identical to the 0-level rows; a "
+                    "single-class reference set), 'VWR vial' (one "
+                    "glass-vial container reference spectrum) and "
+                    "'Trial' (29 exploratory, non-averaged "
+                    "measurements of Sample 7 at 0-100 % lead "
+                    "chromate, marked 'Trial' in the deposit). "
+                    "License note: the deposit's .txt file claims "
+                    "'CC BY-SA', but the machine-readable Zenodo "
+                    "record (and the Zenodo page) state CC BY 4.0, "
+                    "which is the license used here."
+                ),
+            },
+            # Checked: each of the 10 spiked samples carries the
+            # full 7-level series; the laced levels of one sample
+            # share the same base powder, so they are grouped by
+            # sample.
+            is_grouped=True,
+            # Checked: all 70 rows carry a numeric concentration
+            # and a complete 1,765-point spectrum.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "Raw FT-Raman intensities (triplicate-averaged per "
+                "spectrum) as deposited; no baseline correction, "
+                "normalization or resampling applied. The loader "
+                "only flips the workbook's descending wavenumber "
+                "axis (3,601.383-199.5076 cm^-1) to ascending."
+            ),
         ),
     }
 

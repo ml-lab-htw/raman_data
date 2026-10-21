@@ -1265,3 +1265,35 @@ def test_ocean_polymers_raw():
     assert dataset.spectra.max() > 20000
     assert not np.isnan(dataset.spectra).any()
 
+
+def test_turmeric_lead_chromate():
+    dataset = ZenodoLoader.load_dataset("turmeric_lead_chromate")
+    # 70 triplicate-averaged FT-Raman spectra: 10 turmeric
+    # samples x 7 lead-chromate levels, native 1,765-point
+    # axis (stored descending in the workbook, flipped to
+    # ascending by the loader).
+    assert dataset.spectra.shape == (70, 1765)
+    assert dataset.raman_shifts[0] == pytest.approx(199.5076)
+    assert dataset.raman_shifts[-1] == pytest.approx(3601.383)
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    assert dataset.targets.shape == (70,)
+    assert dataset.group_ids is not None
+    assert dataset.target_names == ["lead_chromate_w_w_fraction"]
+    # Lead-chromate w/w fraction (the "Concentration (w/w%)"
+    # column is a misnomer; the sheet info line states the
+    # percentages 0/0.1/0.5/1.0/2.5/5.0/10.0 %).
+    assert dataset.targets.min() == 0.0
+    assert dataset.targets.max() == 0.1
+    levels = sorted(set(dataset.targets.tolist()))
+    assert levels == [0.0, 0.001, 0.005, 0.01, 0.025, 0.05, 0.1]
+    # 10 samples, each with the full 7-level series (the laced
+    # levels of a sample share the same base powder).
+    assert len(set(dataset.group_ids.tolist())) == 10
+    group_sizes = collections.Counter(dataset.group_ids.tolist())
+    assert all(v == 7 for v in group_sizes.values())
+    # Raw (triplicate-averaged) intensities as deposited, no
+    # normalization.
+    assert 0.0 < dataset.spectra.min()
+    assert dataset.spectra.max() < 0.33
+    assert not np.isnan(dataset.spectra).any()
+

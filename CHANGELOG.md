@@ -11,6 +11,19 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `turmeric_lead_chromate`: 70 triplicate-averaged FT-Raman
+  spectra (10 turmeric samples x 7 lead-chromate levels,
+  0-10 % w/w, 200 mW) from Erasmus et al. 2021 (*Food Control*
+  121, 107714, doi:10.1016/j.foodcont.2020.107714; Zenodo
+  6014148, CC BY 4.0) - single-target regression on the
+  lead-chromate w/w fraction on the native 1,765-point
+  199.5-3,601.4 cm^-1 axis (stored descending, flipped),
+  is_grouped=True by sample. The workbook's other sheets
+  (1750-200 sub-region slice, authentic samples, vial
+  reference, exploratory "Trial" block) are documented as not
+  loaded. License note: the deposit's .txt claims "CC BY-SA"
+  but the machine-readable Zenodo record states CC BY 4.0
+  (used here).
 - `ocean_polymers` + `ocean_polymers_raw`: two views of the
   open-access Raman reference library of Miller et al. 2022
   (*Scientific Data* 9, 780, doi:10.1038/s41597-022-01883-5;
