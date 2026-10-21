@@ -496,6 +496,7 @@ def test_single_cell_prokaryotes():
     assert not np.isnan(dataset.spectra).any()
 
 
+@pytest.mark.skipif(os.environ.get('CI') is not None, reason="4TU.ResearchData rate-limits and times out CI runners")
 def test_yeast_bioreactor_fermentation():
     # Single 15.5 MB 4TU.ResearchData download, small enough to run in CI
     # (~10 s fresh).
