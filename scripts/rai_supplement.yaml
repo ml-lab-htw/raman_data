@@ -2110,6 +2110,87 @@ glaucoma_enigma_baseline:
   rai:personalSensitiveInformation: Spectra are derived from human blood serum of trial participants. Subject
     identifiers are pseudonymised (ET0xx); no direct patient identifiers are included, but the accompanying
     clinical values are health-related data under applicable data-protection regulations.
+glucose_liquid_10level:
+  prov:wasDerivedFrom: https://data.mendeley.com/datasets/yk75sxk6p5/1
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of pure glucose liquid at fixed glucose levels, recorded
+    on a large-size Raman spectrometer at Vietnam National University, Hanoi (Ngo Quang Tri; Mendeley Data
+    doi:10.17632/yk75sxk6p5.1, v1, 2024-02-29, CC BY 4.0, no related publication; deposit: https://data.mendeley.com/datasets/yk75sxk6p5/1).
+    This raman_data key loads the deposit''s 10-level (''spare'') set: Tenlabels_RamanData.csv (562,631
+    bytes) + Tenlabels_labels.csv (390 bytes), frozen copies mirrored at HTW-KI-Werkstatt/RamanBench (glucose_liquid/,
+    MANIFEST.txt for provenance) because Mendeley Data 403-blocks non-browser clients (including CI); both
+    files pinned at Mendeley''s own sha256. 50 raw spectra (5 samples x 10 glucose levels) x 2,048 detector
+    columns.'
+  rai:dataAnnotationProtocol: Labels are the deposit's own level-designation strings from the label file's
+    'Label name' column (05M, 10mM, 20mM, 55M, 60M, 65M, 70M, 75M, 125M, 150M; 5 spectra per level; the
+    deposit's 'M'/'mM' annotation is inconsistent within the file); no re-labelling was performed for this
+    benchmark. The levels clearly encode a monotonic glucose-concentration ladder, but the unit convention
+    is not documented in the deposit.
+  rai:dataBiases: The spectra carry NO wavenumber calibration (bare intensity rows; no instrument model,
+    excitation or spectral range recorded), so any Raman-shift-dependent analysis is impossible; the exposed
+    axis is the 0-based column (detector pixel) index and the spectral direction is undetermined. The five
+    samples per level may be repeat measurements of the same solution (correlated) or independent preparations
+    - the deposit does not say; either way level == class here. Raw counts with negative baseline points
+    (-118 minimum); absolute intensity scales are instrument-specific.
+  rai:dataCollection: Raman measurements of pure glucose liquid at 10 fixed glucose levels (5 samples per
+    level) on a large-size Raman spectrometer at Vietnam National University, Hanoi; raw spectra as exported,
+    2,048 detector columns per spectrum.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: No wavenumber calibration in the deposit (axis is an uncalibrated detector-pixel
+    index); spectral direction undetermined; the level-designation labels have an undocumented unit convention,
+    so no numeric concentration target is exposed; small balanced design (10 classes x 5 spectra); raw counts
+    with negative baseline points (-118..63,705); no instrument parameters recorded.
+  rai:dataPreprocessingProtocol: 'No preprocessing was applied by the authors (raw spectra as deposited).
+    The raman_data loader only reads the bare intensity CSV, joins it row-wise with the deposit''s label
+    file (verified: 5 spectra per level, consistent label names), and exposes the 0-based column index as
+    the axis; no baseline correction, smoothing or normalization is applied.'
+  rai:dataSocialImpact: Supports non-invasive glucose monitoring research (Raman-based glucose level discrimination).
+    No personal or medical data; pure glucose liquid samples.
+  rai:dataUseCases: Classification of 10 glucose level designations from raw Raman spectra (5 replicates
+    per level); preprocessing and model-robustness benchmarks (the uncalibrated axis makes this a shape-based
+    classification task); the 14-level companion set is the glucose_liquid_14level key.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are pure
+    glucose liquid at defined levels.
+glucose_liquid_14level:
+  prov:wasDerivedFrom: https://data.mendeley.com/datasets/yk75sxk6p5/1
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of pure glucose liquid at fixed glucose levels, recorded
+    on a large-size Raman spectrometer at Vietnam National University, Hanoi (Ngo Quang Tri; Mendeley Data
+    doi:10.17632/yk75sxk6p5.1, v1, 2024-02-29, CC BY 4.0, no related publication; deposit: https://data.mendeley.com/datasets/yk75sxk6p5/1).
+    This raman_data key loads the deposit''s 14-level (''dense'') set: Fourteenlabels_RamanData.csv (769,775
+    bytes) + Fourteenlabels_labels.csv (530 bytes), frozen copies mirrored at HTW-KI-Werkstatt/RamanBench
+    (glucose_liquid/, MANIFEST.txt for provenance) because Mendeley Data 403-blocks non-browser clients
+    (including CI); both files pinned at Mendeley''s own sha256. 70 raw spectra (5 samples x 14 glucose
+    levels) x 2,030 detector columns.'
+  rai:dataAnnotationProtocol: Labels are the deposit's own level-designation strings from the label file's
+    'Label name' column (M50, M52, M54, M55, M56, M58, M60, M62, M64, M65, M66, M68, M70, M75; 5 spectra
+    per level); no re-labelling was performed for this benchmark. The levels clearly encode a monotonic
+    glucose-concentration ladder, but the unit convention is not documented in the deposit.
+  rai:dataBiases: The spectra carry NO wavenumber calibration (bare intensity rows; no instrument model,
+    excitation or spectral range recorded), so any Raman-shift-dependent analysis is impossible; the exposed
+    axis is the 0-based column (detector pixel) index and the spectral direction is undetermined. The five
+    samples per level may be repeat measurements of the same solution (correlated) or independent preparations
+    - the deposit does not say; either way level == class here. Raw counts with negative baseline points
+    (-439 minimum); absolute intensity scales are instrument-specific.
+  rai:dataCollection: Raman measurements of pure glucose liquid at 14 fixed glucose levels (5 samples per
+    level) on a large-size Raman spectrometer at Vietnam National University, Hanoi; raw spectra as exported,
+    2,030 detector columns per spectrum.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: No wavenumber calibration in the deposit (axis is an uncalibrated detector-pixel
+    index); spectral direction undetermined; the level-designation labels have an undocumented unit convention,
+    so no numeric concentration target is exposed; small balanced design (14 classes x 5 spectra); raw counts
+    with negative baseline points (-439..48,131); no instrument parameters recorded.
+  rai:dataPreprocessingProtocol: 'No preprocessing was applied by the authors (raw spectra as deposited).
+    The raman_data loader only reads the bare intensity CSV, joins it row-wise with the deposit''s label
+    file (verified: 5 spectra per level, consistent label names), and exposes the 0-based column index as
+    the axis; no baseline correction, smoothing or normalization is applied.'
+  rai:dataSocialImpact: Supports non-invasive glucose monitoring research (Raman-based glucose level discrimination).
+    No personal or medical data; pure glucose liquid samples.
+  rai:dataUseCases: Classification of 14 glucose level designations from raw Raman spectra (5 replicates
+    per level); preprocessing and model-robustness benchmarks (the uncalibrated axis makes this a shape-based
+    classification task); the 10-level companion set is the glucose_liquid_10level key.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are pure
+    glucose liquid at defined levels.
 hair_dyes_sers:
   rai:dataAnnotationProtocol: Class labels assigned based on known a priori identity
     of each commercial hair colorant. Four hierarchical label sets are provided -

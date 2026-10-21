@@ -1192,6 +1192,207 @@ class MendeleyLoader(BaseLoader):
                 "done in the paper, not on the deposited data."
             ),
         ),
+        "glucose_liquid_14level": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
+            id="yk75sxk6p5",
+            name=(
+                "Pure Glucose Liquid Raman, 14-Level Set "
+                "(Ngo 2024)"
+            ),
+            short_name="Glucose Liquid 14-Level",
+            license="CC BY 4.0",
+            loader=lambda cache_path: (
+                MendeleyLoader._load_glucose_liquid_14level(cache_path)
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of pure glucose liquid at 14 "
+                    "glucose levels (5 samples each, 70 spectra) "
+                    "from a Raman spectrometer at Vietnam "
+                    "National University, Hanoi (Ngo 2024, "
+                    "Mendeley Data doi:10.17632/yk75sxk6p5.1)"
+                ),
+                "source": "https://data.mendeley.com/datasets/yk75sxk6p5/1",
+                "doi": "10.17632/yk75sxk6p5.1",
+                "bibtex": (
+                    "@dataset{ngo2024glucose, title={Raman "
+                    "Scattering gathering from pure glucose "
+                    "liquid: 14-labels and 10-labels datasets}, "
+                    "author={Ngo Quang, Tri}, year={2024}, "
+                    "publisher={Mendeley Data}, "
+                    "doi={10.17632/yk75sxk6p5.1}, "
+                    "url={https://doi.org/10.17632/yk75sxk6p5.1}}"
+                ),
+                "citation": [
+                    "Ngo Quang, Tri (2024). Raman Scattering "
+                    "gathering from pure glucose liquid: "
+                    "14-labels and 10-labels datasets. Mendeley "
+                    "Data, v1. "
+                    "https://doi.org/10.17632/yk75sxk6p5.1",
+                ],
+                "description": (
+                    "The deposit's 'dense' 14-level set: 70 raw "
+                    "Raman spectra of pure glucose liquid "
+                    "(5 samples x 14 glucose levels; Ngo Quang "
+                    "Tri, Vietnam National University, Hanoi; "
+                    "Mendeley Data doi:10.17632/yk75sxk6p5.1, "
+                    "v1, 2024-02-29, CC BY 4.0, no related "
+                    "publication). Task: classification by the "
+                    "deposit's level-designation labels - M50, "
+                    "M52, M54, M55, M56, M58, M60, M62, M64, "
+                    "M65, M66, M68, M70, M75 (14 classes, 5 "
+                    "spectra each). The labels clearly encode a "
+                    "monotonic glucose-concentration ladder "
+                    "(the mean spectrum changes monotonically "
+                    "across levels), but the unit convention is "
+                    "not documented in the deposit, so no "
+                    "numeric-concentration regression target is "
+                    "exposed. IMPORTANT: the deposit contains NO "
+                    "wavenumber calibration - the data CSVs are "
+                    "bare intensity rows (2,030 columns each) "
+                    "without an axis, and no instrument model, "
+                    "excitation or spectral range is recorded "
+                    "anywhere in the deposit - so the exposed "
+                    "axis is the 0-based column index (detector "
+                    "pixel order, 0..2,029) and the spectral "
+                    "direction is undetermined. Spectra are raw "
+                    "as deposited (arbitrary units, -439..48,131 "
+                    "across the 70 rows, a few negative baseline "
+                    "points); no baseline correction, "
+                    "normalization or resampling applied. The "
+                    "five samples per level are treated as "
+                    "independent (the deposit does not document "
+                    "their preparation), so is_grouped=False. "
+                    "Served from frozen copies mirrored at "
+                    "HTW-KI-Werkstatt/RamanBench "
+                    "(glucose_liquid/): Mendeley Data "
+                    "403-blocks non-browser clients (including "
+                    "CI). The companion 'spare' 10-level set "
+                    "(50 spectra, 2,048 columns, levels "
+                    "05M..150M) is the glucose_liquid_10level "
+                    "key."
+                ),
+            },
+            # Checked: the deposit documents 5 samples per level;
+            # it does not state whether they are independent
+            # preparations, so no group-aware splitting is
+            # applied (level == class here anyway).
+            is_grouped=False,
+            # Checked: all 70 label rows carry a level code and
+            # a consistent label name.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None: raw spectra as deposited (arbitrary "
+                "units). The loader only reads the bare "
+                "intensity CSV and joins it row-wise with the "
+                "deposit's label file; the 'raman_shifts' axis "
+                "is the 0-based column index (detector pixel "
+                "order) because the deposit carries no "
+                "wavenumber calibration."
+            ),
+        ),
+        "glucose_liquid_10level": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
+            id="yk75sxk6p5",
+            name=(
+                "Pure Glucose Liquid Raman, 10-Level Set "
+                "(Ngo 2024)"
+            ),
+            short_name="Glucose Liquid 10-Level",
+            license="CC BY 4.0",
+            loader=lambda cache_path: (
+                MendeleyLoader._load_glucose_liquid_10level(cache_path)
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of pure glucose liquid at 10 "
+                    "glucose levels (5 samples each, 50 spectra) "
+                    "from a Raman spectrometer at Vietnam "
+                    "National University, Hanoi (Ngo 2024, "
+                    "Mendeley Data doi:10.17632/yk75sxk6p5.1)"
+                ),
+                "source": "https://data.mendeley.com/datasets/yk75sxk6p5/1",
+                "doi": "10.17632/yk75sxk6p5.1",
+                "bibtex": (
+                    "@dataset{ngo2024glucose, title={Raman "
+                    "Scattering gathering from pure glucose "
+                    "liquid: 14-labels and 10-labels datasets}, "
+                    "author={Ngo Quang, Tri}, year={2024}, "
+                    "publisher={Mendeley Data}, "
+                    "doi={10.17632/yk75sxk6p5.1}, "
+                    "url={https://doi.org/10.17632/yk75sxk6p5.1}}"
+                ),
+                "citation": [
+                    "Ngo Quang, Tri (2024). Raman Scattering "
+                    "gathering from pure glucose liquid: "
+                    "14-labels and 10-labels datasets. Mendeley "
+                    "Data, v1. "
+                    "https://doi.org/10.17632/yk75sxk6p5.1",
+                ],
+                "description": (
+                    "The deposit's 'spare' 10-level set: 50 raw "
+                    "Raman spectra of pure glucose liquid "
+                    "(5 samples x 10 glucose levels; Ngo Quang "
+                    "Tri, Vietnam National University, Hanoi; "
+                    "Mendeley Data doi:10.17632/yk75sxk6p5.1, "
+                    "v1, 2024-02-29, CC BY 4.0, no related "
+                    "publication). Task: classification by the "
+                    "deposit's level-designation labels - 05M, "
+                    "10mM, 20mM, 55M, 60M, 65M, 70M, 75M, 125M, "
+                    "150M (10 classes, 5 spectra each; the "
+                    "deposit's 'M'/'mM' annotation is "
+                    "inconsistent within the file). The labels "
+                    "clearly encode a monotonic "
+                    "glucose-concentration ladder (the mean "
+                    "spectrum changes monotonically across "
+                    "levels), but the unit convention is not "
+                    "documented in the deposit, so no "
+                    "numeric-concentration regression target is "
+                    "exposed. IMPORTANT: the deposit contains NO "
+                    "wavenumber calibration - the data CSVs are "
+                    "bare intensity rows (2,048 columns each) "
+                    "without an axis, and no instrument model, "
+                    "excitation or spectral range is recorded "
+                    "anywhere in the deposit - so the exposed "
+                    "axis is the 0-based column index (detector "
+                    "pixel order, 0..2,047) and the spectral "
+                    "direction is undetermined. Spectra are raw "
+                    "as deposited (arbitrary units, "
+                    "-118..63,705 across the 50 rows, a few "
+                    "negative baseline points); no baseline "
+                    "correction, normalization or resampling "
+                    "applied. The five samples per level are "
+                    "treated as independent (the deposit does "
+                    "not document their preparation), so "
+                    "is_grouped=False. Served from frozen copies "
+                    "mirrored at HTW-KI-Werkstatt/RamanBench "
+                    "(glucose_liquid/): Mendeley Data "
+                    "403-blocks non-browser clients (including "
+                    "CI). The companion 14-level set (70 "
+                    "spectra, 2,030 columns, levels M50..M75) "
+                    "is the glucose_liquid_14level key."
+                ),
+            },
+            # Checked: the deposit documents 5 samples per level;
+            # it does not state whether they are independent
+            # preparations, so no group-aware splitting is
+            # applied (level == class here anyway).
+            is_grouped=False,
+            # Checked: all 50 label rows carry a level code and
+            # a consistent label name.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None: raw spectra as deposited (arbitrary "
+                "units). The loader only reads the bare "
+                "intensity CSV and joins it row-wise with the "
+                "deposit's label file; the 'raman_shifts' axis "
+                "is the 0-based column index (detector pixel "
+                "order) because the deposit carries no "
+                "wavenumber calibration."
+            ),
+        ),
     }
 
     logger = logging.getLogger(__name__)
@@ -2763,4 +2964,232 @@ class MendeleyLoader(BaseLoader):
             targets=targets,
             target_names=class_names,
             group_ids=group_ids,
+        )
+    # ------------------------------------------------------------------
+    # glucose_liquid_14level / glucose_liquid_10level
+    # (Ngo Quang Tri 2024, Mendeley Data yk75sxk6p5)
+    # ------------------------------------------------------------------
+    # "Raman Scattering gathering from pure glucose liquid:
+    # 14-labels and 10-labels datasets" (Ngo Quang Tri, Vietnam
+    # National University, Hanoi; Mendeley Data
+    # doi:10.17632/yk75sxk6p5.1, v1, 2024-02-29, CC BY 4.0, no
+    # related publication). The deposit holds four CSVs: the
+    # 'dense' 14-level set (70 spectra x 2,030 columns, 5
+    # samples per level) and the 'spare' 10-level set (50
+    # spectra x 2,048 columns, 5 samples per level); each data
+    # row is one raw spectrum, and the matching label file
+    # provides a level code (0..13 / 0..9) plus a
+    # level-designation string per row (M50..M75 / 05M..150M).
+    #
+    # IMPORTANT: the deposit contains no wavenumber calibration
+    # (no axis row/column in the data CSVs, no instrument
+    # parameters, no related paper), so the loader exposes the
+    # 0-based column index (detector pixel order) as the
+    # 'raman_shifts' axis; the spectral direction is not
+    # determined by the deposit. The level-designation labels
+    # clearly encode a monotonic glucose-concentration ladder,
+    # but the unit convention is not documented ('M' and 'mM'
+    # are mixed within the same file), so the task is
+    # classification by the deposited label strings, not
+    # regression on a numeric concentration.
+    #
+    # data.mendeley.com serves downloads through a WAF that
+    # 403-blocks non-browser clients (including CI runners), so
+    # the loader reads frozen copies mirrored at
+    # HTW-KI-Werkstatt/RamanBench (glucose_liquid/, see the
+    # mirror's MANIFEST.txt for provenance) with Mendeley's own
+    # sha256 hashes as pins.
+    _GLUCOSE_MIR = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/"
+        "RamanBench/resolve/main/glucose_liquid/"
+    )
+    _GLUCOSE_14_DATA = (
+        "Fourteenlabels_RamanData.csv",
+        769775,
+        "663595467f41648904c340adff4d6deb55e2ce445d46a76cdf82d703cd574119",
+    )
+    _GLUCOSE_14_LABELS = (
+        "Fourteenlabels_labels.csv",
+        530,
+        "9aaa50f505352d24a76ed24ff20cb894d72d6e357c6982894dcd1fc6179f67cf",
+    )
+    _GLUCOSE_10_DATA = (
+        "Tenlabels_RamanData.csv",
+        562631,
+        "e758c2ab74fa61ee0e7bb0e9c3392fdbd94096c31b1111e652e712d34146b2c6",
+    )
+    _GLUCOSE_10_LABELS = (
+        "Tenlabels_labels.csv",
+        390,
+        "5aba09ea4f1e220b992bca442cc86e7798b2a946f559e1effae13d3f5724a697",
+    )
+    # Deposited level code -> level-designation label (verified
+    # against the pinned label files; 5 spectra per level).
+    _GLUCOSE_14_LEVEL_MAP = {
+        0: "M50", 1: "M52", 2: "M54", 3: "M55", 4: "M56", 5: "M58",
+        6: "M60", 7: "M62", 8: "M64", 9: "M65", 10: "M66", 11: "M68",
+        12: "M70", 13: "M75",
+    }
+    _GLUCOSE_10_LEVEL_MAP = {
+        0: "05M", 1: "10mM", 2: "20mM", 3: "55M", 4: "60M", 5: "65M",
+        6: "70M", 7: "75M", 8: "125M", 9: "150M",
+    }
+
+    @staticmethod
+    def _download_glucose_file(
+        cache_path: str,
+        key: str,
+        fname: str,
+        size: int,
+        sha: str,
+    ) -> str:
+        """
+        Download (if needed) one pinned glucose-liquid file from
+        the HF mirror; returns the local file path.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        fpath = os.path.join(cache_path, fname)
+        if os.path.exists(fpath) and os.path.getsize(fpath) != size:
+            os.remove(fpath)
+        result = LoaderTools.download(
+            url=MendeleyLoader._GLUCOSE_MIR + fname,
+            out_dir_path=cache_path,
+            out_file_name=fname,
+            hash_target=sha,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                f"[!] {key}: mirror download of {fname} failed "
+                "(network error or checksum mismatch). See logs."
+            )
+        return fpath
+
+    @staticmethod
+    def _load_glucose_liquid(
+        cache_path: str,
+        key: str,
+        data_file: Tuple[str, int, str],
+        labels_file: Tuple[str, int, str],
+        level_map: dict,
+        n_spectra: int,
+        n_pixels: int,
+    ):
+        """
+        Download (if needed) and load one half of the
+        glucose-liquid deposit: n_spectra raw Raman rows
+        (n_pixels uncalibrated detector columns each) classified
+        by the deposit's level-designation labels.
+
+        Returns spectra, raman_shifts, targets, class_names.
+        """
+        data_path = MendeleyLoader._download_glucose_file(
+            cache_path, key, *data_file
+        )
+        labels_path = MendeleyLoader._download_glucose_file(
+            cache_path, key, *labels_file
+        )
+        spectra = np.loadtxt(data_path, delimiter=",", ndmin=2)
+        if spectra.shape != (n_spectra, n_pixels):
+            raise RuntimeError(
+                f"[!] {key}: expected {n_spectra} x {n_pixels} "
+                f"data rows, got {spectra.shape}."
+            )
+        if not np.isfinite(spectra).all():
+            raise RuntimeError(
+                f"[!] {key}: data file contains non-finite "
+                "values."
+            )
+        with open(labels_path, encoding="utf-8-sig") as fh:
+            lines = [ln.strip() for ln in fh if ln.strip()]
+        header = [v.strip() for v in lines[0].split(",")]
+        if header != ["has_DM2", "Label name"]:
+            raise RuntimeError(
+                f"[!] {key}: label file header changed "
+                f"({header})."
+            )
+        rows = [ln.split(",") for ln in lines[1 : 1 + n_spectra]]
+        if len(rows) != n_spectra:
+            raise RuntimeError(
+                f"[!] {key}: expected {n_spectra} label rows, "
+                f"got {len(rows)}."
+            )
+        names = []
+        seen = {}
+        for i, row in enumerate(rows):
+            if len(row) != 2:
+                raise RuntimeError(
+                    f"[!] {key}: label row {i} has "
+                    f"{len(row)} fields."
+                )
+            code = int(row[0].strip())
+            name = row[1].strip()
+            expected = level_map.get(code)
+            if expected is None:
+                raise RuntimeError(
+                    f"[!] {key}: unexpected level code {code} "
+                    f"at row {i}."
+                )
+            # 5 spectra per level, in level order.
+            if i // 5 != code:
+                raise RuntimeError(
+                    f"[!] {key}: row {i} breaks the "
+                    "5-spectra-per-level layout (code "
+                    f"{code})."
+                )
+            if seen.setdefault(code, name) != name:
+                raise RuntimeError(
+                    f"[!] {key}: level {code} carries "
+                    "inconsistent label names."
+                )
+            if name != expected:
+                raise RuntimeError(
+                    f"[!] {key}: level {code} label changed "
+                    f"({name!r}, expected {expected!r})."
+                )
+            names.append(name)
+        if set(seen) != set(level_map):
+            raise RuntimeError(
+                f"[!] {key}: level census changed (codes "
+                f"{sorted(seen)})."
+            )
+        # The deposit carries no wavenumber calibration; expose
+        # the 0-based column index (detector pixel order).
+        axis = np.arange(n_pixels, dtype=float)
+        encoded_targets, class_names = encode_labels(
+            pd.Series(names)
+        )
+        MendeleyLoader.logger.debug(
+            f"Loaded {key}: {n_spectra} spectra x {n_pixels} "
+            f"points, {len(level_map)} level labels"
+        )
+        return (
+            spectra,
+            axis,
+            encoded_targets,
+            list(class_names),
+        )
+
+    @staticmethod
+    def _load_glucose_liquid_14level(cache_path: str):
+        return MendeleyLoader._load_glucose_liquid(
+            cache_path,
+            "glucose_liquid_14level",
+            MendeleyLoader._GLUCOSE_14_DATA,
+            MendeleyLoader._GLUCOSE_14_LABELS,
+            MendeleyLoader._GLUCOSE_14_LEVEL_MAP,
+            70,
+            2030,
+        )
+
+    @staticmethod
+    def _load_glucose_liquid_10level(cache_path: str):
+        return MendeleyLoader._load_glucose_liquid(
+            cache_path,
+            "glucose_liquid_10level",
+            MendeleyLoader._GLUCOSE_10_DATA,
+            MendeleyLoader._GLUCOSE_10_LABELS,
+            MendeleyLoader._GLUCOSE_10_LEVEL_MAP,
+            50,
+            2048,
         )

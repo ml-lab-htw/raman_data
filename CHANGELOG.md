@@ -11,6 +11,20 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `glucose_liquid_14level` + `glucose_liquid_10level`: two
+  classification keys from Ngo Quang Tri's Mendeley Data deposit
+  (doi:10.17632/yk75sxk6p5.1, CC BY 4.0, no related
+  publication): raw Raman spectra of pure glucose liquid at 14
+  (70 spectra, 2,030 detector columns) and 10 (50 spectra,
+  2,048 columns) level designations (5 samples each). Note: the
+  deposit contains no wavenumber calibration, so the exposed
+  axis is the 0-based column (detector pixel) index and the
+  spectral direction is undetermined - documented in the
+  descriptions and RAI. Labels are the deposited
+  level-designation strings (M50..M75 / 05M..150M); unit
+  convention undocumented, so no numeric-concentration target.
+  Served from the HF mirror (glucose_liquid/, MANIFEST.txt):
+  Mendeley 403-blocks non-browser clients.
 - `turmeric_lead_chromate`: 70 triplicate-averaged FT-Raman
   spectra (10 turmeric samples x 7 lead-chromate levels,
   0-10 % w/w, 200 mW) from Erasmus et al. 2021 (*Food Control*

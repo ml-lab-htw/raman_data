@@ -1297,3 +1297,45 @@ def test_turmeric_lead_chromate():
     assert dataset.spectra.max() < 0.33
     assert not np.isnan(dataset.spectra).any()
 
+
+def test_glucose_liquid_14level():
+    dataset = MendeleyLoader.load_dataset("glucose_liquid_14level")
+    # 70 raw spectra (14 level designations x 5 samples); the
+    # deposit carries no wavenumber calibration, so the axis is
+    # the 0-based column index (detector pixel order).
+    assert dataset.spectra.shape == (70, 2030)
+    assert dataset.raman_shifts[0] == 0.0
+    assert dataset.raman_shifts[-1] == 2029.0
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    assert dataset.targets.shape == (70,)
+    assert dataset.group_ids is None
+    assert len(dataset.target_names) == 14
+    sizes = collections.Counter(dataset.targets.tolist())
+    assert all(v == 5 for v in sizes.values())
+    # Raw counts as deposited; a few baseline points are
+    # negative.
+    assert dataset.spectra.min() < 0
+    assert dataset.spectra.max() > 40000
+    assert not np.isnan(dataset.spectra).any()
+
+
+def test_glucose_liquid_10level():
+    dataset = MendeleyLoader.load_dataset("glucose_liquid_10level")
+    # 50 raw spectra (10 level designations x 5 samples); the
+    # deposit carries no wavenumber calibration, so the axis is
+    # the 0-based column index (detector pixel order).
+    assert dataset.spectra.shape == (50, 2048)
+    assert dataset.raman_shifts[0] == 0.0
+    assert dataset.raman_shifts[-1] == 2047.0
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    assert dataset.targets.shape == (50,)
+    assert dataset.group_ids is None
+    assert len(dataset.target_names) == 10
+    sizes = collections.Counter(dataset.targets.tolist())
+    assert all(v == 5 for v in sizes.values())
+    # Raw counts as deposited; a few baseline points are
+    # negative.
+    assert dataset.spectra.min() < 0
+    assert dataset.spectra.max() > 50000
+    assert not np.isnan(dataset.spectra).any()
+
