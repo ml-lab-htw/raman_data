@@ -695,12 +695,9 @@ def test_rod_minerals():
     assert dataset.raman_shifts[0] == pytest.approx(250.0)
     assert dataset.raman_shifts[-1] == pytest.approx(1200.0)
     assert len(dataset.target_names) == 432
-    # group = label: one group per mineral/phase (432 groups),
-    # label-pure.
-    g = dataset.group_ids
-    assert g is not None and g.shape == (1098,)
-    assert len(set(g.tolist())) == 432
-    assert _groups_are_label_pure(dataset)
+    # Ungrouped: one spectrum per ROD entry (group = label would
+    # leave every test class unseen in training).
+    assert dataset.group_ids is None
     # Label counts: 108 single-spectrum, 213 two-spectrum, 111
     # three-or-more.
     names = list(dataset.target_names)
@@ -851,18 +848,22 @@ def test_sers_gna_bacteria():
         "P_aeruginosa_10145", "P_aeruginosa_27853", "P_aeruginosa_9027",
         "S_aureus_25923", "S_aureus_43300", "S_aureus_6538",
     }
-    assert set(dataset.target_names) == expected
+    # Label = species (39 spectra each); group = strain.
+    assert set(dataset.target_names) == {"E_coli", "P_aeruginosa", "S_aureus"}
     counts = dict(zip(*np.unique(dataset.targets, return_counts=True)))
-    assert len(counts) == 9
-    assert all(c == 13 for c in counts.values())
+    assert len(counts) == 3
+    assert all(c == 39 for c in counts.values())
     # All 13 spectra of a strain come from one droplet on one GNA
     # substrate of one culture: group = strain (the paper's
-    # leave-strain-out validation).
+    # leave-strain-out validation), three strains per species.
     g = dataset.group_ids
     per_group = collections.Counter(g.tolist())
     assert set(per_group) == expected
     assert all(c == 13 for c in per_group.values())
     assert _groups_are_label_pure(dataset)
+    names = list(dataset.target_names)
+    y = np.asarray(dataset.targets)
+    assert all(g[i].startswith(names[y[i]]) for i in range(len(y)))
     # Raw instrument counts: strictly positive, ~4.2e3-1.45e4.
     assert dataset.spectra.min() > 0
     assert dataset.spectra.max() < 15000
@@ -1235,30 +1236,31 @@ def test_ocean_polymers():
 
 def test_ocean_polymers_raw():
     dataset = MiscLoader.load_dataset("ocean_polymers_raw")
-    # 87 raw Omnic measurements of 49 specimen codes (74 x 532
-    # nm + 13 x 780 nm), resampled onto the common 201-3,418
+    # 54 distinct raw Omnic measurements (the zip's 87 files
+    # minus 33 byte-identical copies) of 49 specimen codes (41 x
+    # 532 nm + 13 x 780 nm), resampled onto the common 201-3,418
     # cm^-1 @1 cm^-1 grid (intersection of the two native
     # axes).
-    assert dataset.spectra.shape == (87, 3218)
+    assert dataset.spectra.shape == (54, 3218)
+    assert np.unique(dataset.spectra, axis=0).shape[0] == 54
     assert dataset.raman_shifts[0] == pytest.approx(201.0)
     assert dataset.raman_shifts[-1] == pytest.approx(3418.0)
     assert np.all(np.diff(dataset.raman_shifts) > 0)
-    # Anthropogenic (PLAS, 69) vs biological (BIOL, 18);
-    # group_id = specimen code (repeat measurements stay
-    # together: 16 single, 28 double, 5 triple).
-    assert dataset.targets.shape == (87,)
+    # Anthropogenic (PLAS, 41) vs biological (BIOL, 13);
+    # group_id = specimen code (5 specimens have a 532 nm and a
+    # 780 nm spectrum, 44 a single one).
+    assert dataset.targets.shape == (54,)
     assert dataset.group_ids is not None
     sizes = collections.Counter(dataset.targets.tolist())
     assert len(dataset.target_names) == 2
-    assert max(sizes.values()) == 69
-    assert min(sizes.values()) == 18
+    assert max(sizes.values()) == 41
+    assert min(sizes.values()) == 13
     assert len(set(dataset.group_ids.tolist())) == 49
     group_sizes = sorted(
         collections.Counter(dataset.group_ids.tolist()).values()
     )
-    assert group_sizes.count(1) == 16
-    assert group_sizes.count(2) == 28
-    assert group_sizes.count(3) == 5
+    assert group_sizes.count(1) == 44
+    assert group_sizes.count(2) == 5
     # Raw counts (no normalization); the 532 nm set is the
     # dominant scale, a few baseline points dip below zero.
     assert dataset.spectra.min() < -100

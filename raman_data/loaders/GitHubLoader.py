@@ -284,7 +284,7 @@ class GitHubLoader(BaseLoader):
             task_type=TASK_TYPE.Classification,
             application_type=APPLICATION_TYPE.Biological,
             id="sers_gna_bacteria",
-            name="SERS of Nine Bacterial Strains on a Gold Nanorod Array (Gulmus 2026)",
+            name="SERS of Three Bacterial Species (Nine Strains) on a Gold Nanorod Array (Gulmus 2026)",
             short_name="SERS GNA Bacteria",
             license="CC BY 4.0",
             loader=lambda cache_path: GitHubLoader._load_sers_gna_bacteria(
@@ -335,9 +335,15 @@ class GitHubLoader(BaseLoader):
                     "rubberband + Savitzky-Golay + min-max "
                     "normalization, 1,215 points, with the S. aureus "
                     "spectra exported on a 0-1 scale and the other two "
-                    "species on 0-2) is not loaded. Strain "
-                    "classification is the primary task; the 3-species "
-                    "task is derivable from the class-name prefixes. "
+                    "species on 0-2) is not loaded. Labels are the "
+                    "three species (39 spectra each) and groups the "
+                    "nine strains, so grouped CV predicts the species "
+                    "of a strain the model has not seen. Strain "
+                    "identity is not exposed as a label: each strain "
+                    "is a single droplet, so strain labels with strain "
+                    "groups would leave every test class unseen, and "
+                    "without groups a strain classifier could learn "
+                    "the droplet instead of the strain. "
                     "The repo is served as a commit-pinned archive "
                     "(1028526, size + sha256 pinned; the Zenodo v1.0.1 "
                     "archive's data are byte-identical)."
@@ -345,7 +351,8 @@ class GitHubLoader(BaseLoader):
             },
             # Checked: all 13 spectra of a strain come from one droplet
             # on one GNA substrate of one culture (same day), so the
-            # strain is the finest correlated unit (9 groups).
+            # strain is the finest correlated unit (9 groups, 3 per
+            # species label).
             is_grouped=True,
             # Checked: all 117 rows of the Data S1 manifest join a raw
             # instrument file of the same strain; no missing values.
@@ -1288,9 +1295,10 @@ class GitHubLoader(BaseLoader):
         data/raw_spectra/<strain>/<raw_file_number>.txt. Rows are
         emitted in the manifest's (Data S1) row order.
 
-        group_ids = strain folder name (9 groups of 13: all spectra
-        of a strain come from one droplet on one substrate of one
-        culture).
+        targets = species (3 classes); group_ids = strain folder name
+        (9 groups of 13: all spectra of a strain come from one droplet
+        on one substrate of one culture), so grouped CV identifies
+        the species of unseen strains.
 
         Returns spectra, raman_shifts, targets, class_names,
         group_ids.
@@ -1406,10 +1414,14 @@ class GitHubLoader(BaseLoader):
                     "[!] sers_gna_bacteria: the raw files do not "
                     "share a common wavenumber axis."
                 )
-            if key not in class_index:
-                class_index[key] = len(class_names)
-                class_names.append(folder)
-            targets_list.append(class_index[key])
+            # label = species (folder prefix, e.g. 'E_coli' of
+            # 'E_coli_29922'); group = strain. A strain label with
+            # strain groups would put every class wholly in one fold.
+            species = folder.rsplit("_", 1)[0]
+            if species not in class_index:
+                class_index[species] = len(class_names)
+                class_names.append(species)
+            targets_list.append(class_index[species])
             group_list.append(folder)
             spectra_list.append(arr[:, 1])
 
@@ -1421,12 +1433,17 @@ class GitHubLoader(BaseLoader):
                 "[!] sers_gna_bacteria: unexpected wavenumber range "
                 f"({axis_ref[0]:.3f}..{axis_ref[-1]:.3f} cm^-1)."
             )
+        if sorted(class_names) != ["E_coli", "P_aeruginosa", "S_aureus"]:
+            raise RuntimeError(
+                "[!] sers_gna_bacteria: unexpected species "
+                f"{sorted(class_names)}."
+            )
         spectra = np.vstack(spectra_list)
         targets = np.asarray(targets_list, dtype=int)
         group_ids = np.asarray(group_list)
         GitHubLoader.logger.debug(
             f"Loaded sers_gna_bacteria: {spectra.shape[0]} spectra x "
-            f"{spectra.shape[1]} points, {len(class_names)} strains, "
+            f"{spectra.shape[1]} points, {len(class_names)} species, "
             f"{len(set(group_ids.tolist()))} groups"
         )
         return (

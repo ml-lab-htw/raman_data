@@ -651,7 +651,7 @@ class MiscLoader(BaseLoader):
                 ),
                 "source": "https://solsa.crystallography.net/rod/",
                 "paper": "https://doi.org/10.1107/S1600576719004229",
-                "bibtex": "@article{ElMendili_2019, title={Raman Open Database: first interconnected Raman--X-ray diffraction open-access resource for material identification}, volume={52}, ISSN={1600-5767}, url={http://dx.doi.org/10.1107/S1600576719004229}, DOI={10.1107/S1600576719004229}, number={3}, journal={Journal of Applied Crystallography}, publisher={International Union of Crystallography}, author={El Mendili, Yassine and Vaitkus, Antanas and Merkys, Andrius and Gra{\=z}ulis, Saulius and Chateigner, Daniel and Mathevet, Fabrice and Gascoin, St{\'e}phanie and Petit, Sebastien}, year={2019}, month=may, pages={618-625}}",
+                "bibtex": "@article{ElMendili_2019, title={Raman Open Database: first interconnected Raman--X-ray diffraction open-access resource for material identification}, volume={52}, ISSN={1600-5767}, url={http://dx.doi.org/10.1107/S1600576719004229}, DOI={10.1107/S1600576719004229}, number={3}, journal={Journal of Applied Crystallography}, publisher={International Union of Crystallography}, author={El Mendili, Yassine and Vaitkus, Antanas and Merkys, Andrius and Gra{\\=z}ulis, Saulius and Chateigner, Daniel and Mathevet, Fabrice and Gascoin, St{\'e}phanie and Petit, Sebastien}, year={2019}, month=may, pages={618-625}}",
                 "citation": [
                     "El Mendili, Y., Vaitkus, A., Merkys, A., Gra\u017culis, S., Chateigner, D., Mathevet, F., Gascoin, S., and Petit, S. (2019). Raman Open Database: first interconnected Raman--X-ray diffraction open-access resource for material identification. Journal of Applied Crystallography, 52(3), 618-625.",
                 ],
@@ -689,24 +689,26 @@ class MiscLoader(BaseLoader):
                     "(795) and DXR (154). Intensities are in arbitrary "
                     "units (per-entry normalization is not documented); "
                     "no preprocessing is applied here beyond grid "
-                    "resampling. group_ids = label: all spectra of "
-                    "one mineral/phase form one group (432 groups), "
-                    "so grouped k-fold CV is "
-                    "leave-one-mineral-species-out. "
+                    "resampling. No group_ids: every spectrum is its "
+                    "own ROD entry, and grouping by label would put "
+                    "each class wholly into one fold. Two pairs of "
+                    "entries carry byte-identical spectra under "
+                    "different labels (Bismutite/Corundum, "
+                    "Corundum/Shcherbianite), as deposited. "
                     "Many entries overlap with the "
                     "rruff_mineral_raw/preprocess datasets (~234 of the "
                     "1,115 experimental entries, ~21%, per the 2026-10-20 "
                     "research -- the public-domain RRUFF spectra are "
-                    "mirrored in both databases); use the group ids to "
-                    "keep the two datasets on the same side of a fold. "
+                    "mirrored in both databases); de-duplicate before "
+                    "training on one and testing on the other. "
                     "License: public domain -- all ROD data have been "
                     "placed in the public domain by the contributors."
                 ),
             },
-            # Checked: spectra of the same mineral/phase come from the
-            # same entry family and must not be split across folds;
-            # group = label gives 432 groups.
-            is_grouped=True,
+            # Checked: one spectrum per ROD entry, no replicate
+            # structure; group = label would make every test class
+            # unseen in training, so the dataset is ungrouped.
+            is_grouped=False,
             # Checked: all 1,098 loaded spectra carry a mineral /
             # systematic / formula label (full CIF parse, so
             # next-line and multi-line ';'-block values are read too).
@@ -1022,8 +1024,8 @@ class MiscLoader(BaseLoader):
                     "plastic-vs-biological split (61 vs 18) is "
                     "derivable from the labels. is_grouped=False "
                     "(one spectrum per specimen). The deposit's "
-                    "raw measurement files (87 spectra, "
-                    "532/780 nm excitation, repeat measurements) "
+                    "raw measurement files (54 distinct spectra, "
+                    "532/780 nm excitation) "
                     "are served separately as the "
                     "ocean_polymers_raw key. License note: the "
                     "OSF project page sets no explicit license; "
@@ -1064,7 +1066,7 @@ class MiscLoader(BaseLoader):
             ),
             metadata={
                 "full_name": (
-                    "Raw Raman measurement files (87 spectra, "
+                    "Raw Raman measurement files (54 spectra, "
                     "532/780 nm excitation) of 49 ocean polymer "
                     "specimens (Miller et al. 2022, Scientific "
                     "Data 9:780)"
@@ -1094,7 +1096,7 @@ class MiscLoader(BaseLoader):
                     "(data: https://osf.io/7cqv4/)",
                 ],
                 "description": (
-                    "The 87 raw Raman measurement files of the "
+                    "The 54 distinct raw Raman measurements of the "
                     "49-specimen subset of the Miller et al. "
                     "2022 ocean-polymer library (Scientific Data "
                     "9, 780, doi:10.1038/s41597-022-01883-5; "
@@ -1106,23 +1108,27 @@ class MiscLoader(BaseLoader):
                     "Omnic File,<CODE>', line 2 'Raman Shift / "
                     "cm-1,INT', data rows in DESCENDING "
                     "wavenumber order - flipped to ascending by "
-                    "the loader). Two excitation wavelengths are "
-                    "present: 74 files at 532 nm (3,467 points, "
-                    "76.55-3,418.58 cm^-1) and 13 files at 780 "
+                    "the loader). The zip holds 87 files, but 33 "
+                    "are byte-identical copies of another file "
+                    "under an instrument-run prefix (e.g. "
+                    "'24544r56_1 PLAS 214 532 nm.csv' = 'PLAS 214 "
+                    "532 nm.csv'); the loader keeps one of each. "
+                    "Two excitation wavelengths are "
+                    "present: 41 spectra at 532 nm (3,467 points, "
+                    "76.55-3,418.58 cm^-1) and 13 at 780 "
                     "nm (2,700 points, 200.49-3,699.66 cm^-1); "
                     "every spectrum is linearly interpolated "
                     "onto the common 201-3,418 cm^-1 @1 cm^-1 "
                     "grid (3,218 points; the intersection of the "
-                    "two native axes). Repeat structure: 49 "
-                    "specimen codes with 1 (x16), 2 (x28; a "
-                    "repeated 532 nm measurement) or 3 (x5; a "
-                    "repeated 532 nm measurement plus one 780 nm "
-                    "measurement) files -> is_grouped=True with "
+                    "two native axes). 49 specimen codes: 36 "
+                    "measured at 532 nm only, 8 at 780 nm only "
+                    "and 5 at both -> is_grouped=True with "
                     "group_id = specimen code, so group-aware "
-                    "splits keep a specimen's repeats together. "
+                    "splits keep a specimen's two spectra "
+                    "together. "
                     "Task: classification of anthropogenic "
-                    "polymers (PLAS-coded, 69 spectra) vs "
-                    "biological materials (BIOL-coded, 18 "
+                    "polymers (PLAS-coded, 41 spectra) vs "
+                    "biological materials (BIOL-coded, 13 "
                     "spectra) - the paper's central "
                     "identification question. Intensities are "
                     "raw counts with no normalization: absolute "
@@ -1138,12 +1144,12 @@ class MiscLoader(BaseLoader):
                     "sha256 pinned); no mirror required."
                 ),
             },
-            # Checked: 28 specimen codes have a repeated 532 nm
-            # measurement and 5 have a repeated 532 nm + one 780
-            # nm measurement; group_id = specimen code keeps the
-            # repeats together in a group-aware split.
+            # Checked: after dropping the 33 byte-identical file
+            # copies, 5 specimen codes have a 532 nm and a 780 nm
+            # spectrum; group_id = specimen code keeps them together
+            # in a group-aware split.
             is_grouped=True,
-            # Checked: all 87 files carry a complete, finite
+            # Checked: all 54 distinct files carry a complete, finite
             # spectrum and a parseable PLAS/BIOL specimen code.
             has_missing_labels=False,
             embedded_preprocessing=(
@@ -3128,11 +3134,10 @@ class MiscLoader(BaseLoader):
 
         Excluded from the snapshot's 1,133 entries: 18 entries that
         only contain theoretical (DFT) spectra and the 17 experimental
-        spectra that do not fully cover the common window. group_ids
-        = label, so all spectra of one mineral/phase stay on one side
-        of a split.
+        spectra that do not fully cover the common window. No
+        group_ids (one spectrum per entry).
 
-        Returns spectra, raman_shifts, targets, class_names, group_ids.
+        Returns spectra, raman_shifts, targets, class_names.
         """
         os.makedirs(cache_path, exist_ok=True)
         zip_path = os.path.join(cache_path, MiscLoader._ROD_MINERALS_SNAPSHOT_ZIP)
@@ -3231,7 +3236,6 @@ class MiscLoader(BaseLoader):
             grid,
             encoded_targets,
             list(class_names),
-            list(labels),
         )
 
     # ------------------------------------------------------------------
@@ -3632,6 +3636,10 @@ class MiscLoader(BaseLoader):
     )
     _MILLER_DATA1_ROOT = "Data1_raw_csv"
     _MILLER_DATA1_N_FILES = 87
+    # 33 of the 87 files are byte-identical copies of another file
+    # under an instrument-run prefix ('24544r56_1 PLAS 214 532 nm.csv'
+    # = 'PLAS 214 532 nm.csv'), so 54 distinct measurements remain.
+    _MILLER_DATA1_N_UNIQUE = 54
     _MILLER_DATA2_N_SPECTRA = 79
     _MILLER_DATA2_N_POINTS = 3201
     _MILLER_DATA2_N_CLASSES = 59
@@ -3774,7 +3782,8 @@ class MiscLoader(BaseLoader):
     @staticmethod
     def _load_miller_ocean_polymers_raw(cache_path: str):
         """
-        Load the 87 raw Omnic measurement spectra of the 49
+        Load the 54 distinct raw Omnic measurement spectra (the
+        zip's 87 files minus 33 byte-identical copies) of the 49
         specimen codes (anthropogenic vs biological
         classification, group_id = specimen code), each
         resampled onto the common 201-3,418 cm^-1 @1 cm^-1
@@ -3783,6 +3792,7 @@ class MiscLoader(BaseLoader):
         Returns spectra, raman_shifts, targets, class_names,
         group_ids.
         """
+        import hashlib
         import zipfile
 
         zpath = MiscLoader._download_miller_osf_file(
@@ -3807,6 +3817,20 @@ class MiscLoader(BaseLoader):
                     f"{MiscLoader._MILLER_DATA1_N_FILES} CSVs in "
                     f"{MiscLoader._MILLER_DATA1_ROOT}/, found "
                     f"{len(names)}."
+                )
+            # Drop byte-identical copies, keeping the shortest name
+            # (the one without the instrument-run prefix).
+            by_hash = {}
+            for name in sorted(names, key=lambda n: (len(n), n)):
+                by_hash.setdefault(
+                    hashlib.sha256(zf.read(name)).hexdigest(), name
+                )
+            names = sorted(by_hash.values())
+            if len(names) != MiscLoader._MILLER_DATA1_N_UNIQUE:
+                raise RuntimeError(
+                    "[!] ocean_polymers_raw: expected "
+                    f"{MiscLoader._MILLER_DATA1_N_UNIQUE} distinct "
+                    f"CSVs, found {len(names)}."
                 )
             entries = []
             for name in names:
@@ -3883,8 +3907,8 @@ class MiscLoader(BaseLoader):
         )
         census = Counter(labels)
         if (
-            spectra.shape != (87, grid.size)
-            or census != {"anthropogenic": 69, "biological": 18}
+            spectra.shape != (MiscLoader._MILLER_DATA1_N_UNIQUE, grid.size)
+            or census != {"anthropogenic": 41, "biological": 13}
             or len(set(group_ids)) != 49
         ):
             raise RuntimeError(

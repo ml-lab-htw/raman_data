@@ -47,12 +47,14 @@ Versions follow [Semantic Versioning](https://semver.org/).
   biological specimens) on the authors' uniform 200-3,400
   cm^-1 @1 grid (3,201 pts), peak-normalized 0-1, classified
   by the deposit's poly_lab label (59 classes, 47 singletons);
-  (2) `ocean_polymers_raw` - the 87 raw Omnic measurement
-  files (74 x 532 nm + 13 x 780 nm) of 49 specimen codes,
-  resampled onto the common 201-3,418 cm^-1 @1 grid (3,218
-  pts), anthropogenic (69) vs biological (18) classification,
-  is_grouped=True with specimen-code groups (repeat
-  measurements). Direct OSF download with size + sha256
+  (2) `ocean_polymers_raw` - the 54 distinct raw Omnic
+  measurements (41 x 532 nm + 13 x 780 nm; the zip's other 33
+  files are byte-identical copies under an instrument-run
+  prefix and are dropped) of 49 specimen codes, resampled onto
+  the common 201-3,418 cm^-1 @1 grid (3,218 pts),
+  anthropogenic (41) vs biological (13) classification,
+  is_grouped=True with specimen-code groups (5 specimens have
+  a 532 nm and a 780 nm spectrum). Direct OSF download with size + sha256
   pinning (no mirror: OSF is CI-reachable).
 - `niclosamide_polymorph_binary` + `niclosamide_polymorph_mcm`:
   NHa (monohydrate-A) %w/w fraction regression on 57 + 57 Raman
@@ -182,7 +184,7 @@ Versions follow [Semantic Versioning](https://semver.org/).
   (produce x mixture x level; 11 groups of 3). GPL-3.0 repo, served as
   a commit-pinned archive (size + sha256 pinned).
 - `sers_gna_bacteria`: 117 raw SERS spectra (9 bacterial strains x 13;
-  3 each of E. coli, P. aeruginosa, S. aureus) on an anisotropic gold
+  3 each of E. coli, P. aeruginosa, S. aureus; labels = the 3 species) on an anisotropic gold
   nanorod array (Gulmus et al. 2026, Zenodo v1.0.1,
   doi:10.5281/zenodo.23426967; the associated article is under review).
   WITec alpha 300R, 785 nm, 1,024-point native axis 247.99-1,997.9
@@ -192,7 +194,9 @@ Versions follow [Semantic Versioning](https://semver.org/).
   mixed 0-1/0-2 export scales - is not loaded); it serves as the
   117-row manifest for the join. All 13 spectra of a strain come from
   one droplet on one substrate of one culture, so group_ids = strain
-  (9 groups; leave-strain-out is the paper's protocol). Served as a
+  (9 groups, 3 per species; leave-strain-out is the paper's
+  protocol). Strain is not a label: with strain groups every test
+  class would be unseen in training. Served as a
   commit-pinned GitHub archive (size + sha256 pinned; the Zenodo
   v1.0.1 archive's data are byte-identical).
 - `infant_formula_raman`: 373 Raman spectra of powdered infant formula
@@ -255,8 +259,9 @@ Versions follow [Semantic Versioning](https://semver.org/).
   fallback to _chemical_name_systematic / _chemical_formula_sum, so
   IMA mineral names, systematic names and formulas are mixed; the
   loader's minimal CIF parser handles same-line, next-line and
-  multi-line ';'-block values. group_ids = label (432 groups):
-  grouped k-fold CV is leave-one-mineral-species-out. Many entries
+  multi-line ';'-block values. Ungrouped (one spectrum per ROD
+  entry; grouping by label would leave every test class unseen in
+  training). Many entries
   overlap with the rruff_mineral_raw/preprocess datasets (~21% of
   the experimental entries).
 - `nist_ecsers_drugs`: NIST EC-SERS (electrochemical surface-enhanced
