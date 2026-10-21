@@ -62,7 +62,7 @@ Versions follow [Semantic Versioning](https://semver.org/).
   sulphate solutions for multi-analyte concentration quantification
   (Luciani et al. 2026, *Data in Brief*, doi:10.1016/j.dib.2026.113319;
   data release doi:10.17632/cxf3zxsc3k.3, Mendeley Data, CC BY 4.0).
-  694 spectra (401–3,898 cm⁻¹, 1,019 points, 532 nm, Horiba iHR320)
+  694 spectra (401–3,899 cm⁻¹, 1,019 points, 532 nm, Horiba iHR320)
   covering single (289), binary (215) and ternary (190) mixtures in
   ultrapure water; 3-target regression (mg/L) — nitrate 122–30,667,
   nitrite 250–15,333, sulphate 253–16,907 (0 = analyte absent).
@@ -132,7 +132,7 @@ Versions follow [Semantic Versioning](https://semver.org/).
   Renishaw WiRE (no preprocessing). Group ids are the 34 maps — pixels within
   a map are spatially correlated, but note the groups are *not* label-pure
   (mixed-material maps contain several classes by design). Maps per
-  class: PE 8, POM 7, ABS/PMMA/PS/PTFE 6, nylon/PP/PVC 5,
+  class: PE 8, POM 7, ABS/PMMA/PS 6, nylon/PP/PTFE/PVC 5,
   polyester/PET 4, PC 3, polyurethane 2, silicone 2 — the last two
   fall below the 3-maps-per-class minimum for grouped 3-fold CV.
 - `raman_spi`: RaSPI — Raman Spectra for Plastics Identification (Hogan et al. 2026,
@@ -140,7 +140,7 @@ Versions follow [Semantic Versioning](https://semver.org/).
   doi:10.5683/SP3/8UQQQN, Borealis, CC-BY 4.0). 396 fully-labeled spectra of 14
   plastic types (of the 402 rows in the source file — 6 metadata rows lack a
   spectrum, 4 spectra lack metadata, and PE1a/PE1b are stored twice), on a
-  uniform 225–3,949 cm⁻¹ / 1 cm⁻¹ grid, 226 spectra at 633 nm + 176 at 523 nm
+  uniform 225–3,949 cm⁻¹ / 1 cm⁻¹ grid, 226 spectra at 633 nm + 176 at 532 nm
   (Renishaw inVia). Pristine commercial plastics plus environmental microplastics
   from Great Lakes Seabin collections. The authors' pipeline (polynomial baseline
   subtraction, truncation, 1 cm⁻¹ interpolation, 0–1 normalization) is documented
@@ -187,9 +187,6 @@ Versions follow [Semantic Versioning](https://semver.org/).
 - Mendeley Data loaders now fall back to their local cache (with a
   warning) when the file-listing API is unreachable (e.g. the WAF 403
   on datacenter IPs) instead of failing on fully cached datasets.
-
-### Fixed
-
 - `mlrod` is CC BY-NC (the Open Data Repository states "BY-NC"), not CC BY 4.0; source link now
   https://odr.io/MLROD.
 - Croissant licences: `generate_croissant.py` turned every licence string it did not recognise into
@@ -201,8 +198,6 @@ Versions follow [Semantic Versioning](https://semver.org/).
 - Stale "CC BY 4.0 has been assumed" notes removed from 24 datasets whose licence is stated (CC BY 4.0,
   MIT). `alzheimer`, `parkinson` and `covid19_salvia` now keep their licence-clarification note on
   regeneration. The note stays only where no licence is known (`covid19_serum`, `organic_compounds_*`).
-
-### Changed
 
 ---
 
