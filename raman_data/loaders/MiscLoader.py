@@ -1602,7 +1602,7 @@ class MiscLoader(BaseLoader):
 
         df, raman_shifts = MiscLoader._lei_read_csv(dataset_cache, resolution)
 
-        spectra = df[wav_cols].to_numpy(dtype=float)
+        spectra = df[list(df.columns[3:])].to_numpy(dtype=float)
         if np.isnan(spectra).any():
             raise RuntimeError(f"[!] microplastics_training_{resolution}: missing intensity values.")
 

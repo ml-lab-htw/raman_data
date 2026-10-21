@@ -187,6 +187,8 @@ Versions follow [Semantic Versioning](https://semver.org/).
 - Mendeley Data loaders now fall back to their local cache (with a
   warning) when the file-listing API is unreachable (e.g. the WAF 403
   on datacenter IPs) instead of failing on fully cached datasets.
+- `microplastics_training_1cm/2cm/4cm/8cm` failed to load (`NameError:
+  wav_cols`) after the CSV reading moved into `_lei_read_csv`.
 
 ### Fixed
 
