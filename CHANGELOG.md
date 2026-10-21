@@ -172,6 +172,13 @@ Versions follow [Semantic Versioning](https://semver.org/).
 - License spelling normalized to `CC BY 4.0` (`raman_spi`, `raman_mpi`,
   `microplastics_training_*`, `stroke_urine_sers_*`,
   `breast_cancer_subtypes`).
+- Loader integrity pins, matching the convention of the other new
+  loaders (these checks previously lived only in CI-skipped tests):
+  `raman_spi` now validates 396 spectra / 14 classes / 272 physical
+  samples and rejects NaN intensities (it had neither); `raman_mpi`
+  pins the 16,598 returned pixels on top of the 33,119 deposit total;
+  `microplastics_training_{1,2,4,8}cm` pin 108 supplier samples /
+  14 classes on top of the row counts.
 
 ### Fixed
 

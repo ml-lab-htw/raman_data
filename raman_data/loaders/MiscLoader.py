@@ -1152,7 +1152,7 @@ class MiscLoader(BaseLoader):
         Download and load RaSPI (Hogan et al. 2026, Sci. Data 13:765,
         doi:10.1038/s41597-026-07103-8), data release doi:10.5683/SP3/8UQQQN.
 
-        Files (Borealis / University of Waterloo DataVerse, CC-BY 4.0):
+        Files (Borealis / University of Waterloo DataVerse, CC BY 4.0):
           RaSPI_processed.csv  402 x 3726 wide CSV, row 0 = spectrum id,
                                columns = intensities on a uniform
                                225-3949 cm^-1 / 1 cm^-1 grid (baseline
@@ -1224,8 +1224,21 @@ class MiscLoader(BaseLoader):
             raise RuntimeError("[!] raman_spi: RaSPI_processed.csv wavenumber axis is not ascending.")
 
         spectra = merged[wav_cols].to_numpy(dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError("[!] raman_spi: missing intensity values.")
         plastic_types = merged["Plastic Type"]
         group_ids = merged["Spectra ID"].map(MiscLoader._raspi_sample_stem).to_numpy()
+
+        # Integrity pin: the deposit's fully-labeled usable set is 396
+        # spectra from 272 physical samples across 14 plastic types.
+        n_samples = len(np.unique(group_ids))
+        n_classes = len(np.unique(plastic_types))
+        if spectra.shape != (396, len(raman_shifts)) or n_classes != 14 or n_samples != 272:
+            raise RuntimeError(
+                f"[!] raman_spi: expected 396 x {len(raman_shifts)} spectra with "
+                f"14 classes / 272 physical samples, got {spectra.shape} with "
+                f"{n_classes} classes / {n_samples} samples."
+            )
 
         targets, class_names = encode_labels(plastic_types)
         return spectra, raman_shifts, targets, list(class_names), group_ids
@@ -1498,6 +1511,10 @@ class MiscLoader(BaseLoader):
             raise RuntimeError("[!] raman_mpi: no plastic-labeled pixels found.")
 
         spectra = np.concatenate(spectra_list, axis=0)
+        # The 33,119 total above pins the deposit; this pins what is
+        # actually returned (blank pixels excluded).
+        if spectra.shape[0] != 16598:
+            raise RuntimeError(f"[!] raman_mpi: expected 16598 plastic-labeled pixels, got {spectra.shape[0]}.")
         targets, class_names = encode_labels(pd.Series(np.concatenate(label_list)))
         group_ids = np.array(group_list)
         return spectra, MiscLoader._RAMPI_COMMON_GRID.copy(), targets, list(class_names), group_ids
@@ -1581,7 +1598,7 @@ class MiscLoader(BaseLoader):
         Download and load the Lei et al. 2022 (Anal. Chem. 94(49),
         17011-17019, doi:10.1021/acs.analchem.2c02451) microplastic
         training CSV for one resolution grid, data release
-        doi:10.5683/SP3/LSN0R0 (Borealis, CC-BY 4.0).
+        doi:10.5683/SP3/LSN0R0 (Borealis, CC BY 4.0).
 
         File layout: one row per spectrum; columns 'plastic', 'supplier',
         'sampleid', then one column per wavenumber (720-1800 cm^-1 at the
@@ -1620,6 +1637,13 @@ class MiscLoader(BaseLoader):
 
         targets, class_names = encode_labels(plastic[keep])
         group_ids = df["sampleid"].astype(str).str.strip()[keep].to_numpy()
+        # Integrity pin (the clean-key loader pins its derived counts
+        # too): 108 supplier samples across 14 plastic classes.
+        if len(np.unique(group_ids)) != 108 or len(class_names) != 14:
+            raise RuntimeError(
+                f"[!] microplastics_training_{resolution}: expected 108 supplier sample "
+                f"ids / 14 plastic classes, got {len(np.unique(group_ids))} / {len(class_names)}."
+            )
         return spectra[keep.to_numpy()], raman_shifts, targets, list(class_names), group_ids
 
     @staticmethod

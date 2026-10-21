@@ -532,5 +532,7 @@ def test_nanoplastics_individual():
     # One spectrum per particle -- no grouping structure.
     assert dataset.group_ids is None
     assert not np.isnan(dataset.spectra).any()
-    assert (dataset.spectra > 0).all()
+    # The loader guarantees no NaN and no negative counts; zero counts
+    # are legitimate for raw Raman data, so do not assert strict positivity.
+    assert (dataset.spectra >= 0).all()
 
