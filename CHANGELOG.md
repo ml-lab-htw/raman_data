@@ -11,6 +11,16 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Fixed
+
+---
+
+## [1.7.0] — 2026-10-21
+
+40 new dataset keys (from v1.6.6), loader fixes from the ingestion review.
+
+### Added
+
 - `glucose_liquid_14level` + `glucose_liquid_10level`: two
   classification keys from Ngo Quang Tri's Mendeley Data deposit
   (doi:10.17632/yk75sxk6p5.1, CC BY 4.0, no related
