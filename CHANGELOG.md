@@ -445,6 +445,9 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `raman_mpi`: PTFE appears in 5 maps, not 6 (description).
+- `raman_spi`: the authors' truncation bound is 3,949 cm^-1, not 3,950
+  (embedded_preprocessing).
 - `import raman_data` no longer fails when the optional `renishawWiRE`
   package is missing: the import is now lazy, inside the
   stroke-urine-SERS loader, which raises an informative
