@@ -293,7 +293,7 @@ class MiscLoader(BaseLoader):
             has_missing_labels=False,
             embedded_preprocessing=(
                 "Authors' pipeline (deposit README 4.2): polynomial baseline "
-                "subtraction, truncation to 225-3950 cm^-1, interpolation "
+                "subtraction, truncation to 225-3949 cm^-1, interpolation "
                 "onto a uniform 1 cm^-1 grid, per-spectrum 0-1 normalization."
             ),
         ),
@@ -313,7 +313,7 @@ class MiscLoader(BaseLoader):
                 "citation": [
                     "Hogan, Úna E., Voss, H. Ben., Lei, Benjamin, Bec, Avery E., Feng, Xinyi, Smith, Rodney (2026). Raman spectra for plastics identification (RaSPI) and Raman maps for plastics identification (RaMPI) datasets. Scientific Data, 13, 765."
                 ],
-                "description": "Per-pixel Raman spectra from 34 maps (30 pristine two-material blend maps plus 4 environmental maps of Great Lakes Seabin microplastic samples) acquired on a Renishaw inVia at 633 nm (1800 l/mm grating). Each of the 33,119 pixel spectra was manually assigned by the authors to one of 14 plastic types or 'blank'; this dataset holds the 16,598 plastic-assigned pixels. The native per-map axes (1,017 points, ~710-1,827 cm^-1, non-uniform spacing) are linearly resampled onto a common 1 cm^-1 grid (710-1,827 cm^-1, 1,118 points). Spectra are raw as exported from Renishaw WiRE -- no baseline correction or normalization. Maps per class: polyethylene 8, polyoxymethylene 7, ABS/PMMA/PS/PTFE 6, nylon/PP/PVC 5, polyester/PET 4, polycarbonate 3, polyurethane 2, silicone 2 -- the last two fall below 3 maps and cannot be split into grouped 3-fold CV by map. group_ids = map: pixels within one map are spatially correlated and must not be split across train/test. The companion 1D point-spectra dataset is raman_spi.",
+                "description": "Per-pixel Raman spectra from 34 maps (30 pristine two-material blend maps plus 4 environmental maps of Great Lakes Seabin microplastic samples) acquired on a Renishaw inVia at 633 nm (1800 l/mm grating). Each of the 33,119 pixel spectra was manually assigned by the authors to one of 14 plastic types or 'blank'; this dataset holds the 16,598 plastic-assigned pixels. The native per-map axes (1,017 points, ~710-1,827 cm^-1, non-uniform spacing) are linearly resampled onto a common 1 cm^-1 grid (710-1,827 cm^-1, 1,118 points). Spectra are raw as exported from Renishaw WiRE -- no baseline correction or normalization. Maps per class: polyethylene 8, polyoxymethylene 7, ABS/PMMA/PS 6, nylon/PP/PTFE/PVC 5, polyester/PET 4, polycarbonate 3, polyurethane 2, silicone 2 -- the last two fall below 3 maps and cannot be split into grouped 3-fold CV by map. group_ids = map: pixels within one map are spatially correlated and must not be split across train/test. The companion 1D point-spectra dataset is raman_spi.",
             },
             # Checked: each Assig file is one Raman map; pixels within a map
             # are spatially adjacent measurements and highly correlated

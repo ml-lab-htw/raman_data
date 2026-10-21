@@ -31,8 +31,10 @@ __LOADERS = [
     MiscLoader,
 ]
 
-# Create a global LRU cache instance with a capacity of 1
-lru_cache = LRUCache(maxsize=1)
+# Global LRU cache for load_dataset(). Capacity 8: a process that
+# works through several datasets (e.g. a benchmark sweep) would
+# thrash a capacity-1 cache, reloading every dataset on each call.
+lru_cache = LRUCache(maxsize=8)
 
 def list_datasets(
         task_type: Optional[TASK_TYPE] = None,
