@@ -11,6 +11,28 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `cwa_tep` + `cwa_dimp` + `cwa_dmmp`: concentration regression on
+  raw 1064 nm FT-Raman spectra of three organophosphorus
+  chemical-warfare-agent simulants - triethyl phosphate (TEP, 683
+  spectra), diisopropyl methylphosphonate (DIMP, 723) and dimethyl
+  methylphosphonate (DMMP, 717) - at 11 concentration levels
+  (0.005-1.0 = 0.5 %-100 %) (Zhong 2026, Aerospace Information
+  Research Institute, Mendeley jtk7rv77td v1,
+  doi:10.17632/jtk7rv77td.1, CC BY-NC 4.0). Part of the LOD-
+  calculation study "Prediction-space LOD calculation for nonlinear
+  machine-learning Raman calibration: validation using RBF-SVR"
+  (cited by title in the deposit; not yet indexed). Native
+  512-point 36.84-2,546.1 cm^-1 axis (xlsx column headers) used as
+  is; raw 16-bit counts as deposited (no NaN); detector saturation
+  at the 65,535 ceiling for 7 (TEP, level 1.0), 8 (DIMP, level
+  1.0) and 198 (DMMP, levels 0.1/0.75/1.0) spectra - documented.
+  `target_names = ["<compound>_concentration"]` (1D, single-target
+  regression); is_grouped=False (Number column is a global spectrum
+  index, no sample ids). The deposit's
+  Linear_simulated_dataset.xlsx is a simulated (not measured) PLSR
+  validation set and is not loaded (mirrored for provenance).
+  Served from the frozen HF mirror (cwa_simulants/, size + sha256
+  pinned; Mendeley's WAF 403s non-browser clients).
 - `olive_sunflower_mixtures`: EVOO % regression on 605 Raman spectra
   of Extra Virgin Olive Oil / sunflower oil mixtures at 26 EVOO
   levels (0-100 %) (Picouet 2023, data.gouv.fr / ENTREPOT

@@ -1007,3 +1007,75 @@ def test_olive_sunflower_mixtures():
     assert dataset.spectra.max() < 13000
     assert not np.isnan(dataset.spectra).any()
 
+
+def test_cwa_tep():
+    # Single ~2.3 MB HF-mirror download + a few seconds of xlsx
+    # parsing, small enough to run in CI.
+    dataset = MendeleyLoader.load_dataset("cwa_tep")
+    # 683 raw 1064 nm FT-Raman spectra of TEP solutions at 11
+    # concentration levels, on the native 512-point 36.84-2,546.1
+    # cm^-1 axis (as is).
+    assert dataset.spectra.shape == (683, 512)
+    assert dataset.raman_shifts[0] == pytest.approx(36.844, abs=0.01)
+    assert dataset.raman_shifts[-1] == pytest.approx(2546.084, abs=0.01)
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    # Single-target regression: fractional concentration (1.0 =
+    # pure compound).
+    assert dataset.targets.shape == (683,)
+    assert dataset.target_names == ["tep_concentration"]
+    conc = dataset.targets
+    assert not np.isnan(conc).any()
+    assert conc.min() == 0.005 and conc.max() == 1.0
+    assert len(set(conc.tolist())) == 11
+    # No group structure (Number is a global spectrum index).
+    assert dataset.group_ids is None
+    # Raw 16-bit counts (7 pure-compound spectra hit the ceiling).
+    assert dataset.spectra.min() > 10000
+    assert dataset.spectra.max() == 65535
+    assert int((dataset.spectra == 65535).any(axis=1).sum()) == 7
+    assert not np.isnan(dataset.spectra).any()
+
+
+def test_cwa_dimp():
+    # Single ~2.4 MB HF-mirror download + a few seconds of xlsx
+    # parsing, small enough to run in CI.
+    dataset = MendeleyLoader.load_dataset("cwa_dimp")
+    assert dataset.spectra.shape == (723, 512)
+    assert dataset.raman_shifts[0] == pytest.approx(36.844, abs=0.01)
+    assert dataset.raman_shifts[-1] == pytest.approx(2546.084, abs=0.01)
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    assert dataset.targets.shape == (723,)
+    assert dataset.target_names == ["dimp_concentration"]
+    conc = dataset.targets
+    assert not np.isnan(conc).any()
+    assert conc.min() == 0.005 and conc.max() == 1.0
+    assert len(set(conc.tolist())) == 11
+    assert dataset.group_ids is None
+    assert dataset.spectra.min() > 14000
+    assert dataset.spectra.max() == 65535
+    assert int((dataset.spectra == 65535).any(axis=1).sum()) == 8
+    assert not np.isnan(dataset.spectra).any()
+
+
+def test_cwa_dmmp():
+    # Single ~2.4 MB HF-mirror download + a few seconds of xlsx
+    # parsing, small enough to run in CI.
+    dataset = MendeleyLoader.load_dataset("cwa_dmmp")
+    assert dataset.spectra.shape == (717, 512)
+    assert dataset.raman_shifts[0] == pytest.approx(36.844, abs=0.01)
+    assert dataset.raman_shifts[-1] == pytest.approx(2546.084, abs=0.01)
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    assert dataset.targets.shape == (717,)
+    assert dataset.target_names == ["dmmp_concentration"]
+    conc = dataset.targets
+    assert not np.isnan(conc).any()
+    assert conc.min() == 0.005 and conc.max() == 1.0
+    assert len(set(conc.tolist())) == 11
+    assert dataset.group_ids is None
+    assert dataset.spectra.min() > 13000
+    # The detector saturates at the 16-bit ceiling for all spectra
+    # of the 0.1, 0.75 and 1.0 levels (88 + 58 + 52).
+    assert dataset.spectra.max() == 65535
+    assert int((dataset.spectra == 65535).any(axis=1).sum()) == 198
+    assert not np.isnan(dataset.spectra).any()
+

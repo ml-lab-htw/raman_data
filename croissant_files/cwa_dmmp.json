@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Raw Raman spectra of DMMP (dimethyl methylphosphonate) concentration series (Zhong 2026, Mendeley Data)",
+  "description": "717 raw 1064 nm FT-Raman spectra (per the deposit page) of dimethyl methylphosphonate (DMMP, an organophosphorus chemical-warfare-agent simulant) solutions at 11 concentration levels (0.005, 0.01, 0.02, 0.04, 0.06, 0.08, 0.1, 0.25, 0.5, 0.75, 1.0, i.e. 0.5 %-100 %; 1.0 = pure compound), collected by the Aerospace Information Research Institute (Beijing) as part of the LOD-calculation study 'Prediction-space LOD calculation for nonlinear machine-learning Raman calibration: validation using RBF-SVR' (Zhong 2026; the manuscript is cited by title in the deposit and was not indexed in Crossref/OpenAlex at capture time). Task: concentration regression (single target dmmp_concentration, fractional concentration 0.005-1.0). Native 512-point axis 36.84-2,546.1 cm^-1 (3.4-7.4 cm^-1 non-uniform spacing), read from the xlsx column headers and used as is, so no resampling is involved. Intensities are raw 16-bit counts (13,606-65,535); the detector saturates at the 65,535 ceiling for all 198 spectra of the 0.1, 0.75 and 1.0 levels (88, 58 and 52 spectra), so those levels are partially unreliable. The xlsx data live in sheet 'Sheet2' (this file has no 'Sheet1'; the loader picks the first non-empty sheet) and carry a Number column (global spectrum index, one gap at 710) that provides no grouping information, so group-aware splitting is not available (is_grouped=False); 6 spectra are exact duplicates of other rows (repeat acquisitions, kept as deposited). The deposit's companion file Linear_simulated_dataset.xlsx is a simulated (not measured) near-linear PLSR validation set and is not loaded. Served from a frozen copy mirrored at HTW-KI-Werkstatt/RamanBench (cwa_simulants/, size + sha256 pinned; the live Mendeley download sits behind a WAF that 403s non-browser clients, hence the mirror). License: CC BY-NC 4.0 (non-commercial use only).",
+  "url": "https://data.mendeley.com/datasets/jtk7rv77td",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+  "sameAs": "https://doi.org/10.17632/jtk7rv77td.1",
+  "citeAs": "@dataset{zhong2026cwa, title={Raw Raman spectral datasets of TEP, DIMP, and DMMP with a linear simulated dataset}, author={Zhong, Fanghui}, year={2026}, publisher={Mendeley Data}, doi={10.17632/jtk7rv77td.1}, url={https://doi.org/10.17632/jtk7rv77td.1}}",
+  "citation": "Zhong, F. (2026). Raw Raman spectral datasets of TEP, DIMP, and DMMP with a linear simulated dataset. Mendeley Data. https://doi.org/10.17632/jtk7rv77td.1",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "cwa_dmmp_source",
+      "name": "Raw Raman spectra of DMMP (dimethyl methylphosphonate) concentration series (Zhong 2026, Mendeley Data)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://data.mendeley.com/datasets/jtk7rv77td",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "06e5723578a86c227bff6bafec57f4194cc8580aac84da6f7d9f74363346c3b8"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "cwa_dmmp_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "cwa_dmmp_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "cwa_dmmp_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "cwa_dmmp_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "1064 nm FT-Raman measurements of 717 DMMP solution spectra at 11 concentration levels (per the Mendeley deposit page); the instrument and measurement conditions are documented in the associated manuscript, which was not indexed in Crossref/OpenAlex at capture time.",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "None in the loader. The deposited xlsx is the raw acquisition export (no Savitzky-Golay smoothing or standardization, per the deposit README); the authors' preprocessing was applied in analysis (RBF-SVR calibration and LOD calculation), not to the deposited data.",
+  "rai:dataAnnotationProtocol": "The concentration label is recorded per spectrum (the solution is prepared at a known level; 11 levels from 0.005 to 1.0, i.e. 0.5%-100%); the Number column is a global spectrum index, not a sample id. No human labelling of spectra was involved.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All samples are chemical reference solutions without any human identifiers.",
+  "rai:dataBiases": "Single instrument (1064 nm FT-Raman) and single lab (Aerospace Information Research Institute, Beijing); one measurement campaign, so results may not transfer to other instruments or matrices. Level coverage is uneven (46-123 spectra per level). 198 of 717 spectra are detector-saturated (peaks at the 65,535 16-bit ceiling) - ALL 88 spectra at the 0.1 level, all 58 at 0.75 and all 52 at 1.0 - so those levels are partially unreliable. A few spectra are exact duplicates of other rows (repeat acquisitions, kept as deposited). No group/sample structure is available (the Number column is a global index with one gap), so group-aware splitting is not possible.",
+  "rai:dataLimitations": "Single instrument/lab and single campaign; uneven level coverage (46-123 spectra); heavy detector saturation (all 88 + 58 + 52 spectra of the 0.1, 0.75 and 1.0 levels clipped at the 65,535 16-bit ceiling); raw counts (no normalization); non-uniform wavenumber axis (3.4-7.4 cm^-1 spacing); no group structure available; the associated manuscript is not yet indexed, so the measurement protocol is only partially documented.",
+  "rai:dataSocialImpact": "Supports defence/security-related research on Raman calibration and limit-of-detection (LOD) estimation for organophosphorus chemical-warfare-agent simulants; no human or medical use. Results are instrument- and matrix-specific; any operational application requires independent verification.",
+  "rai:dataUseCases": "Concentration regression from a single Raman spectrum (RBF-SVR or other nonlinear calibration; the authors' PLSR/RBF-SVR LOD-calculation workflow is reproducible from this data); note the heavy detector saturation at the 0.1, 0.75 and 1.0 levels - those levels should be used with care in calibration.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: 1064 nm FT-Raman spectra (per the deposit page) of 717 DMMP solution spectra at 11 concentration levels (0.005-1.0, i.e. 0.5%-100%; 1.0 = pure compound) (dimethyl methylphosphonate, an organophosphorus chemical-warfare-agent simulant; Aerospace Information Research Institute, Beijing, 2026; Mendeley Data deposit jtk7rv77td v1, doi:10.17632/jtk7rv77td.1, CC BY-NC 4.0). Part of the LOD-calculation study 'Prediction-space LOD calculation for nonlinear machine-learning Raman calibration: validation using RBF-SVR'. Native 512-point axis 36.84-2,546.1 cm^-1 (xlsx column headers, used as is); raw 16-bit counts 13,606-65,535. 198 spectra (all 88 at the 0.1 level, all 58 at 0.75 and all 52 at 1.0) are detector-saturated at the 65,535 ceiling. The xlsx is served from a frozen copy mirrored at HTW-KI-Werkstatt/RamanBench (cwa_simulants/, size + sha256 pinned) because the live Mendeley download sits behind a WAF that 403s non-browser clients.",
+  "prov:wasDerivedFrom": "https://doi.org/10.17632/jtk7rv77td.1"
+}

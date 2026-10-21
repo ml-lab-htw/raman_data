@@ -716,6 +716,274 @@ class MendeleyLoader(BaseLoader):
                 "data."
             ),
         ),
+        "cwa_tep": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="jtk7rv77td",
+            name="CWA Simulant TEP Concentration (Zhong 2026)",
+            short_name="CWA TEP",
+            license="CC BY-NC 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_cwa_tep(cache_path),
+            metadata={
+                "full_name": (
+                    "Raw Raman spectra of TEP (triethyl phosphate) "
+                    "concentration series (Zhong 2026, Mendeley Data)"
+                ),
+                "source": "https://data.mendeley.com/datasets/jtk7rv77td",
+                "doi": "10.17632/jtk7rv77td.1",
+                "bibtex": (
+                    "@dataset{zhong2026cwa, title={Raw Raman spectral "
+                    "datasets of TEP, DIMP, and DMMP with a linear "
+                    "simulated dataset}, author={Zhong, Fanghui}, "
+                    "year={2026}, publisher={Mendeley Data}, "
+                    "doi={10.17632/jtk7rv77td.1}, "
+                    "url={https://doi.org/10.17632/jtk7rv77td.1}}"
+                ),
+                "citation": [
+                    "Zhong, F. (2026). Raw Raman spectral datasets of "
+                    "TEP, DIMP, and DMMP with a linear simulated "
+                    "dataset. Mendeley Data. "
+                    "https://doi.org/10.17632/jtk7rv77td.1",
+                ],
+                "description": (
+                    "683 raw 1064 nm FT-Raman spectra (per the "
+                    "deposit page) of triethyl phosphate (TEP, an "
+                    "organophosphorus chemical-warfare-agent "
+                    "simulant) solutions at 11 concentration levels "
+                    "(0.005, 0.01, 0.02, 0.04, 0.06, 0.08, 0.1, "
+                    "0.25, 0.5, 0.75, 1.0, i.e. 0.5 %-100 %; 1.0 = "
+                    "pure compound), collected by the Aerospace "
+                    "Information Research Institute (Beijing) as "
+                    "part of the LOD-calculation study "
+                    "'Prediction-space LOD calculation for "
+                    "nonlinear machine-learning Raman calibration: "
+                    "validation using RBF-SVR' (Zhong 2026; the "
+                    "manuscript is cited by title in the deposit and "
+                    "was not indexed in Crossref/OpenAlex at "
+                    "capture time). Task: concentration regression "
+                    "(single target tep_concentration, fractional "
+                    "concentration 0.005-1.0). Native 512-point "
+                    "axis 36.84-2,546.1 cm^-1 (3.4-7.4 cm^-1 "
+                    "non-uniform spacing), read from the xlsx column "
+                    "headers and used as is, so no resampling is "
+                    "involved. Intensities are raw 16-bit counts "
+                    "(11,017-65,535); 7 of the 96 pure-compound "
+                    "(1.0) spectra show detector saturation at the "
+                    "65,535 ceiling. The xlsx also carries a Number "
+                    "column (global spectrum index, one gap at 319) "
+                    "that provides no grouping information, so "
+                    "group-aware splitting is not available "
+                    "(is_grouped=False); 9 spectra are exact "
+                    "duplicates of other rows (repeat acquisitions, "
+                    "kept as deposited). The deposit's companion "
+                    "file Linear_simulated_dataset.xlsx is a "
+                    "simulated (not measured) near-linear PLSR "
+                    "validation set and is not loaded. Served from "
+                    "a frozen copy mirrored at HTW-KI-Werkstatt/"
+                    "RamanBench (cwa_simulants/, size + sha256 "
+                    "pinned; the live Mendeley download sits behind "
+                    "a WAF that 403s non-browser clients, hence the "
+                    "mirror). License: CC BY-NC 4.0 (non-commercial "
+                    "use only)."
+                ),
+            },
+            # Checked: the Number column is a global spectrum index
+            # with no per-sample grouping (one gap at 319);
+            # is_grouped=False.
+            is_grouped=False,
+            # Checked: all 683 rows carry a concentration label
+            # (no NaN).
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None. The deposit's README states the spectra are "
+                "raw (no Savitzky-Golay smoothing or "
+                "standardization); the authors' preprocessing was "
+                "applied in analysis, not to the deposited data."
+            ),
+        ),
+        "cwa_dimp": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="jtk7rv77td",
+            name="CWA Simulant DIMP Concentration (Zhong 2026)",
+            short_name="CWA DIMP",
+            license="CC BY-NC 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_cwa_dimp(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raw Raman spectra of DIMP (diisopropyl "
+                    "methylphosphonate) concentration series (Zhong "
+                    "2026, Mendeley Data)"
+                ),
+                "source": "https://data.mendeley.com/datasets/jtk7rv77td",
+                "doi": "10.17632/jtk7rv77td.1",
+                "bibtex": (
+                    "@dataset{zhong2026cwa, title={Raw Raman spectral "
+                    "datasets of TEP, DIMP, and DMMP with a linear "
+                    "simulated dataset}, author={Zhong, Fanghui}, "
+                    "year={2026}, publisher={Mendeley Data}, "
+                    "doi={10.17632/jtk7rv77td.1}, "
+                    "url={https://doi.org/10.17632/jtk7rv77td.1}}"
+                ),
+                "citation": [
+                    "Zhong, F. (2026). Raw Raman spectral datasets of "
+                    "TEP, DIMP, and DMMP with a linear simulated "
+                    "dataset. Mendeley Data. "
+                    "https://doi.org/10.17632/jtk7rv77td.1",
+                ],
+                "description": (
+                    "723 raw 1064 nm FT-Raman spectra (per the "
+                    "deposit page) of diisopropyl methylphosphonate "
+                    "(DIMP, an organophosphorus "
+                    "chemical-warfare-agent simulant) solutions at "
+                    "11 concentration levels (0.005, 0.01, 0.02, "
+                    "0.04, 0.06, 0.08, 0.1, 0.25, 0.5, 0.75, 1.0, "
+                    "i.e. 0.5 %-100 %; 1.0 = pure compound), "
+                    "collected by the Aerospace Information "
+                    "Research Institute (Beijing) as part of the "
+                    "LOD-calculation study 'Prediction-space LOD "
+                    "calculation for nonlinear machine-learning "
+                    "Raman calibration: validation using RBF-SVR' "
+                    "(Zhong 2026; the manuscript is cited by title "
+                    "in the deposit and was not indexed in "
+                    "Crossref/OpenAlex at capture time). Task: "
+                    "concentration regression (single target "
+                    "dimp_concentration, fractional concentration "
+                    "0.005-1.0). Native 512-point axis "
+                    "36.84-2,546.1 cm^-1 (3.4-7.4 cm^-1 non-uniform "
+                    "spacing), read from the xlsx column headers "
+                    "and used as is, so no resampling is involved. "
+                    "Intensities are raw 16-bit counts "
+                    "(14,721-65,535); 8 of the 39 pure-compound "
+                    "(1.0) spectra show detector saturation at the "
+                    "65,535 ceiling. The xlsx also carries a Number "
+                    "column (global spectrum index, complete 1-723) "
+                    "that provides no grouping information, so "
+                    "group-aware splitting is not available "
+                    "(is_grouped=False); 6 spectra are exact "
+                    "duplicates of other rows (repeat acquisitions, "
+                    "kept as deposited). The deposit's companion "
+                    "file Linear_simulated_dataset.xlsx is a "
+                    "simulated (not measured) near-linear PLSR "
+                    "validation set and is not loaded. Served from "
+                    "a frozen copy mirrored at HTW-KI-Werkstatt/"
+                    "RamanBench (cwa_simulants/, size + sha256 "
+                    "pinned; the live Mendeley download sits behind "
+                    "a WAF that 403s non-browser clients, hence the "
+                    "mirror). License: CC BY-NC 4.0 (non-commercial "
+                    "use only)."
+                ),
+            },
+            # Checked: the Number column is a global spectrum index
+            # (complete 1-723) with no per-sample grouping;
+            # is_grouped=False.
+            is_grouped=False,
+            # Checked: all 723 rows carry a concentration label
+            # (no NaN).
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None. The deposit's README states the spectra are "
+                "raw (no Savitzky-Golay smoothing or "
+                "standardization); the authors' preprocessing was "
+                "applied in analysis, not to the deposited data."
+            ),
+        ),
+        "cwa_dmmp": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="jtk7rv77td",
+            name="CWA Simulant DMMP Concentration (Zhong 2026)",
+            short_name="CWA DMMP",
+            license="CC BY-NC 4.0",
+            loader=lambda cache_path: MendeleyLoader._load_cwa_dmmp(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raw Raman spectra of DMMP (dimethyl "
+                    "methylphosphonate) concentration series "
+                    "(Zhong 2026, Mendeley Data)"
+                ),
+                "source": "https://data.mendeley.com/datasets/jtk7rv77td",
+                "doi": "10.17632/jtk7rv77td.1",
+                "bibtex": (
+                    "@dataset{zhong2026cwa, title={Raw Raman spectral "
+                    "datasets of TEP, DIMP, and DMMP with a linear "
+                    "simulated dataset}, author={Zhong, Fanghui}, "
+                    "year={2026}, publisher={Mendeley Data}, "
+                    "doi={10.17632/jtk7rv77td.1}, "
+                    "url={https://doi.org/10.17632/jtk7rv77td.1}}"
+                ),
+                "citation": [
+                    "Zhong, F. (2026). Raw Raman spectral datasets of "
+                    "TEP, DIMP, and DMMP with a linear simulated "
+                    "dataset. Mendeley Data. "
+                    "https://doi.org/10.17632/jtk7rv77td.1",
+                ],
+                "description": (
+                    "717 raw 1064 nm FT-Raman spectra (per the "
+                    "deposit page) of dimethyl methylphosphonate "
+                    "(DMMP, an organophosphorus "
+                    "chemical-warfare-agent simulant) solutions at "
+                    "11 concentration levels (0.005, 0.01, 0.02, "
+                    "0.04, 0.06, 0.08, 0.1, 0.25, 0.5, 0.75, 1.0, "
+                    "i.e. 0.5 %-100 %; 1.0 = pure compound), "
+                    "collected by the Aerospace Information "
+                    "Research Institute (Beijing) as part of the "
+                    "LOD-calculation study 'Prediction-space LOD "
+                    "calculation for nonlinear machine-learning "
+                    "Raman calibration: validation using RBF-SVR' "
+                    "(Zhong 2026; the manuscript is cited by title "
+                    "in the deposit and was not indexed in "
+                    "Crossref/OpenAlex at capture time). Task: "
+                    "concentration regression (single target "
+                    "dmmp_concentration, fractional concentration "
+                    "0.005-1.0). Native 512-point axis "
+                    "36.84-2,546.1 cm^-1 (3.4-7.4 cm^-1 non-uniform "
+                    "spacing), read from the xlsx column headers "
+                    "and used as is, so no resampling is involved. "
+                    "Intensities are raw 16-bit counts "
+                    "(13,606-65,535); the detector saturates at "
+                    "the 65,535 ceiling for all 198 spectra of the "
+                    "0.1, 0.75 and 1.0 levels (88, 58 and 52 "
+                    "spectra), so those levels are partially "
+                    "unreliable. The xlsx data live in sheet "
+                    "'Sheet2' (this file has no 'Sheet1'; the "
+                    "loader picks the first non-empty sheet) and "
+                    "carry a Number column (global spectrum index, "
+                    "one gap at 710) that provides no grouping "
+                    "information, so group-aware splitting is not "
+                    "available (is_grouped=False); 6 spectra are "
+                    "exact duplicates of other rows (repeat "
+                    "acquisitions, kept as deposited). The "
+                    "deposit's companion file "
+                    "Linear_simulated_dataset.xlsx is a simulated "
+                    "(not measured) near-linear PLSR validation set "
+                    "and is not loaded. Served from a frozen copy "
+                    "mirrored at HTW-KI-Werkstatt/RamanBench "
+                    "(cwa_simulants/, size + sha256 pinned; the "
+                    "live Mendeley download sits behind a WAF that "
+                    "403s non-browser clients, hence the mirror). "
+                    "License: CC BY-NC 4.0 (non-commercial use "
+                    "only)."
+                ),
+            },
+            # Checked: the Number column is a global spectrum index
+            # with no per-sample grouping (one gap at 710);
+            # is_grouped=False.
+            is_grouped=False,
+            # Checked: all 717 rows carry a concentration label
+            # (no NaN).
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "None. The deposit's README states the spectra are "
+                "raw (no Savitzky-Golay smoothing or "
+                "standardization); the authors' preprocessing was "
+                "applied in analysis, not to the deposited data."
+            ),
+        ),
     }
 
     logger = logging.getLogger(__name__)
@@ -1801,6 +2069,216 @@ class MendeleyLoader(BaseLoader):
         )
         return spectra, axis, pv, ["peroxide_value"]
 
+    # ------------------------------------------------------------------
+    # cwa_tep / cwa_dimp / cwa_dmmp (Mendeley jtk7rv77td)
+    # ------------------------------------------------------------------
+    # Zhong (2026), "Raw Raman spectral datasets of TEP, DIMP, and
+    # DMMP with a linear simulated dataset" (Aerospace Information
+    # Research Institute, Beijing; Mendeley Data deposit
+    # jtk7rv77td v1, doi:10.17632/jtk7rv77td.1, CC BY-NC 4.0).
+    #
+    # Raw 1064 nm FT-Raman concentration series of three
+    # organophosphorus chemical-warfare-agent simulants:
+    #   TEP  = triethyl phosphate
+    #   DIMP = diisopropyl methylphosphonate
+    #   DMMP = dimethyl methylphosphonate
+    # Each xlsx holds one compound: Concentration, Number (global
+    # spectrum index), then 512 wavenumber columns (36.844..
+    # 2546.084 cm^-1, non-uniform 3.4-7.4 cm^-1 spacing, numeric
+    # headers) in cm^-1. 11 concentration levels: 0.005, 0.01,
+    # 0.02, 0.04, 0.06, 0.08, 0.1, 0.25, 0.5, 0.75, 1.0 (fractional,
+    # 1.0 = pure compound; the README calls them "percentages" and
+    # 1.0 "100%"). Raw 16-bit counts (ceiling 65,535); several
+    # high-concentration spectra are detector-saturated. Row
+    # counts: TEP 683 (Sheet1, Number gap at 319), DIMP 723
+    # (Sheet1, complete), DMMP 717 (Sheet2 -- no Sheet1!, Number
+    # gap at 710). No group structure (Number is not a sample id);
+    # a few exact-duplicate rows (repeat acquisitions) are kept as
+    # deposited. The deposit's Linear_simulated_dataset.xlsx is a
+    # simulated (not measured) near-linear PLSR validation set and
+    # is not loaded (mirrored for provenance).
+    #
+    # Served from the frozen HF mirror (cwa_simulants/) because the
+    # live Mendeley download sits behind a WAF that 403s non-browser
+    # clients (incl. CI runners).
+    _CWA_TEP = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/cwa_simulants/TEP_raw_Raman_spectra.xlsx",
+        "TEP_raw_Raman_spectra.xlsx",
+        2283347,
+        "75d8d50999a5c94f2fd5efdceba7bcb962f4df502eaeb75248f94dd79b11dfb1",
+    )
+    _CWA_DIMP = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/cwa_simulants/DIMP_raw_Raman_spectra.xlsx",
+        "DIMP_raw_Raman_spectra.xlsx",
+        2422235,
+        "c16828a353db66119bdb3dac0d518ec53c122d3023eccb8998995f8c6a81179c",
+    )
+    _CWA_DMMP = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/cwa_simulants/DMMP_raw_Raman_spectra.xlsx",
+        "DMMP_raw_Raman_spectra.xlsx",
+        2408514,
+        "c110bc5814655d0b8d15cd87956c11c88c318b7159aa436463c2d9244de6e26f",
+    )
+
+    @staticmethod
+    def _download_cwa_xlsx(
+        cache_path: str, spec: Tuple[str, str, int, str]
+    ) -> str:
+        """
+        Download (if needed) one mirrored CWA-simulant xlsx; returns
+        the local file path.
+        """
+        url, fname, size, sha = spec
+        fpath = os.path.join(cache_path, fname)
+        if os.path.exists(fpath) and os.path.getsize(fpath) != size:
+            os.remove(fpath)
+        result = LoaderTools.download(
+            url=url,
+            out_dir_path=cache_path,
+            out_file_name=fname,
+            hash_target=sha,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                f"[!] cwa: download of {fname} failed (network "
+                "error or checksum mismatch). See logs."
+            )
+        return fpath
+
+    @staticmethod
+    def _parse_cwa_raw_xlsx(
+        fpath: str, key: str, n_rows: int
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """
+        Parse one of the deposit's raw Raman xlsx files (all three
+        share the layout: Concentration, Number, 512 wavenumber
+        columns). Returns spectra, raman_shifts, concentration
+        targets. The data sheet is the first non-empty sheet
+        (TEP/DIMP use 'Sheet1', DMMP uses 'Sheet2').
+        """
+        xl = pd.ExcelFile(fpath)
+        sheet = None
+        for s in xl.sheet_names:
+            if xl.parse(s, nrows=0).shape[1] > 0:
+                sheet = s
+                break
+        if sheet is None:
+            raise RuntimeError(
+                f"[!] {key}: no non-empty sheet in the xlsx."
+            )
+        df = xl.parse(sheet)
+        if df.shape[0] != n_rows or df.shape[1] != 514:
+            raise RuntimeError(
+                f"[!] {key}: expected {n_rows} rows x 514 columns "
+                f"(Concentration, Number, 512 wavenumbers), got "
+                f"{df.shape} (deposit changed?)."
+            )
+        axis = np.array([float(c) for c in df.columns[2:]])
+        if (
+            not np.all(np.diff(axis) > 0)
+            or not (30.0 < axis[0] < 50.0)
+            or not (2500.0 < axis[-1] < 2600.0)
+        ):
+            raise RuntimeError(
+                f"[!] {key}: unexpected wavenumber axis "
+                f"({axis.shape[0]} points, "
+                f"{axis[0]:.3f}..{axis[-1]:.3f} cm^-1)."
+            )
+        conc = df.iloc[:, 0].to_numpy(dtype=float)
+        if np.isnan(conc).any():
+            raise RuntimeError(f"[!] {key}: NaN concentration labels.")
+        spectra = df.iloc[:, 2:].to_numpy(dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError(f"[!] {key}: NaN intensity values.")
+        if spectra.max() > 65535.0:
+            raise RuntimeError(
+                f"[!] {key}: intensities above the 16-bit ceiling "
+                f"(max {spectra.max():g})."
+            )
+        return spectra, axis, conc
+
+    @staticmethod
+    def _load_cwa_tep(cache_path: str):
+        """
+        Download (if needed) and load the CWA-simulant TEP Raman
+        dataset: 683 raw 1064 nm FT-Raman spectra of triethyl
+        phosphate solutions at 11 concentration levels (0.005-1.0 =
+        0.5 %-100 %), on the deposit's native 512-point
+        36.84-2,546.1 cm^-1 axis, with the concentration as the
+        regression target.
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        fpath = MendeleyLoader._download_cwa_xlsx(
+            cache_path, MendeleyLoader._CWA_TEP
+        )
+        spectra, axis, conc = MendeleyLoader._parse_cwa_raw_xlsx(
+            fpath, "cwa_tep", 683
+        )
+        MendeleyLoader.logger.debug(
+            f"Loaded cwa_tep: {spectra.shape[0]} spectra x "
+            f"{spectra.shape[1]} points, concentration "
+            f"{conc.min():g}..{conc.max():g}"
+        )
+        return spectra, axis, conc, ["tep_concentration"]
+
+    @staticmethod
+    def _load_cwa_dimp(cache_path: str):
+        """
+        Download (if needed) and load the CWA-simulant DIMP Raman
+        dataset: 723 raw 1064 nm FT-Raman spectra of diisopropyl
+        methylphosphonate solutions at 11 concentration levels
+        (0.005-1.0 = 0.5 %-100 %), on the deposit's native
+        512-point 36.84-2,546.1 cm^-1 axis, with the concentration
+        as the regression target.
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        fpath = MendeleyLoader._download_cwa_xlsx(
+            cache_path, MendeleyLoader._CWA_DIMP
+        )
+        spectra, axis, conc = MendeleyLoader._parse_cwa_raw_xlsx(
+            fpath, "cwa_dimp", 723
+        )
+        MendeleyLoader.logger.debug(
+            f"Loaded cwa_dimp: {spectra.shape[0]} spectra x "
+            f"{spectra.shape[1]} points, concentration "
+            f"{conc.min():g}..{conc.max():g}"
+        )
+        return spectra, axis, conc, ["dimp_concentration"]
+
+    @staticmethod
+    def _load_cwa_dmmp(cache_path: str):
+        """
+        Download (if needed) and load the CWA-simulant DMMP Raman
+        dataset: 717 raw 1064 nm FT-Raman spectra of dimethyl
+        methylphosphonate solutions at 11 concentration levels
+        (0.005-1.0 = 0.5 %-100 %), on the deposit's native
+        512-point 36.84-2,546.1 cm^-1 axis, with the concentration
+        as the regression target. The data live in sheet 'Sheet2'
+        (this file has no 'Sheet1').
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        fpath = MendeleyLoader._download_cwa_xlsx(
+            cache_path, MendeleyLoader._CWA_DMMP
+        )
+        spectra, axis, conc = MendeleyLoader._parse_cwa_raw_xlsx(
+            fpath, "cwa_dmmp", 717
+        )
+        MendeleyLoader.logger.debug(
+            f"Loaded cwa_dmmp: {spectra.shape[0]} spectra x "
+            f"{spectra.shape[1]} points, concentration "
+            f"{conc.min():g}..{conc.max():g}"
+        )
+        return spectra, axis, conc, ["dmmp_concentration"]
     # ------------------------------------------------------------------
     # BaseLoader interface
     # ------------------------------------------------------------------
