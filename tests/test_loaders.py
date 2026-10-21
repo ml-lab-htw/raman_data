@@ -1106,3 +1106,59 @@ def test_infra_art_raman():
     assert dataset.spectra.max() < 62000
     assert not np.isnan(dataset.spectra).any()
 
+
+def test_uraman_mofs():
+    dataset = GitHubLoader.load_dataset("uraman_mofs")
+    # One stitched reference spectrum per MOF compound (3 classes),
+    # resampled onto the common 0-3,997 cm^-1 @1 cm^-1 grid.
+    assert dataset.spectra.shape == (3, 3998)
+    assert dataset.raman_shifts[0] == pytest.approx(0.0)
+    assert dataset.raman_shifts[-1] == pytest.approx(3997.0)
+    assert dataset.targets.shape == (3,)
+    assert dataset.group_ids is None
+    assert len(set(dataset.targets.tolist())) == 3
+    assert len(dataset.target_names) == 3
+    # All three spectra are peak-normalized to 1.0 as deposited
+    # (linear interpolation keeps the max within a hair of 1.0);
+    # the background-subtracted Mg-MOF74 spectrum carries negative
+    # points down to ~-0.16.
+    assert 0.95 < dataset.spectra.max() <= 1.0
+    assert dataset.spectra.min() < -0.1
+    assert not np.isnan(dataset.spectra).any()
+
+
+def test_uraman_mof74_1000_2000():
+    dataset = GitHubLoader.load_dataset("uraman_mof74_1000_2000")
+    # Six MOF-74 metal-series samples on the common 970-1,887 cm^-1
+    # window (intersection of the six native axes; limited by
+    # Au@Mg-MOF74's shifted 860.8-1,887.8 cm^-1 axis).
+    assert dataset.spectra.shape == (6, 918)
+    assert dataset.raman_shifts[0] == pytest.approx(970.0)
+    assert dataset.raman_shifts[-1] == pytest.approx(1887.0)
+    assert dataset.targets.shape == (6,)
+    assert dataset.group_ids is None
+    assert len(set(dataset.targets.tolist())) == 6
+    assert len(dataset.target_names) == 6
+    # Peak-normalized as deposited; no negative points in this
+    # window (no background subtraction).
+    assert 0.95 < dataset.spectra.max() <= 1.0
+    assert dataset.spectra.min() >= 0.0
+    assert not np.isnan(dataset.spectra).any()
+
+
+def test_uraman_mof74_70_3000():
+    dataset = GitHubLoader.load_dataset("uraman_mof74_70_3000")
+    # Five MOF-74 metal-series samples (no Au@Mg-MOF74: high
+    # luminescence background, no stitching) on the common
+    # 0-2,999 cm^-1 @1 cm^-1 grid (native axis 0-2,999.35).
+    assert dataset.spectra.shape == (5, 3000)
+    assert dataset.raman_shifts[0] == pytest.approx(0.0)
+    assert dataset.raman_shifts[-1] == pytest.approx(2999.0)
+    assert dataset.targets.shape == (5,)
+    assert dataset.group_ids is None
+    assert len(set(dataset.targets.tolist())) == 5
+    assert len(dataset.target_names) == 5
+    assert 0.95 < dataset.spectra.max() <= 1.0
+    assert dataset.spectra.min() >= 0.0
+    assert not np.isnan(dataset.spectra).any()
+

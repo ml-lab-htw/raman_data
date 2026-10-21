@@ -443,6 +443,263 @@ class GitHubLoader(BaseLoader):
                 "applied."
             ),
         ),
+        "uraman_mofs": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="uraman_mofs",
+            name="IBM uRaman MOF Reference Spectra (Ferreira 2023)",
+            short_name="uRaman MOFs",
+            license="CDLA-Sharing-1.0",
+            loader=lambda cache_path: GitHubLoader._load_uraman_mofs(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "IBM uRaman-Dataset: peak-normalized Raman "
+                    "reference spectra of three MOF compounds "
+                    "(HKUST-1, Mg-MOF74, ZIF-8)"
+                ),
+                "source": "https://github.com/IBM/uRaman-Dataset",
+                "bibtex": (
+                    "@dataset{ferreira2023uraman, title={uRaman-"
+                    "Dataset: Raman spectroscopy spectra of Metal "
+                    "Organic Framework (MOF) compounds}, "
+                    "author={Ferreira, Matheus Esteves}, "
+                    "year={2023}, publisher={GitHub, IBM}, "
+                    "url={https://github.com/IBM/uRaman-Dataset}, "
+                    "note={commit "
+                    "47e712d326fb0458ee8218ab73a2cfc269dcdfab, "
+                    "license CDLA-Sharing-1.0}}"
+                ),
+                "citation": [
+                    "Ferreira, M. E. (2023). uRaman-Dataset: Raman "
+                    "spectroscopy spectra of Metal Organic Framework "
+                    "(MOF) compounds (commit 47e712d3). GitHub "
+                    "(IBM). https://github.com/IBM/uRaman-Dataset",
+                ],
+                "description": (
+                    "Peak-normalized Raman reference spectra of the "
+                    "three MOF compounds listed in the deposit's "
+                    "README: HKUST-1 (Basolite C300, Sigma-Aldrich), "
+                    "Mg-MOF74 and ZIF-8 (Basolite Z1200, "
+                    "Sigma-Aldrich), measured with a WITec UHTS300S "
+                    "Raman system (DU970_BVF detector, 63x "
+                    "objective, 100 accumulations x 0.5 s). The "
+                    "acquisition conditions differ per compound "
+                    "(recorded in each folder's "
+                    "Experiment_Information.txt): HKUST-1 "
+                    "531.970 nm at 1 mW (2023-02-14), Mg-MOF74 "
+                    "632.810 nm at 1 mW (2023-03-01), ZIF-8 "
+                    "531.970 nm at 2 mW (2023-04-27); the "
+                    "Mg-MOF74 export is labelled '(Sub BG) (Norm)' "
+                    "(background-subtracted) and carries 989 "
+                    "negative points. All three spectra are "
+                    "peak-normalized (max = 1.0) as deposited, so "
+                    "the relative peak structure is comparable "
+                    "across the different excitation wavelengths "
+                    "and powers. The two native grids (1,806 points "
+                    "0-3,997.65 cm^-1 for HKUST-1/ZIF-8, 2,768 "
+                    "points 0-3,998.38 cm^-1 for Mg-MOF74) are "
+                    "resampled with linear interpolation onto the "
+                    "common 0-3,997 cm^-1 @1 cm^-1 grid (3,998 "
+                    "points). This is a reference set: one stitched "
+                    "spectrum per class (3 classes), so no "
+                    "cross-validation-based classification is "
+                    "possible - the key is intended for spectral "
+                    "matching, few-shot and augmentation use. "
+                    "is_grouped=False (one spectrum per sample). "
+                    "The repo is served as a commit-pinned codeload "
+                    "archive (commit 47e712d326fb0458ee8218ab73a2c"
+                    "fc269dcdfab, 2023-06-19, 819,336 bytes, size + "
+                    "sha256 pinned); no indexed parent paper "
+                    "exists, so the repository itself is the "
+                    "citation (maintainer: Matheus Esteves "
+                    "Ferreira, IBM)."
+                ),
+            },
+            # Checked: one stitched spectrum per compound; no
+            # replicate structure exists in the deposit.
+            is_grouped=False,
+            # Checked: every CSV in the pinned archive parses to a
+            # finite, strictly increasing two-column spectrum; no
+            # missing values.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "Peak normalization to max = 1.0 as deposited "
+                "(the Mg-MOF74 export is additionally "
+                "background-subtracted, with 989 negative points); "
+                "no further baseline correction or normalization is "
+                "applied here. The two native grids are linearly "
+                "interpolated onto the common 0-3,997 cm^-1 @1 "
+                "cm^-1 grid (3,998 points)."
+            ),
+        ),
+        "uraman_mof74_1000_2000": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="uraman_mof74_1000_2000",
+            name=(
+                "IBM uRaman MOF-74 Metal Series, 1,000-2,000 cm^-1 "
+                "Window (Ferreira 2023)"
+            ),
+            short_name="uRaman MOF-74 1000-2000",
+            license="CDLA-Sharing-1.0",
+            loader=lambda cache_path: GitHubLoader._load_uraman_mof74_1000_2000(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "IBM uRaman-Dataset: peak-normalized Raman "
+                    "spectra of six MOF-74 metal-series samples in "
+                    "the nominal 1,000-2,000 cm^-1 window"
+                ),
+                "source": "https://github.com/IBM/uRaman-Dataset",
+                "bibtex": (
+                    "@dataset{ferreira2023uraman, title={uRaman-"
+                    "Dataset: Raman spectroscopy spectra of Metal "
+                    "Organic Framework (MOF) compounds}, "
+                    "author={Ferreira, Matheus Esteves}, "
+                    "year={2023}, publisher={GitHub, IBM}, "
+                    "url={https://github.com/IBM/uRaman-Dataset}, "
+                    "note={commit "
+                    "47e712d326fb0458ee8218ab73a2cfc269dcdfab, "
+                    "license CDLA-Sharing-1.0}}"
+                ),
+                "citation": [
+                    "Ferreira, M. E. (2023). uRaman-Dataset: Raman "
+                    "spectroscopy spectra of Metal Organic Framework "
+                    "(MOF) compounds (commit 47e712d3). GitHub "
+                    "(IBM). https://github.com/IBM/uRaman-Dataset",
+                ],
+                "description": (
+                    "Peak-normalized Raman spectra of the six "
+                    "MOF-74 metal-series samples of the deposit's "
+                    "MeMOF-74 set ('Me' = metal: Mg, Zn and the "
+                    "Zn75Mg25 alloy, plus the gold-coated Au@ "
+                    "variants), measured in the nominal 1,000-2,000 "
+                    "cm^-1 window with a WITec Alpha 300 RAS "
+                    "micro-Raman system (532 nm at 1 mW, 1800 "
+                    "g/mm grating, 200-400 accumulations x 0.5 s; "
+                    "the samples were provided by Prof. Carlos "
+                    "Basilio Pinheiro's group, per the deposit's "
+                    "About.md). Five files span 969.006-1,980.60 "
+                    "cm^-1 (1,600 points each); Au@Mg-MOF74 spans "
+                    "860.797-1,887.76 cm^-1 (1,600 points), off the "
+                    "nominal window, so the common window is the "
+                    "intersection of the six native axes, resampled "
+                    "with linear interpolation onto 970-1,887 cm^-1 "
+                    "@1 cm^-1 (918 points). All six spectra are "
+                    "peak-normalized (max = 1.0) as deposited, with "
+                    "no negative points in this window. One "
+                    "spectrum per class (6 classes): a reference "
+                    "set, not CV-learnable. is_grouped=False. The "
+                    "1,000-2,000 cm^-1 file of Au@Zn75Mg25-MOF74 is "
+                    "spelled with a double dash in the deposit "
+                    "('Au@Zn75Mg25--MOF74.csv'); its label is "
+                    "normalized to a single dash. Served from the "
+                    "same commit-pinned codeload archive as "
+                    "uraman_mofs (commit "
+                    "47e712d326fb0458ee8218ab73a2cfc269dcdfab, "
+                    "819,336 bytes, size + sha256 pinned)."
+                ),
+            },
+            # Checked: one stitched spectrum per sample; no
+            # replicate structure exists in the deposit.
+            is_grouped=False,
+            # Checked: all six CSVs in the pinned archive parse to
+            # finite, strictly increasing two-column spectra; no
+            # missing values.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "Peak normalization to max = 1.0 as deposited; no "
+                "further preprocessing is applied here. The native "
+                "1,600-point grids are linearly interpolated onto "
+                "the common 970-1,887 cm^-1 @1 cm^-1 grid (918 "
+                "points); each spectrum is truncated outside the "
+                "common window (the five nominal-window files lose "
+                "1,888-1,980.60 cm^-1, Au@Mg-MOF74 loses "
+                "860.797-969 cm^-1)."
+            ),
+        ),
+        "uraman_mof74_70_3000": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="uraman_mof74_70_3000",
+            name=(
+                "IBM uRaman MOF-74 Metal Series, 70-3,000 cm^-1 "
+                "Stitched Window (Ferreira 2023)"
+            ),
+            short_name="uRaman MOF-74 70-3000",
+            license="CDLA-Sharing-1.0",
+            loader=lambda cache_path: GitHubLoader._load_uraman_mof74_70_3000(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "IBM uRaman-Dataset: peak-normalized stitched "
+                    "Raman spectra of five MOF-74 metal-series "
+                    "samples in the nominal 70-3,000 cm^-1 window"
+                ),
+                "source": "https://github.com/IBM/uRaman-Dataset",
+                "bibtex": (
+                    "@dataset{ferreira2023uraman, title={uRaman-"
+                    "Dataset: Raman spectroscopy spectra of Metal "
+                    "Organic Framework (MOF) compounds}, "
+                    "author={Ferreira, Matheus Esteves}, "
+                    "year={2023}, publisher={GitHub, IBM}, "
+                    "url={https://github.com/IBM/uRaman-Dataset}, "
+                    "note={commit "
+                    "47e712d326fb0458ee8218ab73a2cfc269dcdfab, "
+                    "license CDLA-Sharing-1.0}}"
+                ),
+                "citation": [
+                    "Ferreira, M. E. (2023). uRaman-Dataset: Raman "
+                    "spectroscopy spectra of Metal Organic Framework "
+                    "(MOF) compounds (commit 47e712d3). GitHub "
+                    "(IBM). https://github.com/IBM/uRaman-Dataset",
+                ],
+                "description": (
+                    "Peak-normalized stitched Raman spectra of the "
+                    "five MOF-74 metal-series samples available in "
+                    "the deposit's 70-3,000 cm^-1 window (nominal; "
+                    "the native axis is 0-2,999.35 cm^-1, 5,266 "
+                    "points), measured with a WITec Alpha 300 RAS "
+                    "micro-Raman system (532 nm at 1 mW, 1800 "
+                    "g/mm grating, 100 accumulations x 0.5 s; the "
+                    "samples were provided by Prof. Carlos Basilio "
+                    "Pinheiro's group, per the deposit's About.md). "
+                    "Au@Mg-MOF74 has no stitched spectrum - the "
+                    "deposit's About.md states 'No spectral "
+                    "stitching is available for Au@Mg-MOF74 due to "
+                    "a high luminescence background'. The native "
+                    "grids are resampled with linear interpolation "
+                    "onto the common 0-2,999 cm^-1 @1 cm^-1 grid "
+                    "(3,000 points). All five spectra are "
+                    "peak-normalized (max = 1.0) as deposited, with "
+                    "no negative points in this window. One "
+                    "spectrum per class (5 classes): a reference "
+                    "set, not CV-learnable. is_grouped=False. "
+                    "Served from the same commit-pinned codeload "
+                    "archive as uraman_mofs (commit "
+                    "47e712d326fb0458ee8218ab73a2cfc269dcdfab, "
+                    "819,336 bytes, size + sha256 pinned)."
+                ),
+            },
+            # Checked: one stitched spectrum per sample; no
+            # replicate structure exists in the deposit.
+            is_grouped=False,
+            # Checked: all five CSVs in the pinned archive parse to
+            # finite, strictly increasing two-column spectra; no
+            # missing values.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "Peak normalization to max = 1.0 as deposited; no "
+                "further preprocessing is applied here. The native "
+                "5,266-point 0-2,999.35 cm^-1 grids are linearly "
+                "interpolated onto the common 0-2,999 cm^-1 @1 "
+                "cm^-1 grid (3,000 points)."
+            ),
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -1360,4 +1617,232 @@ class GitHubLoader(BaseLoader):
             targets,
             list(GitHubLoader._SFP2_TARGETS),
             group_ids,
+        )
+
+    # ------------------------------------------------------------------
+    # uraman_mofs / uraman_mof74_1000_2000 / uraman_mof74_70_3000
+    # (IBM uRaman-Dataset, github.com/IBM/uRaman-Dataset)
+    # ------------------------------------------------------------------
+    # Standalone IBM GitHub deposit (maintainer: Matheus Esteves
+    # Ferreira; CDLA-Sharing-1.0; commit 47e712d3..., 2023-06-19).
+    # No indexed parent paper exists - the repository is the
+    # citation.
+    #
+    # The 14 spectra split into three measurement campaigns:
+    #   1. top level (2023-02..04): HKUST-1, Mg-MOF74, ZIF-8 - one
+    #      stitched spectrum each, ~0-4,000 cm^-1, WITec UHTS300S
+    #      (531.970 nm x2 / 632.810 nm x1, 1-2 mW);
+    #   2. MeMOF-74/1000-2000 cm-1 (nominal window): six MOF-74
+    #      metal-series samples (Mg, Zn, Zn75Mg25, Au@ variants),
+    #      WITec Alpha 300 RAS, 532 nm @1 mW, 1800 g/mm;
+    #   3. MeMOF-74/70-3000 cm-1 (stitched): the same series minus
+    #      Au@Mg-MOF74 (no stitching: high luminescence background,
+    #      per the deposit's About.md).
+    # One key per campaign, each spectrum resampled onto the
+    # campaign's common @1 cm^-1 grid. All 14 spectra are
+    # peak-normalized (max = 1.0) as deposited; one spectrum per
+    # class, so these are reference sets, not CV-learnable
+    # classification data (documented in the entries).
+    #
+    # Each CSV: header 'Rel. Cm-1,Intensity (A.U.)', wavenumbers in
+    # scientific notation. codeload zips of a pinned commit are
+    # byte-reproducible (verified by double download).
+    _URAMAN_COMMIT = "47e712d326fb0458ee8218ab73a2cfc269dcdfab"
+    _URAMAN_ZIP_URL = (
+        f"https://codeload.github.com/IBM/uRaman-Dataset/zip/"
+        f"{_URAMAN_COMMIT}"
+    )
+    _URAMAN_ZIP = "uRaman-Dataset.zip"
+    _URAMAN_ZIP_SIZE = 819336
+    _URAMAN_ZIP_SHA256 = (
+        "bc772edb201e4a6f0de74b1814df92080601e577ac13b67a83def1e1b520b1fd"
+    )
+    _URAMAN_ROOT = f"uRaman-Dataset-{_URAMAN_COMMIT}"
+
+    @staticmethod
+    def _fetch_uraman_root(cache_path: str) -> str:
+        """
+        Download (if needed) the commit-pinned codeload archive of
+        the IBM uRaman-Dataset repository and return the path of
+        the extracted repository root.
+        """
+        os.makedirs(cache_path, exist_ok=True)
+        zip_file = os.path.join(cache_path, GitHubLoader._URAMAN_ZIP)
+        if (
+            os.path.exists(zip_file)
+            and os.path.getsize(zip_file) != GitHubLoader._URAMAN_ZIP_SIZE
+        ):
+            os.remove(zip_file)
+        result = LoaderTools.download(
+            url=GitHubLoader._URAMAN_ZIP_URL,
+            out_dir_path=cache_path,
+            out_file_name=GitHubLoader._URAMAN_ZIP,
+            hash_target=GitHubLoader._URAMAN_ZIP_SHA256,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                "[!] uraman: codeload archive download failed "
+                "(network error or checksum mismatch). See logs."
+            )
+        repo_root = os.path.join(cache_path, GitHubLoader._URAMAN_ROOT)
+        if not os.path.isdir(os.path.join(repo_root, "Dataset")):
+            LoaderTools.extract_zip_file_content(zip_file)
+            if not os.path.isdir(os.path.join(repo_root, "Dataset")):
+                raise RuntimeError(
+                    "[!] uraman: the pinned archive layout changed "
+                    "(Dataset/ missing after extraction)."
+                )
+        return repo_root
+
+    @staticmethod
+    def _load_uraman_campaign(
+        cache_path: str, files: dict, grid: np.ndarray
+    ):
+        """
+        Shared reader for the three uRaman measurement campaigns:
+        parses each campaign CSV (two-column
+        'Rel. Cm-1,Intensity (A.U.)' WITec export, wavenumbers in
+        scientific notation), verifies that the native axis covers
+        the campaign's common grid, and linearly interpolates onto
+        it.
+
+        files maps class label -> repo-relative CSV path; the row
+        order of the returned spectra follows that mapping.
+
+        Returns spectra, raman_shifts, targets, class_names.
+        """
+        root = GitHubLoader._fetch_uraman_root(cache_path)
+        spectra_list = []
+        for label, rel in files.items():
+            path = os.path.join(root, rel)
+            if not os.path.isfile(path):
+                raise RuntimeError(
+                    f"[!] uraman: {rel} is missing from the pinned "
+                    "archive (layout changed?)."
+                )
+            arr = np.genfromtxt(path, delimiter=",", skip_header=1)
+            if arr.ndim != 2 or arr.shape[1] != 2:
+                raise RuntimeError(
+                    f"[!] uraman: {rel} is not a two-column "
+                    "'Rel. Cm-1,Intensity (A.U.)' CSV."
+                )
+            x, y = arr[:, 0], arr[:, 1]
+            if not np.isfinite(x).all() or not np.isfinite(y).all():
+                raise RuntimeError(
+                    f"[!] uraman: {rel} contains non-finite values."
+                )
+            if not np.all(np.diff(x) > 0):
+                raise RuntimeError(
+                    f"[!] uraman: {rel}: wavenumber axis is not "
+                    "strictly increasing."
+                )
+            if x[0] > grid[0] or x[-1] < grid[-1]:
+                raise RuntimeError(
+                    f"[!] uraman: {rel} does not cover the common "
+                    f"grid (native {x[0]:.3f}..{x[-1]:.3f} cm^-1 "
+                    f"vs {grid[0]:.0f}..{grid[-1]:.0f} expected)."
+                )
+            spectra_list.append(np.interp(grid, x, y))
+        spectra = np.asarray(spectra_list, dtype=float)
+        encoded_targets, class_names = encode_labels(
+            pd.Series(list(files.keys()))
+        )
+        GitHubLoader.logger.debug(
+            f"Loaded uraman campaign: {spectra.shape[0]} spectra x "
+            f"{spectra.shape[1]} points, {len(set(class_names))} "
+            "classes"
+        )
+        return (
+            spectra,
+            grid,
+            encoded_targets,
+            list(class_names),
+        )
+
+    @staticmethod
+    def _load_uraman_mofs(cache_path: str):
+        """
+        Load the three top-level reference spectra of the IBM
+        uRaman-Dataset (HKUST-1, Mg-MOF74, ZIF-8), resampled onto
+        the common 0-3,997 cm^-1 @1 cm^-1 grid (3,998 points).
+
+        Returns spectra, raman_shifts, targets, class_names.
+        """
+        return GitHubLoader._load_uraman_campaign(
+            cache_path,
+            {
+                "HKUST-1": "Dataset/HKUST-1/HKUST-1.csv",
+                "ZIF-8": "Dataset/ZIF 8/ZIF-8.csv",
+                "Mg-MOF74": "Dataset/Mg-MOF74/Mg-MOF74.csv",
+            },
+            np.arange(0.0, 3998.0),
+        )
+
+    @staticmethod
+    def _load_uraman_mof74_1000_2000(cache_path: str):
+        """
+        Load the six MOF-74 metal-series spectra of the deposit's
+        nominal 1,000-2,000 cm^-1 window, resampled onto the common
+        970-1,887 cm^-1 @1 cm^-1 grid (918 points; the intersection
+        of the six native axes, limited by Au@Mg-MOF74's shifted
+        860.797-1,887.76 cm^-1 axis).
+
+        The 1,000-2,000 cm^-1 file of Au@Zn75Mg25-MOF74 is spelled
+        with a double dash in the deposit; the label is normalized
+        to a single dash.
+
+        Returns spectra, raman_shifts, targets, class_names.
+        """
+        return GitHubLoader._load_uraman_campaign(
+            cache_path,
+            {
+                "Mg-MOF74": "Dataset/MeMOF-74/1000-2000 cm-1/Mg-MOF74.csv",
+                "Zn-MOF74": "Dataset/MeMOF-74/1000-2000 cm-1/Zn-MOF74.csv",
+                "Zn75Mg25-MOF74": (
+                    "Dataset/MeMOF-74/1000-2000 cm-1/Zn75Mg25-MOF74.csv"
+                ),
+                "Au@Mg-MOF74": (
+                    "Dataset/MeMOF-74/1000-2000 cm-1/Au@Mg-MOF74.csv"
+                ),
+                "Au@Zn-MOF74": (
+                    "Dataset/MeMOF-74/1000-2000 cm-1/Au@Zn-MOF74.csv"
+                ),
+                "Au@Zn75Mg25-MOF74": (
+                    "Dataset/MeMOF-74/1000-2000 cm-1/"
+                    "Au@Zn75Mg25--MOF74.csv"
+                ),
+            },
+            np.arange(970.0, 1888.0),
+        )
+
+    @staticmethod
+    def _load_uraman_mof74_70_3000(cache_path: str):
+        """
+        Load the five MOF-74 metal-series spectra of the deposit's
+        nominal 70-3,000 cm^-1 stitched window (native axis
+        0-2,999.35 cm^-1), resampled onto the common 0-2,999 cm^-1
+        @1 cm^-1 grid (3,000 points). Au@Mg-MOF74 has no stitched
+        spectrum (high luminescence background, per the deposit's
+        About.md).
+
+        Returns spectra, raman_shifts, targets, class_names.
+        """
+        return GitHubLoader._load_uraman_campaign(
+            cache_path,
+            {
+                "Mg-MOF74": "Dataset/MeMOF-74/70-3000 cm-1/Mg-MOF74.csv",
+                "Zn-MOF74": "Dataset/MeMOF-74/70-3000 cm-1/Zn-MOF74.csv",
+                "Zn75Mg25-MOF74": (
+                    "Dataset/MeMOF-74/70-3000 cm-1/Zn75Mg25-MOF74.csv"
+                ),
+                "Au@Zn-MOF74": (
+                    "Dataset/MeMOF-74/70-3000 cm-1/Au@Zn-MOF74.csv"
+                ),
+                "Au@Zn75Mg25-MOF74": (
+                    "Dataset/MeMOF-74/70-3000 cm-1/"
+                    "Au@Zn75Mg25-MOF74.csv"
+                ),
+            },
+            np.arange(0.0, 3000.0),
         )

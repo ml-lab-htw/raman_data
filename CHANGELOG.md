@@ -11,6 +11,20 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `uraman_mofs` + `uraman_mof74_1000_2000` + `uraman_mof74_70_3000`:
+  14 peak-normalized reference spectra of MOF compounds from IBM's
+  uRaman-Dataset (Ferreira 2023, standalone GitHub deposit,
+  CDLA-Sharing-1.0; no indexed parent paper - the repository is the
+  citation), one key per measurement campaign: the three README
+  compounds (HKUST-1, ZIF-8, Mg-MOF74; WITec UHTS300S, 532/633 nm,
+  1-2 mW, resampled to the common 0-3,997 cm^-1 @1 grid), the six
+  MOF-74 metal-series samples of the nominal 1,000-2,000 cm^-1
+  window (WITec Alpha 300 RAS, 532 nm @1 mW; common window
+  970-1,887 cm^-1 limited by Au@Mg-MOF74's shifted axis), and the
+  five stitched 70-3,000 cm^-1 spectra (no Au@Mg-MOF74: high
+  luminescence background). Reference sets: one spectrum per class,
+  so not CV-learnable. Served as a commit-pinned codeload archive
+  (size + sha256 pinned).
 - `infra_art_raman`: material-class classification on 186 Raman
   reference spectra of art-related materials from the INFRA-ART
   Spectral Library (Cortea, ChiroscA, Anghelu\u0219t\u0103 & Seri\u0219an

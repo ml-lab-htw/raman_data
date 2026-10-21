@@ -4599,6 +4599,132 @@ tg_ecoli_fermentation_supernatant:
   rai:personalSensitiveInformation: No personal or sensitive information is included.
     All spectra originate from chemical, biological, or material samples without individual
     human identifiers.
+uraman_mof74_1000_2000:
+  prov:wasDerivedFrom: https://github.com/IBM/uRaman-Dataset
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of six MOF-74 metal-series samples (Mg-MOF74, Zn-MOF74,
+    Zn75Mg25-MOF74 and the gold-coated Au@Mg-MOF74, Au@Zn-MOF74, Au@Zn75Mg25-MOF74) measured in the nominal
+    1,000-2,000 cm^-1 window with a WITec Alpha 300 RAS micro-Raman system (532 nm excitation, 1 mW, 1800
+    g/mm grating, 200-400 accumulations x 0.5 s); the samples were provided by Prof. Carlos Basilio Pinheiro''s
+    group (per the deposit''s About.md). Part of IBM''s uRaman-Dataset (commit 47e712d326fb0458ee8218ab73a2cfc269dcdfab,
+    2023-06-19, CDLA-Sharing-1.0, maintainer Matheus Esteves Ferreira); no indexed parent paper exists,
+    so the repository is the citation. All spectra are peak-normalized (max = 1.0) as deposited. This raman_data
+    key resamples the six native 1,600-point grids onto the common 970-1,887 cm^-1 @1 cm^-1 grid (918 points;
+    the intersection of the six native axes: five files span 969.006-1,980.60 cm^-1, Au@Mg-MOF74 spans 860.797-1,887.76
+    cm^-1, off the nominal window).'
+  rai:dataAnnotationProtocol: 'Sample identities are given by the deposit''s file and folder names (MOF-74
+    metal-series composition: Me = Mg, Zn, Zn75Mg25; Au@ = gold-coated variant); the labels are derived
+    from the deposit''s filenames, not re-curated for this benchmark. Note: the 1,000-2,000 cm^-1 file of
+    Au@Zn75Mg25-MOF74 is spelled with a double dash in the deposit (''Au@Zn75Mg25--MOF74.csv''); the label
+    is normalized to a single dash (matching the 70-3,000 cm^-1 file).'
+  rai:dataBiases: 'Single facility (IBM) and single instrument (WITec Alpha 300 RAS, 532 nm, 1 mW). One
+    stitched spectrum per sample, so there is no replicate structure and no within-class variance. The common
+    window (970-1,887 cm^-1) is narrower than the nominal 1,000-2,000 cm^-1 acquisition window: every spectrum
+    is truncated outside the common window (the five nominal-window files lose 1,888-1,980.60 cm^-1, Au@Mg-MOF74
+    loses 860.797-969 cm^-1), and the spectra are not directly comparable to the same materials measured
+    in the other windows or at other excitation wavelengths (see the uraman_mofs and uraman_mof74_70_3000
+    keys).'
+  rai:dataCollection: Raman measurements of six MOF-74 metal-series samples in the nominal 1,000-2,000 cm^-1
+    window; WITec Alpha 300 RAS, 532 nm at 1 mW, 1800 g/mm grating, 200-400 accumulations x 0.5 s; samples
+    provided by Prof. Carlos Basilio Pinheiro's group.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: One stitched spectrum per sample (6 samples) - a reference set, not a CV-learnable
+    classification; single instrument/facility; every spectrum is truncated outside the common 970-1,887
+    cm^-1 window; peak normalization to 1.0 removes absolute intensity information; the excitation/power
+    differs from the deposit's top-level set (532 nm at 1 mW here vs 532/633 nm at 1-2 mW there); the CDLA-Sharing-1.0
+    license is share-alike (commercial use allowed, derivative works must carry the same license).
+  rai:dataPreprocessingProtocol: Peak normalization to max = 1.0 as deposited; the WITec exports of this
+    window carry no background subtraction (all intensities >= 0). The loader linearly interpolates the
+    native 1,600-point grids onto the common 970-1,887 cm^-1 @1 cm^-1 grid (918 points); no baseline correction,
+    smoothing or other preprocessing is applied.
+  rai:dataSocialImpact: Materials-science reference data for the MOF-74 metal series (candidate gas-sensing
+    and CO2-capture materials); no human or medical use.
+  rai:dataUseCases: Reference spectra for spectral matching and few-shot / augmentation use; metal-series
+    comparison (Mg vs Zn vs Zn75Mg25, gold-coated vs uncoated) on a common 1,000-2,000 cm^-1-style window;
+    not suitable for CV-based classification (one spectrum per class).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are inorganic
+    MOF-74 metal-series materials.
+uraman_mof74_70_3000:
+  prov:wasDerivedFrom: https://github.com/IBM/uRaman-Dataset
+  prov:wasGeneratedBy: 'Data collection: stitched Raman spectra of five MOF-74 metal-series samples (Mg-MOF74,
+    Zn-MOF74, Zn75Mg25-MOF74, Au@Zn-MOF74, Au@Zn75Mg25-MOF74) measured in the nominal 70-3,000 cm^-1 window
+    (native axis 0-2,999.35 cm^-1, 5,266 points) with a WITec Alpha 300 RAS micro-Raman system (532 nm excitation,
+    1 mW, 1800 g/mm grating, 100 accumulations x 0.5 s); the samples were provided by Prof. Carlos Basilio
+    Pinheiro''s group (per the deposit''s About.md). Au@Mg-MOF74 has no stitched spectrum (''No spectral
+    stitching is available for Au@Mg-MOF74 due to a high luminescence background'', per the deposit). Part
+    of IBM''s uRaman-Dataset (commit 47e712d326fb0458ee8218ab73a2cfc269dcdfab, 2023-06-19, CDLA-Sharing-1.0,
+    maintainer Matheus Esteves Ferreira); no indexed parent paper exists, so the repository is the citation.
+    All spectra are peak-normalized (max = 1.0) as deposited. This raman_data key resamples the native grids
+    onto the common 0-2,999 cm^-1 @1 cm^-1 grid (3,000 points).'
+  rai:dataAnnotationProtocol: 'Sample identities are given by the deposit''s file and folder names (MOF-74
+    metal-series composition: Me = Mg, Zn, Zn75Mg25; Au@ = gold-coated variant); the labels are derived
+    from the deposit''s filenames, not re-curated for this benchmark. Au@Mg-MOF74 is absent from this window
+    because no stitched spectrum was recorded for it.'
+  rai:dataBiases: Single facility (IBM) and single instrument (WITec Alpha 300 RAS, 532 nm, 1 mW). One stitched
+    spectrum per sample, so there is no replicate structure and no within-class variance. The sample set
+    differs from the 1,000-2,000 cm^-1 window (no Au@Mg-MOF74), so the two keys cannot be joined into a
+    single per-material comparison; spectra are not comparable to the top-level compounds measured at 532/633
+    nm (see uraman_mofs).
+  rai:dataCollection: Stitched Raman measurements of five MOF-74 metal-series samples in the nominal 70-3,000
+    cm^-1 window; WITec Alpha 300 RAS, 532 nm at 1 mW, 1800 g/mm grating, 100 accumulations x 0.5 s; samples
+    provided by Prof. Carlos Basilio Pinheiro's group.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: One stitched spectrum per sample (5 samples) - a reference set, not a CV-learnable
+    classification; single instrument/facility; Au@Mg-MOF74 is missing (high luminescence background prevented
+    stitching); peak normalization to 1.0 removes absolute intensity information; the CDLA-Sharing-1.0 license
+    is share-alike (commercial use allowed, derivative works must carry the same license).
+  rai:dataPreprocessingProtocol: Peak normalization to max = 1.0 as deposited; the WITec exports of this
+    window carry no background subtraction (all intensities >= 0). The loader linearly interpolates the
+    native 5,266-point 0-2,999.35 cm^-1 grids onto the common 0-2,999 cm^-1 @1 cm^-1 grid (3,000 points);
+    no baseline correction, smoothing or other preprocessing is applied.
+  rai:dataSocialImpact: Materials-science reference data for the MOF-74 metal series (candidate gas-sensing
+    and CO2-capture materials); no human or medical use.
+  rai:dataUseCases: Reference spectra for spectral matching and few-shot / augmentation use; full-window
+    (0-3,000 cm^-1) metal-series comparison for the five available samples; not suitable for CV-based classification
+    (one spectrum per class).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are inorganic
+    MOF-74 metal-series materials.
+uraman_mofs:
+  prov:wasDerivedFrom: https://github.com/IBM/uRaman-Dataset
+  prov:wasGeneratedBy: 'Data collection: stitched Raman reference spectra of the three MOF compounds listed
+    in the deposit''s README (HKUST-1 = Basolite C300, Sigma-Aldrich; Mg-MOF74; ZIF-8 = Basolite Z1200,
+    Sigma-Aldrich), measured with a WITec UHTS300S Raman system (DU970_BVF detector, 63x objective, 100
+    accumulations x 0.5 s). Acquisition conditions differ per compound (recorded in each folder''s Experiment_Information.txt):
+    HKUST-1 531.970 nm at 1 mW (2023-02-14), Mg-MOF74 632.810 nm at 1 mW (2023-03-01), ZIF-8 531.970 nm
+    at 2 mW (2023-04-27); the Mg-MOF74 export is labelled ''(Sub BG) (Norm)'' (background-subtracted) and
+    carries 989 negative points. Part of IBM''s uRaman-Dataset (commit 47e712d326fb0458ee8218ab73a2cfc269dcdfab,
+    2023-06-19, CDLA-Sharing-1.0, maintainer Matheus Esteves Ferreira); no indexed parent paper exists,
+    so the repository is the citation. All spectra are peak-normalized (max = 1.0) as deposited. This raman_data
+    key resamples the two native grids (1,806 points for HKUST-1/ZIF-8, 2,768 for Mg-MOF74) onto the common
+    0-3,997 cm^-1 @1 cm^-1 grid (3,998 points).'
+  rai:dataAnnotationProtocol: The sample identity of each spectrum is the MOF compound itself (HKUST-1,
+    Mg-MOF74, ZIF-8), as named in the deposit's folders and README; the labels are derived from the deposit,
+    not re-curated for this benchmark.
+  rai:dataBiases: Single facility (IBM), but the three compounds were measured under different conditions
+    (532 nm at 1 mW for HKUST-1, 633 nm at 1 mW for Mg-MOF74, 532 nm at 2 mW for ZIF-8) - Raman intensities
+    depend on excitation wavelength and power, and the Mg-MOF74 export is background-subtracted (989 negative
+    points) while the other two are not, so cross-compound intensity comparisons are confounded. One stitched
+    spectrum per compound, so there is no replicate structure and no within-class variance.
+  rai:dataCollection: Stitched Raman measurements of three MOF compounds (HKUST-1, Mg-MOF74, ZIF-8); WITec
+    UHTS300S, 531.970/632.810 nm excitation, 1-2 mW, 100 accumulations x 0.5 s, 63x objective, measured
+    2023-02-14 to 2023-04-27.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: One stitched spectrum per compound (3 samples) - a reference set, not a CV-learnable
+    classification; mixed excitation wavelengths (532/633 nm) and powers (1-2 mW); inconsistent per-file
+    background subtraction; peak normalization to 1.0 removes absolute intensity information; the CDLA-Sharing-1.0
+    license is share-alike (commercial use allowed, derivative works must carry the same license).
+  rai:dataPreprocessingProtocol: Peak normalization to max = 1.0 as deposited; the Mg-MOF74 export is additionally
+    background-subtracted (labelled '(Sub BG) (Norm)', 989 negative points). The loader linearly interpolates
+    the two native grids (1,806- and 2,768-point) onto the common 0-3,997 cm^-1 @1 cm^-1 grid (3,998 points);
+    no baseline correction, smoothing or other preprocessing is applied.
+  rai:dataSocialImpact: Materials-science reference data for MOF compounds (HKUST-1, Mg-MOF-74, ZIF-8 -
+    candidate gas-sensing and CO2-capture materials); no human or medical use.
+  rai:dataUseCases: Reference spectra for spectral matching and few-shot / augmentation use; single-compound
+    characterization; not suitable for CV-based classification (one spectrum per class).
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are inorganic
+    MOF compounds.
 water_quality_ions:
   prov:wasDerivedFrom: https://data.mendeley.com/datasets/cxf3zxsc3k/3
   prov:wasGeneratedBy: 'Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures,
