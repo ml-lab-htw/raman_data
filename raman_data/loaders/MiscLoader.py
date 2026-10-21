@@ -824,6 +824,121 @@ class MiscLoader(BaseLoader):
                 "here."
             ),
         ),
+        "infra_art_raman": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="infra-art",
+            name="INFRA-ART Heritage Spectral Library, Raman (Cortea 2023)",
+            short_name="INFRA-ART Raman",
+            license="CC BY-NC 4.0",
+            loader=lambda cache_path: MiscLoader._load_infra_art_raman(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "INFRA-ART Spectral Library: Raman reference spectra "
+                    "of art-related materials (Cortea et al. 2023, "
+                    "INOE 2000; frozen 2026-10-21 snapshot)"
+                ),
+                "source": "https://infra-art.eu",
+                "paper": "https://doi.org/10.1145/3593427",
+                "bibtex": (
+                    "@article{cortea2023infraart, title={INFRA-ART: An "
+                    "Open Access Spectral Library of Art-related "
+                    "Materials as a Digital Support Tool for Cultural "
+                    "Heritage Science}, author={Cortea, Ioana Maria "
+                    "and Chiro\\u0219c{\\u0103}, Alecsandru Vladimir "
+                    "and Anghelu\\u0219t{\\u0103}, Lauren\\u021b "
+                    "Marian and Seri\\u0219an, George Calin}, "
+                    "journal={Journal on Computing and Cultural "
+                    "Heritage}, volume={16}, number={2}, year={2023}, "
+                    "pages={1--11}, doi={10.1145/3593427}}"
+                ),
+                "citation": [
+                    "Cortea, I. M., ChiroscA, A. V., Anghelu\u0219t\u0103, "
+                    "L. M., and Seri\u0219an, G. C. (2023). INFRA-ART: "
+                    "An Open Access Spectral Library of Art-related "
+                    "Materials as a Digital Support Tool for Cultural "
+                    "Heritage Science. Journal on Computing and "
+                    "Cultural Heritage, 16(2), 1-11. "
+                    "https://doi.org/10.1145/3593427",
+                ],
+                "description": (
+                    "Raman reference spectra of 186 art-related "
+                    "materials from the INFRA-ART Spectral Library "
+                    "(Cortea et al. 2023, doi:10.1145/3593427; "
+                    "FAIRsharing doi:10.25504/FAIRsharing.091c24), "
+                    "operated by the National Institute for Research "
+                    "and Development in Optoelectronics (INOE 2000, "
+                    "Bucharest, Romania). Frozen 2026-10-21 snapshot: "
+                    "at capture time the library held 1,209 reference "
+                    "samples (3,161 spectra across FTIR, XRF, Raman "
+                    "and SWIR), of which 186 carry a Raman spectrum "
+                    "(one per sample). Each spectrum is the original "
+                    "Renishaw ENLIGHTEN CSV export as served by the "
+                    "site (WP 785 ER spectrometer, 785.078 nm "
+                    "excitation; per-measurement parameters - "
+                    "integration time 0.1-10 s, scan averaging, ROI - "
+                    "are recorded in the CSV metadata block), "
+                    "acquired 2022-03-30 to 2025-06-06. Task: "
+                    "material-class classification - labels are the "
+                    "library's 12 material classes (Special effect "
+                    "pigments 61, Earth pigments 43, Resins, balsams "
+                    "and wax 23, Glues, gums and binders 19, "
+                    "Inorganic pigments, synthetic 18, Organic dyes "
+                    "and pigments, synthetic 5, Mineral pigments 4, "
+                    "Carbon-based pigments 4, Mixed pigments 3, "
+                    "Unclassified materials 3, Natural organic dyes "
+                    "and pigments 2, Other mixtures 1); the "
+                    "per-sample material names, formulas and sources "
+                    "are in the snapshot manifest (5 names are shared "
+                    "by two different samples). Native 1666-point "
+                    "axis 160.07-3,215.39 cm^-1 (non-uniform "
+                    "spacing, identical in all files), used as is - "
+                    "no resampling. Intensities are the Processed "
+                    "(dark-subtracted) column in arbitrary units; "
+                    "the integration time varies per sample (0.1-10 "
+                    "s), so absolute intensity scales are not "
+                    "comparable across spectra and models should "
+                    "rely on relative peak structure (a few points "
+                    "go slightly negative, minimum -13). Two CSV "
+                    "header variants occur (7 columns including "
+                    "Raw/Dark/Reference, 122 files; 4 columns, 64 "
+                    "files); the loader parses header-driven. Served "
+                    "from a frozen zip snapshot (186 CSVs + "
+                    "manifest.json + README.txt, size + sha256 "
+                    "pinned) mirrored at HTW-KI-Werkstatt/RamanBench "
+                    "(infra_art/): the live endpoint "
+                    "(https://infra-art.eu/api/samples/spectra-"
+                    "file?sampleId=<id>&dataType=Raman%20Spectrum) "
+                    "requires full browser request headers (the site "
+                    "is behind Cloudflare) and the library is still "
+                    "growing, so the snapshot is the reproducible "
+                    "reference. is_grouped=False (one spectrum per "
+                    "physical sample, no replicate structure). "
+                    "License: CC BY-NC 4.0 (as stated on the site; "
+                    "non-commercial use only)."
+                ),
+            },
+            # Checked: one spectrum per physical sample; no replicate
+            # structure exists in the library, so there is nothing to
+            # keep together in a group-aware split.
+            is_grouped=False,
+            # Checked: all 186 samples carry a material class (the
+            # "Unclassified materials" class is an actual library
+            # class, not a missing label).
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "Dark subtraction is applied by the instrument "
+                "(Processed = Raw - Dark columns; the export's "
+                "'Raman Intensity Corrected' flag is FALSE and no "
+                "baseline correction is recorded). No baseline "
+                "correction, normalization or resampling is applied "
+                "here; note the per-sample integration time varies "
+                "from 0.1 to 10 s, so absolute intensity scales are "
+                "not comparable across spectra."
+            ),
+        ),
     }
     logger = logging.getLogger(__name__)
 
@@ -3056,3 +3171,187 @@ class MiscLoader(BaseLoader):
             f"{targets.min():g}..{targets.max():g}, {n_groups} blends"
         )
         return spectra, axis, targets, ["evoo_percent"], group_ids
+
+    # ------------------------------------------------------------------
+    # infra_art_raman (INFRA-ART Spectral Library, infra-art.eu)
+    # ------------------------------------------------------------------
+    # Cortea, ChiroscA, Angheluta, Seritan (2023), "INFRA-ART: An
+    # Open Access Spectral Library of Art-related Materials as a
+    # Digital Support Tool for Cultural Heritage Science", Journal
+    # on Computing and Cultural Heritage 16(2), 1-11,
+    # doi:10.1145/3593427 (FAIRsharing
+    # doi:10.25504/FAIRsharing.091c24). National Institute for
+    # Research and Development in Optoelectronics (INOE 2000),
+    # Bucharest; CC BY-NC 4.0.
+    #
+    # The library is a live Next.js/Strapi web app behind
+    # Cloudflare; the Raman spectra of its 186 reference samples
+    # (one per sample) are Renishaw ENLIGHTEN CSV exports served
+    # from
+    #   /api/samples/spectra-file?sampleId=<string id>&dataType=Raman%20Spectrum
+    # (requires a full browser request header set). The live
+    # endpoint is not reachable from CI and the library is still
+    # growing, so this key reads a frozen 2026-10-21 snapshot zip
+    # (186 CSVs + manifest.json + README.txt, size + sha256
+    # pinned) mirrored at HTW-KI-Werkstatt/RamanBench (infra_art/).
+    #
+    # Each CSV: a Key,Value metadata block, then a header row
+    # (Pixel,Wavelength,Wavenumber,Processed[,Raw,Dark,Reference]
+    # - both variants occur: 7 columns in 122 files, 4 columns in
+    # 64) and one row per detector pixel. Wavenumber column in
+    # cm^-1 (1666 points, 160.07-3215.39, common to all files,
+    # non-uniform spacing); Processed = dark-subtracted intensity
+    # in arbitrary units (slightly negative values possible).
+    _INFRA_ART_SNAPSHOT = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/infra_art/infra_art_raman_snapshot_2026-10-21.zip",
+        "infra_art_raman_snapshot_2026-10-21.zip",
+        4930163,
+        "506040528ef866bf2cb5ac543599ebabc3e56ea6c9c84d140dedba147d0b34bb",
+    )
+
+    @staticmethod
+    def _load_infra_art_raman(cache_path: str):
+        """
+        Download (if needed) and load the frozen INFRA-ART Raman
+        snapshot: 186 reference spectra of art-related materials
+        (one per sample) on the native 1666-point 160.07-3,215.39
+        cm^-1 axis, with the library's material class as the
+        classification label.
+
+        Returns spectra, raman_shifts, targets, class_names.
+        """
+        import hashlib
+        import json
+        import shutil
+        import zipfile
+
+        os.makedirs(cache_path, exist_ok=True)
+        url, fname, size, sha = MiscLoader._INFRA_ART_SNAPSHOT
+        zip_path = os.path.join(cache_path, fname)
+        if os.path.exists(zip_path) and os.path.getsize(zip_path) != size:
+            os.remove(zip_path)
+        result = LoaderTools.download(
+            url=url,
+            out_dir_path=cache_path,
+            out_file_name=fname,
+            hash_target=sha,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                "[!] infra_art_raman: snapshot zip download failed "
+                "(network error or checksum mismatch). See logs."
+            )
+
+        extract_dir = os.path.join(cache_path, "infra_art_raman_snapshot")
+        spectra_dir = os.path.join(extract_dir, "spectra")
+        if not (
+            os.path.isdir(spectra_dir)
+            and len(os.listdir(spectra_dir)) == 186
+            and os.path.isfile(os.path.join(extract_dir, "manifest.json"))
+        ):
+            if os.path.exists(extract_dir):
+                shutil.rmtree(extract_dir)
+            with zipfile.ZipFile(zip_path) as zf:
+                zf.extractall(extract_dir)
+
+        with open(
+            os.path.join(extract_dir, "manifest.json"), encoding="utf-8"
+        ) as fh:
+            manifest = json.load(fh)
+        records = manifest.get("samples", [])
+        if manifest.get("n_samples") != 186 or len(records) != 186:
+            raise RuntimeError(
+                f"[!] infra_art_raman: expected 186 samples in the "
+                f"snapshot manifest, found {len(records)} (snapshot "
+                "changed?)."
+            )
+
+        axis = None
+        spectra_list = []
+        labels = []
+        for rec in records:
+            fpath = os.path.join(extract_dir, "spectra", rec["csv"])
+            if not os.path.isfile(fpath):
+                raise RuntimeError(
+                    f"[!] infra_art_raman: {rec['csv']} is missing "
+                    "from the snapshot."
+                )
+            data = open(fpath, "rb").read()
+            if hashlib.sha256(data).hexdigest() != rec["csv_sha256"]:
+                raise RuntimeError(
+                    f"[!] infra_art_raman: checksum mismatch for "
+                    f"{rec['csv']} (snapshot corrupted or altered)."
+                )
+            lines = data.decode("utf-8", errors="replace").splitlines()
+            hi = None
+            for i, ln in enumerate(lines):
+                if ln.startswith("Pixel,"):
+                    hi = i
+                    break
+            if hi is None:
+                raise RuntimeError(
+                    f"[!] infra_art_raman: {rec['csv']} has no data "
+                    "header row."
+                )
+            header = [c.strip() for c in lines[hi].split(",")]
+            if not all(n in header for n in ("Wavenumber", "Processed")):
+                raise RuntimeError(
+                    f"[!] infra_art_raman: {rec['csv']} lacks the "
+                    "Wavenumber/Processed columns."
+                )
+            ix = header.index("Wavenumber")
+            ip = header.index("Processed")
+            rows = []
+            for ln in lines[hi + 1:]:
+                if not ln.strip():
+                    continue
+                p = ln.split(",")
+                if len(p) <= max(ix, ip):
+                    raise RuntimeError(
+                        f"[!] infra_art_raman: short row in "
+                        f"{rec['csv']}: {ln[:60]!r}."
+                    )
+                rows.append((float(p[ix]), float(p[ip])))
+            wn = np.array([r[0] for r in rows], dtype=float)
+            sp = np.array([r[1] for r in rows], dtype=float)
+            if (
+                wn.shape[0] != 1666
+                or not np.all(np.diff(wn) > 0)
+                or not (155.0 < wn[0] < 165.0)
+                or not (3200.0 < wn[-1] < 3220.0)
+            ):
+                raise RuntimeError(
+                    f"[!] infra_art_raman: {rec['csv']} has an "
+                    f"unexpected axis ({wn.shape[0]} points, "
+                    f"{wn[0]:.2f}..{wn[-1]:.2f} cm^-1)."
+                )
+            if np.isnan(sp).any():
+                raise RuntimeError(
+                    f"[!] infra_art_raman: {rec['csv']} has "
+                    "non-numeric intensity values."
+                )
+            if axis is None:
+                axis = wn
+            elif not np.array_equal(axis, wn):
+                raise RuntimeError(
+                    f"[!] infra_art_raman: {rec['csv']} deviates "
+                    "from the common 1666-point axis."
+                )
+            spectra_list.append(sp)
+            labels.append(rec["materialClassName"])
+
+        spectra = np.array(spectra_list, dtype=float)
+        encoded_targets, class_names = encode_labels(pd.Series(labels))
+        MiscLoader.logger.debug(
+            f"Loaded infra_art_raman: {spectra.shape[0]} spectra x "
+            f"{spectra.shape[1]} points, {len(set(class_names))} "
+            "material classes"
+        )
+        return (
+            spectra,
+            axis,
+            encoded_targets,
+            list(class_names),
+        )

@@ -11,6 +11,24 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `infra_art_raman`: material-class classification on 186 Raman
+  reference spectra of art-related materials from the INFRA-ART
+  Spectral Library (Cortea, ChiroscA, Anghelu\u0219t\u0103 & Seri\u0219an
+  2023, *Journal on Computing and Cultural Heritage* 16(2),
+  doi:10.1145/3593427; FAIRsharing doi:10.25504/FAIRsharing.091c24;
+  INOE 2000, CC BY-NC 4.0). Frozen 2026-10-21 snapshot: at capture
+  time the library held 1,209 samples, of which 186 carry a Raman
+  spectrum (one per sample) - labels are the library's 12 material
+  classes (61/43/23/19/18/5/4/4/3/3/2/1). Renishaw WP 785 ER,
+  785.078 nm; original ENLIGHTEN CSV exports (2 header variants,
+  parsed header-driven); per-sample integration time 0.1-10 s (raw
+  dark-subtracted counts, absolute scale not comparable; a few
+  points slightly negative). Native 1666-point 160.07-3,215.39
+  cm^-1 axis (identical in all files, non-uniform) used as is;
+  is_grouped=False. Served from a frozen zip (186 CSVs + manifest,
+  size + sha256 pinned) mirrored at HTW-KI-Werkstatt/RamanBench
+  (infra_art/) because the live endpoint (infra-art.eu, formerly
+  infraart.inoe.ro) sits behind Cloudflare.
 - `cwa_tep` + `cwa_dimp` + `cwa_dmmp`: concentration regression on
   raw 1064 nm FT-Raman spectra of three organophosphorus
   chemical-warfare-agent simulants - triethyl phosphate (TEP, 683

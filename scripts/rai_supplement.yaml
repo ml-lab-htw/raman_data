@@ -2304,6 +2304,60 @@ infant_formula_raman:
   rai:hasSyntheticData: false
   rai:personalSensitiveInformation: No personal or sensitive information is included. All spectra originate
     from commercial product samples without individual identifiers.
+infra_art_raman:
+  prov:wasDerivedFrom: https://doi.org/10.1145/3593427
+  prov:wasGeneratedBy: 'Data collection: Raman spectra of 186 art-related reference materials (pigments,
+    resins, gums and binders, glass flakes and glitter, dyes) acquired 2022-03-30 to 2025-06-06 with a Renishaw
+    WP 785 ER Raman spectrometer (785.078 nm excitation; per-measurement integration time 0.1-10 s, scan
+    averaging and ROI recorded in each file''s metadata block), at the National Institute for Research and
+    Development in Optoelectronics (INOE 2000), Bucharest, Romania. The spectra form part of the INFRA-ART
+    Spectral Library, a FAIR open-access resource for heritage science (Cortea et al. 2023, doi:10.1145/3593427;
+    FAIRsharing doi:10.25504/FAIRsharing.091c24; CC BY-NC 4.0). Native 1666-point axis 160.07-3,215.39 cm^-1
+    (common to all files); intensities are the dark-subtracted ''Processed'' column in arbitrary units.
+    This raman_data key reads a frozen 2026-10-21 snapshot (the 186 original ENLIGHTEN CSV exports + a per-file
+    manifest with sha256, size + sha256 pinned) mirrored at HTW-KI-Werkstatt/RamanBench (infra_art/), because
+    the live site endpoint (infra-art.eu, behind Cloudflare) requires full browser request headers and the
+    library is still growing.'
+  rai:dataAnnotationProtocol: 'Each sample is a reference material with a documented identity: name, alternative
+    names, chemical formula, source and material class (12 classes) are recorded in the library; the class
+    assignments were made by the library''s curators (INOE 2000) as part of building the library, not for
+    this benchmark. No human labelling of the spectra themselves was involved. Five material names are shared
+    by two different samples (different sources/lots); sample-level identifiers are preserved in the snapshot
+    manifest.'
+  rai:dataBiases: Single instrument (Renishaw WP 785 ER, 785 nm), single lab and one measurement-protocol
+    family, so results may not transfer to other instruments or excitation wavelengths. Class balance is
+    skewed (61-1 spectra per class; smallest class 'Other mixtures' has a single spectrum). Per-sample integration
+    time varies from 0.1 to 10 s, so absolute intensity scales are not comparable across spectra (the transferable
+    signal is relative peak structure). 'Mixed pigments' (3), 'Other mixtures' (1) and 'Unclassified materials'
+    (3) are coarse or undefined categories. The snapshot reflects the library as of 2026-10-21 (186 of 1,209
+    samples carried a Raman spectrum at that time).
+  rai:dataCollection: Raman measurements of 186 art-related reference materials (pigments, resins/balsams/wax,
+    glues/gums/binders, dyes and effect materials) acquired 2022-03-30 to 2025-06-06 at INOE 2000, Bucharest;
+    Renishaw WP 785 ER, 785.078 nm excitation, per-measurement parameters (integration time, scan averaging,
+    ROI) recorded in each file.
+  rai:dataCollectionType: Experiments
+  rai:dataLimitations: Single instrument/lab and protocol family; skewed class balance (61...1 spectra per
+    class); three coarse or undefined material classes (Mixed pigments 3, Unclassified materials 3, Other
+    mixtures 1); one spectrum per physical sample (no replicates, so no group-aware splitting); absolute
+    intensities not comparable across samples (integration time 0.1-10 s); non-uniform wavenumber axis (~2.2-2.6
+    cm^-1 steps); a few intensity points are slightly negative (dark subtraction); frozen 2026-10-21 snapshot
+    of a still-growing library; the CC BY-NC 4.0 license restricts commercial use.
+  rai:dataPreprocessingProtocol: 'Dark subtraction is applied by the instrument (Processed = Raw - Dark
+    columns); the export records ''Raman Intensity Corrected: FALSE'' and no baseline correction. The loader
+    applies no baseline correction, normalization or resampling; the native 1666-point axis is used as is.
+    Both ENLIGHTEN CSV header variants (7 columns including Raw/Dark/Reference in 122 files; 4 columns in
+    64) are parsed header-driven.'
+  rai:dataSocialImpact: 'Supports heritage science: identification of art-related materials (pigments, binders,
+    resins) for conservation, authentication and education; no human or medical use. Results are tied to
+    a single 785 nm instrument, and any identification of real heritage samples requires validation against
+    independent measurements.'
+  rai:dataUseCases: Material-class classification from a single Raman spectrum (12 classes); the library
+    also serves as a spectral matching reference for unknown heritage materials (per-sample names/formulas
+    in the manifest); note the single-spectrum-per-class tail (1-5 spectra) and the coarse classes when
+    evaluating models.
+  rai:hasSyntheticData: false
+  rai:personalSensitiveInformation: No personal or sensitive information is included. All samples are inorganic
+    and organic art materials (pigments, resins, glues, binders, dyes) without any human identifiers.
 illicit_adulterants_ft_raman:
   rai:dataAnnotationProtocol: Compound identity labels assigned from known analytical-grade
     reference standards (purchased from Biosynth International and Sigma-Aldrich).

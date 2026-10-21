@@ -1079,3 +1079,30 @@ def test_cwa_dmmp():
     assert int((dataset.spectra == 65535).any(axis=1).sum()) == 198
     assert not np.isnan(dataset.spectra).any()
 
+
+def test_infra_art_raman():
+    # Single ~4.9 MB frozen-snapshot zip from the HF mirror, small
+    # enough to run in CI.
+    dataset = MiscLoader.load_dataset("infra_art_raman")
+    # 186 reference spectra (one per library sample) on the native
+    # 1666-point 160.07-3,215.39 cm^-1 axis (non-uniform spacing,
+    # as is).
+    assert dataset.spectra.shape == (186, 1666)
+    assert dataset.raman_shifts[0] == pytest.approx(160.07)
+    assert dataset.raman_shifts[-1] == pytest.approx(3215.39)
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    # Classification on the library's 12 material classes; one
+    # spectrum per physical sample -> no group structure.
+    assert dataset.targets.shape == (186,)
+    assert dataset.group_ids is None
+    assert len(set(dataset.targets.tolist())) == 12
+    sizes = sorted(collections.Counter(dataset.targets.tolist()).values())
+    assert sizes == [1, 2, 3, 3, 4, 4, 5, 18, 19, 23, 43, 61]
+    assert len(set(dataset.target_names)) == 12
+    # Dark-subtracted counts in arbitrary units: a few points dip
+    # slightly below zero; per-sample integration times (0.1-10 s)
+    # keep the absolute scale non-comparable.
+    assert dataset.spectra.min() < 0
+    assert dataset.spectra.max() < 62000
+    assert not np.isnan(dataset.spectra).any()
+
