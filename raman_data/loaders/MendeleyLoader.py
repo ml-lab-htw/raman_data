@@ -984,6 +984,214 @@ class MendeleyLoader(BaseLoader):
                 "applied in analysis, not to the deposited data."
             ),
         ),
+        "niclosamide_polymorph_binary": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="niclosamide_polymorph_binary",
+            name=(
+                "Niclosamide Polymorph Quantification in Binary "
+                "Mixtures, Raman (Valmala 2019)"
+            ),
+            short_name="Niclosamide Polymorph Binary",
+            license="CC BY-NC 3.0",
+            loader=lambda cache_path: MendeleyLoader._load_niclosamide_polymorph_binary(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of binary mixtures of the "
+                    "anhydrous (NAn) and monohydrate-A (NHa) forms "
+                    "of niclosamide: NHa %w/w quantification "
+                    "(Valmala et al. 2019, Talanta 199, 679-688)"
+                ),
+                "source": "https://data.mendeley.com/datasets/mv686f9r66/1",
+                "paper": "https://doi.org/10.1016/j.talanta.2019.03.027",
+                "bibtex": (
+                    "@article{valmala2019niclosamide, "
+                    "title={Quantification of niclosamide "
+                    "polymorphic forms - a comparative study by "
+                    "Raman, NIR and MIR using chemometric "
+                    "techniques}, author={Bhavana, Valmala and "
+                    "Chavan, Rahul B. and Mannava, M.K. Chaitanya "
+                    "and Nangia, Ashwini and Shastri, Nalini R.}, "
+                    "journal={Talanta}, volume={199}, "
+                    "pages={679--688}, year={2019}, "
+                    "doi={10.1016/j.talanta.2019.03.027}}"
+                ),
+                "citation": [
+                    "Bhavana, V., Chavan, R. B., Mannava, M. K. C., "
+                    "Nangia, A., and Shastri, N. R. (2019). "
+                    "Quantification of niclosamide polymorphic "
+                    "forms - a comparative study by Raman, NIR and "
+                    "MIR using chemometric techniques. Talanta, "
+                    "199, 679-688. "
+                    "https://doi.org/10.1016/j.talanta.2019.03.027 "
+                    "(data: https://doi.org/10.17632/mv686f9r66.1)",
+                ],
+                "description": (
+                    "Raman spectra of 57 binary mixtures of the "
+                    "anhydrous (NAn) and metastable monohydrate-A "
+                    "(NHa) forms of the anthelmintic drug "
+                    "niclosamide, from the supplementary workbook "
+                    "of Valmala et al. 2019 (Talanta 199, 679-688, "
+                    "doi:10.1016/j.talanta.2019.03.027; Mendeley "
+                    "Data doi:10.17632/mv686f9r66.1, CC BY-NC 3.0; "
+                    "the workbook's other sheets cover NIR and MIR "
+                    "and are not loaded). Task: single-target "
+                    "regression - the Y variable is 'Concentration "
+                    "of NHa (%w/w)' (0-100). Levels: the "
+                    "calibration block has 6 spectra each at 0, "
+                    "10, 30, 50, 70, 90 and 100 %, plus the "
+                    "authors' validation block (20% x3 and 50% x3 "
+                    "'Accuracy', 80% x3 'Accuracy' + 80% x6 "
+                    "'Precision') - 9 distinct levels, 57 spectra "
+                    "total. The sheet's remaining blocks are not "
+                    "loaded: a ball-milling time course (Y = "
+                    "milling time 5/60/180 min, 9 spectra) and "
+                    "four spectra labelled by NHa:NHb ratio "
+                    "('NHa: NHb (9:1)' x2, '(1:9)' x2, non-numeric "
+                    "Y) - they quantify NHa under processing or in "
+                    "the presence of the NHb monohydrate, a "
+                    "different experimental design. Niclosamide "
+                    "crystallizes into three solvated forms: NAn "
+                    "(anhydrous) and two monohydrates (NHa, NHb); "
+                    "NAn converts to NHa during high-energy milling "
+                    "in the presence of water, which is why NHa "
+                    "quantification matters. Raman region: 195 "
+                    "points, 1,051.093-1,799.338 cm^-1 (~3.857 "
+                    "cm^-1 spacing; stored descending in the "
+                    "workbook, flipped to ascending by the "
+                    "loader). The six spectra per level are the "
+                    "study's replicates; their preparation "
+                    "protocol is not documented in the SI, so "
+                    "is_grouped=False. Served from a frozen copy "
+                    "of the SI workbook 'SI- spectal Raw data.xlsx' "
+                    "(10,569,495 B, sha256 9d81a8d9...14ec) "
+                    "mirrored at HTW-KI-Werkstatt/RamanBench "
+                    "(niclosamide/): Mendeley Data 403-blocks "
+                    "non-browser clients (including CI)."
+                ),
+            },
+            # Checked: the six spectra per level are the study's
+            # replicates, but the SI does not document whether they
+            # are independent preparations, so no group-aware
+            # splitting is applied.
+            is_grouped=False,
+            # Checked: all 57 concentration rows carry a numeric
+            # NHa %w/w label and a full 195-point spectrum.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "The loader only flips the workbook's descending "
+                "wavenumber axis (1,799.338-1,051.093 cm^-1) to "
+                "ascending. No baseline correction, normalization "
+                "or resampling is applied; intensities are as "
+                "deposited (arbitrary units, 0.0018-10.05 across "
+                "the 57 spectra). The authors' PLSR modeling was "
+                "done in the paper, not on the deposited data."
+            ),
+        ),
+        "niclosamide_polymorph_mcm": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="niclosamide_polymorph_mcm",
+            name=(
+                "Niclosamide Polymorph Quantification in "
+                "Multicomponent Mixtures, Raman (Valmala 2019)"
+            ),
+            short_name="Niclosamide Polymorph MCM",
+            license="CC BY-NC 3.0",
+            loader=lambda cache_path: MendeleyLoader._load_niclosamide_polymorph_mcm(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "Raman spectra of multicomponent mixtures of "
+                    "niclosamide forms: NHa %w/w quantification "
+                    "(Valmala et al. 2019, Talanta 199, 679-688)"
+                ),
+                "source": "https://data.mendeley.com/datasets/mv686f9r66/1",
+                "paper": "https://doi.org/10.1016/j.talanta.2019.03.027",
+                "bibtex": (
+                    "@article{valmala2019niclosamide, "
+                    "title={Quantification of niclosamide "
+                    "polymorphic forms - a comparative study by "
+                    "Raman, NIR and MIR using chemometric "
+                    "techniques}, author={Bhavana, Valmala and "
+                    "Chavan, Rahul B. and Mannava, M.K. Chaitanya "
+                    "and Nangia, Ashwini and Shastri, Nalini R.}, "
+                    "journal={Talanta}, volume={199}, "
+                    "pages={679--688}, year={2019}, "
+                    "doi={10.1016/j.talanta.2019.03.027}}"
+                ),
+                "citation": [
+                    "Bhavana, V., Chavan, R. B., Mannava, M. K. C., "
+                    "Nangia, A., and Shastri, N. R. (2019). "
+                    "Quantification of niclosamide polymorphic "
+                    "forms - a comparative study by Raman, NIR and "
+                    "MIR using chemometric techniques. Talanta, "
+                    "199, 679-688. "
+                    "https://doi.org/10.1016/j.talanta.2019.03.027 "
+                    "(data: https://doi.org/10.17632/mv686f9r66.1)",
+                ],
+                "description": (
+                    "Raman spectra of 57 multicomponent mixtures "
+                    "(MCM; sheet title 'Raman-multicomponent "
+                    "mixtures of niclosamide hydrates') from the "
+                    "supplementary workbook of Valmala et al. 2019 "
+                    "(Talanta 199, 679-688, "
+                    "doi:10.1016/j.talanta.2019.03.027; Mendeley "
+                    "Data doi:10.17632/mv686f9r66.1, CC BY-NC 3.0; "
+                    "the workbook's other sheets cover NIR and MIR "
+                    "and are not loaded). Task: single-target "
+                    "regression - the Y variable is 'Concentration "
+                    "of NHa (%w/w)', where NHa is the metastable "
+                    "monohydrate-A form of the anthelmintic drug "
+                    "niclosamide (the other forms: NAn anhydrous, "
+                    "NHb monohydrate B). Levels: the calibration "
+                    "block has 6 spectra each at 0, 6, 18, 30, 42, "
+                    "54 and 60 %, plus the authors' validation "
+                    "block (12% x3, 30% x3, 48% x3 'Accuracy', 48% "
+                    "x6 'Precision') - 9 distinct levels, 57 "
+                    "spectra total. The NHa level tops out at 60 "
+                    "%: the remaining mixture components (the "
+                    "multicomponent formulation studied for wet "
+                    "granulation) are not identified in the SI "
+                    "file. The sheet's remaining block is not "
+                    "loaded: a wet-granulation time course (Y = "
+                    "granulation time 0/15/60 min, 9 spectra). "
+                    "Raman region: 195 points, 1,051.093-1,799.338 "
+                    "cm^-1 (~3.857 cm^-1 spacing, identical to the "
+                    "binary sheet; stored descending in the "
+                    "workbook, flipped to ascending by the "
+                    "loader). The six spectra per level are the "
+                    "study's replicates; their preparation "
+                    "protocol is not documented in the SI, so "
+                    "is_grouped=False. Served from a frozen copy "
+                    "of the SI workbook 'SI- spectal Raw data.xlsx' "
+                    "(10,569,495 B, sha256 9d81a8d9...14ec) "
+                    "mirrored at HTW-KI-Werkstatt/RamanBench "
+                    "(niclosamide/): Mendeley Data 403-blocks "
+                    "non-browser clients (including CI)."
+                ),
+            },
+            # Checked: the six spectra per level are the study's
+            # replicates, but the SI does not document whether they
+            # are independent preparations, so no group-aware
+            # splitting is applied.
+            is_grouped=False,
+            # Checked: all 57 concentration rows carry a numeric
+            # NHa %w/w label and a full 195-point spectrum.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "The loader only flips the workbook's descending "
+                "wavenumber axis (1,799.338-1,051.093 cm^-1) to "
+                "ascending. No baseline correction, normalization "
+                "or resampling is applied; intensities are as "
+                "deposited (arbitrary units, 0.0023-5.71 across "
+                "the 57 spectra). The authors' PLSR modeling was "
+                "done in the paper, not on the deposited data."
+            ),
+        ),
     }
 
     logger = logging.getLogger(__name__)
@@ -2279,6 +2487,220 @@ class MendeleyLoader(BaseLoader):
             f"{conc.min():g}..{conc.max():g}"
         )
         return spectra, axis, conc, ["dmmp_concentration"]
+
+    # ------------------------------------------------------------------
+    # niclosamide_polymorph_binary / niclosamide_polymorph_mcm
+    # (Mendeley Data mv686f9r66, CC BY-NC 3.0)
+    # ------------------------------------------------------------------
+    # Bhavana Valmala, Rahul B. Chavan, M.K. Chaitanya Mannava,
+    # Ashwini Nangia & Nalini R. Shastri (2019), "Quantification of
+    # niclosamide polymorphic forms - a comparative study by Raman,
+    # NIR and MIR using chemometric techniques", Talanta 199,
+    # 679-688, doi:10.1016/j.talanta.2019.03.027. Data:
+    # https://doi.org/10.17632/mv686f9r66.1 (Nalini Shastri,
+    # 2019-03-09).
+    #
+    # Niclosamide crystallizes into three solvated forms: the
+    # anhydrous form (NAn) and two monohydrates (NHa, NHb). The SI
+    # workbook's 'Raman binary' sheet holds binary NAn+NHa
+    # mixtures (Y = NHa %w/w, levels 0..100) and 'Raman MCM'
+    # multicomponent mixtures (Y = NHa %w/w, levels 0..60).
+    # Sheet layout: row 1 title, row 2 'Calibration data', row 3
+    # 'Y variable' / 'X variable (Wavenumber cm-1)', row 4 =
+    # 'Concentration of NHa (%w/w)' + the 195-point wavenumber
+    # axis (1,799.338-1,051.093 cm^-1, stored DESCENDING, ~3.857
+    # cm^-1 spacing; flipped to ascending), rows 5+ = one spectrum
+    # per row (col A label + 195 intensities). After the
+    # calibration block each sheet carries the authors'
+    # 'Validation Data' block (Accuracy + Precision, still NHa
+    # %w/w) and then a block whose Y column means something else
+    # (ball-milling time in the binary sheet, wet-granulation time
+    # in MCM; plus ratio-labelled spectra in the binary sheet) -
+    # those rows are not loaded. The two sheets' axes are
+    # identical. Mendeley 403-blocks non-browser clients
+    # (including CI), so the loader reads a frozen copy of the
+    # xlsx mirrored on the HF mirror (original filename, typo
+    # included).
+    _NICLOSAMIDE_XLSX_URL = (
+        "https://huggingface.co/datasets/HTW-KI-Werkstatt/RamanBench/"
+        "resolve/main/niclosamide/SI-%20spectal%20Raw%20data.xlsx"
+    )
+    _NICLOSAMIDE_XLSX = "SI- spectal Raw data.xlsx"
+    _NICLOSAMIDE_XLSX_SIZE = 10569495
+    _NICLOSAMIDE_XLSX_SHA256 = (
+        "9d81a8d9d082deb8b98aadc3f6622b2dd4a7524086ff5b796226f27cad2314ec"
+    )
+    _NICLOSAMIDE_N_POINTS = 195
+
+    @staticmethod
+    def _download_niclosamide_xlsx(cache_path: str) -> str:
+        """
+        Download (if needed) the mirrored niclosamide SI workbook;
+        returns the local file path.
+        """
+        fpath = os.path.join(cache_path, MendeleyLoader._NICLOSAMIDE_XLSX)
+        if (
+            os.path.exists(fpath)
+            and os.path.getsize(fpath)
+            != MendeleyLoader._NICLOSAMIDE_XLSX_SIZE
+        ):
+            os.remove(fpath)
+        result = LoaderTools.download(
+            url=MendeleyLoader._NICLOSAMIDE_XLSX_URL,
+            out_dir_path=cache_path,
+            out_file_name=MendeleyLoader._NICLOSAMIDE_XLSX,
+            hash_target=MendeleyLoader._NICLOSAMIDE_XLSX_SHA256,
+            hash_type=HASH_TYPE.sha256,
+        )
+        if result is None:
+            raise RuntimeError(
+                "[!] niclosamide: download of the SI workbook "
+                "failed (network error or checksum mismatch). See "
+                "logs."
+            )
+        return fpath
+
+    @staticmethod
+    def _parse_niclosamide_raman_sheet(
+        fpath: str, sheet_name: str, key: str
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """
+        Parse one Raman sheet of the niclosamide SI workbook
+        ('Raman binary' / 'Raman MCM'). Returns the
+        concentration-regression rows (col A = NHa %w/w) as
+        spectra, raman_shifts (ascending), targets.
+
+        Row selection: after the header, a row is loaded iff its
+        col A label is numeric and no 'Ball milling' /
+        'Wet granulation' section marker has been seen yet (those
+        trailing blocks use Y = process time or ratio labels, not
+        NHa %w/w).
+        """
+        try:
+            import openpyxl
+        except ImportError as e:
+            raise RuntimeError(
+                "[!] The niclosamide loader needs 'openpyxl' "
+                "(pip install openpyxl) to be installed."
+            ) from e
+
+        wb = openpyxl.load_workbook(fpath, read_only=True, data_only=True)
+        try:
+            ws = wb[sheet_name]
+            rows = list(ws.iter_rows(values_only=True))
+        finally:
+            wb.close()
+
+        # Row 4 (index 3): 'Concentration of NHa (%w/w)' + axis.
+        axis_desc = [
+            float(v) for v in rows[3][1 : 1 + MendeleyLoader._NICLOSAMIDE_N_POINTS]
+            if v is not None
+        ]
+        if len(axis_desc) != MendeleyLoader._NICLOSAMIDE_N_POINTS:
+            raise RuntimeError(
+                f"[!] {key}: the workbook layout changed ({sheet_name}: "
+                f"{len(axis_desc)} wavenumber points instead of "
+                f"{MendeleyLoader._NICLOSAMIDE_N_POINTS})."
+            )
+        if not all(b < a for a, b in zip(axis_desc, axis_desc[1:])):
+            raise RuntimeError(
+                f"[!] {key}: the {sheet_name} wavenumber axis is no "
+                "longer strictly descending as expected."
+            )
+        axis = np.asarray(axis_desc[::-1], dtype=float)
+
+        spectra_list = []
+        targets_list = []
+        stop = False
+        for row in rows[4:]:
+            label = row[0]
+            if isinstance(label, str) and (
+                "Ball milling" in label or "Wet granulation" in label
+            ):
+                stop = True
+            if stop:
+                continue
+            if not isinstance(label, (int, float)):
+                continue
+            vals = [float(v) for v in row[1:] if v is not None]
+            if len(vals) != MendeleyLoader._NICLOSAMIDE_N_POINTS:
+                raise RuntimeError(
+                    f"[!] {key}: {sheet_name} row with label "
+                    f"{label!r} has {len(vals)} points (layout "
+                    "changed?)."
+                )
+            arr = np.asarray(vals, dtype=float)
+            if not np.isfinite(arr).all():
+                raise RuntimeError(
+                    f"[!] {key}: {sheet_name} row with label "
+                    f"{label!r} contains non-finite values."
+                )
+            spectra_list.append(arr)
+            targets_list.append(float(label))
+
+        spectra = np.asarray(spectra_list, dtype=float)
+        targets = np.asarray(targets_list, dtype=float)
+        return spectra, axis, targets
+
+    @staticmethod
+    def _load_niclosamide_polymorph_binary(cache_path: str):
+        """
+        Download (if needed) and load the 57 binary NAn+NHa
+        niclosamide mixture spectra (Y = NHa %w/w) on the native
+        195-point 1,051.093-1,799.338 cm^-1 axis (flipped to
+        ascending).
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        fpath = MendeleyLoader._download_niclosamide_xlsx(cache_path)
+        spectra, axis, conc = MendeleyLoader._parse_niclosamide_raman_sheet(
+            fpath, "Raman binary", "niclosamide_polymorph_binary"
+        )
+        levels = Counter(int(round(c)) for c in conc)
+        expected = {0: 6, 10: 6, 20: 3, 30: 6, 50: 9, 70: 6, 80: 9, 90: 6, 100: 6}
+        if levels != expected:
+            raise RuntimeError(
+                f"[!] niclosamide_polymorph_binary: unexpected NHa "
+                f"level census {dict(sorted(levels.items()))} "
+                f"(expected {expected}); the workbook layout "
+                "changed."
+            )
+        MendeleyLoader.logger.debug(
+            f"Loaded niclosamide_polymorph_binary: "
+            f"{spectra.shape[0]} spectra x {spectra.shape[1]} "
+            f"points, NHa %w/w {conc.min():g}..{conc.max():g}"
+        )
+        return spectra, axis, conc, ["nh_a_percent_w_w"]
+
+    @staticmethod
+    def _load_niclosamide_polymorph_mcm(cache_path: str):
+        """
+        Download (if needed) and load the 57 multicomponent
+        mixture niclosamide spectra (Y = NHa %w/w) on the native
+        195-point 1,051.093-1,799.338 cm^-1 axis (flipped to
+        ascending).
+
+        Returns spectra, raman_shifts, targets, target_names.
+        """
+        fpath = MendeleyLoader._download_niclosamide_xlsx(cache_path)
+        spectra, axis, conc = MendeleyLoader._parse_niclosamide_raman_sheet(
+            fpath, "Raman MCM", "niclosamide_polymorph_mcm"
+        )
+        levels = Counter(int(round(c)) for c in conc)
+        expected = {0: 6, 6: 6, 12: 3, 18: 6, 30: 9, 42: 6, 48: 9, 54: 6, 60: 6}
+        if levels != expected:
+            raise RuntimeError(
+                f"[!] niclosamide_polymorph_mcm: unexpected NHa "
+                f"level census {dict(sorted(levels.items()))} "
+                f"(expected {expected}); the workbook layout "
+                "changed."
+            )
+        MendeleyLoader.logger.debug(
+            f"Loaded niclosamide_polymorph_mcm: "
+            f"{spectra.shape[0]} spectra x {spectra.shape[1]} "
+            f"points, NHa %w/w {conc.min():g}..{conc.max():g}"
+        )
+        return spectra, axis, conc, ["nh_a_percent_w_w"]
     # ------------------------------------------------------------------
     # BaseLoader interface
     # ------------------------------------------------------------------

@@ -1162,3 +1162,49 @@ def test_uraman_mof74_70_3000():
     assert dataset.spectra.min() >= 0.0
     assert not np.isnan(dataset.spectra).any()
 
+
+def test_niclosamide_polymorph_binary():
+    dataset = MendeleyLoader.load_dataset("niclosamide_polymorph_binary")
+    # 57 binary NAn+NHa mixtures (42 calibration + 15 validation /
+    # precision rows) on the native 195-point 1,051.093-1,799.338
+    # cm^-1 axis (stored descending in the workbook, flipped to
+    # ascending by the loader).
+    assert dataset.spectra.shape == (57, 195)
+    assert dataset.raman_shifts[0] == pytest.approx(1051.093)
+    assert dataset.raman_shifts[-1] == pytest.approx(1799.338)
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    # Single-target regression: NHa %w/w, 9 distinct levels.
+    assert dataset.targets.shape == (57,)
+    assert dataset.group_ids is None
+    assert dataset.target_names == ["nh_a_percent_w_w"]
+    assert dataset.targets.min() == 0.0
+    assert dataset.targets.max() == 100.0
+    sizes = sorted(collections.Counter(dataset.targets.tolist()).values())
+    assert sizes == [3, 6, 6, 6, 6, 6, 6, 9, 9]
+    # Intensities as deposited (arbitrary units).
+    assert 0.0 < dataset.spectra.min()
+    assert dataset.spectra.max() < 10.1
+    assert not np.isnan(dataset.spectra).any()
+
+
+def test_niclosamide_polymorph_mcm():
+    dataset = MendeleyLoader.load_dataset("niclosamide_polymorph_mcm")
+    # 57 multicomponent mixtures (42 calibration + 15 validation /
+    # precision rows) on the same native 195-point axis; the NHa
+    # level tops out at 60 % (remaining components not identified
+    # in the SI).
+    assert dataset.spectra.shape == (57, 195)
+    assert dataset.raman_shifts[0] == pytest.approx(1051.093)
+    assert dataset.raman_shifts[-1] == pytest.approx(1799.338)
+    assert np.all(np.diff(dataset.raman_shifts) > 0)
+    assert dataset.targets.shape == (57,)
+    assert dataset.group_ids is None
+    assert dataset.target_names == ["nh_a_percent_w_w"]
+    assert dataset.targets.min() == 0.0
+    assert dataset.targets.max() == 60.0
+    sizes = sorted(collections.Counter(dataset.targets.tolist()).values())
+    assert sizes == [3, 6, 6, 6, 6, 6, 6, 9, 9]
+    assert 0.0 < dataset.spectra.min()
+    assert dataset.spectra.max() < 5.8
+    assert not np.isnan(dataset.spectra).any()
+

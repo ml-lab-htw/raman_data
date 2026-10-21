@@ -11,6 +11,20 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `niclosamide_polymorph_binary` + `niclosamide_polymorph_mcm`:
+  NHa (monohydrate-A) %w/w fraction regression on 57 + 57 Raman
+  spectra from the SI of Bhavana, Chavan, Mannava, Nangia &
+  Shastri 2019 (*Talanta* 199, 679-688,
+  doi:10.1016/j.talanta.2019.03.027; Mendeley Data
+  doi:10.17632/mv686f9r66.1, CC BY-NC 3.0, NC noted): binary
+  NAn+NHa mixtures (9 levels, 0-100 %) and multicomponent
+  mixtures (9 levels, 0-60 %), each 42 calibration + 15
+  validation/precision rows. 195-point 1,051.093-1,799.338 cm^-1
+  window (stored descending in the workbook, flipped to
+  ascending); is_grouped=False; the sheets' ball-milling /
+  wet-granulation time-course and ratio-labelled blocks are
+  documented but not loaded (different Y semantics). Frozen SI
+  workbook mirrored at HTW-KI-Werkstatt/RamanBench (niclosamide/).
 - `uraman_mofs` + `uraman_mof74_1000_2000` + `uraman_mof74_70_3000`:
   14 peak-normalized reference spectra of MOF compounds from IBM's
   uRaman-Dataset (Ferreira 2023, standalone GitHub deposit,
