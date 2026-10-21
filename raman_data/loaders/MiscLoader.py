@@ -1529,14 +1529,15 @@ class MiscLoader(BaseLoader):
     }
 
     @staticmethod
-    def _lei_read_csv(dataset_cache: str, resolution: str) -> Tuple[pd.DataFrame, np.ndarray]:
+    def _lei_read_csv(dataset_cache: str, resolution: str) -> Tuple[pd.DataFrame, np.ndarray, list]:
         """
         Download (if not already cached) and read one Lei et al. 2022
         microplastic training CSV (see _load_lei_microplastics).
 
-        Returns (df, raman_shifts): one row per spectrum, first three
-        columns 'plastic', 'supplier', 'sampleid', then one column per
-        wavenumber.
+        Returns (df, raman_shifts, wav_cols): one row per spectrum,
+        first three columns 'plastic', 'supplier', 'sampleid', then one
+        column per wavenumber; wav_cols lists those wavenumber column
+        names in file order.
         """
         if resolution not in MiscLoader._LEI_MPLASTICS_FILES:
             raise ValueError(f"Unknown microplastics training resolution: {resolution}")
@@ -1572,7 +1573,7 @@ class MiscLoader(BaseLoader):
         raman_shifts = np.array([float(col) for col in wav_cols])
         if not np.all(np.diff(raman_shifts) > 0):
             raise RuntimeError(f"[!] Lei microplastics {file_name}: wavenumber axis is not ascending.")
-        return df, raman_shifts
+        return df, raman_shifts, wav_cols
 
     @staticmethod
     def _load_lei_microplastics(cache_path: str, resolution: str):
@@ -1600,7 +1601,7 @@ class MiscLoader(BaseLoader):
         dataset_cache = os.path.join(cache_root, "microplastics_training")
         os.makedirs(dataset_cache, exist_ok=True)
 
-        df, raman_shifts = MiscLoader._lei_read_csv(dataset_cache, resolution)
+        df, raman_shifts, wav_cols = MiscLoader._lei_read_csv(dataset_cache, resolution)
 
         spectra = df[wav_cols].to_numpy(dtype=float)
         if np.isnan(spectra).any():
@@ -1683,7 +1684,7 @@ class MiscLoader(BaseLoader):
         dataset_cache = os.path.join(cache_root, "microplastics_training")
         os.makedirs(dataset_cache, exist_ok=True)
 
-        df, raman_shifts = MiscLoader._lei_read_csv(dataset_cache, "1cm")
+        df, raman_shifts, wav_cols = MiscLoader._lei_read_csv(dataset_cache, "1cm")
 
         plastic = df["plastic"].astype(str).str.strip()
         keep = plastic != "blank"
@@ -1693,7 +1694,7 @@ class MiscLoader(BaseLoader):
                 f"3720 non-blank, got {len(df)} with {int(keep.sum())}."
             )
 
-        X = df[list(df.columns[3:])].to_numpy(dtype=float)[keep.to_numpy()]
+        X = df[wav_cols].to_numpy(dtype=float)[keep.to_numpy()]
         sid = df["sampleid"].astype(str).str.strip().to_numpy()[keep.to_numpy()]
         labels = plastic.to_numpy()[keep.to_numpy()]
 
