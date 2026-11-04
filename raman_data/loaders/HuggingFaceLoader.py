@@ -85,8 +85,12 @@ class HuggingFaceLoader(BaseLoader):
                 "full_name": "Gasoline Properties Raman Dataset (Benchtop)",
                 "hf_key": "chlange/FuelRamanSpectraBenchtop",
                 "source": "https://huggingface.co/datasets/chlange/FuelRamanSpectraBenchtop",
-                "paper": "https://doi.org/10.1016/j.fuel.2018.09.006",
-                "bibtex": "@article{Voigt_2019, title={Using fieldable spectrometers and chemometric methods to determine RON of gasoline from petrol stations: A comparison of low-field 1H NMR@80 MHz, handheld RAMAN and benchtop NIR}, volume={236}, ISSN={0016-2361}, url={http://dx.doi.org/10.1016/j.fuel.2018.09.006}, DOI={10.1016/j.fuel.2018.09.006}, journal={Fuel}, publisher={Elsevier BV}, author={Voigt, Melanie and Legner, Robin and Haefner, Simon and Friesen, Anatoli and Wirtz, Alexander and Jaeger, Martin}, year={2019}, month=jan, pages={829--835}}",
+                # Both dataset cards ask users to cite both publications.
+                "paper": [
+                    "https://doi.org/10.1021/acs.energyfuels.9b02944",
+                    "https://doi.org/10.1016/j.fuel.2018.09.006",
+                ],
+                "bibtex": "@article{Legner_2019_ef, title={Using Compact Proton Nuclear Magnetic Resonance at 80 MHz and Vibrational Spectroscopies and Data Fusion for Research Octane Number and Gasoline Additive Determination}, volume={34}, ISSN={1520-5029}, url={http://dx.doi.org/10.1021/acs.energyfuels.9b02944}, DOI={10.1021/acs.energyfuels.9b02944}, number={1}, journal={Energy and Fuels}, publisher={American Chemical Society (ACS)}, author={Legner, Robin and Voigt, Melanie and Wirtz, Alexander and Friesen, Anatoli and Haefner, Simon and Jaeger, Martin}, year={2019}, month=dec, pages={103--110}}\n\n@article{Voigt_2019, title={Using fieldable spectrometers and chemometric methods to determine RON of gasoline from petrol stations: A comparison of low-field 1H NMR@80 MHz, handheld RAMAN and benchtop NIR}, volume={236}, ISSN={0016-2361}, url={http://dx.doi.org/10.1016/j.fuel.2018.09.006}, DOI={10.1016/j.fuel.2018.09.006}, journal={Fuel}, publisher={Elsevier BV}, author={Voigt, Melanie and Legner, Robin and Haefner, Simon and Friesen, Anatoli and Wirtz, Alexander and Jaeger, Martin}, year={2019}, month=jan, pages={829--835}}",
                 "description": "Raman spectra from 179 commercial gasoline samples recorded using a benchtop 1064 nm FT-Raman system. Targets include Research Octane Number (RON), Motor Octane Number (MON), and oxygenated additive concentrations."
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.
@@ -107,8 +111,12 @@ class HuggingFaceLoader(BaseLoader):
                 "full_name": "Gasoline Properties Raman Dataset (Handheld)",
                 "hf_key": "HTW-KI-Werkstatt/FuelRamanSpectraHandheld",
                 "source": "https://huggingface.co/datasets/HTW-KI-Werkstatt/FuelRamanSpectraHandheld",
-                "paper": "https://doi.org/10.1021/acs.energyfuels.9b02944",
-                "bibtex": "@article{Legner_2019_ef, title={Using Compact Proton Nuclear Magnetic Resonance at 80 MHz and Vibrational Spectroscopies and Data Fusion for Research Octane Number and Gasoline Additive Determination}, volume={34}, ISSN={1520-5029}, url={http://dx.doi.org/10.1021/acs.energyfuels.9b02944}, DOI={10.1021/acs.energyfuels.9b02944}, number={1}, journal={Energy and Fuels}, publisher={American Chemical Society (ACS)}, author={Legner, Robin and Voigt, Melanie and Wirtz, Alexander and Friesen, Anatoli and Haefner, Simon and Jaeger, Martin}, year={2019}, month=dec, pages={103--110}}",
+                # Both dataset cards ask users to cite both publications.
+                "paper": [
+                    "https://doi.org/10.1021/acs.energyfuels.9b02944",
+                    "https://doi.org/10.1016/j.fuel.2018.09.006",
+                ],
+                "bibtex": "@article{Legner_2019_ef, title={Using Compact Proton Nuclear Magnetic Resonance at 80 MHz and Vibrational Spectroscopies and Data Fusion for Research Octane Number and Gasoline Additive Determination}, volume={34}, ISSN={1520-5029}, url={http://dx.doi.org/10.1021/acs.energyfuels.9b02944}, DOI={10.1021/acs.energyfuels.9b02944}, number={1}, journal={Energy and Fuels}, publisher={American Chemical Society (ACS)}, author={Legner, Robin and Voigt, Melanie and Wirtz, Alexander and Friesen, Anatoli and Haefner, Simon and Jaeger, Martin}, year={2019}, month=dec, pages={103--110}}\n\n@article{Voigt_2019, title={Using fieldable spectrometers and chemometric methods to determine RON of gasoline from petrol stations: A comparison of low-field 1H NMR@80 MHz, handheld RAMAN and benchtop NIR}, volume={236}, ISSN={0016-2361}, url={http://dx.doi.org/10.1016/j.fuel.2018.09.006}, DOI={10.1016/j.fuel.2018.09.006}, journal={Fuel}, publisher={Elsevier BV}, author={Voigt, Melanie and Legner, Robin and Haefner, Simon and Friesen, Anatoli and Wirtz, Alexander and Jaeger, Martin}, year={2019}, month=jan, pages={829--835}}",
                 "description": "Counterpart to the benchtop fuel dataset, acquired from the same 179 samples using a handheld 785 nm spectrometer. Used for benchmarking model transferability across different hardware and wavelengths."
             },
             # Checked: raman_bench.splitting.infer_group_ids_from_targets finds real replicate structure in this dataset.

@@ -60,8 +60,13 @@ class FigshareLoader(BaseLoader):
             metadata={
                 "full_name": "ComFilE for PCa",
                 "source": "https://figshare.com/articles/dataset/ComFilE_for_PCa/28107395",
-                "paper": "https://doi.org/10.1016/j.xcrm.2024.101579",
-                "bibtex": "@article{bi2024sersomes, title={SERSomes for metabolic phenotyping and prostate cancer diagnosis}, author={Bi, Xinyuan and Wang, Jiayi and Xue, Bingsen and He, Chang and Liu, Fugang and Chen, Haoran and Lin, Linley Li and Dong, Baijun and Li, Butang and Jin, Cheng and others}, journal={Cell Reports Medicine}, volume={5}, number={6}, year={2024}, publisher={Elsevier}}",
+                # The spectra were acquired for Bi et al. 2024 (data on request); Xue et al. 2025
+                # released them on Figshare and cites this deposit as its data.
+                "paper": [
+                    "https://doi.org/10.1038/s42256-025-01027-5",
+                    "https://doi.org/10.1016/j.xcrm.2024.101579",
+                ],
+                "bibtex": "@article{Xue_2025, title={Deep spectral component filtering as a foundation model for spectral analysis demonstrated in metabolic profiling}, volume={7}, ISSN={2522-5839}, url={http://dx.doi.org/10.1038/s42256-025-01027-5}, DOI={10.1038/s42256-025-01027-5}, number={5}, journal={Nature Machine Intelligence}, publisher={Springer Science and Business Media LLC}, author={Xue, Bingsen and Bi, Xinyuan and Dong, Zheyi and Xu, Yunzhe and Liang, Minghui and Fang, Xin and Yuan, Yizhe and Wang, Ruoxi and Liu, Shuyu and Jiao, Rushi and Chen, Yuze and Zu, Weitao and Wang, Chengxiang and Zhang, Jianhao and Liu, Jiang and Zhang, Qin and Yuan, Ye and Xu, Midie and Zhang, Ya and Wang, Yanfeng and Ye, Jian and Jin, Cheng}, year={2025}, month=may, pages={743--757}}\n\n@article{bi2024sersomes, title={SERSomes for metabolic phenotyping and prostate cancer diagnosis}, author={Bi, Xinyuan and Wang, Jiayi and Xue, Bingsen and He, Chang and Liu, Fugang and Chen, Haoran and Lin, Linley Li and Dong, Baijun and Li, Butang and Jin, Cheng and others}, journal={Cell Reports Medicine}, volume={5}, number={6}, pages={101579}, year={2024}, publisher={Elsevier}, DOI={10.1016/j.xcrm.2024.101579}}",
                 "doi": "10.6084/m9.figshare.28107395.v1",
                 "citation": [
                     "Xue, Bingsen (2024). ComFilE for PCa. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28107395.v1"
@@ -87,6 +92,9 @@ class FigshareLoader(BaseLoader):
                 "full_name": "ComFilE for AD",
                 "source": "https://figshare.com/articles/dataset/ComFilE_for_AD/28107578",
                 "doi": "10.6084/m9.figshare.28107578.v1",
+                # Xue et al. 2025 cites this deposit as its data.
+                "paper": "https://doi.org/10.1038/s42256-025-01027-5",
+                "bibtex": "@article{Xue_2025, title={Deep spectral component filtering as a foundation model for spectral analysis demonstrated in metabolic profiling}, volume={7}, ISSN={2522-5839}, url={http://dx.doi.org/10.1038/s42256-025-01027-5}, DOI={10.1038/s42256-025-01027-5}, number={5}, journal={Nature Machine Intelligence}, publisher={Springer Science and Business Media LLC}, author={Xue, Bingsen and Bi, Xinyuan and Dong, Zheyi and Xu, Yunzhe and Liang, Minghui and Fang, Xin and Yuan, Yizhe and Wang, Ruoxi and Liu, Shuyu and Jiao, Rushi and Chen, Yuze and Zu, Weitao and Wang, Chengxiang and Zhang, Jianhao and Liu, Jiang and Zhang, Qin and Yuan, Ye and Xu, Midie and Zhang, Ya and Wang, Yanfeng and Ye, Jian and Jin, Cheng}, year={2025}, month=may, pages={743--757}}",
                 "citation": [
                     "Xue, Bingsen (2024). ComFilE for AD. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28107578.v1"
                 ],
@@ -110,7 +118,7 @@ class FigshareLoader(BaseLoader):
                 "full_name": "ComFilE: SERS serum spectra for stroke classification",
                 "source": "https://figshare.com/articles/dataset/ComFilE_/28107431",
                 "doi": "10.6084/m9.figshare.28107431",
-                "paper": "https://www.nature.com/articles/s42256-025-01027-5",
+                "paper": "https://doi.org/10.1038/s42256-025-01027-5",
                 "bibtex": "@article{Xue_2025, title={Deep spectral component filtering as a foundation model for spectral analysis demonstrated in metabolic profiling}, volume={7}, ISSN={2522-5839}, url={http://dx.doi.org/10.1038/s42256-025-01027-5}, DOI={10.1038/s42256-025-01027-5}, number={5}, journal={Nature Machine Intelligence}, publisher={Springer Science and Business Media LLC}, author={Xue, Bingsen and Bi, Xinyuan and Dong, Zheyi and Xu, Yunzhe and Liang, Minghui and Fang, Xin and Yuan, Yizhe and Wang, Ruoxi and Liu, Shuyu and Jiao, Rushi and Chen, Yuze and Zu, Weitao and Wang, Chengxiang and Zhang, Jianhao and Liu, Jiang and Zhang, Qin and Yuan, Ye and Xu, Midie and Zhang, Ya and Wang, Yanfeng and Ye, Jian and Jin, Cheng}, year={2025}, month=may, pages={743--757}}",
                 "citation": [
                     "Xue, B. et al. ComFilE: a large-scale benchmark dataset for computational spectroscopy. "
