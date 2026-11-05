@@ -13,6 +13,10 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `import raman_data` no longer imports `zenodo_get`: `ZenodoLoader` imports it when it
+  downloads. Importing `zenodo_get` replaces the SIGINT handler, which fails off the main
+  thread.
+
 ---
 
 ## [1.7.0] — 2026-10-21

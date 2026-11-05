@@ -6,7 +6,6 @@ import logging
 import os, requests
 import pandas as pd
 import numpy as np
-from zenodo_get import download
 
 from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE, APPLICATION_TYPE
 from raman_data.exceptions import CorruptedZipFileError
@@ -1518,6 +1517,10 @@ class ZenodoLoader(BaseLoader):
         file_typ = ZenodoLoader.DATASETS[dataset_name].file_typ
         dataset_cache_path = os.path.join(cache_path, dataset_id)
         os.makedirs(dataset_cache_path, exist_ok=True)
+
+        # Imported here, not at module level: zenodo_get replaces the SIGINT handler on
+        # import, and only Zenodo downloads need it.
+        from zenodo_get import download
 
         try:
             dataset_id = ZenodoLoader.DATASETS[dataset_name].id
