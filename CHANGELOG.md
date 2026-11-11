@@ -15,8 +15,8 @@ Versions follow [Semantic Versioning](https://semver.org/).
   before depositing the spectra, each a `PreprocessingStep(kind, method, params)` with `kind` from
   `PREPROCESSING_KINDS` (baseline, normalization, crop, ...). `None` means not checked, `()` means checked and raw,
   and `DatasetInfo.provider_preprocessed` gives `True` / `False` / `None`. `DatasetInfo.preprocessing_source` names where
-  it is documented. The values live in one table, `raman_data/provider_preprocessing.py`, covering 62 datasets; the
-  other 75 stay unknown. `raman_data(provider_preprocessed=True|False)` and `list_datasets(...)` filter on it, and
+  it is documented. The values live in one table, `raman_data/provider_preprocessing.py`, covering 63 datasets (45 preprocessed, 18 raw); the
+  other 74 stay unknown. `raman_data(provider_preprocessed=True|False)` and `list_datasets(...)` filter on it, and
   datasets not yet checked are in neither group. `embedded_preprocessing` (prose) is unchanged apart from the microgel
   entries below.
 
