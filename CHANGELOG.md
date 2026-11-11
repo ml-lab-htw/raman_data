@@ -11,11 +11,28 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **Structured provider preprocessing.** `DatasetInfo.provider_preprocessing` lists the steps the data provider applied
+  before depositing the spectra, each a `PreprocessingStep(kind, method, params)` with `kind` from
+  `PREPROCESSING_KINDS` (baseline, normalization, crop, ...). `None` means not checked, `()` means checked and raw,
+  and `DatasetInfo.provider_preprocessed` gives `True` / `False` / `None`. `DatasetInfo.preprocessing_source` names where
+  it is documented. The values live in one table, `raman_data/provider_preprocessing.py`, covering 63 datasets (45 preprocessed, 18 raw); the
+  other 74 stay unknown. `raman_data(provider_preprocessed=True|False)` and `list_datasets(...)` filter on it, and
+  datasets not yet checked are in neither group. `embedded_preprocessing` (prose) is unchanged apart from the microgel
+  entries below.
+
 ### Fixed
 
 - `import raman_data` no longer imports `zenodo_get`: `ZenodoLoader` imports it when it
   downloads. Importing `zenodo_get` replaces the SIGINT handler, which fails off the main
   thread.
+- CI: the three `uraman_*` loader tests are skipped. `github.com/IBM/uRaman-Dataset` now returns 404 (the pinned commit
+  and the whole repository are gone), so the datasets cannot be downloaded until a new source is found.
+- **`microgel_size_*`: wrong preprocessing and wrong citation.** `lf` is a linear-fit and `rb` a rubber-band baseline
+  subtraction (they were described as a cropped low-frequency range and a "Raman-bias correction"); `mm` (min-max) and
+  `snv` normalization were missing from most variants; the authors do not state the order of the two steps. The
+  fingerprint variants are the 850-1800 cm^-1 part of the 100-3425 cm^-1 global range. The paper, BibTeX and citation
+  pointed to a *Small* paper with different authors; they now cite Koronaki et al., AIChE J. 70(10), e18494 (2024),
+  doi:10.1002/aic.18494, which describes the deposit (doi:10.18154/RWTH-2023-05604).
 
 ---
 
