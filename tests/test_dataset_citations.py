@@ -10,6 +10,7 @@ XUE_2025 = "10.1038/s42256-025-01027-5"
 BI_2024 = "10.1016/j.xcrm.2024.101579"
 LEGNER_2019 = "10.1021/acs.energyfuels.9b02944"
 VOIGT_2019 = "10.1016/j.fuel.2018.09.006"
+KORONAKI_2024 = "10.1002/aic.18494"  # AIChE J. 70(10), e18494; not the Small paper the loader cited before
 
 
 @pytest.mark.parametrize("dataset, dois", [
@@ -18,6 +19,8 @@ VOIGT_2019 = "10.1016/j.fuel.2018.09.006"
     ("comfile_stroke", {XUE_2025}),
     ("fuel_benchtop", {LEGNER_2019, VOIGT_2019}),
     ("fuel_handheld", {LEGNER_2019, VOIGT_2019}),
+    ("microgel_size_raw_global", {KORONAKI_2024}),
+    ("microgel_size_snv_rb_fingerprint", {KORONAKI_2024}),
 ])
 def test_paper_and_bibtex_cite_the_source_publications(dataset, dois):
     meta = get_dataset_info(dataset).metadata

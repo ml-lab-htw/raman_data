@@ -81,6 +81,40 @@ class HASH_TYPE(Enum):
     sha256 = hashlib.sha256
 
 
+#: Kinds of preprocessing step recorded in :class:`PreprocessingStep`.
+PREPROCESSING_KINDS = (
+    "baseline",               # baseline / background curve subtracted (polynomial, AsLS, rubber band, ...)
+    "background_subtraction", # dark, solvent or substrate spectrum subtracted
+    "fluorescence_removal",
+    "smoothing",
+    "derivative",
+    "normalization",          # per-spectrum scaling (min-max, SNV, unit vector, peak max, area, mean centring)
+    "crop",                   # spectral range cut
+    "resample",               # interpolation onto another axis
+    "cosmic_ray_removal",
+    "augmentation",           # synthetic variants generated from the measurements
+    "averaging",
+)
+
+
+@dataclass(frozen=True)
+class PreprocessingStep:
+    """One preprocessing operation the data provider applied to the spectra.
+
+    Attributes:
+        kind: What the step does; one of :data:`PREPROCESSING_KINDS`, so datasets can be filtered on it.
+        method: The method as the provider names it, e.g. ``"rubber band"`` or ``"Savitzky-Golay"``.
+        params: Parameters the provider reports (``{"window": 11, "order": 3}``); empty if none are known.
+    """
+    kind: str
+    method: str
+    params: dict = field(default_factory=dict, hash=False, compare=True)
+
+    def __post_init__(self):
+        if self.kind not in PREPROCESSING_KINDS:
+            raise ValueError(f"unknown preprocessing kind {self.kind!r}; use one of {PREPROCESSING_KINDS}")
+
+
 @dataclass
 class DatasetInfo:
     """
@@ -130,6 +164,16 @@ class DatasetInfo:
             making effect sizes non-comparable to single-pass preprocessing on
             raw spectra. Document embedded preprocessing so downstream users can
             account for or avoid this double-processing risk.
+        provider_preprocessing (tuple[PreprocessingStep, ...] | None): The same
+            information as ``embedded_preprocessing``, structured so it can be filtered
+            on. ``None`` means the provider's preprocessing has not been checked (unknown).
+            ``()`` means it was checked and the spectra are raw as deposited (the loader may
+            still flip or resample the axis; that is not provider preprocessing). A non-empty
+            tuple lists the steps the provider applied, in the order the provider reports
+            them (or in no stated order, see ``embedded_preprocessing``). The values are
+            filled in from ``raman_data.provider_preprocessing``.
+        preprocessing_source (str | None): Where the preprocessing was documented
+            (paper DOI or deposit README), if known.
     """
     id: str
     name: str
@@ -143,6 +187,15 @@ class DatasetInfo:
     is_grouped: Optional[bool] = None
     has_missing_labels: Optional[bool] = None
     embedded_preprocessing: Optional[str] = None
+    provider_preprocessing: Optional[tuple[PreprocessingStep, ...]] = None
+    preprocessing_source: Optional[str] = None
+
+    @property
+    def provider_preprocessed(self) -> Optional[bool]:
+        """``True`` if the provider applied preprocessing, ``False`` if the spectra are raw, ``None`` if unknown."""
+        if self.provider_preprocessing is None:
+            return None
+        return len(self.provider_preprocessing) > 0
 
 
 
