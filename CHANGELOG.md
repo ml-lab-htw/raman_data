@@ -22,6 +22,8 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- CI: the three `uraman_*` loader tests are skipped. `github.com/IBM/uRaman-Dataset` now returns 404 (the pinned commit
+  and the whole repository are gone), so the datasets cannot be downloaded until a new source is found.
 - **`microgel_size_*`: wrong preprocessing and wrong citation.** `lf` is a linear-fit and `rb` a rubber-band baseline
   subtraction (they were described as a cropped low-frequency range and a "Raman-bias correction"); `mm` (min-max) and
   `snv` normalization were missing from most variants; the authors do not state the order of the two steps. The
