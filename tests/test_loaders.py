@@ -1111,6 +1111,7 @@ def test_infra_art_raman():
     assert not np.isnan(dataset.spectra).any()
 
 
+@pytest.mark.skip(reason="github.com/IBM/uRaman-Dataset returns 404 (repository removed or made private); the loader cannot download it.")
 def test_uraman_mofs():
     dataset = GitHubLoader.load_dataset("uraman_mofs")
     # One stitched reference spectrum per MOF compound (3 classes),
@@ -1131,6 +1132,7 @@ def test_uraman_mofs():
     assert not np.isnan(dataset.spectra).any()
 
 
+@pytest.mark.skip(reason="github.com/IBM/uRaman-Dataset returns 404 (repository removed or made private); the loader cannot download it.")
 def test_uraman_mof74_1000_2000():
     dataset = GitHubLoader.load_dataset("uraman_mof74_1000_2000")
     # Six MOF-74 metal-series samples on the common 970-1,887 cm^-1
@@ -1150,6 +1152,7 @@ def test_uraman_mof74_1000_2000():
     assert not np.isnan(dataset.spectra).any()
 
 
+@pytest.mark.skip(reason="github.com/IBM/uRaman-Dataset returns 404 (repository removed or made private); the loader cannot download it.")
 def test_uraman_mof74_70_3000():
     dataset = GitHubLoader.load_dataset("uraman_mof74_70_3000")
     # Five MOF-74 metal-series samples (no Au@Mg-MOF74: high
