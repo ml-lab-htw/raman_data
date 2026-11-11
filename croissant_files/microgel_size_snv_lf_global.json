@@ -61,8 +61,8 @@
   ],
   "isAccessibleForFree": true,
   "license": "https://creativecommons.org/licenses/by-nc/3.0/",
-  "citeAs": "@article{Koronaki_2024, title={Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy}, volume={20}, ISSN={1613-6829}, url={http://dx.doi.org/10.1002/smll.202311920}, DOI={10.1002/smll.202311920}, number={23}, journal={Small}, publisher={Wiley}, author={Koronaki, Eleni D. and Scholz, Jan G. T. and Modelska, Magdalena M. and Nayak, Prabhat K. and Viell, Jorn and Mitsos, Alexander and Barkley, Samuel}, year={2024}}",
-  "citation": "Koronaki, E. D., Scholz, J. G. T., Modelska, M. M., Nayak, P. K., Viell, J., Mitsos, A., & Barkley, S. (2024). Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy. Small, 20(23), 2311920.",
+  "citeAs": "@article{Koronaki_2024, title={Nonlinear manifold learning determines microgel size from Raman spectroscopy}, volume={70}, ISSN={1547-5905}, url={http://dx.doi.org/10.1002/aic.18494}, DOI={10.1002/aic.18494}, number={10}, journal={AIChE Journal}, publisher={Wiley}, author={Koronaki, Eleni D. and Kaven, Luise F. and Faust, Johannes M. M. and Kevrekidis, Ioannis G. and Mitsos, Alexander}, year={2024}, month=jul}",
+  "citation": "Koronaki, E. D., Kaven, L. F., Faust, J. M. M., Kevrekidis, I. G., & Mitsos, A. (2024). Nonlinear manifold learning determines microgel size from Raman spectroscopy. AIChE Journal, 70(10), e18494.",
   "distribution": [
     {
       "@type": "cr:FileObject",

@@ -9,6 +9,12 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+---
+
+## [1.8.0] — 2026-11-11
+
+Provider preprocessing metadata, microgel citation fix, lazy `zenodo_get` import.
+
 ### Added
 
 - **Structured provider preprocessing.** `DatasetInfo.provider_preprocessing` lists the steps the data provider applied
@@ -32,7 +38,7 @@ Versions follow [Semantic Versioning](https://semver.org/).
   `snv` normalization were missing from most variants; the authors do not state the order of the two steps. The
   fingerprint variants are the 850-1800 cm^-1 part of the 100-3425 cm^-1 global range. The paper, BibTeX and citation
   pointed to a *Small* paper with different authors; they now cite Koronaki et al., AIChE J. 70(10), e18494 (2024),
-  doi:10.1002/aic.18494, which describes the deposit (doi:10.18154/RWTH-2023-05604).
+  doi:10.1002/aic.18494, which describes the deposit (doi:10.18154/RWTH-2023-05604). The 14 `croissant_files/microgel_size_*.json` carry the new citation.
 
 ---
 
