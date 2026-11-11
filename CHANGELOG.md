@@ -22,6 +22,9 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `import raman_data` no longer imports `zenodo_get`: `ZenodoLoader` imports it when it
+  downloads. Importing `zenodo_get` replaces the SIGINT handler, which fails off the main
+  thread.
 - CI: the three `uraman_*` loader tests are skipped. `github.com/IBM/uRaman-Dataset` now returns 404 (the pinned commit
   and the whole repository are gone), so the datasets cannot be downloaded until a new source is found.
 - **`microgel_size_*`: wrong preprocessing and wrong citation.** `lf` is a linear-fit and `rb` a rubber-band baseline
