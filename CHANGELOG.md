@@ -9,6 +9,16 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **`slopp` and `slopp_e`**: the Rochman Lab's Raman libraries of plastic particles (Munno et al. 2020,
+  doi:10.1021/acs.analchem.9b03626), 148 spectra of 15 polymer types and 113 spectra of 20 polymer types (aged in the
+  environment), one spectrum per particle. The spectra come on three different axes, so the loader interpolates them
+  onto a 1 cm^-1 grid (110-1990 cm^-1 for `slopp`, 210-1990 for `slopp_e`, where six spectra start above 150).
+  `slopp` is grouped by the library's `Original Sample ID` (84 source items; seven hold more than one polymer);
+  `slopp_e` has no replicate structure and is not grouped. The download package states no licence, so `license` says
+  so; check it before redistributing the spectra. Source: https://rochmanlab.wordpress.com/spectral-libraries-for-microplastics-research/
+
 ---
 
 ## [1.8.0] — 2026-11-11
