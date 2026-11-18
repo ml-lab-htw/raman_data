@@ -107,6 +107,17 @@ PROVIDER_PREPROCESSING: dict[str, tuple[tuple[S, ...], str | None]] = {
         "niclosamide_polymorph_binary", "niclosamide_polymorph_mcm", "glucose_liquid_14level",
         "glucose_liquid_10level", "olive_sunflower_mixtures", "ocean_polymers_raw",
     )},
+    "soft_tissue_sarcoma": (
+        (
+            S("baseline", "polynomial (Renishaw WiRE)", {"order": 5}),
+            S("cosmic_ray_removal", "median filter (Renishaw WiRE)"),
+            S("smoothing", "Savitzky-Golay", {"polyorder": 3}),
+            S("normalization", "min-max", {"range": [0, 1]}),
+            S("resample", "linear interpolation onto a 1 cm-1 grid"),
+            S("crop", "range", {"min_cm-1": 400, "max_cm-1": 1800}),
+        ),
+        "dataset authors, README_map_index.md of doi:10.7910/DVN/NGEZPA (Boroji et al. 2025)",
+    ),
 }
 
 

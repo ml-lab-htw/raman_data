@@ -6,7 +6,7 @@
 
 Python access to public Raman spectroscopy datasets: one function lists them, downloads one, and loads it as arrays.
 
-`raman-data` provides the datasets for [RamanBench](https://github.com/ml-lab-htw/RamanBench), the Raman machine-learning benchmark. It currently covers <!-- DATASET_COUNT_START -->**97 datasets**<!-- DATASET_COUNT_END --> (classification, regression, denoising, and super-resolution), loaded from Kaggle, Hugging Face, Zenodo, Figshare, Mendeley, GitHub, and other public archives. A curated subset is used for the RamanBench leaderboard.
+`raman-data` provides the datasets for [RamanBench](https://github.com/ml-lab-htw/RamanBench), the Raman machine-learning benchmark. It currently covers <!-- DATASET_COUNT_START -->**98 datasets**<!-- DATASET_COUNT_END --> (classification, regression, denoising, and super-resolution), loaded from Kaggle, Hugging Face, Zenodo, Figshare, Mendeley, GitHub, and other public archives. A curated subset is used for the RamanBench leaderboard.
 
 ## Installation
 
@@ -82,14 +82,15 @@ For datasets **without** loader-built group IDs, grouping must be re-inferred do
 | **HuggingFaceLoader** | ✗ No | Downstream re-inference only; fragile for noisy concentrations |
 | **KaggleLoader** | ✗ No | Downstream re-inference only |
 | **RWTHLoader** | ✗ No | Downstream re-inference only |
-| **GoogleDriveLoader** | ✗ No | Downstream re-inference only |
+| **GoogleDriveLoader** | ✓ Yes | Glioma (APOLLO) datasets: patient ids from the slide names |
+| **DataverseLoader** | ✓ Yes | RamanSTS: one group per Raman map (110) |
 | **MendeleyLoader** | ✗ No | Downstream re-inference only |
 | **MiscLoader** | ✗ No | Downstream re-inference only |
 
 ## Available Datasets
 
 <details>
-<summary>97 datasets across Material Science, Biological & Biotechnological, Medical & Clinical, and Chemical & Industrial domains (click to expand)</summary>
+<summary>98 datasets across Material Science, Biological & Biotechnological, Medical & Clinical, and Chemical & Industrial domains (click to expand)</summary>
 
 <!-- DATASETS_TABLE_START -->
 <!-- AUTO-GENERATED: START - datasets table. Do not edit manually. -->
@@ -215,6 +216,7 @@ For datasets **without** loader-built group IDs, grouping must be re-inferred do
 | `single_cell_prokaryotes` | Biological & Biotechnological | Classification | Spontaneous Raman spectra of single prokaryotic cells for species classification: 782 cells of 6 species -- 3 bacteria (Bacillus subtilis JCM 1465T, Escherichia coli JCM 20135, Thermus thermophilus JCM 10941T) and 3 archaea (Sulfolobus acidocaldarius JCM 8929T, Thermococcus kodakarensis JCM 12380T, |
 | `slopp` | Material Science | Classification | SLoPP, the Spectral Library of Plastic Particles of the Rochman Lab (University of Toronto; Munno et al. 2020, Anal. Chem. 92(3), 2443-2451, doi:10.1021/acs.analchem.9b03626): 148 Raman spectra of plastic and textile particles from consumer products, one spectrum per particle, labelled with 15 polymer types (several with fewer than ten spectra). Spectra were recorded at 532 or 785 nm on three different wavenumber axes; the loader interpolates them onto one 110-1990 cm^-1 grid at 1 cm^-1. group_ids = the library's Original Sample ID (84 source items, not all label-pure). No licence is stated in the download package. |
 | `slopp_e` | Material Science | Classification | SLoPP-E, the Rochman Lab library of plastic particles aged in the environment (Munno et al. 2020, doi:10.1021/acs.analchem.9b03626): 113 Raman spectra of particles collected from stormwater, surface water, fish and sediment, labelled with 20 polymer types (most with fewer than ten spectra). The loader interpolates the spectra onto one 210-1990 cm^-1 grid at 1 cm^-1. No replicate structure is deposited, so the dataset is not grouped. No licence is stated in the download package. |
+| `soft_tissue_sarcoma` | Medical & Clinical | Classification | 286,672 ex-vivo Raman spectra (Renishaw inVia, 633 nm, 400-1,800 cm⁻¹, 1,401 points) of surgically resected soft tissue from 7 patients, measured as 51x51 maps over 100 x 100 µm. Target: tissue type (WHO classification), 8 classes: fat, muscle and skin (normal), leiomyoma (benign), myxoid liposarcoma, high-grade pleomorphic liposarcoma, leiomyosarcoma and high-grade myxofibrosarcoma (malignant). Leiomyoma, myxoid liposarcoma, leiomyosarcoma and high-grade myxofibrosarcoma each come from a single patient, so for them grouped splits measure generalisation across regions of one specimen, not across patients. The spectra are 110 Raman maps (most 51x51; four on other grids: 50x50, 52x51, 53x51, 51x61), all spectra of every map included. Group ids are the 110 maps (the authors' map_id, e.g. "P4_MLS_01_01_A2_r3"): spectra of one map are spatially adjacent and highly correlated and must not be split between train and test. Maps from one marked tissue site are neighbouring scans; the authors' area_id (77 sites) is the stricter grouping, not used here (leiomyosarcoma has only two sites). |
 | `streptococcus_thermophilus_fermentation_kaiser` | Biological & Biotechnological | Regression | This dataset contains offline Raman spectra collected during batch cultivations of Streptococcus thermophilus. The spectra were measured using a Kaiser RXN1. The dataset includes two distinct fermentation runs conducted in shake flasks over a 24-hour period. |
 | `streptococcus_thermophilus_fermentation_timegate` | Biological & Biotechnological | Regression | This dataset contains offline Raman spectra collected during batch cultivations of Streptococcus thermophilus. Unlike conventional continuous-wave Raman, these measurements were captured using Time-Gated Raman Spectroscopy. The dataset includes two distinct fermentation runs conducted in shake flask |
 | `stroke_urine_sers_532` | Medical & Clinical | Classification | Surface-enhanced Raman (SERS) spectra of urine from 101 participants (55 healthy controls, 46 patients with confirmed ischemic stroke) on colloidal Ag-nanoparticle SERS filter-paper chips (R6G enhancement factor 1.62e6), Renishaw inVia Qontor, 50x objective, 1 s acquisition, 532 nm excitation (100 m |
