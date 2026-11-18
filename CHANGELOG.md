@@ -23,6 +23,12 @@ Versions follow [Semantic Versioning](https://semver.org/).
   `slopp` is grouped by the library's `Original Sample ID` (84 source items; seven hold more than one polymer);
   `slopp_e` has no replicate structure and is not grouped. The download package states no licence, so `license` says
   so; check it before redistributing the spectra. Source: https://rochmanlab.wordpress.com/spectral-libraries-for-microplastics-research/
+- **`vcl_pvcl_water` and `citric_acid_citrates`**: the two Raman mixture datasets of the RWTH Aachen AVT.SVT repository
+  "Manifold Learning with DMAPs and Target Determination with Y-AE" (GitLab, no paper cited yet). Multi-target
+  regression of mole fractions: 30 spectra with 3 targets (H2O, VCL, pVCL) and 45 spectra with 5 targets (citric acid,
+  three citrate species, water). Both are raw spectra on one axis (99.9-3424.8 cm^-1, 0.3 cm^-1 steps, 11,084 points),
+  not grouped. The repository states no licence, so `license` says so; check it before redistributing the spectra.
+  The files are downloaded from one pinned commit and checked by md5.
 
 ### Fixed
 

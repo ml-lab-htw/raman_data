@@ -516,6 +516,64 @@ class MiscLoader(BaseLoader):
             is_grouped=False,
             has_missing_labels=False,
         ),
+        "vcl_pvcl_water": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="vcl_pvcl_water",
+            name="VCL / pVCL / water mixtures (RWTH AVT.SVT, DMAPs case study 1)",
+            short_name="VCL-pVCL-water",
+            license="Not stated (GitLab repository without a licence file; check before redistributing)",
+            loader=lambda cache_path: MiscLoader._load_dmaps_mixture(cache_path, "vcl_pvcl_water"),
+            metadata={
+                "full_name": "VCL / pVCL / water mixtures, Raman spectra with mole fractions (RWTH AVT.SVT, DMAPs case study 1)",
+                "source": "https://gitlab.git.nrw/rwth-avt-svt/public/manifold-learning-dmaps-and-target-determination-with-y-ae",
+                "citation": [
+                    "Witte, C., Taka, A., et al. (2026). Manifold Learning with DMAPs and Target Determination with Y-AE "
+                    "(data repository, RWTH Aachen AVT.SVT; no paper cited in the repository). https://gitlab.git.nrw/rwth-avt-svt/public/manifold-learning-dmaps-and-target-determination-with-y-ae"
+                ],
+                "description": (
+                    "30 Raman spectra of aqueous mixtures of the monomer N-vinylcaprolactam (VCL), its polymer (pVCL) "
+                    "and water, with the mole fraction of each component as the 3 regression targets (H2O, VCL, pVCL; "
+                    "the three sum to 1; H2O 0.975-1.0, VCL 0-0.0147 with 14 exact zeros, pVCL 0-0.0222 with 7 exact "
+                    "zeros). One common axis, 99.9-3424.8 cm^-1 in 0.3 cm^-1 steps (11,084 points). The spectra are "
+                    "raw instrument counts as deposited (about -170 to 330,000), not preprocessed. No acquisition "
+                    "settings or sample-preparation details are given in the repository, which carries the data of a "
+                    "manifold-learning (diffusion maps) concentration-determination study; there is no group or "
+                    "replicate information, so every spectrum is treated as its own sample."
+                ),
+            },
+            is_grouped=False,
+            has_missing_labels=False,
+        ),
+        "citric_acid_citrates": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="citric_acid_citrates",
+            name="Citric acid / citrates / water mixtures (RWTH AVT.SVT, DMAPs case study 2)",
+            short_name="Citric acid-citrates",
+            license="Not stated (GitLab repository without a licence file; check before redistributing)",
+            loader=lambda cache_path: MiscLoader._load_dmaps_mixture(cache_path, "citric_acid_citrates"),
+            metadata={
+                "full_name": "Citric acid / citrate species / water mixtures, Raman spectra with mole fractions (RWTH AVT.SVT, DMAPs case study 2)",
+                "source": "https://gitlab.git.nrw/rwth-avt-svt/public/manifold-learning-dmaps-and-target-determination-with-y-ae",
+                "citation": [
+                    "Witte, C., Taka, A., et al. (2026). Manifold Learning with DMAPs and Target Determination with Y-AE "
+                    "(data repository, RWTH Aachen AVT.SVT; no paper cited in the repository). https://gitlab.git.nrw/rwth-avt-svt/public/manifold-learning-dmaps-and-target-determination-with-y-ae"
+                ],
+                "description": (
+                    "45 Raman spectra of aqueous citric acid solutions, with the mole fraction (mol/mol) of citric acid "
+                    "(CA), the three citrate species (CA-, CA2-, CA3-) and water as the 5 regression targets (they sum to "
+                    "1; water 0.9785-1.0, the others at most 0.021; one sample is pure water with four zero targets). "
+                    "One common axis, 99.9-3424.8 cm^-1 in 0.3 cm^-1 steps (11,084 points), the same as the "
+                    "VCL / pVCL / water dataset of the same repository. The spectra are raw instrument counts as deposited "
+                    "(about -610 to 172,000), not preprocessed. No acquisition settings, pH or preparation details are "
+                    "given in the repository; there is no group or replicate information, so every spectrum is treated "
+                    "as its own sample."
+                ),
+            },
+            is_grouped=False,
+            has_missing_labels=False,
+        ),
         "yeast_bioreactor_fermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
             application_type=APPLICATION_TYPE.Biological,
@@ -2517,6 +2575,81 @@ class MiscLoader(BaseLoader):
                 raise RuntimeError("[!] slopp: Library IDs of the spectra do not all have an Original Sample ID.")
             group_ids = table.loc[ids, "Original Sample ID"].astype(str).str.strip().to_numpy()
         return spectra, grid.copy(), targets, list(class_names), group_ids
+
+
+    # vcl_pvcl_water, citric_acid_citrates (RWTH AVT.SVT GitLab repository, pinned to one commit)
+    _DMAPS_BASE = (
+        "https://gitlab.git.nrw/rwth-avt-svt/public/manifold-learning-dmaps-and-target-determination-with-y-ae/"
+        "-/raw/48955e40cd60165dbf20b6a1df60b95433495dc3/"
+    )
+    # key -> (spectra file, md5, targets file, md5, layout, spectra count, target columns)
+    _DMAPS_SPECS = {
+        "vcl_pvcl_water": (
+            "case study 1/datasets/raman_11084.csv", "d495689d95a7d362243c2f7c5d9f9e6b",
+            "case study 1/datasets/concentrations_3D.csv", "1a1107ebd1c12b25f42d2e5bd76c5c43",
+            "rows", 30, ["H2O", "VCL", "pVCL"],
+        ),
+        "citric_acid_citrates": (
+            "case study 2/datasets/spectra_11084.csv", "89282684c0bd50275066f453d87620d9",
+            "case study 2/datasets/concentrations_5D.csv", "1224473607515eb31110c3b28a64b9a4",
+            "columns", 45,
+            ["Citric acid (CA) [mol/mol]", "Citrate 1 (CA-) [mol/mol]", "Citrate 2 (CA2-) [mol/mol]",
+             "Citrate 3 (CA3-) [mol/mol]", "water [mol/mol]"],
+        ),
+    }
+
+    @staticmethod
+    def _load_dmaps_mixture(cache_path: str, key: str):
+        """
+        Download and load one of the two Raman mixture datasets of the RWTH AVT.SVT repository
+        "Manifold Learning with DMAPs and Target Determination with Y-AE" (GitLab, no licence file).
+
+        ``vcl_pvcl_water`` (case study 1): 30 spectra, 3 mole fractions (H2O, VCL, pVCL); the spectra file has one
+        spectrum per row under a label row and a wavenumber row. ``citric_acid_citrates`` (case study 2): 45
+        spectra, 5 mole fractions; the spectra file has the wavenumber in column 0 and one spectrum per column.
+        Both share the axis 99.9-3424.8 cm^-1 (0.3 cm^-1 steps, 11,084 points); the targets of a spectrum sum to 1.
+
+        Returns spectra, raman_shifts, targets (n x k), target_names.
+        """
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            raise ValueError("Cache root for Misc loader is not set. Cannot load " + key + ".")
+        dataset_cache = os.path.join(cache_root, key)
+        os.makedirs(dataset_cache, exist_ok=True)
+        spectra_file, spectra_md5, targets_file, targets_md5, layout, n, names = MiscLoader._DMAPS_SPECS[key]
+
+        paths = []
+        for remote, md5 in ((spectra_file, spectra_md5), (targets_file, targets_md5)):
+            local = remote.replace("/", "_").replace(" ", "_")
+            out_path = os.path.join(dataset_cache, local)
+            if not LoaderTools._is_file_ready(out_path):
+                LoaderTools.download(
+                    url=MiscLoader._DMAPS_BASE + remote.replace(" ", "%20"), out_dir_path=dataset_cache,
+                    out_file_name=local, hash_target=md5, hash_type=HASH_TYPE.md5,
+                )
+                if not LoaderTools._is_file_ready(out_path):
+                    raise RuntimeError(f"[!] Download of {remote} for {key} failed (network error or checksum mismatch). See logs.")
+            paths.append(out_path)
+
+        raw = pd.read_csv(paths[0], header=None)
+        if layout == "rows":  # row 0 label, row 1 wavenumbers, rows 2.. one spectrum each
+            raman_shifts = raw.iloc[1].to_numpy(dtype=float)
+            spectra = raw.iloc[2:].to_numpy(dtype=float)
+        else:  # row 0 header, then one row per wavenumber: column 0 the axis, columns 1.. one spectrum each
+            raman_shifts = raw.iloc[1:, 0].to_numpy(dtype=float)
+            spectra = raw.iloc[1:, 1:].to_numpy(dtype=float).T
+        if spectra.shape != (n, 11084) or raman_shifts.shape != (11084,):
+            raise RuntimeError(f"[!] {key}: expected {n} spectra of 11084 points, got {spectra.shape}.")
+        if not np.isfinite(spectra).all() or not np.allclose(raman_shifts, 99.9 + 0.3 * np.arange(11084), atol=0.01):
+            raise RuntimeError(f"[!] {key}: non-finite intensities or an unexpected wavenumber axis.")
+
+        table = pd.read_csv(paths[1])
+        if list(table.columns) != names or len(table) != n:
+            raise RuntimeError(f"[!] {key}: unexpected target table {list(table.columns)} x {len(table)}.")
+        targets = table.to_numpy(dtype=float)
+        if not np.allclose(targets.sum(axis=1), 1.0, atol=1e-3):
+            raise RuntimeError(f"[!] {key}: the targets of a spectrum do not sum to 1.")
+        return spectra, raman_shifts, targets, list(names)
 
     # yeast_bioreactor_fermentation (4TU.ResearchData, Klaverdijk et al. 2025)
     _YEAST_BIOREACTOR_ZIP = "Chapter 2.zip"
