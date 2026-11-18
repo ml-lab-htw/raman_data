@@ -16,6 +16,7 @@ from raman_data.loaders.RWTHLoader import RWTHLoader
 from raman_data.loaders.GoogleDriveLoader import GoogleDriveLoader
 from raman_data.loaders.FigshareLoader import FigshareLoader
 from raman_data.loaders.GitHubLoader import GitHubLoader
+from raman_data.loaders.DataverseLoader import DataverseLoader
 import numpy as np
 import pytest
 import os
@@ -30,6 +31,7 @@ __LOADERS = [
     GoogleDriveLoader,
     FigshareLoader,
     GitHubLoader,
+    DataverseLoader,
 ]
 
 
@@ -243,6 +245,76 @@ def test_glioma_group_ids():
         assert len(dataset.target_names) == n_classes, name
         assert len(set(dataset.group_ids.tolist())) == 46, name
         assert _groups_are_label_pure(dataset), name
+
+
+def _fake_ramansts(tmp_path, monkeypatch, map_rows):
+    """Two tiny archives (FAT/P1_FAT.npy: 5 rows, MSC/P2_MSC.npy: 4 rows) and a map index with *map_rows*."""
+    import io
+    import zipfile
+
+    import pandas as pd
+    from raman_data.loaders import DataverseLoader as dv
+
+    def npy(n, offset):
+        buf = io.BytesIO()
+        np.save(buf, np.full((n, 1401), float(offset)))
+        return buf.getvalue()
+
+    part1, part2 = tmp_path / "part1.zip", tmp_path / "part2.zip"
+    with zipfile.ZipFile(part1, "w") as zf:
+        zf.writestr("FAT/P1_FAT.npy", npy(5, 1))
+    with zipfile.ZipFile(part2, "w") as zf:
+        zf.writestr("MSC/P2_MSC.npy", npy(4, 2))
+    index = tmp_path / "map_index.tab"
+    pd.DataFrame(map_rows, columns=["file", "map_id", "row_start", "row_end", "n_spectra", "patient", "tissue_class"]) \
+        .to_csv(index, index=False)
+    monkeypatch.setattr(
+        dv.DataverseLoader, "_download_files",
+        staticmethod(lambda *a, **k: {"RamanSTS_part1.zip": str(part1), "RamanSTS_part2.zip": str(part2),
+                                      "map_index.tab": str(index)}),
+    )
+    monkeypatch.setattr(dv, "_STS_N_SPECTRA", 9)
+    monkeypatch.setattr(dv, "_STS_N_MAPS", len(map_rows))
+
+
+_FAKE_MAPS = [
+    ["FAT/P1_FAT.npy", "P1_FAT_a", 0, 3, 3, "P1", "FAT"],
+    ["FAT/P1_FAT.npy", "P1_FAT_b", 3, 5, 2, "P1", "FAT"],
+    ["MSC/P2_MSC.npy", "P2_MSC_a", 0, 4, 4, "P2", "MSC"],
+]
+
+
+def test_ramansts_groups_are_the_maps_of_the_index(tmp_path, monkeypatch):
+    _fake_ramansts(tmp_path, monkeypatch, _FAKE_MAPS)
+    spectra, shifts, targets, names, groups = DataverseLoader._load_ramansts(str(tmp_path))
+    assert spectra.shape == (9, 1401) and shifts[0] == 400 and shifts[-1] == 1800
+    assert groups.tolist() == ["P1_FAT_a"] * 3 + ["P1_FAT_b"] * 2 + ["P2_MSC_a"] * 4
+    assert targets.tolist() == [0] * 5 + [1] * 4
+
+
+def test_ramansts_raises_when_the_index_does_not_cover_a_file(tmp_path, monkeypatch):
+    short = [_FAKE_MAPS[0], ["FAT/P1_FAT.npy", "P1_FAT_b", 3, 4, 1, "P1", "FAT"], _FAKE_MAPS[2]]
+    _fake_ramansts(tmp_path, monkeypatch, short)
+    with pytest.raises(ValueError, match="cover the rows"):
+        DataverseLoader._load_ramansts(str(tmp_path))
+
+
+def test_ramansts_raises_when_the_index_disagrees_with_the_file_name(tmp_path, monkeypatch):
+    wrong = [_FAKE_MAPS[0], _FAKE_MAPS[1], ["MSC/P2_MSC.npy", "P2_MSC_a", 0, 4, 4, "P3", "MSC"]]
+    _fake_ramansts(tmp_path, monkeypatch, wrong)
+    with pytest.raises(ValueError, match="disagrees"):
+        DataverseLoader._load_ramansts(str(tmp_path))
+
+
+@pytest.mark.skip(reason="Harvard Dataverse download (~2.4 GB); run manually.")
+def test_soft_tissue_sarcoma():
+    dataset = DataverseLoader.load_dataset("soft_tissue_sarcoma")
+    assert dataset.spectra.shape == (286672, 1401)
+    assert dataset.raman_shifts[0] == 400 and dataset.raman_shifts[-1] == 1800
+    assert len(dataset.target_names) == 8
+    assert len(set(dataset.group_ids.tolist())) == 110
+    assert _groups_are_label_pure(dataset)
+    assert not np.isnan(dataset.spectra).any()
 
 
 @pytest.mark.skip(reason="MIND-Lab download; run manually.")

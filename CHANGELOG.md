@@ -11,6 +11,11 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `DataverseLoader` for datasets on Harvard Dataverse: lists files through the native API and checks each
+  download against its MD5.
+- `soft_tissue_sarcoma` (RamanSTS, Boroji et al. 2025, PLOS ONE): 286,672 ex-vivo spectra of soft tissue
+  from 7 patients, 8 tissue classes, 400-1,800 cm⁻¹. Group ids are the 110 Raman maps (`map_id` of the
+  authors' `map_index.csv`, Dataverse version 2.0).
 - **`slopp` and `slopp_e`**: the Rochman Lab's Raman libraries of plastic particles (Munno et al. 2020,
   doi:10.1021/acs.analchem.9b03626), 148 spectra of 15 polymer types and 113 spectra of 20 polymer types (aged in the
   environment), one spectrum per particle. The spectra come on three different axes, so the loader interpolates them
@@ -18,6 +23,11 @@ Versions follow [Semantic Versioning](https://semver.org/).
   `slopp` is grouped by the library's `Original Sample ID` (84 source items; seven hold more than one polymer);
   `slopp_e` has no replicate structure and is not grouped. The download package states no licence, so `license` says
   so; check it before redistributing the spectra. Source: https://rochmanlab.wordpress.com/spectral-libraries-for-microplastics-research/
+
+### Fixed
+
+- README: the dataset count and the group-id table, which said `GoogleDriveLoader` emits no group ids
+  (the glioma datasets do).
 
 ---
 
