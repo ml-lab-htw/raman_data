@@ -9,6 +9,12 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+---
+
+## [1.9.0] — 2026-11-18
+
+Five new datasets (RamanSTS, SLoPP, SLoPP-E and two RWTH Raman mixtures) and the Harvard Dataverse loader.
+
 ### Added
 
 - `DataverseLoader` for datasets on Harvard Dataverse: lists files through the native API and checks each
@@ -23,12 +29,17 @@ Versions follow [Semantic Versioning](https://semver.org/).
   `slopp` is grouped by the library's `Original Sample ID` (84 source items; seven hold more than one polymer);
   `slopp_e` has no replicate structure and is not grouped. The download package states no licence, so `license` says
   so; check it before redistributing the spectra. Source: https://rochmanlab.wordpress.com/spectral-libraries-for-microplastics-research/
+  The Rochman Lab site answers automated downloads with HTTP 403, so `raman_data("slopp")` cannot fetch the files by
+  itself: download `slopp-and-slopp-e.zip` and the itemized xlsx by hand into the cache folder (`~/.cache/raman-data/misc/slopp`);
+  the md5 sums are checked. RamanBench reads both datasets from its Hugging Face mirror.
 - **`vcl_pvcl_water` and `citric_acid_citrates`**: the two Raman mixture datasets of the RWTH Aachen AVT.SVT repository
   "Manifold Learning with DMAPs and Target Determination with Y-AE" (GitLab, no paper cited yet). Multi-target
   regression of mole fractions: 30 spectra with 3 targets (H2O, VCL, pVCL) and 45 spectra with 5 targets (citric acid,
   three citrate species, water). Both are raw spectra on one axis (99.9-3424.8 cm^-1, 0.3 cm^-1 steps, 11,084 points),
   not grouped. The repository states no licence, so `license` says so; check it before redistributing the spectra.
   The files are downloaded from one pinned commit and checked by md5.
+- `soft_tissue_sarcoma` is in the provider-preprocessing table (source preprocessing: polynomial baseline, median filter,
+  Savitzky-Golay, min-max, 1 cm^-1 grid).
 
 ### Fixed
 
