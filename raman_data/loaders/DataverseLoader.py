@@ -4,6 +4,7 @@ import zipfile
 from typing import List, Optional
 
 import numpy as np
+import pandas as pd
 import requests
 
 from raman_data.loaders.BaseLoader import BaseLoader
@@ -14,13 +15,18 @@ from raman_data.types import RamanDataset, TASK_TYPE, DatasetInfo, CACHE_DIR, HA
 _DATAVERSE_SERVER = "https://dataverse.harvard.edu"
 
 # RamanSTS (Boroji et al. 2025): one .npy per patient and tissue, <TISSUE>/P<patient>_<TISSUE>.npy inside
-# RamanSTS_part1.zip / RamanSTS_part2.zip; each holds whole or partial 51x51 maps of 1,401-point spectra.
+# RamanSTS_part1.zip / RamanSTS_part2.zip; each file is a concatenation of whole Raman maps of 1,401-point spectra
+# (mostly 51x51), and map_index.csv gives the row range of every map in its file.
 _STS_DOI = "10.7910/DVN/NGEZPA"
-# Pinned dataset version: a revision (e.g. the planned map ids) is picked up only by bumping this,
-# and the cache is per version so a bump downloads the new files.
-_STS_VERSION = "1.1"
+# Pinned dataset version: a revision is picked up only by bumping this, and the cache is per version so a bump
+# downloads the new files. 2.0 (2026-11-09) added the map index; the .npy files are unchanged from 1.1.
+_STS_VERSION = "2.0"
 _STS_N_SPECTRA = 286_672
-_STS_FILES = ("RamanSTS_part1.zip", "RamanSTS_part2.zip")
+_STS_N_MAPS = 110
+# Dataverse lists the uploaded map_index.csv as "map_index.tab" (it converts tables); the download is the
+# original CSV, whose MD5 the API reports.
+_STS_MAP_INDEX = "map_index.tab"
+_STS_FILES = ("RamanSTS_part1.zip", "RamanSTS_part2.zip", _STS_MAP_INDEX)
 _STS_TISSUES = {
     "FAT": "Fat",
     "MSC": "Muscle",
@@ -78,14 +84,16 @@ class DataverseLoader(BaseLoader):
                     "(benign), myxoid liposarcoma, high-grade pleomorphic liposarcoma, leiomyosarcoma and high-grade "
                     "myxofibrosarcoma (malignant). Leiomyoma, myxoid liposarcoma, leiomyosarcoma and high-grade "
                     "myxofibrosarcoma each come from a single patient, so for them grouped splits measure "
-                    "generalisation across regions of one specimen, not across patients. Three maps (P3 muscle, "
-                    "P3 pleomorphic liposarcoma, P4 myxoid liposarcoma) are partial: spectra with artefacts (tissue "
-                    "contamination, ink) were removed in WiRE. Group ids are the 18 patient x tissue files (e.g. \"P3_PLS\"); the map "
-                    "of each spectrum is not published yet."
+                    "generalisation across regions of one specimen, not across patients. The spectra are 110 Raman "
+                    "maps (most 51x51; four on other grids: 50x50, 52x51, 53x51, 51x61), all spectra of every map "
+                    "included. Group ids are the 110 maps (the authors' map_id, e.g. \"P4_MLS_01_01_A2_r3\"): "
+                    "spectra of one map are spatially adjacent and highly correlated and must not be split between "
+                    "train and test. Maps from one marked tissue site are neighbouring scans; the authors' "
+                    "area_id (77 sites) is the stricter grouping, not used here (leiomyosarcoma has only two sites)."
                 ),
             },
-            # One group per patient x tissue file, the finest unit the data identifies. Four classes
-            # (LEM, MLS, LEI, HMS) come from a single file each.
+            # One group per Raman map (110), from the authors' map_index.csv. Four classes (LEM, MLS, LEI, HMS)
+            # come from a single patient each.
             is_grouped=True,
             has_missing_labels=False,
             embedded_preprocessing=(
@@ -194,16 +202,20 @@ class DataverseLoader(BaseLoader):
 
     @staticmethod
     def _load_ramansts(cache_path: str):
-        """Tissue-type spectra of RamanSTS with patient x tissue groups (Boroji et al. 2025)."""
+        """Tissue-type spectra of RamanSTS with one group per Raman map (Boroji et al. 2025)."""
         paths = DataverseLoader._download_files(_STS_DOI, _STS_VERSION, os.path.join(cache_path, f"v{_STS_VERSION}"),
                                                 list(_STS_FILES))
 
         # Read the arrays straight from the archives (no 3 GB extraction), without pickle.
         members = []
-        for zip_path in paths.values():
+        for zip_path in (paths[name] for name in _STS_FILES if name != _STS_MAP_INDEX):
             with zipfile.ZipFile(zip_path) as zf:
                 members += [(zip_path, n) for n in zf.namelist() if n.endswith(".npy")]
         members.sort(key=lambda m: os.path.basename(m[1]))
+
+        map_index = pd.read_csv(paths[_STS_MAP_INDEX])
+        if len(map_index) != _STS_N_MAPS or map_index["map_id"].duplicated().any():
+            raise ValueError(f"expected {_STS_N_MAPS} unique maps in the map index, got {len(map_index)}")
 
         tissues = list(_STS_TISSUES)
         spectra, targets, groups = [], [], []
@@ -213,9 +225,16 @@ class DataverseLoader(BaseLoader):
                 raise ValueError(f"unexpected RamanSTS file {member}")
             with zipfile.ZipFile(zip_path) as zf, zf.open(member) as fh:
                 block = np.lib.format.read_array(fh, allow_pickle=False).astype(np.float32)
+            maps = map_index[map_index["file"] == member].sort_values("row_start")
+            if (maps["patient"] != patient).any() or (maps["tissue_class"] != tissue).any():
+                raise ValueError(f"the map index disagrees with the file name of {member}")
+            # The maps are contiguous row blocks that cover the file exactly.
+            if (maps["row_start"].to_numpy() != np.r_[0, maps["row_end"].to_numpy()[:-1]]).any() \
+                    or maps["row_end"].iloc[-1] != len(block):
+                raise ValueError(f"the map index does not cover the rows of {member} exactly")
             spectra.append(block)
             targets += [tissues.index(tissue)] * len(block)
-            groups += [f"{patient}_{tissue}"] * len(block)
+            groups += [m for m, n in zip(maps["map_id"], maps["n_spectra"]) for _ in range(n)]
 
         spectra = np.concatenate(spectra, axis=0)
         if spectra.shape != (_STS_N_SPECTRA, 1401):

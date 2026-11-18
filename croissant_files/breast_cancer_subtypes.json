@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Ex Vivo Breast Tissue Histological Subtype Classification (Ezzat et al. 2026)",
+  "description": "Label-free Raman spectra of ex vivo human breast tissue (80 frozen tissue samples -- 46 normal, 34 cancerous -- from consenting donors via the Imperial College Healthcare Tissue Bank) for histological subtype classification: normal vs. invasive ductal carcinoma (idc) vs. invasive lobular carcinoma (ilc) vs. ductal carcinoma in situ (dcis). 641 spectra (177 normal, 221 dcis, 114 idc, 129 ilc) on a confocal Raman microscope (DXR3xi, Thermo Fisher Scientific), 785 nm excitation, 500-2,998 cm^-1 at a 2 cm^-1 grid. Tumor samples were measured at 3-6 spatial points, normal tissue at a single point, with 2-3 spectra per point. group_ids are the 80 tissue sample ids (sample_id format SXXX_MX_RX: sample / measurement point / repeat): the paper reports the 80 samples derive from 71 individuals (9 donors contributed two samples), but the deposit carries no sample-to-individual mapping, so sample level is the finest available group. One sample id (S076_M4_R1) appears twice with distinct spectra (two measurements); both rows are kept as deposited. The authors' analysis used an 800-2,000 cm^-1 region of interest with z-score normalization (see embedded_preprocessing); the deposit spans the full acquired range.",
+  "url": "https://doi.org/10.5281/zenodo.20042934",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Classification",
+    "oncology"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Ezzat_2026, title={Label-free classification of breast cancer subtypes in ex vivo human tissues using Raman spectroscopy and machine learning}, url={http://dx.doi.org/10.1038/s41598-026-54071-5}, DOI={10.1038/s41598-026-54071-5}, journal={Scientific Reports}, publisher={Springer Nature}, author={Ezzat, Ahmed and Zhu, Zhiyu and Roddan, Alfie and Silvanto, Anna and Hou, Yingwei and Mandal, Nilanjan and Xu, Jiacheng and Zhang, Ziqi and Zhou, Mengyi and Darzi, Ara and Dryden, Simon and Leff, Daniel R. and Thompson, Alex J.}, year={2026}, month=jun}",
+  "citation": "Ezzat, A., Zhu, Z., Roddan, A., Silvanto, A., Hou, Y., Mandal, N., Xu, J., Zhang, Z., Zhou, M., Darzi, A., Dryden, S., Leff, D. R., and Thompson, A. J. (2026). Label-free classification of breast cancer subtypes in ex vivo human tissues using Raman spectroscopy and machine learning. Scientific Reports.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "breast_cancer_subtypes_source",
+      "name": "Ex Vivo Breast Tissue Histological Subtype Classification (Ezzat et al. 2026)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://doi.org/10.5281/zenodo.20042934",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "e4691d3ad5c009da5b99988b67a3a2afb500341802047229e0cc000942397eaf"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "breast_cancer_subtypes_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "breast_cancer_subtypes_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "breast_cancer_subtypes_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "breast_cancer_subtypes_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
+  "rai:dataCollectionType": "Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols.",
+  "rai:dataPreprocessingProtocol": "Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication.",
+  "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "rai:personalSensitiveInformation": "Spectra are derived from human biological samples (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included, but biological measurements may constitute sensitive health-related data under applicable data-protection regulations.",
+  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
+  "rai:dataLimitations": "Models trained on this dataset may not transfer to different instruments, sample matrices, or patient populations without re-calibration.",
+  "rai:dataSocialImpact": "Raman spectroscopy datasets for medical diagnostics have the potential to support the development of non-invasive, low-cost screening tools with particular relevance to resource-limited healthcare settings. Results must be validated by qualified healthcare professionals before any clinical application.",
+  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://doi.org/10.5281/zenodo.20042934"
+}

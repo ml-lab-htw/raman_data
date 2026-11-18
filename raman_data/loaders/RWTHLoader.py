@@ -126,10 +126,10 @@ class RWTHLoader(BaseLoader):
                 metadata={
                     "full_name": "Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy",
                     "source": "https://publications.rwth-aachen.de/record/959137/files/Data_RWTH-2023-05604.zip?version=1",
-                    "paper": "https://doi.org/10.1002/smll.202311920",
-                    "bibtex": "@article{Koronaki_2024, title={Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy}, volume={20}, ISSN={1613-6829}, url={http://dx.doi.org/10.1002/smll.202311920}, DOI={10.1002/smll.202311920}, number={23}, journal={Small}, publisher={Wiley}, author={Koronaki, Eleni D. and Scholz, Jan G. T. and Modelska, Magdalena M. and Nayak, Prabhat K. and Viell, Jorn and Mitsos, Alexander and Barkley, Samuel}, year={2024}}",
+                    "paper": "https://doi.org/10.1002/aic.18494",
+                    "bibtex": "@article{Koronaki_2024, title={Nonlinear manifold learning determines microgel size from Raman spectroscopy}, volume={70}, ISSN={1547-5905}, url={http://dx.doi.org/10.1002/aic.18494}, DOI={10.1002/aic.18494}, number={10}, journal={AIChE Journal}, publisher={Wiley}, author={Koronaki, Eleni D. and Kaven, Luise F. and Faust, Johannes M. M. and Kevrekidis, Ioannis G. and Mitsos, Alexander}, year={2024}, month=jul}",
                     "citation": [
-                        "Koronaki, E. D., Scholz, J. G. T., Modelska, M. M., Nayak, P. K., Viell, J., Mitsos, A., & Barkley, S. (2024). Nonlinear Manifold Learning Determines Microgel Size from Raman Spectroscopy. Small, 20(23), 2311920."
+                        "Koronaki, E. D., Kaven, L. F., Faust, J. M. M., Kevrekidis, I. G., & Mitsos, A. (2024). Nonlinear manifold learning determines microgel size from Raman spectroscopy. AIChE Journal, 70(10), e18494."
                     ],
                     "description": f"Raman spectra of 235 microgel samples with DLS-measured particle diameters (208–483 nm). Pretreatment: {label}, spectral range: {spectral_range}. Task: predict particle diameter from Raman spectrum.",
                 },
@@ -138,15 +138,27 @@ class RWTHLoader(BaseLoader):
                 # variants (45 groups, max size 10 -- consistent with repeated
                 # measurements per microgel sample across preprocessing variants).
                 is_grouped=True,
-                # Source preprocessing: rb (rubber band baseline) and snv (standard normal
-                # variate) and lf (linear fit) variants are re-preprocessing on top of
-                # embedded operations -- only 'raw' is truly unpreprocessed.
+                # The variants are the authors' pretreatments (Koronaki et al. 2024): lf = linear-fit and
+                # rb = rubber-band baseline subtraction, mm = min-max and snv = standard normal variate
+                # normalization. Structured steps: raman_data/provider_preprocessing.py.
                 embedded_preprocessing=(
-                    None if short_key == "raw"
-                    else "Raman-bias-corrected (baseline subtracted)" if "rb" in short_key
-                    else "low-frequency variant (cropped spectral range)" if "lf" in short_key and "snv" not in short_key
-                    else "standard normal variate normalization (source-applied)" if "snv" in short_key
-                    else None
+                    (
+                        "Raw spectra as deposited."
+                        if short_key == "raw"
+                        else "Baseline subtraction ("
+                        + ("linear fit" if short_key.endswith("lf") else "rubber band")
+                        + ")"
+                        + (
+                            " and " + ("min-max" if short_key.startswith("mm") else "standard normal variate")
+                            + " normalization (the authors do not state the order)"
+                            if "_" in short_key else ""
+                        )
+                        + "."
+                    )
+                    + (
+                        f" Cropped to the fingerprint range 850-1800 cm^-1 of the global 100-3425 cm^-1 range."
+                        if spectral_range == "FingerPrint" else ""
+                    )
                 ),
             )
             for short_key, file_key, label in [

@@ -25,6 +25,7 @@ def raman_data(
     application_type: Optional[APPLICATION_TYPE] = None,
     is_grouped: Optional[bool] = None,
     has_missing_labels: Optional[bool] = None,
+    provider_preprocessed: Optional[bool] = None,
     load_data: bool = True,
 ) -> list[str] | RamanDataset | None:
     """
@@ -32,7 +33,7 @@ def raman_data(
 
     - If 'name' is provided, it loads the specified dataset.
     - If 'name' is None, it lists available datasets, optionally filtered by 'task_type'
-      and/or 'application_type' and/or 'is_grouped' and/or 'has_missing_labels'.
+      and/or 'application_type' and/or 'is_grouped' and/or 'has_missing_labels' and/or 'provider_preprocessed'.
 
     Args:
         dataset_name: The name of the dataset to load. If None, lists datasets.
@@ -51,6 +52,12 @@ def raman_data(
             fully labeled. Datasets where this hasn't been checked yet are
             excluded by either `True` or `False` -- leave as `None` (the default)
             to include them.
+        provider_preprocessed: Filters the dataset list by whether the data provider
+            preprocessed the spectra before depositing them (see
+            `DatasetInfo.provider_preprocessing`). `True` for only datasets with
+            provider preprocessing, `False` for only datasets checked and found raw.
+            Datasets where this hasn't been checked yet are excluded by either
+            `True` or `False` -- leave as `None` (the default) to include them.
         load_data: If True, loads the actual spectral data. If False, returns metadata only.
 
     Returns:
@@ -62,6 +69,7 @@ def raman_data(
         return datasets.list_datasets(
             task_type=task_type, application_type=application_type,
             is_grouped=is_grouped, has_missing_labels=has_missing_labels,
+            provider_preprocessed=provider_preprocessed,
         )
     else:
         logger.info("Loading dataset: %s (cache_dir=%s)", dataset_name, cache_dir)

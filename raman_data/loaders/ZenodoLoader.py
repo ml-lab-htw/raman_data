@@ -1,11 +1,11 @@
 import glob
+from collections import Counter
 from typing import Optional, Tuple, List
 import logging
 
 import os, requests
 import pandas as pd
 import numpy as np
-from zenodo_get import download
 
 from raman_data.types import DatasetInfo, RamanDataset, CACHE_DIR, TASK_TYPE, APPLICATION_TYPE
 from raman_data.exceptions import CorruptedZipFileError
@@ -436,6 +436,517 @@ class ZenodoLoader(BaseLoader):
 
         return spectra, raman_shifts, targets, list(class_names), group_ids
 
+    # Stroke urine SERS (Zenodo ID: 19369604). Both laser variants share the
+    # same data.rar; each variant reads one of the two SERSspectra folders
+    # (deposit folder names: '532，0.5%，1s' and '632，5%，1s' -- the '632'
+    # folder is the 633 nm line, the percent is the laser power setting).
+    _STROKE_URI_RAR = "data.rar"
+    _STROKE_URI_FOLDER_PREFIX = {532: "532", 633: "632"}
+    # The native WiRE axes of both variants (slightly non-uniform, per file
+    # ~484.9-1638.5 cm^-1) are resampled row-wise onto this common 1 cm^-1 grid.
+    _STROKE_URI_GRID = np.arange(485, 1639, 1.0)
+    # Patient (map file stem) -> diagnosis for the 101 participants of the
+    # SERS cohort. Taken from the authors' final labelled tables in the same
+    # record ('results/SERSspectra/{532,633,concat}/data.csv', `label2`/
+    # `labels` columns -- identical across all three); matches the paper's
+    # cohort of 55 healthy controls and 46 patients with confirmed ischemic
+    # stroke.
+    _STROKE_URI_PATIENT_LABELS = {
+        "1": "IS", "2": "HC", "3": "HC", "4": "IS", "5": "IS", "6": "IS",
+        "7": "IS", "8": "IS", "9": "IS", "10": "IS", "11": "IS", "12": "IS",
+        "13": "IS", "14": "IS", "15": "IS", "16": "IS", "17": "IS", "18": "IS",
+        "19": "IS", "20": "IS", "21": "IS", "22": "HC", "23": "HC", "24": "HC",
+        "25": "HC", "26": "HC", "27": "HC", "28": "HC", "29": "HC", "30": "HC",
+        "31": "HC", "32": "HC", "33": "IS", "34": "IS", "35": "HC", "36": "HC",
+        "37": "HC", "38": "HC", "39": "HC", "40": "HC", "41": "HC", "42": "HC",
+        "43": "HC", "44": "HC", "45": "HC", "46": "HC", "47": "HC", "48": "HC",
+        "49": "HC", "50": "HC", "51": "HC", "52": "HC", "53": "HC", "54": "HC",
+        "55": "HC", "56": "HC", "57": "IS", "58": "IS", "59": "IS", "60": "IS",
+        "61": "IS", "62": "IS", "63": "HC", "64": "HC", "65": "HC", "66": "HC",
+        "67": "HC", "68": "HC", "69": "HC", "70": "HC", "71": "HC", "72": "HC",
+        "73": "HC", "74": "HC", "75": "HC", "76": "IS", "77": "IS", "78": "IS",
+        "79": "IS", "80": "IS", "81": "IS", "82": "IS", "83": "IS", "84": "IS",
+        "85": "IS", "86": "IS", "87": "IS", "88": "IS", "89": "IS", "90": "IS",
+        "91": "IS", "92": "IS", "93": "IS", "94": "IS", "95": "HC", "96": "HC",
+        "97": "HC", "98": "HC", "99": "HC", "100": "HC", "101": "HC",
+    }
+
+    @staticmethod
+    def __load_19369604(
+        cache_path: str,
+        laser_nm: int,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str], np.ndarray] | None:
+        """
+        Parse and extract data from the stroke urine SERS dataset (Zenodo ID: 19369604).
+
+        Urine SERS spectra for ischemic-stroke vs. healthy-control
+        classification, deposited by Yu et al. 2026 (Sci. Adv. 12:eaee3487).
+        `laser_nm` selects one of the two excitation variants (532 or 633 nm);
+        both variants are stored in the same 'data.rar' archive.
+
+        Layout of data.rar (after extraction):
+            SERSspectra/532，0.5%，1s/*.wdf   532 nm, 100 mW (0.5% power), 1 s
+            SERSspectra/632，5%，1s/*.wdf     633 nm, 35 mW (5% power), 1 s
+        Each .wdf is a Renishaw WiRE 10x10 map (100 spectra) of one
+        participant's dried urine spot; files 1..101 are the 101 participants,
+        files 31.1-34.1 are four repeated collections.
+
+        Returns a tuple of (spectra, raman_shifts, targets, class_names,
+        group_ids) with group_id = participant id (repeated collections merged
+        into the parent participant).
+        """
+        if laser_nm not in (532, 633):
+            raise ValueError(f"laser_nm must be 532 or 633, got {laser_nm}")
+
+        # Lazy import: renishawWiRE is only needed for this one dataset; a
+        # module-level import would break the whole package when the
+        # community parser is missing.
+        try:
+            from renishawWiRE import WDFReader
+        except ImportError as e:
+            raise RuntimeError(
+                "[!] The stroke urine SERS loader needs the community package "
+                "'renishawWiRE' (Renishaw WiRE .wdf parser) to be installed: "
+                "pip install renishawWiRE, then retry."
+            ) from e
+
+        dataset_dir = os.path.join(cache_path, "19369604")
+        extracted_dir = os.path.join(dataset_dir, "data")
+
+        if not os.path.isdir(extracted_dir) or not os.listdir(extracted_dir):
+            rar_path = os.path.join(dataset_dir, ZenodoLoader._STROKE_URI_RAR)
+            if not os.path.isfile(rar_path):
+                raise FileNotFoundError(
+                    f"Could not find {ZenodoLoader._STROKE_URI_RAR} in {dataset_dir}"
+                )
+            if LoaderTools.extract_rar_file_content(rar_path, "data") is None:
+                raise RuntimeError(
+                    "[!] Could not extract data.rar (Zenodo 19369604): no working "
+                    "RAR extraction tool found on this system. Install bsdtar "
+                    "(libarchive; ships with macOS), unrar, unar, or 7-Zip and retry."
+                )
+
+        sers_dir = os.path.join(extracted_dir, "SERSspectra")
+        if not os.path.isdir(sers_dir):
+            raise FileNotFoundError(f"No SERSspectra/ directory found under {extracted_dir}")
+
+        prefix = ZenodoLoader._STROKE_URI_FOLDER_PREFIX[laser_nm]
+        folders = [
+            f for f in sorted(os.listdir(sers_dir))
+            if f.startswith(prefix) and os.path.isdir(os.path.join(sers_dir, f))
+        ]
+        if len(folders) != 1:
+            raise RuntimeError(
+                f"[!] stroke_urine_sers_{laser_nm}: expected exactly one SERSspectra "
+                f"folder starting with {prefix!r}, found: {folders}"
+            )
+        wdf_dir = os.path.join(sers_dir, folders[0])
+
+        wdf_files = sorted(
+            (f for f in os.listdir(wdf_dir) if f.endswith(".wdf")),
+            key=lambda f: [float(t) for t in f[:-4].split(".")],
+        )
+        stems = [f[:-4] for f in wdf_files]
+        expected_stems = {str(i) for i in range(1, 102)} | {"31.1", "32.1", "33.1", "34.1"}
+        if len(stems) != 105 or set(stems) != expected_stems:
+            raise RuntimeError(
+                f"[!] stroke_urine_sers_{laser_nm}: expected the 105 map files "
+                "1..101 plus repeat collections 31.1-34.1, got "
+                f"{len(stems)} files: {stems[:8]}..."
+            )
+
+        grid = ZenodoLoader._STROKE_URI_GRID
+        spectra_list, labels_list, groups_list = [], [], []
+        for fname in wdf_files:
+            stem = fname[:-4]
+            patient = stem.split(".")[0]
+            reader = WDFReader(os.path.join(wdf_dir, fname))
+            x = np.asarray(reader.xdata, dtype=float)
+            if x.ndim != 1 or x.shape[0] < 50:
+                raise RuntimeError(
+                    f"[!] stroke_urine_sers_{laser_nm}: {fname} has no usable wavenumber axis"
+                )
+            order = np.argsort(x)
+            sp = np.asarray(reader.spectra, dtype=float).reshape(-1, x.shape[0])
+            if sp.shape[0] != 100:
+                raise RuntimeError(
+                    f"[!] stroke_urine_sers_{laser_nm}: {fname} holds {sp.shape[0]} "
+                    "spectra, expected 100 (10x10 map)"
+                )
+            resampled = np.empty((sp.shape[0], grid.shape[0]), dtype=float)
+            for i in range(sp.shape[0]):
+                resampled[i] = np.interp(grid, x[order], sp[i][order])
+            spectra_list.append(resampled)
+            labels_list.extend([ZenodoLoader._STROKE_URI_PATIENT_LABELS[patient]] * sp.shape[0])
+            groups_list.extend([patient] * sp.shape[0])
+
+        spectra = np.concatenate(spectra_list)
+        if np.isnan(spectra).any():
+            raise RuntimeError(f"[!] stroke_urine_sers_{laser_nm}: NaN values after resampling")
+
+        targets, class_names = encode_labels(pd.Series(labels_list))
+        group_ids = np.array(groups_list, dtype=str)
+        return spectra, grid, targets, list(class_names), group_ids
+
+    @staticmethod
+    def __load_20042934(
+        cache_path: str,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str], np.ndarray] | None:
+        """
+        Parse and extract data from the breast_cancer_subtypes dataset (Zenodo ID: 20042934).
+
+        Ex vivo breast tissue Raman spectra for histological subtype
+        classification (Ezzat et al. 2026, Sci. Rep.,
+        doi:10.1038/s41598-026-54071-5; preprint
+        doi:10.21203/rs.3.rs-7714586/v1): normal vs. IDC vs. ILC vs. DCIS.
+
+        DATASET.xlsx / Sheet1: one row per spectrum; `histopathology` is the
+        class label, `sample_id` follows SXXX_MX_RX (tissue sample /
+        measurement point / repeat), then one column per wavenumber
+        (500-2998 cm^-1 in 2 cm^-1 steps). The deposited wavenumber header
+        repeats the final two values (2996, 2998) -- pandas/Excel renamed the
+        duplicates '2996.1'/'2998.1'; only the 500..2998 step-2 columns are
+        used. One sample id (S076_M4_R1) appears twice with distinct spectra
+        (two measurements); both rows are kept.
+
+        Returns a tuple of (spectra, raman_shifts, targets, class_names,
+        group_ids) with group_id = tissue sample id.
+        """
+        data_path = os.path.join(cache_path, "20042934", "DATASET.xlsx")
+        if not os.path.isfile(data_path):
+            raise FileNotFoundError(f"Could not find DATASET.xlsx in {data_path}")
+
+        df = pd.read_excel(data_path, sheet_name="Sheet1")
+        for col in ("histopathology", "sample_id"):
+            if col not in df.columns:
+                raise RuntimeError(f"[!] breast_cancer_subtypes: missing column '{col}'.")
+
+        # Keep exactly the 500..2998 step-2 wavenumber columns (this drops the
+        # duplicated '2996.1'/'2998.1' header artifact of the deposit).
+        expected = {str(500 + 2 * i) for i in range(1250)}
+        wn_cols = [c for c in df.columns if str(c) in expected]
+        if len(wn_cols) != 1250:
+            raise RuntimeError(
+                f"[!] breast_cancer_subtypes: expected the 500-2998 cm^-1 step-2 "
+                f"wavenumber columns, found {len(wn_cols)}."
+            )
+        raman_shifts = np.array([float(c) for c in wn_cols])
+        if not np.all(np.diff(raman_shifts) == 2.0):
+            raise RuntimeError(
+                "[!] breast_cancer_subtypes: wavenumber axis is not uniform (step 2 cm^-1)."
+            )
+
+        spectra = df[wn_cols].apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError("[!] breast_cancer_subtypes: missing intensity values.")
+
+        if len(df) != 641:
+            raise RuntimeError(
+                f"[!] breast_cancer_subtypes: expected 641 spectra, got {len(df)}."
+            )
+        labels = df["histopathology"].astype(str).str.strip()
+        expected_classes = {"normal", "dcis", "idc", "ilc"}
+        if set(labels) != expected_classes:
+            raise RuntimeError(
+                f"[!] breast_cancer_subtypes: unexpected class labels: {sorted(set(labels))}."
+            )
+
+        targets, class_names = encode_labels(labels)
+        # Group by tissue sample (the SXXX prefix of sample_id SXXX_MX_RX):
+        # every measurement point and repeat on one tissue sample is the same
+        # physical specimen, so they must not be split across train/test.
+        group_ids = (
+            df["sample_id"].astype(str).str.strip().str.extract(r"^(S\d+)")[0].to_numpy()
+        )
+        return spectra, raman_shifts, targets, list(class_names), group_ids
+
+    # yeast_batch_effects (Zenodo 19226627, Cheveralls et al. 2026)
+    _YEAST_BATCH_ZIP = "raman-batch-effects-yeast-v1.0.zip"
+    _YEAST_BATCH_REPO_PREFIX = "Arcadia-Science-raman-batch-effects-yeast-"
+    # day -> (spectra subdirectory, platemap file name)
+    _YEAST_BATCH_DAYS = {
+        1: ("2025-08-06", "08-06_yeast-mutants.csv"),
+        2: ("2025-08-07", "08-07_yeast-mutants.csv"),
+        3: ("2025-08-12", "08-12_yeast-mutants.csv"),
+    }
+
+    @staticmethod
+    def __load_19226627(
+        cache_path: str,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[str], np.ndarray] | None:
+        """
+        Parse and extract data from the yeast_batch_effects dataset
+        (Zenodo ID: 19226627).
+
+        Raman spectra of 9 yeast strains (3 S. cerevisiae, 6 S. pombe)
+        desiccated onto three replicate plates, used to expose plate-level
+        batch effects (Cheveralls et al. 2026,
+        doi:10.57844/arcadia-xdmk-yq0w).
+
+        The Zenodo file is a GitHub repo snapshot with a nested data.zip:
+            august-2025-platemaps/<day>_yeast-mutants.csv  well -> strain
+            august-2025-spectra/<date>/yeast_mut/<well>-Site_<n>.csv
+                5x5 grid of site spectra per well (2,048 points; axis in
+                the 'Pixel' column, 'Intensity' for the signal)
+            august-2025-spectra/<date>/dark/Default.csv    per-plate dark
+        Platemap well ids are zero-padded ('D08'); file names are not
+        ('D8'). Each plate's 10th well (E12, E12, C12) is an empty-well
+        control without a strain label and is excluded.
+
+        Returns a tuple of (spectra, raman_shifts, targets, class_names,
+        group_ids) with group_id = the desiccation plate (the date
+        subdirectory, e.g. '2025-08-06'; 225 spectra = 9 strain wells x
+        25 co-located site spectra). The plate is the paper's batch unit
+        -- leave-one-plate-out is its protocol -- so the well level is
+        deliberately not exposed as the group.
+        """
+        dataset_dir = os.path.join(cache_path, "19226627")
+        # zenodo_get writes the file out under its API 'key', which carries
+        # an 'Arcadia-Science/' directory prefix for this record.
+        zip_path = os.path.join(dataset_dir, "Arcadia-Science", ZenodoLoader._YEAST_BATCH_ZIP)
+        if not os.path.isfile(zip_path):
+            zip_path = os.path.join(dataset_dir, ZenodoLoader._YEAST_BATCH_ZIP)
+        if not os.path.isfile(zip_path):
+            raise FileNotFoundError(
+                f"Could not find {ZenodoLoader._YEAST_BATCH_ZIP} in {dataset_dir}"
+            )
+        # The outer zip is extracted next to it, into a 'repo' subdirectory.
+        repo_root = os.path.join(os.path.dirname(zip_path), "repo")
+
+        data_dir = next(
+            (
+                d
+                for d in glob.glob(
+                    os.path.join(repo_root, f"{ZenodoLoader._YEAST_BATCH_REPO_PREFIX}*", "data")
+                )
+                if os.path.isdir(d)
+            ),
+            None,
+        )
+        if data_dir is None:
+            if LoaderTools.extract_zip_file_content(zip_path, "repo") is None:
+                raise RuntimeError(
+                    "[!] yeast_batch_effects: could not extract the repo archive."
+                )
+            repo_dirs = [
+                d
+                for d in glob.glob(os.path.join(repo_root, f"{ZenodoLoader._YEAST_BATCH_REPO_PREFIX}*"))
+                if os.path.isdir(d)
+            ]
+            if len(repo_dirs) != 1:
+                raise RuntimeError(
+                    f"[!] yeast_batch_effects: expected exactly one repo directory, found {repo_dirs}."
+                )
+            inner_zip = os.path.join(repo_dirs[0], "data.zip")
+            if not os.path.isfile(inner_zip):
+                raise FileNotFoundError(f"Could not find data.zip in {repo_dirs[0]}")
+            if LoaderTools.extract_zip_file_content(inner_zip, "data") is None:
+                raise RuntimeError("[!] yeast_batch_effects: could not extract data.zip.")
+            data_dir = os.path.join(repo_dirs[0], "data")
+
+        spectra_list: List[np.ndarray] = []
+        raman_shifts_ref: Optional[np.ndarray] = None
+        labels: List[str] = []
+        group_ids: List[str] = []
+        well_ids: List[str] = []
+
+        for day, (subdir, platemap_name) in ZenodoLoader._YEAST_BATCH_DAYS.items():
+            platemap = pd.read_csv(os.path.join(data_dir, "august-2025-platemaps", platemap_name))
+            for col in ("well_id", "strain"):
+                if col not in platemap.columns:
+                    raise RuntimeError(
+                        f"[!] yeast_batch_effects: missing column '{col}' in {platemap_name}."
+                    )
+            # Platemap well ids are zero-padded ('D08'); file names are not ('D8').
+            well_to_strain = {
+                f"{w[0]}{int(w[1:])}": s for w, s in zip(platemap["well_id"], platemap["strain"])
+            }
+            site_dir = os.path.join(data_dir, "august-2025-spectra", subdir, "yeast_mut")
+            files = sorted(glob.glob(os.path.join(site_dir, "*.csv")))
+            if not files:
+                raise FileNotFoundError(f"[!] yeast_batch_effects: no site spectra in {site_dir}.")
+            for fpath in files:
+                well = os.path.basename(fpath).split("-")[0]
+                strain = well_to_strain.get(well)
+                if strain is None:
+                    continue  # empty-well control
+                df = pd.read_csv(fpath).dropna()
+                axis_col = "Pixel" if "Pixel" in df.columns else "Wavenumber"
+                if axis_col not in df.columns or "Intensity" not in df.columns:
+                    raise RuntimeError(
+                        f"[!] yeast_batch_effects: unexpected columns in {fpath}: {list(df.columns)}."
+                    )
+                axis = df[axis_col].to_numpy(dtype=float)
+                if raman_shifts_ref is None:
+                    raman_shifts_ref = axis
+                elif axis.shape != raman_shifts_ref.shape or not np.allclose(axis, raman_shifts_ref):
+                    raise RuntimeError(f"[!] yeast_batch_effects: spectral axis differs in {fpath}.")
+                spectra_list.append(df["Intensity"].to_numpy(dtype=float))
+                labels.append(strain)
+                # Group = the desiccation plate (date), not the (plate, well)
+                # cell: the paper's batch effect acts at plate level, and
+                # every plate carries all 9 strains, so grouped k-fold with
+                # the plates as groups is exactly leave-one-plate-out CV.
+                # (Well positions repeat across plates, so the integrity
+                # counter below keys on (plate, well), not the well alone.)
+                group_ids.append(subdir)
+                well_ids.append(f"{subdir}/{well}")
+
+        if raman_shifts_ref is None or not spectra_list:
+            raise RuntimeError("[!] yeast_batch_effects: no spectra parsed.")
+        if raman_shifts_ref.shape != (2048,):
+            raise RuntimeError(
+                f"[!] yeast_batch_effects: expected 2,048 spectral points, got {raman_shifts_ref.shape[0]}."
+            )
+
+        spectra = np.asarray(spectra_list, dtype=float)
+        if np.isnan(spectra).any():
+            raise RuntimeError("[!] yeast_batch_effects: missing intensity values.")
+
+        per_well = Counter(well_ids)
+        per_plate = Counter(group_ids)
+        per_strain = Counter(labels)
+        if len(per_well) != 27 or any(v != 25 for v in per_well.values()):
+            raise RuntimeError(
+                f"[!] yeast_batch_effects: expected 27 (plate, well) cells with "
+                f"25 site spectra each, got {len(per_well)} cells "
+                f"(sizes {sorted(per_well.values())})."
+            )
+        if len(per_plate) != 3 or any(v != 225 for v in per_plate.values()):
+            raise RuntimeError(
+                f"[!] yeast_batch_effects: expected 3 plate groups with "
+                f"225 spectra each, got {len(per_plate)} groups "
+                f"(sizes {sorted(per_plate.values())})."
+            )
+        if len(per_strain) != 9 or any(v != 75 for v in per_strain.values()):
+            raise RuntimeError(
+                f"[!] yeast_batch_effects: expected 9 strains with 75 spectra each, "
+                f"got {len(per_strain)} strains (sizes {sorted(per_strain.values())})."
+            )
+
+        targets, class_names = encode_labels(labels)
+        ZenodoLoader.logger.debug(
+            f"Loaded yeast_batch_effects: {spectra.shape[0]} spectra x {spectra.shape[1]} points, "
+            f"{len(class_names)} strains, {len(per_well)} (plate, well) groups"
+        )
+        return spectra, raman_shifts_ref, targets, list(class_names), np.array(group_ids)
+
+    @staticmethod
+    def __load_6014148(cache_path: str):
+        """
+        Parse and extract data from the turmeric lead-chromate
+        FT-Raman dataset (Zenodo ID: 6014148): 70
+        triplicate-averaged spectra of 10 turmeric samples, each
+        laced with one of seven lead-chromate levels
+        (0-0.1 w/w fraction), on the native 1,765-point
+        199.5076-3,601.383 cm^-1 axis (flipped to ascending).
+
+        Args:
+            cache_path: The base path where the dataset files are
+                cached.
+
+        Returns:
+            A tuple of (spectra, raman_shifts, targets,
+            target_names, group_ids) arrays, or None if parsing
+            fails.
+        """
+        try:
+            import openpyxl
+        except ImportError as e:
+            raise RuntimeError(
+                "[!] The turmeric_lead_chromate loader needs "
+                "'openpyxl' (pip install openpyxl) to be "
+                "installed."
+            ) from e
+
+        data_dir = os.path.join(cache_path, "6014148")
+        candidates = glob.glob(os.path.join(data_dir, "*.xlsx"))
+        if not candidates:
+            raise FileNotFoundError(
+                f"Could not find the turmeric xlsx in {data_dir}"
+            )
+        data_path = candidates[0]
+
+        wb = openpyxl.load_workbook(
+            data_path, read_only=True, data_only=True
+        )
+        try:
+            ws = wb["Raw spectra region 3601-200"]
+            rows = list(ws.iter_rows(values_only=True))
+        finally:
+            wb.close()
+
+        # Row 3 (index 2): 'Sample', 'Concentration (w/w%)'
+        # (actually the w/w fraction), then the wavenumber axis.
+        axis_desc = [float(v) for v in rows[2][2:] if v is not None]
+        if (
+            len(axis_desc) != 1765
+            or not all(b < a for a, b in zip(axis_desc, axis_desc[1:]))
+        ):
+            raise RuntimeError(
+                "[!] turmeric_lead_chromate: the workbook layout "
+                "changed (axis no longer a strictly descending "
+                "1,765-point 3,601.383-199.5076 cm^-1 axis)."
+            )
+        # The source axis is descending; flip to ascending.
+        raman_shifts = np.asarray(axis_desc[::-1], dtype=float)
+
+        spectra_list = []
+        targets_list = []
+        groups_list = []
+        for row in rows[3:]:
+            if row[0] is None:
+                continue
+            sample = str(row[0]).strip()
+            concentration = float(row[1])
+            vals = [float(v) for v in row[2:] if v is not None]
+            if len(vals) != 1765:
+                raise RuntimeError(
+                    f"[!] turmeric_lead_chromate: row for "
+                    f"{sample!r} carries {len(vals)} points "
+                    "(workbook layout changed?)."
+                )
+            arr = np.asarray(vals, dtype=float)
+            if not np.isfinite(arr).all():
+                raise RuntimeError(
+                    f"[!] turmeric_lead_chromate: row for "
+                    f"{sample!r} contains non-finite values."
+                )
+            spectra_list.append(arr)
+            targets_list.append(concentration)
+            groups_list.append(sample)
+
+        spectra = np.asarray(spectra_list, dtype=float)
+        targets = np.asarray(targets_list, dtype=float)
+
+        expected_levels = {0.0, 0.001, 0.005, 0.01, 0.025, 0.05, 0.1}
+        per_sample = Counter(groups_list)
+        if (
+            spectra.shape != (70, 1765)
+            or set(targets.tolist()) != expected_levels
+            or len(per_sample) != 10
+            or any(v != 7 for v in per_sample.values())
+        ):
+            raise RuntimeError(
+                "[!] turmeric_lead_chromate: unexpected census "
+                f"(shape {spectra.shape}, levels "
+                f"{sorted(set(targets.tolist()))}, per-sample "
+                f"sizes {sorted(per_sample.values())})."
+            )
+        ZenodoLoader.logger.debug(
+            f"Loaded turmeric_lead_chromate: "
+            f"{spectra.shape[0]} spectra x {spectra.shape[1]} "
+            f"points, {len(per_sample)} samples, "
+            f"lead-chromate w/w fraction {targets.min():g}..{targets.max():g}"
+        )
+        return (
+            spectra,
+            raman_shifts,
+            targets,
+            ["lead_chromate_w_w_fraction"],
+            np.asarray(groups_list),
+        )
+
     __BASE_URL = "https://zenodo.org/api/records/ID/files-archive"
     __BASE_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "raman-data", "zenodo")
     LoaderTools.set_cache_root(__BASE_CACHE_DIR, CACHE_DIR.Zenodo)
@@ -658,6 +1169,327 @@ class ZenodoLoader(BaseLoader):
             # Checked: no missing (NaN) label values.
             has_missing_labels=False,
         ),
+        **{
+            f"stroke_urine_sers_{nm}": DatasetInfo(
+                task_type=TASK_TYPE.Classification,
+                application_type=APPLICATION_TYPE.Medical,
+                id="19369604",
+                name=f"Stroke Urine SERS ({nm} nm, Yu et al. 2026)",
+                short_name=f"Stroke Urine SERS {nm}",
+                file_typ="data.rar",
+                license="CC BY 4.0",
+                loader=lambda cache_path, nm=nm: ZenodoLoader.__load_19369604(cache_path, nm),
+                metadata={
+                    "full_name": f"Ischemic Stroke Urine SERS, {nm} nm laser (Yu et al. 2026)",
+                    "source": "https://doi.org/10.5281/zenodo.19369604",
+                    "paper": "https://doi.org/10.1126/sciadv.aee3487",
+                    "bibtex": (
+                        "@article{Yu_2026, title={Dual-mode analysis of ischemic stroke "
+                        "based on urine SERS spectra and carotid B-ultrasound}, volume={12}, "
+                        "ISSN={2375-2541}, url={http://dx.doi.org/10.1126/sciadv.aee3487}, "
+                        "DOI={10.1126/sciadv.aee3487}, number={27}, journal={Science Advances}, "
+                        "publisher={American Association for the Advancement of Science}, "
+                        "author={Yu, Wenrou and Chen, Zhaoxian and Liu, Yao and Du, Yan and "
+                        "Wang, Hui and Tang, Fengjie and Xie, Xin and Huang, Yingzhou}, "
+                        "year={2026}, month=Jul, pages={eaee3487}}"
+                    ),
+                    "citation": [
+                        "Yu, W., Chen, Z., Liu, Y., Du, Y., Wang, H., Tang, F., Xie, X., and "
+                        "Huang, Y. (2026). Dual-mode analysis of ischemic stroke based on urine "
+                        "SERS spectra and carotid B-ultrasound. Science Advances, 12(27), eaee3487."
+                    ],
+                    "description": (
+                        "Surface-enhanced Raman (SERS) spectra of urine from 101 participants "
+                        "(55 healthy controls, 46 patients with confirmed ischemic stroke) on "
+                        "colloidal Ag-nanoparticle SERS filter-paper chips (R6G enhancement "
+                        f"factor 1.62e6), Renishaw inVia Qontor, 50x objective, 1 s acquisition, "
+                        f"{nm} nm excitation "
+                        f"({'100 mW (0.5% power setting)' if nm == 532 else '35 mW (5% power setting)'}). "
+                        "Each participant's dried urine spot was scanned as a 10x10 map "
+                        "(100 spectra); the deposit additionally contains four repeated "
+                        "collections (files 31.1-34.1), so each variant holds 10,500 spectra "
+                        "from 105 map files (the paper's headline 10,100 counts only the 101 "
+                        "primary maps). Native WiRE axes (667-668 points at 532 nm, 1,015 points "
+                        "at 633 nm; ~485-1,638 cm^-1; slightly non-uniform) resampled row-wise "
+                        "onto a common 1 cm^-1 grid (1,154 points). group_ids = the 101 "
+                        "participants (repeat collections merged into the parent participant), "
+                        "so all spectra of one group share one class. Raw WiRE exports as "
+                        "deposited: the authors' baseline correction, smoothing, normalization, "
+                        "and outlier removal (which dropped ~8% of the map points, incl. all-zero "
+                        "scans) live in their analysis code/results, not in the deposited spectra."
+                    ),
+                },
+                # Checked: 101 participants, each with exactly one diagnosis
+                # (55 HC / 46 IS); the four repeat collections (31.1-34.1) are
+                # merged into their parent participant, so groups are label-pure.
+                is_grouped=True,
+                # Checked: all 101 patients carry a HC/IS label; no missing labels.
+                has_missing_labels=False,
+                # Raw WiRE map exports as deposited; the authors' preprocessing
+                # (baseline correction, smoothing, normalization, outlier
+                # removal) is in their analysis code (code.rar) / results
+                # (results.rar), not in the deposited spectra.
+                embedded_preprocessing=None,
+            )
+            for nm in (532, 633)
+        },
+        "breast_cancer_subtypes": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Medical,
+            id="20042934",
+            name="Breast Cancer Subtypes (Ex Vivo Tissue)",
+            short_name="Breast Cancer Subtypes",
+            file_typ="DATASET.xlsx",
+            license="CC BY 4.0",
+            loader=lambda cache_path: ZenodoLoader.__load_20042934(cache_path),
+            metadata={
+                "full_name": "Ex Vivo Breast Tissue Histological Subtype Classification (Ezzat et al. 2026)",
+                "source": "https://doi.org/10.5281/zenodo.20042934",
+                "paper": "https://doi.org/10.1038/s41598-026-54071-5",
+                "bibtex": (
+                    "@article{Ezzat_2026, title={Label-free classification of breast "
+                    "cancer subtypes in ex vivo human tissues using Raman spectroscopy and "
+                    "machine learning}, url={http://dx.doi.org/10.1038/s41598-026-54071-5}, "
+                    "DOI={10.1038/s41598-026-54071-5}, journal={Scientific Reports}, "
+                    "publisher={Springer Nature}, "
+                    "author={Ezzat, Ahmed and Zhu, Zhiyu and Roddan, Alfie and Silvanto, Anna "
+                    "and Hou, Yingwei and Mandal, Nilanjan and Xu, Jiacheng and Zhang, Ziqi "
+                    "and Zhou, Mengyi and Darzi, Ara and Dryden, Simon and Leff, Daniel R. "
+                    "and Thompson, Alex J.}, year={2026}, month=jun}"
+                ),
+                "citation": [
+                    "Ezzat, A., Zhu, Z., Roddan, A., Silvanto, A., Hou, Y., Mandal, N., Xu, J., "
+                    "Zhang, Z., Zhou, M., Darzi, A., Dryden, S., Leff, D. R., and Thompson, A. J. "
+                    "(2026). Label-free classification of breast cancer subtypes in ex vivo human "
+                    "tissues using Raman spectroscopy and machine learning. Scientific Reports."
+                ],
+                "description": (
+                    "Label-free Raman spectra of ex vivo human breast tissue (80 frozen tissue "
+                    "samples -- 46 normal, 34 cancerous -- from consenting donors via the Imperial "
+                    "College Healthcare Tissue Bank) for histological subtype classification: "
+                    "normal vs. invasive ductal carcinoma (idc) vs. invasive lobular carcinoma "
+                    "(ilc) vs. ductal carcinoma in situ (dcis). 641 spectra (177 normal, 221 dcis, "
+                    "114 idc, 129 ilc) on a confocal Raman microscope (DXR3xi, Thermo Fisher "
+                    "Scientific), 785 nm excitation, 500-2,998 cm^-1 at a 2 cm^-1 grid. Tumor "
+                    "samples were measured at 3-6 spatial points, normal tissue at a single "
+                    "point, with 2-3 spectra per point. group_ids are the 80 tissue sample ids "
+                    "(sample_id format SXXX_MX_RX: sample / measurement point / repeat): the "
+                    "paper reports the 80 samples derive from 71 individuals (9 donors "
+                    "contributed two samples), but the deposit carries no sample-to-individual "
+                    "mapping, so sample level is the finest available group. One sample id "
+                    "(S076_M4_R1) appears twice with distinct spectra (two measurements); both "
+                    "rows are kept as deposited. The authors' analysis used an 800-2,000 cm^-1 "
+                    "region of interest with z-score normalization (see embedded_preprocessing); "
+                    "the deposit spans the full acquired range."
+                ),
+            },
+            # Checked: all spectra of one tissue sample share its histological
+            # label (class is assigned per sample, never per spectrum). Note:
+            # per the paper, 9 of the 80 samples come from the same 71
+            # individuals, but that mapping is not in the deposit.
+            is_grouped=True,
+            # Checked: every row carries one of the four histological labels.
+            has_missing_labels=False,
+            # The deposit is the authors' pipeline output minus ROI selection
+            # and normalization: baseline-corrected (iterative 5th-order
+            # polynomial, 5% relative residual-std convergence; Savitzky-Golay
+            # smoothing, window 11, order 3) but NOT z-score normalized
+            # (row means span 46-2,771) and over the full 500-2,998 cm^-1
+            # range (the paper's 800-2,000 cm^-1 ROI not applied). ~8% of
+            # cells are negative -- baseline subtraction residuals.
+            embedded_preprocessing=(
+                "Baseline-corrected (iterative 5th-order polynomial; "
+                "Savitzky-Golay smoothing, window 11, order 3) per the "
+                "authors' pipeline; full 500-2,998 cm^-1 range, not "
+                "z-score normalized (paper additionally applied an "
+                "800-2,000 cm^-1 region of interest and z-score "
+                "normalization in its analysis)."
+            ),
+        ),
+        "yeast_batch_effects": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.Biological,
+            id="19226627",
+            name="Yeast Strain Classification with Batch Effects (Cheveralls et al. 2026)",
+            short_name="Yeast Batch Effects",
+            file_typ="*/raman-batch-effects-yeast-v1.0.zip",
+            license="MIT",
+            loader=lambda cache_path: ZenodoLoader.__load_19226627(cache_path),
+            metadata={
+                "full_name": (
+                    "Yeast Strain Classification with Plate Batch Effects "
+                    "(Cheveralls et al. 2026)"
+                ),
+                "source": "https://doi.org/10.5281/zenodo.19226627",
+                "paper": "https://doi.org/10.57844/arcadia-xdmk-yq0w",
+                "bibtex": (
+                    "@article{Cheveralls_2026, title={Leave-one-batch-out "
+                    "cross-validation reveals strong batch effects in Raman "
+                    "spectroscopy of yeast cultures}, url={http://dx.doi.org/"
+                    "10.57844/arcadia-xdmk-yq0w}, DOI={10.57844/"
+                    "arcadia-xdmk-yq0w}, journal={The Stacks}, publisher="
+                    "{Arcadia Science}, author={Cheveralls, Keith and Mets, "
+                    "David G. and Kolb, Ilya}, year={2026}, month=mar}"
+                ),
+                "citation": [
+                    "Cheveralls, K., Mets, D. G., and Kolb, I. (2026). "
+                    "Leave-one-batch-out cross-validation reveals strong batch "
+                    "effects in Raman spectroscopy of yeast cultures. The Stacks. "
+                    "https://doi.org/10.57844/arcadia-xdmk-yq0w"
+                ],
+                "description": (
+                    "Spontaneous Raman spectra of desiccated yeast cells for strain "
+                    "classification under strong plate-level batch effects: 9 strains -- "
+                    "3 Saccharomyces cerevisiae (BY4741 WT, YNL141/ADA1, YGL058/UBE2A) and "
+                    "6 Schizosaccharomyces pombe (SP286 WT, ED666 WT, PDF1/PPT1, RAD6/UBE2A, "
+                    "DEA2/ADA1, ARSG) -- grown to OD600 of 5, pelleted, washed, smeared onto "
+                    "a stainless-steel plate stamped with a 96-well layout and desiccated for "
+                    "~3 h. 785 nm excitation, Wasatch Photonics WP-785X-F13-R-IL fiber probe "
+                    "(93 mW at the sample plane), 5 s integration with 10 averages, 5x5 "
+                    "position grid per well, across 3 independent end-to-end replicate plates "
+                    "(2025-08-06, 2025-08-07, 2025-08-12): 75 spectra per strain, 675 in "
+                    "total (the 75 empty-well control spectra are excluded). 235.7-3,653.6 "
+                    "cm^-1 at 2,048 points (non-uniform grid; the paper's analysis used a "
+                    "300-1,800 cm^-1 fingerprint region). group_ids are the 3 desiccation "
+                    "plates (the dates above; 225 spectra each = 9 strain wells x 25 "
+                    "co-located site spectra) -- the paper's batch unit, so a grouped "
+                    "3-fold split is exactly leave-one-plate-out CV, its protocol. The "
+                    "finer (plate, well) structure is documented here but not exposed as "
+                    "groups: well-level grouping would let spectra from the held-out "
+                    "plate's other wells into training and hide the batch effect. "
+                    "Spectra are raw as deposited -- no dark subtraction, baseline "
+                    "correction, or normalization; the per-plate dark spectra are in the "
+                    "archive (dark/Default.csv) for anyone replicating the authors' pipeline "
+                    "(ramanspy: Whitaker-Hayes despiking, consensus dark subtraction, "
+                    "low-intensity QC at mean < 1000, Savitzky-Golay, ModPoly order 5, AUC "
+                    "normalization, per-well outlier QC; leaves 24-33 spectra per strain). "
+                    "The paper shows standard 5-fold CV overestimates strain accuracy (median "
+                    "MCC 0.79) while leave-one-plate-out CV exposes the batch effect (median "
+                    "MCC 0.32), making this a purpose-built probe of group-aware "
+                    "cross-validation."
+                ),
+            },
+            # Checked: the 25 site spectra of one well on one plate are
+            # co-located measurements of the same desiccated smear, and the
+            # same strain on other plates is an independent preparation.
+            # Groups are the 3 plates (the batch-effect unit of the paper),
+            # not the 27 (plate, well) cells; every plate carries all 9
+            # strains, so leave-one-plate-out keeps all classes in training.
+            is_grouped=True,
+            # Checked: every strain spectrum carries a platemap strain label;
+            # the 75 empty-well control spectra (no strain) are excluded.
+            has_missing_labels=False,
+            # Raw spectra as deposited (Pixel/Intensity exports of the
+            # Wasatch probe); all of the authors' processing lives in their
+            # analysis code, not in the deposited files.
+            embedded_preprocessing=None,
+        ),
+        "turmeric_lead_chromate": DatasetInfo(
+            task_type=TASK_TYPE.Regression,
+            application_type=APPLICATION_TYPE.Chemical,
+            id="6014148",
+            name=(
+                "Turmeric Lead-Chromate Adulteration, FT-Raman "
+                "(Erasmus 2021)"
+            ),
+            short_name="Turmeric Lead Chromate",
+            file_typ="*.xlsx",
+            license="CC BY 4.0",
+            loader=lambda cache_path: ZenodoLoader.__load_6014148(
+                cache_path
+            ),
+            metadata={
+                "full_name": (
+                    "FT-Raman spectra of turmeric powder laced "
+                    "with lead chromate (0-10 % w/w) for rapid "
+                    "adulteration detection (Erasmus et al. 2021, "
+                    "Food Control 121, 107714)"
+                ),
+                "source": "https://doi.org/10.5281/zenodo.6014148",
+                "paper": "https://doi.org/10.1016/j.foodcont.2020.107714",
+                "bibtex": (
+                    "@article{erasmus2021turmeric, title={Real or "
+                    "fake yellow in the vibrant colour craze: "
+                    "Rapid detection of lead chromate in "
+                    "turmeric}, author={Erasmus, Sara W. and van "
+                    "Hasselt, Lisanne and Ebbinge, Linda M. and "
+                    "van Ruth, Saskia M.}, journal={Food Control}, "
+                    "volume={121}, pages={107714}, year={2021}, "
+                    "doi={10.1016/j.foodcont.2020.107714}}"
+                ),
+                "citation": [
+                    "Erasmus, S. W., van Hasselt, L., Ebbinge, L. "
+                    "M., and van Ruth, S. M. (2021). Real or fake "
+                    "yellow in the vibrant colour craze: Rapid "
+                    "detection of lead chromate in turmeric. Food "
+                    "Control, 121, 107714. "
+                    "https://doi.org/10.1016/j.foodcont.2020.107714 "
+                    "(data: https://doi.org/10.5281/zenodo.6014148)",
+                ],
+                "description": (
+                    "70 triplicate-averaged FT-Raman spectra of 10 "
+                    "turmeric powder samples (Samples 1, 2, 4, 8, "
+                    "9, 10, 12, 13, 14 and 15), each laced with one "
+                    "of seven lead-chromate levels, recorded at 200 "
+                    "mW laser power, from the data underlying "
+                    "Erasmus et al. 2021 (Food Control 121, 107714, "
+                    "doi:10.1016/j.foodcont.2020.107714; Zenodo "
+                    "v1.1, 2022-02-08, CC BY 4.0, Wageningen "
+                    "University & Research, EU-China-Safe H2020 "
+                    "grant 727864). Task: single-target regression "
+                    "on the lead-chromate w/w FRACTION - the "
+                    "sheet's 'Concentration (w/w%)' column holds "
+                    "0, 0.001, 0.005, 0.01, 0.025, 0.05 and 0.1, "
+                    "i.e. 0, 0.1, 0.5, 1.0, 2.5, 5.0 and 10.0 % "
+                    "w/w (the percentages stated in the sheet's "
+                    "info line; the column header is a "
+                    "misnomer). Native FT-Raman axis: 1,765 points "
+                    "199.5076-3,601.383 cm^-1 (stored descending, "
+                    "flipped to ascending by the loader), no "
+                    "resampling. is_grouped=True with group_id = "
+                    "sample: the seven laced levels of one sample "
+                    "are prepared from the same base powder. "
+                    "Intensities are raw as deposited "
+                    "(triplicate-averaged, no normalization; range "
+                    "0.0014-0.324). A coarse authentic-vs-adulterated "
+                    "binary task is derivable from the targets (0 "
+                    "vs >0; 10 vs 60 spectra). The workbook's five "
+                    "other sheets are not loaded: 'Raw spectra "
+                    "region 1750-200' (the same 70 spectra sliced "
+                    "to the 1,750-200 cm^-1 sub-region - a strict, "
+                    "cell-identical subset of this key's axis, "
+                    "available by axis slicing), 'Raw spectra "
+                    "authentic samples' (15 pure turmeric spectra "
+                    "on a different 1,851-point axis down to 33.7 "
+                    "cm^-1, a separate measurement run verified not "
+                    "identical to the 0-level rows; a "
+                    "single-class reference set), 'VWR vial' (one "
+                    "glass-vial container reference spectrum) and "
+                    "'Trial' (29 exploratory, non-averaged "
+                    "measurements of Sample 7 at 0-100 % lead "
+                    "chromate, marked 'Trial' in the deposit). "
+                    "License note: the deposit's .txt file claims "
+                    "'CC BY-SA', but the machine-readable Zenodo "
+                    "record (and the Zenodo page) state CC BY 4.0, "
+                    "which is the license used here."
+                ),
+            },
+            # Checked: each of the 10 spiked samples carries the
+            # full 7-level series; the laced levels of one sample
+            # share the same base powder, so they are grouped by
+            # sample.
+            is_grouped=True,
+            # Checked: all 70 rows carry a numeric concentration
+            # and a complete 1,765-point spectrum.
+            has_missing_labels=False,
+            embedded_preprocessing=(
+                "Raw FT-Raman intensities (triplicate-averaged per "
+                "spectrum) as deposited; no baseline correction, "
+                "normalization or resampling applied. The loader "
+                "only flips the workbook's descending wavenumber "
+                "axis (3,601.383-199.5076 cm^-1) to ascending."
+            ),
+        ),
     }
 
     @staticmethod
@@ -685,6 +1517,10 @@ class ZenodoLoader(BaseLoader):
         file_typ = ZenodoLoader.DATASETS[dataset_name].file_typ
         dataset_cache_path = os.path.join(cache_path, dataset_id)
         os.makedirs(dataset_cache_path, exist_ok=True)
+
+        # Imported here, not at module level: zenodo_get replaces the SIGINT handler on
+        # import, and only Zenodo downloads need it.
+        from zenodo_get import download
 
         try:
             dataset_id = ZenodoLoader.DATASETS[dataset_name].id

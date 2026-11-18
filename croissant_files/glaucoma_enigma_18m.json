@@ -1,0 +1,148 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Raman spectra of macular pigment carotenoids in human blood serum of glaucoma patients, ENIGMA trial, 18-month visit (Udensi, Loskutova, Loughman & Byrne 2024)",
+  "description": "Whole-serum Raman spectra of 23 glaucoma patients of the ENIGMA trial at the 18-month visit (the deposit's 'whole serum18 months' folder; filename suffixes a-d are repeat measurements of the same patient within the visit). 100 measurement sessions (4 per patient, except ET043/ET048/ET049 with 6/8/6 -- the extra '_1' stems are re-taken exports of the same measurement). Horiba LabSpec6 dispersive Raman, native 2,541-point axes spanning 400.8-3,999.4 cm^-1 (~1.42 cm^-1 spacing); the loader interpolates every session onto the common 401-3,999 cm^-1 @1 cm^-1 grid (3,599 points), which all 246 valid session exports fully cover, so no extrapolation is involved. Multi-target regression: 11 targets per patient from the deposit's 18-month sheet -- macular-pigment optical density at 0.23/0.51/0.74/1.02 mm plus MP_Volume6.02_18M, visual acuity (VA_18M), microperimetry (Microperim_Aver_18M), OCT (mRNFL_6_18M, GCC_6calculate_18M, GCL_6_18M) and GAL9_18M. The sheet's Treatment column (trial arm 1/2, 15/8 patients) is a design factor, not an outcome, so it is not a target. group_ids = patient (23 groups): repeat measurements of one patient share the same target row, so grouped k-fold CV is leave-one-patient-out. Intensities are raw LabSpec counts as deposited (per file header DeNoise, Dark correction and ICS correction are all 'Off'); the excitation wavelength is not recorded in the deposit. Both datasets of the deposit share one frozen 9.5 MB Mendeley snapshot mirrored at HTW-KI-Werkstatt/RamanBench (glaucoma_enigma/snapshot/, size + sha256 pinned; the live Mendeley download sits behind a WAF that 403s non-browser clients, hence the mirror). Excluded: 19 sessions of subjects without 18-month targets (ET003, ET004, ET035, ET062 and the water_a/water_b reference scans) and ET0597_a (four-digit subject id, .l6s-only, presumably a mistyped duplicate of ET057/ET059, both already covered); the .l6s twins of the loaded sessions are not parsed, the .txt export is the canonical text form.",
+  "url": "https://data.mendeley.com/datasets/8pwpbcrjd8/1",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Regression",
+    "art conservation"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "sameAs": "https://doi.org/10.17632/8pwpbcrjd8.1",
+  "citeAs": "@dataset{Udensi_2024_enigma, title={Analysis of macular pigment carotenoids in human blood serum of glaucoma patients as a measure of ocular health: A Raman spectroscopic study}, author={Udensi, Joy and Loskutova, Ekaterina and Loughman, James and Byrne, Hugh}, year={2024}, publisher={Mendeley Data}, doi={10.17632/8pwpbcrjd8.1}, url={https://doi.org/10.17632/8pwpbcrjd8.1}}",
+  "citation": "Udensi, J., Loskutova, E., Loughman, J., and Byrne, H. (2024). Analysis of macular pigment carotenoids in human blood serum of glaucoma patients as a measure of ocular health: A Raman spectroscopic study. Mendeley Data, v1. https://doi.org/10.17632/8pwpbcrjd8.1",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "glaucoma_enigma_18m_source",
+      "name": "Raman spectra of macular pigment carotenoids in human blood serum of glaucoma patients, ENIGMA trial, 18-month visit (Udensi, Loskutova, Loughman & Byrne 2024)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://data.mendeley.com/datasets/8pwpbcrjd8/1",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "2c20eafb3db268cfa22f4e0c986d63f063fd3f929feeb49ebfbefde33d4fc759"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "glaucoma_enigma_18m_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "glaucoma_enigma_18m_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "glaucoma_enigma_18m_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "glaucoma_enigma_18m_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "ENIGMA clinical trial (glaucoma, macular pigment carotenoids in blood serum as a measure of ocular health). Whole-serum Raman spectra were recorded on a Horiba LabSpec6 dispersive Raman system; the excitation wavelength is not recorded in the deposit. 100 measurement sessions (4 per patient, except ET043/ET048/ET049) in the 18-month folder.",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "None beyond interpolation onto the common 401-3,999 cm^-1 @1 cm^-1 grid (3,599 points). The .txt exports are raw LabSpec6 counts; the deposit applied no baseline correction or normalization.",
+  "rai:dataAnnotationProtocol": "Clinical target values (OCT, microperimetry, macular pigment optical density, visual acuity, GAL9) at 18 months measured by the trial's ophthalmic examinations and recorded in the deposit's 18-month sheet, one row per patient; every Raman session of a patient inherits that row. No human labelling of spectra was involved.",
+  "rai:personalSensitiveInformation": "Spectra are derived from human blood serum of trial participants. Subject identifiers are pseudonymised (ET0xx); no direct patient identifiers are included, but the accompanying clinical values are health-related data under applicable data-protection regulations.",
+  "rai:dataBiases": "All 23 patients are glaucoma cases of a single treatment trial; the treatment arm (15/8) is a per-patient design factor that varies within the cohort, not a class label. Sessions per patient are imbalanced (4, except ET043/ET048/ET049 with 6/8/6). Spectra of one patient are highly correlated (same blood, same visit), which is why group_ids = patient. Raw intensities are instrument counts; absolute levels are not comparable across acquisitions.",
+  "rai:dataLimitations": "Single trial, single instrument, single visit: models are not validated against external instruments, cohorts, or a control group. 19 sessions (ET003, ET004, ET035, ET062 and the water_a/water_b reference scans) are present in the deposit but have no 18-month targets and were excluded, as was the .l6s-only ET0597_a (four-digit subject id, presumably a mistyped duplicate of ET057/ET059). The companion baseline visit is a separate dataset (glaucoma_enigma_baseline) from the same frozen snapshot.",
+  "rai:dataSocialImpact": "Supports non-invasive monitoring research of glaucoma treatment response at 18 months from blood serum Raman spectra; any clinical use requires validation by qualified ophthalmic professionals.",
+  "rai:dataUseCases": "Multi-target regression of 18-month ophthalmic endpoints from serum Raman spectra; leave-one-patient-out grouped k-fold CV (23 groups). Longitudinal pairing with glaucoma_enigma_baseline for treatment-response modelling.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: whole-blood serum Raman spectra (Horiba LabSpec6, 400-4,000 cm^-1, ~2,541 points) from 23 glaucoma patients of the ENIGMA trial at the 18-month visit (Udensi, Loskutova, Loughman & Byrne 2024, Mendeley Data, doi:10.17632/8pwpbcrjd8.1); filename suffixes a-d are repeat measurements of the same patient within the visit ('_1' stems are re-taken exports of the same measurement). Preprocessing: none at export (per file header DeNoise, Dark correction and ICS correction are all 'Off'); the loader additionally interpolates onto the common 401-3,999 cm^-1 @1 cm^-1 grid. Annotation: 11 clinical targets per patient from the deposit's 18-month sheet; the Treatment column (trial arm 1/2) is a design factor, not a target.",
+  "prov:wasDerivedFrom": "https://doi.org/10.17632/8pwpbcrjd8.1"
+}

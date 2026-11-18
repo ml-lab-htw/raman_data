@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Raman spectra of infant formula products from online and offline channels (Zhang 2020)",
+  "description": "373 Raman spectra of powdered infant formula products: 24 product types = 4 brands (A/B/N/Q, de-identified by the authors) x 3 formula stages (1: 0-6 months, 2: 6-12 months, 3: 12-36 months) x purchase channel (online / offline), 11-24 spectra per type except the two Q stage-1 types with 5 each. Native 1,738-point spectra over 50.2-3,399.9 cm^-1 (~1.93 cm^-1 spacing; ~2 cm^-1 resolution per the authors' code report), stored as the CSV column headers (one shared axis) and used as is, so no resampling is involved. Intensities are raw as deposited (arbitrary units, negative points down to ~-1.8e3, maxima ~1.1e4); the excitation wavelength is not recorded in the deposit. Label semantics from the deposit's labels file: 1/2/3 are the three formula stages (periods) and ON LINE / OFF LINE the online / offline purchase channel. The deposit's tidy CSV is served from a frozen copy mirrored at HTW-KI-Werkstatt/RamanBench (infant_formula/, size + sha256 pinned; the live Mendeley download sits behind a WAF that 403s non-browser clients, hence the mirror); deposit v1 and v2 are identical for the data files. No per-spectrum sample/bottle identifiers are in the deposit, so group-aware splitting is not possible.",
+  "url": "https://data.mendeley.com/datasets/4j8bj5vv52/2",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Classification"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "sameAs": "https://doi.org/10.17632/4j8bj5vv52.2",
+  "citeAs": "@dataset{Zhang_2020_infant_formula, title={Raman spectra of infant formula products from online and offline channels}, author={Zhang, Yinsheng}, year={2020}, publisher={Mendeley Data}, doi={10.17632/4j8bj5vv52.2}, url={https://doi.org/10.17632/4j8bj5vv52.2}}",
+  "citation": "Zhang, Y. (2020). Raman spectra of infant formula products from online and offline channels. Mendeley Data, v2. https://doi.org/10.17632/4j8bj5vv52.2",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "infant_formula_raman_source",
+      "name": "Raman spectra of infant formula products from online and offline channels (Zhang 2020)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://data.mendeley.com/datasets/4j8bj5vv52/2",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "f6418d0ee38d492e2a2ef9f8b66057de7055dfdc75b06f64398e96f02571391e"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "infant_formula_raman_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "infant_formula_raman_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "infant_formula_raman_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "infant_formula_raman_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra of powdered infant formula products (4 brands x 3 formula stages, purchased online and offline). 373 spectra on a native 1,738-point axis over 50.2-3,399.9 cm^-1 (~2 cm^-1 resolution per the authors' code report); the excitation wavelength is not recorded in the deposit.",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "None. The CSV is the authors' analysis-ready export; intensities are raw as deposited (arbitrary units, including negative points down to ~-1.8e3). The authors' code report applies ElasticNet/PCA in analysis, not to the deposited data.",
+  "rai:dataAnnotationProtocol": "Each spectrum is labelled with the product type of its bottle: one of 24 combinations of de-identified brand (A/B/N/Q), formula stage (1/2/3) and purchase channel (online/offline), as recorded in the deposit's labels file. No human labelling of spectra was involved.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from commercial product samples without individual identifiers.",
+  "rai:dataBiases": "Single study, 4 brands, 3 stages, 2 channels; brand names are de-identified by the authors, so models cannot be related to specific commercial products. Classes are strongly imbalanced (5-24 spectra per product type; the two Q stage-1 types have only 5 each). No per-spectrum sample or bottle identifiers are included, so replicate structure (if any) is unknown and group-aware splitting is not possible. Raw intensities are in arbitrary units from a single instrument; absolute levels are not comparable across acquisitions.",
+  "rai:dataLimitations": "No per-spectrum sample or bottle identifiers, so replicate structure is unknown and group-aware (e.g. leave-one-bottle-out) CV is not possible; k-fold CV on individual spectra may overestimate performance if bottles were measured repeatedly. Brand names are de-identified (A/B/N/Q), so results cannot be mapped to commercial brands. The excitation wavelength and instrument model are not recorded. Single instrument, unknown acquisition settings; generalisation to other instruments requires external validation.",
+  "rai:dataSocialImpact": "Supports food-authentication and quality-control research for infant formula (brand, stage and purchase-channel discrimination from Raman spectra); any consumer-facing use requires validation on commercial products and instruments.",
+  "rai:dataUseCases": "24-class classification of product type (brand x stage x channel); derivable sub-tasks: brand (4 classes), formula stage (3 classes), purchase channel (2 classes). k-fold CV on individual spectra (no grouping available).",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Raman spectra of powdered infant formula products purchased through online and offline channels (Zhang 2020, Mendeley Data, doi:10.17632/4j8bj5vv52.2). 373 spectra of 24 product types: 4 de-identified brands (A/B/N/Q) x 3 formula stages (1: 0-6 months, 2: 6-12 months, 3: 12-36 months) x purchase channel (online/offline), 5-24 spectra per type. Native 1,738-point spectra over 50.2-3,399.9 cm^-1 (~1.93 cm^-1 spacing, ~2 cm^-1 resolution per the authors' code report); the shared axis is stored as the CSV column headers and used as is (no resampling). Preprocessing: none at export; intensities are raw as deposited. Annotation: product-type labels (brand x stage x channel) assigned from the purchase metadata of each bottle; no human labelling of spectra was involved. Deposit v1 and v2 are identical for the data files.",
+  "prov:wasDerivedFrom": "https://doi.org/10.17632/4j8bj5vv52.2"
+}

@@ -1,0 +1,146 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "FT-Raman spectra of turmeric powder laced with lead chromate (0-10 % w/w) for rapid adulteration detection (Erasmus et al. 2021, Food Control 121, 107714)",
+  "description": "70 triplicate-averaged FT-Raman spectra of 10 turmeric powder samples (Samples 1, 2, 4, 8, 9, 10, 12, 13, 14 and 15), each laced with one of seven lead-chromate levels, recorded at 200 mW laser power, from the data underlying Erasmus et al. 2021 (Food Control 121, 107714, doi:10.1016/j.foodcont.2020.107714; Zenodo v1.1, 2022-02-08, CC BY 4.0, Wageningen University & Research, EU-China-Safe H2020 grant 727864). Task: single-target regression on the lead-chromate w/w FRACTION - the sheet's 'Concentration (w/w%)' column holds 0, 0.001, 0.005, 0.01, 0.025, 0.05 and 0.1, i.e. 0, 0.1, 0.5, 1.0, 2.5, 5.0 and 10.0 % w/w (the percentages stated in the sheet's info line; the column header is a misnomer). Native FT-Raman axis: 1,765 points 199.5076-3,601.383 cm^-1 (stored descending, flipped to ascending by the loader), no resampling. is_grouped=True with group_id = sample: the seven laced levels of one sample are prepared from the same base powder. Intensities are raw as deposited (triplicate-averaged, no normalization; range 0.0014-0.324). A coarse authentic-vs-adulterated binary task is derivable from the targets (0 vs >0; 10 vs 60 spectra). The workbook's five other sheets are not loaded: 'Raw spectra region 1750-200' (the same 70 spectra sliced to the 1,750-200 cm^-1 sub-region - a strict, cell-identical subset of this key's axis, available by axis slicing), 'Raw spectra authentic samples' (15 pure turmeric spectra on a different 1,851-point axis down to 33.7 cm^-1, a separate measurement run verified not identical to the 0-level rows; a single-class reference set), 'VWR vial' (one glass-vial container reference spectrum) and 'Trial' (29 exploratory, non-averaged measurements of Sample 7 at 0-100 % lead chromate, marked 'Trial' in the deposit). License note: the deposit's .txt file claims 'CC BY-SA', but the machine-readable Zenodo record (and the Zenodo page) state CC BY 4.0, which is the license used here.",
+  "url": "https://doi.org/10.5281/zenodo.6014148",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{erasmus2021turmeric, title={Real or fake yellow in the vibrant colour craze: Rapid detection of lead chromate in turmeric}, author={Erasmus, Sara W. and van Hasselt, Lisanne and Ebbinge, Linda M. and van Ruth, Saskia M.}, journal={Food Control}, volume={121}, pages={107714}, year={2021}, doi={10.1016/j.foodcont.2020.107714}}",
+  "citation": "Erasmus, S. W., van Hasselt, L., Ebbinge, L. M., and van Ruth, S. M. (2021). Real or fake yellow in the vibrant colour craze: Rapid detection of lead chromate in turmeric. Food Control, 121, 107714. https://doi.org/10.1016/j.foodcont.2020.107714 (data: https://doi.org/10.5281/zenodo.6014148)",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "turmeric_lead_chromate_source",
+      "name": "FT-Raman spectra of turmeric powder laced with lead chromate (0-10 % w/w) for rapid adulteration detection (Erasmus et al. 2021, Food Control 121, 107714)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://doi.org/10.5281/zenodo.6014148",
+      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "sha256": "ebeebd68b60ff2f97fc7fc08aa352e30eca9361c1090d79f1648843a570a6070"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "turmeric_lead_chromate_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "turmeric_lead_chromate_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "turmeric_lead_chromate_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "turmeric_lead_chromate_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "FT-Raman measurements (200 mW laser power) of turmeric powder laced with lead chromate, triplicates averaged per sample and level, recorded as part of the EU-China-Safe food-authenticity work underlying the 2021 Food Control publication.",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "Triplicate averaging was applied by the authors as deposited (each deposited spectrum is the average of three measurements). No baseline correction, normalization or resampling was applied by the authors. The raman_data loader only flips the workbook's descending wavenumber axis (3,601.383-199.5076 cm^-1) to ascending.",
+  "rai:dataAnnotationProtocol": "Targets are the deposit's own lead-chromate lacing levels recorded in the sheet's 'Concentration (w/w%)' column (the column actually holds the w/w fraction; the percentages are stated in the sheet's info line). Labels were prepared gravimetrically by the authors; no re-labelling was performed for this benchmark.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All samples are turmeric powder (with defined lead-chromate loadings).",
+  "rai:dataBiases": "Only 10 of the 15 turmeric samples carry laced spectra (Samples 3, 5, 6, 7, 11 appear only in the deposit's authentic-samples sheet); the seven levels of one sample share the same base powder (grouped here); spectra are raw, unnormalized intensities (0.0014-0.324) with a strong sample-to-sample matrix variation, so generalization across turmeric batches is limited; the 0-level (authentic) rows are a separate measurement run from the deposit's authentic-samples sheet (verified not identical), which is not loaded.",
+  "rai:dataLimitations": "Small dataset (70 spectra, 10 samples x 7 levels); raw unnormalized intensities (0.0014-0.324) with strong batch-to-batch variation; the wavenumber range is 199.5-3,601.4 cm^-1 (FT-Raman region, no fingerprint region below 200 cm^-1); the deposit's .txt file claims a 'CC BY-SA' license while the machine-readable Zenodo record states CC BY 4.0 (the record's license is used here); the workbook's authentic-samples, vial-reference and exploratory 'Trial' sheets are not loaded.",
+  "rai:dataSocialImpact": "Supports food-authenticity research: rapid detection of lead-chromate adulteration in turmeric (a documented public-health concern). No personal or medical data; purely chemical/food samples.",
+  "rai:dataUseCases": "Regression of the lead-chromate w/w fraction from FT-Raman spectra of turmeric; a coarse authentic-vs-adulterated binary task is derivable (0 vs >0; 10 vs 60 spectra); group-aware CV on the 10 sample groups to test batch generalization.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: FT-Raman spectra (200 mW laser power) of turmeric powder laced with lead chromate for rapid adulteration detection, part of WP3 (Task 3.1) of the EU-China-Safe project (H2020 grant 727864) (Sara W. Erasmus, Lisanne van Hasselt, Linda M. Ebbinge, Saskia M. van Ruth, Wageningen University & Research; publication: https://doi.org/10.1016/j.foodcont.2020.107714, Food Control 121, 107714, 2021; data deposited at https://doi.org/10.5281/zenodo.6014148, Zenodo v1.1, 2022-02-08, CC BY 4.0). This raman_data key loads the workbook's 'Raw spectra region 3601-200' sheet: 70 triplicate-averaged spectra of 10 turmeric samples (Samples 1, 2, 4, 8, 9, 10, 12, 13, 14, 15), each at one of seven lead-chromate levels (0, 0.001, 0.005, 0.01, 0.025, 0.05, 0.1 w/w fraction = 0, 0.1, 0.5, 1.0, 2.5, 5.0, 10.0 % w/w), on the native 1,765-point 199.5076-3,601.383 cm^-1 axis (stored descending, flipped to ascending by the loader).",
+  "prov:wasDerivedFrom": "https://doi.org/10.5281/zenodo.6014148"
+}

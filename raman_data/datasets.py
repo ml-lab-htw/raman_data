@@ -19,6 +19,7 @@ from raman_data.loaders.GitHubLoader import GitHubLoader
 from raman_data.loaders.MendeleyLoader import MendeleyLoader
 from raman_data.loaders.DataverseLoader import DataverseLoader
 from raman_data.types import TASK_TYPE, APPLICATION_TYPE, DatasetInfo
+from raman_data import provider_preprocessing
 
 __LOADERS = [
     KaggleLoader,
@@ -33,6 +34,8 @@ __LOADERS = [
     MiscLoader,
 ]
 
+provider_preprocessing.apply(__LOADERS)
+
 # Create a global LRU cache instance with a capacity of 1
 lru_cache = LRUCache(maxsize=1)
 
@@ -41,6 +44,7 @@ def list_datasets(
         application_type: Optional[APPLICATION_TYPE] = None,
         is_grouped: Optional[bool] = None,
         has_missing_labels: Optional[bool] = None,
+        provider_preprocessed: Optional[bool] = None,
 ) -> List[str]:
     """
     Lists the available Raman spectroscopy datasets.
@@ -66,6 +70,13 @@ def list_datasets(
                     checked yet are excluded by either `True` or `False` --
                     pass `None` (the default) to include datasets regardless of
                     whether this has been checked.
+        provider_preprocessed: If specified, filters by whether the data provider
+                    preprocessed the spectra before depositing them (see
+                    `DatasetInfo.provider_preprocessing`). `True` -> only datasets
+                    with provider preprocessing; `False` -> only datasets checked
+                    and found raw. Datasets where this hasn't been checked yet are
+                    excluded by either `True` or `False` -- pass `None` (the
+                    default) to include them.
 
     Returns:
         A list of available dataset names.
@@ -90,6 +101,9 @@ def list_datasets(
 
     if has_missing_labels is not None:
         result = [(name, info) for name, info in result if info.has_missing_labels is has_missing_labels]
+
+    if provider_preprocessed is not None:
+        result = [(name, info) for name, info in result if info.provider_preprocessed is provider_preprocessed]
 
     return [name for name, info in result]
 

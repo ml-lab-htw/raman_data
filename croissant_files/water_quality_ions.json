@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "A Dataset of Raman Spectra with Quantitative Labels of Mixtures of Nitrate, Nitrite and Sulphate (Luciani et al. 2026)",
+  "description": "Raw Raman spectra of aqueous solutions containing nitrate, nitrite and sulphate ions, for multi-analyte concentration quantification (mg/L). 694 spectra (IDs 0-693) covering single-analyte (289), binary (215) and ternary (190) mixtures, prepared in ultrapure Milli-Q water from KNO3, NaNO2 and Na2SO4 (counterions K+/Na+). 401-3,899 cm^-1 at 1,019 points (non-uniform ~2.7-4.3 cm^-1 grid) on a Horiba iHR320 micro-Raman system (Olympus BXFM microscope, 50x objective, Horiba Syncerity CCD) under 532 nm excitation. Targets: three columns of nominal concentrations in mg/L — nitrate 122-30,667, nitrite 250-15,333, sulphate 253-16,907 (0 = analyte absent). group_ids identify the 70 prepared solutions (one unique concentration combination each), each measured up to 10 times, so replicate spectra must not be split across train/test. Lab-prepared standards in ultrapure water, not field matrices.",
+  "url": "https://data.mendeley.com/datasets/cxf3zxsc3k/3",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Chemical",
+    "Regression"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "sameAs": "https://doi.org/10.17632/cxf3zxsc3k.3",
+  "citeAs": "@article{Luciani_2026, title={A Dataset of Raman Spectra with Quantitative Labels of Mixtures of Nitrate, Nitrite and Sulphate}, volume={113319}, url={http://dx.doi.org/10.1016/j.dib.2026.113319}, DOI={10.1016/j.dib.2026.113319}, journal={Data in Brief}, publisher={Elsevier}, author={Luciani, Lorenzo and Nocera, Antonio and Raimondi, Michela and Sbrollini, Agnese and Morettini, Micaela and Galassi, Rossana}, year={2026}}",
+  "citation": "Luciani, L., Nocera, A., Raimondi, M., Sbrollini, A., Morettini, M., and Galassi, R. (2026). A Dataset of Raman Spectra with Quantitative Labels of Nitrate, Nitrite and Sulphate for Application of Artificial Intelligence to Water Quality Sensing. Mendeley Data, v3. https://doi.org/10.17632/cxf3zxsc3k.3",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "water_quality_ions_source",
+      "name": "A Dataset of Raman Spectra with Quantitative Labels of Mixtures of Nitrate, Nitrite and Sulphate (Luciani et al. 2026)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://data.mendeley.com/datasets/cxf3zxsc3k/3",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "733097bd1278532d17df0c8b5f44494401c1ce31b13b8e57a58b8f4bdfc4133d"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "water_quality_ions_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "water_quality_ions_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "water_quality_ions_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "water_quality_ions_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
+  "rai:dataCollectionType": "Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions.",
+  "rai:dataPreprocessingProtocol": "Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication.",
+  "rai:dataAnnotationProtocol": "Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical, biological, or material samples without individual human identifiers.",
+  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
+  "rai:dataLimitations": "Quantitative models are valid within the concentration ranges and chemical matrix of the training data; extrapolation outside these ranges is not recommended.",
+  "rai:dataSocialImpact": "Supports inline quality control and process analytical technology (PAT) in chemical manufacturing, contributing to safer and more efficient industrial processes.",
+  "rai:dataUseCases": "Chemometric modelling, calibration transfer, multivariate regression, quantitative spectral analysis, process analytical technology (PAT).",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on chemical samples including pure compounds, mixtures, and solutions. Preprocessing: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication. Annotation: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "prov:wasDerivedFrom": "https://data.mendeley.com/datasets/cxf3zxsc3k/3"
+}

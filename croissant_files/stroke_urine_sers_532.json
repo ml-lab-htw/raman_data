@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Ischemic Stroke Urine SERS, 532 nm laser (Yu et al. 2026)",
+  "description": "Surface-enhanced Raman (SERS) spectra of urine from 101 participants (55 healthy controls, 46 patients with confirmed ischemic stroke) on colloidal Ag-nanoparticle SERS filter-paper chips (R6G enhancement factor 1.62e6), Renishaw inVia Qontor, 50x objective, 1 s acquisition, 532 nm excitation (100 mW (0.5% power setting)). Each participant's dried urine spot was scanned as a 10x10 map (100 spectra); the deposit additionally contains four repeated collections (files 31.1-34.1), so each variant holds 10,500 spectra from 105 map files (the paper's headline 10,100 counts only the 101 primary maps). Native WiRE axes (667-668 points at 532 nm, 1,015 points at 633 nm; ~485-1,638 cm^-1; slightly non-uniform) resampled row-wise onto a common 1 cm^-1 grid (1,154 points). group_ids = the 101 participants (repeat collections merged into the parent participant), so all spectra of one group share one class. Raw WiRE exports as deposited: the authors' baseline correction, smoothing, normalization, and outlier removal (which dropped ~8% of the map points, incl. all-zero scans) live in their analysis code/results, not in the deposited spectra.",
+  "url": "https://doi.org/10.5281/zenodo.19369604",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Medical",
+    "Classification",
+    "SERS"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Yu_2026, title={Dual-mode analysis of ischemic stroke based on urine SERS spectra and carotid B-ultrasound}, volume={12}, ISSN={2375-2541}, url={http://dx.doi.org/10.1126/sciadv.aee3487}, DOI={10.1126/sciadv.aee3487}, number={27}, journal={Science Advances}, publisher={American Association for the Advancement of Science}, author={Yu, Wenrou and Chen, Zhaoxian and Liu, Yao and Du, Yan and Wang, Hui and Tang, Fengjie and Xie, Xin and Huang, Yingzhou}, year={2026}, month=Jul, pages={eaee3487}}",
+  "citation": "Yu, W., Chen, Z., Liu, Y., Du, Y., Wang, H., Tang, F., Xie, X., and Huang, Y. (2026). Dual-mode analysis of ischemic stroke based on urine SERS spectra and carotid B-ultrasound. Science Advances, 12(27), eaee3487.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "stroke_urine_sers_532_source",
+      "name": "Ischemic Stroke Urine SERS, 532 nm laser (Yu et al. 2026)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://doi.org/10.5281/zenodo.19369604",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "f6bccc1880ba898dd553a4a9cb5ae283825a1a04f3081c93ad365de2cd6c41d1"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "stroke_urine_sers_532_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "stroke_urine_sers_532_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "stroke_urine_sers_532_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "stroke_urine_sers_532_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
+  "rai:dataCollectionType": "Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols.",
+  "rai:dataPreprocessingProtocol": "Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication.",
+  "rai:dataAnnotationProtocol": "Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "rai:personalSensitiveInformation": "Spectra are derived from human biological samples (e.g., blood serum, saliva, or tissue). No direct patient identifiers are included, but biological measurements may constitute sensitive health-related data under applicable data-protection regulations.",
+  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
+  "rai:dataLimitations": "Models trained on this dataset may not transfer to different instruments, sample matrices, or patient populations without re-calibration.",
+  "rai:dataSocialImpact": "Raman spectroscopy datasets for medical diagnostics have the potential to support the development of non-invasive, low-cost screening tools with particular relevance to resource-limited healthcare settings. Results must be validated by qualified healthcare professionals before any clinical application.",
+  "rai:dataUseCases": "Spectral library matching, material identification, disease screening, compound recognition, quality control.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on human biological samples (blood serum, saliva, tissue biopsies) collected under clinical or research protocols. Preprocessing: Spectra are provided with class labels. Any preprocessing applied (baseline correction, smoothing, normalisation) is described in the source publication. Annotation: Class labels assigned based on known sample identity or validated analytical reference methods.",
+  "prov:wasDerivedFrom": "https://doi.org/10.5281/zenodo.19369604"
+}

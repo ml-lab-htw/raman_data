@@ -1,0 +1,147 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "Raman Monitoring of S. cerevisiae Bioreactor Fermentations (Klaverdijk et al. 2025)",
+  "description": "Inline Raman monitoring of S. cerevisiae batch and fed-batch bioreactor fermentations for 3-target regression of process variables (Glucose [mM], Ethanol [mM], Biomass [g/L]): 65 in-line measurements from 5 fermentations -- 3 batch cultivations used as the paper's calibration set (B1: 12, B2: 13, B3: 13 samples), 1 unseen batch cultivation for validation (B4: 13), and 1 fed-batch cultivation for transfer testing (FB: 14). Kaiser Raman RXN2 analyzer with a 785 nm laser and a fiber-optic bIO-Optic immersion probe mounted through the bioreactor head plate; each measurement is a single 60 s acquisition (the deposit also holds 2/4/6/8/10-min stackings of the same 60 s blocks, which are excluded here; the paper calibrated all models on the 1-min spectra). 100-3,425 cm^-1 at 1 cm^-1 (3,326 points; one common grid for all samples). group_ids are the 5 fermentations (B1, B2, B3, B4, FB): samples of one cultivation are strongly correlated time points of the same process and must not be split across train/test (leave-one-batch-out is the paper's validation protocol). 5 glucose reference values (HPLC) failed in the base set and are NaN; all other 190 target values are complete. Spectra are raw instrument output as deposited (strong fluorescence background, no baseline correction or normalization). The same 4TU deposit's other chapters hold single-compound, synthetic, and augmented spectra for transfer-learning studies.",
+  "url": "https://doi.org/10.4121/4fbcf35e-1954-48a4-a2a3-693e19c753e7",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "Biological",
+    "Regression",
+    "bioprocess"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citeAs": "@article{Klaverdijk_2025, title={Single compound data supplementation to enhance transferability of fermentation specific Raman spectroscopy models}, volume={417}, ISSN={1618-2841}, url={http://dx.doi.org/10.1007/s00216-025-05768-5}, DOI={10.1007/s00216-025-05768-5}, number={9}, journal={Analytical and Bioanalytical Chemistry}, publisher={Springer Science and Business Media LLC}, author={Klaverdijk, Maarten and Ottens, Marcel and Klijn, Marieke E.}, year={2025}, month=feb, pages={1873}}",
+  "citation": "Klaverdijk, M., Ottens, M., and Klijn, M. E. (2025). Single compound data supplementation to enhance transferability of fermentation specific Raman spectroscopy models. Analytical and Bioanalytical Chemistry, 417(9), 1873. https://doi.org/10.1007/s00216-025-05768-5",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "yeast_bioreactor_fermentation_source",
+      "name": "Raman Monitoring of S. cerevisiae Bioreactor Fermentations (Klaverdijk et al. 2025)",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://doi.org/10.4121/4fbcf35e-1954-48a4-a2a3-693e19c753e7",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "be86e6cdd2882ae6bb47aeabcf3870626df35c4013d24e77f07f6df5b8eb8581"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "yeast_bioreactor_fermentation_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "yeast_bioreactor_fermentation_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "yeast_bioreactor_fermentation_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Target value(s): concentration, physical property, or other continuous measurement.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "yeast_bioreactor_fermentation_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman spectra were acquired experimentally using a laser spectrometer. Each spectrum represents the scattered light intensity as a function of Raman shift (cm⁻¹).",
+  "rai:dataCollectionType": "Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material.",
+  "rai:dataPreprocessingProtocol": "Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication.",
+  "rai:dataAnnotationProtocol": "Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All spectra originate from chemical, biological, or material samples without individual human identifiers.",
+  "rai:dataBiases": "Data were acquired under controlled laboratory conditions and may not generalise to field or clinical settings. Spectral profiles are influenced by instrument-specific factors (laser wavelength, detector type, optical path length, integration time). Class imbalances may be present in classification datasets.",
+  "rai:dataLimitations": "Spectral signatures are process- and instrument-specific; calibration transfer to other setups requires additional validation.",
+  "rai:dataSocialImpact": "Enables the development of rapid, inline bioprocess monitoring tools that can reduce waste, improve yield, and lower costs in biomanufacturing and biotechnology.",
+  "rai:dataUseCases": "Chemometric modelling, calibration transfer, multivariate regression, quantitative spectral analysis, process analytical technology (PAT).",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Laboratory measurements on biological materials including microorganisms, cell cultures, fermentation broths, and plant material. Preprocessing: Spectra may have undergone baseline correction, smoothing, normalisation, and wavenumber calibration. Exact steps are described in the accompanying publication. Annotation: Ground-truth target values measured by validated reference analytical methods (e.g., enzymatic assays, dynamic light scattering, gas chromatography, or DFT computation).",
+  "prov:wasDerivedFrom": "https://doi.org/10.4121/4fbcf35e-1954-48a4-a2a3-693e19c753e7"
+}

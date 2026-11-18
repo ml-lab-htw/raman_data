@@ -1,0 +1,146 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "wd": "https://www.wikidata.org/wiki/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "dct:conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "IBM uRaman-Dataset: peak-normalized Raman spectra of six MOF-74 metal-series samples in the nominal 1,000-2,000 cm^-1 window",
+  "description": "Peak-normalized Raman spectra of the six MOF-74 metal-series samples of the deposit's MeMOF-74 set ('Me' = metal: Mg, Zn and the Zn75Mg25 alloy, plus the gold-coated Au@ variants), measured in the nominal 1,000-2,000 cm^-1 window with a WITec Alpha 300 RAS micro-Raman system (532 nm at 1 mW, 1800 g/mm grating, 200-400 accumulations x 0.5 s; the samples were provided by Prof. Carlos Basilio Pinheiro's group, per the deposit's About.md). Five files span 969.006-1,980.60 cm^-1 (1,600 points each); Au@Mg-MOF74 spans 860.797-1,887.76 cm^-1 (1,600 points), off the nominal window, so the common window is the intersection of the six native axes, resampled with linear interpolation onto 970-1,887 cm^-1 @1 cm^-1 (918 points). All six spectra are peak-normalized (max = 1.0) as deposited, with no negative points in this window. One spectrum per class (6 classes): a reference set, not CV-learnable. is_grouped=False. The 1,000-2,000 cm^-1 file of Au@Zn75Mg25-MOF74 is spelled with a double dash in the deposit ('Au@Zn75Mg25--MOF74.csv'); its label is normalized to a single dash. Served from the same commit-pinned codeload archive as uraman_mofs (commit 47e712d326fb0458ee8218ab73a2cfc269dcdfab, 819,336 bytes, size + sha256 pinned).",
+  "url": "https://github.com/IBM/uRaman-Dataset",
+  "keywords": [
+    "Raman spectroscopy",
+    "spectroscopy",
+    "MaterialScience",
+    "Classification"
+  ],
+  "isAccessibleForFree": true,
+  "license": "https://cdla.io/sharing-1-0/",
+  "citeAs": "@dataset{ferreira2023uraman, title={uRaman-Dataset: Raman spectroscopy spectra of Metal Organic Framework (MOF) compounds}, author={Ferreira, Matheus Esteves}, year={2023}, publisher={GitHub, IBM}, url={https://github.com/IBM/uRaman-Dataset}, note={commit 47e712d326fb0458ee8218ab73a2cfc269dcdfab, license CDLA-Sharing-1.0}}",
+  "citation": "Ferreira, M. E. (2023). uRaman-Dataset: Raman spectroscopy spectra of Metal Organic Framework (MOF) compounds (commit 47e712d3). GitHub (IBM). https://github.com/IBM/uRaman-Dataset",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "uraman_mof74_1000_2000_source",
+      "name": "IBM uRaman-Dataset: peak-normalized Raman spectra of six MOF-74 metal-series samples in the nominal 1,000-2,000 cm^-1 window",
+      "description": "Source data hosted at the original repository.",
+      "contentUrl": "https://github.com/IBM/uRaman-Dataset",
+      "encodingFormat": "application/octet-stream",
+      "sha256": "bb4e2765f0d69e9f030bef62b047871c674f970a8e37fc32748951e2b0d4f372"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "raman_spectra",
+      "name": "raman_spectra",
+      "description": "Raman spectroscopy data records.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_id",
+          "name": "spectrum_id",
+          "description": "Sequential integer index identifying each spectrum.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "uraman_mof74_1000_2000_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/raman_shift_cm_inv",
+          "name": "raman_shift_cm_inv",
+          "description": "Raman shift wavenumber axis in cm⁻¹. Shape: (n_wavenumbers,).",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "uraman_mof74_1000_2000_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/spectrum_intensity",
+          "name": "spectrum_intensity",
+          "description": "Raman scattering intensity in arbitrary units. Shape: (n_wavenumbers,) per spectrum.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "uraman_mof74_1000_2000_source"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "raman_spectra/target",
+          "name": "target",
+          "description": "Class label: string identifier of the sample class.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "uraman_mof74_1000_2000_source"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rai:dataCollection": "Raman measurements of six MOF-74 metal-series samples in the nominal 1,000-2,000 cm^-1 window; WITec Alpha 300 RAS, 532 nm at 1 mW, 1800 g/mm grating, 200-400 accumulations x 0.5 s; samples provided by Prof. Carlos Basilio Pinheiro's group.",
+  "rai:dataCollectionType": "Experiments",
+  "rai:dataPreprocessingProtocol": "Peak normalization to max = 1.0 as deposited; the WITec exports of this window carry no background subtraction (all intensities >= 0). The loader linearly interpolates the native 1,600-point grids onto the common 970-1,887 cm^-1 @1 cm^-1 grid (918 points); no baseline correction, smoothing or other preprocessing is applied.",
+  "rai:dataAnnotationProtocol": "Sample identities are given by the deposit's file and folder names (MOF-74 metal-series composition: Me = Mg, Zn, Zn75Mg25; Au@ = gold-coated variant); the labels are derived from the deposit's filenames, not re-curated for this benchmark. Note: the 1,000-2,000 cm^-1 file of Au@Zn75Mg25-MOF74 is spelled with a double dash in the deposit ('Au@Zn75Mg25--MOF74.csv'); the label is normalized to a single dash (matching the 70-3,000 cm^-1 file).",
+  "rai:personalSensitiveInformation": "No personal or sensitive information is included. All samples are inorganic MOF-74 metal-series materials.",
+  "rai:dataBiases": "Single facility (IBM) and single instrument (WITec Alpha 300 RAS, 532 nm, 1 mW). One stitched spectrum per sample, so there is no replicate structure and no within-class variance. The common window (970-1,887 cm^-1) is narrower than the nominal 1,000-2,000 cm^-1 acquisition window: every spectrum is truncated outside the common window (the five nominal-window files lose 1,888-1,980.60 cm^-1, Au@Mg-MOF74 loses 860.797-969 cm^-1), and the spectra are not directly comparable to the same materials measured in the other windows or at other excitation wavelengths (see the uraman_mofs and uraman_mof74_70_3000 keys).",
+  "rai:dataLimitations": "One stitched spectrum per sample (6 samples) - a reference set, not a CV-learnable classification; single instrument/facility; every spectrum is truncated outside the common 970-1,887 cm^-1 window; peak normalization to 1.0 removes absolute intensity information; the excitation/power differs from the deposit's top-level set (532 nm at 1 mW here vs 532/633 nm at 1-2 mW there); the CDLA-Sharing-1.0 license is share-alike (commercial use allowed, derivative works must carry the same license).",
+  "rai:dataSocialImpact": "Materials-science reference data for the MOF-74 metal series (candidate gas-sensing and CO2-capture materials); no human or medical use.",
+  "rai:dataUseCases": "Reference spectra for spectral matching and few-shot / augmentation use; metal-series comparison (Mg vs Zn vs Zn75Mg25, gold-coated vs uncoated) on a common 1,000-2,000 cm^-1-style window; not suitable for CV-based classification (one spectrum per class).",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": "Data collection: Raman spectra of six MOF-74 metal-series samples (Mg-MOF74, Zn-MOF74, Zn75Mg25-MOF74 and the gold-coated Au@Mg-MOF74, Au@Zn-MOF74, Au@Zn75Mg25-MOF74) measured in the nominal 1,000-2,000 cm^-1 window with a WITec Alpha 300 RAS micro-Raman system (532 nm excitation, 1 mW, 1800 g/mm grating, 200-400 accumulations x 0.5 s); the samples were provided by Prof. Carlos Basilio Pinheiro's group (per the deposit's About.md). Part of IBM's uRaman-Dataset (commit 47e712d326fb0458ee8218ab73a2cfc269dcdfab, 2023-06-19, CDLA-Sharing-1.0, maintainer Matheus Esteves Ferreira); no indexed parent paper exists, so the repository is the citation. All spectra are peak-normalized (max = 1.0) as deposited. This raman_data key resamples the six native 1,600-point grids onto the common 970-1,887 cm^-1 @1 cm^-1 grid (918 points; the intersection of the six native axes: five files span 969.006-1,980.60 cm^-1, Au@Mg-MOF74 spans 860.797-1,887.76 cm^-1, off the nominal window).",
+  "prov:wasDerivedFrom": "https://github.com/IBM/uRaman-Dataset"
+}
