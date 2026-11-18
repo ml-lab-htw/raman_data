@@ -10,6 +10,7 @@ from raman_data.loaders.KaggleLoader import KaggleLoader
 from raman_data.loaders.HuggingFaceLoader import HuggingFaceLoader
 from raman_data.loaders.ZenodoLoader import ZenodoLoader
 from raman_data.loaders.MiscLoader import MiscLoader
+from raman_data.loaders.LoaderTools import LoaderTools
 from raman_data.loaders.MendeleyLoader import MendeleyLoader
 from raman_data.loaders.RWTHLoader import RWTHLoader
 from raman_data.loaders.GoogleDriveLoader import GoogleDriveLoader
@@ -1347,3 +1348,70 @@ def test_glucose_liquid_10level():
     assert dataset.spectra.max() > 50000
     assert not np.isnan(dataset.spectra).any()
 
+
+
+def _fake_slopp_files(tmp_path, monkeypatch, *, start=100.0):
+    """A four-spectrum SLoPP and two-spectrum SLoPP-E, in the layout of the Rochman Lab zip and table."""
+    import zipfile
+    import pandas as pd
+
+    def txt(x0, x1, step, slope):
+        x = np.arange(x0, x1, step)
+        return "\n".join(f"{a}\t{slope * a}" for a in x)
+
+    zip_path = tmp_path / "slopp.zip"
+    with zipfile.ZipFile(zip_path, "w") as zf:
+        base = "SLoPP and SLoPP-E"
+        zf.writestr(f"{base}/SLoPP/Polyethylene/Polyethylene 1. A.txt", txt(start, 2000, 2.0, 1.0))
+        zf.writestr(f"{base}/SLoPP/Polyethylene/Polyethylene 2. B.txt", txt(start, 2200, 3.0, 2.0))
+        zf.writestr(f"{base}/SLoPP/Cotton/Cotton 1. C.txt", txt(start, 2000, 2.5, 3.0))
+        zf.writestr(f"{base}/SLoPP/Cotton/Cotton 2. D.txt", txt(start, 2000, 2.5, 4.0))
+        zf.writestr(f"{base}/SLoPP-E/Rubber/Rubber 1. E.txt", txt(start + 100, 2000, 2.0, 1.0))
+        zf.writestr(f"{base}/SLoPP-E/Rubber/Rubber 2. F.txt", txt(start + 100, 2000, 2.0, 2.0))
+        zf.writestr(f"{base}/SLoPP/SLoPP.sdbx", "not a spectrum")
+    xlsx_path = tmp_path / "itemized.xlsx"
+    pd.DataFrame({
+        "Library ID": ["Polyethylene 1. A", "Polyethylene 2. B", "Cotton 1. C", "Cotton 2. D"],
+        "Original Sample ID": ["bottle", "bottle", "Fabric", "Fabric"],
+    }).to_excel(xlsx_path, sheet_name="SLoPP", index=False)
+
+    monkeypatch.setattr(
+        MiscLoader, "_slopp_fetch",
+        lambda dataset_cache, spec: str(zip_path if spec is MiscLoader._SLOPP_ZIP else xlsx_path),
+    )
+    monkeypatch.setattr(MiscLoader, "_SLOPP_N", {"SLoPP": 4, "SLoPP-E": 2})
+    monkeypatch.setattr(LoaderTools, "get_cache_root", lambda *_: str(tmp_path))
+
+
+def test_slopp_resamples_onto_one_grid_and_groups_by_source_item(tmp_path, monkeypatch):
+    _fake_slopp_files(tmp_path, monkeypatch)
+    spectra, shifts, targets, names, groups = MiscLoader._load_slopp(str(tmp_path), "SLoPP")
+    assert spectra.shape == (4, 1881) and shifts[0] == 110.0 and shifts[-1] == 1990.0
+    # Rows follow the sorted zip member names: Cotton 1, Cotton 2, Polyethylene 1, Polyethylene 2.
+    assert names == ["Cotton", "Polyethylene"] and targets.tolist() == [0, 0, 1, 1]
+    assert groups.tolist() == ["Fabric", "Fabric", "bottle", "bottle"]
+    # Linear interpolation of intensity = slope * wavenumber is exact, so the slopes come back.
+    for row, slope in zip(spectra, [3.0, 4.0, 1.0, 2.0]):
+        np.testing.assert_allclose(row, slope * shifts)
+
+
+def test_slopp_e_is_not_grouped_and_has_its_own_grid(tmp_path, monkeypatch):
+    _fake_slopp_files(tmp_path, monkeypatch)
+    spectra, shifts, targets, names, groups = MiscLoader._load_slopp(str(tmp_path), "SLoPP-E")
+    assert spectra.shape == (2, 1781) and shifts[0] == 210.0
+    assert names == ["Rubber"] and groups is None
+
+
+def test_slopp_raises_when_a_spectrum_does_not_cover_the_grid(tmp_path, monkeypatch):
+    _fake_slopp_files(tmp_path, monkeypatch, start=150.0)
+    with pytest.raises(RuntimeError, match="covers 150"):
+        MiscLoader._load_slopp(str(tmp_path), "SLoPP")
+
+
+@pytest.mark.skip(reason="Downloads ~20 MB from the Rochman Lab site; run manually.")
+def test_slopp_live():
+    slopp = MiscLoader.load_dataset("slopp")
+    assert slopp.spectra.shape == (148, 1881) and len(slopp.target_names) == 15
+    assert len(set(slopp.group_ids.tolist())) == 84
+    slopp_e = MiscLoader.load_dataset("slopp_e")
+    assert slopp_e.spectra.shape == (113, 1781) and len(slopp_e.target_names) == 20

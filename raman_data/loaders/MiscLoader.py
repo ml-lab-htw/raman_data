@@ -2,6 +2,7 @@ import glob
 import logging
 import os
 import re
+import zipfile
 from collections import Counter
 from io import StringIO
 from typing import Optional, Tuple
@@ -454,6 +455,66 @@ class MiscLoader(BaseLoader):
                 "additionally reduces each measurement to the row-wise "
                 "mean of its 20 augmented variants (see description)."
             ),
+        ),
+        "slopp": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="slopp",
+            name="SLoPP, Spectral Library of Plastic Particles (Munno et al. 2020)",
+            short_name="SLoPP",
+            license="Not stated (Rochman Lab; check before redistributing)",
+            loader=lambda cache_path: MiscLoader._load_slopp(cache_path, "SLoPP"),
+            metadata={
+                "full_name": "SLoPP, Spectral Library of Plastic Particles (Munno et al. 2020)",
+                "source": "https://rochmanlab.wordpress.com/spectral-libraries-for-microplastics-research/",
+                "paper": "https://doi.org/10.1021/acs.analchem.9b03626",
+                "citation": [
+                    "Munno, K., De Frond, H., O'Donnell, B., and Rochman, C. M. (2020). Increasing the accessibility for "
+                    "characterizing microplastics: introducing new application-based and spectral libraries of plastic "
+                    "particles (SLoPP and SLoPP-E). Analytical Chemistry, 92(3), 2443-2451."
+                ],
+                "description": (
+                    "SLoPP: 148 reference spectra of plastic and textile particles from consumer products (15 polymer classes). One Raman spectrum per particle, labelled with the polymer type "
+                    "(the library's own folder per polymer group). Acquired on a Raman microscope at 532 or 785 nm "
+                    "(laser, grating, slit and acquisition parameters per spectrum are in the deposited itemized "
+                    "table, not in this loader); the spectra come on three different wavenumber axes "
+                    "(100-3500, 102-1998 and 102-2200 cm^-1), so the loader resamples every spectrum by linear "
+                    "interpolation onto one 1 cm^-1 grid (110-1990 cm^-1; 210-1990 for SLoPP-E, where six spectra start above 150). group_ids = the library's 'Original Sample ID' (84 source items, e.g. one cable cover or one piece of fabric): particles cut from the same source item share a group. The groups are not all label-pure: seven of the 84 hold more than one polymer (for example the generic item 'Fabric'). "
+                    "Libraries are meant for spectral matching, so several classes have fewer than ten spectra."
+                ),
+            },
+            is_grouped=True,
+            has_missing_labels=False,
+        ),
+        "slopp_e": DatasetInfo(
+            task_type=TASK_TYPE.Classification,
+            application_type=APPLICATION_TYPE.MaterialScience,
+            id="slopp_e",
+            name="SLoPP-E, Spectral Library of Plastic Particles aged in the Environment (Munno et al. 2020)",
+            short_name="SLoPP-E",
+            license="Not stated (Rochman Lab; check before redistributing)",
+            loader=lambda cache_path: MiscLoader._load_slopp(cache_path, "SLoPP-E"),
+            metadata={
+                "full_name": "SLoPP-E, Spectral Library of Plastic Particles aged in the Environment (Munno et al. 2020)",
+                "source": "https://rochmanlab.wordpress.com/spectral-libraries-for-microplastics-research/",
+                "paper": "https://doi.org/10.1021/acs.analchem.9b03626",
+                "citation": [
+                    "Munno, K., De Frond, H., O'Donnell, B., and Rochman, C. M. (2020). Increasing the accessibility for "
+                    "characterizing microplastics: introducing new application-based and spectral libraries of plastic "
+                    "particles (SLoPP and SLoPP-E). Analytical Chemistry, 92(3), 2443-2451."
+                ],
+                "description": (
+                    "SLoPP-E: 113 reference spectra of plastic particles collected from the environment (stormwater, surface water, fish, sediment; 20 polymer classes). One Raman spectrum per particle, labelled with the polymer type "
+                    "(the library's own folder per polymer group). Acquired on a Raman microscope at 532 or 785 nm "
+                    "(laser, grating, slit and acquisition parameters per spectrum are in the deposited itemized "
+                    "table, not in this loader); the spectra come on three different wavenumber axes "
+                    "(100-3500, 102-1998 and 102-2200 cm^-1), so the loader resamples every spectrum by linear "
+                    "interpolation onto one 1 cm^-1 grid (110-1990 cm^-1; 210-1990 for SLoPP-E, where six spectra start above 150). No replicate structure is deposited (the table has a collection site but no source item per particle), so the dataset is not grouped. "
+                    "Libraries are meant for spectral matching, so several classes have fewer than ten spectra."
+                ),
+            },
+            is_grouped=False,
+            has_missing_labels=False,
         ),
         "yeast_bioreactor_fermentation": DatasetInfo(
             task_type=TASK_TYPE.Regression,
@@ -2379,6 +2440,83 @@ class MiscLoader(BaseLoader):
 
         targets, class_names = encode_labels(np.array(block_labels))
         return spectra, raman_shifts, targets, list(class_names), np.array(groups)
+
+    # slopp / slopp_e (Rochman Lab, University of Toronto; Munno et al. 2020)
+    _SLOPP_BASE = "https://rochmanlab.wordpress.com/wp-content/uploads"
+    _SLOPP_ZIP = ("slopp-and-slopp-e.zip", f"{_SLOPP_BASE}/2020/02/slopp-and-slopp-e.zip",
+                  "10d76978604e1eb8c1fa3d2b164f8080")
+    _SLOPP_XLSX = ("slopp-and-slopp-e-itemized.xlsx",
+                   f"{_SLOPP_BASE}/2020/09/copy-of-slopp-and-slopp-e-spectra-itemized_public.xlsx",
+                   "e38012ecd6ed1b5543a27b5463e485de")
+    _SLOPP_N = {"SLoPP": 148, "SLoPP-E": 113}
+    # 1 cm^-1 grid inside the range every spectrum of the library covers (SLoPP-E has six spectra that start at 150-203 cm^-1).
+    _SLOPP_GRID = {"SLoPP": np.arange(110.0, 1991.0, 1.0), "SLoPP-E": np.arange(210.0, 1991.0, 1.0)}
+
+    @staticmethod
+    def _slopp_fetch(dataset_cache: str, spec: tuple) -> str:
+        file_name, url, md5 = spec
+        out_path = os.path.join(dataset_cache, file_name)
+        if not LoaderTools._is_file_ready(out_path):
+            LoaderTools.download(
+                url=url, out_dir_path=dataset_cache, out_file_name=file_name,
+                hash_target=md5, hash_type=HASH_TYPE.md5,
+            )
+            if not LoaderTools._is_file_ready(out_path):
+                raise RuntimeError(
+                    f"[!] Download of {file_name} for slopp failed (network error or checksum mismatch). See logs."
+                )
+        return out_path
+
+    @staticmethod
+    def _load_slopp(cache_path: str, library: str):
+        """
+        Download and load one of the two Rochman Lab Raman libraries of plastic particles (Munno et al. 2020,
+        Anal. Chem. 92(3), 2443-2451, doi:10.1021/acs.analchem.9b03626): ``SLoPP`` (148 spectra) or
+        ``SLoPP-E`` (113 spectra, aged in the environment).
+
+        The zip holds one ``.txt`` (two columns, wavenumber and intensity) per spectrum under
+        ``<library>/<polymer>/<Library ID>.txt``; the label is the polymer folder. The itemized xlsx gives the
+        source item (``Original Sample ID``, SLoPP only). The spectra sit on three different axes, so each is
+        linearly interpolated onto one grid at 1 cm^-1 (110-1990 cm^-1 for SLoPP, 210-1990 for SLoPP-E).
+
+        Returns spectra, raman_shifts, targets, class_names, group_ids (SLoPP) or None (SLoPP-E).
+        """
+        cache_root = LoaderTools.get_cache_root(CACHE_DIR.Misc)
+        if cache_root is None:
+            raise ValueError("Cache root for Misc loader is not set. Cannot load slopp.")
+        dataset_cache = os.path.join(cache_root, "slopp")
+        os.makedirs(dataset_cache, exist_ok=True)
+        zip_path = MiscLoader._slopp_fetch(dataset_cache, MiscLoader._SLOPP_ZIP)
+        grid = MiscLoader._SLOPP_GRID[library]
+
+        rows = []  # (library id, polymer, intensities on grid)
+        with zipfile.ZipFile(zip_path) as zf:
+            for name in sorted(zf.namelist()):
+                parts = name.split("/")
+                if len(parts) != 4 or parts[1] != library or not name.endswith(".txt"):
+                    continue
+                xy = np.loadtxt(StringIO(zf.read(name).decode("utf-8", "ignore")))
+                x, y = xy[:, 0], xy[:, 1]
+                if x[0] > grid[0] or x[-1] < grid[-1]:
+                    raise RuntimeError(f"[!] slopp: {name} covers {x[0]:.1f}-{x[-1]:.1f} cm^-1, not the {grid[0]:.0f}-{grid[-1]:.0f} grid.")
+                rows.append((parts[3][:-4], parts[2], np.interp(grid, x, y)))
+        if len(rows) != MiscLoader._SLOPP_N[library]:
+            raise RuntimeError(f"[!] slopp: expected {MiscLoader._SLOPP_N[library]} {library} spectra, got {len(rows)}.")
+
+        spectra = np.vstack([r[2] for r in rows])
+        if not np.isfinite(spectra).all():
+            raise RuntimeError("[!] slopp: non-finite intensity values.")
+        targets, class_names = encode_labels(np.array([r[1] for r in rows]))
+
+        group_ids = None
+        if library == "SLoPP":
+            xlsx_path = MiscLoader._slopp_fetch(dataset_cache, MiscLoader._SLOPP_XLSX)
+            table = pd.read_excel(xlsx_path, sheet_name="SLoPP").set_index("Library ID")
+            ids = [r[0] for r in rows]
+            if not set(ids) <= set(table.index) or table.loc[ids, "Original Sample ID"].isna().any():
+                raise RuntimeError("[!] slopp: Library IDs of the spectra do not all have an Original Sample ID.")
+            group_ids = table.loc[ids, "Original Sample ID"].astype(str).str.strip().to_numpy()
+        return spectra, grid.copy(), targets, list(class_names), group_ids
 
     # yeast_bioreactor_fermentation (4TU.ResearchData, Klaverdijk et al. 2025)
     _YEAST_BIOREACTOR_ZIP = "Chapter 2.zip"
