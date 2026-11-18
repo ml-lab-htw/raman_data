@@ -1415,3 +1415,65 @@ def test_slopp_live():
     assert len(set(slopp.group_ids.tolist())) == 84
     slopp_e = MiscLoader.load_dataset("slopp_e")
     assert slopp_e.spectra.shape == (113, 1781) and len(slopp_e.target_names) == 20
+def _fake_dmaps_files(tmp_path, monkeypatch, *, layout, n=3, names=("A", "B"), key="vcl_pvcl_water"):
+    """A tiny spectra file and target table in the layout of the RWTH AVT.SVT repository."""
+    import pandas as pd
+
+    shifts = 99.9 + 0.3 * np.arange(11084)
+    spectra = np.arange(n * 11084, dtype=float).reshape(n, 11084)
+    if layout == "rows":
+        header = pd.DataFrame([["Raman shift_intensities"] + [np.nan] * 11083])
+        body = pd.concat([header, pd.DataFrame([shifts]), pd.DataFrame(spectra)], ignore_index=True)
+        body.to_csv(tmp_path / "spectra.csv", header=False, index=False)
+    else:
+        frame = pd.DataFrame(np.column_stack([shifts, spectra.T]))
+        head = pd.DataFrame([["Raman shift", "intensities"] + [np.nan] * (n - 1)])
+        pd.concat([head, frame], ignore_index=True).to_csv(tmp_path / "spectra.csv", header=False, index=False)
+    fractions = np.column_stack([np.linspace(0.9, 0.99, n), 1 - np.linspace(0.9, 0.99, n)])
+    pd.DataFrame(fractions, columns=list(names)).to_csv(tmp_path / "targets.csv", index=False)
+
+    def fake_download(url, out_dir_path, out_file_name, **kwargs):
+        src = tmp_path / ("spectra.csv" if "spectra" in out_file_name or "raman" in out_file_name else "targets.csv")
+        import shutil
+        shutil.copy(src, os.path.join(out_dir_path, out_file_name))
+
+    monkeypatch.setattr(LoaderTools, "download", staticmethod(fake_download))
+    monkeypatch.setattr(LoaderTools, "get_cache_root", lambda *_: str(tmp_path / "cache"))
+    spec = MiscLoader._DMAPS_SPECS[key]
+    monkeypatch.setitem(MiscLoader._DMAPS_SPECS, key, spec[:4] + (layout, n, list(names)))
+    return spectra, fractions
+
+
+@pytest.mark.parametrize("layout", ["rows", "columns"])
+def test_dmaps_mixture_reads_both_spectra_layouts(tmp_path, monkeypatch, layout):
+    spectra, fractions = _fake_dmaps_files(tmp_path, monkeypatch, layout=layout)
+    got, shifts, targets, names = MiscLoader._load_dmaps_mixture(str(tmp_path), "vcl_pvcl_water")
+    np.testing.assert_allclose(got, spectra)
+    assert shifts[0] == pytest.approx(99.9) and shifts[-1] == pytest.approx(3424.8, abs=0.01)
+    np.testing.assert_allclose(targets, fractions)
+    assert names == ["A", "B"]
+
+
+def test_dmaps_mixture_rejects_targets_that_do_not_sum_to_one(tmp_path, monkeypatch):
+    _fake_dmaps_files(tmp_path, monkeypatch, layout="rows")
+    import pandas as pd
+
+    pd.DataFrame({"A": [0.5, 0.5, 0.5], "B": [0.1, 0.1, 0.1]}).to_csv(tmp_path / "targets.csv", index=False)
+    with pytest.raises(RuntimeError, match="sum to 1"):
+        MiscLoader._load_dmaps_mixture(str(tmp_path), "vcl_pvcl_water")
+
+
+def test_dmaps_mixture_rejects_a_changed_spectrum_count(tmp_path, monkeypatch):
+    _fake_dmaps_files(tmp_path, monkeypatch, layout="columns")
+    monkeypatch.setitem(MiscLoader._DMAPS_SPECS, "vcl_pvcl_water",
+                        MiscLoader._DMAPS_SPECS["vcl_pvcl_water"][:5] + (4, ["A", "B"]))
+    with pytest.raises(RuntimeError, match="expected 4 spectra"):
+        MiscLoader._load_dmaps_mixture(str(tmp_path), "vcl_pvcl_water")
+
+
+@pytest.mark.skip(reason="Downloads ~10 MB from the RWTH GitLab; run manually.")
+def test_dmaps_mixtures_live():
+    vcl = MiscLoader.load_dataset("vcl_pvcl_water")
+    assert vcl.spectra.shape == (30, 11084) and vcl.targets.shape == (30, 3)
+    citrate = MiscLoader.load_dataset("citric_acid_citrates")
+    assert citrate.spectra.shape == (45, 11084) and citrate.targets.shape == (45, 5)
